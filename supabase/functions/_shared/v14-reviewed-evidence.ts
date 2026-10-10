@@ -1,5 +1,7 @@
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
-import type { EvidenceRequirementPlan } from "./p7-ic-evidence-normalization.ts"
+import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
+import {approvedBankDelegatedReview,approvedBankOfficialFallback} from "./v14-bank-approved-delegation.ts"
+import {evaluateBankPublicationAvailability,type BankPublicationProof} from "./v14-bank-publication-precision.ts"
 
 type Json = Readonly<Record<string, unknown>>
 export type ReviewEvidenceFamily = EvidenceRequirementPlan["deterministicCoverageRule"]
@@ -37,6 +39,7 @@ export interface ReviewedEvidenceResult {
 }
 
 const HASH=/^[0-9a-f]{64}$/u, DECIMAL=/^-?\d+(?:\.\d+)?$/u
+const AUBANK_SECURITY_ID="f5c47463-3c6d-4db0-a815-e4301e990213"
 const SUPPORTED_VERSION="V1_4_REQUIREMENT_REVIEW_V2"
 const APPROVED_KINDS:Readonly<Record<ReviewEvidenceFamily,readonly string[]>>={
   NUMERIC_SERIES:["OWNER_NUMERIC_REVIEW"], OWNERSHIP_4Q:["OWNER_OWNERSHIP_REVIEW"], TEXT_EVIDENCE_REVIEW:["OWNER_DOCUMENT_REVIEW"],
@@ -61,6 +64,23 @@ function fail(state:ReviewedEvidenceResult["state"],reason:string,ids:readonly s
 }
 function payloadStrings(v:unknown,out:string[]=[]):string[]{if(typeof v==="string")out.push(v);else if(Array.isArray(v))v.forEach(x=>payloadStrings(x,out));else if(v&&typeof v==="object")Object.values(v as Record<string,unknown>).forEach(x=>payloadStrings(x,out));return out}
 function exactFragmentPresent(payload:Json,fragment:string){return fragment.length>0&&payloadStrings(payload).some(x=>x.includes(fragment))}
+function bankPublicationAvailability(review:RequirementReview,source:ReviewedSourceRecord,evaluationAsOfMs:number){
+ const precision=str(source.raw_payload.publication_precision)
+ const originalHash=str(source.raw_payload.original_sha256)
+ const sourceProofHash=originalHash&&HASH.test(originalHash)?originalHash:source.payload_hash
+ let proof:BankPublicationProof|null=null
+ if(source.published_at!==null)proof={kind:"EXACT",publishedAt:source.published_at,sourceProofHash}
+ else if(precision==="EXACT"){
+   const published=str(source.raw_payload.published_at);if(published)proof={kind:"EXACT",publishedAt:published,sourceProofHash}
+ }else if(precision==="DATE_ONLY"){
+   const publishedDate=str(source.raw_payload.publication_date);if(publishedDate)proof={kind:"DATE_ONLY",publishedDate,sourceProofHash}
+ }else if(precision==="UNKNOWN"||precision==="UNKNOWN_DATE"){
+   const first=str(source.raw_payload.first_verified_available_at)??source.retrieved_at
+   proof={kind:"UNKNOWN_DATE",firstVerifiedRetrievalAt:first,sourceProofHash}
+ }else if(review.published_at)proof={kind:"EXACT",publishedAt:review.published_at,sourceProofHash}
+ if(!proof||!review.period_end)return {eligibleForFactualReview:false,earliestProvenAvailabilityMs:null,reason:"BANK_PUBLICATION_PRECISION_NOT_PROVEN",historicalApplicable:false}
+ return evaluateBankPublicationAvailability({proof,retrievedAt:source.retrieved_at,reportingEnd:review.period_end,evaluationAsOf:new Date(evaluationAsOfMs).toISOString()})
+}
 function decimalTokens(text:string){return [...text.matchAll(/(?<![\d.])-?\d+(?:\.\d+)?(?![\d.])/gu)].map(x=>x[0])}
 function reviewHashPayload(review:RequirementReview){
  return {portfolio_id:review.portfolio_id,security_id:review.security_id,requirement_code:review.requirement_code,review_kind:review.review_kind,
@@ -139,8 +159,9 @@ export async function validateReviewedRequirementEvidence(input:{
  const ownershipRows:Array<{review:RequirementReview;series:string;basis:string;period:string;value:string;source:ReviewedSourceRecord}>=[]
  const documentRows:Array<{review:RequirementReview;document:ReviewedResearchDocument;link:ReviewedDocumentSource;source:ReviewedSourceRecord}>=[]
  for(const r of active){
-   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind))return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
-   if(r.reviewed_by!==input.portfolioOwnerId)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
+   const delegated=approvedBankDelegatedReview(r,input.portfolioOwnerId,family)
+   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind)&&!delegated)return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
+   if(r.reviewed_by!==input.portfolioOwnerId&&!delegated)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
    if(!HASH.test(r.review_hash)||await sha256(stable(reviewHashPayload(r)))!==r.review_hash)return fail("REVIEW_REQUIRED","REVIEW_INTEGRITY_HASH_INVALID",[r.id])
    const decision=r.decision.toUpperCase();if(decision==="INSUFFICIENT"){insufficient.push(r);continue}
    if(decision==="CONTRADICTS"||decision==="REJECTED"){contradict.push(r);continue}
@@ -148,12 +169,18 @@ export async function validateReviewedRequirementEvidence(input:{
    const source=r.source_record_id?sourceById.get(r.source_record_id)??null:null
    if(!source||!r.source_payload_hash||r.source_payload_hash!==source.payload_hash||!HASH.test(source.payload_hash))
     return fail("REVIEW_REQUIRED","REVIEW_SOURCE_HASH_OR_RECORD_INVALID",[r.id])
+   if(delegated&&source.source_code!=="TRENDLYNE_MCP"&&!approvedBankOfficialFallback(r,source,input.portfolioOwnerId,family))
+    return fail("REVIEW_REQUIRED","DELEGATED_SOURCE_AUTHORITY_NOT_PROVEN",[r.id])
    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
    if(r.retrieved_at!==source.retrieved_at)return fail("REVIEW_REQUIRED","REVIEW_RETRIEVAL_MISMATCH",[r.id])
    if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>evaluationAsOfMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_EVALUATION",[r.id])
    if(source.published_at!==null&&r.published_at!==source.published_at)return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_MISMATCH",[r.id])
+   if(family==="NUMERIC_SERIES"&&["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(requirementCode)){
+     const availability=bankPublicationAvailability(r,source,evaluationAsOfMs)
+     if(!availability.eligibleForFactualReview)return fail("REVIEW_REQUIRED",availability.reason,[r.id])
+   }
    if(r.fresh_through&&!Number.isFinite(time(r.fresh_through)))return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_INVALID",[r.id])
    if(family==="NUMERIC_SERIES"){
      const metric=str(r.metadata.metric_code),value=str(r.metadata.numeric_value)
@@ -162,6 +189,58 @@ export async function validateReviewedRequirementEvidence(input:{
       return fail("REVIEW_REQUIRED","REVIEW_NUMERIC_METADATA_INCOMPLETE",[r.id])
      const binding=sourceBinding(r,source);if(!binding.ok)return fail("REVIEW_REQUIRED",binding.reason,[r.id])
      if(binding.value!==value)return fail("REVIEW_REQUIRED","NUMERIC_SOURCE_VALUE_MISMATCH",[r.id])
+     // M1-M4 owner-approved source-only contracts: do not trust a claimed
+     // certification flag or derive a financial fact from unbound metadata.
+     // sourceBinding has independently verified the exact fragment in the
+     // immutable source record and its metric/period/value anchors.
+     if(["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(requirementCode)){
+       const directDefinition=input.definitions.find(x=>x.code===metric)
+       const approvedSources=directDefinition?.definition?.source_priority
+       if(!Array.isArray(approvedSources)||!approvedSources.includes(source.source_code)
+         ||!["COMPANY_EXCHANGE_FILING","NSE_OFFICIAL","TRENDLYNE_MCP"].includes(source.source_code))
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_SOURCE_AUTHORITY_NOT_APPROVED",[r.id])
+       if(str(source.raw_payload.security_id)!==securityId)
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_ISSUER_SECURITY_IDENTITY_NOT_PROVEN",[r.id])
+
+       const sfbMetric=(securityId===AUBANK_SECURITY_ID&&source.raw_payload.regulatory_entity_type==="SMALL_FINANCE_BANK"&&(
+         requirementCode==="CET1_RATIO"&&metric==="SFB_PRUDENTIAL_CET1"||
+         requirementCode==="CAPITAL_ADEQUACY_RATIO"&&metric==="SFB_PRUDENTIAL_TOTAL_CRAR"
+       ))
+       if((metric!==requirementCode&&!sfbMetric) || r.unit!=="PERCENT" || Number(value)<=0)
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_METRIC_UNIT_OR_IDENTITY_INVALID",[r.id])
+       const literal=binding.fragment.toLowerCase()
+       const start=r.period_start,end=r.period_end
+       if(sfbMetric&&(
+         start!==end||r.period_type!=="REGULATORY_AS_OF"||
+         !/(small finance bank|sfb)/i.test(literal)||
+         !/(rbi|reserve bank of india)/i.test(literal)||
+         !/(prudential|capital adequacy|capital adequacy ratio|car)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_SFB_REGULATORY_SOURCE_PROOF_MISSING",[r.id])
+       if(requirementCode==="NIM_TTM"&&(
+         !start||r.period_type!=="TRAILING_FOUR_QUARTERS"||
+         Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
+         !/(nim|net interest margin)/i.test(literal)||
+         !/(ttm|trailing (four|4) quarters|last (four|4) quarters)/i.test(literal)||
+         !/(average interest.earning assets|average earning assets)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_TTM_NIM_SOURCE_PROOF_MISSING",[r.id])
+       if(!sfbMetric&&(requirementCode==="CET1_RATIO"||requirementCode==="CAPITAL_ADEQUACY_RATIO")&&(
+         start!==end||r.period_type!=="REGULATORY_AS_OF"||
+         !/basel\s*(iii|3)/i.test(literal)||
+         !/(risk.weighted assets|rwa)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_BASEL_III_SOURCE_PROOF_MISSING",[r.id])
+       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?1)/i.test(literal))
+         return fail("REVIEW_REQUIRED","BANK_CET1_NOT_EXPLICITLY_SOURCED",[r.id])
+       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total regulatory capital)/i.test(literal))
+         return fail("REVIEW_REQUIRED","BANK_TOTAL_CAR_NOT_EXPLICITLY_SOURCED",[r.id])
+       if(requirementCode==="ROA_ANNUAL"&&(
+         !start||r.period_type!=="YEAR"||
+         Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
+         !/(return on assets|annual roa)/i.test(literal)||
+         !/(annual|financial year|full.year|audited)/i.test(literal)||
+         !/(average (total )?assets)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_FULL_YEAR_ROA_SOURCE_PROOF_MISSING",[r.id])
+     }
+
      const document=r.research_document_id?documentById.get(r.research_document_id)??null:null
      if(document){
        const db=validateDocumentBinding(r,document,source,input.documentSources);if(!db.ok)return fail("REVIEW_REQUIRED",db.reason,[r.id])
@@ -172,9 +251,12 @@ export async function validateReviewedRequirementEvidence(input:{
      const definition=input.definitions.find(x=>x.code===metric);if(!definition)return fail("REVIEW_REQUIRED","REVIEW_METRIC_DEFINITION_MISSING",[r.id])
      const retrieved=source.retrieved_at,fresh=r.fresh_through
      if(!fresh)return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_NOT_PROVEN",[r.id])
+     const availability=bankPublicationAvailability(r,source,evaluationAsOfMs)
      observations.push({id:r.id,metric_code:metric,numeric_value:value,text_value:null,boolean_value:null,date_value:null,unit:r.unit,currency:r.currency,
       consolidation_scope:r.consolidation_scope,period_start:r.period_start,period_end:r.period_end,period_type:r.period_type,retrieved_at:retrieved,
-      fresh_until:fresh,published_at:r.published_at??source.published_at,evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id})
+      fresh_until:fresh,published_at:r.published_at??source.published_at,proven_availability_at:availability.earliestProvenAvailabilityMs===null?null:new Date(availability.earliestProvenAvailabilityMs).toISOString(),evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id,
+      source_verified_at:typeof source.raw_payload.original_bytes_verified_at==="string"?source.raw_payload.original_bytes_verified_at:null,
+      disqualifying_event_at:typeof source.raw_payload.disqualifying_event_at==="string"?source.raw_payload.disqualifying_event_at:null})
      support.push(r);continue
    }
    if(family==="OWNERSHIP_4Q"){
@@ -207,17 +289,33 @@ export async function validateReviewedRequirementEvidence(input:{
  if(!support.length&&insufficient.length)return fail("INSUFFICIENT","REVIEWED_SOURCE_INSUFFICIENT",insufficient.map(x=>x.id))
  if(!support.length)return fail("REVIEW_REQUIRED","NO_APPROVED_ACTIVE_REVIEW",active.map(x=>x.id))
  if(family==="NUMERIC_SERIES"){
-   const v=validateObservationSeries({rows:observations,definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
+   // Scoped owner-approved primary-filing fallback. Never change global metric
+   // definitions or relabel source facts as Trendlyne.
+   const definitions=input.definitions.map(d=>{
+    const relevant=support.filter(r=>r.metadata.metric_code===d.code)
+    if(!relevant.length||!relevant.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)}))return d
+    const sourceCodes=uniq(observations.filter(o=>o.metric_code===d.code).map(o=>o.source_code))
+    if(sourceCodes.length!==1)return d
+    return {...d,definition:{...d.definition,provider:sourceCodes[0],source_priority:sourceCodes,bank_source_admission_policy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"}}
+   })
+   const v=validateObservationSeries({rows:observations,definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
    if(v.state!=="FRESH")return {...fail(v.state,v.reason,support.map(x=>x.id)),observations,sourceRecordIds:uniq(observations.map(x=>x.source_record_id)),
     researchDocumentIds:uniq(support.map(x=>x.research_document_id).filter((x):x is string=>Boolean(x))),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:support.map(x=>x.id),reason:v.reason}}
-   return resultFrom(v.selected,support,input.documentSources,"REVIEWED_CANONICAL_OBSERVATION_READY")
+   const result=resultFrom(v.selected,support,input.documentSources,"REVIEWED_CANONICAL_OBSERVATION_READY")
+   const approvedFallback=support.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)})
+   return approvedFallback?{...result,lineage:{...result.lineage,sourceAdmissionPolicy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",executor:"CODEX",personalOwnerReview:false}}:result
  }
  if(family==="OWNERSHIP_4Q"){
    const series=uniq(ownershipRows.map(x=>x.series)),bases=uniq(ownershipRows.map(x=>x.basis));if(series.length!==1||bases.length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SERIES_OR_BASIS_MIXED",support.map(x=>x.id))
+   const expectedSeries=selectedV14OwnershipSeries(requirementCode)
+   if(requirementCode==="OWNERSHIP_GOVERNANCE")return fail("REVIEW_REQUIRED","OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",support.map(x=>x.id))
+   if(expectedSeries&&(series[0]!==expectedSeries.toUpperCase()||bases[0]!=="TOTAL_EQUITY"))return fail("REVIEW_REQUIRED","OWNERSHIP_SELECTED_SERIES_OR_BASIS_NOT_PROVEN",support.map(x=>x.id))
+   if(expectedSeries&&uniq(ownershipRows.map(x=>x.source.source_code)).length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SOURCE_AUTHORITY_MIXED",support.map(x=>x.id))
+   const requiredPeriods=expectedSeries?Math.max(4,input.minimum):input.minimum
    const byQuarter=new Map<string,typeof ownershipRows>();for(const x of ownershipRows){const g=byQuarter.get(x.period)??[];g.push(x);byQuarter.set(x.period,g)}
    for(const g of byQuarter.values())if(uniq(g.map(x=>x.value)).length>1)return fail("CONFLICTING","OWNERSHIP_QUARTER_VALUE_CONFLICT",g.map(x=>x.review.id))
-   const periods=[...byQuarter.keys()];if(!consecutiveLatestQuarters(periods,input.minimum))return fail("INSUFFICIENT","OWNERSHIP_REQUIRED_WINDOW_NOT_PROVEN",support.map(x=>x.id))
-   const selected=[...byQuarter.entries()].sort(([a],[b])=>b.localeCompare(a)).slice(0,input.minimum).flatMap(([,g])=>[g.sort((a,b)=>time(b.review.reviewed_at)-time(a.review.reviewed_at))[0]!])
+   const periods=[...byQuarter.keys()];if(!consecutiveLatestQuarters(periods,requiredPeriods))return fail("INSUFFICIENT","OWNERSHIP_REQUIRED_WINDOW_NOT_PROVEN",support.map(x=>x.id))
+   const selected=[...byQuarter.entries()].sort(([a],[b])=>b.localeCompare(a)).slice(0,requiredPeriods).flatMap(([,g])=>[g.sort((a,b)=>time(b.review.reviewed_at)-time(a.review.reviewed_at))[0]!])
    const latestPeriod=selected.map(x=>x.period).sort().at(-1)??null
    if(input.freshnessPolicy?.includes("150_DAYS")&&latestPeriod&&evaluationAsOfMs-time(latestPeriod+"T00:00:00Z")>150*86400000)
     return fail("STALE","OWNERSHIP_LATEST_REQUIRED_PERIOD_STALE",selected.map(x=>x.review.id))
@@ -249,6 +347,31 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
  const r=input.reviewed
  if(canonical.state==="CONFLICTING")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_CONFLICT_PRESERVED"}
  if(r?.state==="CONFLICTING")return {authority:"CONFLICT" as const,validation:{state:"CONFLICTING" as const,reason:r.reason,selected:[]},reviewed:r,reason:"REVIEW_CONFLICT_PRESERVED"}
+ const approvedFallback=r?.state==="FRESH"&&r.lineage.sourceAdmissionPolicy==="V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"
+ if(approvedFallback&&input.family==="NUMERIC_SERIES"){
+   const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
+   // Comparable retained facts may contradict a fallback even if other metadata
+   // is incomplete. Never select by retrieval recency or mix source authorities.
+   const conflict=input.canonicalRows.some(c=>r.observations.some(o=>c.metric_code===o.metric_code&&c.period_end===o.period_end
+     &&c.period_type===o.period_type&&c.unit===o.unit&&c.currency===o.currency&&c.consolidation_scope===o.consolidation_scope
+     &&c.numeric_value!==null&&o.numeric_value!==null&&decimal(c.numeric_value)!==decimal(o.numeric_value)))
+   if(conflict)return {authority:"CONFLICT" as const,validation:{state:"CONFLICTING" as const,reason:"OFFICIAL_FALLBACK_CANONICAL_VALUE_CONFLICT",selected:[]},reviewed:r,reason:"OFFICIAL_FALLBACK_CANONICAL_VALUE_CONFLICT"}
+   if(canonical.state==="FRESH")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_FRESH_PRIMARY"}
+   return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"APPROVED_OFFICIAL_FILING_FALLBACK"}
+ }
+ if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&input.minimum===1&&r.observations.length===1
+   &&input.canonicalRows.length>0
+   &&(canonical.state==="INSUFFICIENT"||(canonical.state==="REVIEW_REQUIRED"
+     &&["REPORTING_PERIOD_TYPE_NOT_PROVEN","REPORTING_PERIOD_INVALID","CONSOLIDATION_SCOPE_NOT_PROVEN"].includes(canonical.reason)))){
+   const reviewedRow=r.observations[0]!
+   const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
+   const sameValue=input.canonicalRows.every(c=>c.metric_code===reviewedRow.metric_code
+     &&c.numeric_value!==null&&reviewedRow.numeric_value!==null&&decimal(c.numeric_value)===decimal(reviewedRow.numeric_value))
+   const metadataOnly=input.canonicalRows.every(c=>!c.period_end||!c.period_type||!c.consolidation_scope||c.consolidation_scope==="UNKNOWN")
+   if(sameValue&&metadataOnly){
+     return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"REVIEW_REPAIRS_UNDATED_CANONICAL_METADATA"}
+   }
+ }
  if(canonical.state==="FRESH"){
    if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
      const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})

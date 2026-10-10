@@ -1,0 +1,1802 @@
+{
+  "version": "BANK_NPA_ACTUAL_CANONICAL_REQUIREMENT_REPLAY_V1",
+  "evaluatedAt": "2026-10-09T04:59:19.243Z",
+  "boundary": "EXISTING_REQUIREMENT_EVALUATOR_OVER_DATABASE_READBACK; NOT_AUTHENTICATED_HTTP_HANDLER_OR_MATERIALIZATION",
+  "retainedObservationCount": 52,
+  "results": [
+    {
+      "symbol": "AUBANK",
+      "securityId": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "4b56fe56-40a3-45ab-a6c6-85da3c9f1828"
+        ],
+        "selected_evidence_id": "4b56fe56-40a3-45ab-a6c6-85da3c9f1828",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "28940bfe-d687-42c4-b49a-6e71a104f1af",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "4b56fe56-40a3-45ab-a6c6-85da3c9f1828"
+            ],
+            "sourceRecordIds": [
+              "28940bfe-d687-42c4-b49a-6e71a104f1af"
+            ],
+            "sourcePayloadHashes": [
+              "6b7bcf41470b87eb7dd9892be3f8d4d23b5aa9b9a76fd32748b64ed001aa7a4a"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "4b56fe56-40a3-45ab-a6c6-85da3c9f1828",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "2.100",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-25T14:37:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "28940bfe-d687-42c4-b49a-6e71a104f1af"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "AUBANK",
+      "securityId": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "8ecf21a2-130e-4eac-b641-261d89d20788"
+        ],
+        "selected_evidence_id": "8ecf21a2-130e-4eac-b641-261d89d20788",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "28940bfe-d687-42c4-b49a-6e71a104f1af",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "8ecf21a2-130e-4eac-b641-261d89d20788"
+            ],
+            "sourceRecordIds": [
+              "28940bfe-d687-42c4-b49a-6e71a104f1af"
+            ],
+            "sourcePayloadHashes": [
+              "6b7bcf41470b87eb7dd9892be3f8d4d23b5aa9b9a76fd32748b64ed001aa7a4a"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "8ecf21a2-130e-4eac-b641-261d89d20788",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.7600",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-25T14:37:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "28940bfe-d687-42c4-b49a-6e71a104f1af"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "AXISBANK",
+      "securityId": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "76f9ad8f-3cbb-47fb-9b5e-af7890e06a04"
+        ],
+        "selected_evidence_id": "76f9ad8f-3cbb-47fb-9b5e-af7890e06a04",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "b44af820-1e24-43d7-bb37-fd33fcf5017a",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "76f9ad8f-3cbb-47fb-9b5e-af7890e06a04"
+            ],
+            "sourceRecordIds": [
+              "b44af820-1e24-43d7-bb37-fd33fcf5017a"
+            ],
+            "sourcePayloadHashes": [
+              "99e614bbafebcee085e824e3ac146468cd062749895ec05b3490ee71b6131a93"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "76f9ad8f-3cbb-47fb-9b5e-af7890e06a04",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.2800",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T09:49:03+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "b44af820-1e24-43d7-bb37-fd33fcf5017a"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "AXISBANK",
+      "securityId": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "e998b213-6881-4951-8cc3-72f191ce29cf"
+        ],
+        "selected_evidence_id": "e998b213-6881-4951-8cc3-72f191ce29cf",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "b44af820-1e24-43d7-bb37-fd33fcf5017a",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "e998b213-6881-4951-8cc3-72f191ce29cf"
+            ],
+            "sourceRecordIds": [
+              "b44af820-1e24-43d7-bb37-fd33fcf5017a"
+            ],
+            "sourcePayloadHashes": [
+              "99e614bbafebcee085e824e3ac146468cd062749895ec05b3490ee71b6131a93"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "e998b213-6881-4951-8cc3-72f191ce29cf",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.3900",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T09:49:03+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "b44af820-1e24-43d7-bb37-fd33fcf5017a"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "securityId": "30ce066a-6410-4b11-9b85-e41324971261",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "927dd3e3-cb91-47aa-b223-35f0d4fa61e4"
+        ],
+        "selected_evidence_id": "927dd3e3-cb91-47aa-b223-35f0d4fa61e4",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "ef43913f-3a92-4e1a-b3de-6ec3428bb38f",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "927dd3e3-cb91-47aa-b223-35f0d4fa61e4"
+            ],
+            "sourceRecordIds": [
+              "ef43913f-3a92-4e1a-b3de-6ec3428bb38f"
+            ],
+            "sourcePayloadHashes": [
+              "abb04c6d8b00c907d2e7abb6db610ab85415394372ed0fa1c7fca12608cb5d9b"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "927dd3e3-cb91-47aa-b223-35f0d4fa61e4",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "3.1500",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-21T11:55:13+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "ef43913f-3a92-4e1a-b3de-6ec3428bb38f"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "securityId": "30ce066a-6410-4b11-9b85-e41324971261",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "474dba5b-0568-4a75-9794-bc62aa104d19"
+        ],
+        "selected_evidence_id": "474dba5b-0568-4a75-9794-bc62aa104d19",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "ef43913f-3a92-4e1a-b3de-6ec3428bb38f",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "474dba5b-0568-4a75-9794-bc62aa104d19"
+            ],
+            "sourceRecordIds": [
+              "ef43913f-3a92-4e1a-b3de-6ec3428bb38f"
+            ],
+            "sourcePayloadHashes": [
+              "abb04c6d8b00c907d2e7abb6db610ab85415394372ed0fa1c7fca12608cb5d9b"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "474dba5b-0568-4a75-9794-bc62aa104d19",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.9300",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-21T11:55:13+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "ef43913f-3a92-4e1a-b3de-6ec3428bb38f"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "BANKBARODA",
+      "securityId": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "d05bd1d5-be59-4303-ac7f-ecf50ec5339f"
+        ],
+        "selected_evidence_id": "d05bd1d5-be59-4303-ac7f-ecf50ec5339f",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "a2e4d67a-4458-4b96-b04b-b225a895e89e",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "d05bd1d5-be59-4303-ac7f-ecf50ec5339f"
+            ],
+            "sourceRecordIds": [
+              "a2e4d67a-4458-4b96-b04b-b225a895e89e"
+            ],
+            "sourcePayloadHashes": [
+              "d44eb866717fde37ff9db025fb19676a6c9cbb7753e94c4d12a8beb5d9d40c7f"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "d05bd1d5-be59-4303-ac7f-ecf50ec5339f",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.9900",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-24T13:34:14+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "a2e4d67a-4458-4b96-b04b-b225a895e89e"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "BANKBARODA",
+      "securityId": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "285714b3-58f0-460a-b025-ef3c9cb688fd"
+        ],
+        "selected_evidence_id": "285714b3-58f0-460a-b025-ef3c9cb688fd",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "a2e4d67a-4458-4b96-b04b-b225a895e89e",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "285714b3-58f0-460a-b025-ef3c9cb688fd"
+            ],
+            "sourceRecordIds": [
+              "a2e4d67a-4458-4b96-b04b-b225a895e89e"
+            ],
+            "sourcePayloadHashes": [
+              "d44eb866717fde37ff9db025fb19676a6c9cbb7753e94c4d12a8beb5d9d40c7f"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "285714b3-58f0-460a-b025-ef3c9cb688fd",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.500",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-24T13:34:14+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "a2e4d67a-4458-4b96-b04b-b225a895e89e"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "079e0274-9b40-4b24-a4aa-f8c6b2ce8034"
+        ],
+        "selected_evidence_id": "079e0274-9b40-4b24-a4aa-f8c6b2ce8034",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "c91be0f3-504f-4f2e-be0c-dd580e007813",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "079e0274-9b40-4b24-a4aa-f8c6b2ce8034"
+            ],
+            "sourceRecordIds": [
+              "c91be0f3-504f-4f2e-be0c-dd580e007813"
+            ],
+            "sourcePayloadHashes": [
+              "36e32083ea77f6c3c12924f449301774eacf07ceded46996052ebdd313541b15"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "079e0274-9b40-4b24-a4aa-f8c6b2ce8034",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.5200",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-17T12:14:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "c91be0f3-504f-4f2e-be0c-dd580e007813"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "089ba710-5361-46de-a866-dd8fad4dab5c"
+        ],
+        "selected_evidence_id": "089ba710-5361-46de-a866-dd8fad4dab5c",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "c91be0f3-504f-4f2e-be0c-dd580e007813",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "089ba710-5361-46de-a866-dd8fad4dab5c"
+            ],
+            "sourceRecordIds": [
+              "c91be0f3-504f-4f2e-be0c-dd580e007813"
+            ],
+            "sourcePayloadHashes": [
+              "36e32083ea77f6c3c12924f449301774eacf07ceded46996052ebdd313541b15"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "089ba710-5361-46de-a866-dd8fad4dab5c",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.1800",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-17T12:14:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "c91be0f3-504f-4f2e-be0c-dd580e007813"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "HDFCBANK",
+      "securityId": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "daa3c11b-c1f2-40d4-aa2c-62ac7d95364a"
+        ],
+        "selected_evidence_id": "daa3c11b-c1f2-40d4-aa2c-62ac7d95364a",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "e4095800-a3a1-4aca-8c3e-a369ef383d79",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "daa3c11b-c1f2-40d4-aa2c-62ac7d95364a"
+            ],
+            "sourceRecordIds": [
+              "e4095800-a3a1-4aca-8c3e-a369ef383d79"
+            ],
+            "sourcePayloadHashes": [
+              "4bd25f1541c352673596add20fe920a5a9bf23e1ccac15ae9324bb83992358c5"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "daa3c11b-c1f2-40d4-aa2c-62ac7d95364a",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.1700",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T10:31:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "e4095800-a3a1-4aca-8c3e-a369ef383d79"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "HDFCBANK",
+      "securityId": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "83c8b2fe-2263-43fe-bf7c-3445a5f54086"
+        ],
+        "selected_evidence_id": "83c8b2fe-2263-43fe-bf7c-3445a5f54086",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "e4095800-a3a1-4aca-8c3e-a369ef383d79",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "83c8b2fe-2263-43fe-bf7c-3445a5f54086"
+            ],
+            "sourceRecordIds": [
+              "e4095800-a3a1-4aca-8c3e-a369ef383d79"
+            ],
+            "sourcePayloadHashes": [
+              "4bd25f1541c352673596add20fe920a5a9bf23e1ccac15ae9324bb83992358c5"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "83c8b2fe-2263-43fe-bf7c-3445a5f54086",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.4100",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T10:31:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "e4095800-a3a1-4aca-8c3e-a369ef383d79"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "ICICIBANK",
+      "securityId": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "64797ed0-8340-4c94-88a0-25990e0b2a13"
+        ],
+        "selected_evidence_id": "64797ed0-8340-4c94-88a0-25990e0b2a13",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "bd75e392-d90c-4106-ae9b-cccf30096d55",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "64797ed0-8340-4c94-88a0-25990e0b2a13"
+            ],
+            "sourceRecordIds": [
+              "bd75e392-d90c-4106-ae9b-cccf30096d55"
+            ],
+            "sourcePayloadHashes": [
+              "5d0f4862f1752278a2516d487397a9254ebaf43934dade3e434a676a2b4ae5de"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "64797ed0-8340-4c94-88a0-25990e0b2a13",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.3800",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T11:36:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "bd75e392-d90c-4106-ae9b-cccf30096d55"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "ICICIBANK",
+      "securityId": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "536a5bf6-3f75-41ed-a1e0-8411209f5bb1"
+        ],
+        "selected_evidence_id": "536a5bf6-3f75-41ed-a1e0-8411209f5bb1",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "bd75e392-d90c-4106-ae9b-cccf30096d55",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "536a5bf6-3f75-41ed-a1e0-8411209f5bb1"
+            ],
+            "sourceRecordIds": [
+              "bd75e392-d90c-4106-ae9b-cccf30096d55"
+            ],
+            "sourcePayloadHashes": [
+              "5d0f4862f1752278a2516d487397a9254ebaf43934dade3e434a676a2b4ae5de"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "536a5bf6-3f75-41ed-a1e0-8411209f5bb1",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.3500",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T11:36:10+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "bd75e392-d90c-4106-ae9b-cccf30096d55"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "IDBI",
+      "securityId": "a5639446-3238-4e08-9d02-59bc529982db",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "cdcc0333-fc1a-4617-a9b9-612e4d1df9ab"
+        ],
+        "selected_evidence_id": "cdcc0333-fc1a-4617-a9b9-612e4d1df9ab",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "cdcc0333-fc1a-4617-a9b9-612e4d1df9ab"
+            ],
+            "sourceRecordIds": [
+              "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88"
+            ],
+            "sourcePayloadHashes": [
+              "d2220505d58ea3c1c0104a1c0e7a01d2402f59df2095369d7cf79269a673f68c"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "cdcc0333-fc1a-4617-a9b9-612e4d1df9ab",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "2.300",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T12:03:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "IDBI",
+      "securityId": "a5639446-3238-4e08-9d02-59bc529982db",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "8335e959-ce1e-4ef0-9b24-d1f0203d99d2"
+        ],
+        "selected_evidence_id": "8335e959-ce1e-4ef0-9b24-d1f0203d99d2",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "8335e959-ce1e-4ef0-9b24-d1f0203d99d2"
+            ],
+            "sourceRecordIds": [
+              "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88"
+            ],
+            "sourcePayloadHashes": [
+              "d2220505d58ea3c1c0104a1c0e7a01d2402f59df2095369d7cf79269a673f68c"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "8335e959-ce1e-4ef0-9b24-d1f0203d99d2",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.1600",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T12:03:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "7b2e290d-7fe6-45ba-999a-9fa4e7f62b88"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "securityId": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "f6e4bd17-b80e-47a9-adab-09b77bf1e9f3"
+        ],
+        "selected_evidence_id": "f6e4bd17-b80e-47a9-adab-09b77bf1e9f3",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "04187434-28d8-43e4-9526-47acf67b2570",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "f6e4bd17-b80e-47a9-adab-09b77bf1e9f3"
+            ],
+            "sourceRecordIds": [
+              "04187434-28d8-43e4-9526-47acf67b2570"
+            ],
+            "sourcePayloadHashes": [
+              "a64bcb72e6ae0a17b01167f71236474d95c35ca782e1f4930c57cf56c17f0d4f"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "f6e4bd17-b80e-47a9-adab-09b77bf1e9f3",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.5100",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-25T11:03:14+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "04187434-28d8-43e4-9526-47acf67b2570"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "securityId": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "71de37d9-6d4c-482a-801d-bd52b01b34bf"
+        ],
+        "selected_evidence_id": "71de37d9-6d4c-482a-801d-bd52b01b34bf",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "04187434-28d8-43e4-9526-47acf67b2570",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "71de37d9-6d4c-482a-801d-bd52b01b34bf"
+            ],
+            "sourceRecordIds": [
+              "04187434-28d8-43e4-9526-47acf67b2570"
+            ],
+            "sourcePayloadHashes": [
+              "a64bcb72e6ae0a17b01167f71236474d95c35ca782e1f4930c57cf56c17f0d4f"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "71de37d9-6d4c-482a-801d-bd52b01b34bf",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.4400",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-25T11:03:14+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "04187434-28d8-43e4-9526-47acf67b2570"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "INDIANB",
+      "securityId": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "ca021e5d-3073-488f-8211-600697710404"
+        ],
+        "selected_evidence_id": "ca021e5d-3073-488f-8211-600697710404",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "ca021e5d-3073-488f-8211-600697710404"
+            ],
+            "sourceRecordIds": [
+              "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b"
+            ],
+            "sourcePayloadHashes": [
+              "e194a5fbaf7ca2be1f549b15a139d87049f5f64b73b9017307925d54a82476ae"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "ca021e5d-3073-488f-8211-600697710404",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.8600",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-10T14:35:59+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "INDIANB",
+      "securityId": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "dc00cec9-6860-4504-97bf-36c9727a7230"
+        ],
+        "selected_evidence_id": "dc00cec9-6860-4504-97bf-36c9727a7230",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "dc00cec9-6860-4504-97bf-36c9727a7230"
+            ],
+            "sourceRecordIds": [
+              "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b"
+            ],
+            "sourcePayloadHashes": [
+              "e194a5fbaf7ca2be1f549b15a139d87049f5f64b73b9017307925d54a82476ae"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "dc00cec9-6860-4504-97bf-36c9727a7230",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.1500",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-10T14:35:59+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "15ac1666-73dc-4422-8ce3-2fbc5af8bb2b"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "KARURVYSYA",
+      "securityId": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "41e1f233-481d-40eb-ab38-1852793f0385"
+        ],
+        "selected_evidence_id": "41e1f233-481d-40eb-ab38-1852793f0385",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "c2973c76-8e7d-47d4-b8a3-a244190a3daa",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "41e1f233-481d-40eb-ab38-1852793f0385"
+            ],
+            "sourceRecordIds": [
+              "c2973c76-8e7d-47d4-b8a3-a244190a3daa"
+            ],
+            "sourcePayloadHashes": [
+              "5dd82f94accdd4808bedbaeb7a27b672db7cedca1ca8833f22c98c0891ad0ea4"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "41e1f233-481d-40eb-ab38-1852793f0385",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "0.7400",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-20T14:32:18+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "c2973c76-8e7d-47d4-b8a3-a244190a3daa"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "KARURVYSYA",
+      "securityId": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "25c9867c-e918-41be-b0e7-725820493de1"
+        ],
+        "selected_evidence_id": "25c9867c-e918-41be-b0e7-725820493de1",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "c2973c76-8e7d-47d4-b8a3-a244190a3daa",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "25c9867c-e918-41be-b0e7-725820493de1"
+            ],
+            "sourceRecordIds": [
+              "c2973c76-8e7d-47d4-b8a3-a244190a3daa"
+            ],
+            "sourcePayloadHashes": [
+              "5dd82f94accdd4808bedbaeb7a27b672db7cedca1ca8833f22c98c0891ad0ea4"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "25c9867c-e918-41be-b0e7-725820493de1",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.1900",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-20T14:32:18+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "c2973c76-8e7d-47d4-b8a3-a244190a3daa"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "securityId": "05744a34-415b-4084-b832-ce3436ba0694",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "344ceb98-671f-4818-83ba-f9e60a68ffa8"
+        ],
+        "selected_evidence_id": "344ceb98-671f-4818-83ba-f9e60a68ffa8",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "141c7131-d9ed-4515-94aa-72c5b8e8045b",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "344ceb98-671f-4818-83ba-f9e60a68ffa8"
+            ],
+            "sourceRecordIds": [
+              "141c7131-d9ed-4515-94aa-72c5b8e8045b"
+            ],
+            "sourcePayloadHashes": [
+              "7d52c58bb96ac185b0bc2dae79120a66bdeb2697bf4196a3050942733e8c2f90"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "344ceb98-671f-4818-83ba-f9e60a68ffa8",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.1800",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T13:17:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "141c7131-d9ed-4515-94aa-72c5b8e8045b"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "securityId": "05744a34-415b-4084-b832-ce3436ba0694",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "ee31ef64-99f2-4fdd-b66a-251a1732c388"
+        ],
+        "selected_evidence_id": "ee31ef64-99f2-4fdd-b66a-251a1732c388",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "141c7131-d9ed-4515-94aa-72c5b8e8045b",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "ee31ef64-99f2-4fdd-b66a-251a1732c388"
+            ],
+            "sourceRecordIds": [
+              "141c7131-d9ed-4515-94aa-72c5b8e8045b"
+            ],
+            "sourcePayloadHashes": [
+              "7d52c58bb96ac185b0bc2dae79120a66bdeb2697bf4196a3050942733e8c2f90"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "ee31ef64-99f2-4fdd-b66a-251a1732c388",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.2700",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-07-18T13:17:07+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "141c7131-d9ed-4515-94aa-72c5b8e8045b"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "SBIN",
+      "securityId": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "result": {
+        "requirement_code": "GROSS_NPA",
+        "metric_code": "GROSS_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "2d4907a9-a13a-4da7-8d02-52d358155327"
+        ],
+        "selected_evidence_id": "2d4907a9-a13a-4da7-8d02-52d358155327",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "f9b5661b-dd47-47db-811f-8a4bd2d1be65",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "2d4907a9-a13a-4da7-8d02-52d358155327"
+            ],
+            "sourceRecordIds": [
+              "f9b5661b-dd47-47db-811f-8a4bd2d1be65"
+            ],
+            "sourcePayloadHashes": [
+              "8abad707b7a3dc7ce6f6a572356c00892578c9f814549ef657da65f7ae568b95"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "2d4907a9-a13a-4da7-8d02-52d358155327",
+              "metric_code": "GROSS_NPA_PERCENT",
+              "numeric_value": "1.4700",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-08-07T09:29:25+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "f9b5661b-dd47-47db-811f-8a4bd2d1be65"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    },
+    {
+      "symbol": "SBIN",
+      "securityId": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "result": {
+        "requirement_code": "NET_NPA",
+        "metric_code": "NET_NPA_PERCENT",
+        "required": true,
+        "minimum_history": 1,
+        "freshness_policy": "90_DAYS",
+        "benchmark_authority": [],
+        "applicability": "APPLICABLE",
+        "evidence_state": "FRESH",
+        "candidate_evidence_ids": [
+          "993f5f10-2050-4eb7-be50-b3bda343cee3"
+        ],
+        "selected_evidence_id": "993f5f10-2050-4eb7-be50-b3bda343cee3",
+        "evidence_as_of_date": "2026-06-30",
+        "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+        "fresh_through": "2027-01-07",
+        "source_provider": "COMPANY_EXCHANGE_FILING",
+        "raw_source_record_id": "f9b5661b-dd47-47db-811f-8a4bd2d1be65",
+        "normalized_value": {
+          "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+          "reviewedEvidence": {
+            "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+            "reviewIds": [
+              "993f5f10-2050-4eb7-be50-b3bda343cee3"
+            ],
+            "sourceRecordIds": [
+              "f9b5661b-dd47-47db-811f-8a4bd2d1be65"
+            ],
+            "sourcePayloadHashes": [
+              "8abad707b7a3dc7ce6f6a572356c00892578c9f814549ef657da65f7ae568b95"
+            ],
+            "researchDocumentIds": [],
+            "documentSourceIds": [],
+            "sourceAdmissionPolicy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+            "executor": "CODEX",
+            "personalOwnerReview": false
+          },
+          "series": [
+            {
+              "id": "993f5f10-2050-4eb7-be50-b3bda343cee3",
+              "metric_code": "NET_NPA_PERCENT",
+              "numeric_value": "0.3800",
+              "text_value": null,
+              "boolean_value": null,
+              "date_value": null,
+              "unit": "PERCENT",
+              "currency": null,
+              "consolidation_scope": "STANDALONE",
+              "period_start": "2026-04-01",
+              "period_end": "2026-06-30",
+              "period_type": "QUARTER",
+              "retrieved_at": "2026-10-09T04:52:46.236667+00:00",
+              "fresh_until": "2027-01-07T04:52:46.236667+00:00",
+              "published_at": "2026-08-07T09:29:25+00:00",
+              "evidence_status": "AVAILABLE",
+              "source_code": "COMPANY_EXCHANGE_FILING",
+              "source_record_id": "f9b5661b-dd47-47db-811f-8a4bd2d1be65"
+            }
+          ]
+        },
+        "validation_state": "VALIDATED_REVIEW_LEDGER",
+        "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+        "reason_code": "APPROVED_OFFICIAL_FILING_FALLBACK",
+        "recommended_remediation_action": "NONE"
+      }
+    }
+  ]
+}

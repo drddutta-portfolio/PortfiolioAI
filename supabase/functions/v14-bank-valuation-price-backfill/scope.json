@@ -1,0 +1,69 @@
+[
+  {
+    "symbol": "AUBANK",
+    "securityId": "f5c47463-3c6d-4db0-a815-e4301e990213",
+    "isin": "INE949L01017"
+  },
+  {
+    "symbol": "AXISBANK",
+    "securityId": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+    "isin": "INE238A01034"
+  },
+  {
+    "symbol": "BANDHANBNK",
+    "securityId": "30ce066a-6410-4b11-9b85-e41324971261",
+    "isin": "INE545U01014"
+  },
+  {
+    "symbol": "BANKBARODA",
+    "securityId": "6771f493-c29a-477e-8cc8-2bede0941e44",
+    "isin": "INE028A01039"
+  },
+  {
+    "symbol": "FEDERALBNK",
+    "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+    "isin": "INE171A01029"
+  },
+  {
+    "symbol": "HDFCBANK",
+    "securityId": "b47b007d-1990-4504-a5a2-4391c07687c5",
+    "isin": "INE040A01034"
+  },
+  {
+    "symbol": "ICICIBANK",
+    "securityId": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+    "isin": "INE090A01021"
+  },
+  {
+    "symbol": "IDBI",
+    "securityId": "a5639446-3238-4e08-9d02-59bc529982db",
+    "isin": "INE008A01015"
+  },
+  {
+    "symbol": "IDFCFIRSTB",
+    "securityId": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+    "isin": "INE092T01019"
+  },
+  {
+    "symbol": "INDIANB",
+    "securityId": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+    "isin": "INE562A01011"
+  },
+  {
+    "symbol": "KARURVYSYA",
+    "securityId": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+    "isin": "INE036D01028"
+  },
+  {
+    "symbol": "KOTAKBANK",
+    "securityId": "05744a34-415b-4084-b832-ce3436ba0694",
+    "isin": "INE237A01010",
+    "identityBasis": "OFFICIAL_NSE_HISTORICAL_ISIN_2021_2023_BEFORE_LATER_ISIN_CHANGES",
+    "currentIsin": "INE237A01036"
+  },
+  {
+    "symbol": "SBIN",
+    "securityId": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+    "isin": "INE062A01020"
+  }
+]

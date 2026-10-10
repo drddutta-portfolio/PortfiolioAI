@@ -1,3 +1,211 @@
+## Banking V1-4 — successful Oct-9 canary, qualified capital facts and current 13-bank materialization — 10 October 2026
+
+PR #124 Development execution advanced materially beyond the earlier preflight. **D1 and D2 remain NOT APPROVED / NOT ACTIVATED.** The exact owner-decision package is `docs/private/v1-4-industry-batches/Banking_V1_4_D1_D2_Owner_Decision_Package_2026-10-10.md`: proposed D1 `BANK_NBFC_STAGE_8_BANK_V2` removes mandatory M6 `PB_ADJUSTED_FOR_ROE` and redistributes valuation to **M7=12/17, M5=5/17** while preserving immutable V1 history and all remaining M5/M7 evidence gates; proposed D2 permits DATE_ONLY/UNKNOWN sources to enter **current** factual review only under conservative proven-availability bounds, preserving precision and `published_at=NULL`, with no historical availability inference, reporting-age renewal or valuation look-ahead.
+
+Original issuer PDF bytes were independently reopened/rehashed and **8 ordinary-bank capital source facts** were appended as `SOURCE_FACT_QUALIFIED`, not ACCEPTED: BANDHANBNK CET1/CRAR 17.54/18.15, ICICIBANK standalone 16.19/16.84, KARURVYSYA 17.98/18.61, SBIN standalone 12.89/15.67. Publication precision remains UNKNOWN and `published_at=NULL` for those exact retained PDF versions. AUBANK's official NSE 30-Jun-2026 filing separately yielded exact-timestamp SFB facts **CET1 17.14% / total CRAR 18.93%**, appended as two SFB `SOURCE_FACT_QUALIFIED` records under the already-approved SFB mapping direction; no Basel III relabelling. New financial ACCEPT reviews from these 10 facts remain **0** because D2 is not approved and the SFB canonical mapping/review path is not yet active. Existing accepted NPA reviews remain exactly **26 (13 Gross + 13 Net)**.
+
+The legitimate one-time P4 grant issuer was confirmed as the existing owner-authorized Development control plane using append-only `OWNER_REVIEWED_CLASSIFICATION / P4_EXECUTION_GRANT` records; no token or synthetic secret was introduced. ANGEL_ONE Development ingestion controls were configured with **scheduler OFF**, 14 attempts/day, 14/run, rolling 14/day, concurrency 1, hard stop 100%, quota status UNKNOWN. New separate `v14-bank-maintenance-canary` v2, SHA `8a90d8b7afccb95e90c6f8ef5e8d03f41d49cc2aed23a03a41e0972afc633562`, executed the missing **09-Oct-2026** session successfully: run `7ef5b788-1ff6-4810-b803-4eb7b1754979`, reservation `9dafe0dd-7eed-4ea0-9fea-6ac9ccbe2d10`, **1 successful auth, 14/14 successful history calls (13 banks + NIFTY_BANK), zero retries/failures, 14 consumed units, 0 failed/released**, 14 immutable source captures and independent post-write readback of exactly 13 stock + 1 benchmark rows, all exchange-local date 09-Oct. A first grant consumed by a pre-provider trigger enum failure made zero provider calls/reservations and remains in the audit trail.
+
+Oct-8 historical accounting is reconciled append-only, not backfilled: reconciliation record `e7351429-65a3-4ac1-9cdd-a635f07b09f6` preserves the observed 1 auth + 14 history requests and 14 immutable captures while explicitly recording that no contemporaneous standard ingestion run/reservation/usage events existed and no backdated usage events were inserted. Future maintenance now uses prospective standard reservation/usage settlement.
+
+Corporate-action/history remediation used existing verified evidence. KVB 1:5 bonus, HDFC 1:1 bonus and Kotak split treatments are independently continuity-adjusted by Angel One/P8 READY factors; no local price rewrite was made. Post-canary append-only history proofs now make all five current history requirements — `PRICE_MOMENTUM_6M`, `PRICE_MOMENTUM_12M`, `MAX_DRAWDOWN_1Y`, `VOLATILITY_RELATIVE`, `RELATIVE_STRENGTH_12M` — **FRESH for 13/13 banks**.
+
+The single canonical materializer was narrowly extended to permit explicit security-ID writes only under `targetingMode=P4_GRANT_SCOPED_SECURITY_IDS_V1` with exact P4 grant scope; pagination cannot be combined. Development `p7-ic2-materialize-readiness` is **v52 ACTIVE**, SHA `a83424952b5765e98160105002b23608faad801040829f432abaa1fa916763cf`. A 13-bank invocation persisted 10 selections before a worker resource limit; those 10 were not replayed. Three same-run continuation attempts failed safely on metadata invariants and created no selections. KVB, Kotak and SBI were then materialized independently under exact single-bank grants, and HDFCBANK once more after its bonus proof superseded the stale history record. Independent final current readback is now **13/13 current selections, 13 REVIEW_REQUIRED / 0 CONFLICTING / 0 READY**, versus the starting 11 REVIEW_REQUIRED / 2 CONFLICTING. READY value remains **₹0 / ₹2,05,138.62**; canonical materialization made zero provider calls.
+
+Historical valuation evidence remains a genuine blocker. Cloudflare R2 proves both raw and adjusted P8 B3 archives contain **744 distinct trade-date partitions from 03-Oct-2023 through 30-Sep-2026**, with **0 partitions in 2021/2022**. Current 13-bank `fundamental_observations` has `PE_TTM` 26 rows/13 banks, `PBV_ADJUSTED_PROVIDER` 26/13, `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT` 38/12 and `EPS_DILUTED` 1 row, but **zero of those inspected valuation denominator rows has `period_end`**. Therefore the approved ≥36/60 observations distributed across all five preceding years remain unproven; no current facts were backfilled historically and M5/M7 remain blocked.
+
+Ownership investigation confirms NSE XBRL preserves domestic and foreign institutional categories separately; no approved aggregate-INSTITUTIONAL derivation exists, so no silent summation was used. Rating/governance source candidates were located in retained issuer documents, but no source-primary, period-matched 13-bank rating-trend package or blanket governance no-event proof was fabricated. Full execution/readback: `docs/private/v1-4-industry-batches/Banking_V1_4_Canary_Qualification_And_Current_Materialization_2026-10-10.md`.
+
+---
+
+## Banking V1-4 — 10 Oct source-precision code, M6 recommendation, historical and canary readbacks
+
+PR #124 current continuation adds pure `v14-bank-publication-precision.ts` and negative tests for three distinct original-document cases: (A) proven exact issuer publication instant, (B) proven official publication date only with conservative end-of-day IST bound, and (C) unknown publication date with original bytes and first verified retrieval, **never falsely setting published_at**. B/C remain **non-admitting** pending a narrow explicit canonical precision amendment; historical point-in-time valuation must never use pre-availability data. Source `published_at` NULL not patched.
+
+M6 exact recommended **governed BANK V2 amendment retiring required `PB_ADJUSTED_FOR_ROE` from the new model with proportional redistribution of validated surviving scores**, after authoritative weights/all-13 impact/threshold comparisons and owner approval. This is not currently authorized or activated. See `docs/private/v1-4-industry-batches/Banking_V1_4_M6_And_Publication_Precision_Final_Decision_2026-10-10.md`.
+
+**Correction to the earlier UTC-date census:** the October 8 banking history was in fact persisted. `period_start` is `timestamptz`; the 2026-10-08 NSE session is stored as `2026-10-07 18:30:00+00`, i.e. `2026-10-08 00:00 Asia/Kolkata`. Live Development readback of action `V1_4_BANK_TAIL_2026_10_08` proves **16 stock rows total**, including **13/13 October 8 IST stock sessions**, plus **one October 8 IST NIFTY_BANK row**. All carry the original action/source lineage; the three extra stock rows are the October 7 IST repairs for KARURVYSYA, KOTAKBANK and SBIN. The prior “0 October 8 rows” conclusion used the UTC calendar date and is superseded; no October 8 reacquisition is warranted. `p8_b3_adjusted_market_price_series` remains 0 rows and the 13-bank history still spans only 15 distinct IST calendar months, below the approved ≥36/60 valuation minimum. The next completed-session gap is October 9, but no current unconsumed/unexpired bank execution grant was found, so no provider canary or recovery call was made. No new M1–M4 ACCEPT, no 299-item current handler proof, no READY increase; existing 26 NPA reviews unchanged; Gate A/B NOT PROVEN; Production/main unchanged.
+
+---
+
+## Banking V1-4 — CI PASS, M6 decision and measured evidence blockers — 10 October 2026
+
+**Verified** code commit `a6c84f5584e9c1f12173612bd083bf636ab1baed`: Banking V1-4 Full Verification PASS and PortfolioAI Architecture Guard PASS. M6 `PB_ADJUSTED_FOR_ROE` is **required**, BANK profile order 14. The ROE-median division/clamp heuristic lacks financial justification. Versioned owner-ready choice to keep required+blocked pending calibrated residual-income `justified PB=(through-cycle ROE−g)/(Ke−g)` with full source/risk/scoring sensitivity, or formally replace/reweight in a versioned BANK methodology without silently deleting requirement. See `docs/private/v1-4-industry-batches/Banking_V1_4_M6_Financial_Model_Or_Amendment_Decision_2026-10-10.md`. **No M6 approval/activation inferred**.
+
+Official ICICI financial iXBRL from NSE and issuer earnings/results establish 18 July 2026 board date; Bandhan bank regulatory listing and July results dates exist; KVB July 20 letter references Pillar 3. **None proves the exact issuer publication timestamp of the acquired same-hash Pillar 3 PDFs.** Four original-source records have `published_at=NULL`, hence no new M1–M4 factual ACCEPT. Precise evidence/date-only possible representation and non-invented publication-clock proposal recorded in `Banking_V1_4_Publication_And_Canary_Preflight_2026-10-10.md`. Existing accepted 26 NPA reviews unchanged.
+
+Measured live `market_price_history` coverage across all 13 BANK symbols is **15 distinct months each**, versus approved required ≥36 qualified of preceding 60 across all five years; current point-in-time BVPS/TTM EPS history still unproven. Do not derive five-year comparator scores from 15 months, confuse it with separate P8 archived data or activate M5/M7.
+
+Bounded recurring operating canary **NOT EXECUTED**: Trendlyne scheduler OFF and quota last owner-verified on 2026-09-29, no confirmed current Angel One scoped provider entitlement/budget grant/issuer machine identity; manual planner tests are not a live canary. No provider attempts or recurring activation. Full authenticated canonical 299-item evaluation and bank selection write similarly not executed without qualifying financial facts and valid owner grant. Latest selected 0/13 READY; Gate A/B NOT PROVEN. PR #124 remains draft, Production/main untouched.
+
+---
+
+## Banking V1-4 — consolidated owner approval and executable M5/M7 / bounded maintenance (10 October 2026)
+
+Owner approved the **recommended proposals** from `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`: M5 same-bank 60-month point-in-time PB relative and M7 analogous positive-earnings TTM PE relative, minimum 36/60 with five-year temporal spread; **M6 recommended deferral**, not a made-up ROE adjustment; AUBANK SFB-specific regulatory mapping direction, and bounded Development maintenance proposal subject to manual live canary, genuine provider/grant budgets and verified exchange-final publication. Approval record: `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Contract_V1_Owner_Approval_2026-10-10.md`.
+
+Implemented pure fail-closed M5/M7 60-month comparator and source/coverage tests in `v14-bank-valuation-self-history.ts` and `.test.ts`. Implemented 14-attempt maximum and single missing-session bound in **read-only** maintenance planner, with guard tests. These are **not wired to canonical evaluator or activated** pending real period-dated five-year point-in-time observations; M6 remains required and deferred. Cron/recurring spend remains OFF because no live grant-bound end-to-end canary or observed scheduled run exists.
+
+Independent live reconciliation preceding changes: PR #124 draft/unmerged, base `codex/v1-4-bank-owner-ui`; PR #121/#123 unmerged. Development canonical v51, active M1–M4 definitions, four R2 original source records including SBIN with `published_at=NULL`, no newly accepted bank capital reviews (only 26 accepted NPA), persisted 0/13 READY and ₹0/₹2,05,138.62. Production/main unchanged. Final commit CI must be checked; do not promote these commit-only tests to verified PASS prematurely.
+
+---
+
+## Banking V1-4 — consolidated remaining owner decision checkpoint (10 October 2026)
+
+**Document:** `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Execution_Contract_V1_2026-10-10.md`, version `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`. Reconciled live PR #124 `176fbdce38a1c64b68b90647f33018ec4ad27333`, unmerged PRs #121/#123, Development canonical validator v51 SHA `260c202064096ac7f426b33feea1eff9ceccf6bc3180a8ff6c55438e14cbbe3d`, four **active** direct M1–M4 definitions and approved dual clocks, four original PDF source records (including SBIN) with durable R2 keys. Their issuer publication timestamps remain NULL. Existing **26 NPA ACCEPTED**; new M1–M4 factual reviews 0; persisted 0/13 READY, 11 REVIEW_REQUIRED / 2 CONFLICTING, ₹0/₹2,05,138.62.
+
+The contract **does not re-request** existing approvals: direct M1–M4, dual-clock 150/550, issuer original source pathway, controlled Development work and no waiver/production. One proposed checkpoint remains for M5 PB_RELATIVE, M6 PB_ADJUSTED_FOR_ROE (default defer as financially unvalidated), M7 PE_TTM_RELATIVE, AUBANK SFB applicability/scoring, and exact recurring O budget/schedule. No proposed models or jobs activated. Actual five-year point-in-time P/B and P/E coverage not demonstrated; registry has no M5–M7 normalized observations. Gate A/B both NOT PROVEN.
+
+---
+
+## Banking V1-4 — approved dual clocks, four original PDFs in R2, Development v51 — 10 October 2026
+
+Owner approved M1–M3 dual 150-day reporting/source-byte verification ceilings, M4 dual 550-day ceilings, earliest expiry, explicit source supersession/conflict handling, and narrowed delegated review of verified official issuer-hosted originals within the 13 frozen banks. These do not authorize individual factual ACCEPT, arbitrary hosts, scoring changes, or recurring execution. M5–M7 deferred/mandatory, O1 scheduler OFF.
+
+Four M1–M4 metric definition rows now ACTIVE with the approved policy and 150/550-day freshness seconds, updated through existing registry data without schema migration. The canonical Development handler was updated from v48 to v49, v50, then v51 ACTIVE. Latest independently verified v51 SHA-256: 260c202064096ac7f426b33feea1eff9ceccf6bc3180a8ff6c55438e14cbbe3d. Live code enforces dual clocks and original source issuer identity, and the latest raw-candidate veto demands SOURCE_FACT_QUALIFIED and VERIFIED_FROM_ORIGINAL_PDF_BYTES. Code commit 61dcf776190aaf62bc2d5ca63173553210a9eb50 passed Full Verification and Architecture Guard; CI for subsequent stricter raw-candidate code commit 35a22f37f0e2462a05169affa5f4d8f4e06e5f87 was still running at last inspection after TypeScript, edge lint and Edge tests passed.
+
+Development R2 bucket portfolioai-history-dev contains content-addressed original June 2026 Basel III issuer PDFs for ICICIBANK, BANDHANBNK, KARURVYSYA and SBIN, GitHub Actions acquisition run 37981975274 verified 4/4 upload/download SHA256 equality. Four unreviewed data_source_records source records appended and read back: ICICI ae753e77-38f2-46b0-8237-fb2a7b59de20; Bandhan a1ef5183-e4f3-4501-8715-bce9bb9ad4c7; KVB 5852a5b1-20a1-4481-b557-a7dc80209eb0; SBI 7f6cda20-6eba-49d7-a4f1-85d826e9cb3d. Publication timestamps remain NULL pending authoritative version-specific publication proof; original table extract attestation and choice between standalone versus consolidated scope remain required. They are unreviewed source captures, not financially ACCEPTED facts.
+
+Factual admission readback remains 0 new M1–M4 ACCEPTED, 26 existing NPA ACCEPTED unchanged, no normalized financial facts or new selected snapshots. Prior persisted 0/13 READY, 11 REVIEW_REQUIRED, 2 CONFLICTING; frozen READY value INR 0 of INR 205138.62. No authenticated current full 299-requirement validation run proven. Separate proposed, NOT APPROVED AUBANK RBI SFB capital methodology recorded in Banking_13_AUBANK_SFB_Capital_Methodology_Decision_2026-10-10.md. Source preservation and exact audit in Banking_13_Owner_Approved_Freshness_R2_And_Admissions_2026-10-10.md. M5–M7, ownership, rating/governance, corporate action and recurring Gate B remain blocked.
+
+---
+## Banking V1-4 canonical source-authority deployment and original-source artifact — 10 October 2026
+
+**Development canonical function v48 ACTIVE**: exact CI-passed code commit `58a97dacc6afbc0690191edb348c4a3160d209c6`; 18-file deployed bundle SHA-256 `d349aba4b124e798ac907528a29406f70fdbb949f4c75ec4456f7b7d28f41186`. Both Banking V1-4 Full Verification and Architecture Guard succeeded for that source commit. Independently fetched v48 and confirmed `BANK_DIRECT_SOURCE_AUTHORITY_NOT_APPROVED`, `BANK_DIRECT_ISSUER_SECURITY_IDENTITY_NOT_PROVEN`, and `BANK_DIRECT_FACTUAL_REVIEW_REQUIRED` are present, custom authorization setting unchanged. Source-priority, quote/hash/period/units and delegation constraints remain enforced; v48 deployment is **not a new authenticated 299-item evaluation**.
+
+GitHub Actions original-byte capture is complete for ICICI/Bandhan/KVB. The manual-only workflow avoids re-acquisition on every PR commit; 90-day artifact run `37978638995` artifact `11640330272` expires `2027-01-07T19:12:33Z`. Original PDFs and SHA hashes independently verified; original capital tables extracted. Original-byte acquisition is PROVEN but canonical R2 storage binding, publication timestamp proof, chosen regulatory scope and issuer-hosted delegated review authorization remain outstanding. Exact source facts and hashes: `docs/private/v1-4-industry-batches/Banking_13_Original_Bytes_Capital_Ratio_Qualification_2026-10-10.json`. Execution policy and AUBANK regulatory exception: `Banking_13_Acquisition_And_Admission_Readiness_2026-10-10.md`.
+
+Active M1–M4 metric definitions **remain false** pending approval of separate reporting age and verified-byte freshness policy; no normalized observations, reviews, selected snapshots or Production changes. Independent last ledger readback: **13 GROSS_NPA + 13 NET_NPA ACCEPTED** exactly. Frozen banks remain **0 READY**, 11 REVIEW_REQUIRED and 2 CONFLICTING; ₹0/₹2,05,138.62. M5–M7 deferred mandatory; O1 scheduler OFF.
+
+---
+
+## Banking V1-4 — original bytes acquired, delegated issuer-source boundary — 10 October 2026
+
+**Progress (NOT Gate A completion):** GitHub Actions one-shot original issuer PDF acquisition succeeded for ICICIBANK, BANDHANBNK, KARURVYSYA. Independently rehashed original PDF bytes, verified exact standalone/consolidated 30 June 2026 Basel III CET1 and total CRAR tables. Original-source artifact run `37977912532`, artifact `11639583150`; 90-day retained rerun `37978638995`, artifact `11640330272` expires **2027-01-07**. Three PDFs and actual hashes/values/remaining source gaps are recorded in `docs/private/v1-4-industry-batches/Banking_13_Original_Bytes_Capital_Ratio_Qualification_2026-10-10.json` and `Banking_13_Acquisition_And_Admission_Readiness_2026-10-10.md`. No PDF bytes committed; content-addressed R2 copy remains uncompleted.
+
+M1–M4 source authority now explicitly checked inside canonical factual review against registry source_priority and exact source raw security_id. Dedicated source numeric-validator test includes unknown provider, invalid original provenance, mixed official/Trendlyne bases and period/scope mismatch. **Code commit tests need successful exact-HEAD CI before live deploy.** Deployed canonical function still v47, with earlier source-guard but not this newest review-source whitelist change.
+
+**Crucial review authorization finding:** existing delegated `approvedBankOfficialFallback` covers exact NSE `nsearchives.nseindia.com/corporate/` originals only; these issuer-hosted PDFs do not satisfy that scoped path even with correct original byte hashes. Do not silently widen delegation. Published_at, long-lived R2 original linkage, exact chosen regulatory perimeter and explicit M1–M4 financial dual-clock policy remain to be proven/approved. The four definitions remain registered **inactive**; issuer source values are not `REVIEW_ACCEPTED` yet. Existing 26 NPA ACCEPTED unchanged. No M1–M4 reviews, observations or READY selections.
+
+**AUBANK exception:** RBI Basel III circular explicitly excludes SFBs and separate 2025 SFB capital directions apply. AU's June 2026 Pillar 3 is labelled Basel II. Its M2/M3 BANK Basel III applicability requires a **bank-specific owner decision**, not an invented Basel III fact, dropped cohort member or automatic NA. See cited RBI/issuer links in acquisition readiness document. M5–M7 still mandatory and deferred; O1 recurrence OFF; Production unchanged.
+
+**Independent persisted readback:** 0/13 READY; 11 REVIEW_REQUIRED, 2 CONFLICTING; ₹0/₹2,05,138.62 READY. Gate A/B NOT PROVEN.
+
+---
+
+## Banking V1-4 inherited freshness and direct-source compatibility — 10 October 2026
+
+**PR #124** continuation from `b76deb83675a08f24b22142d0edf90dbc1f28d9b` (both CI checks SUCCESS). BANK profile requirements contain no explicit M1–M4 `freshnessPolicy` even though other profiles explicitly inherit `FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS`. A proposed BANK dual-clock policy (150 days reporting end for quarter/regulatory, 550 days annual, independent source-verification time, explicit amendment supersession) is **NOT APPROVED**, so four M1–M4 definitions remain inactive. No invented 120/90-day activation. Full boundary examples and official-source investigation are in `docs/private/v1-4-industry-batches/Banking_13_Dual_Clock_Freshness_And_Issuer_Source_Investigation_2026-10-10.md`.
+
+Corrected a demonstrated pre-existing definition incompatibility through the existing data registry: `definition.provider=TRENDLYNE_MCP` conflicted with the owner-approved direct `source_priority` hierarchy and the canonical validator's exact provider check, unfairly rejecting official issuer/NSE records. Removed only the hardcoded provider restriction from the **four inactive rows**, retaining `source_priority` and source-binding guards; independently returned all four with source hierarchy intact and `is_active=false`. No schema migration, write of review/observation, paid call or READY change.
+
+Public original June 2026 Basel III disclosures actually inspected for **BANDHANBNK** (standalone 17.54% CET1 / 18.15% CRAR) and **KARURVYSYA** (17.98% CET1 / 18.61% CRAR), plus earlier ICICIBANK 16.11% / 16.75% consolidated and 16.19% / 16.84% standalone. Official issuer directory links identified for the remaining banks, with precise missing source-level proof tracked. Original PDF bytes could not be obtained via container transport; **0 new reviews or admissions**. Existing 26 NPA ACCEPTED preserved; 0/13 READY; M5–M7 deferred; maintenance scheduler OFF.
+
+---
+
+## Banking V1-4 M1–M4 registry compatibility and deployed validator — 9 October 2026
+
+PR #124 code commit `838a9406` passed Banking V1-4 Full Verification and Architecture Guard. Canonical Development `p7-ic2-materialize-readiness` was deployed as **v47 ACTIVE**, SHA-256 `c5dff71f63cdcff0fea1eeacbecda9c1fa3927e800676bc1a3d39b4fbf48abf6`, with preserved custom owner/grant authorization boundary. Independent live bundle readback confirmed source-hash review and M1–M4 source-only/bypass guards.
+
+Four M1–M4 metric data rows were registered and read back; compatibility audit found **120-day / 90-day caps not explicitly approved** and BANK selected requirement freshness_policy null. They remain registered but **is_active=false** with explicit BLOCKED_PENDING_EXPLICIT_FINANCIAL_FRESHNESS_POLICY status until genuine numeric-reporting expiry/source-clock policy is resolved. No schema migration. No M1–M4 factual acceptance; existing 26 NPA ACCEPTED unchanged.
+
+Original ICICI June 2026 issuer Pillar 3 document was accessed via official linked PDF: consolidated CET1 16.11%, total CRAR 16.75%, standalone CET1 16.19%, total CRAR 16.84%. Original PDF byte download/hash was unsuccessful, so no admission was fabricated. Detailed facts, failed deployment packaging and successful v47 parity, and expiry decision: `docs/private/v1-4-industry-batches/Banking_13_Registry_Deployment_Original_Source_Audit_2026-10-09.md`.
+
+**Gate A NOT PROVEN, 0/13 READY. Gate B NOT PROVEN, recurring maintenance OFF.** M5–M7 deferred and mandatory. No Production/main change.
+
+---
+
+## Banking V1-4 M1–M4 canonical review integration — 9 October 2026
+
+M1–M4 approved direct-source semantic proof has now been added to the existing `v14-reviewed-evidence.ts` reviewer after original hash, exact source quote, numeric value and financial period binding; negative source-substitution integration regressions committed. This is **repository integration**, not Development Edge deployment, registry registration, factual admission or current handler materialization. A read-only retained-source scan confirmed candidate NIM/CET1/CAR/ROA mentions but no fully verified direct-source period/scope/denominator fragments admitted in this execution. **New reviews/observations/selections: 0.** Existing 26 accepted NPA reviews unchanged. No provider calls, grant creation, cron, Production or V1-5 changes.
+
+All three deferred valuation requirements remain mandatory in the 13 selected BANK snapshots; they block Gate A irrespective of M1–M4 progress. Precise source inspection and remaining boundary: `docs/private/v1-4-industry-batches/Banking_13_M1_M4_Integration_And_Raw_Source_Checkpoint_2026-10-09.md`. Gate A **NOT PROVEN (0/13 READY)**; Gate B **NOT PROVEN (scheduler OFF)**.
+
+---
+
+## Banking V1-4 explicit owner decision and direct-source preflight — 9 October 2026
+
+The owner explicitly approved **M1–M4 DIRECT ONLY** (NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL); **M5–M7 DEFERRED** (PB_RELATIVE, PB_ADJUSTED_FOR_ROE, PE_TTM_RELATIVE); and **O1 APPROVED FOR PLANNING/TESTING ONLY**, without scheduler activation or recurring provider spend. The specific source is `docs/private/v1-4-industry-batches/Banking_13_Owner_Decision_Record_2026-10-09.md`, reflected in the eight-decision matrix.
+
+Implemented a pure source semantic preflight `supabase/functions/_shared/v14-bank-approved-direct-preflight.ts` and matching `.test.ts`. It rejects unsupported annual NIM→TTM, Tier 1→CET1, Basel II→Basel III, quarterly→annual ROA and missing identity/hash/period/denominator proof. Passing is **only eligible for subsequent factual review**, never `ACCEPTED` or `READY`; not yet wired to the canonical adapter nor deployed to an Edge runtime. Direct reported values remain subject to exact source semantics/period/scope and existing immutable review authority. No metric registry activation/migration, provider calls, review writes, canonical selections, schedule, Production or V1-5 changes. Gate A and Gate B remain **NOT PROVEN**.
+
+---
+
+## Banking V1-4 seven-contract and maintenance decision handoff — 9 October 2026
+
+**Gate A NOT PROVEN (0/13 READY, ₹0). Gate B NOT PROVEN (scheduler OFF).** Source-backed owner decision work has been consolidated, not activated. Current read-only Development registry still lacks seven BANK metric definitions: NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL, PB_RELATIVE, PB_ADJUSTED_FOR_ROE and PE_TTM_RELATIVE. Live selected 13×23 requirement census totals 299 applicable, 65 historical FRESH and 234 historical blocked; the old selected snapshot counts must not be presented as current freshness and do not include subsequent source admissions.
+
+- Prepared `docs/private/v1-4-industry-batches/Banking_13_Consolidated_Methodology_And_Maintenance_Approval_Package_2026-10-09.md` — seven exact source/semantic recommendations, guarded valuation alternatives, test expectations and separate bounded recurring-policy choices; **PROPOSED / NOT APPROVED**.
+- Added 299-row `docs/private/v1-4-industry-batches/Banking_13_By_Requirement_Execution_Ledger_2026-10-09.csv` covering all 13 exact banks in four owner slices and all 23 registered BANK codes. It records bank/requirement source context, proof and decision dependencies, next step and unexecuted current replay; it does **not** assert new facts admitted.
+- No provider call, new review/observation/snapshot/selection, migration, Auth/RLS change, Development Edge deployment, recurring activation, PR merge, Production or V1-5 change during this documentation handoff. Earlier live history writer v20/v11 deployments remain separately recorded.
+
+---
+
+## Banking V1-4 Development history write-safety deployment — 9 October 2026
+
+**Gate A:** NOT PROVEN. **Gate B:** NOT PROVEN. Recurring scheduler remains OFF.
+
+- Independent live-source comparison found Development `refresh-market-history` v19 and `refresh-bank-benchmark` v10 lagged the remediation branch and did not include the already-tested append-only correction/race safeguards.
+- Deployed the exact remediation implementations to Development only. `refresh-market-history` is now **v20**, bundle `940be77753e9dbfe4f12126383b7e2c6a1736fb6c25d13c1dfad216dd821fdbf`; `refresh-bank-benchmark` is now **v11**, bundle `5182e4faafc20feca78bba1c7dfad9127a922f0e0a67a99b8a0c3bcf15e8cdb0`.
+- Post-deployment bundle readback verifies both live functions now contain source-bound numeric equality, duplicate-ignore persistence, correction-review blocking, concurrent-correction detection and final post-write readback.
+- No provider invocation, migration, Auth/RLS change, factual review, canonical snapshot/selection write, Production deployment, PR merge, cohort change or scheduler activation occurred.
+- Independent database readback after deployment confirms the same 13 selections remain selected: **0 READY / 11 REVIEW_REQUIRED / 2 CONFLICTING**; the delegated review ledger remains exactly **26** rows. READY frozen value remains **₹0**.
+- Exact deployment record: `docs/private/v1-4-industry-batches/Banking_13_History_Write_Safety_Deployment_2026-10-09.md`.
+- Gate B still requires a qualified current-session execution/canary path, expiry/event revalidation evidence, recovery monitoring and valid recurring activation authority. Gate A still requires approved source/methodology contracts and successful whole-bank canonical materialization/readback.
+
+---
+
+## Banking V1-4 continuing qualification and current-readiness bridge — 9 October 2026
+
+**Scope:** Draft PR #124, Development-only. **Gate A:** NOT PROVEN (0/13 persisted READY; frozen READY ₹0/₹2,05,138.62). **Gate B:** NOT PROVEN; recurring scheduler OFF. All 111 frozen securities and methodology unchanged.
+
+- Independent readback located **13/13 October 8 stock bars and one NIFTY_BANK bar**, each with raw `V1_4_BANK_TAIL_CAPTURE` record provenance and payload hash. These records already exist; no repeat October 8 acquisition needed. See `docs/private/v1-4-industry-batches/Banking_13_Oct8_Capture_And_NPA_Independent_Readback_2026-10-09.md` for exact security, retained source and snapshot/selection IDs.
+- Independently reconciled **26/26 ACCEPTED** delegated quarterly standalone percent Gross/Net NPA review rows; all have corresponding retained source records and matching original source payload hashes. These accepted individual reviews have **not** yet generated a fresh selected snapshot. Current owner-authenticated full canonical replay is outstanding.
+- Added current-clock BANK display-veto logic and an explicitly prospective **authenticated read-only** single-stock canonical-replay bridge for the frozen 13-bank Development research page, with strict zero-provider/zero-write response checks. It cannot upgrade historical selected status. Simulated timestamp and Development-host regression tests were added. **Not deployed or live owner-browser-verified.**
+- The deployed Development canonical validator remains `p7-ic2-materialize-readiness` v46; the historical tail-acquisition function remains v1. The grant ledger showed no unexpired unconsumed P4 grant. No grant was fabricated, no owner JWT obtained and no fresh HTTP validation or materialization was performed.
+- Stage 8.1C and 8.6D leave specific NIM TTM, CET1, CAR, annual ROA and generic/ROE-adjusted P/B semantics unresolved. A single source-bound decision package is recorded at `docs/private/v1-4-industry-batches/Banking_13_Methodology_Contract_Decision_Package_2026-10-09.md`, without inventing financial formulas.
+- No additional provider call, factual review, database/R2/canonical write, backend redeployment, PR merge, Production change or recurring scheduler activation in this continuation. Source availability, historical selections, prospective statuses and actual persisted READY remain separate.
+
+---
+
+## Banking V1-4 native Trendlyne correction — 9 October 2026
+
+Executed 13 fresh scoped Trendlyne tool calls plus one capability-discovery request. All fourteen reservations SETTLED; thirteen internal units, no retries. Corrected SBIN selector from internal ID to NSE symbol: six quarters of both selected ownership series recovered. Ownership histories now available for **13/13**, with source semantics still blocked. Four source-token-bound exact slice calls returned annual ROE and ROA for all thirteen banks; broad-search absence was not provider absence. Native annual NIM/Tier 1 are not substitutes for NIM TTM/CET1. No invented reporting dates, fiscal scope or missing metric definitions.
+
+Independent persisted selection readback: **13/13 exactly unchanged, 0 READY**, 11 REVIEW_REQUIRED and 2 CONFLICTING. Prior 26 qualified delegated NPA reviews are separate from these raw captures. Financial executor v7 and corrected SBIN executor v3 ACTIVE in Development; canonical v46 unchanged. 377 Edge tests, four relevant type-checked Deno tests, architecture, TypeScript and Edge lint PASS. Full authenticated 299-item handler replay and whole-bank materialization not claimed. Evidence and final deployment boundaries: `docs/private/v1-4-industry-batches/Banking_13_Fresh_Trendlyne_Financial_Result_2026-10-09.md`. Draft PR #124; no merge or Production change.
+
+## Banking V1-4 fresh Trendlyne financial capture — 9 October 2026
+
+Following the owner's request for fresh calls, executed four scoped multi-stock Trendlyne attempts across the approved banking slices. All 13 requested symbol/instrument identities match. Four raw source records, four usage events/four internal units and four SETTLED reservations independently reconciled; zero retries. Responses also include unrequested entities, excluded from the target-only projection.
+
+Fresh data-date 2026-10-09 is not a financial reporting-period proof. Returned EPS YoY fields, annual capital-adequacy candidates, Tier 1, annual NIM, adjusted PBV and self-history valuation cannot be substituted for other required metrics or admitted with invented reporting dates/scope. No new canonical admissions from these responses; 26 separately qualified delegated NPA requirements remain FRESH in their recorded replay. Whole-bank readiness remains 0/13 persisted READY / NOT PROVEN. Acquisition did not write canonical observations/reviews/snapshots/selections.
+
+Evidence: `docs/private/v1-4-industry-batches/Banking_13_Fresh_Trendlyne_Financial_Result_2026-10-09.md`, exact source captures, target-only field inspection, budget and deployment records. Scoped financial-acquisition executor is active in Development; canonical validator remains v46. New handler Deno rejection/business-error regression, 375 Edge tests, Edge lint and whitespace PASS. No Production, migrations, RLS/Auth, R2, scheduler, cohort or V1-5 changes. Draft PR #124; no merge. Earlier entries retain their historical execution boundaries.
+
+## Banking V1-4 approved delegated admission — 9 October 2026
+
+Owner approved the bounded Development source/review policy. Implemented `V1_4_BANK_PRIMARY_FILING_DELEGATION_V1` with exact portfolio/owner/thirteen-security scope. Appended thirteen primary-filing fact records and **26 delegated NPA reviews**, all with personal `reviewed_by = null` and integrity-hashed executor/authorization metadata. No schema or RLS change. Original June-quarter filings match security symbol/ISIN/Equity class, explicit quarterly start/end and Standalone scope. No conversions, financial formulas, date invention or provider relabeling.
+
+Database readback and the actual canonical requirement evaluator, including 52 retained NPA observations, verify **26/26 NPA requirements FRESH**. Qualified primary evidence retains priority; comparable conflicts remain blocked. This is a provider-free evaluator replay, not an authenticated full 299-item HTTP replay or materialization. Independent persisted selection readback remains **0/13 READY, 11 REVIEW_REQUIRED, 2 CONFLICTING**, unchanged selections and zero READY frozen value. No stock is falsely promoted.
+
+Development canonical validator **v46 ACTIVE**, bundle SHA-256 `8a5ba7e87577fff8ae1c938ed537cd861fc89643e0a0994e47f98ee265b28e57`. Current verification: 375 Edge tests, three type-checked canonical-handler Deno integration tests, architecture, TypeScript, lint, build and whitespace PASS. Prior 2,305 application-test PASS is retained as historical evidence, not rerun on this policy change. Authority and executed evidence: `docs/private/v1-4-industry-batches/Banking_13_Approved_Delegated_Admission_Result_2026-10-09.md`.
+
+Ownership semantics, unresolved bank metric/valuation contracts, additional financial facts, ratings/governance and three corporate-action cases remain blocked. Fresh registry check finds no NIM_TTM/CET1_RATIO/CAPITAL_ADEQUACY_RATIO/ROA_ANNUAL/PB_ADJUSTED_FOR_ROE definitions; do not invent replacements. No canonical materialization, Production, migrations, Auth/RLS, provider acquisition, R2, scheduler, frozen-cohort or V1-5 change in this approval continuation. Work remains on draft PR #124; no merge. Earlier sections are historical checkpoints.
+
+## Banking V1-4 executed acquisition and admission repairs — 9 October 2026
+
+**Banking NOT PROVEN: 0/13 persisted READY, 11 REVIEW_REQUIRED, 2 CONFLICTING; READY frozen value zero.** Independent post-execution readback confirms unchanged selected snapshot IDs. Original owner replay remains 299 requirements / 15 FRESH / 284 blocked; no later full authenticated banking replay is claimed.
+
+Following explicit owner authorization, executed 14 Angel One history requests and appended 16 stock sessions plus one NIFTY_BANK session. Captured 65 official ownership XBRL filings and 207 official financial/governance filings for all 13 banks, with original URL/hash manifests and append-only structured source records. One scoped Trendlyne SBIN call returned provider business failure (1011, no shareholding data); it was not admitted and was not retried. Budget settled. No R2 or canonical snapshot/selection writes.
+
+Actual existing-canonical-module replay over read-only history projections passes stock and benchmark histories for 10 banks at 2026-10-09T03:37:19.040Z. HDFCBANK, KARURVYSYA and KOTAKBANK retain unqualified corporate-action treatment. This is not an authenticated handler or full requirement replay. Freshness is bounded by real qualification time and the existing grace period, not a durable readiness promise.
+
+Repaired unreachable ownership review admission, enforced selected series / TOTAL_EQUITY / minimum-four-quarter / single-authority guards, connected BANK NPA names to existing percentage primitives and preserved the CORS/owner-authentication contract. Development canonical validator **v44 ACTIVE**, bundle SHA-256 `93e0f0b2a4db3918bad720e4512ebc43e7fc8db012c5987d5ffe72f5e8305016`. Executed local checks: architecture, TypeScript, lint, 2,305 application tests, 375 Edge tests, five type-checked Deno tests, build and whitespace PASS. Tests use explicit mocks; live owner-authenticated v44 replay remains pending.
+
+Authoritative execution record: `docs/private/v1-4-industry-batches/Banking_13_Acquisition_And_Admission_Result_2026-10-09.md`. Source-admission/delegated-review proposal beside it is not activated. Primary filings cannot be mislabeled as TRENDLYNE_MCP; source identity/denominator/period/scope, rating/document review and established valuation evidence still require qualification. No auto-signed owner review or readiness fabrication.
+
+Implementation/evidence are on draft PR #124, dependent on #123/#121; no merge. Development HEAD remains `927181cf02d01d5f27d441dea6fac9d9b11a6d9b`. No Production, migrations, Auth/RLS, scheduler, financial formula, frozen cohort or V1-5 changes. Earlier sections below are historical checkpoints, not the current execution boundary.
+
 ## V1-4 banking validator — approved Development deployment, 8 October 2026
 
 After explicit owner approval (“Sure Deploy”), deployed only `p7-ic2-materialize-readiness` to Development `lrgpjimipfkyoqbpsqzz`: version **41 ACTIVE**, source commit `f818810e6e75f7b73d2a1b22720d5e0deebc178c`, bundle SHA-256 `3484aad133d82ab5ee82a01ee3e93d127a9d0d7c3b0b5f4b4cd46fc54c3dd5ea`. Retrieved deployed source matches all 16 tested bundle files exactly. Existing gateway configuration and handler owner/grant authentication preserved. Live rejection smoke checks passed: missing owner session 401; duplicate IDs 400; security-ID write targeting 400. Verification at 20:43 IST (15:13 UTC).

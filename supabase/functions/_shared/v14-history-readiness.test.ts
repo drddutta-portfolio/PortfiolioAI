@@ -29,6 +29,27 @@ describe("V1-4 deterministic history readiness",()=>{
  it("fails stale latest-history contract",()=>{
   expect(validateStockHistoryReadiness({rows:rows(),minimum:252,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:"MARKET_5_TRADING_DAYS",proof:proof("PRICE_RETURN_RAW_CLOSE",{freshnessThrough:"2026-10-05T00:00:00Z"})})).toMatchObject({state:"STALE",reason:"HISTORY_LATEST_SESSION_STALE"})
  })
+ it("carries a verified post-close session across a current CLOSED NSE date",()=>{
+  const p=proof("PRICE_RETURN_CORPORATE_ACTION_ADJUSTED",{freshnessThrough:"2026-10-09T13:30:00Z",dailySessionState:"LATEST_COMPLETED_SESSION_POST_CLOSE",dailySessionProofRecordIds:["daily-proof"]})
+  const history:HistoryRow[]=[
+   {period_start:"2026-10-08T00:00:00+05:30",retrieved_at:"2026-10-09T14:00:00Z",close:"100",adjusted_close:"100",provenance:{v1_4_history_contract:p}},
+   {period_start:"2026-10-09T00:00:00+05:30",retrieved_at:"2026-10-09T14:00:00Z",close:"101",adjusted_close:"101",provenance:{v1_4_history_contract:p}},
+  ]
+  const x=validateStockHistoryReadiness({rows:history,minimum:2,evaluationAsOfMs:Date.parse("2026-10-10T14:30:00Z"),sourceCutoffAtMs:Date.parse("2026-10-10T14:30:00Z"),freshnessPolicy:"MARKET_5_TRADING_DAYS",proof:p,currentSessionDecision:{sessionDate:"2026-10-10",decision:"CLOSED",recordId:"calendar-decision",reason:"WEEKEND_NO_APPROVED_SPECIAL_SESSION"}})
+  expect(x).toMatchObject({state:"FRESH",reason:"STOCK_HISTORY_CONTRACT_READY"})
+  expect(x.lineage).toMatchObject({currentSessionDecisionRecordId:"calendar-decision",currentSessionDecision:"CLOSED"})
+ })
+ it("does not carry stale history across OPEN UNKNOWN or missing session decisions",()=>{
+  const p=proof("PRICE_RETURN_CORPORATE_ACTION_ADJUSTED",{freshnessThrough:"2026-10-09T13:30:00Z",dailySessionState:"LATEST_COMPLETED_SESSION_POST_CLOSE",dailySessionProofRecordIds:["daily-proof"]})
+  const history:HistoryRow[]=[
+   {period_start:"2026-10-08T00:00:00+05:30",retrieved_at:"2026-10-09T14:00:00Z",close:"100",adjusted_close:"100",provenance:{v1_4_history_contract:p}},
+   {period_start:"2026-10-09T00:00:00+05:30",retrieved_at:"2026-10-09T14:00:00Z",close:"101",adjusted_close:"101",provenance:{v1_4_history_contract:p}},
+  ]
+  const base={rows:history,minimum:2,evaluationAsOfMs:Date.parse("2026-10-10T14:30:00Z"),sourceCutoffAtMs:Date.parse("2026-10-10T14:30:00Z"),freshnessPolicy:"MARKET_5_TRADING_DAYS",proof:p}
+  expect(validateStockHistoryReadiness({...base,currentSessionDecision:{sessionDate:"2026-10-10",decision:"OPEN",recordId:"open-decision",reason:"OPEN"}})).toMatchObject({state:"STALE",reason:"HISTORY_LATEST_SESSION_STALE"})
+  expect(validateStockHistoryReadiness({...base,currentSessionDecision:{sessionDate:"2026-10-10",decision:"UNKNOWN",recordId:"unknown-decision",reason:"SPECIAL_PENDING"}})).toMatchObject({state:"STALE",reason:"HISTORY_LATEST_SESSION_STALE"})
+  expect(validateStockHistoryReadiness(base)).toMatchObject({state:"STALE",reason:"HISTORY_LATEST_SESSION_STALE"})
+ })
  it("qualifies aligned benchmark pair with exact mapping",()=>{
   const stock=rows(),benchmark=rows(252,proof("PRICE_RETURN_RAW_CLOSE",{lineageSourceRecordIds:["bench"]}))
   const x=validateBenchmarkPairReadiness({stockRows:stock,benchmarkRows:benchmark,minimum:252,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:"MARKET_5_TRADING_DAYS",

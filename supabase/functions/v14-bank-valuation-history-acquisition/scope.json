@@ -1,0 +1,54 @@
+[
+  {
+    "symbol": "AUBANK",
+    "securityId": "f5c47463-3c6d-4db0-a815-e4301e990213"
+  },
+  {
+    "symbol": "AXISBANK",
+    "securityId": "b330c9fe-ae35-469a-9975-d5af26843b1c"
+  },
+  {
+    "symbol": "BANDHANBNK",
+    "securityId": "30ce066a-6410-4b11-9b85-e41324971261"
+  },
+  {
+    "symbol": "BANKBARODA",
+    "securityId": "6771f493-c29a-477e-8cc8-2bede0941e44"
+  },
+  {
+    "symbol": "FEDERALBNK",
+    "securityId": "63889b52-85da-4a1b-9046-c1e975819f99"
+  },
+  {
+    "symbol": "HDFCBANK",
+    "securityId": "b47b007d-1990-4504-a5a2-4391c07687c5"
+  },
+  {
+    "symbol": "ICICIBANK",
+    "securityId": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf"
+  },
+  {
+    "symbol": "IDBI",
+    "securityId": "a5639446-3238-4e08-9d02-59bc529982db"
+  },
+  {
+    "symbol": "IDFCFIRSTB",
+    "securityId": "ba340b06-fd44-4d80-9ce7-d280616354ed"
+  },
+  {
+    "symbol": "INDIANB",
+    "securityId": "5275dd14-35ba-4feb-94d8-f8d1facb19d3"
+  },
+  {
+    "symbol": "KARURVYSYA",
+    "securityId": "be55b3cc-0400-45af-84aa-2a95e2c361c5"
+  },
+  {
+    "symbol": "KOTAKBANK",
+    "securityId": "05744a34-415b-4084-b832-ce3436ba0694"
+  },
+  {
+    "symbol": "SBIN",
+    "securityId": "d77abadc-d171-49d9-bfee-0b34dd0281f4"
+  }
+]

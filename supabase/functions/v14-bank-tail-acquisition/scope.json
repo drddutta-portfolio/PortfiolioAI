@@ -1,0 +1,156 @@
+[
+  {
+    "target": "f5c47463-3c6d-4db0-a815-e4301e990213",
+    "kind": "STOCK",
+    "symbol": "AUBANK",
+    "mappingId": "d9ee02e7-258f-4c61-a6fb-cfc0b7cf116f",
+    "token": "21238",
+    "exchange": "NSE",
+    "tradingSymbol": "AUBANK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+    "kind": "STOCK",
+    "symbol": "AXISBANK",
+    "mappingId": "ad9b72b6-9a33-4f9a-8b0e-89e7eea15613",
+    "token": "5900",
+    "exchange": "NSE",
+    "tradingSymbol": "AXISBANK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "30ce066a-6410-4b11-9b85-e41324971261",
+    "kind": "STOCK",
+    "symbol": "BANDHANBNK",
+    "mappingId": "55aca957-2967-4f56-a698-6c4e77ac56bb",
+    "token": "2263",
+    "exchange": "NSE",
+    "tradingSymbol": "BANDHANBNK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "6771f493-c29a-477e-8cc8-2bede0941e44",
+    "kind": "STOCK",
+    "symbol": "BANKBARODA",
+    "mappingId": "277b65b0-8711-42ce-b2a5-7ce827a0abc8",
+    "token": "4668",
+    "exchange": "NSE",
+    "tradingSymbol": "BANKBARODA-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "63889b52-85da-4a1b-9046-c1e975819f99",
+    "kind": "STOCK",
+    "symbol": "FEDERALBNK",
+    "mappingId": "8ccea425-a67d-436e-850f-b626fa00d8b7",
+    "token": "1023",
+    "exchange": "NSE",
+    "tradingSymbol": "FEDERALBNK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "b47b007d-1990-4504-a5a2-4391c07687c5",
+    "kind": "STOCK",
+    "symbol": "HDFCBANK",
+    "mappingId": "d25d7255-4b35-430f-9752-398d85c9b7f3",
+    "token": "1333",
+    "exchange": "NSE",
+    "tradingSymbol": "HDFCBANK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+    "kind": "STOCK",
+    "symbol": "ICICIBANK",
+    "mappingId": "120ee7d8-d7e2-4db8-9cd9-4422eca4f1c0",
+    "token": "4963",
+    "exchange": "NSE",
+    "tradingSymbol": "ICICIBANK-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "a5639446-3238-4e08-9d02-59bc529982db",
+    "kind": "STOCK",
+    "symbol": "IDBI",
+    "mappingId": "c031984a-c456-47eb-b241-2be0bd197760",
+    "token": "1476",
+    "exchange": "NSE",
+    "tradingSymbol": "IDBI-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+    "kind": "STOCK",
+    "symbol": "IDFCFIRSTB",
+    "mappingId": "8560d0c8-9911-4f32-b742-3e93e3d9e498",
+    "token": "11184",
+    "exchange": "NSE",
+    "tradingSymbol": "IDFCFIRSTB-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+    "kind": "STOCK",
+    "symbol": "INDIANB",
+    "mappingId": "0082a4bb-72e9-43ff-a726-7892dc91f4b5",
+    "token": "14309",
+    "exchange": "NSE",
+    "tradingSymbol": "INDIANB-EQ",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+    "kind": "STOCK",
+    "symbol": "KARURVYSYA",
+    "mappingId": "9f7f0d28-a83d-41c7-a133-6467617e67e6",
+    "token": "1838",
+    "exchange": "NSE",
+    "tradingSymbol": "KARURVYSYA-EQ",
+    "from": "2026-10-07",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "05744a34-415b-4084-b832-ce3436ba0694",
+    "kind": "STOCK",
+    "symbol": "KOTAKBANK",
+    "mappingId": "8f016cc6-f1a3-47c5-9b5e-8fc5d7064ca4",
+    "token": "1922",
+    "exchange": "NSE",
+    "tradingSymbol": "KOTAKBANK-EQ",
+    "from": "2026-10-07",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+    "kind": "STOCK",
+    "symbol": "SBIN",
+    "mappingId": "86924e77-e8af-46e5-a6ba-0e9fe6d1e720",
+    "token": "3045",
+    "exchange": "NSE",
+    "tradingSymbol": "SBIN-EQ",
+    "from": "2026-10-07",
+    "to": "2026-10-08"
+  },
+  {
+    "target": "NIFTY_BANK",
+    "kind": "BENCHMARK",
+    "symbol": "NIFTY_BANK",
+    "mappingId": "BENCHMARK:NIFTY_BANK",
+    "token": "99926009",
+    "exchange": "NSE",
+    "tradingSymbol": "Nifty Bank",
+    "from": "2026-10-08",
+    "to": "2026-10-08"
+  }
+]

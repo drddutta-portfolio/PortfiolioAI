@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react"
+import { act, cleanup, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { P7CurrentEvidenceDetails, P7EvidenceRequirement } from "../../data/p7CurrentIntelligenceRepository"
 const mocks = vi.hoisted(() => ({ hook: vi.fn() }))
@@ -12,6 +12,40 @@ function mount() { return render(<CanonicalEvidenceReadinessPanel portfolioId="p
 describe("canonical evidence requirement presentation", () => {
   afterEach(cleanup)
   beforeEach(() => { mocks.hook.mockReturnValue({ applicable: true, isLoading: false, error: null, data: { snapshot, requirements: [requirement] } }) })
+  it("vetoes an expiring BANK requirement on the clock without any provider response", () => {
+    vi.useFakeTimers()
+    try {
+      vi.setSystemTime(new Date("2026-10-09T12:00:00Z"))
+      mocks.hook.mockReturnValue({
+        applicable: true, isLoading: false, error: null,
+        data: { snapshot: { ...snapshot, profileCode: "BANK", snapshotStatus: "READY" },
+          requirements: [{ ...requirement, evidence_state: "FRESH", fresh_through: "2026-10-09T12:00:30Z" }] },
+      })
+      mount()
+      expect(screen.getByRole("status").textContent).toContain("CURRENT_CANONICAL_REVALIDATION_REQUIRED")
+      act(() => { vi.advanceTimersByTime(60_000) })
+      expect(screen.getByRole("status").textContent).toContain("FRESHNESS_EXPIRED")
+      expect(screen.getByRole("status").textContent).toContain("not currently READY")
+    } finally {
+      cleanup()
+      vi.useRealTimers()
+    }
+  })
+  it("does not present an old persisted BANK READY selection as verified current READY", () => {
+    mocks.hook.mockReturnValue({
+      applicable: true, isLoading: false, error: null,
+      data: { snapshot: { ...snapshot, profileCode: "BANK", snapshotStatus: "READY" }, requirements: [{ ...requirement, evidence_state: "FRESH" }] },
+    })
+    mount()
+    expect(screen.getByText("HISTORICAL READY (CURRENT NOT VERIFIED)")).toBeTruthy()
+    expect(screen.getByRole("status").textContent).toContain("Historical BANK assessment only")
+    expect(screen.getByRole("status").textContent).toContain("not currently READY")
+    expect(screen.getByText(/This is the stored evidence assessment/)).toBeTruthy()
+  })
+  it("does not apply banking historical-display warning to another profile", () => {
+    mount()
+    expect(screen.queryByText(/Historical BANK assessment only/)).toBeNull()
+  })
   it("exposes missing approved benchmark requirements for a profile without requiring a scoring engine", () => {
     mount()
     expect(screen.getByText("REVIEW REQUIRED")).toBeTruthy()

@@ -361,134 +361,128 @@ export const P7_IC_PROFILE_CONTRACTS={
       {
         "signalCode": "ROE_ANNUAL",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 1
       },
       {
         "signalCode": "NIM_TTM",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 2
       },
       {
         "signalCode": "GROSS_NPA",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 3
       },
       {
         "signalCode": "NET_NPA",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 4
       },
       {
         "signalCode": "ADVANCES_GROWTH_YOY",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 5
       },
       {
         "signalCode": "DEPOSITS_GROWTH_YOY",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 6
       },
       {
         "signalCode": "EPS_GROWTH_YOY",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 7
       },
       {
         "signalCode": "ROA_ANNUAL",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 8
       },
       {
         "signalCode": "CET1_RATIO",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 9
       },
       {
         "signalCode": "CAPITAL_ADEQUACY_RATIO",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 10
       },
       {
         "signalCode": "EXTERNAL_LONG_TERM_RATING",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 11
       },
       {
         "signalCode": "PE_TTM_RELATIVE",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 12
       },
       {
         "signalCode": "PB_RELATIVE",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
         "order": 13
-      },
-      {
-        "signalCode": "PB_ADJUSTED_FOR_ROE",
-        "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 14
       },
       {
         "signalCode": "PRICE_MOMENTUM_12M",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 15
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 14
       },
       {
         "signalCode": "PRICE_MOMENTUM_6M",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 16
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 15
       },
       {
         "signalCode": "RELATIVE_STRENGTH_12M",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 17
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 16
       },
       {
         "signalCode": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 18
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 17
       },
       {
         "signalCode": "GOVERNANCE_EVENT_SIGNAL",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 19
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 18
       },
       {
         "signalCode": "MAX_DRAWDOWN_1Y",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 20
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 19
       },
       {
         "signalCode": "VOLATILITY_RELATIVE",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 21
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 20
       },
       {
         "signalCode": "RATING_TREND",
         "required": true,
-        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
-        "order": 22
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V2",
+        "order": 21
       }
     ]
   },
@@ -4871,4 +4865,13 @@ export const P7_IC_PROFILE_CONTRACTS={
     ]
   }
 } as const
+export const BANK_V1_LEGACY_REQUIREMENT_CODES=["ROE_ANNUAL","NIM_TTM","GROSS_NPA","NET_NPA","ADVANCES_GROWTH_YOY","DEPOSITS_GROWTH_YOY","EPS_GROWTH_YOY","ROA_ANNUAL","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","EXTERNAL_LONG_TERM_RATING","PE_TTM_RELATIVE","PB_RELATIVE","PB_ADJUSTED_FOR_ROE","PRICE_MOMENTUM_12M","PRICE_MOMENTUM_6M","RELATIVE_STRENGTH_12M","INSTITUTIONAL_OWNERSHIP_TREND_4Q","GOVERNANCE_EVENT_SIGNAL","MAX_DRAWDOWN_1Y","VOLATILITY_RELATIVE","RATING_TREND"] as const
+
+export const BANK_V2_VALUATION_WEIGHTS={
+  PE_TTM_RELATIVE:{numerator:12,denominator:17,weight:12/17},
+  PB_RELATIVE:{numerator:5,denominator:17,weight:5/17},
+  PB_ADJUSTED_FOR_ROE:{numerator:0,denominator:17,weight:0},
+} as const
+export const BANK_ACTIVE_METHODOLOGY_AUTHORITY="BANK_NBFC_STAGE_8_BANK_V2" as const
+
 export function p7IcProfileContract(profileCode:string):Ic1ProfileEvidenceContract{const row=(P7_IC_PROFILE_CONTRACTS as Readonly<Record<string,Ic1ProfileEvidenceContract>>)[profileCode];if(!row)throw new Error("P7_IC_PROFILE_CONTRACT_NOT_FOUND");return row}
