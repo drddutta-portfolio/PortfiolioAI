@@ -1,6 +1,6 @@
 # BANK V1-4 — bounded Oct-9 canary, source qualification and current materialization
-**Date:** 2026-10-10  
-**Scope:** PR #124 / Development only. Production/main/V1-5 unchanged.  
+**Date:** 2026-10-10
+**Scope:** PR #124 / Development only. Production/main/V1-5 unchanged.
 **Methodology:** current BANK V1 only. D1 and D2 remain **NOT APPROVED / NOT ACTIVATED**.
 
 ## 1. Exact-head verification baseline
