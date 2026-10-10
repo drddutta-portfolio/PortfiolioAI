@@ -1,6 +1,7 @@
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
 import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
 import {approvedBankDelegatedReview,approvedBankOfficialFallback} from "./v14-bank-approved-delegation.ts"
+import {evaluateBankPublicationAvailability,type BankPublicationProof} from "./v14-bank-publication-precision.ts"
 
 type Json = Readonly<Record<string, unknown>>
 export type ReviewEvidenceFamily = EvidenceRequirementPlan["deterministicCoverageRule"]
@@ -62,6 +63,23 @@ function fail(state:ReviewedEvidenceResult["state"],reason:string,ids:readonly s
 }
 function payloadStrings(v:unknown,out:string[]=[]):string[]{if(typeof v==="string")out.push(v);else if(Array.isArray(v))v.forEach(x=>payloadStrings(x,out));else if(v&&typeof v==="object")Object.values(v as Record<string,unknown>).forEach(x=>payloadStrings(x,out));return out}
 function exactFragmentPresent(payload:Json,fragment:string){return fragment.length>0&&payloadStrings(payload).some(x=>x.includes(fragment))}
+function bankPublicationAvailability(review:RequirementReview,source:ReviewedSourceRecord,evaluationAsOfMs:number){
+ const precision=str(source.raw_payload.publication_precision)
+ const originalHash=str(source.raw_payload.original_sha256)
+ const sourceProofHash=originalHash&&HASH.test(originalHash)?originalHash:source.payload_hash
+ let proof:BankPublicationProof|null=null
+ if(source.published_at!==null)proof={kind:"EXACT",publishedAt:source.published_at,sourceProofHash}
+ else if(precision==="EXACT"){
+   const published=str(source.raw_payload.published_at);if(published)proof={kind:"EXACT",publishedAt:published,sourceProofHash}
+ }else if(precision==="DATE_ONLY"){
+   const publishedDate=str(source.raw_payload.publication_date);if(publishedDate)proof={kind:"DATE_ONLY",publishedDate,sourceProofHash}
+ }else if(precision==="UNKNOWN"||precision==="UNKNOWN_DATE"){
+   const first=str(source.raw_payload.first_verified_available_at)??source.retrieved_at
+   proof={kind:"UNKNOWN_DATE",firstVerifiedRetrievalAt:first,sourceProofHash}
+ }else if(review.published_at)proof={kind:"EXACT",publishedAt:review.published_at,sourceProofHash}
+ if(!proof||!review.period_end)return {eligibleForFactualReview:false,earliestProvenAvailabilityMs:null,reason:"BANK_PUBLICATION_PRECISION_NOT_PROVEN",historicalApplicable:false}
+ return evaluateBankPublicationAvailability({proof,retrievedAt:source.retrieved_at,reportingEnd:review.period_end,evaluationAsOf:new Date(evaluationAsOfMs).toISOString()})
+}
 function decimalTokens(text:string){return [...text.matchAll(/(?<![\d.])-?\d+(?:\.\d+)?(?![\d.])/gu)].map(x=>x[0])}
 function reviewHashPayload(review:RequirementReview){
  return {portfolio_id:review.portfolio_id,security_id:review.security_id,requirement_code:review.requirement_code,review_kind:review.review_kind,
@@ -158,6 +176,10 @@ export async function validateReviewedRequirementEvidence(input:{
    if(r.retrieved_at!==source.retrieved_at)return fail("REVIEW_REQUIRED","REVIEW_RETRIEVAL_MISMATCH",[r.id])
    if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>evaluationAsOfMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_EVALUATION",[r.id])
    if(source.published_at!==null&&r.published_at!==source.published_at)return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_MISMATCH",[r.id])
+   if(family==="NUMERIC_SERIES"&&["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(requirementCode)){
+     const availability=bankPublicationAvailability(r,source,evaluationAsOfMs)
+     if(!availability.eligibleForFactualReview)return fail("REVIEW_REQUIRED",availability.reason,[r.id])
+   }
    if(r.fresh_through&&!Number.isFinite(time(r.fresh_through)))return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_INVALID",[r.id])
    if(family==="NUMERIC_SERIES"){
      const metric=str(r.metadata.metric_code),value=str(r.metadata.numeric_value)
