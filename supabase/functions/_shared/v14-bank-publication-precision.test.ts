@@ -25,7 +25,7 @@ describe("distinct bank publication precision",()=>{
   expect(r.earliestProvenAvailabilityMs).toBe(Date.parse(base.retrievedAt));
  });
  it("DATE_ONLY does not admit before conservative availability bound",()=>{
-  const r=evaluateBankPublicationAvailability({...base,evaluationAsOf:"2026-07-18T12:00:00Z",proof:{kind:"DATE_ONLY",publishedDate:"2026-07-18",sourceProofHash:sha}});
+  const r=evaluateBankPublicationAvailability({...base,retrievedAt:"2026-07-18T10:00:00Z",evaluationAsOf:"2026-07-18T12:00:00Z",proof:{kind:"DATE_ONLY",publishedDate:"2026-07-18",sourceProofHash:sha}});
   expect(r.eligibleForFactualReview).toBe(false);
   expect(r.reason).toBe("BANK_PUBLICATION_AFTER_EVALUATION");
   expect(r.historicalApplicable).toBe(false);
