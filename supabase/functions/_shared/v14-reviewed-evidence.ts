@@ -251,9 +251,10 @@ export async function validateReviewedRequirementEvidence(input:{
      const definition=input.definitions.find(x=>x.code===metric);if(!definition)return fail("REVIEW_REQUIRED","REVIEW_METRIC_DEFINITION_MISSING",[r.id])
      const retrieved=source.retrieved_at,fresh=r.fresh_through
      if(!fresh)return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_NOT_PROVEN",[r.id])
+     const availability=bankPublicationAvailability(r,source,evaluationAsOfMs)
      observations.push({id:r.id,metric_code:metric,numeric_value:value,text_value:null,boolean_value:null,date_value:null,unit:r.unit,currency:r.currency,
       consolidation_scope:r.consolidation_scope,period_start:r.period_start,period_end:r.period_end,period_type:r.period_type,retrieved_at:retrieved,
-      fresh_until:fresh,published_at:r.published_at??source.published_at,evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id,
+      fresh_until:fresh,published_at:r.published_at??source.published_at,proven_availability_at:availability.earliestProvenAvailabilityMs===null?null:new Date(availability.earliestProvenAvailabilityMs).toISOString(),evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id,
       source_verified_at:typeof source.raw_payload.original_bytes_verified_at==="string"?source.raw_payload.original_bytes_verified_at:null,
       disqualifying_event_at:typeof source.raw_payload.disqualifying_event_at==="string"?source.raw_payload.disqualifying_event_at:null})
      support.push(r);continue
