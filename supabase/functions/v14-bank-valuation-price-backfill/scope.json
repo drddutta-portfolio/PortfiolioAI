@@ -57,8 +57,8 @@
   {
     "symbol": "KOTAKBANK",
     "securityId": "05744a34-415b-4084-b832-ce3436ba0694",
-    "isin": "INE237A01028",
-    "identityBasis": "PRE_2026_01_14_OLD_ISIN_BEFORE_5_TO_1_FACE_VALUE_SPLIT",
+    "isin": "INE237A01010",
+    "identityBasis": "OFFICIAL_NSE_HISTORICAL_ISIN_2021_2023_BEFORE_LATER_ISIN_CHANGES",
     "currentIsin": "INE237A01036"
   },
   {
