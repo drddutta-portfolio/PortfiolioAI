@@ -1,6 +1,7 @@
 /** Publication and availability precision for BANK factual admission.
  * This is a strict, side-effect-free candidate evaluator.
- * DATE_ONLY and UNKNOWN_DATE policies remain unapproved for canonical ACCEPT.
+ * DATE_ONLY and UNKNOWN_DATE are approved for CURRENT factual review only.
+ * They never establish historical point-in-time availability or reset reporting-age clocks.
  */
 export type BankPublicationProof=
  |{kind:"EXACT";publishedAt:string;sourceProofHash:string}
@@ -25,10 +26,12 @@ export function evaluateBankPublicationAvailability(input:{proof:BankPublication
   if(!exactDay(input.proof.publishedDate)||input.proof.publishedDate<input.reportingEnd)return fail("BANK_PUBLICATION_DATE_INVALID");
   // Indian issuer dates are 5h30 ahead of UTC. Local 23:59:59.999 IST is conservative.
   const bound=Date.parse(input.proof.publishedDate+"T18:29:59.999Z");
-  return fail("BANK_DATE_ONLY_CANONICAL_POLICY_UNAPPROVED",bound);
+  if(bound>evaluation)return fail("BANK_PUBLICATION_AFTER_EVALUATION",bound);
+  return {eligibleForFactualReview:true,earliestProvenAvailabilityMs:bound,reason:"BANK_DATE_ONLY_CURRENT_REVIEW_BOUND",historicalApplicable:false};
  }
  if(!fullStamp(input.proof.firstVerifiedRetrievalAt)||Date.parse(input.proof.firstVerifiedRetrievalAt)!==retrieved)return fail("BANK_UNKNOWN_PUBLICATION_NO_PROVEN_AVAILABILITY");
  // A byte-verified observation exists by retrieval; this is NOT issuer publication.
- // Current admission is held pending policy amendment. It can never establish earlier historical PIT eligibility.
- return fail("BANK_UNKNOWN_PUBLICATION_CANONICAL_POLICY_UNAPPROVED",retrieved);
+ // Retrieval is not publication. It proves only that these exact bytes were available by retrieval.
+ // Approved use is CURRENT factual review only; historical PIT eligibility remains false.
+ return {eligibleForFactualReview:true,earliestProvenAvailabilityMs:retrieved,reason:"BANK_UNKNOWN_CURRENT_REVIEW_AVAILABILITY_BOUND",historicalApplicable:false};
 }
