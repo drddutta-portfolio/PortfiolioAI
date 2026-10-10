@@ -51,19 +51,24 @@ C. **UNKNOWN publication date, verified original bytes**
 
 This amendment must preserve the approved pending-new-disclosure veto, dual clocks, exact source hash/issuer identity, append-only supersession and the existing single canonical READY owner. It must not create a second review/materialization engine.
 
-## D3 — AUBANK SFB regulatory mapping
+## D3 — AUBANK SFB regulatory mapping: direction already approved; applicability evidence advanced
 
-RBI's ordinary Basel III commercial-bank capital framework excludes Small Finance Banks, so AUBANK must not be failed or passed by pretending that its SFB disclosure is ordinary Basel III.
+Do **not** re-request the recorded owner approval of the AUBANK bank-specific SFB mapping direction. The remaining work is implementation/period-specific evidence.
 
-**Recommended approval in principle, conditional on exact period-specific regulatory proof before activation:**
+Current official evidence now establishes the generic regulatory perimeter:
+- RBI's ordinary Basel III commercial-bank framework excludes SFBs and points them to their SFB prudential framework.
+- RBI's current prudential handbook identifies **Small Finance Banks** under a **Basel II norms generally applicable** framework, with reference minima **CET1 6%, Tier 1 7.5%, total CRAR 15%**.
+- AU Small Finance Bank's official regulatory-disclosure directory lists **“Basel II - Pillar III Disclosures – 30th June 2026”**; its March 31, 2026 Pillar 3 disclosure explicitly states that AU Small Finance Bank is subject to the RBI `Small Finance Banks – Prudential Norms on Capital Adequacy Directions, 2025`.
+
+Therefore the previously approved implementation direction remains:
 - retain AUBANK in the frozen 13-bank population;
 - retain the two frozen capital-safety positions rather than silently mark them N/A;
-- introduce separately typed SFB regulatory facts, e.g. `SFB_PRUDENTIAL_CET1` and `SFB_PRUDENTIAL_TOTAL_CRAR`;
-- map those facts to AUBANK's two capital-safety positions only when `regulatory_entity_type=SFB`, the effective regulatory date, exact RBI SFB framework, issuer identity, RWA denominator, scope, original bytes/hash and applicable threshold/add-on are proven;
-- never relabel Basel II/SFB evidence as Basel III and never substitute Tier 1 for CET1;
-- preserve a cross-framework comparability notice and run an AUBANK scoring-compatibility regression before activation.
+- use separately typed SFB regulatory facts, `SFB_PRUDENTIAL_CET1` and `SFB_PRUDENTIAL_TOTAL_CRAR`;
+- map them to AUBANK's two capital-safety positions only with exact effective-date issuer evidence, RWA denominator, scope, original bytes/hash, and any bank-specific supervisory add-on or later amendment;
+- never relabel the SFB/Basel-II-regime evidence as ordinary commercial-bank Basel III and never substitute Tier 1 for CET1;
+- preserve a cross-framework comparability notice and complete the approved scoring-compatibility regression before canonical activation.
 
-This decision approves the mapping architecture only. It does **not** approve an unverified numeric regulatory minimum or any AUBANK factual value.
+The generic SFB minima are now externally verified; what remains unproven is the **exact June-30-2026 AUBANK factual ratio package, original-byte/provenance admission and any bank-specific add-on**, not the existence of the SFB regulatory framework.
 
 ## G1 — fresh one-session Development grant, not a new policy decision
 
@@ -93,4 +98,4 @@ Grant issuance is an operational prerequisite, not permission to widen the maint
 
 ## Owner action requested
 
-A single owner response may approve any or all of **D1, D2 and D3**. G1 is then an execution-grant issuance step under the already-approved maintenance limits, not a methodology approval. Until those actions occur, the system remains fail-closed and Gate A / Gate B remain NOT PROVEN.
+A single owner response is needed only for **D1 and D2**. **D3's mapping direction is already approved**; its remaining implementation is evidence-gated as described above. G1 is an execution-grant issuance step under the already-approved maintenance limits, not a methodology approval. Until these remaining gates are satisfied, the system remains fail-closed and Gate A / Gate B remain NOT PROVEN.
