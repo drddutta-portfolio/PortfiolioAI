@@ -70,7 +70,13 @@ Deno.serve(async req=>{
    const selected=scope.map(target=>{const r=byIsin.get(target.isin);return r?{
     security_id:target.securityId,symbol:target.symbol,isin:target.isin,raw_symbol:r.symbol,series:r.series,close:r.close,timestamp:r.timestamp
    }:null}).filter(Boolean)
-   if(selected.length!==scope.length){failed++;captures.push({month,status:"IDENTITY_ROWS_INCOMPLETE",found:selected.length,tradeDate:found.date.toISOString().slice(0,10)});continue}
+   if(selected.length!==scope.length){
+    const missing=scope.filter(target=>!byIsin.has(target.isin)).map(target=>({
+     symbol:target.symbol,expectedIsin:target.isin,
+     observed:found!.rows.filter(r=>r.series==="EQ"&&r.symbol===target.symbol).map(r=>({symbol:r.symbol,isin:r.isin,close:r.close,timestamp:r.timestamp})),
+    }))
+    failed++;captures.push({month,status:"IDENTITY_ROWS_INCOMPLETE",found:selected.length,tradeDate:found.date.toISOString().slice(0,10),missing});continue
+   }
    const zipSha=await hex(found.bytes),tradeDate=found.date.toISOString().slice(0,10)
    const payload={version:"V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE_V1",month,trade_date:tradeDate,
     source_url:found.url,archive_sha256:zipSha,archive_bytes:found.bytes.length,join_basis:"EXACT_ISIN",rows:selected,
