@@ -24,7 +24,7 @@ jobs:
       - name: Install repository type dependencies
         run: npm ci
       - name: Run KVB numeric source tests
-        run: deno test --allow-env supabase/functions/v14-bank-kvb-roa-numeric-review/index.deno.test.ts
+        run: deno test --allow-env supabase/functions/v14-bank-kvb-roa-numeric-review/index.deno.test.ts supabase/functions/v14-bank-kvb-owner-materialize-grant/request-guard.deno.test.ts
       - name: Check TypeScript modules
         run: deno check supabase/functions/v14-bank-kvb-roa-numeric-review/index.ts supabase/functions/v14-bank-kvb-owner-materialize-grant/index.ts
       - name: Check migration text boundaries
