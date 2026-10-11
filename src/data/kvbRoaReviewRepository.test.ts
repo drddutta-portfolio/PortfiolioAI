@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { readOnlySecurityIds } from "../../supabase/functions/_shared/p7-ic-read-only-targeting"
 import { validateAndSaveKvbReadiness } from "./kvbRoaReviewRepository"
 const { call, session } = vi.hoisted(() => ({ call: vi.fn<(name: string, options: { body: Record<string, unknown> }) => Promise<{ data: unknown; error: null }>>(), session: vi.fn() }))
 vi.mock("../lib/supabase", () => ({ supabase: { auth: { getSession: session }, functions: { invoke: call } } }))
@@ -21,6 +22,9 @@ describe("KVB canonical save admission gate", () => {
   expect(call.mock.calls.map(x => x[0])).toEqual(["p7-ic2-materialize-readiness", "v14-bank-kvb-owner-materialize-grant", "p7-ic2-materialize-readiness"])
   expect(call.mock.calls[2]?.[1].body.securityIds).toEqual([security])
   expect(call.mock.calls[2]?.[1].body.grantId).toBe("grant")
+  const materializeBody = call.mock.calls[2]?.[1].body
+  expect(materializeBody).toBeDefined()
+  expect(readOnlySecurityIds(materializeBody!)).toEqual([security])
  })
  it("requires an authenticated session before any handler invocation", async () => {
   session.mockResolvedValue({ data: { session: null }, error: null })
