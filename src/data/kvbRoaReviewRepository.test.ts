@@ -19,7 +19,8 @@ describe("KVB canonical save admission gate", () => {
    .mockResolvedValueOnce({ data: { status: "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED", dryRun: false, providerCalls: 0, processed: 1, snapshotIds: ["snapshot"], selectionIds: ["selection"] }, error: null })
   expect(await validateAndSaveKvbReadiness()).toBe("snapshot")
   expect(call.mock.calls.map(x => x[0])).toEqual(["p7-ic2-materialize-readiness", "v14-bank-kvb-owner-materialize-grant", "p7-ic2-materialize-readiness"])
-  expect(call.mock.calls[2]?.[1]).toEqual(expect.objectContaining({ body: expect.objectContaining({ securityIds: [security], grantId: "grant" }) }))
+  expect(call.mock.calls[2]?.[1].body.securityIds).toEqual([security])
+  expect(call.mock.calls[2]?.[1].body.grantId).toBe("grant")
  })
  it("requires an authenticated session before any handler invocation", async () => {
   session.mockResolvedValue({ data: { session: null }, error: null })
