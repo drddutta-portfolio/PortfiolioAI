@@ -32,17 +32,18 @@ Deno.serve(async req=>{
  // retained as a separate, hash-verified original and linked by this immutable source record.
  const raw=source.raw_payload as Record<string,unknown>;
  const regulator=raw.roa_regulatory_proof as Record<string,unknown>|undefined;
- if(!regulator||!HASH.test(str(regulator.original_sha256))||!/^https:\/\/.*rbi\.org\.in\//.test(str(regulator.official_url))
+ if(!regulator||str(regulator.original_sha256)!=="1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834"||!/^https:\/\/.*rbi\.org\.in\//.test(str(regulator.official_url))
    ||str(regulator.applicability_status)!=="VERIFIED_FOR_FY2025_26_STANDALONE"
    ||!str(regulator.exact_passage).toLowerCase().includes("average working funds"))
    return reply(409,"RBI_ORIGINAL_APPLICABILITY_NOT_PROVEN");
+ if(str(raw.original_sha256)!=="8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9")return reply(409,"KVB_ORIGINAL_SOURCE_SHA_MISMATCH");
  const now=new Date().toISOString(),retrieved=str(source.retrieved_at),published=str(source.published_at)||null;
  const quote=str(body.supportingQuote);
  const binding={kind:"TEXT_CELL",fragment:quote,metric_label:"Return on Assets",period_label:"FY2025-26",exact_value:"1.93",entity_id:"KARURVYSYA",period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",period_start_anchor:"01-04-2025",period_end_anchor:"31-03-2026",scale:"1",conversion:"IDENTITY"};
  // Validator requires literal anchors; do not auto-invent source text.
  if(![binding.metric_label,binding.period_label,binding.entity_id,binding.period_start_anchor,binding.period_end_anchor].every(x=>quote.includes(x)))return reply(409,"SOURCE_LITERAL_ANCHORS_MISSING");
- const authorization={policy_id:"V1_4_BANK_VERIFIED_ISSUER_ORIGINAL_DELEGATION_V1",authorizing_owner_id:user.data.user.id,executor:"CHATGPT",authorization:"OWNER_APPROVED_ISSUER_HOSTED_ORIGINALS_2026_10_10",recorded_at:"2026-10-09T19:21:00Z"};
- const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"DELEGATED_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:new Date(Date.now()+150*86400000).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:null,reviewed_at:now,supersedes_review_id:null,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,review_authorization:authorization,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE"}};
+
+ const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"OWNER_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:new Date(Date.now()+150*86400000).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:user.data.user.id,reviewed_at:now,supersedes_review_id:null,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE"}};
  const review_hash=await sha(row);
  // Idempotency on immutable source and requirement; the existing append-only uniqueness
  // is checked before insert but concurrent duplicates still need an atomic constraint.
