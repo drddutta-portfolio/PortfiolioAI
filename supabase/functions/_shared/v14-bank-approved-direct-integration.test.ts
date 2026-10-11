@@ -8,9 +8,9 @@ describe("M1-M4 binding inside canonical reviewed-evidence owner",()=>{
  it("retains source hash, quoted fragment and exact financial-period/value binding before semantics",()=>{
   expect(source).toContain("REVIEW_SOURCE_HASH_OR_RECORD_INVALID")
   expect(source).toContain("REVIEW_QUOTE_NOT_BOUND_TO_SOURCE")
-  expect(source).toContain("const binding=sourceBinding(r,source)")
+  expect(source).toContain("const binding=sourceBinding(r,source,sourceById)")
   expect(source).toContain("NUMERIC_SOURCE_VALUE_MISMATCH")
-  expect(source.indexOf("const binding=sourceBinding(r,source)")).toBeLessThan(source.indexOf("BANK_DIRECT_TTM_NIM_SOURCE_PROOF_MISSING"))
+  expect(source.indexOf("const binding=sourceBinding(r,source,sourceById)")).toBeLessThan(source.indexOf("BANK_DIRECT_TTM_NIM_SOURCE_PROOF_MISSING"))
  })
  it("does not accept annual NIM or substitute Tier 1 and Basel II for capital proofs",()=>{
   expect(source).toContain('r.period_type!=="TRAILING_FOUR_QUARTERS"')
@@ -22,7 +22,7 @@ describe("M1-M4 binding inside canonical reviewed-evidence owner",()=>{
  it("requires full year and average assets for direct ROA",()=>{
   expect(source).toContain('r.period_type!=="YEAR"')
   expect(source).toContain("BANK_DIRECT_FULL_YEAR_ROA_SOURCE_PROOF_MISSING")
-  expect(source).toContain("average (total )?assets")
+  expect(source).toContain("average (?:of )?(?:total )?assets")
  })
  it("blocks an unreviewed canonical M1-M4 observation from being promoted",()=>{
   expect(materializer).toContain("BANK_DIRECT_FACTUAL_REVIEW_REQUIRED")

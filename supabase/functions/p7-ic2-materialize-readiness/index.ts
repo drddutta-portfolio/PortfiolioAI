@@ -234,11 +234,11 @@ async function loadReviewFacts(admin:Admin,portfolioId:string,ids:readonly strin
   if((result.data?.length??0)<500)break
   if(offset===4500)throw new Error("REVIEW_FACTS_COMPLETENESS_NOT_PROVEN")
  }
- const sourceIds=[...new Set(reviews.map(row=>row.source_record_id).filter((id):id is string=>Boolean(id)))]
+ const sourceIds=[...new Set(reviews.flatMap(row=>[row.source_record_id,typeof row.metadata.regulator_source_record_id==="string"?row.metadata.regulator_source_record_id:null]).filter((id):id is string=>Boolean(id)))]
  const documentIds=[...new Set(reviews.map(row=>row.research_document_id).filter((id):id is string=>Boolean(id)))]
  const reviewSources:ReviewedSourceRecord[]=[],researchDocuments:ReviewedResearchDocument[]=[],documentSources:ReviewedDocumentSource[]=[]
  for(let i=0;i<sourceIds.length;i+=100){
-  const result=await admin.from("data_source_records").select("id,source_code,retrieved_at,published_at,payload_hash,raw_payload").in("id",sourceIds.slice(i,i+100))
+  const result=await admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,published_at,payload_hash,raw_payload").in("id",sourceIds.slice(i,i+100))
   if(result.error)throw result.error
   reviewSources.push(...(result.data??[]) as unknown as ReviewedSourceRecord[])
  }

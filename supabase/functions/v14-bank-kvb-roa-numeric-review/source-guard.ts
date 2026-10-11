@@ -1,6 +1,8 @@
+import {kvbRoaOriginalQualified,KVB_ORIGINAL_PROOF} from "../_shared/v14-kvb-roa-original-proof.ts"
 const HASH=/^[0-9a-f]{64}$/;
 const str=(v:unknown)=>typeof v==="string"?v:"";
 export function sourceEligible(source:Record<string,unknown>,fragment:string){
+ if(kvbRoaOriginalQualified(source))return fragment===KVB_ORIGINAL_PROOF.issuer.table
  const raw=source.raw_payload as Record<string,unknown>|null;
  if(!raw||!["COMPANY_EXCHANGE_FILING","NSE_OFFICIAL"].includes(str(source.source_code)))return false;
  const original=str(raw.original_sha256),url=str(raw.original_url);

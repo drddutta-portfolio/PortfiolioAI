@@ -1,0 +1,44 @@
+name: Banking V1-4 KVB Pinned Original Registration
+on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-kvb-source-import.yml'
+      - 'scripts/v1-4/kvb_register_originals.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reuse captured original artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 38153347879 --name kvb-rbi-commercial-2025-original --dir original-artifacts/regulator
+          gh run download 38133645597 --name banking-v14-kvb-fy26-original-schedules --dir original-artifacts/issuer
+      - name: Install pinned archive client
+        run: pip install boto3==1.35.99
+      - name: Preserve originals and invoke authenticated source importer
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/kvb_register_originals.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kvb-original-source-registration
+          path: source-import-result/
+          retention-days: 90
+          if-no-files-found: error

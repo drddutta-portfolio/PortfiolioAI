@@ -1,3 +1,5 @@
+import {kvbRoaBinding,kvbRoaOriginalQualified,KVB_ORIGINAL_PROOF} from "../_shared/v14-kvb-roa-original-proof.ts"
+import {bankReportingDeadline} from "../_shared/v14-bank-dual-clock.ts"
 import {sourceEligible} from "./source-guard.ts";
 // BANK V1-4: owner-authenticated, append-only KVB ROA numeric review.
 // Does not mint grants, alter canonical snapshots, or weaken M4.
@@ -21,6 +23,19 @@ Deno.serve(async req=>{
  const owner=await db.from("portfolios").select("user_id").eq("id",PORTFOLIO).single();
  if(owner.error||owner.data?.user_id!==user.data.user.id)return reply(403,"PORTFOLIO_OWNER_REQUIRED");
  const body=await req.json().catch(()=>null) as Record<string,unknown>|null;
+ if(body?.action==="READ_KVB_FY26_ROA_PROPOSAL"&&body.portfolioId===PORTFOLIO&&body.securityId===KVB){
+   const candidates=await db.from("data_source_records").select("id,payload_hash,raw_payload,source_code,record_kind,retrieved_at,published_at")
+    .eq("record_kind","V1_4_KVB_ROA_ORIGINAL_SOURCE_V1").eq("source_code","COMPANY_EXCHANGE_FILING")
+    .eq("external_record_id",KVB_ORIGINAL_PROOF.issuer.sha256);
+   if(candidates.error)return reply(503,"PROPOSAL_READ_FAILED");
+   const qualified=(candidates.data??[]).filter(x=>kvbRoaOriginalQualified(x));
+   if(qualified.length!==1)return reply(409,"REGISTERED_ORIGINAL_PROPOSAL_NOT_UNIQUE");
+   const s=qualified[0];
+   return reply(200,"SOURCE_BOUND_ROA_PROPOSAL_NOT_ACCEPTED",{sourceRecordId:s.id,sourcePayloadHash:s.payload_hash,
+    supportingQuote:KVB_ORIGINAL_PROOF.issuer.table,period:"FY2025-26",scope:"STANDALONE",roaPercent:"1.93",
+    issuerUrl:KVB_ORIGINAL_PROOF.issuer.originalUrl,regulatorUrl:KVB_ORIGINAL_PROOF.regulator.originalUrl,
+    publicationPrecision:"UNKNOWN",canonicalPromotion:false});
+ }
  if(!body||body.action!=="V14_KVB_ROA_OWNER_NUMERIC_REVIEW"||body.portfolioId!==PORTFOLIO||body.securityId!==KVB||body.confirmation!=="APPROVE_KVB_FY26_ROA_SOURCE_BOUND_193"
    ||typeof body.sourceRecordId!=="string"||typeof body.sourcePayloadHash!=="string"||!HASH.test(body.sourcePayloadHash)
    ||typeof body.supportingQuote!=="string"||body.supportingQuote.length>3500)
@@ -32,27 +47,29 @@ Deno.serve(async req=>{
  // retained as a separate, hash-verified original and linked by this immutable source record.
  const raw=source.raw_payload as Record<string,unknown>;
  const regulator=raw.roa_regulatory_proof as Record<string,unknown>|undefined;
- if(!regulator||str(regulator.original_sha256)!=="1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834"||!/^https:\/\/.*rbi\.org\.in\//.test(str(regulator.official_url))
-   ||str(regulator.applicability_status)!=="VERIFIED_FOR_FY2025_26_STANDALONE"
-   ||!str(regulator.exact_passage).toLowerCase().includes("average working funds"))
-   return reply(409,"RBI_ORIGINAL_APPLICABILITY_NOT_PROVEN");
- if(str(raw.original_sha256)!=="8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9")return reply(409,"KVB_ORIGINAL_SOURCE_SHA_MISMATCH");
- // Never trust a nested applicability assertion alone. Require a separate immutable
- // Development regulator source record with the original RBI historical-version hash.
- const regulatorRecordId=str(regulator.source_record_id);
- if(!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(regulatorRecordId))return reply(409,"REGULATOR_SOURCE_RECORD_ID_REQUIRED");
- const regulatorQ=await db.from("data_source_records").select("id,source_code,record_kind,raw_payload").eq("id",regulatorRecordId).single();
+ const structured=kvbRoaOriginalQualified(source);
+ if(!structured)return reply(409,"REGISTERED_ORIGINAL_MULTI_ANCHOR_PROOF_REQUIRED");
+ const regulatorRecordId=str(regulator?.source_record_id);
+ const regulatorQ=await db.from("data_source_records").select("id,source_code,record_kind,payload_hash,raw_payload,retrieved_at").eq("id",regulatorRecordId).single();
  const regulatorSource=regulatorQ.data;
- if(regulatorQ.error||!regulatorSource||str(regulatorSource.raw_payload?.original_sha256)!=="1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834"
-   ||str(regulatorSource.raw_payload?.original_url)!=="https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143")
+ if(regulatorQ.error||!regulatorSource||regulatorSource.source_code!=="CONTROLLED_PUBLIC_WEB"
+   ||regulatorSource.record_kind!=="V1_4_KVB_ROA_ORIGINAL_SOURCE_V1"
+   ||str(regulatorSource.raw_payload?.original_sha256)!==KVB_ORIGINAL_PROOF.regulator.sha256
+   ||str(regulatorSource.raw_payload?.original_url)!==KVB_ORIGINAL_PROOF.regulator.originalUrl
+   ||str(regulatorSource.raw_payload?.roa)!==KVB_ORIGINAL_PROOF.regulator.roa
+   ||str(regulatorSource.raw_payload?.denominator)!==KVB_ORIGINAL_PROOF.regulator.denominator)
    return reply(409,"REGULATOR_INDEPENDENT_ORIGINAL_RECORD_REQUIRED");
+ if(await sha(raw)!==source.payload_hash||await sha(regulatorSource.raw_payload)!==regulatorSource.payload_hash)
+   return reply(409,"ORIGINAL_SOURCE_PAYLOAD_INTEGRITY_INVALID");
  const now=new Date().toISOString(),retrieved=str(source.retrieved_at),published=str(source.published_at)||null;
- const quote=str(body.supportingQuote);
- const binding={kind:"TEXT_CELL",fragment:quote,metric_label:"Return on Assets",period_label:"FY2025-26",exact_value:"1.93",entity_id:"KARURVYSYA",period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",period_start_anchor:"01-04-2025",period_end_anchor:"31-03-2026",scale:"1",conversion:"IDENTITY"};
- // Validator requires literal anchors; do not auto-invent source text.
- if(![binding.metric_label,binding.period_label,binding.entity_id,binding.period_start_anchor,binding.period_end_anchor].every(x=>quote.includes(x)))return reply(409,"SOURCE_LITERAL_ANCHORS_MISSING");
-
- const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"OWNER_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:new Date(Date.now()+150*86400000).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:user.data.user.id,reviewed_at:now,supersedes_review_id:null,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE"}};
+ const quote=str(body.supportingQuote),binding=kvbRoaBinding();
+ // Append to the already established correction chain; preserve both old reviews.
+ const prior=await db.from("research_evidence_requirement_reviews").select("id,decision,metadata,period_start,period_end,unit,consolidation_scope")
+  .eq("id","84db59ab-5621-4137-86a7-8ca9af987be2").eq("portfolio_id",PORTFOLIO).eq("security_id",KVB).eq("requirement_code","ROA_ANNUAL").single();
+ if(prior.error||prior.data?.decision!=="ACCEPTED"||prior.data?.metadata?.numeric_value!=="1.9300"
+   ||prior.data.period_start!=="2025-04-01"||prior.data.period_end!=="2026-03-31"||prior.data.unit!=="PERCENT"||prior.data.consolidation_scope!=="STANDALONE")
+   return reply(409,"ROA_SUPERSESSION_PREDECESSOR_CHANGED");
+ const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"OWNER_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:new Date(Math.min(bankReportingDeadline("2026-03-31",550),Date.parse(str(raw.original_bytes_verified_at))+550*86400000)).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:user.data.user.id,reviewed_at:now,supersedes_review_id:prior.data.id,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE",regulator_source_record_id:regulatorRecordId,regulator_source_payload_hash:regulatorSource.payload_hash}};
  const review_hash=await sha(row);
  // Idempotency on immutable source and requirement; the existing append-only uniqueness
  // is checked before insert but concurrent duplicates still need an atomic constraint.

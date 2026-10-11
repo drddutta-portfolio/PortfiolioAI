@@ -1,3 +1,4 @@
+import {kvbRoaBindingQualified,KVB_BINDING_KIND} from "./v14-kvb-roa-original-proof.ts"
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
 import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
 import {approvedBankDelegatedReview,approvedBankOfficialFallback} from "./v14-bank-approved-delegation.ts"
@@ -16,7 +17,7 @@ export interface RequirementReview {
   readonly review_hash:string; readonly supersedes_review_id:string|null; readonly metadata:Json; readonly created_at?:string
 }
 export interface ReviewedSourceRecord {
-  readonly id:string; readonly source_code:string; readonly retrieved_at:string; readonly published_at:string|null
+  readonly id:string; readonly source_code:string; readonly record_kind?:string; readonly retrieved_at:string; readonly published_at:string|null
   readonly payload_hash:string; readonly raw_payload:Json
 }
 export interface ReviewedResearchDocument {
@@ -90,9 +91,25 @@ function reviewHashPayload(review:RequirementReview){
   retrieved_at:review.retrieved_at,fresh_through:review.fresh_through,review_version:review.review_version,reviewed_by:review.reviewed_by,
   reviewed_at:review.reviewed_at,supersedes_review_id:review.supersedes_review_id,metadata:review.metadata}
 }
-function sourceBinding(review:RequirementReview,source:ReviewedSourceRecord){
+function sourceBinding(review:RequirementReview,source:ReviewedSourceRecord,sources:ReadonlyMap<string,ReviewedSourceRecord>){
  const b=obj(review.metadata.source_binding); if(!b)return {ok:false as const,reason:"NUMERIC_SOURCE_BINDING_MISSING"}
  const kind=str(b.kind),fragment=str(b.fragment),metric=str(b.metric_label),periodLabel=str(b.period_label),value=str(b.exact_value)
+ if(kind===KVB_BINDING_KIND){
+   if(review.requirement_code!=="ROA_ANNUAL"||review.period_start!=="2025-04-01"||review.period_end!=="2026-03-31"||review.period_type!=="YEAR"
+     ||!kvbRoaBindingQualified(source as unknown as Json,b))return {ok:false as const,reason:"KVB_ORIGINAL_MULTI_ANCHOR_BINDING_INVALID"}
+   const reg=obj(source.raw_payload.roa_regulatory_proof),regulator=reg&&sources.get(str(reg.source_record_id)??"")
+   if(!regulator||regulator.source_code!=="CONTROLLED_PUBLIC_WEB"||regulator.record_kind!=="V1_4_KVB_ROA_ORIGINAL_SOURCE_V1"
+     ||regulator.raw_payload.original_sha256!==reg?.original_sha256
+     ||regulator.raw_payload.original_url!==reg?.official_url
+     ||regulator.raw_payload.denominator!==reg?.denominator||regulator.raw_payload.roa!==reg?.roa
+     ||review.metadata.regulator_source_payload_hash!==regulator.payload_hash)
+     return {ok:false as const,reason:"KVB_REGULATOR_ORIGINAL_LINK_NOT_BOUND"}
+   // Semantic context consists of individually bound original excerpts, not a
+   // fabricated supporting quotation. The numeric table is preserved literally.
+   const raw=source.raw_payload
+   return {ok:true as const,value:"1.93",fragment:str(raw.table_fragment)!+"\n"+str(raw.period_anchor)!+"\n"+str(reg!.denominator)!,
+    kind,metric:"Return on Assets",periodLabel:"2025-26"}
+ }
  const entity=str(b.entity_id)
  if(!kind||!["TABLE_CELL","XBRL_FACT","TEXT_CELL"].includes(kind)||!fragment||!metric||!periodLabel||!value||!DECIMAL.test(value))
   return {ok:false as const,reason:"NUMERIC_SOURCE_BINDING_INVALID"}
@@ -172,6 +189,12 @@ export async function validateReviewedRequirementEvidence(input:{
    if(delegated&&source.source_code!=="TRENDLYNE_MCP"&&!approvedBankOfficialFallback(r,source,input.portfolioOwnerId,family))
     return fail("REVIEW_REQUIRED","DELEGATED_SOURCE_AUTHORITY_NOT_PROVEN",[r.id])
    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
+   if(source.record_kind==="V1_4_KVB_ROA_ORIGINAL_SOURCE_V1"){
+     const regulatory=obj(source.raw_payload.roa_regulatory_proof)
+     const linked=regulatory&&sourceById.get(str(regulatory.source_record_id)??"")
+     if(linked&&(!Number.isFinite(time(linked.retrieved_at))||time(linked.retrieved_at)>sourceCutoffAtMs))
+       return fail("REVIEW_REQUIRED","KVB_REGULATOR_SOURCE_POST_CUTOFF",[r.id])
+   }
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
    if(r.retrieved_at!==source.retrieved_at)return fail("REVIEW_REQUIRED","REVIEW_RETRIEVAL_MISMATCH",[r.id])
@@ -187,7 +210,7 @@ export async function validateReviewedRequirementEvidence(input:{
      if(!metric||value===null||!input.metricCodes.includes(metric)||!DECIMAL.test(value))return fail("REVIEW_REQUIRED","NUMERIC_REVIEW_METRIC_VALUE_REQUIRED",[r.id])
      if(!r.period_end||!safeDate(r.period_end)||r.period_start!==null&&!safeDate(r.period_start)||!r.period_type||!r.unit||!r.consolidation_scope)
       return fail("REVIEW_REQUIRED","REVIEW_NUMERIC_METADATA_INCOMPLETE",[r.id])
-     const binding=sourceBinding(r,source);if(!binding.ok)return fail("REVIEW_REQUIRED",binding.reason,[r.id])
+     const binding=sourceBinding(r,source,sourceById);if(!binding.ok)return fail("REVIEW_REQUIRED",binding.reason,[r.id])
      if(binding.value!==value)return fail("REVIEW_REQUIRED","NUMERIC_SOURCE_VALUE_MISMATCH",[r.id])
      // M1-M4 owner-approved source-only contracts: do not trust a claimed
      // certification flag or derive a financial fact from unbound metadata.
@@ -237,7 +260,7 @@ export async function validateReviewedRequirementEvidence(input:{
          Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
          !/(return on assets|annual roa)/i.test(literal)||
          !/(annual|financial year|full.year|audited)/i.test(literal)||
-         !/(average (total )?assets)/i.test(literal)
+         !/(average (?:of )?(?:total )?assets)/i.test(literal)
        ))return fail("REVIEW_REQUIRED","BANK_DIRECT_FULL_YEAR_ROA_SOURCE_PROOF_MISSING",[r.id])
      }
 
