@@ -18,7 +18,11 @@ export function KvbRoaReviewPage() {
   busy.current = true; setPending(true); setError("")
   try {
    if (approve && proposal) setReviewId(await approveKvbRoaProposal(proposal))
-   else setProposal(await loadKvbRoaProposal())
+   else {
+    const loaded = await loadKvbRoaProposal()
+    setProposal(loaded)
+    if (loaded.acceptedReviewId) setReviewId(loaded.acceptedReviewId)
+   }
   } catch (e) { setError(e instanceof Error ? e.message : "ROA review failed.") }
   finally { busy.current = false; setPending(false) }
  }

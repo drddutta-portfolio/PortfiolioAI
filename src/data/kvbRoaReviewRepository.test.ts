@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { readOnlySecurityIds } from "../../supabase/functions/_shared/p7-ic-read-only-targeting"
 import { validateAndSaveKvbReadiness } from "./kvbRoaReviewRepository"
-const { call, session } = vi.hoisted(() => ({ call: vi.fn<(name: string, options: { body: Record<string, unknown> }) => Promise<{ data: unknown; error: null }>>(), session: vi.fn() }))
+const { call, session } = vi.hoisted(() => ({ call: vi.fn<(name: string, options: { body: Record<string, unknown> }) => Promise<{ data: unknown; error: unknown }>>(), session: vi.fn() }))
 vi.mock("../lib/supabase", () => ({ supabase: { auth: { getSession: session }, functions: { invoke: call } } }))
 const security = "be55b3cc-0400-45af-84aa-2a95e2c361c5"
 function validation(state = "FRESH", writes = 0) { return { status: "IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY", dryRun: true, providerCalls: 0, results: [{ securityId: security, items: [{ requirement_code: "ROA_ANNUAL", evidence_state: state }] }], writeTotals: { snapshotsCreated: writes, snapshotsReused: 0, selectionsCreated: 0, selectionsReused: 0 }, snapshotIds: [], selectionIds: [] } }
@@ -25,6 +25,20 @@ describe("KVB canonical save admission gate", () => {
   const materializeBody = call.mock.calls[2]?.[1].body
   expect(materializeBody).toBeDefined()
   expect(readOnlySecurityIds(materializeBody!)).toEqual([security])
+ })
+ it("stops at grant issuance when the owner session expires after validation", async () => {
+  call.mockResolvedValueOnce({ data: validation(), error: null })
+  session.mockResolvedValueOnce({ data: { session: { user: { id: "owner" } } }, error: null })
+   .mockResolvedValueOnce({ data: { session: null }, error: null })
+  await expect(validateAndSaveKvbReadiness()).rejects.toThrow(/GRANT_ISSUANCE: Sign in/)
+  expect(call).toHaveBeenCalledTimes(1)
+ })
+ it("preserves the backend grant replay rejection and identifies materialization", async () => {
+  call.mockResolvedValueOnce({ data: validation(), error: null })
+   .mockResolvedValueOnce({ data: { code: "GRANT_ISSUED_SINGLE_USE", grantId: "grant", action: "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS", scope: "SECURITY_IDS:" + security, expiresAt: new Date(Date.now()+60000).toISOString() }, error: null })
+   .mockResolvedValueOnce({ data: null, error: { context: new Response(JSON.stringify({ code: "P4_GRANT_ALREADY_USED" }), { status: 401 }) } })
+  await expect(validateAndSaveKvbReadiness()).rejects.toThrow("CANONICAL_MATERIALIZATION: P4_GRANT_ALREADY_USED")
+  expect(call).toHaveBeenCalledTimes(3)
  })
  it("requires an authenticated session before any handler invocation", async () => {
   session.mockResolvedValue({ data: { session: null }, error: null })

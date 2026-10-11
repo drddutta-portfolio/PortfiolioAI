@@ -31,10 +31,16 @@ async function handle(req:Request){
    const qualified=(candidates.data??[]).filter(x=>kvbRoaOriginalQualified(x));
    if(qualified.length!==1)return reply(409,"REGISTERED_ORIGINAL_PROPOSAL_NOT_UNIQUE");
    const s=qualified[0];
+   const accepted=await db.from("research_evidence_requirement_reviews").select("id")
+    .eq("portfolio_id",PORTFOLIO).eq("security_id",KVB).eq("requirement_code","ROA_ANNUAL")
+    .eq("source_record_id",s.id).eq("source_payload_hash",s.payload_hash).eq("review_kind","OWNER_NUMERIC_REVIEW")
+    .eq("decision","ACCEPTED").eq("reviewed_by",user.data.user.id);
+   if(accepted.error)return reply(503,"ACCEPTED_REVIEW_READ_FAILED");
+   if((accepted.data??[]).length>1)return reply(409,"ACCEPTED_REVIEW_NOT_UNIQUE");
    return reply(200,"SOURCE_BOUND_ROA_PROPOSAL_NOT_ACCEPTED",{sourceRecordId:s.id,sourcePayloadHash:s.payload_hash,
     supportingQuote:KVB_ORIGINAL_PROOF.issuer.table,period:"FY2025-26",scope:"STANDALONE",roaPercent:"1.93",
     issuerUrl:KVB_ORIGINAL_PROOF.issuer.originalUrl,regulatorUrl:KVB_ORIGINAL_PROOF.regulator.originalUrl,
-    publicationPrecision:"UNKNOWN",canonicalPromotion:false});
+    publicationPrecision:"UNKNOWN",canonicalPromotion:false,acceptedReviewId:accepted.data?.[0]?.id??null});
  }
  if(!body||body.action!=="V14_KVB_ROA_OWNER_NUMERIC_REVIEW"||body.portfolioId!==PORTFOLIO||body.securityId!==KVB||body.confirmation!=="APPROVE_KVB_FY26_ROA_SOURCE_BOUND_193"
    ||typeof body.sourceRecordId!=="string"||typeof body.sourcePayloadHash!=="string"||!HASH.test(body.sourcePayloadHash)
