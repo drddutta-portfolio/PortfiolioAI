@@ -1,0 +1,27 @@
+name: Banking V1-4 KVB RBI Official Evidence
+on:
+  pull_request:
+    paths:
+      - "scripts/v1-4/kvb_rbi_original_capture.mjs"
+      - ".github/workflows/banking-v14-kvb-rbi-evidence.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture-rbi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Capture official RBI original bytes and hashes
+        run: node scripts/v1-4/kvb_rbi_original_capture.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kvb-rbi-original-source-provenance
+          path: kvb-rbi-original-artifact/
+          retention-days: 90
+          if-no-files-found: error
