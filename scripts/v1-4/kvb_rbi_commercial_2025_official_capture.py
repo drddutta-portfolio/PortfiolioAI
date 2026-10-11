@@ -4,7 +4,7 @@ Public RBI source only; no DB writes or numeric admission."""
 from urllib.request import Request, urlopen
 from pathlib import Path
 import hashlib,json,subprocess,datetime,sys
-url="https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13143"
+url="https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143"
 dir=Path("kvb-rbi-2025-source-artifact");dir.mkdir(exist_ok=True)
 out={"source_url":url,"retrieved_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"admission":False}
 try:
@@ -19,7 +19,7 @@ try:
   h=hashlib.sha256(data).hexdigest()
   (dir/"RBI_Commercial_Banks_Financial_Statements_2025_Official.html").write_bytes(data)
   out.update({"status":"ORIGINAL_RBI_HTML_CAPTURED_NOT_ADMITTED","final_url":final,"bytes":len(data),"sha256":h})
-  out["source_kind"]="RBI_OFFICIAL_MASTER_DIRECTIONS_HTML"
+  out["source_kind"]="RBI_OFFICIAL_NOV_28_2025_HISTORICAL_VERSION_HTML"
   text=data.decode("utf-8",errors="replace")
   out["anchors"]={m:m.lower() in text.lower() for m in ["Return on Assets","Working funds","Form X","November 28, 2025","Commercial Banks"]}
   (dir/"roa_context.txt").write_text(text[max(0,text.lower().find("return on assets")-800):text.lower().find("return on assets")+1800])
