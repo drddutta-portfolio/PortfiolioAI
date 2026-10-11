@@ -3,12 +3,12 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { MemoryRouter } from "react-router-dom"
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest"
 import { KvbRoaReviewPage } from "./KvbRoaReviewPage"
-const { load, approve, config } = vi.hoisted(() => ({ load: vi.fn(), approve: vi.fn(), config: { supabaseUrl: "https://lrgpjimipfkyoqbpsqzz.supabase.co" } }))
-vi.mock("../data/kvbRoaReviewRepository", () => ({ loadKvbRoaProposal: load, approveKvbRoaProposal: approve }))
+const { load, approve, save, config } = vi.hoisted(() => ({ load: vi.fn(), approve: vi.fn(), save: vi.fn(), config: { supabaseUrl: "https://lrgpjimipfkyoqbpsqzz.supabase.co" } }))
+vi.mock("../data/kvbRoaReviewRepository", () => ({ loadKvbRoaProposal: load, approveKvbRoaProposal: approve, validateAndSaveKvbReadiness: save }))
 vi.mock("../lib/config", () => ({ publicConfig: config }))
 const proposal = { sourceRecordId: "issuer", sourcePayloadHash: "hash", supportingQuote: "Return on Assets 1.93", issuerUrl: "https://www.kvb.bank.in/ar-26/", regulatorUrl: "https://www.rbi.org.in/", roaPercent: "1.93", period: "FY2025-26", scope: "STANDALONE", publicationPrecision: "UNKNOWN" }
 function view() { render(<MemoryRouter><KvbRoaReviewPage /></MemoryRouter>) }
-beforeEach(() => { load.mockReset(); approve.mockReset(); config.supabaseUrl = "https://lrgpjimipfkyoqbpsqzz.supabase.co" })
+beforeEach(() => { load.mockReset(); approve.mockReset(); save.mockReset(); config.supabaseUrl = "https://lrgpjimipfkyoqbpsqzz.supabase.co" })
 afterEach(cleanup)
 describe("KVB source-bound owner review", () => {
  it("requires explicit source loading and confirmation before submitting a review", async () => {
@@ -22,6 +22,14 @@ describe("KVB source-bound owner review", () => {
   await screen.findByRole("status")
   expect(approve).toHaveBeenCalledExactlyOnceWith(proposal)
   expect(screen.getByRole("status").textContent).toContain("does not establish FRESH or READY")
+ })
+ it("saves readiness only after an accepted owner review and a separate explicit action", async () => {
+  load.mockResolvedValue(proposal); approve.mockResolvedValue("accepted-review"); save.mockResolvedValue("canonical-snapshot")
+  view(); fireEvent.click(screen.getByText("Load registered source evidence")); await screen.findByText(proposal.supportingQuote)
+  fireEvent.click(screen.getByRole("checkbox")); fireEvent.click(screen.getByText("Approve source-bound ROA evidence"))
+  await screen.findByText("Validate and save KVB readiness"); expect(save).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByText("Validate and save KVB readiness")); await screen.findByText(/canonical-snapshot/)
+  expect(save).toHaveBeenCalledTimes(1)
  })
  it("does not submit concurrent owner approvals", async () => {
   load.mockResolvedValue(proposal); approve.mockReturnValue(new Promise(() => {}))

@@ -4,7 +4,7 @@ const PROJECT="lrgpjimipfkyoqbpsqzz",PORTFOLIO="6193a4aa-3235-4057-bddc-209fcf44
 const ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",SCOPE="SECURITY_IDS:"+KVB;
 const respond=(s:number,code:string,extra:Record<string,unknown>={})=>new Response(JSON.stringify({code,...extra}),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}});
 
-Deno.serve(async req=>{
+async function handle(req:Request){
  if(req.method!=="POST")return respond(405,"METHOD_NOT_ALLOWED");
  const url=Deno.env.get("SUPABASE_URL")??"",secret=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
  if(url!==`https://${PROJECT}.supabase.co`||!secret)return respond(409,"DEV_TARGET_REQUIRED");
@@ -29,4 +29,17 @@ Deno.serve(async req=>{
  const inserted=await db.from("data_source_records").insert({source_code:"OWNER_REVIEWED_CLASSIFICATION",record_kind:"P4_EXECUTION_GRANT",external_record_id:external,retrieved_at:now.toISOString(),payload_hash:hash,raw_payload:payload,terms_snapshot:{issuer:"OWNER_AUTHENTICATED_BANK_KVB_V14",authenticated_owner:user.data.user.id,materialization_only:true,expires_in_seconds:900}}).select("id").single();
  if(inserted.error)return respond(409,"GRANT_INSERT_REJECTED",{postgresCode:inserted.error.code});
  return respond(200,"GRANT_ISSUED_SINGLE_USE",{grantId:inserted.data.id,action:ACTION,scope:SCOPE,expiresAt:payload.expires_at});
-});
+}
+const REVIEW_ORIGINS=new Set(["https://portfiolio-ai-git-codex-banking-source-re-9b3df9-dibyendu-dutta.vercel.app","http://localhost:5173","http://127.0.0.1:5173"])
+Deno.serve(async req=>{
+ const origin=req.headers.get("origin")
+ if(origin&&!REVIEW_ORIGINS.has(origin))return respond(403,"DEVELOPMENT_REVIEW_ORIGIN_REQUIRED")
+ const response=req.method==="OPTIONS"?new Response(null,{status:204}):await handle(req)
+ if(origin){
+  response.headers.set("Access-Control-Allow-Origin",origin)
+  response.headers.set("Access-Control-Allow-Headers","authorization, x-client-info, apikey, content-type")
+  response.headers.set("Access-Control-Allow-Methods","POST, OPTIONS")
+  response.headers.set("Vary","Origin")
+ }
+ return response
+})

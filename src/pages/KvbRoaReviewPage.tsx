@@ -1,12 +1,13 @@
 import { useRef, useState } from "react"
 import { Link } from "react-router-dom"
-import { loadKvbRoaProposal, approveKvbRoaProposal, type KvbRoaProposal } from "../data/kvbRoaReviewRepository"
+import { loadKvbRoaProposal, approveKvbRoaProposal, validateAndSaveKvbReadiness, type KvbRoaProposal } from "../data/kvbRoaReviewRepository"
 import { publicConfig } from "../lib/config"
 import { DEVELOPMENT_SUPABASE_PROJECT_REF, getSupabaseProjectRef } from "../lib/environment"
 export function KvbRoaReviewPage() {
  const [proposal, setProposal] = useState<KvbRoaProposal | null>(null)
  const [error, setError] = useState("")
  const [reviewId, setReviewId] = useState("")
+ const [snapshotId, setSnapshotId] = useState("")
  const [pending, setPending] = useState(false)
  const [confirmed, setConfirmed] = useState(false)
  const busy = useRef(false)
@@ -19,6 +20,13 @@ export function KvbRoaReviewPage() {
    if (approve && proposal) setReviewId(await approveKvbRoaProposal(proposal))
    else setProposal(await loadKvbRoaProposal())
   } catch (e) { setError(e instanceof Error ? e.message : "ROA review failed.") }
+  finally { busy.current = false; setPending(false) }
+ }
+ async function saveReadiness() {
+  if (!allowed || busy.current || !reviewId || snapshotId) return
+  busy.current = true; setPending(true); setError("")
+  try { setSnapshotId(await validateAndSaveKvbReadiness()) }
+  catch (e) { setError(e instanceof Error ? e.message : "Canonical validation failed.") }
   finally { busy.current = false; setPending(false) }
  }
  if (!allowed) return <section className="panel"><h1>Development owner review</h1><p>This review is available only in the approved Development preview.</p></section>
@@ -35,6 +43,9 @@ export function KvbRoaReviewPage() {
    <p><button disabled={pending || !confirmed || Boolean(reviewId)} onClick={() => void execute(true)}>{pending ? "Submitting…" : "Approve source-bound ROA evidence"}</button></p>
   </div>}
   {reviewId && <p role="status">Accepted review: {reviewId}. Canonical validation and materialization still need to run; this acceptance alone does not establish FRESH or READY.</p>}
+  {reviewId && <p><button disabled={pending || Boolean(snapshotId)} onClick={() => void saveReadiness()}>Validate and save KVB readiness</button></p>}
+  {snapshotId && <p role="status">Canonical snapshot reported: {snapshotId}. Independent database readback is required to confirm the selected ROA result and remaining blockers.</p>}
+  <p>This action validates KVB first and requests a single-use KVB-only materialization grant only if ROA passes. It requests no provider calls.</p>
   <p><Link to="/app/settings/diagnostics/banking-v1-4">Banking read-only validator</Link></p>
  </section>
 }
