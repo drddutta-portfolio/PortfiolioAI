@@ -25,7 +25,7 @@ try:
   (dir/"roa_context.txt").write_text(text[max(0,text.lower().find("return on assets")-800):text.lower().find("return on assets")+1800])
 
 except Exception as exc:
- out.update({"status":"ACQUISITION_FAILED", "error_type":type(exc).__name__, "error":str(exc) or repr(exc), "transport":"RBI_ORIGINAL_PDF_HTTPS"})
+ out.update({"status":"ACQUISITION_FAILED", "error_type":type(exc).__name__, "error":str(exc) or repr(exc), "transport":"RBI_OFFICIAL_MASTER_DIRECTIONS_HTML"})
 (dir/"manifest.json").write_text(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out))
-if out.get("status")!="ORIGINAL_PDF_CAPTURED_NOT_ADMITTED":sys.exit(2)
+if out.get("status")!="ORIGINAL_RBI_HTML_CAPTURED_NOT_ADMITTED":sys.exit(2)
