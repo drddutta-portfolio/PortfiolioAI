@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { validateAndSaveKvbReadiness } from "./kvbRoaReviewRepository"
-const { call, session } = vi.hoisted(() => ({ call: vi.fn(), session: vi.fn() }))
+const { call, session } = vi.hoisted(() => ({ call: vi.fn<(name: string, options: { body: Record<string, unknown> }) => Promise<{ data: unknown; error: null }>>(), session: vi.fn() }))
 vi.mock("../lib/supabase", () => ({ supabase: { auth: { getSession: session }, functions: { invoke: call } } }))
 const security = "be55b3cc-0400-45af-84aa-2a95e2c361c5"
 function validation(state = "FRESH", writes = 0) { return { status: "IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY", dryRun: true, providerCalls: 0, results: [{ securityId: security, items: [{ requirement_code: "ROA_ANNUAL", evidence_state: state }] }], writeTotals: { snapshotsCreated: writes, snapshotsReused: 0, selectionsCreated: 0, selectionsReused: 0 }, snapshotIds: [], selectionIds: [] } }
