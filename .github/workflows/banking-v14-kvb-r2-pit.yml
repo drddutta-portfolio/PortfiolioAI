@@ -1,0 +1,54 @@
+name: Banking V1-4 KVB R2 PIT Extraction
+on:
+  pull_request:
+    paths:
+      - "scripts/v1-4/kvb_r2_pit_extract.py"
+      - ".github/workflows/banking-v14-kvb-r2-pit.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source syntax and fail-closed boundaries
+        run: |
+          python -m py_compile scripts/v1-4/kvb_r2_pit_extract.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path("scripts/v1-4/kvb_r2_pit_extract.py").read_text()
+          assert 'pe_pit_admitted":False' in s and 'pb_pit_admitted":False' in s
+          assert 'ORIGINAL_AVAILABILITY_NOT_PROVEN' in s
+          assert 'put_object(' not in s and 'delete_object(' not in s
+          PY
+  extract:
+    if: github.event_name == 'workflow_dispatch'
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: PortfolioAI-Development
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned R2 archive readers
+        run: pip install boto3==1.35.99 pyarrow==19.0.1
+      - name: Extract KVB 2023–2026 archived month-end candidates
+        env:
+          CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: python scripts/v1-4/kvb_r2_pit_extract.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kvb-r2-monthly-pit-candidates
+          path: kvb-pit-extract-artifact/
+          retention-days: 90
+          if-no-files-found: warn
