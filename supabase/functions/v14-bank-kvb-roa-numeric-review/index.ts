@@ -37,6 +37,15 @@ Deno.serve(async req=>{
    ||!str(regulator.exact_passage).toLowerCase().includes("average working funds"))
    return reply(409,"RBI_ORIGINAL_APPLICABILITY_NOT_PROVEN");
  if(str(raw.original_sha256)!=="8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9")return reply(409,"KVB_ORIGINAL_SOURCE_SHA_MISMATCH");
+ // Never trust a nested applicability assertion alone. Require a separate immutable
+ // Development regulator source record with the original RBI historical-version hash.
+ const regulatorRecordId=str(regulator.source_record_id);
+ if(!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(regulatorRecordId))return reply(409,"REGULATOR_SOURCE_RECORD_ID_REQUIRED");
+ const regulatorQ=await db.from("data_source_records").select("id,source_code,record_kind,raw_payload").eq("id",regulatorRecordId).single();
+ const regulatorSource=regulatorQ.data;
+ if(regulatorQ.error||!regulatorSource||str(regulatorSource.raw_payload?.original_sha256)!=="1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834"
+   ||str(regulatorSource.raw_payload?.original_url)!=="https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143")
+   return reply(409,"REGULATOR_INDEPENDENT_ORIGINAL_RECORD_REQUIRED");
  const now=new Date().toISOString(),retrieved=str(source.retrieved_at),published=str(source.published_at)||null;
  const quote=str(body.supportingQuote);
  const binding={kind:"TEXT_CELL",fragment:quote,metric_label:"Return on Assets",period_label:"FY2025-26",exact_value:"1.93",entity_id:"KARURVYSYA",period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",period_start_anchor:"01-04-2025",period_end_anchor:"31-03-2026",scale:"1",conversion:"IDENTITY"};
