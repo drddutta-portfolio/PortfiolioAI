@@ -1,0 +1,24 @@
+name: Banking V1-4 RBI 2025 Governing Source
+on:
+  pull_request:
+    paths:
+      - "scripts/v1-4/kvb_rbi_commercial_2025_official_capture.py"
+      - ".github/workflows/banking-v14-rbi-2025-original.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture-official:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture RBI 2025 original PDF, SHA256 and ROA context
+        run: python3 scripts/v1-4/kvb_rbi_commercial_2025_official_capture.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kvb-rbi-commercial-2025-original
+          path: kvb-rbi-2025-source-artifact/
+          retention-days: 90
+          if-no-files-found: error
