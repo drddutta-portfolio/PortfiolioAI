@@ -1,5 +1,5 @@
 """Register two pinned originals through signed CI identity; never approve facts."""
-import hashlib,json,os,urllib.request,urllib.parse
+import base64,hashlib,json,os,urllib.request,urllib.parse
 from pathlib import Path
 import boto3
 from botocore.config import Config
@@ -32,7 +32,14 @@ req=urllib.request.Request(os.environ['ACTIONS_ID_TOKEN_REQUEST_URL']+'&audience
 with urllib.request.urlopen(req,timeout=30) as response:token=json.load(response)['value']
 request=urllib.request.Request(AUD,data=json.dumps(body).encode(),method='POST',
  headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
-with urllib.request.urlopen(request,timeout=90) as response:result=json.load(response)
+try:
+ with urllib.request.urlopen(request,timeout=90) as response:result=json.load(response)
+except urllib.error.HTTPError as error:
+ # Signed token is never printed. Only non-secret identity fields aid scope diagnosis.
+ claims=json.loads(base64.urlsafe_b64decode(token.split('.')[1]+'==='))
+ print(json.dumps({'httpStatus':error.code,'code':json.load(error).get('code'),
+  'executorIdentity':{k:claims.get(k) for k in ['repository','repository_id','ref','environment','sub','workflow_ref','event_name','sha']}}))
+ raise SystemExit(1)
 assert result['code']=='PINNED_ORIGINALS_REGISTERED_NOT_REVIEWED' and result['canonicalPromotion'] is False
 Path('source-import-result').mkdir(exist_ok=True)
 Path('source-import-result/registration.json').write_text(json.dumps(result,indent=2)+'\n')
