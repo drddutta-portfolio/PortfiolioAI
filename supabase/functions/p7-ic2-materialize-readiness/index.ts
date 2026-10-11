@@ -6,6 +6,7 @@ import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,validateV14SelectedOwnership,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
 import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows,parseHistoryContractProof,type HistoryContractProof,type CurrentSessionDecision} from "../_shared/v14-history-readiness.ts"
+import {verifiedPreOpenCalendar,type CalendarRecord} from "../_shared/v14-bank-pre-open-calendar.ts"
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract,BANK_ACTIVE_METHODOLOGY_AUTHORITY,BANK_V2_VALUATION_WEIGHTS} from "../_shared/p7-ic-profile-contracts.ts"
@@ -202,7 +203,17 @@ async function loadCurrentSessionDecision(admin:Admin,sourceCutoffAt:string):Pro
   .limit(10)
  if(result.error)throw result.error
  const rows=(result.data??[]) as Array<{id:string;retrieved_at:string;raw_payload:Json}>
- if(!rows.length)return null
+ if(!rows.length){
+  const calendar=await admin.from("data_source_records").select("id,record_kind,retrieved_at,raw_payload")
+   .eq("source_code","NSE_OFFICIAL")
+   .in("record_kind",["V1_4_NSE_TRADING_CALENDAR_2026_BASE","V1_4_NSE_CALENDAR_APPROVED_BASELINE","V1_4_NSE_CALENDAR_REFRESH_CAPTURE"])
+   .lte("retrieved_at",sourceCutoffAt).order("retrieved_at",{ascending:false}).limit(100)
+  if(calendar.error)throw calendar.error
+  const preOpenCalendar=verifiedPreOpenCalendar((calendar.data??[]) as CalendarRecord[],sourceCutoffAt)
+  if(!preOpenCalendar)return null
+  // Calendar proof is separate; do not fabricate a current CLOSED or OPEN decision record.
+  return{sessionDate,decision:"UNKNOWN",recordId:"",reason:"PRE_OPEN_LATEST_COMPLETED_SESSION_VERIFIED",preOpenCalendar}
+ }
  const latest=rows[0]!
  const tied=rows.filter(row=>row.retrieved_at===latest.retrieved_at)
  if(tied.length>1&&new Set(tied.map(row=>JSON.stringify(row.raw_payload))).size>1)throw new Error("CURRENT_SESSION_DECISION_CONFLICT")

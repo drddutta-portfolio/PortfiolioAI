@@ -2,6 +2,7 @@ import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import {AngelOneProvider,AngelProviderError,loadAngelOneConfig} from "../_shared/angel-one.ts"
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {validateBankTail,bankTailDay} from "../_shared/v14-bank-tail-validation.ts"
+import {bankMaintenanceExecutionWindow} from "../_shared/v14-bank-maintenance-time.ts"
 import scope from "./scope.json" with {type:"json"}
 
 const PROJECT="lrgpjimipfkyoqbpsqzz"
@@ -34,6 +35,8 @@ Deno.serve(async req=>{
   const calendarDecisionId=String(body.calendarDecisionId??"")
   if(body.action!==ACTION||body.portfolioId!==PORTFOLIO||!SESSION_RE.test(sessionDate)||!calendarDecisionId)
     return reply(400,{code:"BANK_MAINTENANCE_SCOPE_INVALID"})
+  if(!bankMaintenanceExecutionWindow(sessionDate,Date.now()))
+    return reply(409,{code:"BANK_MAINTENANCE_SESSION_NOT_PUBLICATION_ELIGIBLE",providerCalls:0,grantConsumed:false})
   const admin=createClient(url,key,{auth:{persistSession:false}})
 
   const decision=await admin.from("data_source_records")
