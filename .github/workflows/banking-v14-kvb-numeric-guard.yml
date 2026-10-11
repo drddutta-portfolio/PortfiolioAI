@@ -1,0 +1,35 @@
+name: Banking V1-4 KVB Numeric Admission Guard
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/v14-bank-kvb-roa-numeric-review/**"
+      - "supabase/functions/v14-bank-kvb-owner-materialize-grant/**"
+      - "supabase/migrations/20261011172000_bank_v14_atomic_single_use_grants.sql"
+      - "supabase/migrations/20261011173000_bank_v14_kvb_roa_source_review_unique.sql"
+      - ".github/workflows/banking-v14-kvb-numeric-guard.yml"
+permissions:
+  contents: read
+jobs:
+  source-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run KVB numeric source tests
+        run: deno test --allow-env supabase/functions/v14-bank-kvb-roa-numeric-review/index.deno.test.ts
+      - name: Check TypeScript modules
+        run: deno check supabase/functions/v14-bank-kvb-roa-numeric-review/index.ts supabase/functions/v14-bank-kvb-owner-materialize-grant/index.ts
+      - name: Check migration text boundaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          paths=[Path("supabase/migrations/20261011172000_bank_v14_atomic_single_use_grants.sql"),Path("supabase/migrations/20261011173000_bank_v14_kvb_roa_source_review_unique.sql")]
+          txt="\n".join(x.read_text() for x in paths).upper()
+          assert txt.count("CREATE UNIQUE INDEX") == 3
+          assert "P4_EXECUTION_GRANT_CONSUMED" in txt
+          assert "KVB" in txt
+          assert "DROP TABLE" not in txt and "DELETE FROM" not in txt and "TRUNCATE" not in txt
+          PY
