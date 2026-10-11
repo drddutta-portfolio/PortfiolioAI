@@ -1,4 +1,4 @@
-import {sourceEligible} from "./index.ts";
+import {sourceEligible} from "./source-guard.ts";
 const quote="KARURVYSYA Return on Assets FY2025-26 full-year audited Standalone 01-04-2025 31-03-2026 1.93% average total assets";
 const base={source_code:"COMPANY_EXCHANGE_FILING",raw_payload:{original_url:"https://www.kvb.bank.in/ar-26/assets/pdfs/Karur_Vysya_Bank_IAR_Schedules.pdf",original_sha256:"8".repeat(64),verified_quote:quote}};
 Deno.test("KVB numeric review requires precise issuer hash and denominator binding",()=>{
