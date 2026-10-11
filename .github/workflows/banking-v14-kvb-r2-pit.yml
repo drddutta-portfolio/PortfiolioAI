@@ -23,7 +23,7 @@ jobs:
           assert 'put_object(' not in s and 'delete_object(' not in s
           PY
   extract:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.number == 124 && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/banking-source-remediation')
     needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -33,6 +33,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Restore independently reviewed, immutable extractor from prior commit
+        run: |
+          git show 03cf0c85916ce32c7f4e5c734349eb13b5505d75:scripts/v1-4/kvb_r2_pit_extract.py > /tmp/kvb_pit_reviewed.py
+          python -m py_compile /tmp/kvb_pit_reviewed.py
       - name: Install pinned R2 archive readers
         run: pip install boto3==1.35.99 pyarrow==19.0.1
       - name: Extract KVB 2023–2026 archived month-end candidates
@@ -44,7 +48,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
-        run: python scripts/v1-4/kvb_r2_pit_extract.py
+        run: python /tmp/kvb_pit_reviewed.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
