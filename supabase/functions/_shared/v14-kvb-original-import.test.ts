@@ -38,7 +38,7 @@ async function evaluate(sources:ReviewedSourceRecord[],r?:RequirementReview){ret
  family:"NUMERIC_SERIES",metricCodes:["ROA_ANNUAL"],minimum:1,reviews:[r??await review()],sources,documents:[],documentSources:[],
  definitions:[definition],evaluationAsOfMs:Date.parse("2026-10-11T18:05:00Z"),sourceCutoffAtMs:Date.parse("2026-10-11T18:05:00Z"),freshnessPolicy:"BANK_DIRECT_150D_550D_DUAL_CLOCK_V1"})}
 const claims={repository:"drddutta-portfolio/PortfiolioAI",repository_id:"1357024254",ref:"refs/heads/codex/banking-source-remediation",
- environment:"PortfolioAI-Development",sub:"repo:drddutta-portfolio/PortfiolioAI:environment:PortfolioAI-Development",
+ environment:"PortfolioAI-Development",sub:"repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development",
  workflow_ref:"drddutta-portfolio/PortfiolioAI/.github/workflows/banking-v14-kvb-source-import.yml@refs/heads/codex/banking-source-remediation",event_name:"push",sha:"a".repeat(40)}
 describe("Pinned KVB original admission",()=>{
  it("restricts signed CI claims to the approved repository, branch, workflow and Development environment",()=>{

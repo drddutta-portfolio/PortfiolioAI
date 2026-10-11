@@ -11,6 +11,7 @@ permissions:
 jobs:
   register:
     runs-on: ubuntu-latest
+    # The verified OIDC subject includes immutable repository and owner IDs.
     environment: PortfolioAI-Development
     permissions:
       contents: read

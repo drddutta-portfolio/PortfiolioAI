@@ -41,7 +41,7 @@ export function kvbRoaBindingQualified(source:Json,binding:Json):boolean{
 export function githubImportClaimsQualified(p:Json):boolean{
  return p.repository==="drddutta-portfolio/PortfiolioAI"&&p.repository_id==="1357024254"
   &&p.ref==="refs/heads/codex/banking-source-remediation"&&p.environment==="PortfolioAI-Development"
-  &&p.sub==="repo:drddutta-portfolio/PortfiolioAI:environment:PortfolioAI-Development"
+  &&p.sub==="repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development"
   &&p.workflow_ref==="drddutta-portfolio/PortfiolioAI/.github/workflows/banking-v14-kvb-source-import.yml@refs/heads/codex/banking-source-remediation"
   &&p.event_name==="push"&&typeof p.sha==="string"&&/^[a-f0-9]{40}$/.test(p.sha)
 }
