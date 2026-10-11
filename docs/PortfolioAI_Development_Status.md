@@ -9840,3 +9840,9 @@ HDFCBANK and TORNTPHARM; tablet score-label overflow was found and a shared-shel
 CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
 allowance were corrected. G5.2 is now in review, rather than access-blocked; final
 acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.
+
+### Banking V1-4 execution — 12 October 2026 IST
+
+KVB's genuine owner ROA acceptance is preserved and independently persisted FRESH at 1.93%; no repeat review was created. Development maintenance runner v2 rejects pre-19:00 IST dispatch before grant/provider activity. A source-bound pre-open calendar repair and actual-data canonical-engine replay identify three FRESH KVB history requirements, while two benchmark-dependent requirements remain blocked by unqualified return-basis compatibility. The replay is not owner-authenticated HTTP validation or materialization; persisted READY remains 0/13 and ₹0.
+
+Original annual ROA cells were verified for all thirteen banks without quarterly annualization; these are source candidates, not new admissions. AUBANK requires its separately applicable SFB regulatory authority. PIT sample publication proof is retained, but PE/PB admission is still absent. Direct TTM NIM remains unproven after bounded original-source checks; the derived feasibility model remains inactive. Both Development cron jobs and the existing first-OPEN-session verification automation are preserved. No migration or Production/main change occurred. See `docs/private/v1-4-industry-batches/Banking_13_Execution_Checkpoint_2026-10-12.md` and the source-linked replay/annual-source verification artifacts for exact boundaries.

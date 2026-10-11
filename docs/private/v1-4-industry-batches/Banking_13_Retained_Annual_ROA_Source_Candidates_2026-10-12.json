@@ -1,0 +1,1072 @@
+[
+  {
+    "symbol": "KOTAKBANK",
+    "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+    "source_record_id": "0ac63c4a-e937-4e6e-a3d9-416cdfd03917",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "155303",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155303_02052026191411_iXBRL_WEB.html",
+        "originalBytes": 2018977,
+        "originalSha256": "7b0aae65b1ac979a9b43fa300096145e32ef2f3aecc1458b0c37affc0d1925af",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.5300",
+            "1.9700"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "02-May-2026 19:14:10"
+      }
+    ]
+  },
+  {
+    "symbol": "BANDHANBNK",
+    "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+    "source_record_id": "0dd21e10-d950-46ec-80ae-e1c0d486751c",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "153854",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153854_28042026202816_iXBRL_WEB.html",
+        "originalBytes": 196281,
+        "originalSha256": "eda046d0d5a4e2f8ace72803eed845613534bddb7f821932fa56304c9b3ec654",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.2700",
+            "0.6400"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "28-Apr-2026 20:28:14"
+      }
+    ]
+  },
+  {
+    "symbol": "ICICIBANK",
+    "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+    "source_record_id": "14a38f65-7918-418d-86ad-c08428d91f91",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "151429",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151429_18042026180754_iXBRL_WEB.html",
+        "originalBytes": 1693973,
+        "originalSha256": "0f614116f9e584e1a1088d0ea8e58b658d14a4300ea9471081dbcfba412153b5",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "2.400",
+            "2.3300"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "18-Apr-2026 18:07:54"
+      }
+    ]
+  },
+  {
+    "symbol": "IDBI",
+    "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+    "source_record_id": "2745ed49-632c-46e1-aa2f-0b4f9dbecd64",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "155018",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155018_30042026194728_iXBRL_WEB.html",
+        "originalBytes": 147290,
+        "originalSha256": "e89f8169a6a7de41cb1bd7f30cbc40c25c5ea36131112fcc7f0c1fc94be5bc93",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "1.7500",
+            "2.2700"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "30-Apr-2026 19:46:15"
+      }
+    ]
+  },
+  {
+    "symbol": "BANKBARODA",
+    "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+    "source_record_id": "3b52b883-a7e6-4e84-a22b-6538d739fb08",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "156426",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156426_08052026203710_iXBRL_WEB.html",
+        "originalBytes": 107722,
+        "originalSha256": "99bb60a71c5901e209d9c0cdaef038a0a7d8bc0851888a99089187e39cc9af3b",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "1.1500",
+            "1.0600"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "08-May-2026 20:37:08"
+      }
+    ]
+  },
+  {
+    "symbol": "AUBANK",
+    "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+    "source_record_id": "3c8f9043-447d-4070-87dc-774fd7179b01",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "153377",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153377_27042026232414_iXBRL_WEB.html",
+        "originalBytes": 105898,
+        "originalSha256": "17a58690af55eaf852d720374841f0719eb2629541891c64201819ab9f724d66",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.4500",
+            "1.5700"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "27-Apr-2026 23:24:13"
+      }
+    ]
+  },
+  {
+    "symbol": "SBIN",
+    "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+    "source_record_id": "506ba799-c6e9-4f94-9ee5-4ec7df9bf778",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "156316",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156316_08052026164017_iXBRL_WEB.html",
+        "originalBytes": 124633,
+        "originalSha256": "732da02fafb1ef412b6947cd3ad25b4463705ae76da08a8caad8ba4ac6e29d82",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "1.0700",
+            "1.1200"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "08-May-2026 16:40:13"
+      }
+    ]
+  },
+  {
+    "symbol": "HDFCBANK",
+    "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+    "source_record_id": "8c830a2e-8a37-44aa-964e-98238b7bca4d",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "151455",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151455_18042026192837_iXBRL_WEB.html",
+        "originalBytes": 495198,
+        "originalSha256": "a3e4b5d130621618061f5c7475935c62951d4240ddb5a3e19213e846fbbee6e2",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.4800",
+            "1.9400"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "18-Apr-2026 19:28:36"
+      }
+    ]
+  },
+  {
+    "symbol": "KARURVYSYA",
+    "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+    "source_record_id": "99560c4b-6d01-4aae-8f87-605e84ce0232",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "156081",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156081_07052026185729_iXBRL_WEB.html",
+        "originalBytes": 76386,
+        "originalSha256": "ae58a46abcbbe9f21cd1fd5175dbf9786c7a0d1e9922615aaea5237e982daece",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "2.100",
+            "1.9300"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "07-May-2026 18:57:29"
+      }
+    ]
+  },
+  {
+    "symbol": "INDIANB",
+    "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+    "source_record_id": "ca22559c-b464-4715-96cb-85dcc5f87c7f",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "154404",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154404_29042026203012_iXBRL_WEB.html",
+        "originalBytes": 82938,
+        "originalSha256": "38d7c092ef2f989429c8f4ec835a516680d7081b16969daf82db3f270b4cba43",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "1.2800",
+            "1.3100"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "29-Apr-2026 20:30:12"
+      }
+    ]
+  },
+  {
+    "symbol": "FEDERALBNK",
+    "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+    "source_record_id": "de0210e0-584a-4379-a00d-86db6dea084e",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "174178",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_174178_13072026190423_iXBRL_WEB.html",
+        "originalBytes": 108879,
+        "originalSha256": "ea795b2d1c9ffad592d1184c3d57af0de02b6bf362db7478c8e8cf6ed9777905",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.3400",
+            "1.1500"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": null
+      },
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "154328",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154328_29042026190229_iXBRL_WEB.html",
+        "originalBytes": 109563,
+        "originalSha256": "51839750611d5b415d1525d555556e541112c7fbf4382ce63781f1e888725435",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.3400",
+            "1.1500"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "29-Apr-2026 19:02:12"
+      }
+    ]
+  },
+  {
+    "symbol": "AXISBANK",
+    "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+    "source_record_id": "e549740d-ca84-4cc5-864c-6ea5d82a262f",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "153576",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153576_28042026155521_iXBRL_WEB.html",
+        "originalBytes": 740192,
+        "originalSha256": "a90260811f8eb4fd8c109f29064042d4ece7e7ad76890e74899bed79bf8881fb",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "1.5800",
+            "1.4500"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "28-Apr-2026 15:55:21"
+      }
+    ]
+  },
+  {
+    "symbol": "IDFCFIRSTB",
+    "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+    "source_record_id": "f6d08ae2-c3cd-409b-9bcf-85a71637ddfb",
+    "filings": [
+      {
+        "type": "Integrated Filing- Financials",
+        "filingId": "152940",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_152940_25042026185222_iXBRL_WEB.html",
+        "originalBytes": 213274,
+        "originalSha256": "d59b952a547b004458c818589b7643b60b36da34b1320b56094f35b80761cea9",
+        "admissionStatus": "NOT_ADMITTED",
+        "literalTableCells": [
+          [
+            "Date of start of financial year",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of financial year",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "A",
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ],
+          [
+            "B",
+            "Date of end of reporting period",
+            "31-03-2026",
+            "31-03-2026"
+          ],
+          [
+            "D",
+            "Nature of report standalone or consolidated",
+            "Standalone",
+            "Standalone"
+          ],
+          [
+            "",
+            "Return on assets",
+            "0.3300",
+            "0.4400"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-04-2025"
+          ],
+          [
+            "Date of end of reporting period",
+            "31-03-2026"
+          ],
+          [
+            "Nature of report standalone or consolidated",
+            "Standalone"
+          ],
+          [
+            "Date of start of reporting period",
+            "01-01-2026",
+            "01-04-2025"
+          ]
+        ],
+        "consolidationLabel": "Standalone",
+        "reportingQuarterEnd": "31-MAR-2026",
+        "broadcastDateLiteral": "25-Apr-2026 18:52:22"
+      }
+    ]
+  }
+]
