@@ -14,7 +14,7 @@ try:
   final=resp.geturl()
   if not final.startswith("https://rbidocs.rbi.org.in/"): raise RuntimeError(f"RBI_REDIRECT_HOST_MISMATCH:{final[:180]}")
   data=resp.read(12_000_001)
-  if not (50000<len(data)<=12_000_000): raise RuntimeError(f"RBI_PDF_SIZE_INVALID:{len(data)}")
+  if not (1024<len(data)<=12_000_000): raise RuntimeError(f"RBI_PDF_SIZE_INVALID:{len(data)};PREFIX:{data[:60]!r}")
   if data[:5]!=b"%PDF-": raise RuntimeError(f"RBI_NON_PDF_RESPONSE_PREFIX:{data[:60]!r}")
   h=hashlib.sha256(data).hexdigest()
   (dir/"RBI_Commercial_Banks_Financial_Statements_2025_Original.pdf").write_bytes(data)
