@@ -50,6 +50,13 @@ export function SettingsPage() {
         </article>
 
         <article className="panel">
+          <p className="eyebrow">Development evidence review</p>
+          <h2>KVB annual ROA</h2>
+          <p>Review registered issuer and RBI originals through the portfolio-owner session.</p>
+          <Link className="button button-secondary" to="/app/settings/diagnostics/kvb-roa">Review KVB ROA evidence</Link>
+        </article>
+
+        <article className="panel">
           <p className="eyebrow">Decision authority</p>
           <h2>Owner settings stay separate</h2>
           <p>

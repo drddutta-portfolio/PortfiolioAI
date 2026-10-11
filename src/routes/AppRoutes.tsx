@@ -65,6 +65,7 @@ const BankingReadOnlyValidationPage = lazy(async () => {
   const module = await import("../pages/BankingReadOnlyValidationPage")
   return { default: module.BankingReadOnlyValidationPage }
 })
+const KvbRoaReviewPage = lazy(() => import("../pages/KvbRoaReviewPage").then(m => ({ default: m.KvbRoaReviewPage })))
 const SettingsPage = lazy(async () => {
   const module = await import("../pages/SettingsPage")
   return { default: module.SettingsPage }
@@ -156,7 +157,9 @@ export function AppRoutes() {
           path="/app/settings/diagnostics/operations"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading diagnostics" />}><OperationsPage /></Suspense></AppShell>}
         />
-        <Route path="/app/settings/diagnostics/banking-v1-4" element={<AppShell><Suspense fallback={<PageLoader label="Loading banking validator" />}><BankingReadOnlyValidationPage /></Suspense></AppShell>} />\n        <Route path="/app/operations" element={<Navigate to="/app/settings/diagnostics/operations" replace />} />
+        <Route path="/app/settings/diagnostics/banking-v1-4" element={<AppShell><Suspense fallback={<PageLoader label="Loading banking validator" />}><BankingReadOnlyValidationPage /></Suspense></AppShell>} />
+        <Route path="/app/settings/diagnostics/kvb-roa" element={<AppShell><Suspense fallback={<PageLoader label="Loading ROA review" />}><KvbRoaReviewPage /></Suspense></AppShell>} />
+        <Route path="/app/operations" element={<Navigate to="/app/settings/diagnostics/operations" replace />} />
         <Route path="/app/investment-committee" element={<Navigate to="/app/intelligence/investment-committee" replace />} />
         <Route
           path="/app/import"

@@ -11,7 +11,7 @@ const str=(v:unknown)=>typeof v==="string"?v:"";
 const stable=(v:unknown):string=>Array.isArray(v)?"["+v.map(stable).join(",")+"]":v!==null&&typeof v==="object"?"{"+Object.entries(v as Record<string,unknown>).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>JSON.stringify(k)+":"+stable(x)).join(",")+"}":JSON.stringify(v)??"null";
 const sha=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(stable(v))))).map(x=>x.toString(16).padStart(2,"0")).join("");
 
-Deno.serve(async req=>{
+async function handle(req:Request){
  if(req.method!=="POST")return reply(405,"METHOD_NOT_ALLOWED");
  const url=Deno.env.get("SUPABASE_URL")??"",service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
  if(url!==`https://${PROJECT}.supabase.co`||!service)return reply(409,"DEV_ONLY");
@@ -79,4 +79,20 @@ Deno.serve(async req=>{
  const inserted=await db.from("research_evidence_requirement_reviews").insert({...row,review_hash}).select("id,review_hash").single();
  if(inserted.error)return reply(409,"REVIEW_APPEND_REJECTED",{postgresCode:inserted.error.code});
  return reply(201,"NUMERIC_REVIEW_APPENDED_NOT_MATERIALIZED",{reviewId:inserted.data.id,reviewHash:inserted.data.review_hash});
-});
+}
+const REVIEW_ORIGINS=new Set([
+ "https://portfiolio-ai-git-codex-banking-source-re-9b3df9-dibyendu-dutta.vercel.app",
+ "http://localhost:5173","http://127.0.0.1:5173",
+])
+Deno.serve(async req=>{
+ const origin=req.headers.get("origin")
+ if(origin&&!REVIEW_ORIGINS.has(origin))return reply(403,"DEVELOPMENT_REVIEW_ORIGIN_REQUIRED")
+ const response=req.method==="OPTIONS"?new Response(null,{status:204}):await handle(req)
+ if(origin){
+  response.headers.set("Access-Control-Allow-Origin",origin)
+  response.headers.set("Access-Control-Allow-Headers","authorization, x-client-info, apikey, content-type")
+  response.headers.set("Access-Control-Allow-Methods","POST, OPTIONS")
+  response.headers.set("Vary","Origin")
+ }
+ return response
+})

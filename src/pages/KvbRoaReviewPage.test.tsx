@@ -1,0 +1,41 @@
+// @vitest-environment jsdom
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { MemoryRouter } from "react-router-dom"
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest"
+import { KvbRoaReviewPage } from "./KvbRoaReviewPage"
+const { load, approve, config } = vi.hoisted(() => ({ load: vi.fn(), approve: vi.fn(), config: { supabaseUrl: "https://lrgpjimipfkyoqbpsqzz.supabase.co" } }))
+vi.mock("../data/kvbRoaReviewRepository", () => ({ loadKvbRoaProposal: load, approveKvbRoaProposal: approve }))
+vi.mock("../lib/config", () => ({ publicConfig: config }))
+const proposal = { sourceRecordId: "issuer", sourcePayloadHash: "hash", supportingQuote: "Return on Assets 1.93", issuerUrl: "https://www.kvb.bank.in/ar-26/", regulatorUrl: "https://www.rbi.org.in/", roaPercent: "1.93", period: "FY2025-26", scope: "STANDALONE", publicationPrecision: "UNKNOWN" }
+function view() { render(<MemoryRouter><KvbRoaReviewPage /></MemoryRouter>) }
+beforeEach(() => { load.mockReset(); approve.mockReset(); config.supabaseUrl = "https://lrgpjimipfkyoqbpsqzz.supabase.co" })
+afterEach(cleanup)
+describe("KVB source-bound owner review", () => {
+ it("requires explicit source loading and confirmation before submitting a review", async () => {
+  load.mockResolvedValue(proposal); approve.mockResolvedValue("accepted-review")
+  view(); expect(load).not.toHaveBeenCalled(); expect(approve).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByText("Load registered source evidence"))
+  await screen.findByText(proposal.supportingQuote)
+  const button = screen.getByRole<HTMLButtonElement>("button", { name: "Approve source-bound ROA evidence" })
+  expect(button.disabled).toBe(true)
+  fireEvent.click(screen.getByRole("checkbox")); fireEvent.click(button)
+  await screen.findByRole("status")
+  expect(approve).toHaveBeenCalledExactlyOnceWith(proposal)
+  expect(screen.getByRole("status").textContent).toContain("does not establish FRESH or READY")
+ })
+ it("does not submit concurrent owner approvals", async () => {
+  load.mockResolvedValue(proposal); approve.mockReturnValue(new Promise(() => {}))
+  view(); fireEvent.click(screen.getByText("Load registered source evidence")); await screen.findByText(proposal.supportingQuote)
+  fireEvent.click(screen.getByRole("checkbox")); const b=screen.getByText("Approve source-bound ROA evidence")
+  fireEvent.click(b); fireEvent.click(b)
+  await waitFor(() => expect(approve).toHaveBeenCalledTimes(1))
+ })
+ it("rejects a Production project and preserves source errors without pretending acceptance", async () => {
+  config.supabaseUrl = "https://uxiyufbsbgzzdujzcdxe.supabase.co"; view()
+  expect(screen.getByText(/only in the approved Development preview/)).toBeTruthy(); expect(load).not.toHaveBeenCalled()
+  cleanup(); config.supabaseUrl = "https://lrgpjimipfkyoqbpsqzz.supabase.co"
+  load.mockRejectedValue(new Error("REGISTERED_ORIGINAL_PROPOSAL_NOT_UNIQUE")); view()
+  fireEvent.click(screen.getByText("Load registered source evidence"))
+  await screen.findByRole("alert"); expect(approve).not.toHaveBeenCalled()
+ })
+})
