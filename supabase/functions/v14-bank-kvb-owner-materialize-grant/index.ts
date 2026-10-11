@@ -1,10 +1,9 @@
+import {validKvbGrantRequest,ownerMatches} from "./request-guard.ts";
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0";
 const PROJECT="lrgpjimipfkyoqbpsqzz",PORTFOLIO="6193a4aa-3235-4057-bddc-209fcf443fc2",KVB="be55b3cc-0400-45af-84aa-2a95e2c361c5";
 const ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",SCOPE="SECURITY_IDS:"+KVB;
 const respond=(s:number,code:string,extra:Record<string,unknown>={})=>new Response(JSON.stringify({code,...extra}),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}});
-export function validRequest(b:Record<string,unknown>){
- return b.action===ACTION&&b.portfolioId===PORTFOLIO&&b.securityId===KVB&&b.confirmation==="ISSUE_KVB_V14_SINGLE_USE_MATERIALIZATION_GRANT"&&typeof b.requestId==="string"&&/^[a-f0-9-]{36}$/i.test(b.requestId);
-}
+
 Deno.serve(async req=>{
  if(req.method!=="POST")return respond(405,"METHOD_NOT_ALLOWED");
  const url=Deno.env.get("SUPABASE_URL")??"",secret=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
@@ -15,9 +14,9 @@ Deno.serve(async req=>{
  const user=await db.auth.getUser(token);
  if(user.error||!user.data.user||user.data.user.is_anonymous)return respond(401,"OWNER_AUTH_INVALID");
  const own=await db.from("portfolios").select("user_id").eq("id",PORTFOLIO).single();
- if(own.error||own.data?.user_id!==user.data.user.id)return respond(403,"OWNER_ONLY");
+ if(own.error||!ownerMatches(user.data.user.id,own.data?.user_id,user.data.user.is_anonymous))return respond(403,"OWNER_ONLY");
  const b=await req.json().catch(()=>null);
- if(!b||typeof b!=="object"||Array.isArray(b)||!validRequest(b))return respond(400,"EXACT_SCOPE_REQUIRED");
+ if(!b||typeof b!=="object"||Array.isArray(b)||!validKvbGrantRequest(b))return respond(400,"EXACT_SCOPE_REQUIRED");
  const open=await db.from("current_holdings").select("security_id").eq("portfolio_id",PORTFOLIO).eq("security_id",KVB).gt("current_quantity",0).maybeSingle();
  if(open.error||!open.data)return respond(409,"FROZEN_OPEN_HOLDING_NOT_VERIFIED");
  const external="V14_KVB_OWNER_MATERIALIZER:"+b.requestId;
