@@ -10,6 +10,6 @@ Deno.test("KVB numeric review requires precise issuer hash and denominator bindi
   {...base,raw_payload:{...base.raw_payload,verified_quote:"unrelated"}},
  ];
  for(const s of failures)if(sourceEligible(s,quote))throw Error("Unqualified source accepted");
- for(const q of [quote.replace("average total assets","reported assets"),quote.replace("1.93%","1.81%"),quote.replace("FY2025-26","undated"),quote.replace("31-03-2026","31-03-2025")])
+ for(const q of [quote.replace("average total assets","reported assets"),quote.replace("1.93%","1.81%"),quote.replace("full-year audited","unverified"),quote.replace("31-03-2026","31-03-2025")])
   if(sourceEligible({...base,raw_payload:{...base.raw_payload,verified_quote:q}},q))throw Error("Unqualified literal accepted");
 });
