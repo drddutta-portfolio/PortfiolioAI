@@ -18,6 +18,11 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install repository type dependencies
+        run: npm ci
       - name: Run KVB numeric source tests
         run: deno test --allow-env supabase/functions/v14-bank-kvb-roa-numeric-review/index.deno.test.ts
       - name: Check TypeScript modules
