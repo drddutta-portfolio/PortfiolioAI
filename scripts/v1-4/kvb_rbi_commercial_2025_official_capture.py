@@ -10,11 +10,12 @@ out={"source_url":url,"retrieved_at":datetime.datetime.now(datetime.timezone.utc
 try:
  req=Request(url,headers={"User-Agent":"PortfolioAI-Banking-V14-Original-RBI-Source/1.0","Accept":"application/pdf"})
  with urlopen(req,timeout=35) as resp:
-  assert resp.status==200
+  if resp.status!=200: raise RuntimeError(f"RBI_HTTP_STATUS_{resp.status}")
   final=resp.geturl()
-  assert final.startswith("https://rbidocs.rbi.org.in/")
+  if not final.startswith("https://rbidocs.rbi.org.in/"): raise RuntimeError(f"RBI_REDIRECT_HOST_MISMATCH:{final[:180]}")
   data=resp.read(12_000_001)
-  assert 50000<len(data)<=12_000_000 and data[:5]==b"%PDF-"
+  if not (50000<len(data)<=12_000_000): raise RuntimeError(f"RBI_PDF_SIZE_INVALID:{len(data)}")
+  if data[:5]!=b"%PDF-": raise RuntimeError(f"RBI_NON_PDF_RESPONSE_PREFIX:{data[:60]!r}")
   h=hashlib.sha256(data).hexdigest()
   (dir/"RBI_Commercial_Banks_Financial_Statements_2025_Original.pdf").write_bytes(data)
   out.update({"status":"ORIGINAL_PDF_CAPTURED_NOT_ADMITTED","final_url":final,"bytes":len(data),"sha256":h})
