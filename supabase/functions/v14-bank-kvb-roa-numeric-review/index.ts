@@ -1,4 +1,4 @@
-import {kvbRoaBinding,kvbRoaOriginalQualified,KVB_ORIGINAL_PROOF} from "../_shared/v14-kvb-roa-original-proof.ts"
+import {kvbRoaBinding,kvbRoaOriginalQualified,KVB_ORIGINAL_PROOF,pgReviewTimestamp} from "../_shared/v14-kvb-roa-original-proof.ts"
 import {bankReportingDeadline} from "../_shared/v14-bank-dual-clock.ts"
 import {sourceEligible} from "./source-guard.ts";
 // BANK V1-4: owner-authenticated, append-only KVB ROA numeric review.
@@ -61,7 +61,7 @@ async function handle(req:Request){
    return reply(409,"REGULATOR_INDEPENDENT_ORIGINAL_RECORD_REQUIRED");
  if(await sha(raw)!==source.payload_hash||await sha(regulatorSource.raw_payload)!==regulatorSource.payload_hash)
    return reply(409,"ORIGINAL_SOURCE_PAYLOAD_INTEGRITY_INVALID");
- const now=new Date().toISOString(),retrieved=str(source.retrieved_at),published=str(source.published_at)||null;
+ const now=pgReviewTimestamp(new Date().toISOString()),retrieved=str(source.retrieved_at),published=str(source.published_at)||null;
  const quote=str(body.supportingQuote),binding=kvbRoaBinding();
  // Append to the already established correction chain; preserve both old reviews.
  const prior=await db.from("research_evidence_requirement_reviews").select("id,decision,metadata,period_start,period_end,unit,consolidation_scope")
@@ -69,7 +69,7 @@ async function handle(req:Request){
  if(prior.error||prior.data?.decision!=="ACCEPTED"||prior.data?.metadata?.numeric_value!=="1.9300"
    ||prior.data.period_start!=="2025-04-01"||prior.data.period_end!=="2026-03-31"||prior.data.unit!=="PERCENT"||prior.data.consolidation_scope!=="STANDALONE")
    return reply(409,"ROA_SUPERSESSION_PREDECESSOR_CHANGED");
- const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"OWNER_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:new Date(Math.min(bankReportingDeadline("2026-03-31",550),Date.parse(str(raw.original_bytes_verified_at))+550*86400000)).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:user.data.user.id,reviewed_at:now,supersedes_review_id:prior.data.id,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE",regulator_source_record_id:regulatorRecordId,regulator_source_payload_hash:regulatorSource.payload_hash}};
+ const row={portfolio_id:PORTFOLIO,security_id:KVB,requirement_code:"ROA_ANNUAL",review_kind:"OWNER_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,source_payload_hash:source.payload_hash,supporting_quote:quote,period_start:"2025-04-01",period_end:"2026-03-31",period_type:"YEAR",unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",published_at:published,retrieved_at:retrieved,fresh_through:pgReviewTimestamp(new Date(Math.min(bankReportingDeadline("2026-03-31",550),Date.parse(str(raw.original_bytes_verified_at))+550*86400000)).toISOString()),review_version:"V1_4_REQUIREMENT_REVIEW_V2",reviewed_by:user.data.user.id,reviewed_at:now,supersedes_review_id:prior.data.id,metadata:{metric_code:"ROA_ANNUAL",numeric_value:"1.93",source_binding:binding,publication_precision:str(raw.publication_precision)||"UNKNOWN_DATE",regulator_source_record_id:regulatorRecordId,regulator_source_payload_hash:regulatorSource.payload_hash}};
  const review_hash=await sha(row);
  // Idempotency on immutable source and requirement; the existing append-only uniqueness
  // is checked before insert but concurrent duplicates still need an atomic constraint.

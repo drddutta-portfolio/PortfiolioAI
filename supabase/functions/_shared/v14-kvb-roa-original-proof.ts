@@ -56,3 +56,10 @@ export function approvedOriginalReadUrl(raw:string,kind:"issuer"|"regulator"):bo
    &&Number(u.searchParams.get("X-Amz-Expires"))>0&&Number(u.searchParams.get("X-Amz-Expires"))<=300
  }catch{return false}
 }
+
+/** Match PostgreSQL/PostgREST timestamptz JSON serialization before hashing a
+ * generated review timestamp. Do not normalize source timestamps or infer dates. */
+export function pgReviewTimestamp(iso:string):string{
+ if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(iso)||!Number.isFinite(Date.parse(iso)))throw new Error("GENERATED_REVIEW_TIMESTAMP_INVALID")
+ return iso.replace(/\.000Z$/,"+00:00").replace(/(\.\d*?[1-9])0*Z$/,"$1+00:00")
+}

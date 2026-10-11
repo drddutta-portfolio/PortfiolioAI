@@ -19,9 +19,15 @@ The original KVB page-68 table, financial-year header and security identity are 
 
 - Migration `20261011181539`, `bank_v14_atomic_single_use_grants`, applied through the supported migration tool. Before applying it, all 1,993 existing consumption records had distinct non-null identities. Both resulting unique indexes were independently read back. Live owner concurrency/replay/expiry execution remains untested; database uniqueness and guard tests are not represented as those live executions.
 - Original importer v2: `ae2ac0690f4b0bab0c13e7fee7d4fa89b53bfe0d0f7b67be921f215c873ad8b6`. Custom GitHub signed-OIDC verification restricts repository ID, immutable subject, branch, workflow, environment, issuer, audience and token age. Anonymous/forged requests returned 401. Its gateway JWT check is disabled because its actual handler verifies GitHub signatures; owner endpoints retain the gateway check.
-- Numeric reviewer v2: `cf1e9aff8b89b13d354e030eb62973854953328a046dceda6e3ff6bb0c6f2487`. Genuine authenticated portfolio owner only; linked source hashes and faithful multi-anchor binding required. A new accepted review supersedes the existing deficient ROA review without altering either historical review.
+- Numeric reviewer v3: `c97a39ff2b197c765e7abb9b653f81597c3cecba88a9a05149c1497964a46b8d`. Genuine authenticated portfolio owner only; linked source hashes and faithful multi-anchor binding required. A new accepted review supersedes the existing deficient ROA review without altering either historical review.
 - Canonical materializer v57: `7b923f18c5f35a7b83f70fe1d036451515733a2eade92b9a676f534b232307bd`. Loads the separate regulator record and enforces its evaluation cutoff. This remains the existing canonical calculation owner.
 - Owner-only KVB grant issuer v1: `b46534c242a91599be99ac395e7d7d66a7767dc73e8ac5399806f9e58d150694`. KVB-only scope, 15-minute expiry, atomic issuance identity and consumption protections.
+
+A live read-only PostgreSQL check demonstrated that generated timestamptz fields serialize with `+00:00` and omit trailing fractional zeroes, rather than preserving JavaScript `Z` formatting. Reviewer v3 hashes generated timestamps in that observed storage representation. Without this correction, an otherwise valid owner review would fail its immutable integrity hash after canonical readback. Historical reviews and the canonical integrity-check contract remain unchanged.
+
+The actual live ROA metric definition was also read back: active, PERCENT, YEAR, REVIEWED, 550-day policy, and COMPANY_EXCHANGE_FILING in its approved source hierarchy. Source fixture success was checked against those live contract terms.
+
+The original three historical presentations were independently retained by successful workflow [38164006651](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38164006651). This retains actual PDF bytes and the qualification manifest as an artifact without claiming historical publication or admitting valuations.
 
 No Production/main, financial methodology, scheduler or cohort changes were made.
 

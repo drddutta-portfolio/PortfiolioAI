@@ -1,6 +1,6 @@
 import {describe,it,expect} from "vitest"
 import {KVB_ORIGINAL_PROOF as proof,KVB_ORIGINAL_KIND,KVB_ROA_SECURITY,KVB_ROA_PORTFOLIO,
- kvbOriginalKey,kvbRoaBinding,kvbRoaBindingQualified,githubImportClaimsQualified,approvedOriginalReadUrl} from "./v14-kvb-roa-original-proof.ts"
+ pgReviewTimestamp,kvbOriginalKey,kvbRoaBinding,kvbRoaBindingQualified,githubImportClaimsQualified,approvedOriginalReadUrl} from "./v14-kvb-roa-original-proof.ts"
 import {validateReviewedRequirementEvidence,type RequirementReview,type ReviewedSourceRecord} from "./v14-reviewed-evidence.ts"
 import type {MetricDefinition} from "./p7-ic-input-validation.ts"
 const hash="a".repeat(64),owner="f9e48c4c-d796-424b-95f7-2a4a97149543"
@@ -41,6 +41,12 @@ const claims={repository:"drddutta-portfolio/PortfiolioAI",repository_id:"135702
  environment:"PortfolioAI-Development",sub:"repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development",
  workflow_ref:"drddutta-portfolio/PortfiolioAI/.github/workflows/banking-v14-kvb-source-import.yml@refs/heads/codex/banking-source-remediation",event_name:"push",sha:"a".repeat(40)}
 describe("Pinned KVB original admission",()=>{
+ it("hashes generated review timestamps using the observed PostgREST storage representation",()=>{
+  expect(pgReviewTimestamp("2026-10-11T18:00:00.000Z")).toBe("2026-10-11T18:00:00+00:00")
+  expect(pgReviewTimestamp("2026-10-11T18:00:00.100Z")).toBe("2026-10-11T18:00:00.1+00:00")
+  expect(pgReviewTimestamp("2026-10-11T18:00:00.123Z")).toBe("2026-10-11T18:00:00.123+00:00")
+  expect(()=>pgReviewTimestamp("unknown")).toThrow()
+ })
  it("restricts signed CI claims to the approved repository, branch, workflow and Development environment",()=>{
   expect(githubImportClaimsQualified(claims)).toBe(true)
   for(const patch of [{repository:"other/repo"},{ref:"refs/heads/main"},{environment:"Production"},{event_name:"pull_request"},{sub:"other"},{workflow_ref:"other"}])
