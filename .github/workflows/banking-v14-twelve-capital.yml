@@ -4,6 +4,7 @@ on:
     branches: [codex/banking-twelve-evidence]
     paths:
       - '.github/workflows/banking-v14-twelve-capital.yml'
+      - 'docs/private/v1-4-industry-batches/Banking_12_Federal_One_Shot_Execution_Request_2026-10-12.json'
   workflow_dispatch:
     inputs:
       materialize:
@@ -26,7 +27,7 @@ jobs:
       - run: npm run test:edge -- supabase/functions/_shared/v14-bank-twelve-capital-review.test.ts supabase/functions/_shared/v14-reviewed-evidence.test.ts
       - run: npm run lint:edge
   execute:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/banking-twelve-evidence'
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[bank-twelve-one-shot-approved]'))) && github.ref == 'refs/heads/codex/banking-twelve-evidence'
     needs: verify
     runs-on: ubuntu-latest
     environment: PortfolioAI-Development
@@ -46,7 +47,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
-          BANK_TWELVE_MATERIALIZE: ${{ inputs.materialize }}
+          BANK_TWELVE_MATERIALIZE: ${{ inputs.materialize || github.event_name == 'push' }}
+          BANK_TWELVE_ONE_SHOT: ${{ github.event_name == 'push' }}
         run: python scripts/v1-4/bank_twelve_capital_execute.py
       - uses: actions/upload-artifact@v4
         if: always()

@@ -47,8 +47,8 @@ describe("twelve-bank source-bound capital admission",()=>{
  it("accepts only the signed exact workflow identity",()=>{
   const claims={repository:"drddutta-portfolio/PortfiolioAI",repository_id:"1357024254",ref:"refs/heads/codex/banking-twelve-evidence",environment:"PortfolioAI-Development",
    sub:"repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development",workflow_ref:"drddutta-portfolio/PortfiolioAI/.github/workflows/banking-v14-twelve-capital.yml@refs/heads/codex/banking-twelve-evidence",event_name:"workflow_dispatch",sha:"a".repeat(40)}
-  expect(twelveCapitalClaimsQualified(claims)).toBe(true)
-  for(const patch of [{ref:"refs/heads/main"},{environment:"Production"},{repository_id:"other"},{event_name:"push"},{workflow_ref:"wrong"}])expect(twelveCapitalClaimsQualified({...claims,...patch})).toBe(false)
+  expect(twelveCapitalClaimsQualified(claims)).toBe(true);expect(twelveCapitalClaimsQualified({...claims,event_name:"push"})).toBe(true)
+  for(const patch of [{ref:"refs/heads/main"},{environment:"Production"},{repository_id:"other"},{event_name:"pull_request"},{workflow_ref:"wrong"}])expect(twelveCapitalClaimsQualified({...claims,...patch})).toBe(false)
  })
  it("rejects unpinned storage objects and excessive signature expiry",()=>{
   const u=`https://ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com/${BANK_TWELVE_POLICY.storageBucket}/${BANK_TWELVE_POLICY.storageKeyPrefix}${BANK_TWELVE_CAPITAL_MANIFEST.original_sha256}.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=300`

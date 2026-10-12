@@ -41,6 +41,11 @@ def main():
     with urlopen(Request(oidc, headers={'Authorization': 'Bearer ' + os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']}), timeout=20) as response:
         token = json.load(response)['value']
     materialize = os.environ.get('BANK_TWELVE_MATERIALIZE', 'false') == 'true'
+    if os.environ.get('BANK_TWELVE_ONE_SHOT') == 'true':
+        request_record = json.loads(Path('docs/private/v1-4-industry-batches/Banking_12_Federal_One_Shot_Execution_Request_2026-10-12.json').read_text())
+        assert request_record['directive_sha256'] == policy['directiveSha256']
+        assert request_record['security_id'] == pin['security_id'] and request_record['original_sha256'] == pin['original_sha256']
+        assert request_record['action'] == 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1' and request_record['materialize'] is True and request_record['once'] is True
     payload = {'action': 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1', 'approvalHash': policy['directiveSha256'], 'materialize': materialize,
                'readUrl': s3.generate_presigned_url('get_object', Params={'Bucket': policy['storageBucket'], 'Key': key}, ExpiresIn=300)}
     request = Request(aud, data=json.dumps(payload).encode(), headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}, method='POST')

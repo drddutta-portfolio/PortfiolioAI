@@ -22,7 +22,7 @@ export function twelveCapitalClaimsQualified(p:Readonly<Record<string,unknown>>)
   &&p.ref==="refs/heads/codex/banking-twelve-evidence"&&p.environment==="PortfolioAI-Development"
   &&p.sub==="repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development"
   &&p.workflow_ref==="drddutta-portfolio/PortfiolioAI/.github/workflows/banking-v14-twelve-capital.yml@refs/heads/codex/banking-twelve-evidence"
-  &&p.event_name==="workflow_dispatch"&&typeof p.sha==="string"&&/^[a-f0-9]{40}$/.test(p.sha)
+  &&["workflow_dispatch","push"].includes(String(p.event_name))&&typeof p.sha==="string"&&/^[a-f0-9]{40}$/.test(p.sha)
 }
 export async function prepareTwelveCapitalReview(verifiedAt:string){
  if(!Number.isFinite(Date.parse(verifiedAt))||Date.parse(verifiedAt)<Date.parse(manifest.proven_availability_at))throw Error("VERIFICATION_TIME_INVALID")

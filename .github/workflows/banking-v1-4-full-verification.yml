@@ -8,6 +8,9 @@ on:
       - "src/routes/AppRoutes.tsx"
       - "src/pages/SettingsPage.tsx"
       - "supabase/functions/p7-ic2-materialize-readiness/**"
+      - "supabase/functions/_shared/v14-bank-twelve-*"
+      - "supabase/functions/v14-bank-twelve-capital-admission/**"
+      - ".github/workflows/banking-v14-twelve-capital.yml"
       - ".github/workflows/banking-v1-4-full-verification.yml"
   workflow_dispatch:
 
