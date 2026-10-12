@@ -1,0 +1,25 @@
+# Banking raw PIT and original-source registration execution — 12 October 2026
+
+KVB's selected owner-saved snapshot `2af15b91-4924-4baf-ab1b-c91d62b095dc` remains the acceptance baseline: annual ROA and all five market-history requirements are FRESH; NIM TTM and historical relative P/E/P/B remain blocked. No additional owner ROA approval is requested. This continuation has not created an accepted review or a READY selection.
+
+## Executed source work
+
+- GitHub run **38200640473**, implementation head **7dda3c1c85a1ad7332b76033449e6b57738338ea**, preserved and independently rehashed **22/22 original NSE KVB presentations** in `portfolioai-history-dev`. Conditional object creation and readback were mandatory. Source records are not valuation admissions. The exact receipt is `KVB_PIT_Originals_R2_Readback_2026-10-12.json`.
+- The existing verified NSE archive catalog supplies **22 additional monthly sources, October 2023–July 2025**, containing **286 exact-ISIN raw price rows across all 13 banks**. The dated historical Kotak identity is the existing backfill scope, not a fuzzy symbol bridge. All CSV hashes match the catalog. Two ZIP representations have changed compressed bytes while their decompressed CSV bytes remain identical; both expected and observed hashes are retained without catalog overwrite. The first strict ZIP attempt stopped on this discrepancy. The completed extraction subsequently downloaded 17 sources and reused five verified originals; these batch counters do not purport to count every earlier diagnostic HTTP request.
+- Re-executing that extraction reused all 22 cached originals with **zero downloads**, zero paid calls and zero admission. This is measured source-reuse behavior, not a claimed overall speed improvement.
+- KVB's **24 earlier retained raw sources + 22 newly verified raw month rows + 14 existing Angel One month rows = 60 distinct raw-price months**. Recent session dates are grouped in **Asia/Kolkata**, preventing UTC midnight from selecting a candle from the following exchange month. September 2026 uses the existing September 30 raw candle rather than assuming the September 29 adjusted archive is month-end.
+- Every month can be joined to an original then-public annual book-value disclosure. **Ten months, July 2025–April 2026, expose differing same-period values (148.17 vs 145.57).** The join retains both originals; later publication is not an automatic correction approval. Original financial scope and then-applicable share basis still need source-bound qualification. Annual EPS is never relabelled as diluted TTM EPS. **P/E admitted months = 0; P/B admitted months = 0.**
+
+## Implemented source registration
+
+The additive `v14-bank-pit-original-import` handler reuses the established GitHub OIDC source-ingestion pattern. Its pinned manifest contains the 22 original hashes, exact exchange dissemination timestamps and corresponding publication-API hashes. The handler reads only exact, short-lived Development R2 URLs, rehashes each original, and registers immutable source metadata through `data_source_records`, with independent payload readback and idempotency checks. It cannot issue grants, approve numerical facts, calculate valuation, materialize snapshots or call providers. Scope/share-basis qualification remains explicit rather than assumed.
+
+The workflow performs execution only on explicit `workflow_dispatch`; ordinary pushes register/verify the workflow without silently performing acquisitions or admissions. Deployment and live registration receipts must be recorded after their actual execution, not inferred from tests.
+
+## Maintenance
+
+The verified maintenance accounting guard is deployed in Development as **v4**, SHA-256 **66b8cb4dbd4861e533fdb0656d5b7699d664eb0f8bef7b1d8708640eaa53be6e**. The prior atomic session-lease implementation and actual simultaneous acquisition proof are preserved. The existing 18:55/19:00 IST jobs remain active. The first eligible scheduled OPEN-session run is still future at this morning's execution time and is not claimed PASS.
+
+## Remaining decisions and acceptance
+
+The single exact-input NIM amendment remains pending explicit owner selection. It would require certified raw NII and exact daily-average earning assets; approval would not fabricate those currently missing inputs. The existing direct-only NIM contract is still active. Source registration, price extraction and engineering deployment do not reduce the mandatory blocker count by themselves. All thirteen selected banks remain REVIEW_REQUIRED, **0/13 READY / ₹0**, pending genuine canonical admissions and qualified materialization.

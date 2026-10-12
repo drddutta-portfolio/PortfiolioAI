@@ -1,0 +1,233 @@
+{
+  "workflow_run": 38200640473,
+  "verified_head": "7dda3c1c85a1ad7332b76033449e6b57738338ea",
+  "archive_readback": {
+    "expected_originals": 22,
+    "hash_verified_originals": 22,
+    "provider_calls": 0,
+    "canonical_admissions": 0,
+    "overwrites": 0,
+    "results": [
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_29052021194739_Presentation_NSE_BSE.pdf",
+        "original_sha256": "f16a9f447f7e0783e21b0e39e24df7b38009e755b20c976b61993435ddb4110b",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/f16a9f447f7e0783e21b0e39e24df7b38009e755b20c976b61993435ddb4110b.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "f16a9f447f7e0783e21b0e39e24df7b38009e755b20c976b61993435ddb4110b",
+        "bytes": 2717774
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_04082021194737_Investor_Presentation.pdf",
+        "original_sha256": "ec0318edbae5db672b1d252ef634dcaf1717478605d1d42f37293ab326295b65",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/ec0318edbae5db672b1d252ef634dcaf1717478605d1d42f37293ab326295b65.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "ec0318edbae5db672b1d252ef634dcaf1717478605d1d42f37293ab326295b65",
+        "bytes": 2065523
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_08112021180719_NSE_BSE_Investor_Presentation.pdf",
+        "original_sha256": "8d6fce32c30b70568189d5fc4f8196565411f5ea2f642cead286fa2c4b00a8f4",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/8d6fce32c30b70568189d5fc4f8196565411f5ea2f642cead286fa2c4b00a8f4.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "8d6fce32c30b70568189d5fc4f8196565411f5ea2f642cead286fa2c4b00a8f4",
+        "bytes": 2022774
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022145724_KVBINVESTORPRESENTATION.pdf",
+        "original_sha256": "2b82ff64efb0c9060b1db8d5e3fd2ff303ddb764cc32b0f265daf8095f4b6e27",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/2b82ff64efb0c9060b1db8d5e3fd2ff303ddb764cc32b0f265daf8095f4b6e27.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "2b82ff64efb0c9060b1db8d5e3fd2ff303ddb764cc32b0f265daf8095f4b6e27",
+        "bytes": 4312922
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_25072022142409_NSE_InvestorPresentation.pdf",
+        "original_sha256": "a8a1959ea1513069ab0b74f6202496fa861cfcb7de2639153e1b44a8dd7ac3e6",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/a8a1959ea1513069ab0b74f6202496fa861cfcb7de2639153e1b44a8dd7ac3e6.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "a8a1959ea1513069ab0b74f6202496fa861cfcb7de2639153e1b44a8dd7ac3e6",
+        "bytes": 2877136
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_21102022142309_Investor_Presentation_NSE_BSE_DS.pdf",
+        "original_sha256": "b1dfaee356337bb1c1d201c67fad6cee13b024cd1f2a57b3b9ba0bae041f52d0",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/b1dfaee356337bb1c1d201c67fad6cee13b024cd1f2a57b3b9ba0bae041f52d0.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "b1dfaee356337bb1c1d201c67fad6cee13b024cd1f2a57b3b9ba0bae041f52d0",
+        "bytes": 2287891
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_31012022162210_Investor_Presentation_with_Covering.pdf",
+        "original_sha256": "d2986bbef728b7714156ec4a5b487bf5cdb99b81aea830f87f2068dd385b1c76",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/d2986bbef728b7714156ec4a5b487bf5cdb99b81aea830f87f2068dd385b1c76.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "d2986bbef728b7714156ec4a5b487bf5cdb99b81aea830f87f2068dd385b1c76",
+        "bytes": 2993358
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_23012023153505_NSE_BSE_Investor_Presentation.pdf",
+        "original_sha256": "0d821b81174dd6a43203f8869ebe07ef510eaad3c8ad2ba00fe9cd58156f7914",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/0d821b81174dd6a43203f8869ebe07ef510eaad3c8ad2ba00fe9cd58156f7914.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "0d821b81174dd6a43203f8869ebe07ef510eaad3c8ad2ba00fe9cd58156f7914",
+        "bytes": 3309929
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_15052023165956_NSE_BSE_IP.PDF",
+        "original_sha256": "bfa67ffcde3acbc93067d2ea35187dc68175a1a1270733667a6a8613b285c620",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/bfa67ffcde3acbc93067d2ea35187dc68175a1a1270733667a6a8613b285c620.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "bfa67ffcde3acbc93067d2ea35187dc68175a1a1270733667a6a8613b285c620",
+        "bytes": 4564701
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17072023162225_NSE_BSE_Presentation_sd.pdf",
+        "original_sha256": "4d22a31e6137c0bbf5abaa9d5a204a73e7bbc11f8ed6d599507eb89646a07861",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/4d22a31e6137c0bbf5abaa9d5a204a73e7bbc11f8ed6d599507eb89646a07861.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "4d22a31e6137c0bbf5abaa9d5a204a73e7bbc11f8ed6d599507eb89646a07861",
+        "bytes": 3926366
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_16102023163116_NSE_BSE_Presentation_sd.pdf",
+        "original_sha256": "5888f4938fe08860cc2f58633e71463b9d0e84bf46b446a79886caabb8f53798",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/5888f4938fe08860cc2f58633e71463b9d0e84bf46b446a79886caabb8f53798.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "5888f4938fe08860cc2f58633e71463b9d0e84bf46b446a79886caabb8f53798",
+        "bytes": 3599306
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_22012024163324_NSE_BSE_IP.pdf",
+        "original_sha256": "491450a07d5f5afa31079455500c200ee981584c8b61dd7a7d5036d34c57f0ef",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/491450a07d5f5afa31079455500c200ee981584c8b61dd7a7d5036d34c57f0ef.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "491450a07d5f5afa31079455500c200ee981584c8b61dd7a7d5036d34c57f0ef",
+        "bytes": 2627028
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_13052024161333_NSE_BSE_IP_signed.pdf",
+        "original_sha256": "ff084644193b0bf223990b741f2568e979011d87abc83526967e80c8b8b1d7e4",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/ff084644193b0bf223990b741f2568e979011d87abc83526967e80c8b8b1d7e4.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "ff084644193b0bf223990b741f2568e979011d87abc83526967e80c8b8b1d7e4",
+        "bytes": 5238834
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_18072024163902_NSE_BSE_IP_DS.pdf",
+        "original_sha256": "88b9375300bdf745248f74a34f57315fd0dfd440f7e795c6e30e75ea39e2aa8e",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/88b9375300bdf745248f74a34f57315fd0dfd440f7e795c6e30e75ea39e2aa8e.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "88b9375300bdf745248f74a34f57315fd0dfd440f7e795c6e30e75ea39e2aa8e",
+        "bytes": 2966022
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102024144942_NSE_BSE_IP_DS.pdf",
+        "original_sha256": "6e2f03325a5730ee4d01bd7a82fda4aa5ba28aafda2f2f265ac42c9d10e21b10",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/6e2f03325a5730ee4d01bd7a82fda4aa5ba28aafda2f2f265ac42c9d10e21b10.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "6e2f03325a5730ee4d01bd7a82fda4aa5ba28aafda2f2f265ac42c9d10e21b10",
+        "bytes": 5043963
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20012025154750_NSE_BSE_IP_200125_DS.pdf",
+        "original_sha256": "ffcfaf13f9334063da478252bf97dfca14f298c90b1bdb53c6f83eb444145329",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/ffcfaf13f9334063da478252bf97dfca14f298c90b1bdb53c6f83eb444145329.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "ffcfaf13f9334063da478252bf97dfca14f298c90b1bdb53c6f83eb444145329",
+        "bytes": 4982996
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_19052025171855_NSE_BSE_IP_DS.pdf",
+        "original_sha256": "a21a74c7a660622a969b0aba3e2e6718fac553839ef3ba60ab532bff4eb73a15",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/a21a74c7a660622a969b0aba3e2e6718fac553839ef3ba60ab532bff4eb73a15.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "a21a74c7a660622a969b0aba3e2e6718fac553839ef3ba60ab532bff4eb73a15",
+        "bytes": 7032585
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_24072025161432_Intimation_IP_24072025_DS.pdf",
+        "original_sha256": "7fcee6f12cec28cd20acbe4f67cffffe0b0c26dd7264e89c78aa380f8fa7d97a",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/7fcee6f12cec28cd20acbe4f67cffffe0b0c26dd7264e89c78aa380f8fa7d97a.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "7fcee6f12cec28cd20acbe4f67cffffe0b0c26dd7264e89c78aa380f8fa7d97a",
+        "bytes": 4174782
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102025165746_Intimation_IP_17102025_DS.pdf",
+        "original_sha256": "0f80a30604f9ddff9516cd8f7d1fda50d905146eefaf271b047fe04e727d1e9d",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/0f80a30604f9ddff9516cd8f7d1fda50d905146eefaf271b047fe04e727d1e9d.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "0f80a30604f9ddff9516cd8f7d1fda50d905146eefaf271b047fe04e727d1e9d",
+        "bytes": 4478860
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_23012026153750_NSE_BSE_DSC.pdf",
+        "original_sha256": "df3495180f264e96ae02c4ec790090a0560853b9bfa326c280ea567cab651ead",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/df3495180f264e96ae02c4ec790090a0560853b9bfa326c280ea567cab651ead.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "df3495180f264e96ae02c4ec790090a0560853b9bfa326c280ea567cab651ead",
+        "bytes": 4407973
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026155944_NSE_BSE_IP_DSC.pdf",
+        "original_sha256": "d4e15a6da4122e26d8f06b9563937431e75fa5ed7f942809fb96e604d67025ec",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/d4e15a6da4122e26d8f06b9563937431e75fa5ed7f942809fb96e604d67025ec.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "d4e15a6da4122e26d8f06b9563937431e75fa5ed7f942809fb96e604d67025ec",
+        "bytes": 6152469
+      },
+      {
+        "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026154732_NSE_BSE_IP_DSC.pdf",
+        "original_sha256": "79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822",
+        "bucket": "portfolioai-history-dev",
+        "object_key": "portfolioai-history/development/v1-4/banking/pit-originals/79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822.pdf",
+        "canonical_admitted": false,
+        "state": "CREATED_ONCE",
+        "readback_sha256": "79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822",
+        "bytes": 4058686
+      }
+    ]
+  }
+}

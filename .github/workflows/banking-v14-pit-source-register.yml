@@ -1,0 +1,41 @@
+name: Banking V1-4 Pinned PIT Source Registration
+on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-pit-source-register.yml'
+      - 'scripts/v1-4/register_bank_pit_originals.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  register:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/banking-source-remediation'
+    environment: PortfolioAI-Development
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify source extraction regressions
+        run: python -m unittest discover -s scripts/v1-4 -p 'test_*.py'
+      - run: pip install boto3==1.35.99
+      - name: Register already retained originals under signed executor identity
+        env:
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: python scripts/v1-4/register_bank_pit_originals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bank-pit-source-registration
+          path: bank-pit-source-registration/
+          retention-days: 90
+          if-no-files-found: error
