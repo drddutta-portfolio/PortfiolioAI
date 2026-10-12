@@ -4,12 +4,14 @@ import {BANK_TWELVE_HISTORY_TAIL_HASH,qualifyTwelveHistoryRenewal,type RenewalSo
 import {bankValueHash} from "./v14-bank-twelve-capital-review.ts"
 import {inspectStoredHistory} from "./p7-ic-input-validation.ts"
 import {parseHistoryContractProof,validateBenchmarkPairReadiness} from "./v14-history-readiness.ts"
+import integrityPins from "./v14-bank-twelve-history-integrity-pins.json" with {type:"json"}
 import tailPin from "./v14-bank-twelve-history-tail-manifest.json" with {type:"json"}
 const FEDERAL="63889b52-85da-4a1b-9046-c1e975819f99"
 const sourceColumns="id,source_code,record_kind,retrieved_at,payload_hash,raw_payload,terms_snapshot"
 function tailReadUrl(raw:string){try{const u=new URL(raw);return u.protocol==="https:"&&u.hostname==="ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com"&&!u.username&&!u.password&&!u.port&&!u.hash&&decodeURIComponent(u.pathname)===`/${policy.storageBucket}/${policy.storageKeyPrefix}${BANK_TWELVE_HISTORY_TAIL_HASH}.json`&&u.searchParams.get("X-Amz-Algorithm")==="AWS4-HMAC-SHA256"&&Number(u.searchParams.get("X-Amz-Expires"))>0&&Number(u.searchParams.get("X-Amz-Expires"))<=300}catch{return false}}
-const CAPTURE_PINS:Readonly<Record<string,string>>={"22838e70-4c95-4c75-ab3e-a513e1bad32c":"fa32bbbe142cd3fc4ddc93ed17a83199a7ed9ae26c5a3bb5c1e12e489b8112d7","6947a6c2-df36-4b63-bdb1-5577eeb9f99a":"9a51d231a1c6ab64bb70cc87cc4d6f485c1a915c5eec36d123309e62c8cc9531","ca7691ed-b1db-47f5-974f-62054c59017d":"225c4958351cea9cd19384de3a6a4e1e5d4759e0936e19b79651522015a24cfa","f211ba76-5cab-4d59-b21c-51a68ac0d8c6":"b13ccf9e94a82ca13bd6174a135b5973ba646586b7d7e21ce3835e46e95b8b82","f692746f-27ae-4b84-8e72-e3aa3a10c41e":"ba64c41b12e4bed3497848d4065d484c288fd8d8fe14dac1db59645d35a40fa2"}
-async function sourceIntegrity(s:RenewalSource){const pin=CAPTURE_PINS[s.id];if(pin?s.payload_hash!==pin:await bankValueHash(s.raw_payload)!==s.payload_hash)throw Error("HISTORY_SOURCE_PAYLOAD_HASH_INVALID")}
+export async function verifyTwelveRenewalSourceIntegrity(s:RenewalSource){const pin=integrityPins.find(p=>p.id===s.id),actual=await bankValueHash(s.raw_payload);if(pin?(s.payload_hash!==pin.original_ledger_hash||actual!==pin.canonical_raw_hash):actual!==s.payload_hash)throw Error("HISTORY_SOURCE_PAYLOAD_HASH_INVALID")}
+export function twelveLatestPrior(rows:readonly RenewalSource[]):RenewalSource{if(!rows.length)throw Error("PRIOR_HISTORY_PROOF_MISSING");const latest=rows[0]!;if(rows.some(r=>Date.parse(r.retrieved_at)===Date.parse(latest.retrieved_at)&&JSON.stringify(r.raw_payload.proof)!==JSON.stringify(latest.raw_payload.proof)))throw Error("HISTORY_CONTRACT_PROOF_CONFLICT");return latest}
+export function twelveRenewalCutoffQualified(proofRetrievedAt:readonly string[],cutoff:string){const at=Date.parse(cutoff);return Number.isFinite(at)&&proofRetrievedAt.length===2&&proofRetrievedAt.every(v=>Number.isFinite(Date.parse(v))&&Date.parse(v)<=at)}
 async function identity(v:string){const hash=await bankValueHash(v);return hash.slice(0,8)+"-"+hash.slice(8,12)+"-5"+hash.slice(13,16)+"-a"+hash.slice(17,20)+"-"+hash.slice(20,32)}
 /** Signed fixed-scope caller only. Append fresh qualification, never change old
  * sources/rows/selections. All source inputs are read from canonical storage. */
@@ -25,12 +27,12 @@ export async function renewTwelveStoredHistory(db:SupabaseClient,readUrl:string)
  const tail:RenewalSource={id:await identity("FEDERAL_CA_TAIL:"+tailPin.from_date+":"+session+":"+hash),source_code:"NSE_OFFICIAL",record_kind:"V1_4_BANK_OFFICIAL_CORPORATE_ACTION_TAIL",retrieved_at:tailPin.available_at,payload_hash:await bankValueHash(tailRaw),raw_payload:tailRaw}
  const calRead=await db.from("data_source_records").select(sourceColumns).eq("record_kind","V1_4_NSE_SESSION_CALENDAR_DECISION").eq("source_code","NSE_OFFICIAL").eq("raw_payload->>session_date",session).lte("retrieved_at",at).order("retrieved_at",{ascending:false}).limit(2)
  if(calRead.error||!calRead.data?.length||calRead.data.length>1&&calRead.data[0].payload_hash!==calRead.data[1].payload_hash)throw Error("HISTORY_CALENDAR_NOT_UNIQUE")
- const calendar=calRead.data[0] as RenewalSource;await sourceIntegrity(calendar)
+ const calendar=calRead.data[0] as RenewalSource;await verifyTwelveRenewalSourceIntegrity(calendar)
  const captures=await db.from("data_source_records").select(sourceColumns).eq("record_kind","V1_4_BANK_MAINTENANCE_DAILY_CAPTURE").eq("raw_payload->>session_date",session).in("raw_payload->>target",[FEDERAL,"NIFTY_BANK"])
  if(captures.error||captures.data?.length!==2)throw Error("HISTORY_CAPTURE_PAIR_NOT_UNIQUE")
  const pair=[]
  for(const target of [FEDERAL,"NIFTY_BANK"]){
-  const capture=captures.data.find(x=>x.raw_payload.target===target) as RenewalSource|undefined;if(!capture)throw Error("TARGET_HISTORY_CAPTURE_MISSING");await sourceIntegrity(capture)
+  const capture=captures.data.find(x=>x.raw_payload.target===target) as RenewalSource|undefined;if(!capture)throw Error("TARGET_HISTORY_CAPTURE_MISSING");await verifyTwelveRenewalSourceIntegrity(capture)
   const runId=String(capture.terms_snapshot?.ingestion_run_id??""),reservationId=String(capture.terms_snapshot?.reservation_id??"")
   const [run,reservation,usage,priorRead,rowsRead]=await Promise.all([
    db.from("data_ingestion_runs").select("*").eq("id",runId).single(),db.from("provider_budget_reservations").select("*").eq("id",reservationId).single(),
@@ -39,7 +41,7 @@ export async function renewTwelveStoredHistory(db:SupabaseClient,readUrl:string)
    db.from(target===FEDERAL?"market_price_history":"market_benchmark_price_history").select("period_start,retrieved_at,open::text,high::text,low::text,close::text,volume::text,provider_code,provenance").eq(target===FEDERAL?"security_id":"benchmark_code",target).eq("provider_code","ANGEL_ONE").eq("interval","ONE_DAY").lte("retrieved_at",at).order("period_start",{ascending:false}).limit(400)
   ])
   if(run.error||reservation.error||usage.error||priorRead.error||rowsRead.error||!priorRead.data?.length)throw Error("HISTORY_CANONICAL_INPUT_READ_FAILED")
-  const prior=priorRead.data[0] as RenewalSource;await sourceIntegrity(prior)
+  const prior=twelveLatestPrior(priorRead.data as RenewalSource[]);await verifyTwelveRenewalSourceIntegrity(prior)
   const allRows=rowsRead.data as RenewalHistoryRow[],inspection=inspectStoredHistory(allRows,252,Date.parse(at))
   if(["CONFLICTING","INSUFFICIENT"].includes(inspection.state)||inspection.reason==="HISTORY_INPUT_INVALID")throw Error("HISTORY_ALL_RETAINED_ROWS_INVALID:"+inspection.reason)
   const sessionOf=(r:RenewalHistoryRow)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata"}).format(new Date(r.period_start))
@@ -61,5 +63,5 @@ export async function renewTwelveStoredHistory(db:SupabaseClient,readUrl:string)
   if(previous.data&&previous.data.payload_hash!==s.payload_hash)throw Error("HISTORY_RENEWAL_ID_CONFLICT")
   if(!previous.data){const saved=await db.from("data_source_records").insert({...s,source_url:tailPin.url,external_record_id:policy.id+":HISTORY_RENEWAL:"+s.id,terms_snapshot:{mode:"SIGNED_SOURCE_BOUND_HISTORY_REQUALIFICATION",directive_sha256:policy.directiveSha256,kvb_writes:0}});if(saved.error)throw Error("HISTORY_RENEWAL_APPEND_FAILED")}
  }
- return {revision:await bankValueHash(pair.map(p=>({id:p.candidate.id,hash:p.candidate.payload_hash}))),proofIds:pair.map(p=>p.candidate.id),corporateActionTailSourceId:tail.id,session,verifiedAt:at,pairState:aligned.state}
+ return {revision:await bankValueHash(pair.map(p=>({id:p.candidate.id,hash:p.candidate.payload_hash}))),proofIds:pair.map(p=>p.candidate.id),proofRetrievedAt:pair.map(p=>p.candidate.retrieved_at),corporateActionTailSourceId:tail.id,session,verifiedAt:at,pairState:aligned.state}
 }

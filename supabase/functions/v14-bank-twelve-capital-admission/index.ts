@@ -1,4 +1,4 @@
-import {renewTwelveStoredHistory} from "../_shared/v14-bank-twelve-history-execution.ts"
+import {renewTwelveStoredHistory,twelveRenewalCutoffQualified} from "../_shared/v14-bank-twelve-history-execution.ts"
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import {createRemoteJWKSet,jwtVerify} from "https://esm.sh/jose@6.1.0"
 import {BANK_TWELVE_POLICY as policy} from "../_shared/v14-bank-twelve-delegation.ts"
@@ -107,6 +107,7 @@ Deno.serve(async req=>{
    }
    if(grant.raw_payload.authorization_reference!==policy.directiveSha256||grant.raw_payload.security_id!==scope||grant.raw_payload.action!==action||grant.raw_payload.history_proof_revision!==historyRenewal.revision)
     return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_SCOPE_CONFLICT")
+   if(!twelveRenewalCutoffQualified(historyRenewal.proofRetrievedAt,String(grant.raw_payload.source_cutoff_at)))return reply(409,"MATERIALIZATION_CUTOFF_PRECEDES_QUALIFIED_HISTORY")
    const consumed=await db.from("data_source_records").select("id").eq("source_code","OWNER_REVIEWED_CLASSIFICATION").eq("record_kind","P4_EXECUTION_GRANT_CONSUMED").eq("external_record_id",grant.id).limit(1)
    if(consumed.error)return reply(503,"TWELVE_BANK_MATERIALIZATION_CONSUMPTION_LOOKUP_FAILED")
    let materialization:Record<string,unknown>={reusedAlreadyConsumedGrant:consumed.data.length>0}
