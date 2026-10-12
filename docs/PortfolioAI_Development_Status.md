@@ -1,3 +1,19 @@
+## Results page — UI-first plan and existing-data audit (13 October 2026)
+
+**Status: DOCUMENTATION COMPLETE / R1 UI NOT STARTED / DAILY CRON NOT DEPLOYED.** Owner chose a UI-first approach for a new top-navigation **Results** module (Quarterly first; Annual later) while maintaining V1-4 and frozen banking work independently. See [Results UI-first implementation plan](PortfolioAI_RESULTS_UI_FIRST_IMPLEMENTATION_PLAN_2026-10-13.md) and [Results data reuse, R2 and daily collection contract](PortfolioAI_RESULTS_DATA_R2_AND_DAILY_COLLECTION_CONTRACT_2026-10-13.md).
+
+The seven planned gates are R1 UI shell, R2 chart/analysis interface, R3 existing canonical data integration, R4 historical recovery and targeted acquisition, R5 operational R2 storage, R6 daily 07:00 IST new-result scan, R7 calibrated decision intelligence and Development acceptance. Future R8 Annual Results is separately gated. **Only R1 is presently authorized for implementation**; plan text does not authorize migrations, provider acquisition campaigns, R2 writes, deployment to Production/main or V1-4 readiness mutations.
+
+Read-only live Supabase Dev check: database size **217 MB** (remaining quota unverified); **1,683 Trendlyne source records**, including 236 structured financial records and 236 P8 historical fundamentals captures; exact **19** QUARTERLY_RESULT document records but **0** reporting_period_end fields populated among those 19; 8 dated OPERATING_REVENUE_QUARTER and 6 dated OPERATING_PROFIT_QUARTER observations. Existing 157 REVENUE_TTM and 157 NET_PROFIT_TTM observations have no populated period_end and cannot be relabelled as quarter data. Capture counts are not quarter-completeness proof. Cloudflare read-only GET: existing bucket `portfolioai-history-dev`, first 1,000 objects reviewed (P8 archives/backup/capture); pagination remains, **full Results archives not proven**. No database or R2 changes.
+
+**Storage mandate:** bulky financial statements, source files, versioned series and analysis artifacts belong in Cloudflare R2 where permitted; Supabase remains a small canonical indexed catalog/projection, never a duplicate large financial archive. Before R5 validate quota/rights/security and hash readback. Preserve legacy source data without unauthorized relocation.
+
+**Cron plan, not runtime status:** at 07:00 Asia/Kolkata daily (01:30 UTC, `30 1 * * *` for UTC-only scheduling) run incremental discovery with source cursor/lookback, quota-aware Trendlyne/fallback discovery, validation, R2 immutable version write then indexed selection, independent readback, retries, job audit and user-visible scan health. Choose one production-compatible scheduler during R6; no cron installed by this documentation commit.
+
+No live application code, schema, provider, R2, scheduler, deployment, Production/main, frozen V1-4 evidence, approvals or grants changed here. Next authorized action is R1 frontend code and Development UI acceptance using clearly marked fixtures.
+
+---
+
 ## Banking V1-4 — reuse-first priority execution amendment (12 October 2026)
 
 Owner requested a reuse-first plan in Development. See [Banking reuse-first priority execution plan](private/v1-4-industry-batches/Banking_V1_4_Reuse_First_Priority_Execution_Plan_2026-10-12.md).
