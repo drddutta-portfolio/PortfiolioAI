@@ -1,3 +1,15 @@
+## Banking V1-4 — reuse-first priority execution amendment (12 October 2026)
+
+Owner requested a reuse-first plan in Development. See [Banking reuse-first priority execution plan](private/v1-4-industry-batches/Banking_V1_4_Reuse_First_Priority_Execution_Plan_2026-10-12.md).
+
+Prioritize HDFCBANK, FEDERALBNK, BANKBARODA, BANDHANBNK and SBIN within the unchanged twelve-bank remediation scope; KVB remains separate. Re-rank by qualified retained evidence and genuine blockers. Reuse compatible HDFC contracts/inherited infrastructure while preserving BANK V2 direct Institutional ownership, exact financial contracts and PIT valuations. Historical preview scores are not current READY evidence.
+
+Documentation-only amendment; no implementation merge/activation. Documentation parent: `927181cf02d01d5f27d441dea6fac9d9b11a6d9b`. Separately inspected PR #125/#124 checkpoint `ada579ec318801ff5388e33363f91a2ab7f9711c` passed Full Verification 38284825944 and Architecture Guard 38284826021. Prepared renewal/growth routes remain undeployed/unexecuted at the recorded pause.
+
+Last verified: 0/12 READY, ₹0 READY value. Federal CET1 15.89%/total capital 16.97% persisted FRESH; selected snapshot still has 15 blockers including five stale history proofs. BOB/Bandhan's four growth facts pass canonical tests and two originals are R2 hash-verified; no admission/materialization claimed. Real 12 October OPEN execution proves 14 history calls/zero retries; proof renewal and effective expiry remain outstanding.
+
+Implementation remains paused; approved scheduler preserved. No changes to frozen-111 membership/values, original thirteen-bank target, financial methodology, source decisions, runtime, grants, database, Production/main or V1-5. Earlier records below remain historical checkpoints.
+
 ## V1-4 hybrid industry execution — Phase 1 read-only preparation (8 October 2026)
 
 Owner authorized five execution phases, not five new product stages. Development-only Phase 1 performed with frozen 111/111 and 13-bank pilot, without provider calls, database writes, migration, deployment, grant consumption, Production or V1-5.

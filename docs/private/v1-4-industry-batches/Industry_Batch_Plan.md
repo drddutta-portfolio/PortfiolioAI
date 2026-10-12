@@ -2,6 +2,12 @@
 
 Prepared 8 October 2026 from repository HEAD `7116e375`. Planning only; no provider calls, evidence writes, methodology changes or activation.
 
+## Banking execution priority amendment — 12 October 2026
+
+The [reuse-first banking plan](Banking_V1_4_Reuse_First_Priority_Execution_Plan_2026-10-12.md) is the current detailed banking execution-priority amendment. First completion pool: HDFCBANK, FEDERALBNK, BANKBARODA, BANDHANBNK and SBIN; advance others when verified evidence justifies it. Active remediation covers twelve banks; KVB remains separate without removal from the original thirteen-bank pilot or frozen-111 cohort.
+
+Reuse qualified HDFC research/inherited contracts before acquisition. This changes banking priority only; G01–G81 identities/order, immutable manifests/values, Pharma lanes and original completion requirements remain unchanged. Seven work packages are not new product stages. Historical schedules below remain dated records. Implementation is paused; this amendment does not activate runtime operations.
+
 ## Scope and data confidence
 
 The repository inventory contains **239 equities**, dated 29 September 2026. All **111 frozen release members** are matched by security ID. Their frozen value remains **₹13,25,856.96**. Exactly **76** overlap the fixed 115-stock remediation manifest; the other **35** are included explicitly below. These are historical source inventories, not a fresh live holdings or readiness census.
