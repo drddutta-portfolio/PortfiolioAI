@@ -1,7 +1,7 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import {createRemoteJWKSet,jwtVerify} from "https://esm.sh/jose@6.1.0"
 import {BANK_PIT_ORIGINAL_MANIFEST as manifest,BANK_PIT_ORIGINAL_ACTION as ACTION,BANK_PIT_ORIGINAL_KIND as KIND,
- bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError} from "../_shared/v14-bank-pit-original-proof.ts"
+ bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError,bankPitOriginalFormatQualified} from "../_shared/v14-bank-pit-original-proof.ts"
 const PROJECT="lrgpjimipfkyoqbpsqzz",NAME="v14-bank-pit-original-import"
 const AUD=`https://${PROJECT}.supabase.co/functions/v1/${NAME}`
 const jwks=createRemoteJWKSet(new URL("https://token.actions.githubusercontent.com/.well-known/jwks"))
@@ -37,7 +37,8 @@ Deno.serve(async req=>{
    const res=await fetch(reads.get(p.original_sha256)!,{redirect:"error",signal:AbortSignal.timeout(20000)})
    if(!res.ok)throw Error("PIT_ORIGINAL_READ_FAILED")
    const bytes=new Uint8Array(await res.arrayBuffer())
-   if(bytes.length!==p.original_bytes||new TextDecoder().decode(bytes.slice(0,5))!=="%PDF-"||await sha(bytes)!==p.original_sha256)
+   const format="original_format" in p?p.original_format:"PDF"
+   if(bytes.length!==p.original_bytes||!bankPitOriginalFormatQualified(bytes,String(format))||await sha(bytes)!==p.original_sha256)
     throw Error("PIT_ORIGINAL_BYTES_MISMATCH")
    const raw={version:KIND,...p,publication_precision:"EXACT",proven_availability_at:p.published_at,
     r2_bucket:"portfolioai-history-dev",r2_verified_sha256:p.original_sha256,canonical_promotion:false,

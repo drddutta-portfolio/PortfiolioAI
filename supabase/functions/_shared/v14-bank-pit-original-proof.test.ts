@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest"
-import {BANK_PIT_ORIGINAL_MANIFEST,bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError} from "./v14-bank-pit-original-proof.ts"
+import {BANK_PIT_ORIGINAL_MANIFEST,bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError,bankPitOriginalFormatQualified} from "./v14-bank-pit-original-proof.ts"
 
 describe("pinned Development PIT original import",()=>{
  it("never returns signed read capabilities from transport error messages",()=>{
@@ -25,13 +25,19 @@ describe("pinned Development PIT original import",()=>{
   expect(bankPitOriginalReadUrl(url,key+"other")).toBe(false)
  })
  it("preserves exact original provenance without declaring scope or valuation acceptance",()=>{
-  expect(BANK_PIT_ORIGINAL_MANIFEST).toHaveLength(36)
-  expect(new Set(BANK_PIT_ORIGINAL_MANIFEST.map(p=>p.original_sha256)).size).toBe(36)
+  expect(BANK_PIT_ORIGINAL_MANIFEST).toHaveLength(46)
+  expect(new Set(BANK_PIT_ORIGINAL_MANIFEST.map(p=>p.original_sha256)).size).toBe(46)
   for(const p of BANK_PIT_ORIGINAL_MANIFEST){
    expect(p.valuation_admitted).toBe(false)
    expect(p.source_scope).toBe("REQUIRES_SOURCE_RECONCILIATION")
    expect(Number.isFinite(Date.parse(p.published_at))).toBe(true)
    expect(p.original_bytes).toBeGreaterThan(0)
   }
+ })
+ it("does not confuse pinned XML originals with PDFs or allow XML entities",()=>{
+  const xml='<?xml version="1.0"?><xbrl xmlns="http://www.xbrl.org/2003/instance"/>'
+  expect(bankPitOriginalFormatQualified(new TextEncoder().encode(xml),"XBRL")).toBe(true)
+  expect(bankPitOriginalFormatQualified(new TextEncoder().encode(xml),"PDF")).toBe(false)
+  expect(bankPitOriginalFormatQualified(new TextEncoder().encode(xml.replace("<xbrl","<!DOCTYPE x><xbrl")),"XBRL")).toBe(false)
  })
 })

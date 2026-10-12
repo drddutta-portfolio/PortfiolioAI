@@ -3,6 +3,13 @@ import manifest from "./v14-bank-pit-original-manifest.json" with {type:"json"}
 export const BANK_PIT_ORIGINAL_MANIFEST=manifest
 export const BANK_PIT_ORIGINAL_ACTION="REGISTER_BANK_PIT_PINNED_ORIGINALS_V1"
 export const BANK_PIT_ORIGINAL_KIND="V1_4_BANK_PIT_REGISTERED_ORIGINAL"
+export function bankPitOriginalFormatQualified(bytes:Uint8Array,format:string):boolean{
+ const prefix=new TextDecoder().decode(bytes.slice(0,256))
+ if(format==="PDF")return prefix.startsWith("%PDF-")
+ if(format!=="XBRL"||!prefix.startsWith("<?xml"))return false
+ const text=new TextDecoder().decode(bytes)
+ return !/<!\s*(?:DOCTYPE|ENTITY)/i.test(text)&&text.includes("http://www.xbrl.org/2003/instance")
+}
 export function bankPitImportSafeError(error:unknown):string{
  const code=error instanceof Error?error.message:""
  return new Set(["PIT_ORIGINAL_READ_FAILED","PIT_ORIGINAL_BYTES_MISMATCH","PIT_ORIGINAL_LOOKUP_FAILED",

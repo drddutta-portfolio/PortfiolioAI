@@ -7,6 +7,7 @@ import json
 import os
 import re
 import urllib.request
+from acquire_kvb_pit_share_counts import extract_total
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -23,10 +24,12 @@ def qualified_source(source):
     # identity must match a reviewed immutable pin, not a filename guess.
     pinned = any(p["symbol"] == "KARURVYSYA" and p["original_url"] == url and p["original_sha256"] == digest
                  for p in json.loads(MANIFEST.read_text()))
-    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not (corporate or annual or pinned) or not parsed.path.lower().endswith(".pdf") or parsed.query or parsed.fragment or parsed.username:
+    source_format = source.get("original_format", "PDF")
+    xbrl = source_format == "XBRL" and parsed.path.startswith("/corporate/xbrl/SHP_") and parsed.path.endswith(".xml") and pinned
+    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not (corporate or annual or pinned) or not (parsed.path.lower().endswith(".pdf") and source_format == "PDF" or xbrl) or parsed.query or parsed.fragment or parsed.username:
         raise ValueError("EXACT_OFFICIAL_KVB_ORIGINAL_REQUIRED")
     if not re.fullmatch(r"[a-f0-9]{64}", digest): raise ValueError("ORIGINAL_SHA256_REQUIRED")
-    return url, digest, PREFIX + digest + ".pdf"
+    return url, digest, PREFIX + digest + (".xml" if source_format == "XBRL" else ".pdf")
 
 def main():
     import boto3
@@ -36,9 +39,9 @@ def main():
     if os.environ["CLOUDFLARE_R2_BUCKET"] != BUCKET or account != "ced17d24f4b380721e58a08c9e9273e4":
         raise ValueError("DEVELOPMENT_R2_REQUIRED")
     pins = json.loads(Path("supabase/functions/_shared/v14-bank-pit-original-manifest.json").read_text())
-    sources = [{"exchange_url": p["original_url"], "exchange_original_sha256": p["original_sha256"]} for p in pins]
-    if len(sources) != 36 or len({s["exchange_original_sha256"] for s in sources}) != 36:
-        raise ValueError("EXACT_36_PINNED_ORIGINALS_REQUIRED")
+    sources = [{**p, "exchange_url": p["original_url"], "exchange_original_sha256": p["original_sha256"]} for p in pins]
+    if len(sources) != 46 or len({s["exchange_original_sha256"] for s in sources}) != 46:
+        raise ValueError("EXACT_46_PINNED_ORIGINALS_REQUIRED")
     s3 = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com", region_name="auto", config=Config(retries={"total_max_attempts": 1}))
     def archive(source):
         url, digest, key = qualified_source(source)
@@ -53,12 +56,17 @@ def main():
                 if error.response["Error"]["Code"] not in ("NoSuchKey", "404", "NotFound"): raise
             request = urllib.request.Request(url, headers={"User-Agent": "PortfolioAI immutable original archival/1.0"})
             with urllib.request.urlopen(request, timeout=60) as response: raw = response.read()
-            if not raw.startswith(b"%PDF-") or hashlib.sha256(raw).hexdigest() != digest:
+            if hashlib.sha256(raw).hexdigest() != digest:
                 raise ValueError("ORIGINAL_CHANGED_DO_NOT_ARCHIVE")
+            content_type = "application/pdf"
+            if source.get("original_format", "PDF") == "XBRL":
+                extract_total(raw, source["original_period_end"])
+                content_type = "application/xml"
+            elif not raw.startswith(b"%PDF-"): raise ValueError("ORIGINAL_PDF_REQUIRED")
             # Conditional creation is mandatory. Unsupported conditional writes fail
             # closed rather than falling back to an overwriting PUT.
             try:
-                s3.put_object(Bucket=BUCKET, Key=key, Body=raw, ContentType="application/pdf", IfNoneMatch="*", Metadata={"sha256": digest})
+                s3.put_object(Bucket=BUCKET, Key=key, Body=raw, ContentType=content_type, IfNoneMatch="*", Metadata={"sha256": digest})
                 state = "CREATED_ONCE"
             except ClientError as error:
                 if error.response["Error"]["Code"] not in ("PreconditionFailed", "412"): raise
