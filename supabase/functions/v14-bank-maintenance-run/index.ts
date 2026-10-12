@@ -3,6 +3,8 @@ import {AngelOneProvider,AngelProviderError,loadAngelOneConfig} from "../_shared
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {validateBankTail,bankTailDay} from "../_shared/v14-bank-tail-validation.ts"
 import {bankMaintenanceExecutionWindow} from "../_shared/v14-bank-maintenance-time.ts"
+import {beginBankSessionDispatch,bankSessionLeaseOperation} from "../_shared/v14-bank-maintenance-dispatch.ts"
+import {verifiedUsageEvent,verifiedBudgetSettlement} from "../_shared/v14-bank-maintenance-accounting.ts"
 import scope from "./scope.json" with {type:"json"}
 
 const PROJECT="lrgpjimipfkyoqbpsqzz"
@@ -29,6 +31,8 @@ Deno.serve(async req=>{
  const url=Deno.env.get("SUPABASE_URL")??""
  const key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
  if(url!==`https://${PROJECT}.supabase.co`||!key)return reply(409,{code:"DEVELOPMENT_TARGET_REQUIRED"})
+ const sessionLease:{release:(()=>Promise<boolean>)|null}={release:null}
+ const execute=async():Promise<Response>=>{
  try{
   const body=await req.json() as Record<string,unknown>
   const sessionDate=String(body.sessionDate??"")
@@ -53,6 +57,27 @@ Deno.serve(async req=>{
    grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO,securityId:sentinel,
   })
   if(!grant.ok)return reply(401,{code:grant.code})
+
+  const holder=crypto.randomUUID(),operation=bankSessionLeaseOperation(ACTION,sessionDate)
+  const dispatch=await beginBankSessionDispatch({
+   async acquire(){
+    const lease=await admin.rpc("acquire_data_ingestion_lease_v1",{p_source_code:SOURCE,p_operation:operation,p_lease_holder:holder,p_lease_seconds:900})
+    if(lease.error)throw Error("BANK_MAINTENANCE_LEASE_ACQUIRE_FAILED")
+    return Array.isArray(lease.data)&&lease.data[0]?.acquired===true
+   },
+   async hasPriorRun(){
+    const prior=await admin.from("data_ingestion_runs").select("id").eq("source_code",SOURCE)
+     .eq("operation",ACTION).eq("metadata->>session",sessionDate).limit(1).maybeSingle()
+    if(prior.error)throw Error("BANK_MAINTENANCE_PRIOR_RUN_READ_FAILED")
+    return Boolean(prior.data)
+   },
+   async release(){
+    const released=await admin.rpc("release_data_ingestion_lease_v1",{p_source_code:SOURCE,p_operation:operation,p_lease_holder:holder,p_cooldown_seconds:0})
+    return !released.error&&released.data===true
+   },
+  })
+  if(!dispatch.ok)return reply(409,{code:dispatch.code,providerCalls:0,grantConsumed:true})
+  sessionLease.release=dispatch.release
 
   const run=await admin.from("data_ingestion_runs").insert({
    source_code:SOURCE,operation:ACTION,portfolio_id:PORTFOLIO,
@@ -89,6 +114,7 @@ Deno.serve(async req=>{
 
   const results:Array<Record<string,unknown>>=[]
   let consumed=0,failed=0
+  let completedRunVerified=false
   try{
    for(const target of scope){
     const stock=target.kind==="STOCK"
@@ -131,13 +157,13 @@ Deno.serve(async req=>{
       },sessionDate+" 00:00",sessionDate+" 23:59")
       if(transport.historyRequests<=before)throw new Error("BANK_MAINTENANCE_HISTORY_ATTEMPT_NOT_OBSERVED")
       consumed+=1
-      await admin.rpc("record_provider_usage_event_v1",{
+      verifiedUsageEvent(await admin.rpc("record_provider_usage_event_v1",{
        p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:null,p_security_id:stock?target.target:null,
        p_data_domain:"MARKET_HISTORY",p_operation_class:stock?"BANK_HISTORY":"BENCHMARK_HISTORY",
        p_accounting_class:"PROVIDER_TOOL_ATTEMPT",p_estimated_internal_units:1,p_actual_internal_units:1,
        p_attempted_at:attemptedAt,p_completed_at:new Date().toISOString(),p_outcome:"SUCCEEDED",
        p_safe_error_code:null,p_retry_attempt:0,p_idempotency_key:`${ACTION}:${sessionDate}:${target.target}:HISTORY`,
-      })
+      }))
       validateBankTail(candles,sessionDate,sessionDate)
       if(!candles.some(c=>bankTailDay(c.periodStart)===sessionDate))throw new Error("BANK_MAINTENANCE_FINAL_SESSION_MISSING")
       if(candles.some(c=>existing.has(bankTailDay(c.periodStart))))throw new Error("BANK_MAINTENANCE_OVERLAP_REQUIRES_REVIEW")
@@ -169,46 +195,53 @@ Deno.serve(async req=>{
       const attempted=transport.historyRequests>before
       if(attempted&&consumed+failed<transport.historyRequests){
        failed+=1
-       await admin.rpc("record_provider_usage_event_v1",{
+       verifiedUsageEvent(await admin.rpc("record_provider_usage_event_v1",{
         p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:null,p_security_id:stock?target.target:null,
         p_data_domain:"MARKET_HISTORY",p_operation_class:stock?"BANK_HISTORY":"BENCHMARK_HISTORY",
         p_accounting_class:"PROVIDER_TOOL_ATTEMPT",p_estimated_internal_units:1,p_actual_internal_units:1,
         p_attempted_at:attemptedAt,p_completed_at:new Date().toISOString(),p_outcome:"FAILED",
         p_safe_error_code:safe(error),p_retry_attempt:0,p_idempotency_key:`${ACTION}:${sessionDate}:${target.target}:HISTORY`,
-       })
+       }))
       }
       throw error
      }
     }catch(error){
      const code=safe(error);results.push({target:target.target,status:"FAILED",code})
-     if((error instanceof AngelProviderError&&error.sessionExpired)||transport.authenticationRequests===0||code==="BANK_MAINTENANCE_AUTH_LIMIT")break
+     if((error instanceof AngelProviderError&&error.sessionExpired)||transport.authenticationRequests===0||code==="BANK_MAINTENANCE_AUTH_LIMIT"||code==="BANK_MAINTENANCE_USAGE_ACCOUNTING_FAILED")break
     }
     await new Promise(resolve=>setTimeout(resolve,1100))
    }
   }finally{
    const accounted=consumed+failed,released=Math.max(0,HISTORY_LIMIT-accounted)
-   await admin.rpc("settle_provider_budget_v1",{p_reservation_id:reservationId,p_consumed_units:consumed,p_failed_units:failed,p_released_units:released})
+   verifiedBudgetSettlement(await admin.rpc("settle_provider_budget_v1",{p_reservation_id:reservationId,p_consumed_units:consumed,p_failed_units:failed,p_released_units:released}),{id:reservationId,consumed,failed,released})
    if(transport.authenticationRequests>0){
-    await admin.rpc("record_provider_usage_event_v1",{
+    verifiedUsageEvent(await admin.rpc("record_provider_usage_event_v1",{
      p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:null,p_security_id:null,p_data_domain:"AUTH",
      p_operation_class:"AUTHENTICATE",p_accounting_class:"TRANSPORT_BOOTSTRAP",p_estimated_internal_units:0,p_actual_internal_units:0,
      p_attempted_at:new Date().toISOString(),p_completed_at:new Date().toISOString(),
      p_outcome:transport.authenticationResponses>0?"SUCCEEDED":"FAILED",
      p_safe_error_code:transport.authenticationResponses>0?null:"BANK_MAINTENANCE_AUTHENTICATION_FAILED",
      p_retry_attempt:0,p_idempotency_key:`${ACTION}:${sessionDate}:AUTH`,
-    })
+    }))
    }
    const failures=results.filter(x=>x.status==="FAILED").length
    const ingested=results.filter(x=>x.status==="INGESTED_NOT_QUALIFIED").length
-   await admin.from("data_ingestion_runs").update({
+   const completed=await admin.from("data_ingestion_runs").update({
     status:failures===0?"SUCCEEDED":ingested>0?"PARTIAL":"FAILED",completed_at:new Date().toISOString(),
     fetched_count:ingested,failed_count:failures,attempted_call_count:accounted,accepted_count:ingested,
     error_summary:failures?results.filter(x=>x.status==="FAILED").map(x=>String(x.code)).join(",").slice(0,1000):null,
     metadata:{grant_id:body.grantId,session:sessionDate,retry_policy:"ZERO",scheduler:true,transport,
      reservation_id:reservationId,consumed_units:consumed,failed_units:failed,released_units:released,
      calendar_decision_id:calendarDecisionId},
-   }).eq("id",runId)
+   }).eq("id",runId).select("id,status").single()
+   completedRunVerified=!completed.error&&completed.data?.id===runId
   }
+  if(!completedRunVerified)throw Error("BANK_MAINTENANCE_RUN_COMPLETION_WRITE_FAILED")
   return reply(200,{action:ACTION,sessionDate,runId,reservationId,transport,results,canonicalMaterialization:false})
  }catch(error){return reply(500,{code:safe(error)})}
+ }
+ const response=await execute()
+ try{if(sessionLease.release&&!await sessionLease.release())return reply(503,{code:"BANK_MAINTENANCE_LEASE_RELEASE_FAILED"})}
+ catch{return reply(503,{code:"BANK_MAINTENANCE_LEASE_RELEASE_FAILED"})}
+ return response
 })

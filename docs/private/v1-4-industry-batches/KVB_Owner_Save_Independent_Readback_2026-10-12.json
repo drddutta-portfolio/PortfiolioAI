@@ -1,0 +1,200 @@
+{
+  "snapshotId": "2af15b91-4924-4baf-ab1b-c91d62b095dc",
+  "selectionId": "f92d14a1-ea43-40fa-aff3-85e6bd16956f",
+  "readbackMode": "INDEPENDENT_DEVELOPMENT_DB_READ",
+  "requirements": [
+    {
+      "code": "ADVANCES_GROWTH_YOY",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "CAPITAL_ADEQUACY_RATIO",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "CET1_RATIO",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "DEPOSITS_GROWTH_YOY",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "EPS_GROWTH_YOY",
+      "state": "FRESH",
+      "reason": "REVIEW_REPAIRS_UNDATED_CANONICAL_METADATA",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "EXTERNAL_LONG_TERM_RATING",
+      "state": "FRESH",
+      "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "GOVERNANCE_EVENT_SIGNAL",
+      "state": "FRESH",
+      "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "GROSS_NPA",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "IC3_SNAPSHOT_LINEAGE",
+      "state": "FRESH",
+      "reason": "IC3_LINEAGE_READY",
+      "benchmarks": []
+    },
+    {
+      "code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+      "state": "FRESH",
+      "reason": "REVIEWED_OWNERSHIP_SERIES_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "MAX_DRAWDOWN_1Y",
+      "state": "FRESH",
+      "reason": "STOCK_HISTORY_CONTRACT_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "FRESH",
+      "historyReturnBasis": "PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"
+    },
+    {
+      "code": "NET_NPA",
+      "state": "FRESH",
+      "reason": "APPROVED_OFFICIAL_FILING_FALLBACK",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "NIM_TTM",
+      "state": "REVIEW_REQUIRED",
+      "reason": "BANK_DIRECT_FACTUAL_REVIEW_REQUIRED",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "PB_RELATIVE",
+      "state": "REVIEW_REQUIRED",
+      "reason": "BANK_VALUATION_CURRENT_PIT_MISSING",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "REVIEW_REQUIRED"
+    },
+    {
+      "code": "PE_TTM_RELATIVE",
+      "state": "REVIEW_REQUIRED",
+      "reason": "BANK_VALUATION_CURRENT_PIT_MISSING",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "REVIEW_REQUIRED"
+    },
+    {
+      "code": "PRICE_MOMENTUM_12M",
+      "state": "FRESH",
+      "reason": "STOCK_HISTORY_CONTRACT_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "FRESH",
+      "historyReturnBasis": "PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"
+    },
+    {
+      "code": "PRICE_MOMENTUM_6M",
+      "state": "FRESH",
+      "reason": "STOCK_HISTORY_CONTRACT_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "FRESH",
+      "historyReturnBasis": "PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"
+    },
+    {
+      "code": "RATING_TREND",
+      "state": "FRESH",
+      "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "RELATIVE_STRENGTH_12M",
+      "state": "FRESH",
+      "reason": "STOCK_HISTORY_CONTRACT_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "FRESH",
+      "historyReturnBasis": "PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"
+    },
+    {
+      "code": "ROA_ANNUAL",
+      "state": "FRESH",
+      "reason": "REVIEW_SUPPLEMENTS_CANONICAL_SERIES",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "numericValue": "1.93"
+    },
+    {
+      "code": "ROE_ANNUAL",
+      "state": "FRESH",
+      "reason": "REVIEW_REPAIRS_UNDATED_CANONICAL_METADATA",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ]
+    },
+    {
+      "code": "VOLATILITY_RELATIVE",
+      "state": "FRESH",
+      "reason": "STOCK_HISTORY_CONTRACT_READY",
+      "benchmarks": [
+        "NIFTY_BANK"
+      ],
+      "historyInputState": "FRESH",
+      "historyReturnBasis": "PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"
+    }
+  ],
+  "remaining": [
+    "NIM_TTM",
+    "PB_RELATIVE",
+    "PE_TTM_RELATIVE"
+  ],
+  "note": "Five history INPUT requirements are FRESH under current BANK V2 coverage routing. Supplementary benchmark-pair comparison is not equivalent to a persisted input blocker."
+}
