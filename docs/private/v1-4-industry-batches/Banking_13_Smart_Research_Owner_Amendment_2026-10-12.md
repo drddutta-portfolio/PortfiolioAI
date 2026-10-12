@@ -1,9 +1,9 @@
 # PORTFOLIOAI — OWNER DIRECTIVE
 ## Smart Research Execution Amendment and Accelerated Banking V1-4 Completion
 
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Development branch:** Continue from the actual authorized Development working branch and PR #124  
-**Development Supabase:** `lrgpjimipfkyoqbpsqzz`  
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Development branch:** Continue from the actual authorized Development working branch and PR #124
+**Development Supabase:** `lrgpjimipfkyoqbpsqzz`
 **Objective:** Accelerate research development, automate financial calculations and evidence qualification, reduce unnecessary engineering complexity, and complete Banking V1-4 without compromising investment research accuracy.
 
 ### 1. Owner's strategic decision
