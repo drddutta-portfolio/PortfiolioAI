@@ -1,5 +1,9 @@
 name: Banking V1-4 Twelve Bank Capital Admission
 on:
+  push:
+    branches: [codex/banking-twelve-evidence]
+    paths:
+      - '.github/workflows/banking-v14-twelve-capital.yml'
   workflow_dispatch:
     inputs:
       materialize:
@@ -9,8 +13,21 @@ on:
 permissions:
   contents: read
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:edge -- supabase/functions/_shared/v14-bank-twelve-capital-review.test.ts supabase/functions/_shared/v14-reviewed-evidence.test.ts
+      - run: npm run lint:edge
   execute:
-    if: github.ref == 'refs/heads/codex/banking-twelve-evidence'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/banking-twelve-evidence'
+    needs: verify
     runs-on: ubuntu-latest
     environment: PortfolioAI-Development
     timeout-minutes: 10
