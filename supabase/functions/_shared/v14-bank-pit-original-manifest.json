@@ -672,5 +672,19 @@
     "original_period_end": "2021-09-30",
     "source_scope": "REQUIRES_SOURCE_RECONCILIATION",
     "valuation_admitted": false
+  },
+  {
+    "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+    "symbol": "KARURVYSYA",
+    "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026142140_NSE_Res_Q1.pdf",
+    "original_sha256": "7e7cd523aebb7185bd24e35da85971c704dfe6c12eef1e4497c23292548613ca",
+    "original_bytes": 2926360,
+    "published_at": "2026-07-20T14:24:24+05:30",
+    "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-07-2026&to_date=31-07-2026",
+    "publication_proof_sha256": "bd7439be00440a4fe8b73e84081d04f1d36fe8e3ba35ae11bc81145f3bf0590f",
+    "r2_object_key": "portfolioai-history/development/v1-4/banking/pit-originals/7e7cd523aebb7185bd24e35da85971c704dfe6c12eef1e4497c23292548613ca.pdf",
+    "observed_api_isin": "INE036D01010",
+    "source_scope": "REQUIRES_SOURCE_RECONCILIATION",
+    "valuation_admitted": false
   }
 ]

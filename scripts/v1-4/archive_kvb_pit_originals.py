@@ -40,9 +40,9 @@ def main():
         raise ValueError("DEVELOPMENT_R2_REQUIRED")
     pins = json.loads(Path("supabase/functions/_shared/v14-bank-pit-original-manifest.json").read_text())
     sources = [{**p, "exchange_url": p["original_url"], "exchange_original_sha256": p["original_sha256"]} for p in pins]
-    if len(sources) != 46 or len({s["exchange_original_sha256"] for s in sources}) != 46:
-        raise ValueError("EXACT_46_PINNED_ORIGINALS_REQUIRED")
-    s3 = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com", region_name="auto", config=Config(retries={"total_max_attempts": 1}))
+    if len(sources) != 47 or len({s["exchange_original_sha256"] for s in sources}) != 47:
+        raise ValueError("EXACT_47_PINNED_ORIGINALS_REQUIRED")
+    s3 = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com", region_name="auto", config=Config(connect_timeout=10, read_timeout=120, retries={"total_max_attempts": 1}))
     def archive(source):
         url, digest, key = qualified_source(source)
         result = {"original_url": url, "original_sha256": digest, "bucket": BUCKET, "object_key": key, "canonical_admitted": False}
