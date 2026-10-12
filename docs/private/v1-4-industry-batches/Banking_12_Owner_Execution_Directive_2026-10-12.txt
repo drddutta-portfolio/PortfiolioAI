@@ -1,0 +1,70 @@
+OBJECTIVE
+Complete the banking build (Banking V1-4) for these 12 banks:
+BANKBARODA, ICICIBANK, SBIN, FEDERALBNK, KOTAKBANK, HDFCBANK, AXISBANK, IDFCFIRSTB, BANDHANBNK, IDBI, INDIANB, AUBANK
+
+KARURVYSYA (KVB) is excluded from writes and is being handled by a concurrent workstream. You may read and reuse its proven implementation.
+
+Success is measured only by persisted, independently read-back requirement results (FRESH / missing / stale / conflicting) in the canonical PortfolioAI pipeline, and by operational acceptance. Green builds, downloaded reports, source counts and accepted individual metrics are progress, not completion. A bank is READY only when every mandatory requirement passes its approved acceptance contract and a database readback confirms the application's selected snapshot reflects it.
+
+Evaluate each requirement against its actual approved acceptance contract. Do not infer completeness from a single accepted observation. A requirement can show FRESH for one observation while its historical series (especially P/E and P/B) still needs separate qualification.
+
+HARD RULES (do not violate to go faster)
+1. Never relabel one metric as another (e.g. annual or quarterly NIM as NIM_TTM; annual EPS as TTM EPS; a provider's current P/B as a 5-year series).
+2. Never admit a figure without defensible original-availability evidence. Use as-first-reported data from original exchange filings. Never let later restatements leak into earlier valuations.
+3. A valid calculation is not a valid input. Admit an observation only if security identity, units, accounting scope, reporting period, publication availability and share basis all pass.
+4. Do not silently overwrite conflicting source values. Reconcile them with evidence or exclude the affected observation with a recorded reason.
+5. Use deterministic decimal arithmetic. Preserve content, hash, source identity, retrieval time, reporting period and availability evidence. Reuse retained sources before fetching new ones.
+6. Do not run another broad census, audit or architectural redesign. Do not repeat provider calls for a blocker that is a methodology or source-availability issue.
+7. Do not ask for re-approval of already accepted evidence. Automate routine work within the approved scope. If a genuinely owner-authenticated action is required, stop on that item only and present it as ONE concrete action with a recommendation.
+
+EXECUTION MODEL
+Execute independent financial evidence work across banks in parallel where safe. Persist every qualified improvement through the authorized canonical process without waiting for all requirements of a bank to pass. Do not allow an unresolved NIM blocker to prevent valid P/E, P/B or other evidence from being admitted.
+
+Coordinate shared validator, materializer, scheduler and database changes with the concurrent KVB execution. Do not overwrite its accepted evidence, redeploy older versions or compete for the same maintenance grant. Gate B must be independently verified once for the shared operational system.
+
+STEP 1 – Per-bank blocker table (existing persisted data, no new live audit)
+For each of the 12 banks, list every mandatory requirement not FRESH (or FRESH but lacking its full series qualification), the exact reason, and classify each blocker as:
+(A) engineering defect, (B) evidence/source gap, (C) methodology decision, (D) owner-authentication boundary.
+Base the table on actual records, not assumptions.
+
+STEP 2 – Fix engineering blockers (class A)
+Repair, test and deploy: incomplete environments, auth/materialization request problems, missing source registration, protected migration dependencies, undeployed successor fixes. Confirm the historical valuation loader fix (already in repository code) is deployed and loads the records its comparator needs. Each fix needs tests and deployment confirmation. Do not redeploy anything that would regress the KVB workstream.
+
+STEP 3 – P/B admission gate
+Implement or reuse (from KVB) a per-observation admission gate for historical P/B:
+- one consistent statutory common-equity book-value basis (do not mix presentations that treat proposed dividends differently);
+- verified fully paid share counts;
+- prices and book value on compatible share bases around any bonus, split or corporate action;
+- where sources differ on a month's close, investigate the cause (exchange, adjustment basis, closing-price definition). Admit only reconciled observations; otherwise exclude the affected month with a recorded reason;
+- every rejected month carries a recorded rejection reason.
+Coverage standard: at least 36 qualified observations across 60 months, sufficient coverage in every 12-month bucket, no excessive consecutive gap. Run on each in-scope bank and confirm blocker reduction via independent readback.
+
+STEP 4 – P/E coverage, then qualification
+First establish achievable coverage from retained sources: for each bank, count month-ends with a bindable TTM EPS (four consecutive quarters from original quarterly results filings, each with an original publication date and compatible share basis). Then acquire specifically the missing original filings. Declare an unresolved evidence gap (class B) only after a bounded acquisition attempt shows the approved coverage requirement cannot currently be met, and list the specific missing filings. Do not fill gaps from annual EPS, rounded-EPS-derived share counts, or incompatible figures. Build and admit the qualified denominator wherever feasible.
+
+STEP 5 – NIM_TTM
+The active approval requires a directly certified trailing-four-quarter NIM figure. Perform one targeted, deduplicated acquisition pass per bank across retained disclosures and relevant official sources (investor presentations, quarterly disclosures). If a direct TTM NIM is found, qualify it with full provenance. If it remains unavailable, stop repetitive searching and prepare ONE consolidated methodology decision for the owner covering: which banks lack a directly disclosed figure; the exact proposed fallback formula (quarterly net interest income and average interest-earning assets); the source-backed inputs required per bank and whether each exists; and the consequence of not approving (NIM_TTM stays unfulfilled and those banks cannot be READY). Do not admit fallback-derived values until the owner approves the fallback.
+
+STEP 6 – Applicability and definitions
+AUBANK: verify small-finance-bank regulatory applicability for CET1 and capital adequacy instead of inheriting ordinary-bank assumptions, and document the result. For every bank, verify the CET1, total CAR/CRAR, annual ROA (correct financial year and denominator) and institutional ownership (legitimate aggregate series, no double-counting) definitions.
+
+STEP 7 – Canonical admission and materialization
+Push qualified evidence through the existing review, validation and selection pipeline. Perform authorized materialization, then an independent database readback confirming the application's selected snapshot reflects the result. Confirm that evidence expiry reduces effective readiness, so a bank does not stay presented as current after its evidence expires.
+
+STEP 8 – Maintenance operational proof (Gate B, shared)
+Do not claim Gate B closed from the CLOSED-session run. Inspect actual execution records for a real OPEN-session run (NSE calendar refresh 18:55 IST, evaluation 19:00 IST) and verify: grant issuance, call accounting against the approved ceiling, settlement, persistence, retry policy, duplicate and partial-failure handling, and shared NIFTY BANK benchmark use. If no OPEN-session run exists yet, report that and coordinate one with the KVB workstream, then inspect it. Verify once for the shared system.
+
+EXECUTION PRIORITY
+Proceed from the latest verified Development state. Execute all independently authorized work across the 12 banks without unnecessary pauses.
+Prioritize reusable financial calculations, existing evidence, targeted acquisition, canonical admission and independently verified blocker reduction.
+Do not launch another broad audit or architectural redesign. Do not stop at implementation or passing tests when valid evidence can be materialized.
+Coordinate shared changes with the KVB workstream. Preserve all accepted evidence, current methodologies, security controls and completed gates.
+Finish as much of Banking V1-4 as the available qualified evidence and approved methodology allow. Escalate only genuinely unresolved decisions, with one concrete recommendation and the precise owner action required.
+Success is measured by persisted requirements and READY banks, not by how much code or documentation was produced.
+
+FINAL REPORT (concise)
+1. Per-bank table: each mandatory requirement, status (FRESH/missing/stale/conflicting), whether its full acceptance contract is met, and whether confirmed by independent readback.
+2. Count of READY banks with readback verification, and the READY frozen value.
+3. Remaining blockers by class (A/B/C/D), each with the single next action.
+4. Anything you could not verify, stated plainly.
+Do not state completion unless these numbers support it.

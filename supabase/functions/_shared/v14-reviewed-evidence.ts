@@ -251,9 +251,9 @@ export async function validateReviewedRequirementEvidence(input:{
          !/basel\s*(iii|3)/i.test(literal)||
          !/(risk.weighted assets|rwa)/i.test(literal)
        ))return fail("REVIEW_REQUIRED","BANK_DIRECT_BASEL_III_SOURCE_PROOF_MISSING",[r.id])
-       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?1)/i.test(literal))
+       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?(?:1|i)\b)/i.test(literal))
          return fail("REVIEW_REQUIRED","BANK_CET1_NOT_EXPLICITLY_SOURCED",[r.id])
-       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total regulatory capital)/i.test(literal))
+       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total capital ratio|total regulatory capital)/i.test(literal))
          return fail("REVIEW_REQUIRED","BANK_TOTAL_CAR_NOT_EXPLICITLY_SOURCED",[r.id])
        if(requirementCode==="ROA_ANNUAL"&&(
          !start||r.period_type!=="YEAR"||
