@@ -1,0 +1,101 @@
+{
+  "authorization_reference": "9a5aa51e99647e4b26faa800ea8383f5c87eb6b7e6269f079a65b886f8ac5762",
+  "executor": "SIGNED_GITHUB_ACTIONS_CODEX",
+  "maximum_parallel": 3,
+  "maximum_planned_calls": 5,
+  "paid_retries": 0,
+  "canonical_promotion": false,
+  "results": [
+    {
+      "action": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+      "sliceId": "BANK-P1-01",
+      "scope": "BANK-P1-01:BANK_FINANCIALS:2026-10-09",
+      "execution": "INVOKED_ONCE",
+      "http_status": 200,
+      "result": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "ace6c654-adaf-4694-a70b-756d366771a6",
+        "sourceRecordId": "23444531-e988-4161-b467-42d3648c24d8",
+        "budgetSettled": true
+      }
+    },
+    {
+      "action": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+      "sliceId": "BANK-P1-02",
+      "scope": "BANK-P1-02:BANK_FINANCIALS:2026-10-09",
+      "execution": "INVOKED_ONCE",
+      "http_status": 200,
+      "result": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "4539a895-0ded-4c71-9863-5d3d6ac5a45d",
+        "sourceRecordId": "053ff4e2-cc7a-4685-aa2f-aa390d071f8a",
+        "budgetSettled": true
+      }
+    },
+    {
+      "action": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+      "sliceId": "BANK-P1-03",
+      "scope": "BANK-P1-03:BANK_FINANCIALS:2026-10-09",
+      "execution": "INVOKED_ONCE",
+      "http_status": 200,
+      "result": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "7f907555-0dc9-4234-bd10-066385bbeeeb",
+        "sourceRecordId": "675b33e2-1372-4beb-b774-f4a02c5e1dd9",
+        "budgetSettled": true
+      }
+    },
+    {
+      "action": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+      "sliceId": "BANK-P1-04",
+      "scope": "BANK-P1-04:BANK_FINANCIALS:2026-10-09",
+      "execution": "INVOKED_ONCE",
+      "http_status": 200,
+      "result": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "9583248b-2b9e-40de-812f-829b7c631a48",
+        "sourceRecordId": "5dcee563-1ce6-4c24-8754-9c240676f451",
+        "budgetSettled": true
+      }
+    },
+    {
+      "action": "V1_4_BANK_PARAMETER_SEARCH_2026_10_09",
+      "sliceId": "BANK-P1-01",
+      "scope": "BANK_PARAMETER_SEARCH:BANK_MARGIN:2026-10-09",
+      "execution": "INVOKED_ONCE",
+      "http_status": 200,
+      "result": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "508b8e8e-da78-4e4f-8f9f-f682340b6164",
+        "sourceRecordId": "5993a812-8743-44b5-9fd0-ee2f242c9a1f",
+        "budgetSettled": true
+      }
+    }
+  ],
+  "workflow_run_id": 38196917459
+}

@@ -9851,3 +9851,16 @@ Original annual ROA cells were verified for all thirteen banks without quarterly
 ### 2026-10-12 IST — owner smart-research amendment execution
 
 The owner explicitly approved incremental source-once, multi-fact extraction and routine automated qualification under existing contracts. Fourteen retained original financial filings across all 13 banks yielded 308 literal, period- and scope-linked observations in one offline pass, with zero new acquisitions or provider calls. These are unadmitted observations; no speed or readiness improvement is asserted from extraction alone. KVB's authenticated selected snapshot remains preserved with three blockers. The maintenance successor adds an existing-RPC atomic per-session lease, failed/interrupted-run retry exclusion, and verified usage/settlement/run-completion results. No schema migration or financial-methodology change was introduced. The first scheduled OPEN-session execution remains future and unproven.
+
+
+### 2026-10-12 IST — executed smart-research source batches
+
+PR #124 implements the owner-approved incremental execution amendment. The signed research run 38196917459 completed five Trendlyne attempts with five SUCCEEDED ingestion runs, five usage events, all reservations SETTLED, and zero retries or canonical promotions. Results are retained for qualification; extra returned stocks and substituted metrics are excluded. The discretionary workflow now requires explicit dispatch for new acquisition, so ordinary code pushes will not spend provider quota.
+
+Shared archive run 38197276889 read 36 Development R2 partitions once for the other twelve banks: eleven have 36 exact-identity price candidates and KOTAKBANK has 13, with 23 requiring a dated historical-ISIN bridge. These are adjusted-column candidates, not raw/PIT-admitted month-end prices.
+
+Twenty-two KVB issuer presentations are retained, including eighteen previously missing originals. One previously verified July 2026 issuer original was unnecessarily downloaded under a different local filename and is explicitly counted as a duplicate recapture. Actual NSE dissemination has been established for all twenty-two official exchange originals; nineteen issuer versions additionally match their extracted text. Reading the official originals yielded 452 literal annual EPS/BVPS observations. Annual EPS is not relabelled as TTM or diluted EPS, and unknown scope/share basis remains unqualified. No new FRESH requirement or READY bank is claimed.
+
+The Development maintenance runner v3 is ACTIVE with atomic per-session dispatch exclusion and verified provider accounting. A controlled simultaneous live RPC test admitted one holder and refused the other, then released the lease. Live pre-dispatch invocation still returned zero calls and no grant consumption. Recurring jobs remain 18:55/19:00 IST; a future eligible OPEN run has not been claimed.
+
+The exact-input derived NIM amendment is a concrete inactive proposal awaiting the one explicit methodology decision required by the owner directive. Verified exact quarter-average earning assets are still absent; approval cannot substitute for those inputs. KVB's selected snapshot remains 2af15b91-4924-4baf-ab1b-c91d62b095dc with three blockers; all thirteen persisted banks remain REVIEW_REQUIRED, READY value ₹0.

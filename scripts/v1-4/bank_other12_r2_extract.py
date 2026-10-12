@@ -6,6 +6,7 @@ import io
 import json
 import os
 import re
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 BASE = "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/"
@@ -47,9 +48,16 @@ def exact_candidates(data, bank, month):
     day, price = next(iter(values))
     if day[:7] != month:
         return {"state": "MONTH_MISMATCH"}
+    try:
+        number = Decimal(price)
+        if not number.is_finite() or number <= 0:
+            return {"state": "PRICE_INVALID"}
+    except InvalidOperation:
+        return {"state": "PRICE_INVALID"}
     return {"state": "PRICE_CANDIDATE_UNADMITTED", "identity_column": identity,
         "observed_identity": expected, "identity_matches": len(indices), "price_date": day,
-        "price_column": price_col, "price_value": price, "corporate_action_basis": "NOT_QUALIFIED"}
+        "price_column": price_col, "price_value": price, "corporate_action_basis": "NOT_QUALIFIED",
+        "month_end_verified": False}
 
 def main():
     import boto3

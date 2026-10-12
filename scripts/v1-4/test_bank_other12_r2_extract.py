@@ -17,5 +17,9 @@ class ArchiveTests(unittest.TestCase):
     def test_conflicting_duplicates_block(self):
         row = exact_candidates({"security_id": ["exact", "exact"], "close": ["10", "11"], "trade_date": ["2026-01-30"] * 2}, self.bank, "2026-01")
         self.assertEqual(row["state"], "DUPLICATE_OR_AMBIGUOUS_PRICE")
+    def test_missing_and_invalid_prices_never_become_candidates(self):
+        for price in (None, "NaN", "Infinity", "0", "-1"):
+            row = exact_candidates({"isin": [self.bank["isin"]], "close": [price], "trade_date": ["2026-01-30"]}, self.bank, "2026-01")
+            self.assertEqual(row["state"], "PRICE_INVALID")
 
 if __name__ == "__main__": unittest.main()

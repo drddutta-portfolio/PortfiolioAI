@@ -1,0 +1,49 @@
+{
+  "status": "PROPOSAL_ONLY_NOT_RUNTIME",
+  "fixtures": [
+    {
+      "case": "equal_assets",
+      "nii": [
+        "100",
+        "100",
+        "100",
+        "100"
+      ],
+      "daily_average_earning_assets": [
+        "10000",
+        "10000",
+        "10000",
+        "10000"
+      ],
+      "quarter_days": [
+        90,
+        91,
+        92,
+        92
+      ],
+      "result_percent_4dp": "4.0000"
+    },
+    {
+      "case": "different_quarter_assets",
+      "nii": [
+        "100",
+        "200",
+        "300",
+        "400"
+      ],
+      "daily_average_earning_assets": [
+        "10000",
+        "20000",
+        "30000",
+        "40000"
+      ],
+      "quarter_days": [
+        90,
+        91,
+        92,
+        92
+      ],
+      "result_percent_4dp": "3.9847"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ describe("banking maintenance persisted provider accounting",()=>{
  const row={reservation_id:"reservation",status:"SETTLED",consumed_units:12,failed_units:1,released_units:1}
  it("requires an actual recorded usage-event identity",()=>{
   expect(()=>verifiedUsageEvent({data:"00000000-0000-4000-8000-000000000001",error:null})).not.toThrow()
-  for(const result of [{data:null,error:null},{data:"00000000-0000-4000-8000-000000000001",error:{message:"write denied"}}])expect(()=>verifiedUsageEvent(result)).toThrow("BANK_MAINTENANCE_USAGE_ACCOUNTING_FAILED")
+  for(const result of [{data:null,error:null},{data:"------------------------------------",error:null},{data:"00000000-0000-4000-8000-000000000001",error:{message:"write denied"}}])expect(()=>verifiedUsageEvent(result)).toThrow("BANK_MAINTENANCE_USAGE_ACCOUNTING_FAILED")
  })
  it("checks exact settled reservation identity and every reserved unit",()=>{
   expect(()=>verifiedBudgetSettlement({data:[row],error:null},expected)).not.toThrow()
