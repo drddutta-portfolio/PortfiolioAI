@@ -1,5 +1,10 @@
 name: Banking V1-4 Other 12 Shared R2 Extraction
 on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-other12-r2.yml'
+      - 'scripts/v1-4/bank_other12_r2_extract.py'
   workflow_dispatch:
 permissions:
   contents: read
