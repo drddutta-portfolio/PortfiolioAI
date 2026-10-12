@@ -1,9 +1,5 @@
 name: Banking V1-4 RBI 2025 Governing Source
 on:
-  pull_request:
-    paths:
-      - "scripts/v1-4/kvb_rbi_commercial_2025_official_capture.py"
-      - ".github/workflows/banking-v14-rbi-2025-original.yml"
   workflow_dispatch:
 permissions:
   contents: read

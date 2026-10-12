@@ -1,9 +1,5 @@
 name: Banking V1-4 KVB R2 PIT Extraction
 on:
-  pull_request:
-    paths:
-      - "scripts/v1-4/kvb_r2_pit_extract.py"
-      - ".github/workflows/banking-v14-kvb-r2-pit.yml"
   workflow_dispatch:
 permissions:
   contents: read

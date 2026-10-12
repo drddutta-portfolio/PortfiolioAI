@@ -1,9 +1,7 @@
 name: Banking V1-4 KVB RBI Official Evidence
 on:
-  pull_request:
-    paths:
-      - "scripts/v1-4/kvb_rbi_original_capture.mjs"
-      - ".github/workflows/banking-v14-kvb-rbi-evidence.yml"
+  # Acquisition is explicit. PR synchronization must not reacquire an unchanged
+  # original or make accepted source evidence depend on today's host availability.
   workflow_dispatch:
 permissions:
   contents: read

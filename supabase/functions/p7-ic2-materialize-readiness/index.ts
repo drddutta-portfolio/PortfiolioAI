@@ -11,6 +11,7 @@ import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord}
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract,BANK_ACTIVE_METHODOLOGY_AUTHORITY,BANK_V2_VALUATION_WEIGHTS} from "../_shared/p7-ic-profile-contracts.ts"
 import {evaluateBankValuationLedger,BANK_VALUATION_LEDGER_RECORD_KIND,type BankValuationLedgerRecord} from "../_shared/v14-bank-valuation-ledger.ts"
+import {loadBankValuationSourceRecords} from "../_shared/v14-bank-valuation-source-loading.ts"
 import {executableV14BenchmarkCodes,resolveV14BenchmarkAuthority} from "../_shared/v14-benchmark-authority-resolution.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
@@ -301,7 +302,7 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
   ?await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at").in("code",requiredBenchmarkCodes)
   :{data:[],error:null}
  if(benchmarkResult.error)throw benchmarkResult.error
- const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory,reviewFacts,historyProofs,currentSessionDecision]=await Promise.all([
+ const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory,reviewFacts,historyProofs,currentSessionDecision,valuationSources]=await Promise.all([
   loadObservations(admin,ids,sourceCutoffAt),
   admin.from("fundamental_metric_definitions").select("code,canonical_unit,value_kind,is_active,freshness_seconds,definition"),
   admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,raw_payload").in("record_kind",["COMPLETE_RESEARCH_STRUCTURED_METRICS","COMPLETE_RESEARCH_DOCUMENT_SEARCH","COMPLETE_RESEARCH_OWNERSHIP"]).in("raw_payload->>security_id",ids).lte("retrieved_at",sourceCutoffAt).order("retrieved_at"),
@@ -310,10 +311,16 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
   loadReviewFacts(admin,portfolioId,ids,sourceCutoffAt),
   loadHistoryContractProofs(admin,sourceCutoffAt),
   loadCurrentSessionDecision(admin,sourceCutoffAt),
+  loadBankValuationSourceRecords({securityIds:ids,sourceCutoffAt,readPage:async(offset,limit)=>{
+   const page=await admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,payload_hash,raw_payload")
+    .eq("record_kind",BANK_VALUATION_LEDGER_RECORD_KIND).in("raw_payload->>security_id",ids)
+    .lte("retrieved_at",sourceCutoffAt).order("retrieved_at").order("id").range(offset,offset+limit-1)
+   return{data:page.data,error:page.error}
+  }}),
  ])
  for(const result of [definitionsResult,sourceRecordsResult])if(result.error)throw result.error
  const benchmarks=(benchmarkResult.data??[]).map(row=>{const loaded=benchmarkHistory.get(String(row.code))??{rows:[],inspection:inspectStoredHistory([],252,Date.parse(sourceCutoffAt)),sourceRecordId:null};return{code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),history:{rows:loaded.rows,inspection:loaded.inspection},source_record_id:loaded.sourceRecordId}})
- return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks,reviewFacts,historyProofs,currentSessionDecision}
+ return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:[...(sourceRecordsResult.data??[]) as SourceRecord[],...valuationSources as SourceRecord[]],histories,benchmarks,reviewFacts,historyProofs,currentSessionDecision}
 }
 
 function blocked(code:string,minimum:number,freshness:string|null,benchmarks:string[],state:Item["evidence_state"],reason:string,action:string):Item{return {requirement_code:code,metric_code:null,required:true,minimum_history:minimum,freshness_policy:freshness,benchmark_authority:benchmarks,applicability:"APPLICABLE",evidence_state:state,candidate_evidence_ids:[],selected_evidence_id:null,evidence_as_of_date:null,retrieved_at:null,fresh_through:null,source_provider:null,raw_source_record_id:null,normalized_value:null,validation_state:"FAIL_CLOSED",canonical_selection_state:"NO_SELECTION",reason_code:reason,recommended_remediation_action:action}}

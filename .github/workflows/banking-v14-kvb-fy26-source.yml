@@ -1,9 +1,5 @@
 name: Banking V1-4 KVB FY26 Source Capture
 on:
-  pull_request:
-    paths:
-      - "scripts/banking-v14-kvb-fy26-original-schedules.mjs"
-      - ".github/workflows/banking-v14-kvb-fy26-source.yml"
   workflow_dispatch:
 permissions:
   contents: read
