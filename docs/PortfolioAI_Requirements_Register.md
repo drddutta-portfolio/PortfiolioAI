@@ -1,3 +1,24 @@
+## Results module — planned requirements overlay (13 October 2026)
+
+**Status: PLANNED / NOT IMPLEMENTED.** Subordinate to [UI-first implementation plan](PortfolioAI_RESULTS_UI_FIRST_IMPLEMENTATION_PLAN_2026-10-13.md) and [reuse, R2, cron contract](PortfolioAI_RESULTS_DATA_R2_AND_DAILY_COLLECTION_CONTRACT_2026-10-13.md). Requirements do not alter previous V1-4 completion/readiness assertions or authorize V1-5.
+
+| Requirement | Gate | Acceptance |
+|---|---|---|
+| RESULTS-001 Top menu Results, Quarterly and deferred Annual tabs | R1 | Navigation and responsive rendering |
+| RESULTS-002 Stocks vertical, newest quarter left, scroll/sticky/virtualization | R1 | Desktop/mobile and large population tests |
+| RESULTS-003 Tooltip on hover/focus/touch, click opens details below matrix | R1–R2 | Accessible functional/selection tests |
+| RESULTS-004 Unique current plus fully exited equity universe | R3 | Reconcile against canonical transactions/security identity |
+| RESULTS-005 Correct period/accounting scope and quarter-by-quarter financial metrics | R3–R4 | Readback with source lineage; no TTM/annual substitutions |
+| RESULTS-006 Existing Trendlyne and document reuse before new source calls | R3–R4 | Coverage map with provenance and documented misses |
+| RESULTS-007 Large financial objects stored in R2, indexed small Supabase projection | R5 | Quota/rights review, SHA readback, RLS/security, recovery |
+| RESULTS-008 Daily 07:00 IST idempotent incremental new-result scan | R6 | Actual scheduled invocation, no-change, revision and retry evidence |
+| RESULTS-009 Industry-specific quality/trend/holdings analysis and thesis review | R7 | Calibrated methodology, deterministic test and no scoring overwrite |
+| RESULTS-010 Annual Results extension | Future R8 | Separate owner approval and audited annual source contracts |
+
+**Implementation boundary:** Only R1 UI implementation authorized. Fixtures only for isolated preview/tests. No cron, bulk R2 writes, DB migrations, provider acquisition campaign or Production/main release yet. No financial-results coverage claim beyond evidence in the reuse contract.
+
+---
+
 ## V1-1 baseline audit overlay — 5 October 2026
 
 The authorized V1-1 audit is complete for available read-only repository/Development evidence. Baseline Freeze is **PARTIAL** and Scope Freeze B remains **INCOMPLETE / NOT READY FOR OWNER APPROVAL**.
