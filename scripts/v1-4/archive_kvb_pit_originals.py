@@ -12,13 +12,18 @@ from urllib.parse import urlsplit
 
 BUCKET = "portfolioai-history-dev"
 PREFIX = "portfolioai-history/development/v1-4/banking/pit-originals/"
+MANIFEST = Path(__file__).resolve().parents[2] / "supabase/functions/_shared/v14-bank-pit-original-manifest.json"
 
 def qualified_source(source):
     url = source["exchange_url"]; digest = source["exchange_original_sha256"]
     parsed = urlsplit(url)
     corporate = parsed.path.startswith("/corporate/KARURVYSYA_")
     annual = bool(re.fullmatch(r"/annual_reports/AR_\d+_KARURVYSYA_\d{4}_\d{4}_A_\d+\.pdf", parsed.path))
-    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not (corporate or annual) or not parsed.path.lower().endswith(".pdf") or parsed.query or parsed.fragment or parsed.username:
+    # Older filings use generic exchange filenames. Their URL, hash and issuer
+    # identity must match a reviewed immutable pin, not a filename guess.
+    pinned = any(p["symbol"] == "KARURVYSYA" and p["original_url"] == url and p["original_sha256"] == digest
+                 for p in json.loads(MANIFEST.read_text()))
+    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not (corporate or annual or pinned) or not parsed.path.lower().endswith(".pdf") or parsed.query or parsed.fragment or parsed.username:
         raise ValueError("EXACT_OFFICIAL_KVB_ORIGINAL_REQUIRED")
     if not re.fullmatch(r"[a-f0-9]{64}", digest): raise ValueError("ORIGINAL_SHA256_REQUIRED")
     return url, digest, PREFIX + digest + ".pdf"
@@ -32,8 +37,8 @@ def main():
         raise ValueError("DEVELOPMENT_R2_REQUIRED")
     pins = json.loads(Path("supabase/functions/_shared/v14-bank-pit-original-manifest.json").read_text())
     sources = [{"exchange_url": p["original_url"], "exchange_original_sha256": p["original_sha256"]} for p in pins]
-    if len(sources) != 27 or len({s["exchange_original_sha256"] for s in sources}) != 27:
-        raise ValueError("EXACT_27_PINNED_ORIGINALS_REQUIRED")
+    if len(sources) != 36 or len({s["exchange_original_sha256"] for s in sources}) != 36:
+        raise ValueError("EXACT_36_PINNED_ORIGINALS_REQUIRED")
     s3 = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com", region_name="auto", config=Config(retries={"total_max_attempts": 1}))
     def archive(source):
         url, digest, key = qualified_source(source)

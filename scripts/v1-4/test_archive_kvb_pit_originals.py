@@ -1,5 +1,6 @@
 import unittest
-from archive_kvb_pit_originals import qualified_source
+import json
+from archive_kvb_pit_originals import qualified_source, MANIFEST
 
 class SourceScope(unittest.TestCase):
     source = {"exchange_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_2021_Presentation.PDF", "exchange_original_sha256": "a" * 64}
@@ -13,5 +14,10 @@ class SourceScope(unittest.TestCase):
         url = "https://nsearchives.nseindia.com/annual_reports/AR_27187_KARURVYSYA_2024_2025_A_30072025192827.pdf"
         self.assertEqual(qualified_source({**self.source, "exchange_url": url})[0], url)
         with self.assertRaises(ValueError): qualified_source({**self.source, "exchange_url": url.replace("KARURVYSYA", "OTHER")})
+    def test_generic_exchange_filename_requires_exact_original_pin(self):
+        pin = next(p for p in json.loads(MANIFEST.read_text()) if "/corporate/KVBResults_" in p["original_url"])
+        row = {"exchange_url": pin["original_url"], "exchange_original_sha256": pin["original_sha256"]}
+        self.assertEqual(qualified_source(row)[0], pin["original_url"])
+        with self.assertRaises(ValueError): qualified_source({**row, "exchange_original_sha256": "a" * 64})
 
 if __name__ == "__main__": unittest.main()
