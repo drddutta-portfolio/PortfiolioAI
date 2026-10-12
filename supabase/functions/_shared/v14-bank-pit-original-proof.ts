@@ -3,6 +3,12 @@ import manifest from "./v14-bank-pit-original-manifest.json" with {type:"json"}
 export const BANK_PIT_ORIGINAL_MANIFEST=manifest
 export const BANK_PIT_ORIGINAL_ACTION="REGISTER_BANK_PIT_PINNED_ORIGINALS_V1"
 export const BANK_PIT_ORIGINAL_KIND="V1_4_BANK_PIT_REGISTERED_ORIGINAL"
+export function bankPitImportSafeError(error:unknown):string{
+ const code=error instanceof Error?error.message:""
+ return new Set(["PIT_ORIGINAL_READ_FAILED","PIT_ORIGINAL_BYTES_MISMATCH","PIT_ORIGINAL_LOOKUP_FAILED",
+  "PIT_ORIGINAL_IDEMPOTENCY_CONFLICT","PIT_ORIGINAL_REGISTRATION_FAILED","PIT_ORIGINAL_CANONICAL_SOURCE_READBACK_FAILED"]).has(code)
+  ?code:"PIT_ORIGINAL_INTERNAL_FAILURE"
+}
 export function bankPitImportClaimsQualified(p:Record<string,unknown>):boolean{
  return p.repository==="drddutta-portfolio/PortfiolioAI"&&p.repository_id==="1357024254"
   &&p.repository_owner_id==="324877535"&&p.ref==="refs/heads/codex/banking-source-remediation"

@@ -1,7 +1,7 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import {createRemoteJWKSet,jwtVerify} from "https://esm.sh/jose@6.1.0"
 import {BANK_PIT_ORIGINAL_MANIFEST as manifest,BANK_PIT_ORIGINAL_ACTION as ACTION,BANK_PIT_ORIGINAL_KIND as KIND,
- bankPitImportClaimsQualified,bankPitOriginalReadUrl} from "../_shared/v14-bank-pit-original-proof.ts"
+ bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError} from "../_shared/v14-bank-pit-original-proof.ts"
 const PROJECT="lrgpjimipfkyoqbpsqzz",NAME="v14-bank-pit-original-import"
 const AUD=`https://${PROJECT}.supabase.co/functions/v1/${NAME}`
 const jwks=createRemoteJWKSet(new URL("https://token.actions.githubusercontent.com/.well-known/jwks"))
@@ -61,7 +61,7 @@ Deno.serve(async req=>{
    results.push({sourceRecordId:readback.data.id,originalSha256:p.original_sha256,publishedAt:p.published_at,
     state:existing.data?"REUSED_HASH_VERIFIED_SOURCE":"REGISTERED_HASH_VERIFIED_SOURCE",canonicalAdmitted:false})
   }catch(error){
-   results.push({originalSha256:p.original_sha256,state:"FAILED_NO_ADMISSION",code:error instanceof Error?error.message:"PIT_REGISTRATION_FAILED"})
+   results.push({originalSha256:p.original_sha256,state:"FAILED_NO_ADMISSION",code:bankPitImportSafeError(error)})
   }
  }
  const registered=results.filter(r=>r.sourceRecordId).length

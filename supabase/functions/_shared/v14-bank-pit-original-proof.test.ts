@@ -1,7 +1,11 @@
 import {describe,expect,it} from "vitest"
-import {BANK_PIT_ORIGINAL_MANIFEST,bankPitImportClaimsQualified,bankPitOriginalReadUrl} from "./v14-bank-pit-original-proof.ts"
+import {BANK_PIT_ORIGINAL_MANIFEST,bankPitImportClaimsQualified,bankPitOriginalReadUrl,bankPitImportSafeError} from "./v14-bank-pit-original-proof.ts"
 
 describe("pinned Development PIT original import",()=>{
+ it("never returns signed read capabilities from transport error messages",()=>{
+  expect(bankPitImportSafeError(new Error("fetch https://r2.example/original?X-Amz-Signature=secret failed"))).toBe("PIT_ORIGINAL_INTERNAL_FAILURE")
+  expect(bankPitImportSafeError(new Error("PIT_ORIGINAL_BYTES_MISMATCH"))).toBe("PIT_ORIGINAL_BYTES_MISMATCH")
+ })
  const claims={repository:"drddutta-portfolio/PortfiolioAI",repository_id:"1357024254",repository_owner_id:"324877535",
   ref:"refs/heads/codex/banking-source-remediation",environment:"PortfolioAI-Development",
   sub:"repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development",
