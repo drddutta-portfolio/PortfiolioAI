@@ -4,7 +4,7 @@ import {BANK_TWELVE_HISTORY_TAIL_HASH,qualifyTwelveHistoryRenewal,type RenewalSo
 import {bankValueHash} from "./v14-bank-twelve-capital-review.ts"
 import {inspectStoredHistory} from "./p7-ic-input-validation.ts"
 import {parseHistoryContractProof,validateBenchmarkPairReadiness} from "./v14-history-readiness.ts"
-import tailPin from "../../../docs/private/v1-4-industry-batches/Banking_12_Federal_CA_Tail_Source_2026-10-12.json" with {type:"json"}
+import tailPin from "./v14-bank-twelve-history-tail-manifest.json" with {type:"json"}
 const FEDERAL="63889b52-85da-4a1b-9046-c1e975819f99"
 const sourceColumns="id,source_code,record_kind,retrieved_at,payload_hash,raw_payload,terms_snapshot"
 function tailReadUrl(raw:string){try{const u=new URL(raw);return u.protocol==="https:"&&u.hostname==="ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com"&&!u.username&&!u.password&&!u.port&&!u.hash&&decodeURIComponent(u.pathname)===`/${policy.storageBucket}/${policy.storageKeyPrefix}${BANK_TWELVE_HISTORY_TAIL_HASH}.json`&&u.searchParams.get("X-Amz-Algorithm")==="AWS4-HMAC-SHA256"&&Number(u.searchParams.get("X-Amz-Expires"))>0&&Number(u.searchParams.get("X-Amz-Expires"))<=300}catch{return false}}
