@@ -14,7 +14,7 @@ async function evaluate(code:string,mutate?:(x:Awaited<ReturnType<typeof prepare
 }
 describe("twelve-bank source-bound capital admission",()=>{
  it("qualifies actual standalone CET1 and total CAR through the canonical reviewer",async()=>{
-  for(const code of ["CET1_RATIO","CAPITAL_ADEQUACY_RATIO"]){const result=await evaluate(code);expect(result?.reason).not.toBeUndefined();expect(result?.state,result?.reason).toBe("FRESH")}
+  for(const code of ["CET1_RATIO","CAPITAL_ADEQUACY_RATIO"]){const result=await evaluate(code);expect(result?.reason).not.toBeUndefined();expect(result?.state,result?.reason).toBe("FRESH");expect(result?.lineage.sourceAdmissionPolicy).toBe(BANK_TWELVE_POLICY.id);expect(result?.lineage.executor).toBe(BANK_TWELVE_POLICY.executor)}
  })
  it("preserves UNKNOWN publication and limits source availability to the proven date",async()=>{
   const x=await prepareTwelveCapitalReview(now);expect(x.source.published_at).toBeNull();expect(x.reviews.every(r=>r.published_at===null)).toBe(true)

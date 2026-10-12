@@ -1,6 +1,6 @@
 import policy from "./v14-bank-approved-delegation.json" with {type:"json"}
 import issuerPolicy from "./v14-bank-verified-issuer-delegation.json" with {type:"json"}
-import {approvedTwelveBankReview,approvedTwelveBankIssuerSource} from "./v14-bank-twelve-delegation.ts"
+import {approvedTwelveBankReview,approvedTwelveBankIssuerSource,BANK_TWELVE_POLICY} from "./v14-bank-twelve-delegation.ts"
 import type {RequirementReview,ReviewedSourceRecord,ReviewEvidenceFamily} from "./v14-reviewed-evidence.ts"
 
 export const BANK_DELEGATION_POLICY=policy
@@ -58,4 +58,15 @@ export function approvedBankOfficialFallback(review:RequirementReview,source:Rev
  if(p.security_id!==review.security_id||p.policy_id!==policy.id||p.symbol!==policy.securities[review.security_id as keyof typeof policy.securities])return false
  if(typeof p.original_sha256!=="string"||! /^[0-9a-f]{64}$/u.test(p.original_sha256)||typeof p.original_url!=="string")return false
  try{const u=new URL(p.original_url);return u.protocol==="https:"&&u.hostname==="nsearchives.nseindia.com"&&u.pathname.startsWith("/corporate/")}catch{return false}
+}
+
+/** Report the actual validated delegation; never relabel CHATGPT as CODEX. */
+export function approvedBankFallbackLineage(review:RequirementReview,source:ReviewedSourceRecord,ownerId:string,family:ReviewEvidenceFamily):{sourceAdmissionPolicy:string;executor:string;personalOwnerReview:false}|null{
+ if(!approvedBankOfficialFallback(review,source,ownerId,family))return null
+ const authorization=review.metadata.review_authorization as Record<string,unknown>
+ const selected=[policy,issuerPolicy,BANK_TWELVE_POLICY].find(p=>p.id===authorization.policy_id)
+ return selected?{sourceAdmissionPolicy:selected.id,executor:selected.executor,personalOwnerReview:false}:null
+}
+export function approvedBankFallbackPolicyId(value:unknown):boolean{
+ return typeof value==="string"&&[policy.id,issuerPolicy.id,BANK_TWELVE_POLICY.id].includes(value)
 }
