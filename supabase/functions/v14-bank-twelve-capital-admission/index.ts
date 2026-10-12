@@ -72,6 +72,60 @@ Deno.serve(async req=>{
     sources:[sourceRead.data as ReviewedSourceRecord],documents:[],documentSources:[],definitions:definitions.data as MetricDefinition[],evaluationAsOfMs:Date.now(),sourceCutoffAtMs:Date.now(),freshnessPolicy:null})
    if(read?.state!=="FRESH")return reply(409,"PERSISTED_REVIEW_QUALIFICATION_FAILED",{requirement:r.requirement_code,reason:read?.reason})
   }
+  if(body.materialize===true){
+   const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date())
+   const part=(name:Intl.DateTimeFormatPartTypes)=>parts.find(p=>p.type===name)?.value??""
+   const session=`${part("year")}-${part("month")}-${part("day")}`
+   if(Number(part("hour"))<19)return reply(409,"MATERIALIZATION_AWAITS_COMPLETED_SCHEDULED_SESSION",{newAcceptedReviews})
+   const calendar=await db.from("data_source_records").select("id,raw_payload,payload_hash").eq("source_code","NSE_OFFICIAL")
+    .eq("record_kind","V1_4_NSE_SESSION_CALENDAR_DECISION").eq("raw_payload->>session_date",session).order("retrieved_at",{ascending:false}).limit(2)
+   if(calendar.error||!calendar.data?.length||calendar.data[0].raw_payload.decision!=="OPEN"
+    ||calendar.data.length>1&&calendar.data[0].payload_hash!==calendar.data[1].payload_hash)return reply(409,"MATERIALIZATION_VERIFIED_OPEN_SESSION_REQUIRED",{newAcceptedReviews})
+   const stock=await db.from("market_price_history").select("period_start").eq("security_id",pin.security_id).eq("provider_code","ANGEL_ONE")
+    .gte("period_start",session+"T00:00:00+05:30").lte("period_start",session+"T23:59:59+05:30").limit(1)
+   const benchmark=await db.from("market_benchmark_price_history").select("period_start").eq("benchmark_code","NIFTY_BANK")
+    .gte("period_start",session+"T00:00:00+05:30").lte("period_start",session+"T23:59:59+05:30").limit(1)
+   if(stock.error||benchmark.error||!stock.data?.length||!benchmark.data?.length)return reply(409,"MATERIALIZATION_AWAITS_FRESH_STOCK_AND_SHARED_BENCHMARK",{newAcceptedReviews})
+   const action="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",scope="SECURITY_IDS:"+pin.security_id
+   const external=policy.id+":MATERIALIZE:"+session+":"+pin.security_id
+   const lookup=await db.from("data_source_records").select("id,raw_payload").eq("source_code","OWNER_REVIEWED_CLASSIFICATION").eq("record_kind","P4_EXECUTION_GRANT").eq("external_record_id",external).maybeSingle()
+   if(lookup.error)return reply(503,"TWELVE_BANK_MATERIALIZATION_GRANT_LOOKUP_FAILED")
+   let grant=lookup.data
+   if(!grant){
+    const id=crypto.randomUUID(),at=new Date().toISOString(),raw={action,security_id:scope,portfolio_id:policy.portfolioId,
+     environment:"PortfolioAI Dev",project_ref:policy.developmentProject,expires_at:new Date(Date.now()+10*60000).toISOString(),
+     authorization:policy.authorization,authorization_reference:policy.directiveSha256,authorizing_owner_id:policy.ownerId,
+     executor:"CODEX_GITHUB_ACTIONS_OIDC",selection_run_id:crypto.randomUUID(),evaluation_as_of:at,source_cutoff_at:at,
+     approved_security_ids:[pin.security_id],qualified_review_ids:prepared.reviews.map(r=>r.id),calendar_decision_id:calendar.data[0].id}
+    const inserted=await db.from("data_source_records").insert({id,source_code:"OWNER_REVIEWED_CLASSIFICATION",record_kind:"P4_EXECUTION_GRANT",
+     external_record_id:external,retrieved_at:at,payload_hash:await bankValueHash(raw),raw_payload:raw,
+     terms_snapshot:{mode:"EXPLICIT_OWNER_DELEGATED_TWELVE_BANK_CANONICAL_EXECUTION",directive_sha256:policy.directiveSha256,scope_excludes_kvb:true}}).select("id,raw_payload").single()
+    if(inserted.error)return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_INSERT_REJECTED",{postgresCode:inserted.error.code})
+    grant=inserted.data
+   }
+   if(grant.raw_payload.authorization_reference!==policy.directiveSha256||grant.raw_payload.security_id!==scope||grant.raw_payload.action!==action)
+    return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_SCOPE_CONFLICT")
+   const consumed=await db.from("data_source_records").select("id").eq("source_code","OWNER_REVIEWED_CLASSIFICATION").eq("record_kind","P4_EXECUTION_GRANT_CONSUMED").eq("external_record_id",grant.id).limit(1)
+   if(consumed.error)return reply(503,"TWELVE_BANK_MATERIALIZATION_CONSUMPTION_LOOKUP_FAILED")
+   let materialization:Record<string,unknown>={reusedAlreadyConsumedGrant:consumed.data.length>0}
+   if(!consumed.data.length){
+    if(Date.parse(grant.raw_payload.expires_at)<=Date.now())return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_EXPIRED")
+    const result=await fetch(url+"/functions/v1/p7-ic2-materialize-readiness",{method:"POST",headers:{authorization:"Bearer "+key,apikey:key,"content-type":"application/json"},
+     body:JSON.stringify({action,portfolioId:policy.portfolioId,securityIds:[pin.security_id],targetingMode:"P4_GRANT_SCOPED_SECURITY_IDS_V1",
+      grantId:grant.id,selectionRunId:grant.raw_payload.selection_run_id,evaluationAsOf:grant.raw_payload.evaluation_as_of,sourceCutoffAt:grant.raw_payload.source_cutoff_at}),signal:AbortSignal.timeout(60000)})
+    materialization=await result.json()
+    if(!result.ok)return reply(409,"TWELVE_BANK_CANONICAL_MATERIALIZATION_FAILED",{backendCode:materialization.code??materialization.error??"UNREPORTED"})
+    if(materialization.providerCalls!==0||materialization.processed!==1)return reply(409,"TWELVE_BANK_CANONICAL_RESPONSE_SCOPE_INVALID")
+   }
+   const selected=await db.from("current_research_evidence_snapshot_v1").select("id,snapshot_status").eq("portfolio_id",policy.portfolioId).eq("security_id",pin.security_id).single()
+   if(selected.error)return reply(503,"TWELVE_BANK_SELECTED_SNAPSHOT_READBACK_FAILED")
+   const items=await db.from("research_evidence_snapshot_items").select("requirement_code,evidence_state,reason_code,required").eq("snapshot_id",selected.data.id)
+   if(items.error||prepared.reviews.some(r=>!items.data.some(i=>i.requirement_code===r.requirement_code&&i.evidence_state==="FRESH")))
+    return reply(409,"TWELVE_BANK_CAPITAL_NOT_PERSISTED_FRESH",{snapshotId:selected.data.id})
+   return reply(200,"PINNED_CAPITAL_MATERIALIZED_AND_SELECTED_READ_BACK",{symbol:pin.symbol,securityId:pin.security_id,snapshotId:selected.data.id,
+    snapshotStatus:selected.data.snapshot_status,items:items.data,mandatoryBlockers:items.data.filter(i=>i.required&&i.evidence_state!=="FRESH").length,
+    reviewIds:prepared.reviews.map(r=>r.id),newAcceptedReviews,materialization,providerCalls:0,kvbWrites:0})
+  }
   return reply(200,"PINNED_CAPITAL_REVIEWS_ACCEPTED_AND_READ_BACK",{securityId:pin.security_id,symbol:pin.symbol,sourceRecordId:pin.source_id,
    reviewIds:prepared.reviews.map(r=>r.id),newAcceptedReviews,results,publicationPrecision:"UNKNOWN_DATE",publishedAt:null,
    historicalPitEligible:false,providerCalls:0,canonicalMaterializations:0,persistedSelectedSnapshotChanged:false})

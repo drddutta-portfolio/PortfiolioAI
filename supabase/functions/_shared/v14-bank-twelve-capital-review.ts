@@ -13,6 +13,10 @@ export function twelveCapitalReadUrl(raw:string):boolean{
 export const stableBankValue=(v:unknown):string=>Array.isArray(v)?"["+v.map(stableBankValue).join(",")+"]":v!==null&&typeof v==="object"
  ?"{"+Object.entries(v as Record<string,unknown>).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>JSON.stringify(k)+":"+stableBankValue(x)).join(",")+"}":JSON.stringify(v)??"null"
 export const bankValueHash=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(stableBankValue(v))))).map(x=>x.toString(16).padStart(2,"0")).join("")
+function ledgerTimestamp(value:string):string{
+ const iso=new Date(value).toISOString().replace(/\.000Z$/,"Z").replace(/(\.\d*?[1-9])0+Z$/,"$1Z")
+ return iso.replace(/Z$/,"+00:00")
+}
 export function twelveCapitalClaimsQualified(p:Readonly<Record<string,unknown>>):boolean{
  return p.repository==="drddutta-portfolio/PortfiolioAI"&&p.repository_id==="1357024254"
   &&p.ref==="refs/heads/codex/banking-twelve-evidence"&&p.environment==="PortfolioAI-Development"
@@ -22,6 +26,7 @@ export function twelveCapitalClaimsQualified(p:Readonly<Record<string,unknown>>)
 }
 export async function prepareTwelveCapitalReview(verifiedAt:string){
  if(!Number.isFinite(Date.parse(verifiedAt))||Date.parse(verifiedAt)<Date.parse(manifest.proven_availability_at))throw Error("VERIFICATION_TIME_INVALID")
+ verifiedAt=ledgerTimestamp(verifiedAt)
  if(!Object.hasOwn(policy.securities,manifest.security_id)||manifest.symbol==="KARURVYSYA")throw Error("BANK_TWELVE_SCOPE_INVALID")
  for(const fact of manifest.facts)if(!fact.source_segments.every(s=>manifest.source_normalized_page.includes(s)))throw Error("PINNED_FRAGMENT_MISMATCH")
  const raw={version:"BANK_TWELVE_PINNED_CURRENT_CAPITAL_V1",security_id:manifest.security_id,symbol:manifest.symbol,policy_id:policy.id,
@@ -38,7 +43,7 @@ export async function prepareTwelveCapitalReview(verifiedAt:string){
    review_kind:"DELEGATED_NUMERIC_REVIEW",decision:"ACCEPTED",source_record_id:source.id,research_document_id:null,provider_document_id:null,
    source_payload_hash:source.payload_hash,supporting_quote:fact.quote,period_start:manifest.period_end,period_end:manifest.period_end,
    period_type:"REGULATORY_AS_OF",unit:"PERCENT",currency:null,consolidation_scope:manifest.consolidation_scope,published_at:null,
-   retrieved_at:manifest.proven_availability_at,fresh_through:new Date(bankReportingDeadline(manifest.period_end,150)).toISOString(),review_version:"V1_4_REQUIREMENT_REVIEW_V2",
+   retrieved_at:manifest.proven_availability_at,fresh_through:ledgerTimestamp(new Date(bankReportingDeadline(manifest.period_end,150)).toISOString()),review_version:"V1_4_REQUIREMENT_REVIEW_V2",
    reviewed_by:null,reviewed_at:verifiedAt,supersedes_review_id:null,metadata:{metric_code:fact.requirement_code,numeric_value:fact.value,
     review_authorization:{policy_id:policy.id,authorizing_owner_id:policy.ownerId,executor:policy.executor,authorization:policy.authorization,
      recorded_at:policy.recordedAt,directive_sha256:policy.directiveSha256},

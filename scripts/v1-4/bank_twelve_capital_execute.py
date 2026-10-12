@@ -40,7 +40,8 @@ def main():
     oidc = os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] + '&audience=' + quote(aud, safe='')
     with urlopen(Request(oidc, headers={'Authorization': 'Bearer ' + os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']}), timeout=20) as response:
         token = json.load(response)['value']
-    payload = {'action': 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1', 'approvalHash': policy['directiveSha256'],
+    materialize = os.environ.get('BANK_TWELVE_MATERIALIZE', 'false') == 'true'
+    payload = {'action': 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1', 'approvalHash': policy['directiveSha256'], 'materialize': materialize,
                'readUrl': s3.generate_presigned_url('get_object', Params={'Bucket': policy['storageBucket'], 'Key': key}, ExpiresIn=300)}
     request = Request(aud, data=json.dumps(payload).encode(), headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}, method='POST')
     try:
@@ -52,7 +53,8 @@ def main():
     out = Path('bank-twelve-capital-execution'); out.mkdir(exist_ok=True)
     (out / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result))
-    if result.get('code') != 'PINNED_CAPITAL_REVIEWS_ACCEPTED_AND_READ_BACK':
+    expected = 'PINNED_CAPITAL_MATERIALIZED_AND_SELECTED_READ_BACK' if materialize else 'PINNED_CAPITAL_REVIEWS_ACCEPTED_AND_READ_BACK'
+    if result.get('code') != expected:
         raise SystemExit(1)
 
 

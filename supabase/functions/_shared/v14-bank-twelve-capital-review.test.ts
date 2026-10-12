@@ -37,6 +37,12 @@ describe("twelve-bank source-bound capital admission",()=>{
   expect(result?.state).toBe("REVIEW_REQUIRED");expect(result?.reason).toBe("REVIEW_INTEGRITY_HASH_INVALID")
  })
  it("uses stable source/review identities for repeat attempts",async()=>{const a=await prepareTwelveCapitalReview(now),b=await prepareTwelveCapitalReview(now);expect(a).toEqual(b);expect(a.source.payload_hash).toBe(await bankValueHash(a.source.raw_payload))})
+ it("preserves review integrity through PostgREST timestamp formatting",async()=>{
+  const a=await prepareTwelveCapitalReview("2026-10-12T12:45:00.120Z")
+  const b=await prepareTwelveCapitalReview("2026-10-12T12:45:00.12+00:00")
+  expect(a).toEqual(b);expect(a.reviews[0]?.reviewed_at).toBe("2026-10-12T12:45:00.12+00:00")
+  expect(a.reviews[0]?.fresh_through).toMatch(/\+00:00$/)
+ })
  it("rejects other branches and manual unsigned callers",()=>{expect(twelveCapitalClaimsQualified({})).toBe(false);expect(twelveCapitalClaimsQualified({ref:"refs/heads/main"})).toBe(false)})
  it("accepts only the signed exact workflow identity",()=>{
   const claims={repository:"drddutta-portfolio/PortfiolioAI",repository_id:"1357024254",ref:"refs/heads/codex/banking-twelve-evidence",environment:"PortfolioAI-Development",
