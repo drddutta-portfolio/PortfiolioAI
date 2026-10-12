@@ -30,6 +30,6 @@ def main():
     out = Path('bank-pit-source-registration'); out.mkdir(exist_ok=True)
     (out/'registration-receipt.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps({k:v for k,v in result.items() if k != 'results'}))
-    if result.get('registered') != 22 or result.get('canonicalAdmissions') != 0: raise SystemExit(1)
+    if result.get('registered') != len(source) or result.get('canonicalAdmissions') != 0: raise SystemExit(1)
 
 if __name__ == '__main__': main()

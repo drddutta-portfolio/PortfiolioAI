@@ -16,7 +16,9 @@ PREFIX = "portfolioai-history/development/v1-4/banking/pit-originals/"
 def qualified_source(source):
     url = source["exchange_url"]; digest = source["exchange_original_sha256"]
     parsed = urlsplit(url)
-    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not parsed.path.startswith("/corporate/KARURVYSYA_") or not parsed.path.lower().endswith(".pdf") or parsed.query or parsed.fragment or parsed.username:
+    corporate = parsed.path.startswith("/corporate/KARURVYSYA_")
+    annual = bool(re.fullmatch(r"/annual_reports/AR_\d+_KARURVYSYA_\d{4}_\d{4}_A_\d+\.pdf", parsed.path))
+    if parsed.scheme != "https" or parsed.hostname != "nsearchives.nseindia.com" or not (corporate or annual) or not parsed.path.lower().endswith(".pdf") or parsed.query or parsed.fragment or parsed.username:
         raise ValueError("EXACT_OFFICIAL_KVB_ORIGINAL_REQUIRED")
     if not re.fullmatch(r"[a-f0-9]{64}", digest): raise ValueError("ORIGINAL_SHA256_REQUIRED")
     return url, digest, PREFIX + digest + ".pdf"
@@ -28,9 +30,10 @@ def main():
     account = os.environ["CLOUDFLARE_R2_ACCOUNT_ID"]
     if os.environ["CLOUDFLARE_R2_BUCKET"] != BUCKET or account != "ced17d24f4b380721e58a08c9e9273e4":
         raise ValueError("DEVELOPMENT_R2_REQUIRED")
-    sources = json.loads(Path("docs/private/v1-4-industry-batches/KVB_PIT_Exchange_Publication_Batch_2026-10-12.json").read_text())["documents"]
-    if len(sources) != 22 or len({s["exchange_original_sha256"] for s in sources}) != 22:
-        raise ValueError("EXACT_22_ORIGINALS_REQUIRED")
+    pins = json.loads(Path("supabase/functions/_shared/v14-bank-pit-original-manifest.json").read_text())
+    sources = [{"exchange_url": p["original_url"], "exchange_original_sha256": p["original_sha256"]} for p in pins]
+    if len(sources) != 27 or len({s["exchange_original_sha256"] for s in sources}) != 27:
+        raise ValueError("EXACT_27_PINNED_ORIGINALS_REQUIRED")
     s3 = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com", region_name="auto", config=Config(retries={"total_max_attempts": 1}))
     def archive(source):
         url, digest, key = qualified_source(source)
@@ -62,11 +65,11 @@ def main():
             result.update(state="FAILED_NO_OVERWRITE_OR_RETRY", error=type(error).__name__, safe_code=str(error) if isinstance(error, ValueError) else None)
         return result
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor: results = list(executor.map(archive, sources))
-    report = {"expected_originals": 22, "hash_verified_originals": sum(r.get("readback_sha256") == r["original_sha256"] for r in results),
+    report = {"expected_originals": len(pins), "hash_verified_originals": sum(r.get("readback_sha256") == r["original_sha256"] for r in results),
         "provider_calls": 0, "canonical_admissions": 0, "overwrites": 0, "results": results}
     out = Path("kvb-pit-r2-original-archive"); out.mkdir(exist_ok=True)
     (out / "archive-receipts.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({k: v for k, v in report.items() if k != "results"}))
-    if report["hash_verified_originals"] != 22: raise SystemExit(1)
+    if report["hash_verified_originals"] != len(pins): raise SystemExit(1)
 
 if __name__ == "__main__": main()

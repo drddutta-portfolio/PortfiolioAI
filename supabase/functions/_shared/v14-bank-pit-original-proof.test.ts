@@ -25,8 +25,8 @@ describe("pinned Development PIT original import",()=>{
   expect(bankPitOriginalReadUrl(url,key+"other")).toBe(false)
  })
  it("preserves exact original provenance without declaring scope or valuation acceptance",()=>{
-  expect(BANK_PIT_ORIGINAL_MANIFEST).toHaveLength(22)
-  expect(new Set(BANK_PIT_ORIGINAL_MANIFEST.map(p=>p.original_sha256)).size).toBe(22)
+  expect(BANK_PIT_ORIGINAL_MANIFEST).toHaveLength(27)
+  expect(new Set(BANK_PIT_ORIGINAL_MANIFEST.map(p=>p.original_sha256)).size).toBe(27)
   for(const p of BANK_PIT_ORIGINAL_MANIFEST){
    expect(p.valuation_admitted).toBe(false)
    expect(p.source_scope).toBe("REQUIRES_SOURCE_RECONCILIATION")

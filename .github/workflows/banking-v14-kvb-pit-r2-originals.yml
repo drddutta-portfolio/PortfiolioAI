@@ -6,6 +6,7 @@ on:
       - '.github/workflows/banking-v14-kvb-pit-r2-originals.yml'
       - 'scripts/v1-4/archive_kvb_pit_originals.py'
       - 'docs/private/v1-4-industry-batches/KVB_PIT_Exchange_Publication_Batch_2026-10-12.json'
+      - 'supabase/functions/_shared/v14-bank-pit-original-manifest.json'
   workflow_dispatch:
 permissions:
   contents: read
