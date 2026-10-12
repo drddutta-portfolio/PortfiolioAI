@@ -1,3 +1,4 @@
+import {renewTwelveStoredHistory} from "../_shared/v14-bank-twelve-history-execution.ts"
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import {createRemoteJWKSet,jwtVerify} from "https://esm.sh/jose@6.1.0"
 import {BANK_TWELVE_POLICY as policy} from "../_shared/v14-bank-twelve-delegation.ts"
@@ -86,8 +87,9 @@ Deno.serve(async req=>{
    const benchmark=await db.from("market_benchmark_price_history").select("period_start").eq("benchmark_code","NIFTY_BANK")
     .gte("period_start",session+"T00:00:00+05:30").lte("period_start",session+"T23:59:59+05:30").limit(1)
    if(stock.error||benchmark.error||!stock.data?.length||!benchmark.data?.length)return reply(409,"MATERIALIZATION_AWAITS_FRESH_STOCK_AND_SHARED_BENCHMARK",{newAcceptedReviews})
+   const historyRenewal=await renewTwelveStoredHistory(db,String(body.corporateActionTailReadUrl??""))
    const action="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",scope="SECURITY_IDS:"+pin.security_id
-   const external=policy.id+":MATERIALIZE:"+session+":"+pin.security_id
+   const external=policy.id+":MATERIALIZE:"+session+":"+pin.security_id+":HISTORY_REVISION:"+historyRenewal.revision
    const lookup=await db.from("data_source_records").select("id,raw_payload").eq("source_code","OWNER_REVIEWED_CLASSIFICATION").eq("record_kind","P4_EXECUTION_GRANT").eq("external_record_id",external).maybeSingle()
    if(lookup.error)return reply(503,"TWELVE_BANK_MATERIALIZATION_GRANT_LOOKUP_FAILED")
    let grant=lookup.data
@@ -96,14 +98,14 @@ Deno.serve(async req=>{
      environment:"PortfolioAI Dev",project_ref:policy.developmentProject,expires_at:new Date(Date.now()+10*60000).toISOString(),
      authorization:policy.authorization,authorization_reference:policy.directiveSha256,authorizing_owner_id:policy.ownerId,
      executor:"CODEX_GITHUB_ACTIONS_OIDC",selection_run_id:crypto.randomUUID(),evaluation_as_of:at,source_cutoff_at:at,
-     approved_security_ids:[pin.security_id],qualified_review_ids:prepared.reviews.map(r=>r.id),calendar_decision_id:calendar.data[0].id}
+     approved_security_ids:[pin.security_id],qualified_review_ids:prepared.reviews.map(r=>r.id),calendar_decision_id:calendar.data[0].id,history_proof_revision:historyRenewal.revision,qualified_history_proof_ids:historyRenewal.proofIds}
     const inserted=await db.from("data_source_records").insert({id,source_code:"OWNER_REVIEWED_CLASSIFICATION",record_kind:"P4_EXECUTION_GRANT",
      external_record_id:external,retrieved_at:at,payload_hash:await bankValueHash(raw),raw_payload:raw,
      terms_snapshot:{mode:"EXPLICIT_OWNER_DELEGATED_TWELVE_BANK_CANONICAL_EXECUTION",directive_sha256:policy.directiveSha256,scope_excludes_kvb:true}}).select("id,raw_payload").single()
     if(inserted.error)return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_INSERT_REJECTED",{postgresCode:inserted.error.code})
     grant=inserted.data
    }
-   if(grant.raw_payload.authorization_reference!==policy.directiveSha256||grant.raw_payload.security_id!==scope||grant.raw_payload.action!==action)
+   if(grant.raw_payload.authorization_reference!==policy.directiveSha256||grant.raw_payload.security_id!==scope||grant.raw_payload.action!==action||grant.raw_payload.history_proof_revision!==historyRenewal.revision)
     return reply(409,"TWELVE_BANK_MATERIALIZATION_GRANT_SCOPE_CONFLICT")
    const consumed=await db.from("data_source_records").select("id").eq("source_code","OWNER_REVIEWED_CLASSIFICATION").eq("record_kind","P4_EXECUTION_GRANT_CONSUMED").eq("external_record_id",grant.id).limit(1)
    if(consumed.error)return reply(503,"TWELVE_BANK_MATERIALIZATION_CONSUMPTION_LOOKUP_FAILED")
@@ -122,16 +124,18 @@ Deno.serve(async req=>{
    const items=await db.from("research_evidence_snapshot_items").select("requirement_code,evidence_state,reason_code,required").eq("snapshot_id",selected.data.id)
    if(items.error||prepared.reviews.some(r=>!items.data.some(i=>i.requirement_code===r.requirement_code&&i.evidence_state==="FRESH")))
     return reply(409,"TWELVE_BANK_CAPITAL_NOT_PERSISTED_FRESH",{snapshotId:selected.data.id})
+   const requiredHistory=["PRICE_MOMENTUM_12M","PRICE_MOMENTUM_6M","RELATIVE_STRENGTH_12M","MAX_DRAWDOWN_1Y","VOLATILITY_RELATIVE"]
+   if(requiredHistory.some(code=>!items.data.some(i=>i.requirement_code===code&&i.evidence_state==="FRESH")))return reply(409,"TWELVE_BANK_HISTORY_NOT_PERSISTED_FRESH",{snapshotId:selected.data.id,items:items.data,historyRenewal})
    return reply(200,"PINNED_CAPITAL_MATERIALIZED_AND_SELECTED_READ_BACK",{symbol:pin.symbol,securityId:pin.security_id,snapshotId:selected.data.id,
     snapshotStatus:selected.data.snapshot_status,items:items.data,mandatoryBlockers:items.data.filter(i=>i.required&&i.evidence_state!=="FRESH").length,
-    reviewIds:prepared.reviews.map(r=>r.id),newAcceptedReviews,materialization,providerCalls:0,kvbWrites:0})
+    reviewIds:prepared.reviews.map(r=>r.id),newAcceptedReviews,materialization,historyRenewal,providerCalls:0,kvbWrites:0})
   }
   return reply(200,"PINNED_CAPITAL_REVIEWS_ACCEPTED_AND_READ_BACK",{securityId:pin.security_id,symbol:pin.symbol,sourceRecordId:pin.source_id,
    reviewIds:prepared.reviews.map(r=>r.id),newAcceptedReviews,results,publicationPrecision:"UNKNOWN_DATE",publishedAt:null,
    historicalPitEligible:false,providerCalls:0,canonicalMaterializations:0,persistedSelectedSnapshotChanged:false})
  }
  let response:Response
- try{response=await run()}catch{response=reply(503,"CAPITAL_ADMISSION_FAILED")}
+ try{response=await run()}catch(error){const code=error instanceof Error?error.message:"CAPITAL_ADMISSION_FAILED";response=reply(503,/^[A-Z0-9_:]+$/.test(code)?code:"CAPITAL_ADMISSION_FAILED")}
  finally{
   if(leased){const released=await db.rpc("release_data_ingestion_lease_v1",{p_source_code:"OWNER_REVIEWED_CLASSIFICATION",p_operation:operation,p_lease_holder:holder,p_cooldown_seconds:0});if(released.error||released.data!==true)response=reply(503,"CAPITAL_ADMISSION_LEASE_RELEASE_FAILED")}
  }

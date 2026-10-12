@@ -48,6 +48,21 @@ def main():
         assert request_record['action'] == 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1' and request_record['materialize'] is True and request_record['once'] is True
     payload = {'action': 'ADMIT_PINNED_TWELVE_BANK_CAPITAL_V1', 'approvalHash': policy['directiveSha256'], 'materialize': materialize,
                'readUrl': s3.generate_presigned_url('get_object', Params={'Bucket': policy['storageBucket'], 'Key': key}, ExpiresIn=300)}
+    if materialize:
+        tail = json.loads(Path('docs/private/v1-4-industry-batches/Banking_12_Federal_CA_Tail_Source_2026-10-12.json').read_text())
+        assert tail['http_status'] == 200 and tail['response'] == [] and tail['bytes'] == 2
+        tail_bytes = b'[]'
+        assert hashlib.sha256(tail_bytes).hexdigest() == tail['sha256']
+        tail_key = policy['storageKeyPrefix'] + tail['sha256'] + '.json'
+        try:
+            retained_tail = s3.get_object(Bucket=policy['storageBucket'], Key=tail_key)['Body'].read()
+        except ClientError as error:
+            if error.response['Error']['Code'] not in ('NoSuchKey', '404'):
+                raise
+            s3.put_object(Bucket=policy['storageBucket'], Key=tail_key, Body=tail_bytes, ContentType='application/json', IfNoneMatch='*')
+            retained_tail = s3.get_object(Bucket=policy['storageBucket'], Key=tail_key)['Body'].read()
+        assert retained_tail == tail_bytes
+        payload['corporateActionTailReadUrl'] = s3.generate_presigned_url('get_object', Params={'Bucket': policy['storageBucket'], 'Key': tail_key}, ExpiresIn=300)
     request = Request(aud, data=json.dumps(payload).encode(), headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}, method='POST')
     try:
         with urlopen(request, timeout=180) as response:
