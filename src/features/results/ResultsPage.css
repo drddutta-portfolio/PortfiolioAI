@@ -399,3 +399,35 @@
   .results-collection-status { grid-template-columns: 1fr; }
   .results-tabs button { min-width: 0; flex: 1; padding-inline: .6rem; }
 }
+
+/* Results R2 — detailed analysis and responsive evidence cards */
+.r2-analysis-content { display: grid; gap: .75rem; }
+.r2-secondary-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: .7rem; }
+.r2-card-heading { align-items: flex-start; }
+.r2-metric-picker { display: grid; gap: .2rem; font-size: .66rem; color: #64728a; }
+.r2-metric-picker select { min-height: 1.8rem; max-width: 8rem; padding: 0 .35rem; border: 1px solid #d5e2f3; border-radius: .4rem; color: #213a60; background: #fff; }
+.r2-guidance { margin: .65rem 0; line-height: 1.5; color: #536680; font-size: .75rem; }
+.r2-industry-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .35rem .8rem; }
+.r2-industry-metrics > div { display: flex; justify-content: space-between; gap: .6rem; padding: .5rem; border: 1px solid #e9eef6; border-radius: .4rem; font-size: .68rem; }
+.r2-industry-metrics span { color: #425573; }
+.r2-industry-metrics strong { text-align: right; color: #77879f; font-size: .63rem; }
+.r2-evidence-card dl { display: grid; gap: .3rem; margin: .65rem 0; }
+.r2-evidence-card dl div { display: flex; justify-content: space-between; gap: .75rem; border-bottom: 1px solid #eaf0f8; padding-bottom: .25rem; font-size: .7rem; }
+.r2-evidence-card dt { color: #61718a; }
+.r2-evidence-card dd { margin: 0; color: #293a56; font-weight: 700; text-align: right; }
+.r2-help { margin: .5rem 0 0; color: #78869a; line-height: 1.35; font-size: .63rem; }
+.r2-bars { height: 9rem; }
+.r2-negative-bar { background: linear-gradient(180deg, #e87676, #c74141) !important; }
+.metrics-table th[scope="row"] { color: #40516b; text-align: left; font-weight: 650; }
+.metrics-table td.financial-negative { color: var(--color-loss) !important; }
+.metrics-table td.financial-positive { color: var(--color-gain) !important; }
+.metrics-table td:not(.financial-positive):not(.financial-negative) { color: #596b83; }
+@media (max-width: 1180px) { .r2-secondary-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) {
+  .r2-secondary-grid { grid-template-columns: 1fr; }
+  .r2-industry-metrics { grid-template-columns: 1fr; }
+  .r2-card-heading { flex-wrap: wrap; }
+  .results-matrix-shell { overscroll-behavior: contain; }
+  .metrics-table-wrap { overflow-x: auto; }
+  .metrics-table { min-width: 18rem; }
+}
