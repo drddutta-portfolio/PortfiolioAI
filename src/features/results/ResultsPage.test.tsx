@@ -1,5 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react"
+import { beforeAll, describe, expect, it, vi } from "vitest"
 import { ResultsPage } from "./ResultsPage"
+
+beforeAll(() => {
+  Object.defineProperty(Element.prototype, "scrollIntoView", { value: vi.fn(), configurable: true })
+})
 
 describe("ResultsPage", () => {
   it("renders the R1 demo shell and keeps unavailable data explicit", () => {
