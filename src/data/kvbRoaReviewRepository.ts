@@ -32,7 +32,7 @@ export async function approveKvbRoaProposal(p: KvbRoaProposal): Promise<string> 
  return r.reviewId
 }
 
-export async function validateAndSaveKvbReadiness(): Promise<string> {
+export async function validateAndSaveKvbReadiness(requiredFreshRequirements: readonly string[] = ["ROA_ANNUAL"]): Promise<string> {
  let stage = "PROSPECTIVE_VALIDATION"
  try {
  const now = new Date().toISOString()
@@ -40,7 +40,7 @@ export async function validateAndSaveKvbReadiness(): Promise<string> {
  const validation = await invoke({ ...request, action: "P7_IC3_VALIDATE_CANONICAL_INPUTS" }, "p7-ic2-materialize-readiness")
  const results = validation.results as { securityId?: string; items?: { requirement_code?: string; evidence_state?: string }[] }[] | undefined
  const writes = validation.writeTotals as Record<string, unknown> | undefined
- if (validation.dryRun !== true || validation.status !== "IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY" || validation.providerCalls !== 0 || !Array.isArray(results) || results.length !== 1 || results[0]?.securityId !== SECURITY || !results[0].items?.some(x => x.requirement_code === "ROA_ANNUAL" && x.evidence_state === "FRESH") || !writes || ["snapshotsCreated", "snapshotsReused", "selectionsCreated", "selectionsReused"].some(k => writes[k] !== 0) || !Array.isArray(validation.snapshotIds) || validation.snapshotIds.length || !Array.isArray(validation.selectionIds) || validation.selectionIds.length) throw new Error("Canonical ROA is not FRESH in a complete read-only result. No materialization grant requested.")
+ if (validation.dryRun !== true || validation.status !== "IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY" || validation.providerCalls !== 0 || !Array.isArray(results) || results.length !== 1 || results[0]?.securityId !== SECURITY || !requiredFreshRequirements.every(code => results[0]?.items?.some(x => x.requirement_code === code && x.evidence_state === "FRESH")) || !writes || ["snapshotsCreated", "snapshotsReused", "selectionsCreated", "selectionsReused"].some(k => writes[k] !== 0) || !Array.isArray(validation.snapshotIds) || validation.snapshotIds.length || !Array.isArray(validation.selectionIds) || validation.selectionIds.length) throw new Error("Required canonical evidence is not FRESH in a complete read-only result. No materialization grant requested.")
  stage = "GRANT_ISSUANCE"
  const grant = await invoke({ action: "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS", requestId: crypto.randomUUID(), confirmation: "ISSUE_KVB_V14_SINGLE_USE_MATERIALIZATION_GRANT" }, "v14-bank-kvb-owner-materialize-grant")
  if (grant.code !== "GRANT_ISSUED_SINGLE_USE" || typeof grant.grantId !== "string" || grant.scope !== "SECURITY_IDS:" + SECURITY || grant.action !== "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS" || typeof grant.expiresAt !== "string" || Date.parse(grant.expiresAt) <= Date.now()) throw new Error("A valid KVB-only materialization grant was not established.")

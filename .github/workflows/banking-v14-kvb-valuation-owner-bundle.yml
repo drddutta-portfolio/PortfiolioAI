@@ -1,0 +1,31 @@
+name: KVB Valuation Genuine Owner Source Bundle
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install boto3==1.35.99
+      - name: Verify originals and prepare nonadmitted valuation source batch
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/kvb_valuation_owner_bundle.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kvb-pb-pe-qualified-owner-source-bundle
+          path: kvb-valuation-bundle-result/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,10 @@
+import {describe,it,expect} from 'vitest'
+import {prepareKvbValuationOwnerBatch,validateKvbOwnerBatchConfirmation} from './v14-kvb-valuation-owner-batch.ts'
+import {KVB_PB_OWNER,KVB_PB_PORTFOLIO,KVB_PB_SECURITY} from './v14-kvb-pb-admission.ts'
+const pb={requirementCode:'PB_RELATIVE' as const,proposalHash:'a'.repeat(64),method:'BANK_PB_RELATIVE_SELF_MEDIAN_60M_V1',eligibleMonths:54,bands:[9,12,12,12,9],longestMissingRun:3,currentPriceSourceRecordId:'current',canonicalAdmissions:0 as const}
+const pe={...pb,requirementCode:'PE_TTM_RELATIVE' as const,method:'BANK_PE_TTM_RELATIVE_SELF_MEDIAN_60M_V1',proposalHash:'b'.repeat(64)}
+describe('one genuine owner batch for both source qualified valuations',()=>{
+ it('does not admit or activate anything on preparation',async()=>{const b=await prepareKvbValuationOwnerBatch([pe,pb],'2026-10-12');expect(b.canonicalAdmissions).toBe(0);expect(b.ownerApprovalRequired).toBe(true);expect(b.metrics[0]!.requirementCode).toBe('PB_RELATIVE')})
+ it('requires both coverages and matching actual current source',async()=>{await expect(prepareKvbValuationOwnerBatch([pb],'2026-10-12')).rejects.toThrow();await expect(prepareKvbValuationOwnerBatch([pb,{...pe,currentPriceSourceRecordId:'other'}],'2026-10-12')).rejects.toThrow();await expect(prepareKvbValuationOwnerBatch([pb,{...pe,bands:[5,12,12,12,13]}],'2026-10-12')).rejects.toThrow()})
+ it('requires authenticated actual owner and all explicit unchanged-model confirmations',()=>{const x={authenticatedOwnerId:KVB_PB_OWNER,portfolioOwnerId:KVB_PB_OWNER,portfolioId:KVB_PB_PORTFOLIO,securityId:KVB_PB_SECURITY,batchHash:'a'.repeat(64),expectedBatchHash:'a'.repeat(64),confirmCommonEquityBasis:true,confirmDilutedTtmBasis:true,confirmGlobalApprovedDefinitionActivation:true};expect(validateKvbOwnerBatchConfirmation(x)).toBe(true);expect(()=>validateKvbOwnerBatchConfirmation({...x,authenticatedOwnerId:'GITHUB_ACTIONS'})).toThrow();expect(()=>validateKvbOwnerBatchConfirmation({...x,confirmGlobalApprovedDefinitionActivation:false})).toThrow();expect(()=>validateKvbOwnerBatchConfirmation({...x,batchHash:'b'.repeat(64)})).toThrow()})
+})
