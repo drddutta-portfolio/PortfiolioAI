@@ -1,0 +1,39 @@
+name: G02 Original Document Qualification and Admission
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths:
+      - .github/workflows/g02-document-qualification.yml
+      - scripts/v1-4/g02_document_admission.py
+      - supabase/functions/_shared/v14-g02-document-review-batch.json
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-22.04
+    environment: PortfolioAI-Development
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install boto3==1.35.99
+      - run: command -v pdftotext || (sudo apt-get update && sudo apt-get install -y poppler-utils)
+      - name: Qualify only registered originals and fixed review passages
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/g02_document_admission.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g02-qualified-documentary-review
+          path: g02-document-admission-result/
+          retention-days: 90
+          if-no-files-found: ignore

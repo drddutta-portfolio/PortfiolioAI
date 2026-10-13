@@ -1,6 +1,7 @@
+import {g02DocumentExecutorQualified} from '../_shared/v14-g02-executor-identity.ts'
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
-import {G02_OWNER_POLICY as policy,g02SourceExecutorQualified,g02StableId,hashG02,G02_ORIGINAL_KIND,g02SourcePin} from '../_shared/v14-g02-source-import.ts'
+import {G02_OWNER_POLICY as policy,g02StableId,hashG02,G02_ORIGINAL_KIND,g02SourcePin} from '../_shared/v14-g02-source-import.ts'
 import {G02_DOCUMENT_REVIEW_BATCH as batch,G02_DOCUMENT_KIND,G02_DOCUMENT_REVIEW_KIND} from '../_shared/v14-g02-document-review.ts'
 const audience=`https://${policy.developmentProject}.supabase.co/functions/v1/v14-g02-document-admission`,jwks=createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'))
 Deno.serve(async req=>{
@@ -9,7 +10,7 @@ Deno.serve(async req=>{
  const url=Deno.env.get('SUPABASE_URL')??'',key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')??''
  if(url!==`https://${policy.developmentProject}.supabase.co`||!key)return reply(409,'DEVELOPMENT_ONLY')
  let claims:Record<string,unknown>
- try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload;if(!g02SourceExecutorQualified(claims))return reply(403,'G02_EXECUTOR_SCOPE_INVALID')}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
+ try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload;if(!g02DocumentExecutorQualified(claims))return reply(403,'G02_EXECUTOR_SCOPE_INVALID')}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null),b=batch.find(x=>x.securityId===body?.securityId)
  if(body?.action!=='ADMIT_FIXED_G02_DURABILITY_DOCUMENT'||body.authorizationHash!==policy.directiveSha256||!b||body.originalHash!==b.originalHash||body.normalizedFragment!==b.fragment||body.extractionMethod!=='POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES')return reply(400,'EXACT_G02_DOCUMENT_BATCH_REQUIRED')
  const db=createClient(url,key,{auth:{persistSession:false}})
