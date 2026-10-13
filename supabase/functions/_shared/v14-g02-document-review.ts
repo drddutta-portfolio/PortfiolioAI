@@ -11,3 +11,6 @@ export function approvedG02DocumentSource(review:{security_id:string;supporting_
  const b=batch.find(x=>x.securityId===review.security_id)
  return Boolean(b&&source.source_code==='COMPANY_EXCHANGE_FILING'&&source.record_kind===G02_DOCUMENT_KIND&&source.raw_payload.security_id===b.securityId&&source.raw_payload.original_sha256===b.originalHash&&source.raw_payload.fragment===b.fragment&&review.supporting_quote===b.fragment&&source.raw_payload.assessment===b.assessment&&review.metadata.original_sha256===b.originalHash&&source.raw_payload.authorization_reference===policy.directiveSha256)
 }
+
+/** PostgREST timestamptz representation must match the integrity-hashed row. */
+export function g02PostgresTimestamp(value:string){const t=new Date(value);if(!Number.isFinite(t.getTime()))throw Error('G02_REVIEW_TIMESTAMP_INVALID');return t.toISOString().replace(/(\.\d*?[1-9])0+Z$/,'$1Z').replace(/\.0+Z$/,'Z').replace(/Z$/,'+00:00')}
