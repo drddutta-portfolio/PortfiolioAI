@@ -1,3 +1,11 @@
+## Banking V1-4 — KVB-first execution — 13 October 2026
+
+The current verified implementation head `48ea39122875f319e8852ab82767d272b8868238` passed Architecture Guard, Banking Full Verification and Numeric Admission Guard. Development canonical materializer v61 is ACTIVE; all 53 pinned originals are registered. KVB retains its genuine owner-approved ROA and the selected snapshot with three mandatory blockers (NIM TTM, relative P/E TTM and relative P/B). No repeat ROA approval is required.
+
+The conservative source calculations now yield 52 P/B and 46 P/E historical candidates meeting the approved five-year coverage rules. They are not admitted. The combined genuine-owner source-review/admission interface and verified OPEN-session cache interpretation are under integration testing. Focused UI/repository tests, TypeScript, architecture checks, targeted lint and build passed; those checks do not establish deployment or canonical FRESH results for the new interface.
+
+The October 12 actual scheduled OPEN maintenance run settled 14 consumed units, with zero failed calls and zero retries. This supersedes the earlier pending-first-OPEN statement; complete ongoing maintenance acceptance is not inferred from one successful run. NIM still lacks a source-certified current TTM observation or the exact eligible denominator inputs. BANK V1-4 remains NOT PROVEN; no Production/main changes or new READY selection are claimed.
+
 ## Banking V1-4 — current source execution boundary — 12 October 2026
 
 The historical entries below are dated records, not the current activation authority. BANK V2/D1/D2 are active; KVB's owner-saved snapshot `2af15b91-4924-4baf-ab1b-c91d62b095dc` preserves annual ROA and five market-history requirements FRESH, with three remaining blockers: NIM TTM, relative P/E TTM and relative P/B. No repeated ROA approval is required. All thirteen selected banks remain REVIEW_REQUIRED; persisted READY remains 0/13 and ₹0.

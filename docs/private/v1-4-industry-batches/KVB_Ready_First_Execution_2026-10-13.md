@@ -2,6 +2,13 @@
 
 The owner instructed: **Make KVB Bank V1-4 READY first.** This supersedes KVB's temporary execution deferral. It resumes scoped Development implementation, source qualification and authorized admission under the existing owner execution/smart-research directives; it does not change BANK V2 methodology or authorize Production/main changes.
 
+## Current execution position — 13 October 2026
+
+All 53 pinned issuer/regulatory originals are now registered through the signed source-import route. The verified canonical materializer is ACTIVE at v61. The conservative nonadmitted historical candidates are **52 P/B** (annual buckets 9/12/12/10/9) and **46 P/E** (8/9/9/9/11); both have a longest missing run of three months. This supersedes the earlier 54-P/B planning count: August/September 2025 are excluded where completed-bonus availability was not yet proved. Later normalization binds the original October 17, 2025 completed-bonus filing, not a backdated proposal.
+
+The combined genuine-owner admission page and source-qualified proposal endpoint are under integration verification; they have not been deployed or used for admission. Twelve focused repository/page tests pass, including approval resumption, changed-source invalidation, duplicate submission and exact error propagation. Daytime source qualification is being connected to a fresh original NSE OPEN-session response and separately verified normal cash-market timings; the canonical validator remains cache-only. No valuation admission or READY result is claimed. The NIM source gap remains unchanged.
+
+
 ## Preserved starting point
 
 - PR #124 remote implementation parent: `ff6c03aeecb63797a7a46249a88a17495daebeab`.
