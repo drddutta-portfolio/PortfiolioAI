@@ -3,6 +3,7 @@ import { usePortfolioView } from "../portfolio/usePortfolioView"
 import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
+import { assessQuarterlyPerformance } from "./quarterlyPerformance"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import "./ResultsPage.css"
 
@@ -91,6 +92,7 @@ export function ResultsLivePage() {
   const chosen = selected ? filtered.find(({ position }) => position.securityId === selected.id) ?? null : null
   const chosenSources = selected ? evidenceForPeriod(observations, selected.id, selected.end) : []
   const selectedSources = chosenSources.filter((source) => source.selected)
+  const quarterAssessment = assessQuarterlyPerformance(chosenSources, chosen?.position.industry ?? null)
   const unselectedCount = chosenSources.length - selectedSources.length
   const selectedPeriod = periods.find((period) => period.end === selected?.end)
   const selectedRevenue = chosen && selectedPeriod
@@ -180,8 +182,10 @@ export function ResultsLivePage() {
             <div><dt>Original publication</dt><dd>{selectedSources[0]?.publishedAt ?? "Unknown"}</dd></div>
             <div><dt>Source</dt><dd>{selectedSources[0]?.source ?? "Not qualified"}</dd></div>
           </dl></section>
-          <section className="results-card insight-card"><h3>Research interpretation</h3>
-            <p>Not assessed. Results visibility does not imply V1-4 research READY status or an investment recommendation.</p>
+          <section className="results-card insight-card"><h3>Quarterly operating performance</h3>
+            <p><strong>{quarterAssessment.status.replaceAll("_", " ")}</strong></p>
+            <p>{quarterAssessment.explanation}</p>
+            <p className="r2-help">Independent of V1-4 readiness and investment recommendations.</p>
           </section>
         </div>
       </div> : null}
