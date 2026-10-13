@@ -1,3 +1,13 @@
+## G02 V1-4 execution started — 14 October 2026 (Asia/Kolkata)
+
+G02 source and classification triage has executed for TDPOWERSYS, AVALON and CGPOWER. CGPOWER is the pilot because the approved Industrials contract explicitly names it as the reference. All three retain their existing Sector/Industry labels and bundled CAPITAL_EQUIPMENT_ELECTRICAL assignments; separate business-model suitability checks are required. No taxonomy or financial-methodology change was made.
+
+Five official issuer/exchange originals were actually downloaded, SHA-256 verified and identity checked. They remain local source candidates; R2 registration, canonical admission and authenticated validation were not executed. Last selected October 7 snapshots remain REVIEW_REQUIRED (10/8/8 blockers), 0/3 READY. None of the 43 inspected non-shareholding metric rows has period_end. Frozen three-year/eight-quarter/four-order-period minima must be enforced rather than generic minimum-history-one defaults before any READY claim.
+
+Executed source inventory, requirement ledger and next bounded slice: [G02 execution start](private/v1-4-industry-batches/G02_Execution_Start_2026-10-14.md). Banking remains deferred. No provider API calls, migrations, deployments, evidence admissions, materialization, scheduler changes, Production/main changes or V1-5 work occurred.
+
+---
+
 ## Results R3 simplified operating-performance split — 14 October 2026
 
 **Implemented as Development candidate / NOT a full R3 pass.** The owner approved separate quarterly operating-performance status from V1-4 investment research scoring, without introducing duplicate financial tables or unnecessary provider calls. Results-only pure module `quarterlyPerformance.ts` assesses a narrowly evidenced bank advances/deposit growth directional signal using selected matching-quarter, matching-basis, published observations; all other cases explicitly report INSUFFICIENT DATA. The view labels this as a limited operating signal, not an investment recommendation, research READY decision, or full earnings grade. No V1-4 methodology or canonical selections were changed.

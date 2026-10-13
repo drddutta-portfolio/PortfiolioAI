@@ -1,0 +1,36 @@
+{
+  "authority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+  "frozenHistoryAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4A_METHODOLOGY_V1",
+  "common": {
+    "OPERATING_MARGIN_HISTORY": 8,
+    "ROCE_OR_ROIC": 3,
+    "NET_DEBT_AND_INTEREST_COVERAGE": 3,
+    "BUSINESS_DURABILITY": 1,
+    "VALUATION": 3,
+    "MOMENTUM_12M_RELATIVE": 252,
+    "DRAWDOWN_VOLATILITY_RISK": 252,
+    "OWNERSHIP_GOVERNANCE": 1
+  },
+  "profiles": {
+    "PROJECT_EPC": {
+      "ORDER_BOOK_AND_REVENUE_GROWTH": 4,
+      "WORKING_CAPITAL_AND_CASH_CONVERSION": 3
+    },
+    "CAPITAL_EQUIPMENT_ELECTRICAL": {
+      "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD": 8,
+      "CFO_FCF_AND_WORKING_CAPITAL": 3
+    },
+    "DEFENCE_AEROSPACE": {
+      "ORDER_BOOK_AND_EXECUTION_GROWTH": 4,
+      "CFO_FCF_CONVERSION": 3
+    }
+  },
+  "supportingHistory": {
+    "annualFundamentalsYears": 3,
+    "quarterlyGrowthQuarters": 8,
+    "orderBookPeriods": 4,
+    "cashConversionYears": 3,
+    "workingCapitalYears": 3,
+    "marketHistoryTradingDays": 252
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "version": "G02_OWNER_AUTHORIZED_EXECUTION_V1",
+  "ownerInstruction": "Proceed and Complete G02. You DO NOT need any approval from me to execute ANYTHING. Just complete G02",
+  "directiveSha256": "48a15d686973b1adbb25145813ba4a881cafc1488e1e2405727a7c51146f7901",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityIds": [
+    "7202b7b7-237c-439b-936d-c75bab806678",
+    "87132afb-e054-4ba2-adae-dc325637c001",
+    "5643737c-3c55-472d-af20-59d3121d6b9c"
+  ],
+  "executor": "GITHUB_ACTIONS_OIDC_NOT_OWNER_SESSION",
+  "sourceImportDoesNotApproveFinancialEvidence": true,
+  "productionAllowed": false
+}
