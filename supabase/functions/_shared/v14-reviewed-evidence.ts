@@ -1,3 +1,4 @@
+import {approvedG02DocumentReview,approvedG02DocumentSource} from './v14-g02-document-review.ts'
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
 import type { EvidenceRequirementPlan } from "./p7-ic-evidence-normalization.ts"
 
@@ -139,8 +140,9 @@ export async function validateReviewedRequirementEvidence(input:{
  const ownershipRows:Array<{review:RequirementReview;series:string;basis:string;period:string;value:string;source:ReviewedSourceRecord}>=[]
  const documentRows:Array<{review:RequirementReview;document:ReviewedResearchDocument;link:ReviewedDocumentSource;source:ReviewedSourceRecord}>=[]
  for(const r of active){
-   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind))return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
-   if(r.reviewed_by!==input.portfolioOwnerId)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
+   const delegated=approvedG02DocumentReview(r,input.portfolioOwnerId,family)
+   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind)&&!delegated)return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
+   if(r.reviewed_by!==input.portfolioOwnerId&&!delegated)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
    if(!HASH.test(r.review_hash)||await sha256(stable(reviewHashPayload(r)))!==r.review_hash)return fail("REVIEW_REQUIRED","REVIEW_INTEGRITY_HASH_INVALID",[r.id])
    const decision=r.decision.toUpperCase();if(decision==="INSUFFICIENT"){insufficient.push(r);continue}
    if(decision==="CONTRADICTS"||decision==="REJECTED"){contradict.push(r);continue}
@@ -148,6 +150,7 @@ export async function validateReviewedRequirementEvidence(input:{
    const source=r.source_record_id?sourceById.get(r.source_record_id)??null:null
    if(!source||!r.source_payload_hash||r.source_payload_hash!==source.payload_hash||!HASH.test(source.payload_hash))
     return fail("REVIEW_REQUIRED","REVIEW_SOURCE_HASH_OR_RECORD_INVALID",[r.id])
+   if(delegated&&!approvedG02DocumentSource(r,source))return fail("REVIEW_REQUIRED","G02_DOCUMENT_SOURCE_NOT_QUALIFIED",[r.id])
    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])

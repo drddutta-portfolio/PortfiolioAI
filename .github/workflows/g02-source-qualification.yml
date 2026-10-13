@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/g02-source-qualification.yml
       - scripts/v1-4/g02_source_import.py
+      - scripts/v1-4/g02_document_admission.py
+      - supabase/functions/_shared/v14-g02-document-review-batch.json
       - supabase/functions/_shared/v14-g02-original-pins.json
 permissions:
   contents: read
@@ -24,6 +26,7 @@ jobs:
           python-version: '3.11'
       - run: python scripts/v1-4/test_g02_source_import.py
       - run: pip install boto3==1.35.99
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Register only exact authorized originals
         env:
           CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
@@ -35,5 +38,18 @@ jobs:
         with:
           name: g02-official-original-source-registration
           path: g02-source-import-result/
+          retention-days: 90
+          if-no-files-found: ignore
+      - name: Qualify fixed documentary source passages
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/g02_document_admission.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g02-qualified-documentary-review
+          path: g02-document-admission-result/
           retention-days: 90
           if-no-files-found: ignore
