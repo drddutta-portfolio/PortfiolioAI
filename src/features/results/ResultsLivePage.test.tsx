@@ -46,6 +46,9 @@ describe("ResultsLivePage R3 boundary", () => {
     fireEvent.click(screen.getByText("Review required"))
     expect(screen.getByText(/No selected quarterly financial observation/)).toBeInTheDocument()
     expect(screen.queryByText("123456.78")).not.toBeInTheDocument()
+    expect(screen.getByRole("list", { name: "Unselected source provenance" })).toBeInTheDocument()
+    expect(screen.getByText(/Source: TRENDLYNE_MCP/)).toBeInTheDocument()
+    expect(screen.getByText(/Not an approved quarter fact/)).toBeInTheDocument()
   })
 
   it("shows explicit failure when evidence inventory cannot load", async () => {
