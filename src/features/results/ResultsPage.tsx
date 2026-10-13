@@ -64,10 +64,8 @@ function ResultTooltip({ tooltip }: { readonly tooltip: TooltipState }) {
 
 function QuarterlyMetricChart({ result }: { readonly result: QuarterlyResultSummary }) {
   const security = resultsDemoModel.securities.find((item) => item.id === result.securityId)
-  const series = resultsDemoModel.periods
-    .slice()
-    .reverse()
-    .map((period) => security?.results.find((item) => item.periodId === period.id)?.metrics.find((metric) => metric.id === "pat")?.value ?? null)
+  const reversedPeriods = [...resultsDemoModel.periods].reverse()
+  const series = reversedPeriods.map((period) => security?.results.find((item) => item.periodId === period.id)?.metrics.find((metric) => metric.id === "pat")?.value ?? null)
   const max = Math.max(...series.map((value) => Math.abs(value ?? 0)), 1)
 
   return (
@@ -75,7 +73,8 @@ function QuarterlyMetricChart({ result }: { readonly result: QuarterlyResultSumm
       <div className="results-card-heading"><div><h3>PAT — Last 6 Quarters</h3><span>(₹ Crore)</span></div></div>
       <div className="results-bars">
         {series.map((value, index) => {
-          const period = resultsDemoModel.periods.slice().reverse()[index]
+          const period = reversedPeriods[index]
+          if (!period) return null
           const height = value === null ? 8 : Math.max(12, Math.round((Math.abs(value) / max) * 88))
           return (
             <div className="results-bar-item" key={period.id}>
