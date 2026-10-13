@@ -1,3 +1,15 @@
+## V1-4 owner execution-priority amendment — 14 October 2026 (Asia/Kolkata)
+
+The owner directed Banking/KVB active evidence closure to be deferred and research preserved so other industries can proceed. **Banking remains PARTIAL RESEARCH / NOT PROVEN; 0/13 selected READY and ₹0 READY frozen banking value.** Existing canonical selections, accepted ROA, original evidence, provider controls and scheduled Development maintenance are preserved. This documentation amendment neither activates a new methodology nor changes the frozen release threshold.
+
+The next approved execution group is **G02 Heavy Electrical Equipment: TDPOWERSYS, AVALON, CGPOWER**, recorded profile CAPITAL_EQUIPMENT_ELECTRICAL. Independent readback found their last selected October 7 snapshots REVIEW_REQUIRED with 10, 8 and 8 blockers respectively. These are stored baseline counts, not current authenticated validation; current assignment, sources and freshness require Phase 1 verification. Three frozen members contribute 9,664,130 paise (₹96,641.30) only when legitimately READY. The original G01–G81 sequence/frozen inputs remain unchanged; Banking groups are explicitly deferred.
+
+Controlling research handoff and bounded four-phase next-batch plan: [Banking research preservation and G02 execution](private/v1-4-industry-batches/Banking_Research_Handoff_And_G02_Execution_Plan_2026-10-14.md). KVB retains three selected blockers: NIM_TTM, PE_TTM_RELATIVE and PB_RELATIVE. Qualified historical valuation evidence is 52 P/B and 46 P/E observations; no genuine owner valuation approval/admission record was found at the latest readback. Accepted ROA requires no repeat approval. Banking runtime/CI in PR #124 must not be mistaken for a merge into this branch or full readiness closure. Maintenance still requires proof of the deployed rolling-window correction and source-bound freshness renewal; its configuration was not changed by this handoff.
+
+Next action: G02 retained-source/contract triage and supported authenticated prospective validation, followed by source-backed qualification and selective stock closure. Banking need not finish first. No provider calls, review/admission writes, materialization, deployment, migration, scheduler change, Production/main change or V1-5 work was performed for this planning amendment.
+
+---
+
 ## Results R3 closure check — 13 October 2026
 
 **Decision: NOT COMPLETE / BLOCKED BY CANONICAL FINANCIAL SELECTIONS.** The R3 portfolio read path and missing-evidence presentation are implemented, but the approved R3 acceptance condition requiring independently selected source-backed quarterly fact displays cannot be met today. A separate review state in the UI exposes source code, reporting scope, recorded publication and retrieval metadata without exposing unselected numeric values as qualified results. This remains read-only.
