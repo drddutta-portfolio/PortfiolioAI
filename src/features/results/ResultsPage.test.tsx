@@ -4,6 +4,30 @@ import { ResultsPage } from "./ResultsPage"
 
 beforeAll(() => {
   Object.defineProperty(Element.prototype, "scrollIntoView", { value: vi.fn(), configurable: true })
+  it("renders banking template and switches demo chart metrics", () => {
+    render(<ResultsPage />)
+    const row = screen.getByText("HDFCBANK").closest("tr")
+    const button = row?.querySelector("button")
+    if (!button) throw new Error("Expected HDFCBANK result")
+    fireEvent.click(button)
+    expect(screen.getByRole("heading", { name: "Banking analysis" })).toBeInTheDocument()
+    expect(screen.getByText(/Revenue must not substitute for NII/)).toBeInTheDocument()
+    const metric = screen.getByRole("combobox", { name: "Chart metric" })
+    fireEvent.change(metric, { target: { value: "eps" } })
+    expect(screen.getByRole("heading", { name: "EPS — Last 6 Quarters" })).toBeInTheDocument()
+  })
+
+  it("shows pharma and fully closed context without fabricating evidence", () => {
+    render(<ResultsPage />)
+    const row = screen.getByText("AUROPHARMA").closest("tr")
+    const firstAvailable = row?.querySelectorAll("button")[1]
+    if (!firstAvailable) throw new Error("Expected an available demo result")
+    fireEvent.click(firstAvailable)
+    expect(screen.getByRole("heading", { name: "Pharmaceuticals analysis" })).toBeInTheDocument()
+    expect(screen.getByText("Fully closed")).toBeInTheDocument()
+    expect(screen.getByText("Publication time")).toBeInTheDocument()
+    expect(screen.getByText("Not established")).toBeInTheDocument()
+  })
 })
 
 afterEach(() => {
@@ -11,10 +35,10 @@ afterEach(() => {
 })
 
 describe("ResultsPage", () => {
-  it("renders the R1 demo shell and keeps unavailable data explicit", () => {
+  it("renders the R2 demo shell and keeps unavailable data explicit", () => {
     render(<ResultsPage />)
     expect(screen.getByRole("heading", { name: "Results" })).toBeInTheDocument()
-    expect(screen.getByText("R1 DEMO DATA")).toBeInTheDocument()
+    expect(screen.getByText("R2 DEMO DATA")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /Run Scan Now/i })).toBeDisabled()
     expect(screen.getByRole("tab", { name: /Annual Results/i })).toBeDisabled()
   })
