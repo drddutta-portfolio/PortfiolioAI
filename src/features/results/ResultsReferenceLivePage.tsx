@@ -146,13 +146,13 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
     <div className="results-card-heading"><h3>{label} — Last {recent.length} Quarters</h3></div>
     <p className="ref-chart-unit">{bank ? "Reported percentage growth" : "₹ crore (where reported)"} <span>{series.some((r) => r && !r.selected) ? "· Review pending" : ""}</span></p>
     <div className={"ref-bars" + (hasNegative ? " signed" : "")} role="img" aria-label={label + " by quarter, unavailable dates left blank"}>
-      {series.map((row, index) => <div className="ref-bar-item" key={recent[index].end}>
+      {series.map((row, index) => <div className="ref-bar-item" key={recent[index]?.end ?? index}>
         <strong>{row ? formattedValue(row) : "—"}</strong>
         <div className="ref-bar-track"><span className="ref-bar-zero"/>
           {row ? <i className={(row.selected ? "selected" : "pending") + (Number(row.value) < 0 ? " negative" : "")}
             style={{ height: Math.max(5, Math.abs(Number(row.value)) / max * (hasNegative ? 45 : 92)) + "%" }} /> : null}
         </div>
-        <small>{recent[index].label}</small>
+        <small>{recent[index]?.label ?? "—"}</small>
       </div>)}
     </div>
     {series.every((row) => row === null) ? <p className="ref-chart-empty">Quarterly history not yet connected</p> : null}
@@ -252,10 +252,12 @@ export function ResultsLivePage() {
 
   useEffect(() => {
     if (initialized.current || loadingEvidence || entries.length === 0 || periods.length === 0) return
-    initialized.current = true
     const first = entries.find((entry) => observations.some((r) => r.securityId === entry.position.securityId)) ?? entries[0]
+    const latest = periods[0]
+    if (!first || !latest) return
+    initialized.current = true
     const period = observations.filter((r) => r.securityId === first.position.securityId).sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))[0]
-    setSelection({ securityId: first.position.securityId, periodEnd: period?.periodEnd ?? periods[0].end })
+    setSelection({ securityId: first.position.securityId, periodEnd: period?.periodEnd ?? latest.end })
   }, [entries, observations, loadingEvidence, periods])
 
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
