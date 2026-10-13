@@ -25,3 +25,9 @@ describe('G02 signed original import cannot fabricate acceptance or widen source
   await expect(prepareG02Source(pins[0]!.original_sha256,'2020-01-01T00:00:00Z')).rejects.toThrow('VERIFICATION_TIME_INVALID')
  })
 })
+
+import {readG02Original} from './v14-g02-source-import'
+describe('exact decoded original length independent of transport encoding',()=>{
+ it('accepts decoded body with compressed wire length only after exact byte count',async()=>expect(Array.from(await readG02Original(new Response('original',{headers:{'content-length':'4','content-encoding':'gzip'}}),8))).toEqual(Array.from(new TextEncoder().encode('original'))))
+ it('rejects truncated and oversized decoded bodies',async()=>{await expect(readG02Original(new Response('short'),8)).rejects.toThrow('G02_ORIGINAL_LENGTH_MISMATCH');await expect(readG02Original(new Response('oversized'),8)).rejects.toThrow('G02_ORIGINAL_LENGTH_MISMATCH')})
+})

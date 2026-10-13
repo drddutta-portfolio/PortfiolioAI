@@ -1,6 +1,6 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
-import {G02_OWNER_POLICY as policy,G02_ORIGINAL_KIND,g02SourceExecutorQualified,g02ReadUrlAllowed,verifyG02Original,prepareG02Source,hashG02,g02StableId,g02SourcePin,G02_R2_BUCKET,g02R2Key} from '../_shared/v14-g02-source-import.ts'
+import {G02_OWNER_POLICY as policy,G02_ORIGINAL_KIND,g02SourceExecutorQualified,g02ReadUrlAllowed,verifyG02Original,prepareG02Source,hashG02,g02StableId,g02SourcePin,G02_R2_BUCKET,g02R2Key,readG02Original} from '../_shared/v14-g02-source-import.ts'
 const audience=`https://${policy.developmentProject}.supabase.co/functions/v1/v14-g02-official-source-import`,jwks=createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'))
 Deno.serve(async req=>{
  const reply=(s:number,code:string,data:Record<string,unknown>={})=>new Response(JSON.stringify({code,...data}),{status:s,headers:{'content-type':'application/json','cache-control':'no-store'}})
@@ -16,8 +16,9 @@ Deno.serve(async req=>{
   const pin=g02SourcePin(body.originalHash),owner=await db.from('portfolios').select('user_id').eq('id',policy.portfolioId).single(),security=await db.from('securities').select('id,symbol').eq('id',pin.security_id).single(),authority=await db.from('data_sources').select('is_active').eq('code',pin.source_code).single()
   if(owner.error||owner.data.user_id!==policy.ownerId||security.error||security.data.symbol!==pin.symbol||authority.error||authority.data.is_active!==true)return reply(409,'G02_OWNER_SECURITY_OR_SOURCE_NOT_VERIFIED')
   const response=await fetch(body.readUrl,{redirect:'error',signal:AbortSignal.timeout(60000)});if(!response.ok)return reply(503,'G02_PINNED_R2_READ_FAILED')
-  const length=Number(response.headers.get('content-length'));if(!Number.isInteger(length)||length!==pin.original_bytes)return reply(409,'G02_ORIGINAL_LENGTH_MISMATCH')
-  await verifyG02Original(body.originalHash,new Uint8Array(await response.arrayBuffer()))
+  // Fetch may decode a compressed transfer: Content-Length describes the wire,
+  // while the pinned hash/length describe the original decoded document bytes.
+  await verifyG02Original(body.originalHash,await readG02Original(response,pin.original_bytes))
   const id=await g02StableId({kind:G02_ORIGINAL_KIND,security:pin.security_id,hash:body.originalHash}),existing=await db.from('data_source_records').select('id,payload_hash,raw_payload,retrieved_at').eq('id',id).maybeSingle()
   if(existing.error)return reply(503,'G02_SOURCE_LOOKUP_FAILED')
   const at=existing.data?.raw_payload.original_bytes_verified_at??new Date().toISOString(),candidate=await prepareG02Source(body.originalHash,at)
