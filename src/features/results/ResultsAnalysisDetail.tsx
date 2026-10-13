@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useState } from "react"
 import { templateForSecurity } from "./industryProfiles"
 import type { QuarterlyMetric, QuarterlyResultSummary, ReportingPeriod, ResultSecurity } from "./types"
 
@@ -46,19 +46,13 @@ function PositionCard({ security }: { readonly security: ResultSecurity }) {
 
 function MetricChart({ security, periods, result }: Props) {
   const template = templateForSecurity(security)
-  const available = result.metrics.map((metric) => metric.id)
   const [selectedMetric, setSelectedMetric] = useState(template.primaryMetricId)
-  useEffect(() => {
-    setSelectedMetric(template.primaryMetricId)
-  }, [security.id, template.primaryMetricId])
-  const options = useMemo(() => {
-    const set = new Set(available)
-    return [
-      ...(template.kind === "BANK" ? [{ id: "nii", label: "NII" }] : [{ id: "revenue", label: "Revenue" }]),
-      { id: "pat", label: "PAT" },
-      { id: "eps", label: "EPS" },
-    ].filter((item) => set.has(item.id))
-  }, [available.join(","), template.kind])
+  const available = new Set(result.metrics.map((metric) => metric.id))
+  const options = [
+    ...(template.kind === "BANK" ? [{ id: "nii", label: "NII" }] : [{ id: "revenue", label: "Revenue" }]),
+    { id: "pat", label: "PAT" },
+    { id: "eps", label: "EPS" },
+  ].filter((item) => available.has(item.id))
   const units = result.metrics.find((metric) => metric.id === selectedMetric)?.unit ?? "INR_CRORE"
   const ascendingPeriods = [...periods].reverse()
   const series = ascendingPeriods.map((period) => {
@@ -152,7 +146,7 @@ export function ResultsAnalysisDetail({ security, result, periods }: Props) {
   return <div className="r2-analysis-content">
     <div className="analysis-grid">
       <PositionCard security={security}/>
-      <MetricChart security={security} result={result} periods={periods}/>
+      <MetricChart key={security.id} security={security} result={result} periods={periods}/>
       <MetricsCard result={result} period={period}/>
       <InsightCard security={security} result={result}/>
     </div>
