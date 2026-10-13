@@ -18,7 +18,7 @@ const view = {
   portfolio: { currency: "INR" },
   openPositions: [position("a","TCS","CURRENT"), position("etf","TESTETF","CURRENT","ETF")],
   closedPositions: [position("b","INFY","CLOSED"), position("a","TCS","CLOSED")],
-} as PortfolioViewModel
+} as unknown as PortfolioViewModel
 
 afterEach(() => { cleanup(); vi.clearAllMocks() })
 
