@@ -524,3 +524,14 @@
  .analysis-grid > .position-card,.analysis-grid > .r3-chart-card,.analysis-grid > .metrics-card,.analysis-grid > .insight-card,.analysis-grid > .r2-evidence-card {grid-column:1;grid-row:auto}
  .selected-analysis-heading {align-items:flex-start; flex-direction:column}
 }
+
+
+/* Screenshot-style hover/focus quarterly source preview. */
+.results-matrix .r3-status-pill { overflow:visible; }
+.r3-status-pill { isolation:isolate; }
+.r3-hover-popover { display:none; position:absolute; z-index:50; top:calc(100% + .4rem); left:50%; transform:translateX(-50%); width:16.5rem; max-width:min(90vw,18rem); padding:.8rem; border-radius:.55rem; border:1px solid #dce5f2; background:#fff; box-shadow:0 9px 32px rgba(37,67,120,.2); text-align:left; white-space:normal; pointer-events:none; color:#263755; }
+.r3-hover-popover > strong { display:block; font-size:.8rem; color:#172238; margin-bottom:.4rem; }
+.r3-hover-popover > span { display:block; font-size:.7rem; margin:.2rem 0; }
+.r3-hover-popover > small { display:block; color:#7687a0; border-top:1px solid #e5eaf3; padding-top:.4rem; margin-top:.4rem; font-size:.65rem; }
+.r3-status-pill:hover .r3-hover-popover, .r3-status-pill:focus-visible .r3-hover-popover { display:block; }
+.results-matrix-shell { overflow:auto; }
