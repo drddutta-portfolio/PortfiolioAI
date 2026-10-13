@@ -1,3 +1,13 @@
+## Results R3 closure check — 13 October 2026
+
+**Decision: NOT COMPLETE / BLOCKED BY CANONICAL FINANCIAL SELECTIONS.** The R3 portfolio read path and missing-evidence presentation are implemented, but the approved R3 acceptance condition requiring independently selected source-backed quarterly fact displays cannot be met today. A separate review state in the UI exposes source code, reporting scope, recorded publication and retrieval metadata without exposing unselected numeric values as qualified results. This remains read-only.
+
+**Independent Supabase Development readback:** 499 transactions, 491 non-superseded transactions, 284 securities, 262 distinct historically transacted EQUITY security IDs (the actual open/closed split must still derive from the canonical portfolio hook), 2,507 fundamental observation rows, **0** fundamental observation decisions, **0** selected current fundamental view rows, 19 QUARTERLY_RESULT document rows. The 2,507 observations are not 2,507 qualified quarterly results, and the 262 historically transacted equities are not a substitute for the UI's canonical current/closed calculation. No fabricated quarterly results, NII proxy, guessed publication date or arbitrary metric approvals were introduced.
+
+**Remaining acceptance blocker:** Approved canonical financial observation selection and independent per-security/per-period readback are absent. Completing this requires evidence qualification under the original Research authority and/or R4 recovery where period/source evidence is missing. Do not claim a fully populated Results matrix on this readback, and do not bypass the selection gate by treating provider 'AVAILABLE' as approval. Production/main, R2 objects, cron, provider quotas, database schema and V1-4 banking authority remain unchanged.
+
+---
+
 ## Results R3 — canonical read-only integration (13 October 2026)
 
 **Status: PARTIAL / DEVELOPMENT CANDIDATE — NOT PROVEN COMPLETE.** Implemented read-only Results route using existing canonical `usePortfolioView` and a bounded quarterly source-inventory repository. Open and fully exited EQUITY identities are derived from transaction-backed portfolio positions (current takes precedence if an equity has both open and closed history); ETFs are excluded. Demo numeric figures and uncalibrated Strong/Mixed/Weak grades are removed from the live route. The matrix offers real membership and explicit No result / Review required / Source selected labels; only an explicitly selected observation can enter the reported-metrics card. The UI does not write to Supabase/R2 and does not activate a scheduler.

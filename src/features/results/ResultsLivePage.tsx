@@ -161,7 +161,16 @@ export function ResultsLivePage() {
                 {selectedSources.map((row) => <tr key={row.id}><th>{LABELS[row.code] ?? row.code}</th><td>{row.value} {row.unit}</td></tr>)}
               </tbody></table>}
             {selectedRevenue ? <p className="r2-help">Primary observation: {LABELS[selectedRevenue.code]}</p> : null}
-            {unselectedCount > 0 ? <p className="r2-help">{unselectedCount} source observation(s) awaiting selection — not displayed as qualified figures.</p> : null}
+            {unselectedCount > 0 ? <div className="r3-review-sources">
+              <p className="r2-help">{unselectedCount} source observation(s) awaiting selection — numeric values are withheld.</p>
+              <ul aria-label="Unselected source provenance">
+                {chosenSources.filter((source) => !source.selected).map((source) => <li key={source.id}>
+                  <strong>{LABELS[source.code] ?? source.code}</strong>
+                  <span>Source: {source.source} · Scope: {source.scope ?? "Unknown"} · Publication: {source.publishedAt ?? "Unknown"}</span>
+                  <span>Retrieved: {source.retrievedAt} · Not an approved quarter fact</span>
+                </li>)}
+              </ul>
+            </div> : null}
           </section>
           <section className="results-card r2-evidence-card"><h3>Source & quality</h3><dl>
             <div><dt>Reporting period end</dt><dd>{selectedPeriod.end}</dd></div>
