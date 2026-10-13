@@ -22,9 +22,9 @@ describe("ResultsPage", () => {
     render(<ResultsPage />)
     const kvbRow = screen.getByText("KVB").closest("tr")
     expect(kvbRow).not.toBeNull()
-    const buttons = kvbRow?.querySelectorAll("button") ?? []
-    const q1Button = buttons.item(1)
-    expect(q1Button).not.toBeNull()
+    const buttons = kvbRow ? Array.from(kvbRow.querySelectorAll("button")) : []
+    const q1Button = buttons[1]
+    expect(q1Button).toBeDefined()
     if (!q1Button) throw new Error("Expected KVB Q1 FY27 result button")
     fireEvent.click(q1Button)
     expect(screen.getByRole("heading", { name: "KVB — Q1 FY27" })).toBeInTheDocument()
