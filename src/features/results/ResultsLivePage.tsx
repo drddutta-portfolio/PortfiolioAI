@@ -137,7 +137,7 @@ export function ResultsLivePage() {
                 <button type="button" className={`result-pill ${isSelected ? "selected" : ""} ${selectedEvidence ? "result-mixed" : "result-unavailable"}`}
                   aria-pressed={isSelected}
                   onClick={() => setSelected({ id: position.securityId, end: period.end })}>
-                  {loadingEvidence ? "Loading…" : selectedEvidence ? "Selected data" : pending ? "Data · Review pending" : "Not in current data"}
+                  {loadingEvidence ? "Loading…" : selectedEvidence ? `${LABELS[selectedEvidence.code] ?? selectedEvidence.code}: ${selectedEvidence.value} ${selectedEvidence.unit}` : pending ? `${LABELS[candidate[0]!.code] ?? candidate[0]!.code}: ${candidate[0]!.value} ${candidate[0]!.unit} · Review pending` : "Not in current data"}
                 </button>
               </td>
             })}
