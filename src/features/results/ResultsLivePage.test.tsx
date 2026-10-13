@@ -42,13 +42,13 @@ describe("ResultsLivePage R3 boundary", () => {
       periodEnd: "2026-06-30", value: "123456.78", unit: "Cr", source: "TRENDLYNE_MCP",
       scope: "UNKNOWN", publishedAt: null, retrievedAt: "2026-07-20T00:00:00Z", selected: false }])
     render(<ResultsLivePage/>)
-    expect(await screen.findByText("Review required")).toBeInTheDocument()
-    fireEvent.click(screen.getByText("Review required"))
+    expect(await screen.findByText(/Operating revenue: 123456.78 Cr · Review pending/)).toBeInTheDocument()
+    fireEvent.click(screen.getByText(/Operating revenue: 123456.78 Cr · Review pending/))
     expect(screen.getByText(/No selected quarterly financial observation/)).toBeInTheDocument()
-    expect(screen.queryByText("123456.78")).not.toBeInTheDocument()
+    expect(screen.getByText(/123456.78 Cr \(Review pending\)/)).toBeInTheDocument()
     expect(screen.getByRole("list", { name: "Unselected source provenance" })).toBeInTheDocument()
     expect(screen.getByText(/Source: TRENDLYNE_MCP/)).toBeInTheDocument()
-    expect(screen.getByText(/Not an approved quarter fact/)).toBeInTheDocument()
+    expect(screen.getByText(/Unverified observation, excluded from performance grade/)).toBeInTheDocument()
   })
 
   it("shows explicit failure when evidence inventory cannot load", async () => {
