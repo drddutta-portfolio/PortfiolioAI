@@ -131,7 +131,7 @@ export function ResultsLivePage() {
         <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setStatusFilter("ALL"); setScrollTop(0) }}>Clear Filters</button>
       </div>
       {evidenceError ? <div role="alert" className="notice notice-error">Financial evidence unavailable: {evidenceError}. Portfolio membership is still shown; no financial values have been inferred.</div> : null}
-      
+
       <div className="results-matrix-shell" tabIndex={0} aria-label="Quarterly results, newest quarter first" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}>
         <table className="results-matrix">
           <thead><tr><th className="stock-column">{filtered.length} equities</th>{periods.map((period) => <th key={period.end}>{period.label}</th>)}</tr></thead>
