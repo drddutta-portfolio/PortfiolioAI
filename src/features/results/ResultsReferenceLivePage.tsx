@@ -223,9 +223,9 @@ export function ResultsLivePage() {
   const [scrollTop, setScrollTop] = useState(0)
   const [selection, setSelection] = useState<Selection | null>(null)
   const [preview, setPreview] = useState<Preview | null>(null)
-  const initialized = useRef(false)
+  const [collapsed, setCollapsed] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
-  const periods = useMemo(makePeriods, [])
+  const periods = useMemo(() => makePeriods(), [])
 
   const entries = useMemo((): Entry[] => {
     if (!portfolio) return []
@@ -242,23 +242,12 @@ export function ResultsLivePage() {
   useEffect(() => {
     if (!portfolio) return
     let active = true
-    setLoadingEvidence(true)
     void loadResultsSourceInventory(entries.map((entry) => entry.position.securityId))
       .then((rows) => { if (active) { setObservations(rows); setEvidenceError(null) } })
       .catch((reason: unknown) => { if (active) { setObservations([]); setEvidenceError(reason instanceof Error ? reason.message : "Evidence cannot be loaded") } })
       .finally(() => { if (active) setLoadingEvidence(false) })
     return () => { active = false }
   }, [portfolio, entries])
-
-  useEffect(() => {
-    if (initialized.current || loadingEvidence || entries.length === 0 || periods.length === 0) return
-    const first = entries.find((entry) => observations.some((r) => r.securityId === entry.position.securityId)) ?? entries[0]
-    const latest = periods[0]
-    if (!first || !latest) return
-    initialized.current = true
-    const period = observations.filter((r) => r.securityId === first.position.securityId).sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))[0]
-    setSelection({ securityId: first.position.securityId, periodEnd: period?.periodEnd ?? latest.end })
-  }, [entries, observations, loadingEvidence, periods])
 
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
   const filtered = useMemo(() => entries.filter((e) => {
@@ -273,8 +262,16 @@ export function ResultsLivePage() {
     return true
   }), [entries, query, filter, industry, statuses, observations, periods])
 
-  const chosen = selection ? filtered.find((e) => e.position.securityId === selection.securityId) ?? null : null
-  const period = selection ? periods.find((p) => p.end === selection.periodEnd) ?? null : null
+  const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId)) ?? entries[0]
+  const newestObservation = suggestedEntry
+    ? observations.filter((r) => r.securityId === suggestedEntry.position.securityId)
+        .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))[0]
+    : null
+  const effectiveSelection = collapsed || loadingEvidence ? null : selection ?? (suggestedEntry && periods[0]
+    ? { securityId: suggestedEntry.position.securityId, periodEnd: newestObservation?.periodEnd ?? periods[0].end }
+    : null)
+  const chosen = effectiveSelection ? filtered.find((e) => e.position.securityId === effectiveSelection.securityId) ?? null : null
+  const period = effectiveSelection ? periods.find((p) => p.end === effectiveSelection.periodEnd) ?? null : null
   const detailRows = chosen && period ? forQuarter(observations, chosen.position.securityId, period.end) : []
   const grade = chosen ? resultStatus(detailRows, chosen.position.industry) : "UNAVAILABLE"
   const activeIndex = period ? periods.findIndex((p) => p.end === period.end) : -1
@@ -286,12 +283,13 @@ export function ResultsLivePage() {
   }
   const selectCell = (entry: Entry, p: Period) => {
     setSelection({ securityId: entry.position.securityId, periodEnd: p.end })
+    setCollapsed(false)
     setPreview(null)
     window.requestAnimationFrame(() => analysisRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }))
   }
   const setAdjacent = (indexDelta: number) => {
     const next = periods[activeIndex + indexDelta]
-    if (selection && next) setSelection({ securityId: selection.securityId, periodEnd: next.end })
+    if (effectiveSelection && next) setSelection({ securityId: effectiveSelection.securityId, periodEnd: next.end })
   }
   const toggleStatus = (s: StatusFilter) => {
     setStatuses((current) => { const next = new Set(current); if (next.has(s)) next.delete(s); else next.add(s); return next })
@@ -344,7 +342,7 @@ export function ResultsLivePage() {
               const primary = primaryObservation(rows, isBank(entry.position.industry))
               const status = resultStatus(rows, entry.position.industry)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
-              const active = selection?.securityId === entry.position.securityId && selection.periodEnd === p.end
+              const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
                 type="button" aria-pressed={active} aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? formattedValue(primary) + (pending ? ", review pending" : "") : "not available")}
                 onClick={() => selectCell(entry, p)}
@@ -368,7 +366,7 @@ export function ResultsLivePage() {
             <button type="button" disabled title="Verified company investor relations URL is not yet linked">Company IR ↗</button>
             <button type="button" disabled={activeIndex <= 0} onClick={() => setAdjacent(-1)}>← Previous</button>
             <button type="button" disabled={activeIndex >= periods.length - 1} onClick={() => setAdjacent(1)}>Next →</button>
-            <button type="button" onClick={() => { setSelection(null); setPreview(null) }}>Collapse</button>
+            <button type="button" onClick={() => { setSelection(null); setCollapsed(true); setPreview(null) }}>Collapse</button>
           </div>
         </div>
         <div className="ref-analysis-grid">
