@@ -65,6 +65,10 @@ const SettingsPage = lazy(async () => {
   const module = await import("../pages/SettingsPage")
   return { default: module.SettingsPage }
 })
+const ResultsPage = lazy(async () => {
+  const module = await import("../features/results/ResultsPage")
+  return { default: module.ResultsPage }
+})
 
 export function AppRoutes() {
   return (
@@ -127,6 +131,10 @@ export function AppRoutes() {
         <Route
           path="/app/research/:security"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading security research" />}><ResearchPage /></Suspense></AppShell>}
+        />
+        <Route
+          path="/app/results"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Results" />}><ResultsPage /></Suspense></AppShell>}
         />
         <Route
           path="/app/intelligence"
