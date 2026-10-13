@@ -1,7 +1,7 @@
 -- Results R3 read-only quarterly acquisition qualification preflight.
 -- No mutations; do not interpret source availability as canonical approval.
 WITH candidate AS (
- SELECT security_id, metric_code, period_end, unit, consolidation_scope, published_at,
+ SELECT id, security_id, metric_code, period_end, unit, consolidation_scope, published_at,
         source_record_id, evidence_status
  FROM public.fundamental_observations
  WHERE period_type='QUARTER'
@@ -24,8 +24,4 @@ SELECT
  COUNT(*) FILTER (WHERE candidate.source_record_id IS NULL) AS source_record_unlinked,
  COUNT(*) FILTER (WHERE candidate.evidence_status='AVAILABLE') AS provider_available_not_necessarily_approved,
  COUNT(*) FILTER (WHERE selection.selected_observation_id IS NOT NULL) AS canonically_selected_rows
-FROM candidate LEFT JOIN selection ON selection.selected_observation_id IS NOT NULL
-AND selection.selected_observation_id IN (
-  SELECT id FROM public.fundamental_observations f
-  WHERE f.security_id=candidate.security_id AND f.metric_code=candidate.metric_code AND f.period_end=candidate.period_end
-);
+FROM candidate LEFT JOIN selection ON selection.selected_observation_id = candidate.id;
