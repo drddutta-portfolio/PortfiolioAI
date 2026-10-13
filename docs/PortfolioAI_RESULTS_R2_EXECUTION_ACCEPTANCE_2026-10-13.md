@@ -22,7 +22,7 @@ PR: #128
 Merge commit: `b057b962491f6455ab335aeaa9c3dbc0122ca9b6`
 Results UI workflow run `38342051925`: PASS (architecture boundary, typecheck, ESLint, focused tests, production build, whitespace).
 PortfolioAI Architecture Guard run `38342051913`: PASS (full existing guard sequence, typecheck, lint and build).
-The source-branch Vercel preview for commit `589edadec7fac140f3945d46302356d3d3254750` was READY. Separate final Development deployment ID and alias readback belong to deployment evidence, not assertions based on compilation alone.
+The source-branch Vercel preview for commit `589edadec7fac140f3945d46302356d3d3254750` was READY. The merged Development deployment `dpl_A2uWjxL5A9wckjYbw6gZvHvuKGfE` for commit `b057b962491f6455ab335aeaa9c3dbc0122ca9b6` was independently verified READY. The existing Development preview alias `portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app` was assigned to that exact deployment, independently read back, and `/app/results` responded HTTP 200. This is route/deployment availability verification, not pixel-diff or authenticated browser screenshot evidence.
 
 ## Boundaries and follow-up
 No Supabase or Cloudflare R2 schema/data changes; no external provider calls; no daily scan activation; no V1-4 research or portfolio readiness changes; no financial scoring implementation. Industry template commentary is descriptive UI scaffolding, not calibrated scoring or authoritative analysis. Historical period/date, publication and source evidence remain R3–R7 integration tasks.
