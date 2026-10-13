@@ -1,9 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react"
-import { beforeAll, describe, expect, it, vi } from "vitest"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
 import { ResultsPage } from "./ResultsPage"
 
 beforeAll(() => {
   Object.defineProperty(Element.prototype, "scrollIntoView", { value: vi.fn(), configurable: true })
+})
+
+afterEach(() => {
+  cleanup()
 })
 
 describe("ResultsPage", () => {
