@@ -29,9 +29,14 @@ def original_read_url(data,pin,extension="json"):
         if e.response['Error']['Code'] not in ['NoSuchKey','404']:raise
         s3.put_object(Bucket=BUCKET,Key=key,Body=data,ContentType='text/html' if extension=='html' else 'application/json',IfNoneMatch='*')
     return s3.generate_presigned_url('get_object',Params={'Bucket':BUCKET,'Key':key},ExpiresIn=240)
-tail=json.loads((ROOT/'v14-kvb-history-renewal-tail-pin.json').read_text());late=json.loads((ROOT/'v14-kvb-valuation-ca-late-pin.json').read_text())
-timing={'original_sha256':'9b138c51ef3e05cef9fdc05746614f7919d8c8018e0fede788b228672b044067'}
-result=invoke('PREPARE_KVB_PB_PE_SOURCE_BATCH',{'timingReadUrl':original_read_url(base64.b64decode(json.loads((ROOT/'v14-kvb-nse-timing-original.json').read_text())['body_base64'],validate=True),timing,'html'),'receipts':receipts,'tailReadUrl':original_read_url(b'[]',tail),'lateCaReadUrl':original_read_url((ROOT/'v14-kvb-valuation-ca-late-original.json').read_bytes(),late)})
+mode=os.environ.get('KVB_SOURCE_MODE','VERIFY_STORED')
+if mode not in ('VERIFY_STORED','PREPARE'):raise ValueError('EXACT_SOURCE_MODE_REQUIRED')
+if mode=='VERIFY_STORED':
+    result=invoke('VERIFY_STORED_KVB_SOURCE_BATCH',{'receipts':receipts})
+else:
+    tail=json.loads((ROOT/'v14-kvb-history-renewal-tail-pin.json').read_text());late=json.loads((ROOT/'v14-kvb-valuation-ca-late-pin.json').read_text())
+    timing={'original_sha256':'9b138c51ef3e05cef9fdc05746614f7919d8c8018e0fede788b228672b044067'}
+    result=invoke('PREPARE_KVB_PB_PE_SOURCE_BATCH',{'timingReadUrl':original_read_url(base64.b64decode(json.loads((ROOT/'v14-kvb-nse-timing-original.json').read_text())['body_base64'],validate=True),timing,'html'),'receipts':receipts,'tailReadUrl':original_read_url(b'[]',tail),'lateCaReadUrl':original_read_url((ROOT/'v14-kvb-valuation-ca-late-original.json').read_bytes(),late)})
 (OUTPUT/'sanitized-result.json').write_text(json.dumps(result,indent=2)+'\n')
 (OUTPUT/'raw-archive-receipts.json').write_text(json.dumps({'receipts':receipts,'providerCalls':0,'canonicalAdmissions':0,'retries':0},indent=2)+'\n')
 print(json.dumps({'code':result.get('code'),'verifiedRawMonths':len(receipts),'canonicalAdmissions':0,'providerCalls':0}))

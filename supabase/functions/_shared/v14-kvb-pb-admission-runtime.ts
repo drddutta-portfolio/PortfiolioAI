@@ -82,3 +82,20 @@ export async function prepareKvbPbFromCanonical(db:SupabaseClient,receipts:reado
 export async function kvbPbCurrentPriceStillMatches(db:SupabaseClient,proposal:Awaited<ReturnType<typeof prepareKvbPbProposal>>,at:string){const inputs=await lookupInputs(db,at),result=await latestQualifiedHistory(db,at);return inputs.current.provenance?.source_record_id===proposal.currentPriceSourceRecordId&&result.latestSession===proposal.currentPriceSession&&sameQualifiedHistoryNumeric(inputs.current.close,proposal.currentRawClose)}
 
 export async function kvbPbCurrentHistoryQualified(db:SupabaseClient,at:string){return await latestQualifiedHistory(db,at)}
+
+export async function kvbPbLatestQualifiedCurrentPrice(db:SupabaseClient,at:string){const inputs=await lookupInputs(db,at),history=await latestQualifiedHistory(db,at),session=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata'}).format(new Date(inputs.current.period_start)),sourceRecordId=String(inputs.current.provenance?.source_record_id??'');if(history.latestSession!==session||!sourceRecordId)throw Error('KVB_CURRENT_PRICE_LINEAGE_NOT_QUALIFIED');return {sourceRecordId,close:String(inputs.current.close),session,retrievedAt:inputs.current.retrieved_at,historyContractState:'FRESH' as const}}
+
+/** Signed read-only physical receipt comparison to the already stored bridges.
+ * No history freshness assertion, registration, lease or source write occurs. */
+export async function verifyStoredKvbRawArchiveReceipts(db:SupabaseClient,receipts:readonly KvbPbRawArchiveReceipt[]){
+ const inputs=await lookupInputs(db,new Date().toISOString())
+ if(receipts.length!==36||new Set(receipts.map(r=>r.archiveId)).size!==36)throw Error('KVB_PB_EXACT_36_RAW_ARCHIVE_RECEIPTS_REQUIRED')
+ const rows=await db.from('data_source_records').select('id,payload_hash,raw_payload').eq('record_kind','V1_4_KVB_PB_VERIFIED_RAW_ARCHIVE_ROW').in('raw_payload->>source_p8_archive_id',receipts.map(r=>r.archiveId))
+ if(rows.error||rows.data?.length!==36)throw Error('KVB_STORED_RAW_ARCHIVE_BRIDGES_INCOMPLETE')
+ for(const receipt of receipts){const archive=inputs.archives.find(a=>a.id===receipt.archiveId),source=rows.data.find(r=>r.raw_payload.source_p8_archive_id===receipt.archiveId),price=fixed.prices.find(p=>p.source_id===receipt.archiveId)
+  if(!archive||!source||!price||await kvbPbHash(source.raw_payload)!==source.payload_hash)throw Error('KVB_STORED_ARCHIVE_BODY_INTEGRITY_FAILED')
+  const raw=source.raw_payload
+  if(receipt.symbol!=='KARURVYSYA'||receipt.isin!==fixed.isin||receipt.series!=='EQ'||receipt.tradeDate!==price.trade_date||!sameQualifiedHistoryNumeric(receipt.rawClose,price.raw_close)||receipt.contentSha256!==archive.content_sha256||receipt.catalogCompressedSha256!==archive.compressed_sha256||receipt.contentSha256!==raw.content_sha256||receipt.actualCompressedSha256!==raw.actual_compressed_sha256||receipt.transportRepresentation!==raw.transport_representation||receipt.r2ContentKey!==raw.r2_content_key||receipt.r2CompressedKey!==raw.r2_compressed_key)throw Error('KVB_STORED_ARCHIVE_RECEIPT_CHANGED')
+ }
+ return {verifiedRawMonths:36,sourceWrites:0,providerCalls:0}
+}
