@@ -51,6 +51,7 @@ export function ResultsLivePage() {
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<Filter>("ALL")
   const [industry, setIndustry] = useState("ALL")
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "IMPROVING" | "MIXED" | "DETERIORATING" | "UNAVAILABLE">("ALL")
   const [scrollTop, setScrollTop] = useState(0)
   const [selected, setSelected] = useState<{ id: string; end: string } | null>(null)
   const periods = useMemo(() => periodsThroughLastCompletedQuarter(), [])
@@ -84,7 +85,8 @@ export function ResultsLivePage() {
     (filter === "ALL" || filter === kind)
     && (industry === "ALL" || (position.industry ?? "Unclassified") === industry)
     && (!query.trim() || `${position.symbol} ${position.company}`.toLowerCase().includes(query.trim().toLowerCase()))
-  ), [positions, filter, industry, query])
+    && (statusFilter === "ALL" || (statusFilter === "UNAVAILABLE" ? periods.every((period) => !evidenceForPeriod(observations, position.securityId, period.end).length) : periods.some((period) => assessQuarterlyPerformance(evidenceForPeriod(observations, position.securityId, period.end), position.industry).status === statusFilter)))
+  ), [positions, filter, industry, query, statusFilter, observations, periods])
   const rowHeight = 48
   const start = Math.max(0, Math.floor(scrollTop / rowHeight) - 4)
   const end = Math.min(filtered.length, start + 18)
@@ -95,6 +97,11 @@ export function ResultsLivePage() {
   const quarterAssessment = assessQuarterlyPerformance(chosenSources, chosen?.position.industry ?? null)
   const unselectedCount = chosenSources.length - selectedSources.length
   const selectedPeriod = periods.find((period) => period.end === selected?.end)
+  const selectedIndex = selectedPeriod ? periods.findIndex((period) => period.end === selectedPeriod.end) : -1
+  const selectAdjacent = (delta: number) => { const next = periods[selectedIndex + delta]; if (next && selected) setSelected({ id: selected.id, end: next.end }) }
+  const chartCode = chosen && isBank(chosen.position) ? "ADVANCES_GROWTH_YOY" : "OPERATING_REVENUE_QUARTER"
+  const chartPoints = chosen ? [...periods].reverse().map((period) => ({ period, observation: evidenceForPeriod(observations, chosen.position.securityId, period.end).find((row) => row.selected && row.code === chartCode) ?? null })) : []
+  const chartMax = Math.max(1, ...chartPoints.map(({ observation }) => observation ? Math.abs(Number(observation.value)) : 0))
   const selectedRevenue = chosen && selectedPeriod
     ? selectedSources.find((source) => source.code === (isBank(chosen.position) ? "ADVANCES_GROWTH_YOY" : "OPERATING_REVENUE_QUARTER"))
     : null
@@ -106,20 +113,22 @@ export function ResultsLivePage() {
     <header className="results-page-header">
       <div><h1 id="results-live-title">Results</h1><p>Quarterly observations · transaction-derived current and closed equities</p></div>
       <div className="results-collection-status">
-        <div><span>Financial scan</span><strong>Not configured</strong><small>R6</small></div>
-        <div><span>Evidence</span><strong>{loadingEvidence ? "Loading" : evidenceError ? "Unavailable" : "Read-only"}</strong><small>R3</small></div>
-        <div><span>Universe</span><strong>{positions.length} equities</strong><small>Current + exited</small></div>
+        <div><span>Last scan</span><strong>Not configured</strong><small>Planned in R6</small></div>
+        <div><span>New results</span><strong>—</strong><small>{loadingEvidence ? "Loading evidence" : evidenceError ? "Evidence unavailable" : "Daily scan not yet active"}</small></div>
+        <div><span>Coverage</span><strong>Current + Closed</strong><small>{positions.length} equities</small></div>
         <button type="button" disabled>Run Scan Now</button>
       </div>
     </header>
     <div className="results-tabs"><button type="button" className="active">Quarterly Results</button><button type="button" disabled>Annual Results · Later</button></div>
     <section className="results-workspace">
-      <div className="results-demo-banner" role="status"><strong>LIVE PORTFOLIO · EVIDENCE-GATED</strong><span>Existing quarter-dated observations are visible with verification labels. Only selected observations support an operating-performance assessment.</span></div>
+
       <div className="results-filter-bar">
         <label className="results-search"><span className="sr-only">Search stocks</span><input placeholder="Search stocks…" value={query} onChange={(e) => { setQuery(e.target.value); setScrollTop(0) }}/></label>
         {(["ALL", "CURRENT", "CLOSED"] as const).map((f) => <button key={f} type="button" className={filter === f ? "active" : ""} onClick={() => { setFilter(f); setScrollTop(0) }}>{f === "ALL" ? "All Stocks" : f === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
         <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((item) => <option key={item}>{item}</option>)}</select></label>
-        <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setScrollTop(0) }}>Clear Filters</button>
+        {([{ key: "IMPROVING", label: "Strong", tone: "strong" }, { key: "MIXED", label: "Mixed", tone: "mixed" }, { key: "DETERIORATING", label: "Weak", tone: "weak" }, { key: "UNAVAILABLE", label: "Not Available", tone: "unavailable" }] as const).map(({ key, label, tone }) => <button key={key} type="button" className={`r3-filter-pill ${statusFilter === key ? "active" : ""}`} onClick={() => { setStatusFilter(statusFilter === key ? "ALL" : key); setScrollTop(0) }}><i className={`r3-dot ${tone}`} aria-hidden="true"/>{label}</button>)}
+        <button type="button" className="r3-filter-pill" disabled title="Newly reported detection starts with the R6 daily scanner"><i className="r3-dot new" aria-hidden="true"/>Newly Reported</button>
+        <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setStatusFilter("ALL"); setScrollTop(0) }}>Clear Filters</button>
       </div>
       {evidenceError ? <div role="alert" className="notice notice-error">Financial evidence unavailable: {evidenceError}. Portfolio membership is still shown; no financial values have been inferred.</div> : null}
       <p className="r2-scroll-hint">Newer quarters appear on the left. Scroll horizontally for older quarters. Select a stock-quarter to inspect available observations, source status and portfolio position.</p>
@@ -133,9 +142,12 @@ export function ResultsLivePage() {
               const selectedEvidence = candidate.find((row) => row.selected)
               const pending = candidate.some((row) => !row.selected)
               const isSelected = selected?.id === position.securityId && selected.end === period.end
+              const performance = assessQuarterlyPerformance(candidate, position.industry)
+              const tone = performance.status === "IMPROVING" ? "strong" : performance.status === "DETERIORATING" ? "weak" : performance.status === "MIXED" ? "mixed" : "unavailable"
               return <td key={period.end}>
-                <button type="button" className={`result-pill ${isSelected ? "selected" : ""} ${selectedEvidence ? "result-mixed" : "result-unavailable"}`}
+                <button type="button" className={`result-pill r3-status-pill ${isSelected ? "selected" : ""} ${candidate.length ? `r3-${tone}` : "result-unavailable"}`}
                   aria-pressed={isSelected}
+                  title={`${position.symbol} — ${period.label}. ${candidate.length ? candidate.map((row) => `${LABELS[row.code] ?? row.code}: ${row.value} ${row.unit}; ${row.selected ? "selected" : "review pending"}; source ${row.source}; basis ${row.scope ?? "unknown"}`).join(" | ") : "No quarter-dated observation in connected data"}`}
                   onClick={() => setSelected({ id: position.securityId, end: period.end })}>
                   {loadingEvidence ? "Loading…" : selectedEvidence ? `${LABELS[selectedEvidence.code] ?? selectedEvidence.code}: ${selectedEvidence.value} ${selectedEvidence.unit}` : pending ? `${LABELS[candidate[0]!.code] ?? candidate[0]!.code}: ${candidate[0]!.value} ${candidate[0]!.unit} · Review pending` : "Not in current data"}
                 </button>
@@ -146,8 +158,8 @@ export function ResultsLivePage() {
       </div>
       {filtered.length === 0 ? <div className="results-empty">No matching equity positions.</div> : null}
       {chosen && selectedPeriod ? <div className="selected-analysis">
-        <div className="selected-analysis-heading"><div><h2>{chosen.position.symbol} — {selectedPeriod.label}</h2><span className="demo-chip">Evidence status explicit</span></div>
-          <div className="analysis-actions"><button onClick={() => setSelected(null)} type="button">Collapse</button></div></div>
+        <div className="selected-analysis-heading"><div><h2>{chosen.position.symbol} — {selectedPeriod.label}</h2><span className="demo-chip">{quarterAssessment.status.replaceAll("_", " ")}</span></div>
+          <div className="analysis-actions"><button type="button" disabled title="Official filing URL not yet qualified">NSE Filing ↗</button><button type="button" disabled title="Company source URL not yet qualified">Company IR ↗</button><button onClick={() => selectAdjacent(-1)} disabled={selectedIndex <= 0} type="button">← Previous</button><button onClick={() => selectAdjacent(1)} disabled={selectedIndex >= periods.length - 1} type="button">Next →</button><button onClick={() => setSelected(null)} type="button">Collapse</button></div></div>
         <div className="analysis-grid">
           <section className="results-card position-card"><h3>Canonical portfolio position</h3><dl>
             <div><dt>Position</dt><dd>{chosen.kind === "CURRENT" ? "Open" : "Fully closed"}</dd></div>
