@@ -1,5 +1,5 @@
 """Owner-authorized original source registration; no evidence review or READY writes."""
-import hashlib,json,os,gzip,urllib.request,urllib.parse,urllib.error
+import hashlib,json,os,gzip,re,urllib.request,urllib.parse,urllib.error
 from pathlib import Path
 
 BUCKET='portfolioai-history-dev'
@@ -68,8 +68,8 @@ def main():
             results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'r2ObjectKey':key,'uploaded':uploaded,**result})
             print(json.dumps({'symbol':pin['symbol'],'sourceId':result['sourceId'],'registered':True,'acceptedReviews':0}))
         except Exception as e:
-            results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__})
-            print(json.dumps({'symbol':pin['symbol'],'sourceHash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__}))
+            results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__,'errorCode':str(e) if re.fullmatch('[A-Z0-9_:]+',str(e)) else None})
+            print(json.dumps({'symbol':pin['symbol'],'sourceHash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__,'errorCode':str(e) if re.fullmatch('[A-Z0-9_:]+',str(e)) else None}))
         Path('g02-source-import-result').mkdir(exist_ok=True)
         Path('g02-source-import-result/sanitized-results.json').write_text(json.dumps({'results':results,'providerApiCalls':0,'acceptedReviews':0,'canonicalMaterialization':False},indent=2)+'\n')
 

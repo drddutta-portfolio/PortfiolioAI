@@ -3,7 +3,7 @@ import policy from './v14-g02-owner-authorization.json' with {type:'json'}
 export {pins as G02_ORIGINAL_PINS,policy as G02_OWNER_POLICY}
 export const G02_ORIGINAL_KIND='V1_4_G02_REGISTERED_OFFICIAL_ORIGINAL'
 export const G02_R2_BUCKET='portfolioai-history-dev'
-export function g02SourceExecutorQualified(c:Record<string,unknown>){return c.repository==='drddutta-portfolio/PortfiolioAI'&&c.repository_id==='1357024254'&&c.ref==='refs/heads/codex/g02-industry-evidence'&&c.environment==='PortfolioAI-Development'&&c.sub==='repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development'&&c.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g02-source-qualification.yml@refs/heads/codex/g02-industry-evidence'&&['push','workflow_dispatch'].includes(String(c.event_name))}
+export {g02SourceExecutorQualified} from './v14-g02-executor-identity.ts'
 export const stableG02=(v:unknown):string=>Array.isArray(v)?'['+v.map(stableG02).join(',')+']':v!==null&&typeof v==='object'?'{'+Object.entries(v as Record<string,unknown>).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>JSON.stringify(k)+':'+stableG02(x)).join(',')+'}':JSON.stringify(v)??'null'
 export const hashG02=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(stableG02(v))))).map(x=>x.toString(16).padStart(2,'0')).join('')
 export const bytesHashG02=async(v:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(v).buffer))).map(x=>x.toString(16).padStart(2,'0')).join('')

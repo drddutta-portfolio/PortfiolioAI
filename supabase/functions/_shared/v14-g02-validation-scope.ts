@@ -1,0 +1,2 @@
+import policy from './v14-g02-owner-authorization.json' with {type:'json'}
+export function g02ValidationRequestQualified(body:Record<string,unknown>){return body.action==='P7_IC3_VALIDATE_CANONICAL_INPUTS'&&body.portfolioId===policy.portfolioId&&body.ownerExecutionAuthorization===policy.directiveSha256&&Array.isArray(body.securityIds)&&body.securityIds.length>0&&body.securityIds.length<=3&&new Set(body.securityIds).size===body.securityIds.length&&body.securityIds.every(id=>typeof id==='string'&&policy.securityIds.includes(id))&&body.grantId===undefined}
