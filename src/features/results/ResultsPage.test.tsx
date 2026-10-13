@@ -39,6 +39,28 @@ describe("ResultsPage", () => {
     fireEvent.click(q1Button)
     expect(screen.getByRole("heading", { name: "KVB — Q1 FY27" })).toBeInTheDocument()
   })
+  it("hides stale analysis when filters remove its stock and restores it on clearing", () => {
+    render(<ResultsPage />)
+    expect(screen.getByRole("heading", { name: "TCS — Q2 FY27" })).toBeInTheDocument()
+    fireEvent.change(screen.getByPlaceholderText("Search stocks…"), { target: { value: "AURO" } })
+    expect(screen.queryByRole("heading", { name: "TCS — Q2 FY27" })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Clear Filters" }))
+    expect(screen.getByRole("heading", { name: "TCS — Q2 FY27" })).toBeInTheDocument()
+  })
+
+  it("shows unavailable chart periods explicitly and preserves metric selection", () => {
+    render(<ResultsPage />)
+    const row = screen.getByText("AUROPHARMA").closest("tr")
+    const button = row?.querySelectorAll("button")[1]
+    if (!button) throw new Error("Expected available demo result")
+    fireEvent.click(button)
+    const chart = screen.getByRole("img", { name: /Demo revenue history/ })
+    expect(chart.getAttribute("aria-label")).toContain("Q2 FY27 unavailable")
+    expect(chart.querySelector(".r2-bar-missing")).not.toBeNull()
+    fireEvent.change(screen.getByRole("combobox", { name: "Chart metric" }), { target: { value: "pat" } })
+    expect(screen.getByRole("heading", { name: "PAT — Last 6 Quarters" })).toBeInTheDocument()
+  })
+
   it("renders banking template and switches demo chart metrics", () => {
     render(<ResultsPage />)
     const row = screen.getByText("HDFCBANK").closest("tr")
