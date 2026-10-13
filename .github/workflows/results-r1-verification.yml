@@ -1,0 +1,40 @@
+name: Results R1 Verification
+
+on:
+  pull_request:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - "src/features/results/**"
+      - "src/components/AppShell.tsx"
+      - "src/routes/AppRoutes.tsx"
+      - "docs/PortfolioAI_Product_UI_and_Decision_Workflow.md"
+      - ".github/workflows/results-r1-verification.yml"
+  workflow_dispatch:
+
+jobs:
+  verify-results-r1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Architecture guard
+        run: npm run check:architecture
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint Results surface
+        run: npx eslint src/features/results src/components/AppShell.tsx src/routes/AppRoutes.tsx
+      - name: Results interaction tests
+        run: npx vitest run src/features/results/ResultsPage.test.tsx
+      - name: Production build
+        run: npm run build
+      - name: Whitespace check
+        run: git diff --check
