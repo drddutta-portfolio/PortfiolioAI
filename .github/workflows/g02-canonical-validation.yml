@@ -1,6 +1,11 @@
 name: G02 Signed Canonical Read-Only Validation
 on:
   workflow_dispatch:
+    inputs:
+      materialize:
+        description: 'Persist source-qualified G02 evidence via one-time canonical grant'
+        type: boolean
+        default: false
   push:
     branches: [codex/g02-industry-evidence]
     paths:
@@ -22,6 +27,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: python scripts/v1-4/g02_canonical_validation.py
+        env:
+          G02_MATERIALIZE: ${{ github.event_name == 'workflow_dispatch' && inputs.materialize }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
