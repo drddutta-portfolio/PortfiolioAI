@@ -1,6 +1,6 @@
 # PortfolioAI Results — UI-first implementation plan
 **Date:** 2026-10-13  
-**Status:** R1 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R2–R8 PLANNED / GATED  
+**Status:** R1 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R2–R8 PLANNED / GATED
 **Repository/branch:** `drddutta-portfolio/PortfiolioAI` / `PortfolioAI-Development`  
 **Development database:** `lrgpjimipfkyoqbpsqzz`  
 **R2 candidate:** `portfolioai-history-dev` (existing bucket; access/usage rights require verification before writes)  
