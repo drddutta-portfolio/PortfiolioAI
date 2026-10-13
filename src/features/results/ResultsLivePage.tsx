@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { usePortfolioView } from "../portfolio/usePortfolioView"
-import { formatMoney, formatQuantity } from "../portfolio/format"
+import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -50,6 +50,7 @@ export function ResultsLivePage() {
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<Filter>("ALL")
   const [industry, setIndustry] = useState("ALL")
+  const [scrollTop, setScrollTop] = useState(0)
   const [selected, setSelected] = useState<{ id: string; end: string } | null>(null)
   const periods = useMemo(() => periodsThroughLastCompletedQuarter(), [])
 
@@ -83,6 +84,10 @@ export function ResultsLivePage() {
     && (industry === "ALL" || (position.industry ?? "Unclassified") === industry)
     && (!query.trim() || `${position.symbol} ${position.company}`.toLowerCase().includes(query.trim().toLowerCase()))
   ), [positions, filter, industry, query])
+  const rowHeight = 48
+  const start = Math.max(0, Math.floor(scrollTop / rowHeight) - 4)
+  const end = Math.min(filtered.length, start + 18)
+  const visible = filtered.slice(start, end)
   const chosen = selected ? filtered.find(({ position }) => position.securityId === selected.id) ?? null : null
   const chosenSources = selected ? evidenceForPeriod(observations, selected.id, selected.end) : []
   const selectedSources = chosenSources.filter((source) => source.selected)
@@ -109,17 +114,17 @@ export function ResultsLivePage() {
     <section className="results-workspace">
       <div className="results-demo-banner" role="status"><strong>LIVE PORTFOLIO · EVIDENCE-GATED</strong><span>Only independently selected quarter observations can display numeric results. Missing or pending evidence is not estimated.</span></div>
       <div className="results-filter-bar">
-        <label className="results-search"><span className="sr-only">Search stocks</span><input placeholder="Search stocks…" value={query} onChange={(e) => setQuery(e.target.value)}/></label>
-        {(["ALL", "CURRENT", "CLOSED"] as const).map((f) => <button key={f} type="button" className={filter === f ? "active" : ""} onClick={() => setFilter(f)}>{f === "ALL" ? "All Stocks" : f === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
-        <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => setIndustry(e.target.value)}><option value="ALL">All Industries</option>{industries.map((item) => <option key={item}>{item}</option>)}</select></label>
-        <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL") }}>Clear Filters</button>
+        <label className="results-search"><span className="sr-only">Search stocks</span><input placeholder="Search stocks…" value={query} onChange={(e) => { setQuery(e.target.value); setScrollTop(0) }}/></label>
+        {(["ALL", "CURRENT", "CLOSED"] as const).map((f) => <button key={f} type="button" className={filter === f ? "active" : ""} onClick={() => { setFilter(f); setScrollTop(0) }}>{f === "ALL" ? "All Stocks" : f === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
+        <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((item) => <option key={item}>{item}</option>)}</select></label>
+        <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setScrollTop(0) }}>Clear Filters</button>
       </div>
       {evidenceError ? <div role="alert" className="notice notice-error">Financial evidence unavailable: {evidenceError}. Portfolio membership is still shown; no financial values have been inferred.</div> : null}
       <p className="r2-scroll-hint">Newer quarters appear on the left. Scroll horizontally for older quarters. Select a stock-quarter for qualified evidence and portfolio position.</p>
-      <div className="results-matrix-shell" tabIndex={0} aria-label="Quarterly results, newest quarter first">
+      <div className="results-matrix-shell" tabIndex={0} aria-label="Quarterly results, newest quarter first" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}>
         <table className="results-matrix">
           <thead><tr><th className="stock-column">{filtered.length} equities</th>{periods.map((period) => <th key={period.end}>{period.label}</th>)}</tr></thead>
-          <tbody>{filtered.map(({ position, kind }) => <tr key={position.securityId}>
+          <tbody>{start > 0 ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: start * rowHeight }}/></tr> : null}{visible.map(({ position, kind }) => <tr key={position.securityId}>
             <th className="stock-column" scope="row">{position.symbol}<small>{position.industry ?? "Unclassified"} · {kind === "CURRENT" ? "Current" : "Closed"}</small></th>
             {periods.map((period) => {
               const candidate = evidenceForPeriod(observations, position.securityId, period.end)
@@ -134,7 +139,7 @@ export function ResultsLivePage() {
                 </button>
               </td>
             })}
-          </tr>)}</tbody>
+          </tr>)}{end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }}/></tr> : null}</tbody>
         </table>
       </div>
       {filtered.length === 0 ? <div className="results-empty">No matching equity positions.</div> : null}
@@ -147,8 +152,8 @@ export function ResultsLivePage() {
             <div><dt>Quantity</dt><dd>{formatQuantity(chosen.position.quantity)}</dd></div>
             <div><dt>Average cost</dt><dd>{chosen.position.averageCost === null ? "—" : formatMoney(chosen.position.averageCost, portfolio.portfolio.currency)}</dd></div>
             <div><dt>Current value</dt><dd>{chosen.position.currentValue === null ? "—" : formatMoney(chosen.position.currentValue, portfolio.portfolio.currency)}</dd></div>
-            <div><dt>Unrealised P&L</dt><dd>{chosen.position.unrealisedPnl === null ? "—" : formatMoney(chosen.position.unrealisedPnl, portfolio.portfolio.currency)}</dd></div>
-            <div><dt>Realised P&L</dt><dd>{chosen.position.realisedPnl === null ? "—" : formatMoney(chosen.position.realisedPnl, portfolio.portfolio.currency)}</dd></div>
+            <div><dt>Unrealised P&L</dt><dd className={financialClass(chosen.position.unrealisedPnl)}>{chosen.position.unrealisedPnl === null ? "—" : formatMoney(chosen.position.unrealisedPnl, portfolio.portfolio.currency)}</dd></div>
+            <div><dt>Realised P&L</dt><dd className={financialClass(chosen.position.realisedPnl)}>{chosen.position.realisedPnl === null ? "—" : formatMoney(chosen.position.realisedPnl, portfolio.portfolio.currency)}</dd></div>
           </dl></section>
           <section className="results-card metrics-card"><h3>Qualified quarterly metrics</h3>
             {selectedSources.length === 0 ? <p>No selected quarterly financial observation is available for this company and quarter.</p> :
