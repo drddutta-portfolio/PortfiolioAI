@@ -35,8 +35,8 @@ function ResultTooltip({ tooltip }: { readonly tooltip: TooltipState }) {
   const pat = tooltip.result.metrics.find((metric) => metric.id === "pat")
   const eps = tooltip.result.metrics.find((metric) => metric.id === "eps")
   const period = resultsDemoModel.periods.find((item) => item.id === tooltip.result.periodId)
-  const left = Math.min(tooltip.x, Math.max(12, window.innerWidth - 286))
-  const top = Math.min(tooltip.y, Math.max(12, window.innerHeight - 224))
+  const left = Math.max(12, Math.min(tooltip.x, window.innerWidth - 286))
+  const top = Math.max(12, Math.min(tooltip.y, window.innerHeight - 224))
 
   return createPortal(
     <div className="results-tooltip" role="tooltip" style={{ left, top }}>
@@ -82,10 +82,11 @@ export function ResultsPage() {
     })
   }, [industry, positionFilter, query, strengthFilters])
 
-  const selectedSecurity = selected ? resultsDemoModel.securities.find((item) => item.id === selected.securityId) ?? null : null
+  const selectedSecurity = selected ? filtered.find((item) => item.id === selected.securityId) ?? null : null
   const selectedResult = selectedSecurity && selected ? selectedSecurity.results.find((item) => item.periodId === selected.periodId) ?? null : null
 
   const toggleStrength = (filter: StrengthFilter) => {
+    setScrollTop(0)
     setStrengthFilters((current) => {
       const next = new Set(current)
       if (next.has(filter)) next.delete(filter)
@@ -99,18 +100,21 @@ export function ResultsPage() {
     setPositionFilter("ALL")
     setIndustry("ALL")
     setStrengthFilters(new Set())
+    setScrollTop(0)
   }
 
   const selectResult = (security: ResultSecurity, result: QuarterlyResultSummary) => {
     if (!result.available) return
     setSelected({ securityId: security.id, periodId: result.periodId })
+    setTooltip(null)
     window.requestAnimationFrame(() => analysisRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }))
   }
 
   const showTooltip = (event: React.SyntheticEvent<HTMLButtonElement>, security: ResultSecurity, result: QuarterlyResultSummary) => {
     if (!result.available) return
     const rect = event.currentTarget.getBoundingClientRect()
-    setTooltip({ security, result, x: rect.right + 10, y: rect.top - 12 })
+    const rightSide = rect.right + 290 < window.innerWidth
+    setTooltip({ security, result, x: rightSide ? rect.right + 10 : rect.left - 282, y: rect.top - 12 })
   }
 
   const rowHeight = 48
@@ -143,13 +147,14 @@ export function ResultsPage() {
       <section className="results-workspace">
         <div className="results-demo-banner" role="status"><strong>R2 DEMO DATA</strong><span>Illustrative fixtures only. No company result on this page is live or persisted.</span></div>
         <div className="results-filter-bar">
-          <label className="results-search"><span className="sr-only">Search stocks</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search stocks…" /></label>
-          {(["ALL", "CURRENT", "CLOSED"] as const).map((filter) => <button key={filter} type="button" className={positionFilter === filter ? "active" : ""} onClick={() => setPositionFilter(filter)}>{filter === "ALL" ? "All Stocks" : filter === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
-          <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(event) => setIndustry(event.target.value)}><option value="ALL">All Industries</option>{industries.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className="results-search"><span className="sr-only">Search stocks</span><input value={query} onChange={(event) => { setQuery(event.target.value); setScrollTop(0) }} placeholder="Search stocks…" /></label>
+          {(["ALL", "CURRENT", "CLOSED"] as const).map((filter) => <button key={filter} type="button" className={positionFilter === filter ? "active" : ""} onClick={() => { setPositionFilter(filter); setScrollTop(0) }}>{filter === "ALL" ? "All Stocks" : filter === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
+          <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(event) => { setIndustry(event.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((item) => <option key={item}>{item}</option>)}</select></label>
           {(["STRONG", "MIXED", "WEAK", "UNAVAILABLE", "NEW"] as const).map((filter) => <button key={filter} type="button" className={strengthFilters.has(filter) ? "active" : ""} onClick={() => toggleStrength(filter)}><i className={filter === "NEW" ? "filter-dot result-new" : `filter-dot ${statusClass(filter)}`} aria-hidden="true" />{filter === "NEW" ? "Newly Reported" : statusLabel(filter)}</button>)}
           <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
         </div>
 
+        <p className="r2-scroll-hint">Latest quarter first. Scroll sideways to compare previous quarters; tap a cell to open its analysis below.</p>
         <div className="results-matrix-shell" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)} tabIndex={0} aria-label="Scrollable quarterly results matrix">
           <table className="results-matrix">
             <thead><tr><th className="stock-column"><span>{filtered.length} stocks</span>Stock</th>{resultsDemoModel.periods.map((period) => <th key={period.id}>{period.label}{period.latest ? <small>(Latest) ↓</small> : null}</th>)}</tr></thead>
@@ -159,7 +164,7 @@ export function ResultsPage() {
                 const result = security.results.find((item) => item.periodId === period.id)
                 if (!result) return <td key={period.id}><span className="result-pill result-unavailable">—</span></td>
                 const isSelected = selected?.securityId === security.id && selected?.periodId === period.id
-                return <td key={period.id}><button type="button" className={`result-pill ${statusClass(result.strength)} ${isSelected ? "selected" : ""}`} aria-pressed={isSelected} onMouseEnter={(event) => showTooltip(event, security, result)} onMouseLeave={() => setTooltip(null)} onFocus={(event) => showTooltip(event, security, result)} onBlur={() => setTooltip(null)} onPointerDown={(event) => { if (event.pointerType === "touch") showTooltip(event, security, result) }} onClick={() => selectResult(security, result)} disabled={!result.available}><i aria-hidden="true" />{result.newlyReported ? "New" : result.available ? `${result.primaryMetricLabel} ${formatPercent(result.primaryMetricYoY)}` : "—"}{result.newlyReported ? <b aria-label="Newly reported" /> : null}</button></td>
+                return <td key={period.id}><button type="button" className={`result-pill ${statusClass(result.strength)} ${isSelected ? "selected" : ""}`} aria-pressed={isSelected} onMouseEnter={(event) => showTooltip(event, security, result)} onMouseLeave={() => setTooltip(null)} onFocus={(event) => showTooltip(event, security, result)} onBlur={() => setTooltip(null)} onPointerDown={(event) => { if (event.pointerType === "touch") setTooltip(null) }} onClick={() => selectResult(security, result)} disabled={!result.available}><i aria-hidden="true" />{result.newlyReported ? "New" : result.available ? `${result.primaryMetricLabel} ${formatPercent(result.primaryMetricYoY)}` : "—"}{result.newlyReported ? <b aria-label="Newly reported" /> : null}</button></td>
               })}</tr>)}
               {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={resultsDemoModel.periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
             </tbody>
@@ -170,7 +175,7 @@ export function ResultsPage() {
         {selectedSecurity && selectedResult ? <div ref={analysisRef} className="selected-analysis">
           <div className="selected-analysis-heading">
             <div><h2>{selectedSecurity.symbol} — {resultsDemoModel.periods.find((item) => item.id === selectedResult.periodId)?.label}</h2><span className={`analysis-status ${statusClass(selectedResult.strength)}`}><i aria-hidden="true" />{statusLabel(selectedResult.strength)}</span><span className="demo-chip">Demo fixture</span></div>
-            <div className="analysis-actions"><button type="button" disabled>NSE Filing ↗</button><button type="button" disabled>Company IR ↗</button><button type="button" onClick={() => setSelected(null)}>Collapse</button></div>
+            <div className="analysis-actions"><button type="button" disabled>NSE Filing ↗</button><button type="button" disabled>Company IR ↗</button><button type="button" onClick={() => { setSelected(null); setTooltip(null) }}>Collapse</button></div>
           </div>
           <ResultsAnalysisDetail security={selectedSecurity} result={selectedResult} periods={resultsDemoModel.periods} />
         </div> : null}

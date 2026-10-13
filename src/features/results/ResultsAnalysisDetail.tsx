@@ -60,6 +60,8 @@ function MetricChart({ security, periods, result }: Props) {
     return observation?.metrics.find((m) => m.id === selectedMetric)?.value ?? null
   })
   const largest = Math.max(1, ...series.filter((v): v is number => v !== null).map((v) => Math.abs(v)))
+  const hasNegative = series.some((value) => value !== null && value < 0)
+  const positiveHeight = hasNegative ? 46 : 88
 
   return <section className="results-card results-chart-card">
     <div className="results-card-heading r2-card-heading">
@@ -70,13 +72,18 @@ function MetricChart({ security, periods, result }: Props) {
         </select>
       </label>
     </div>
-    <div className="results-bars r2-bars" role="img" aria-label={`Demo ${selectedMetric} history: ${ascendingPeriods.map((p,i) => `${p.label} ${series[i] === null ? "unavailable" : series[i]}`).join(", ")}`}>
+    <div className={`results-bars r2-bars ${hasNegative ? "r2-signed-chart" : ""}`} role="img" aria-label={`Demo ${selectedMetric} history: ${ascendingPeriods.map((p,i) => `${p.label} ${series[i] === null ? "unavailable" : series[i]}`).join(", ")}`}>
       {series.map((value, index) => {
         const period = ascendingPeriods[index]
         if (!period) return null
+        const extent = value === null ? 0 : Math.max(5, Math.abs(value) / largest * positiveHeight)
         return <div className="results-bar-item" key={period.id}>
-          <strong>{value === null ? "—" : number.format(value)}</strong>
-          <div className="results-bar-track"><i className={value !== null && value < 0 ? "r2-negative-bar" : ""} style={{ height: value === null ? 0 : `${Math.max(5, Math.abs(value) / largest * 90)}%` }}/></div>
+          <strong>{value === null ? "N/A" : number.format(value)}</strong>
+          <div className="results-bar-track r2-signed-track">
+            <div className="r2-axis" aria-hidden="true"/>
+            {value === null ? <span className="r2-bar-missing" aria-label="Unavailable">—</span> :
+              <i className={value < 0 ? "r2-negative-bar" : ""} style={value < 0 ? { top: "50%", height: `${extent}%` } : { bottom: hasNegative ? "50%" : "0%", height: `${extent}%` }}/>}
+          </div>
           <span>{period.label}</span>
         </div>
       })}
