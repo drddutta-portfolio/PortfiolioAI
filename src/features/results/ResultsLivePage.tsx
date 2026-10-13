@@ -114,7 +114,7 @@ export function ResultsLivePage() {
     </header>
     <div className="results-tabs"><button type="button" className="active">Quarterly Results</button><button type="button" disabled>Annual Results · Later</button></div>
     <section className="results-workspace">
-      <div className="results-demo-banner" role="status"><strong>LIVE PORTFOLIO · EVIDENCE-GATED</strong><span>Only independently selected quarter observations can display numeric results. Missing or pending evidence is not estimated.</span></div>
+      <div className="results-demo-banner" role="status"><strong>LIVE PORTFOLIO · EVIDENCE-GATED</strong><span>Existing quarter-dated observations are visible with verification labels. Only selected observations support an operating-performance assessment.</span></div>
       <div className="results-filter-bar">
         <label className="results-search"><span className="sr-only">Search stocks</span><input placeholder="Search stocks…" value={query} onChange={(e) => { setQuery(e.target.value); setScrollTop(0) }}/></label>
         {(["ALL", "CURRENT", "CLOSED"] as const).map((f) => <button key={f} type="button" className={filter === f ? "active" : ""} onClick={() => { setFilter(f); setScrollTop(0) }}>{f === "ALL" ? "All Stocks" : f === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
@@ -122,7 +122,7 @@ export function ResultsLivePage() {
         <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setScrollTop(0) }}>Clear Filters</button>
       </div>
       {evidenceError ? <div role="alert" className="notice notice-error">Financial evidence unavailable: {evidenceError}. Portfolio membership is still shown; no financial values have been inferred.</div> : null}
-      <p className="r2-scroll-hint">Newer quarters appear on the left. Scroll horizontally for older quarters. Select a stock-quarter for qualified evidence and portfolio position.</p>
+      <p className="r2-scroll-hint">Newer quarters appear on the left. Scroll horizontally for older quarters. Select a stock-quarter to inspect available observations, source status and portfolio position.</p>
       <div className="results-matrix-shell" tabIndex={0} aria-label="Quarterly results, newest quarter first" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}>
         <table className="results-matrix">
           <thead><tr><th className="stock-column">{filtered.length} equities</th>{periods.map((period) => <th key={period.end}>{period.label}</th>)}</tr></thead>
@@ -137,7 +137,7 @@ export function ResultsLivePage() {
                 <button type="button" className={`result-pill ${isSelected ? "selected" : ""} ${selectedEvidence ? "result-mixed" : "result-unavailable"}`}
                   aria-pressed={isSelected}
                   onClick={() => setSelected({ id: position.securityId, end: period.end })}>
-                  {loadingEvidence ? "Loading…" : selectedEvidence ? "Source selected" : pending ? "Review required" : "No result"}
+                  {loadingEvidence ? "Loading…" : selectedEvidence ? "Selected data" : pending ? "Data · Review pending" : "Not in current data"}
                 </button>
               </td>
             })}
@@ -157,19 +157,19 @@ export function ResultsLivePage() {
             <div><dt>Unrealised P&L</dt><dd className={financialClass(chosen.position.unrealisedPnl)}>{chosen.position.unrealisedPnl === null ? "—" : formatMoney(chosen.position.unrealisedPnl, portfolio.portfolio.currency)}</dd></div>
             <div><dt>Realised P&L</dt><dd className={financialClass(chosen.position.realisedPnl)}>{chosen.position.realisedPnl === null ? "—" : formatMoney(chosen.position.realisedPnl, portfolio.portfolio.currency)}</dd></div>
           </dl></section>
-          <section className="results-card metrics-card"><h3>Qualified quarterly metrics</h3>
-            {selectedSources.length === 0 ? <p>No selected quarterly financial observation is available for this company and quarter.</p> :
+          <section className="results-card metrics-card"><h3>Quarterly observations · selection clearly marked</h3>
+            {selectedSources.length === 0 ? <p>No independently selected financial observation for this quarter. Any existing unselected observations are listed below.</p> :
               <table className="metrics-table"><thead><tr><th>Metric</th><th>Reported</th></tr></thead><tbody>
                 {selectedSources.map((row) => <tr key={row.id}><th>{LABELS[row.code] ?? row.code}</th><td>{row.value} {row.unit}</td></tr>)}
               </tbody></table>}
             {selectedRevenue ? <p className="r2-help">Primary observation: {LABELS[selectedRevenue.code]}</p> : null}
             {unselectedCount > 0 ? <div className="r3-review-sources">
-              <p className="r2-help">{unselectedCount} source observation(s) awaiting selection — numeric values are withheld.</p>
+              <p className="r2-help">{unselectedCount} existing quarter-dated observation(s), not independently verified. Values below are stored source observations, not approved results.</p>
               <ul aria-label="Unselected source provenance">
                 {chosenSources.filter((source) => !source.selected).map((source) => <li key={source.id}>
-                  <strong>{LABELS[source.code] ?? source.code}</strong>
+                  <strong>{LABELS[source.code] ?? source.code}: {source.value} {source.unit} (Review pending)</strong>
                   <span>Source: {source.source} · Scope: {source.scope ?? "Unknown"} · Publication: {source.publishedAt ?? "Unknown"}</span>
-                  <span>Retrieved: {source.retrievedAt} · Not an approved quarter fact</span>
+                  <span>Retrieved: {source.retrievedAt} · Unverified observation, excluded from performance grade</span>
                 </li>)}
               </ul>
             </div> : null}
