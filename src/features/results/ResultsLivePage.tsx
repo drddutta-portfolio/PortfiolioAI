@@ -38,9 +38,6 @@ const LABELS: Readonly<Record<string, string>> = {
   DEPOSITS_GROWTH_YOY: "Deposits growth YoY",
 }
 const isBank = (position: PortfolioPosition) => /bank/i.test(position.industry ?? "")
-function statusRow(source: ResultsSourceObservation | undefined) {
-  return source ? (source.selected ? "Selected source" : "Review required") : "No qualified result"
-}
 function evidenceForPeriod(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
   return rows.filter((row) => row.securityId === securityId && row.periodEnd === end)
 }
