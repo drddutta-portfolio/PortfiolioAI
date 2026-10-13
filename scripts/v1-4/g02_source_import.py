@@ -1,5 +1,5 @@
 """Owner-authorized original source registration; no evidence review or READY writes."""
-import hashlib,json,os,urllib.request,urllib.parse,urllib.error
+import hashlib,json,os,gzip,urllib.request,urllib.parse,urllib.error
 from pathlib import Path
 
 BUCKET='portfolioai-history-dev'
@@ -31,6 +31,9 @@ def ensure_original(s3,pin,fetch):
     original_valid(pin,s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
     return key,True
 
+def decode_transport(data,encoding):
+    return gzip.decompress(data) if encoding.lower()=='gzip' else data
+
 def main():
     import boto3
     from botocore.config import Config
@@ -41,6 +44,9 @@ def main():
         request=urllib.request.Request(pin['original_url'],headers={'User-Agent':'Mozilla/5.0 PortfolioAI original-source verification'})
         with urllib.request.urlopen(request,timeout=90) as r:
             data=r.read(64*1024*1024+1)
+            data=decode_transport(data,r.headers.get('Content-Encoding',''))
+            if len(data)!=pin['original_bytes'] or hashlib.sha256(data).hexdigest()!=pin['original_sha256']:
+                print(json.dumps({'sourceHash':pin['original_sha256'],'sourceSymbol':pin['symbol'],'httpStatus':r.status,'contentType':r.headers.get('Content-Type'),'contentEncoding':r.headers.get('Content-Encoding'),'observedBytes':len(data),'observedSha256':hashlib.sha256(data).hexdigest()}))
             if r.geturl()!=pin['resolved_url']:raise ValueError('G02_ORIGINAL_REDIRECT_CHANGED')
             return data
     def invoke(pin,url):
@@ -56,11 +62,17 @@ def main():
         if result.get('code')!='G02_ORIGINAL_REGISTERED_NOT_FINANCIALLY_ADMITTED' or result.get('providerApiCalls')!=0 or result.get('acceptedReviews')!=0 or result.get('canonicalMaterialization') is not False:raise ValueError('G02_SOURCE_IMPORT_RESPONSE_CONTRACT_INVALID')
         return result
     for pin in pins:
-        key,uploaded=ensure_original(s3,pin,fetch)
-        result=invoke(pin,s3.generate_presigned_url('get_object',Params={'Bucket':BUCKET,'Key':key},ExpiresIn=240))
-        results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'r2ObjectKey':key,'uploaded':uploaded,**result})
-        print(json.dumps({'symbol':pin['symbol'],'sourceId':result['sourceId'],'registered':True,'acceptedReviews':0}))
+        try:
+            key,uploaded=ensure_original(s3,pin,fetch)
+            result=invoke(pin,s3.generate_presigned_url('get_object',Params={'Bucket':BUCKET,'Key':key},ExpiresIn=240))
+            results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'r2ObjectKey':key,'uploaded':uploaded,**result})
+            print(json.dumps({'symbol':pin['symbol'],'sourceId':result['sourceId'],'registered':True,'acceptedReviews':0}))
+        except Exception as e:
+            results.append({'symbol':pin['symbol'],'hash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__})
+            print(json.dumps({'symbol':pin['symbol'],'sourceHash':pin['original_sha256'],'registered':False,'errorClass':type(e).__name__}))
         Path('g02-source-import-result').mkdir(exist_ok=True)
         Path('g02-source-import-result/sanitized-results.json').write_text(json.dumps({'results':results,'providerApiCalls':0,'acceptedReviews':0,'canonicalMaterialization':False},indent=2)+'\n')
+
+    if any(x.get('registered') is False for x in results):raise RuntimeError('G02_PARTIAL_ORIGINAL_REGISTRATION_REVIEW_ARTIFACT')
 
 if __name__=='__main__':main()
