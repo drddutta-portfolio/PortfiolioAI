@@ -9,9 +9,9 @@ const periods = [
   { id: "q1-fy26", label: "Q1 FY26", fiscalYear: 2026, quarter: 1 },
 ] as const
 
-function metrics(revenue: number | null, pat: number | null, eps: number | null, yoy: number | null): readonly QuarterlyMetric[] {
+function metrics(revenue: number | null, pat: number | null, eps: number | null, yoy: number | null, primaryLabel: string): readonly QuarterlyMetric[] {
   return [
-    { id: "revenue", label: "Revenue", value: revenue, unit: "INR_CRORE", qoqPercent: revenue === null ? null : 1.8, yoyPercent: yoy },
+    { id: primaryLabel === "NII" ? "nii" : "revenue", label: primaryLabel === "NII" ? "Net interest income" : "Revenue", value: revenue, unit: "INR_CRORE", qoqPercent: revenue === null ? null : 1.8, yoyPercent: yoy },
     { id: "pat", label: "PAT", value: pat, unit: "INR_CRORE", qoqPercent: pat === null ? null : 5.4, yoyPercent: pat === null ? null : 5.4 },
     { id: "eps", label: "EPS", value: eps, unit: "INR", qoqPercent: eps === null ? null : 5.3, yoyPercent: eps === null ? null : 5.4 },
   ]
@@ -37,7 +37,7 @@ function result(
     newlyReported,
     available: primaryMetricYoY !== null,
     verificationState: "DEMO",
-    metrics: metrics(revenue, pat, eps, primaryMetricYoY),
+    metrics: metrics(revenue, pat, eps, primaryMetricYoY, primaryMetricLabel),
   }
 }
 
