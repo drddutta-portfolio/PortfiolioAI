@@ -1,0 +1,928 @@
+{
+  "version": "G02_EXECUTION_START_READ_ONLY_V1",
+  "date": "2026-10-14",
+  "timezone": "Asia/Kolkata",
+  "canonicalHandlerDryRunExecuted": false,
+  "persistedSelectionsChanged": false,
+  "readyCount": 0,
+  "canonicalAdmissions": 0,
+  "classification": [
+    {
+      "id": "87132afb-e054-4ba2-adae-dc325637c001",
+      "symbol": "AVALON",
+      "name": "AVALON",
+      "isin": "INE0LCL01028",
+      "exchange": "NSE",
+      "sector": "Information Technology",
+      "industry": "Heavy Electrical Equipment",
+      "enrichment_state": "AVAILABLE",
+      "fresh_until": "2026-12-31 23:59:59.999+00",
+      "scoring_profile_code": null,
+      "assignment_status": null,
+      "assignment_basis": null,
+      "source_reference": null,
+      "reviewed_at": null
+    },
+    {
+      "id": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "symbol": "CGPOWER",
+      "name": "CGPOWER",
+      "isin": "INE067A01029",
+      "exchange": "NSE",
+      "sector": "Capital Goods",
+      "industry": "Heavy Electrical Equipment",
+      "enrichment_state": "AVAILABLE",
+      "fresh_until": "2026-12-31 23:59:59.999+00",
+      "scoring_profile_code": null,
+      "assignment_status": null,
+      "assignment_basis": null,
+      "source_reference": null,
+      "reviewed_at": null
+    },
+    {
+      "id": "7202b7b7-237c-439b-936d-c75bab806678",
+      "symbol": "TDPOWERSYS",
+      "name": "TDPOWERSYS",
+      "isin": "INE419M01035",
+      "exchange": "NSE",
+      "sector": "Energy",
+      "industry": "Heavy Electrical Equipment",
+      "enrichment_state": "AVAILABLE",
+      "fresh_until": "2026-12-31 23:59:59.999+00",
+      "scoring_profile_code": null,
+      "assignment_status": null,
+      "assignment_basis": null,
+      "source_reference": null,
+      "reviewed_at": null
+    }
+  ],
+  "subprofiles": [],
+  "requirements": [
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "BUSINESS_DURABILITY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+      "raw_source_record_id": "5d22ab53-83b2-4599-85cb-8c4a30f5e8f6"
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "CFO_FCF_AND_WORKING_CAPITAL",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "54e469ab-c19e-4326-8ba8-84b69c22bd9f"
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "IC3_LINEAGE_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "MOMENTUM_12M_RELATIVE",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "28d06632-4449-4cd0-95e8-e1013b9ff12e"
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OPERATING_MARGIN_HISTORY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "REPORTING_PERIOD_INVALID",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OWNERSHIP_GOVERNANCE",
+      "required": true,
+      "minimum_history": 4,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "8abd71d5-f1b7-49f5-b61b-a2ab26fd18ba"
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "MISSING",
+      "reason_code": "REQUIRED_EVIDENCE_MISSING",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "ROCE_OR_ROIC",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "28d06632-4449-4cd0-95e8-e1013b9ff12e"
+    },
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "624aa400-f50a-4234-b8fc-90ad2b6e74d8",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "VALUATION",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "28d06632-4449-4cd0-95e8-e1013b9ff12e"
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "BUSINESS_DURABILITY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+      "raw_source_record_id": "c091452e-1306-4261-94f8-fdb0b14d8f62"
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "CFO_FCF_AND_WORKING_CAPITAL",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "9f2548ff-9fbd-4cd6-8362-a3fc933f9c13"
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "IC3_LINEAGE_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "MOMENTUM_12M_RELATIVE",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "9f2548ff-9fbd-4cd6-8362-a3fc933f9c13"
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OPERATING_MARGIN_HISTORY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "MISSING",
+      "reason_code": "REQUIRED_EVIDENCE_MISSING",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OWNERSHIP_GOVERNANCE",
+      "required": true,
+      "minimum_history": 4,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "27813495-25b1-4635-ac1a-30f65a5cee68"
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "MISSING",
+      "reason_code": "REQUIRED_EVIDENCE_MISSING",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "ROCE_OR_ROIC",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "REPORTING_PERIOD_INVALID",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "c5b2ab97-389f-4e38-ae57-0833f2d1ae56",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "VALUATION",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "9f2548ff-9fbd-4cd6-8362-a3fc933f9c13"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "BUSINESS_DURABILITY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+      "raw_source_record_id": "21990c52-0858-4197-9abf-f3346551ab34"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "CFO_FCF_AND_WORKING_CAPITAL",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "94d0d799-a91c-4e7c-8369-e04d8716a787"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "STALE",
+      "reason_code": "HISTORY_LATEST_SESSION_STALE",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "FRESH",
+      "reason_code": "IC3_LINEAGE_READY",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "MOMENTUM_12M_RELATIVE",
+      "required": true,
+      "minimum_history": 252,
+      "freshness_policy": null,
+      "evidence_state": "STALE",
+      "reason_code": "HISTORY_LATEST_SESSION_STALE",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "MISSING",
+      "reason_code": "REQUIRED_EVIDENCE_MISSING",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OPERATING_MARGIN_HISTORY",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "REPORTING_PERIOD_INVALID",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "OWNERSHIP_GOVERNANCE",
+      "required": true,
+      "minimum_history": 4,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "280f4761-76e4-4afe-8823-0ecd10077d07"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "MISSING",
+      "reason_code": "REQUIRED_EVIDENCE_MISSING",
+      "raw_source_record_id": null
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "ROCE_OR_ROIC",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "94d0d799-a91c-4e7c-8369-e04d8716a787"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "98f0f400-981e-46f7-83bb-2b0ffa686948",
+      "as_of_date": "2026-10-07",
+      "requirement_code": "VALUATION",
+      "required": true,
+      "minimum_history": 1,
+      "freshness_policy": null,
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+      "raw_source_record_id": "94d0d799-a91c-4e7c-8369-e04d8716a787"
+    }
+  ],
+  "observations": [
+    {
+      "symbol": "AVALON",
+      "metric_code": "CFO_ANNUAL",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "EPS_GROWTH_YOY",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:36:50.245+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "NET_PROFIT_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "OPM_TTM",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:36:50.245+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "PE_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "REVENUE_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "ROE_ANNUAL",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:55.856+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:39:59.606+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:39:59.606+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:39:59.606+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:39:59.606+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:39:57.925+00"
+    },
+    {
+      "symbol": "AVALON",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:39:59.606+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "CFO_ANNUAL",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "EPS_GROWTH_YOY",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:33.303+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "NET_PROFIT_TTM",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:33.303+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "PE_TTM",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "REVENUE_TTM",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "ROCE_ANNUAL",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:33.303+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "ROE_ANNUAL",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:31.274+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "rows": 1,
+      "dated_rows": 1,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:49:34.974+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "rows": 1,
+      "dated_rows": 1,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:49:34.974+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "rows": 1,
+      "dated_rows": 1,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:49:34.974+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "rows": 1,
+      "dated_rows": 1,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:49:34.974+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-26 20:49:33.303+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "rows": 1,
+      "dated_rows": 1,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-26 20:49:34.974+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "CFO_ANNUAL",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "EPS_GROWTH_YOY",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:46:00.027+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "NET_PROFIT_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "OPM_TTM",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:46:00.027+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "rows": 1,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:46:00.027+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "PE_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "REVENUE_TTM",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "ROE_ANNUAL",
+      "rows": 2,
+      "dated_rows": 0,
+      "latest_period": null,
+      "last_retrieved": "2026-09-29 16:45:57.519+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-29 16:46:01.9+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-29 16:46:01.9+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-29 16:46:01.9+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-29 16:46:01.9+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "rows": 2,
+      "dated_rows": 2,
+      "latest_period": "2026-06-30",
+      "last_retrieved": "2026-09-29 16:46:01.9+00"
+    }
+  ],
+  "linkedSources": [
+    {
+      "id": "21990c52-0858-4197-9abf-f3346551ab34",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_DOCUMENT_SEARCH",
+      "retrieved_at": "2026-09-29 16:46:04.542+00",
+      "source_url": null
+    },
+    {
+      "id": "27813495-25b1-4635-ac1a-30f65a5cee68",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_OWNERSHIP",
+      "retrieved_at": "2026-09-26 20:49:34.974+00",
+      "source_url": null
+    },
+    {
+      "id": "280f4761-76e4-4afe-8823-0ecd10077d07",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_OWNERSHIP",
+      "retrieved_at": "2026-09-29 16:46:01.9+00",
+      "source_url": null
+    },
+    {
+      "id": "28d06632-4449-4cd0-95e8-e1013b9ff12e",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_STRUCTURED_METRICS",
+      "retrieved_at": "2026-09-26 20:39:57.925+00",
+      "source_url": null
+    },
+    {
+      "id": "54e469ab-c19e-4326-8ba8-84b69c22bd9f",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_STRUCTURED_METRICS",
+      "retrieved_at": "2026-09-29 16:36:50.245+00",
+      "source_url": null
+    },
+    {
+      "id": "5d22ab53-83b2-4599-85cb-8c4a30f5e8f6",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_DOCUMENT_SEARCH",
+      "retrieved_at": "2026-09-26 20:40:03.527+00",
+      "source_url": null
+    },
+    {
+      "id": "8abd71d5-f1b7-49f5-b61b-a2ab26fd18ba",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_OWNERSHIP",
+      "retrieved_at": "2026-09-26 20:39:59.606+00",
+      "source_url": null
+    },
+    {
+      "id": "94d0d799-a91c-4e7c-8369-e04d8716a787",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_STRUCTURED_METRICS",
+      "retrieved_at": "2026-09-29 16:46:00.027+00",
+      "source_url": null
+    },
+    {
+      "id": "9f2548ff-9fbd-4cd6-8362-a3fc933f9c13",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_STRUCTURED_METRICS",
+      "retrieved_at": "2026-09-26 20:49:33.303+00",
+      "source_url": null
+    },
+    {
+      "id": "c091452e-1306-4261-94f8-fdb0b14d8f62",
+      "source_code": "TRENDLYNE_MCP",
+      "record_kind": "COMPLETE_RESEARCH_DOCUMENT_SEARCH",
+      "retrieved_at": "2026-09-26 20:49:38.603+00",
+      "source_url": null
+    }
+  ],
+  "marketHistory": [
+    {
+      "symbol": "AVALON",
+      "history_rows": 277,
+      "latest_session": "2026-10-06 18:30:00+00",
+      "last_retrieved": "2026-10-07 16:53:05.682+00"
+    },
+    {
+      "symbol": "CGPOWER",
+      "history_rows": 277,
+      "latest_session": "2026-10-06 18:30:00+00",
+      "last_retrieved": "2026-10-07 16:54:06.912+00"
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "history_rows": 276,
+      "latest_session": "2026-10-05 18:30:00+00",
+      "last_retrieved": "2026-10-07 03:27:29.067+00"
+    }
+  ],
+  "benchmarkCanonicalTableRows": 0,
+  "benchmarkOtherStoresNotRuledOut": true,
+  "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+  "assignmentAuthority": "PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json",
+  "dbAssignmentTableEmptyNotAbsenceOfBundledAuthority": true,
+  "methodologyReferencePilot": "CGPOWER",
+  "admissionGap": "FROZEN_MULTI_PERIOD_MINIMA_NOT_PROVEN_BY_LEGACY_MINIMUM_ONE",
+  "officialOriginalsLocalOnly": true
+}
