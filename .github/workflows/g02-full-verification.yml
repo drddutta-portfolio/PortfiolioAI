@@ -1,0 +1,33 @@
+name: G02 Full Repository Verification
+on:
+  pull_request:
+    branches: [PortfolioAI-Development]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.head_ref == 'codex/g02-industry-evidence' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch historical Program D audit reference
+        run: git fetch origin refs/heads/program-d-operations-optional-ai:refs/remotes/origin/program-d-operations-optional-ai
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check:architecture
+      - run: npm run lint:architecture
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run lint:edge
+      - run: npm run test:edge
+      - run: npm test
+      - run: npm run build
+      - run: python scripts/v1-4/test_g02_source_import.py
+      - run: git diff --check

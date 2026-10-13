@@ -1,3 +1,4 @@
+import {industrialsMinimumObservations} from '../../../supabase/functions/_shared/v14-industrials-history-minimums'
 import {
   INDUSTRIALS_K4A_CONTRACT,
   type IndustrialsK4aSubprofile,
@@ -62,43 +63,51 @@ const DIMENSION_WEIGHTS = {
   OWNERSHIP_GOVERNANCE: 4,
 } as const
 
-function commonRules(): IndustrialsSignalRule[] {
+function commonRules(): Array<Omit<IndustrialsSignalRule, "minimumObservations">> {
   return [
-    { signalCode: "OPERATING_MARGIN_HISTORY", dimensionCode: "QUALITY", dimensionWeight: DIMENSION_WEIGHTS.QUALITY, minimumObservations: 8, normalizationAuthority: "SELF_HISTORY_AND_SUBPROFILE_PEER_RELATIVE" },
-    { signalCode: "ROCE_OR_ROIC", dimensionCode: "CAPITAL_EFFICIENCY", dimensionWeight: DIMENSION_WEIGHTS.CAPITAL_EFFICIENCY, minimumObservations: 3, normalizationAuthority: "CYCLE_AWARE_ABSOLUTE_PLUS_PEER_RELATIVE" },
-    { signalCode: "NET_DEBT_AND_INTEREST_COVERAGE", dimensionCode: "BALANCE_SHEET_CREDIT", dimensionWeight: DIMENSION_WEIGHTS.BALANCE_SHEET_CREDIT, minimumObservations: 3, normalizationAuthority: "ABSOLUTE_SAFETY_BANDS" },
-    { signalCode: "BUSINESS_DURABILITY", dimensionCode: "BUSINESS_DURABILITY", dimensionWeight: DIMENSION_WEIGHTS.BUSINESS_DURABILITY, minimumObservations: 1, normalizationAuthority: "SUBPROFILE_DURABILITY_EVIDENCE_CONTRACT" },
-    { signalCode: "VALUATION", dimensionCode: "VALUATION", dimensionWeight: DIMENSION_WEIGHTS.VALUATION, minimumObservations: 3, normalizationAuthority: "SUBPROFILE_VALUATION_AUTHORITY" },
-    { signalCode: "MOMENTUM_12M_RELATIVE", dimensionCode: "MOMENTUM", dimensionWeight: DIMENSION_WEIGHTS.MOMENTUM, minimumObservations: 252, normalizationAuthority: "APPROVED_INDUSTRIAL_BENCHMARK" },
-    { signalCode: "DRAWDOWN_VOLATILITY_RISK", dimensionCode: "RISK", dimensionWeight: DIMENSION_WEIGHTS.RISK, minimumObservations: 252, normalizationAuthority: "ABSOLUTE_AND_SUBPROFILE_RELATIVE_RISK" },
-    { signalCode: "OWNERSHIP_GOVERNANCE", dimensionCode: "OWNERSHIP_GOVERNANCE", dimensionWeight: DIMENSION_WEIGHTS.OWNERSHIP_GOVERNANCE, minimumObservations: 1, normalizationAuthority: "REVIEWED_GOVERNANCE_EVIDENCE" },
+    { signalCode: "OPERATING_MARGIN_HISTORY", dimensionCode: "QUALITY", dimensionWeight: DIMENSION_WEIGHTS.QUALITY, normalizationAuthority: "SELF_HISTORY_AND_SUBPROFILE_PEER_RELATIVE" },
+    { signalCode: "ROCE_OR_ROIC", dimensionCode: "CAPITAL_EFFICIENCY", dimensionWeight: DIMENSION_WEIGHTS.CAPITAL_EFFICIENCY, normalizationAuthority: "CYCLE_AWARE_ABSOLUTE_PLUS_PEER_RELATIVE" },
+    { signalCode: "NET_DEBT_AND_INTEREST_COVERAGE", dimensionCode: "BALANCE_SHEET_CREDIT", dimensionWeight: DIMENSION_WEIGHTS.BALANCE_SHEET_CREDIT, normalizationAuthority: "ABSOLUTE_SAFETY_BANDS" },
+    { signalCode: "BUSINESS_DURABILITY", dimensionCode: "BUSINESS_DURABILITY", dimensionWeight: DIMENSION_WEIGHTS.BUSINESS_DURABILITY, normalizationAuthority: "SUBPROFILE_DURABILITY_EVIDENCE_CONTRACT" },
+    { signalCode: "VALUATION", dimensionCode: "VALUATION", dimensionWeight: DIMENSION_WEIGHTS.VALUATION, normalizationAuthority: "SUBPROFILE_VALUATION_AUTHORITY" },
+    { signalCode: "MOMENTUM_12M_RELATIVE", dimensionCode: "MOMENTUM", dimensionWeight: DIMENSION_WEIGHTS.MOMENTUM, normalizationAuthority: "APPROVED_INDUSTRIAL_BENCHMARK" },
+    { signalCode: "DRAWDOWN_VOLATILITY_RISK", dimensionCode: "RISK", dimensionWeight: DIMENSION_WEIGHTS.RISK, normalizationAuthority: "ABSOLUTE_AND_SUBPROFILE_RELATIVE_RISK" },
+    { signalCode: "OWNERSHIP_GOVERNANCE", dimensionCode: "OWNERSHIP_GOVERNANCE", dimensionWeight: DIMENSION_WEIGHTS.OWNERSHIP_GOVERNANCE, normalizationAuthority: "REVIEWED_GOVERNANCE_EVIDENCE" },
   ]
 }
 
-function rulesFor(subprofile: IndustrialsK4aSubprofile): readonly IndustrialsSignalRule[] {
+function candidateRulesFor(subprofile: IndustrialsK4aSubprofile): readonly Omit<IndustrialsSignalRule, "minimumObservations">[] {
   const shared = commonRules()
 
   if (subprofile === "PROJECT_EPC") {
     return [
       ...shared,
-      { signalCode: "ORDER_BOOK_AND_REVENUE_GROWTH", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, minimumObservations: 4, normalizationAuthority: "ORDER_BOOK_PLUS_EXECUTION_NORMALIZED" },
-      { signalCode: "WORKING_CAPITAL_AND_CASH_CONVERSION", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, minimumObservations: 3, normalizationAuthority: "CFO_FCF_AND_WORKING_CAPITAL_DISCIPLINE" },
+      { signalCode: "ORDER_BOOK_AND_REVENUE_GROWTH", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, normalizationAuthority: "ORDER_BOOK_PLUS_EXECUTION_NORMALIZED" },
+      { signalCode: "WORKING_CAPITAL_AND_CASH_CONVERSION", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, normalizationAuthority: "CFO_FCF_AND_WORKING_CAPITAL_DISCIPLINE" },
     ]
   }
 
   if (subprofile === "CAPITAL_EQUIPMENT_ELECTRICAL") {
     return [
       ...shared,
-      { signalCode: "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, minimumObservations: 8, normalizationAuthority: "MULTI_PERIOD_GROWTH_WITH_ORDER_CONTEXT" },
-      { signalCode: "CFO_FCF_AND_WORKING_CAPITAL", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, minimumObservations: 3, normalizationAuthority: "CFO_FCF_CONVERSION_AND_WORKING_CAPITAL" },
+      { signalCode: "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, normalizationAuthority: "MULTI_PERIOD_GROWTH_WITH_ORDER_CONTEXT" },
+      { signalCode: "CFO_FCF_AND_WORKING_CAPITAL", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, normalizationAuthority: "CFO_FCF_CONVERSION_AND_WORKING_CAPITAL" },
     ]
   }
 
   return [
     ...shared,
-    { signalCode: "ORDER_BOOK_AND_EXECUTION_GROWTH", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, minimumObservations: 4, normalizationAuthority: "ORDER_INFLOW_EXECUTION_AND_REVENUE_GROWTH" },
-    { signalCode: "CFO_FCF_CONVERSION", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, minimumObservations: 3, normalizationAuthority: "CFO_FCF_CONVERSION_WITH_PROGRAM_CONTEXT" },
+    { signalCode: "ORDER_BOOK_AND_EXECUTION_GROWTH", dimensionCode: "GROWTH", dimensionWeight: DIMENSION_WEIGHTS.GROWTH, normalizationAuthority: "ORDER_INFLOW_EXECUTION_AND_REVENUE_GROWTH" },
+    { signalCode: "CFO_FCF_CONVERSION", dimensionCode: "CASH_FLOW", dimensionWeight: DIMENSION_WEIGHTS.CASH_FLOW, normalizationAuthority: "CFO_FCF_CONVERSION_WITH_PROGRAM_CONTEXT" },
   ]
+}
+
+function rulesFor(subprofile: IndustrialsK4aSubprofile): readonly IndustrialsSignalRule[] {
+ return candidateRulesFor(subprofile).map(rule=>{
+  const minimum=industrialsMinimumObservations(subprofile,rule.signalCode)
+  if(minimum===null)throw new Error('INDUSTRIALS_FROZEN_SIGNAL_MINIMUM_MISSING:'+rule.signalCode)
+  return {...rule,minimumObservations:minimum}
+ })
 }
 
 function stableScore(value: number) {
