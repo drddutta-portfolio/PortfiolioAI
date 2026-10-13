@@ -1,6 +1,11 @@
 name: KVB Valuation Genuine Owner Source Bundle
 on:
   workflow_dispatch:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - .github/workflows/banking-v14-kvb-valuation-owner-bundle.yml
+      - scripts/v1-4/kvb_valuation_owner_bundle.py
 permissions:
   contents: read
 jobs:

@@ -54,3 +54,15 @@ Registration has not activated valuation definitions or admitted any financial o
 The independently checked current quarterly diluted EPS components are 5.94, 7.14, 7.50 and 7.82, all on the post-bonus basis. Their calculated TTM sum is 28.40; this is a calculation awaiting factual admission, not a canonical FRESH claim. Historical annual EPS is used only for same-basis reconciliation, never substituted for rolling quarterly TTM evidence.
 
 No new evidence admission, READY selection, registry activation or migration is claimed by this execution record. Source-registration and code checks are reported separately from canonical FRESH results.
+
+## Verified activation — 13 October 2026
+
+Implementation head `17ce42c7eb647ad90cfd9cde6f4e3289f4ef9563` passed Architecture Guard (38352770036), Banking Full Verification (38352770021), and Numeric Admission Guard (38352770024). Local application verification passed 2,517 tests; Edge verification passed 545 tests before the last timing/collector additions, which also passed focused tests and final CI. The combined page/repository/timing/collector focused check passed 17 tests.
+
+Development canonical materializer is ACTIVE v62, bundle SHA-256 `cdf207dab3b6b5c1277d26bf5fc7e8261fc6aa95231de8428386386aea436327`. The deployment overlays only the current-session loader, history-readiness and pre-open helper plus three new read-only session helpers on the retrieved v61 bundle (`9739e6d86596b33c34869df0e626e2c82919b1cec3c47fd79b31ac8a2c116ed9`). It preserves the additional live BANK12 delegation, accepted-source proof and metric-label compatibility changes rather than replacing those deployed files with this branch's older copies. The full repository CI applies to the implementation head; no claim is made that unrelated preserved live files were rerun as this branch's full repository suite.
+
+The new Development `v14-kvb-pb-admission` endpoint is ACTIVE v1, SHA-256 `251f85e50faef630994a00a2a2249c3fdbc7fe50d8856576173b1902660f77ab`. Platform JWT verification is disabled specifically because the function verifies both the tightly scoped signed GitHub OIDC source executor and the genuine Supabase owner session itself. Neither route permits operator financial approval. It reuses the existing atomic ingestion lease and genuine owner-only materialization/grant path; no new schema migration was applied.
+
+The Vercel preview from the exact implementation commit is READY (`dpl_2aTnzpEfww9y44oD92pgh69A8zfR`). The existing approved alias points to it; the valuation route returned HTTP 200 and its compiled Supabase asset contains the Development URL and no Production URL. This is HTTP/configuration proof, not a genuine owner-browser acceptance test.
+
+The new workflow could not be manually dispatched before GitHub registered its branch-only file (HTTP 404). A restricted push trigger on the authorized source-remediation branch is added to execute the reviewed source-only preparation without changing the default/Production branch. Financial admission, registry activation and canonical materialization remain pending genuine owner review.
