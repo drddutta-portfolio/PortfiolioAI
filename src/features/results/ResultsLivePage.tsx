@@ -131,7 +131,7 @@ export function ResultsLivePage() {
         <button type="button" className="clear-filter" onClick={() => { setQuery(""); setFilter("ALL"); setIndustry("ALL"); setStatusFilter("ALL"); setScrollTop(0) }}>Clear Filters</button>
       </div>
       {evidenceError ? <div role="alert" className="notice notice-error">Financial evidence unavailable: {evidenceError}. Portfolio membership is still shown; no financial values have been inferred.</div> : null}
-      <p className="r2-scroll-hint">Newer quarters appear on the left. Scroll horizontally for older quarters. Select a stock-quarter to inspect available observations, source status and portfolio position.</p>
+      
       <div className="results-matrix-shell" tabIndex={0} aria-label="Quarterly results, newest quarter first" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}>
         <table className="results-matrix">
           <thead><tr><th className="stock-column">{filtered.length} equities</th>{periods.map((period) => <th key={period.end}>{period.label}</th>)}</tr></thead>
@@ -149,7 +149,7 @@ export function ResultsLivePage() {
                   aria-pressed={isSelected}
                   title={`${position.symbol} — ${period.label}. ${candidate.length ? candidate.map((row) => `${LABELS[row.code] ?? row.code}: ${row.value} ${row.unit}; ${row.selected ? "selected" : "review pending"}; source ${row.source}; basis ${row.scope ?? "unknown"}`).join(" | ") : "No quarter-dated observation in connected data"}`}
                   onClick={() => setSelected({ id: position.securityId, end: period.end })}>
-                  {loadingEvidence ? "Loading…" : selectedEvidence ? `${LABELS[selectedEvidence.code] ?? selectedEvidence.code}: ${selectedEvidence.value} ${selectedEvidence.unit}` : pending ? `${LABELS[candidate[0]!.code] ?? candidate[0]!.code}: ${candidate[0]!.value} ${candidate[0]!.unit} · Review pending` : "Not in current data"}
+                  <i className={`r3-dot ${candidate.length ? tone : "unavailable"}`} aria-hidden="true"/>{loadingEvidence ? "Loading…" : selectedEvidence ? `${LABELS[selectedEvidence.code] ?? selectedEvidence.code}: ${selectedEvidence.value} ${selectedEvidence.unit}` : pending ? `${LABELS[candidate[0]!.code] ?? candidate[0]!.code}: ${candidate[0]!.value} ${candidate[0]!.unit} · Review pending` : "Not in current data"}
                 </button>
               </td>
             })}
@@ -169,6 +169,17 @@ export function ResultsLivePage() {
             <div><dt>Unrealised P&L</dt><dd className={financialClass(chosen.position.unrealisedPnl)}>{chosen.position.unrealisedPnl === null ? "—" : formatMoney(chosen.position.unrealisedPnl, portfolio.portfolio.currency)}</dd></div>
             <div><dt>Realised P&L</dt><dd className={financialClass(chosen.position.realisedPnl)}>{chosen.position.realisedPnl === null ? "—" : formatMoney(chosen.position.realisedPnl, portfolio.portfolio.currency)}</dd></div>
           </dl></section>
+          <section className="results-card r3-chart-card">
+            <h3>{isBank(chosen.position) ? "Advances growth" : "Operating revenue"} — Last {periods.length} Quarters</h3>
+            <p className="r2-help">Only verified selected observations are charted. Missing quarters are not estimated.</p>
+            <div className="r3-chart-bars" role="img" aria-label="Selected financial history by quarter">
+              {chartPoints.map(({ period, observation }) => <div className="r3-chart-col" key={period.end}>
+                <strong>{observation ? observation.value : "—"}</strong>
+                <div className="r3-chart-track">{observation ? <i style={{ height: `${Math.max(4, Math.abs(Number(observation.value)) / chartMax * 100)}%` }}/>: null}</div>
+                <span>{period.label}</span>
+              </div>)}
+            </div>
+          </section>
           <section className="results-card metrics-card"><h3>Quarterly observations · selection clearly marked</h3>
             {selectedSources.length === 0 ? <p>No independently selected financial observation for this quarter. Any existing unselected observations are listed below.</p> :
               <table className="metrics-table"><thead><tr><th>Metric</th><th>Reported</th></tr></thead><tbody>
