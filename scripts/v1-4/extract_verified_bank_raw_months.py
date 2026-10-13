@@ -92,9 +92,10 @@ def read_archive(archive, identities, cache):
 
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('catalog'); parser.add_argument('scope'); parser.add_argument('cache'); parser.add_argument('output')
+    parser.add_argument('--through-month', choices=['2025-07','2026-09'], default='2025-07')
     args = parser.parse_args(); catalog = json.loads(Path(args.catalog).read_text()); scope = json.loads(Path(args.scope).read_text())
     if len({a['month_key'] for a in catalog}) != len(catalog): raise ValueError('DUPLICATE_MONTH_CATALOG')
-    if any(not '2023-10' <= a['month_key'] <= '2025-07' for a in catalog): raise ValueError('DATED_SCOPE_REQUIRED')
+    if any(not '2023-10' <= a['month_key'] <= args.through_month for a in catalog): raise ValueError('DATED_SCOPE_REQUIRED')
     cache = Path(args.cache); cache.mkdir(parents=True, exist_ok=True); started = time.monotonic()
     with ThreadPoolExecutor(max_workers=3) as pool:
         captures = list(pool.map(lambda archive: read_archive(archive, scope, cache), catalog))

@@ -29,4 +29,21 @@ The NIM direct-only contract remains active. Retained presentations contain quar
 5. Resolve NIM's exact source/methodology boundary without unapproved derivation or annual-to-TTM relabelling. Consolidate genuinely required decisions after unaffected work is complete.
 6. Run current KVB validation, authorized single-use materialization and independent selected-snapshot readback. READY requires every mandatory requirement to pass.
 
-No new evidence admission, READY selection, registry activation, migration or deployment is claimed by this execution record. Source-registration and code checks are reported separately from canonical FRESH results.
+## Executed original-source registration successor
+
+The eighteen missing denominator originals described above are now registered. The source manifest also includes the original June 2026 statutory diluted-EPS filing, with its exact exchange publication timestamp and original SHA-256. No source acquisition is repeated to replace a qualified original.
+
+- Verified repository source head: `ab2c7e466cce92893b77b152e73efb63a512c0e5`.
+- Architecture Guard: GitHub Actions `38299011268`, SUCCESS.
+- Banking Full Verification: `38299011475`, SUCCESS.
+- Numeric Admission Guard: `38299011459`, SUCCESS.
+- Immutable-original archive/readback: `38299004782`, SUCCESS.
+- Signed source-registration execution: `38325666583`, SUCCESS.
+- Development original importer: ACTIVE v3, SHA-256 `e60670bb98a6605d52b02829c1a3335cd60e0355ad17d0be42278ecfc6cdbb4f`; its existing custom GitHub OIDC authentication remains mandatory.
+- Independent database readback: 47 registered original sources, including ten XBRL shareholding sources and the June 2026 statutory EPS PDF.
+
+Registration has not activated valuation definitions or admitted any financial observations. The initial archive execution encountered a timeout reading one existing large original; the successor used a bounded 120-second read timeout, with one total attempt and immutable hash readback. No automatic retry or conflicting-source replacement was introduced.
+
+The independently checked current quarterly diluted EPS components are 5.94, 7.14, 7.50 and 7.82, all on the post-bonus basis. Their calculated TTM sum is 28.40; this is a calculation awaiting factual admission, not a canonical FRESH claim. Historical annual EPS is used only for same-basis reconciliation, never substituted for rolling quarterly TTM evidence.
+
+No new evidence admission, READY selection, registry activation or migration is claimed by this execution record. Source-registration and code checks are reported separately from canonical FRESH results.

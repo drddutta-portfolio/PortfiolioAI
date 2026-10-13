@@ -27,4 +27,13 @@ describe("BANK owner-approved M5/M7 comparator without fake admissions",()=>{
   expect(compareBankSelfHistory({...base,historical:rows.map(r=>({...r,corporateActionBasis:"UNADJUSTED"}))}).state).toBe("REVIEW_REQUIRED");
  });
  it("keeps zero/negative denominators blocked",()=>expect(compareBankSelfHistory({...base,historical:rows.map(r=>({...r,multiple:-1}))}).state).toBe("REVIEW_REQUIRED"));
+ it("preserves source decimal precision when selecting an even median",()=>{
+  const r=compareBankSelfHistory({...base,currentMultiple:"100.0000000000000002",
+   historical:rows.map((row,i)=>({...row,multiple:i<30?"100.0000000000000001":"100.0000000000000003"}))});
+  expect(r.state).toBe("FRESH");expect(r.referenceMedianExact).toBe("100.0000000000000002");expect(r.ratioExact).toBe("1.0000000000000000");
+ });
+ it("keeps malformed decimal and non-finite current inputs blocked",()=>{
+  for(const value of ["", "NaN", "Infinity", "1e3", "-1", "0",Number.NaN,Number.POSITIVE_INFINITY])
+   expect(compareBankSelfHistory({...base,currentMultiple:value}).state).toBe("REVIEW_REQUIRED");
+ });
 });

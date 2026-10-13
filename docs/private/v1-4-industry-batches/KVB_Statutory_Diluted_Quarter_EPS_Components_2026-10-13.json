@@ -1,0 +1,2004 @@
+{
+  "version": "KVB_EXPLICIT_STATUTORY_DILUTED_QUARTER_EPS_COMPONENTS_V1",
+  "as_of": "2026-10-13",
+  "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+  "originals_reused": 11,
+  "new_originals": 1,
+  "public_source_calls": 1,
+  "new_discovery_calls": 0,
+  "paid_provider_calls": 0,
+  "retries": 0,
+  "database_writes": 0,
+  "canonical_admissions": 0,
+  "originals": [
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KVBResults_NSEUpload_28052021150450.pdf",
+      "original_sha256": "ccb612375f72ebb43a6ba32e2545e480a8b7ffbd6e89752767e52375503c2106",
+      "original_bytes": 32837996,
+      "published_at": "2021-05-28T15:06:10+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2021&to_date=31-05-2021",
+      "publication_proof_sha256": "ad872749e3b13d9edcbfa0d1c83d08e339f4e4878a37716aaa03e56f5274319a",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2021-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "OCR_PLUS_ORIGINAL_IMAGE_VISUAL_NUMERIC_AND_HEADER_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2021-03-31",
+        "2020-12-31",
+        "2020-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "1.31",
+        "0.43",
+        "1.05"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "ee Smart way to bank\n\u00ab\nee ee\n| Quarter ended Year ended\n| 31-03-2021 | 31-12-2020 | 31-03-2020 | 31-03-2021 | 31-03-2020\nParticulars \u2018Audited Audited\n(Refer Note | Unaudited | (Refer Note | Audited Audited\n1 below) 1 below)\n17,Analytical ratio\n(i) % of shares held by Government of : 2\nIndia\n(ii) Capital adequacy ratio - Basel iN! (%) 18.52 17.47\n(iil) Earnings per share (EPS)4 (Rs.) it\n@) Basic EPS before and after 1.31 0.43 1.05 4,50 2.94\nextraordinary items pete\nb) Diluted EPS before and after\nextraordinary items 131 0.43 1.05 4.50 2.94\n[a] Gross NPA es\nb) Net NPA 171939\n\u00a9) % of Gross NPA \u2018\nd) % of Net NPA ae 1 es\n(v)Return on asset (annualised) (9%) ds5[ G15) ao o49[ 0.32 |\n4 EPS not annuolised for the quarter. je\ncies fe gfe\nCAVA Vv\n12(S/igh.., \\8\\8\n* bi\nKN\nOy Ne\nNe of -\n\u201ced Acco\nTHE KARUR VYSYA BANK LIMITED\nFinance & Control Department\nRegistered & Central Office, No.20, Erade Road,\nVadivel Nagar, L.N.S. KARUR - 639 002, Tamil Nadu\n\u00a9 : (043249269326, 269328\nExmail; fed@kvomall,com\nWebsite : www.kvb.co.in\nCIN; L651 10TN1916PL.C001295,\nPage 2of 11 GSTIN : 33AAACT3373/12D\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/NSEKVBQ2_08112021125443.pdf",
+      "original_sha256": "bb3a42433ca6d07d270152d768d79814a2701e44153d43fd196d5cd955d729b7",
+      "original_bytes": 15700466,
+      "published_at": "2021-11-08T12:56:11+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-10-2021&to_date=30-11-2021",
+      "publication_proof_sha256": "0eba1b595d86e853698522598f26a559a6698449d5888d07fca5a462b72a2b56",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2021-09.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "OCR_PLUS_ORIGINAL_IMAGE_VISUAL_NUMERIC_AND_HEADER_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2021-09-30",
+        "2021-06-30",
+        "2020-09-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "2.07",
+        "1.36",
+        "1.44"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Smart way to bank\nQuarter ended Half Year ended\nParticulars 30-09-2021 | 30-06-2021 | 30-09-2020 | 30-09-2021 | 30-09-2020 | 31-03-2021 |\nUnaudited Unaudited\nee ee ae 15986 15986 15986 15986 15986 15986\ncapital (FV Rs.2/- per share)\n16. Reserves excluding | 679988\nrevaluation reserve\n17. Analytical ratio\n(i) % of shares held by 7\nGovernment of India\n(i) Capital adequacy ratio - 18.82 19.06 18.41 18.82 18.41 18.98\nBasel Ill (%)\n(iii) Earnings per share (EPS)* (Rs.)\nA ele eee 2.07 1.36 1.44 3.43 2.76 4.50\nafter extraordinary items\nb) Diluted EPS before\nand after extraordinary 2.07 1.36 1.44 3.43 2.76 4.50 |\nitems\n(iv) NPA ratios\na) Gross NPA 397164 416749 399843 397164 399843 414287\nb) Net NPA 153771 184461 142820 153771 142820 171939\n\u00a2) % of Gross NPA\nd) % of Net NPA [_2s9[aeg[2a9f sof 29a 3.4 |\n(v) Return on asset |\n* 0.86 57 0.6: 0.72 0.61 .49\n(annualised) (%) oF id 9\n18. Net worth? 713823 696253 672819 713823 672819 684039\n19. Paid up debt capital/\nJ 49. 22 07 \u00e9 k\nOutstanding debt? (56) 42.07 9.36 35 42.0 35.22 19.26\n20. Debt/equity ratio\u00ae\n2d: otal debts.to total 1.53 1.33 1.94 1.53 1.94 3.39\nassets\u201d (%)\n\u2014 EPS not annualised for the quarter.\n2 _ Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n? \u2014 Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\nmaturity of more than one year.\n4 _ Equity represents total of share capital and reserves less proposed dividend.\n*\u2014 Total assets as per Balance Sheet. Ata th.\niS oN\n{2 Fcr/\u00ae'\n= aS 2 C.0,\nZPRICE See te, =)\nAe SE 10: 4, Yo Se ol\n[oye No 3 Bess: Ve yw\n{ee O | CRN AD, 5\n(x { * 3\\ CRENNAI\u201d J\n\\o\\ 2 ey 600 018. \u2018Ky\no \u00a7 Ey\neo S OD ACCO\nOP s\nLod Ace\u00ae)\nTHE KARUR VYSYA BANK LIMITED\nFinance & Control Department.\nRegistered & Central Office, No.20, Erode Road,\nVadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n\u00a9 : (04324)269326,269328\nE.mail : fcd@kvbmail.com\nPage 2 of 11 Website : www.kvb.co.in\nCIN : L65110TN1916PLC001295\nGSTIN : S3AAACT3373J1ZD\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022132618_KVBMar2022NSE.pdf",
+      "original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "original_bytes": 6637197,
+      "published_at": "2022-05-20T13:26:21+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2022&to_date=31-05-2022",
+      "publication_proof_sha256": "9950c65d42e595285ac2776c636113f2c53641fdab2692063742772c62ce9aea",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2022-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "OCR_PLUS_ORIGINAL_IMAGE_VISUAL_NUMERIC_AND_HEADER_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2022-03-31",
+        "2021-12-31",
+        "2021-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "2.67",
+        "2.32",
+        "1.31"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "KVB) Karur Vysya Bank\nSmart way to bank\nParticulars 31-03-2022 | 31-12-2021 | 31-03-2021 | 31-03-2022 | 31-03-2021 |\n(i) % of shares held by Government of\nIndia\n(iii) Earnings per share (EPS)\" (Rs.)\nextraordinary items\nextraordina ry items\nd) % of Net NPA\n(v) Return on asset (annualised) (%) | ao6[ 093] oss] ose] 0.49 |\ndebt* (%)\n| 20.Debt/equityratio\u00ae | | dd | oa] 0.090. |\n3.39\n7 EPS not annualised for the quarter.\n?_ Net worth is calculated as per guidelines given under RB! Master Circular on Exposure Norms.\n\u00b0 \u2014 Qutstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\nmaturity of more than one year.\n* Equity represents total of share capital and reserves less proposed dividend. S87) f\n* \u2014 Total assets as per Balance Sheet. 4\n C.0/\nSy, ny by\nAER, GPRD \u00a5\n[oy NOV (S/ New No:4, NZ\nne \\ >| Gla Na:zs, =\njs 4 s\\ Dod wy\n. eS 600 018. S\nAED, <>\nTHE KARUR VYSYA BANK LIMITED\nFinance & Control Department\nRegistered & Central Office, No.20, Erode Road,\nVadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n\u00ae : (04324)269326,269328\nE.mail : f\u00a2d@kvbmail.com\nPage 2 of 10 Website : www.kvb.co.in\nCIN : L65110TN1916PLC001295\nGSTIN : S3AAACT3373J12D\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_21102022130409_KVBQ2FinResUpload.pdf",
+      "original_sha256": "eb276942a5a0fca7e528df178f59da5866536e82a262da9552f82e32ee892b25",
+      "original_bytes": 6390201,
+      "published_at": "2022-10-21T13:04:22+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-10-2022&to_date=31-10-2022",
+      "publication_proof_sha256": "4fca99fcba0ac7808a966cfb0de78c912e7574972c7ac626f23616e5dac0838b",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2022-09.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2022-09-30",
+        "2022-06-30",
+        "2021-09-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "3.12",
+        "2.86",
+        "2.07"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "                                               Quarter ended                       Half Year ended             I Year ended 1\n         Particulars\n                                                              I                              I                 I\n\n                                                Unaudited                             Unaudited                    Audited\n15. Paid-up equity share\n                                      16009          16002              15986       16009            15986             16000\ncapital (FV Rs.21- per share)\n16. Reserves excluding\nrevaluation reserve                                                                                                  743620\n17. Analytical ratio\n  (i) % of shares held by                                                   -\nGovernment of India\n (ii) Capital adequacy ratio -\n                                       18.31          19.21             18.82        18.31            18.82             19.46\nBasel Ill (%)\n(iii) Earnings per share (EPS)'(Rs.)\n    a) Basic EPS before and\n                                        3.13           2.86              2.07         5.99             3.43              8.42\nafter extraordinary items\n    b) Diluted EPS before\nand after extraordinary                 3.12           2.86              2.07         5.97             3.43              8.41\nitems\n(iv) NPA ratios\n    a) Gross NPA                     245653         310717             397164      245653           397164           343104\n    b) Net NPA                        81872         109836             153771       81872           153771           126079\n    c) % of Gross NPA                   3.97          5.21               7.38        3.97             7.38             5.96\n    d) % of Net NPA                     1.36           1.91              2.99         1.36            2.99             2.28\n(v) Return on asset\n                                        1.16           1.09              0.86         1.13             0.72              0.86\n(annualised) (%)\n18. Net worth2                       790269         765614             713823      790269           713823           741781\n19. Paid up debt capital/\n                                       21.35          18.65             42.07        21.35            42.07             36.37\nOutstanding debt3 (%)\n20. Debtlequity ratio4                  0.03           0.08              0.11         0.03             0.11              0.09\n21. Total debts to total\n                                        2.64           3.11              1.53         2.64              1.53             1.67\nassets51%)\n\n  - EPS not annualisedfor the quarter.\n  1\n\n '- Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n 3\n   - Outstanding debt / Total debts represent total borrowings of the Sank. Debt represents borrowings with residual\n maturity of more than one year.\n 4\n     -\n    Equity represents total of share capital and reserves less proposed dividend.\n 5\n     -\n    Total assets as per Balance Sheet.\n\n\n\n                                                                                                    Qd\n\n                                                                                    THE KARUR VYSYA BANK LIMITED\n                                                                                    Finance & Control Department\n                                                                                    Registered& Central Office, No.20, Erode Road,\n                                                                                    Vadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n                                                                                    (D : (04324)269326,269328\n                                                                                    E-mail:fcd@kvbmail.com\n                                                                                    Website : www.kvb.co.in\n                                                                                    CIN : L65110TN1916PLC001295\n                                                                                    ^STIN ^^MCT3373JlZD\n\n                                                         Page 2 of 9\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/Results_NSE_BSE_0001_15052023134056.pdf",
+      "original_sha256": "e199246b56eb85355724d3440d3d8ac7a3f7f6ddae39a790ba48effbbd0336f5",
+      "original_bytes": 4445047,
+      "published_at": "2023-05-15T13:41:00+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2023&to_date=31-05-2023",
+      "publication_proof_sha256": "5b4615ffe27937c1a9a5d8bcef5cf8d784855138aa0698b7f62f21fcc1983820",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2023-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2023-03-31",
+        "2022-12-31",
+        "2022-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "4.20",
+        "3.60",
+        "2.67"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Classification I PUBLIC\n\n\n                                                                                                 .VB Karur Vysya Bank\n\n                                                                                                                        (Rs hijFmRn1\n                                                                   t\n                    Particulars                    3                        2               2               2\n                                                       Audited         Unaudited       Audited                    Audited\n      a) Basic EPS before and after\n                                                            4.21             3.61            2.67            13.81                8.42\n  extraordinary items\n      b) Diluted EPS before and after\n                                                            4.20             3.60            2.67            13.78               8.41\n  extraordinary items\n  (iv) NPA ratios\n     a) Gross NPA                                        145815            167434        343104           145815              343104\n     b) Net NPA                                           46815             55043        126079            46815              126079\n     c) % of Gross NPA                                      2.27             2.70           6.03            2.27                 6.03\n     d) % of Net NPA                                        0.74             0.90           2.31            0.74                 2.31\n  (v) Return on asset (annualised) (%)                      1.50             1.32           1.06                1.27             0.86\n  18. Net worth2                                        837867             819844       741781            837867             741781\n  19. Paid up debt capital/ Outstanding                   34.01             33.07           36.37           34.01               36.37\n  debt3 (%)\n  20. Debt/equity ratio4                                    0.05             0.05            0.09               0.05             0.09\n  21.1 Total debts to total assets5 (%)                     1.59             1.65            1.67               1.59             1.67\n       \u2013 EPS not annualised for the quarter.\n   2 \u2013 Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n   3 \u2013 Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residua\\\n   maturity of more than one year.\n   4 \u2013 Equity represents total of share capital and reserves less proposed dividend.\n   5 \u2013 Total assets as per Balance Sheet.\n\n\n\n\n                                                                                        THEKARURVYSYABANKLIMITED\n                                                                                        Finance & Control Department\n                                                                                        Registered & Central Office, No.20, Erode Road,\n                                                                                        Vadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n                                                                                        e  : (04324)269326,269328\n                                                                                        E.mail : fcd@kvbmail,com\n                                                                                        Website : www.kvb.co.in\n                                                                                        CIN : L651 IOTN1916PLCO01295\n                                                                                        GSTIN : 33AAACT3373JIZD\n\n\n\n                                                             Page 2 of 9\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_FINSEP23_0001_16102023132132.pdf",
+      "original_sha256": "2a0e2f55586b6d94ea50ac58e960b8b4829e820b82778b99394c4655b1165dd4",
+      "original_bytes": 4884065,
+      "published_at": "2023-10-16T13:21:38+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-10-2023&to_date=30-11-2023",
+      "publication_proof_sha256": "45517b4ba6548e3b5d0f5aed75699fc83246144f24c4cba7d35ae8d169d8a643",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2023-09.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2023-09-30",
+        "2023-06-30",
+        "2022-09-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "4.70",
+        "4.46",
+        "3.12"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Classification i PUBLiC\n\n\n\n\n                                                                                                Be,E:J.==:                     (Rs. in lakh)\n                                                      Quarter ended                            Half Year ended                 Year ended\n             Particulars            3                       2                              3                                   31-03-2023\n                                                       Unaudited                                    Unaudited                    Audited\n  15. Paid-up equity share                    16053                                16009\n                                                            16048                               16053             16009              16041\n  capital (FV Rs.2/- per share)\n  16. Reserves excluding\n                                                                                                                                   842364\n  revaluation reserve\n  17. Analytical ratio\n   (i) % of shares held by\n  Government of India\n   (ii) Capital adequacy ratio -              16.84           17.67                18.07        16.84             18.07 1             18.56\n  Basel 111 (%)\n  (iii) Earnings per share (EPS)1 (Rs.)\n     a) Basic EPS before and                   4.72             4.47                                9.19            5.99              13.81\n                                                                                    3.13\n  after extraordinary items\n     b) Diluted EPS before\n  and after extraordinary                      4.70             4.46                3.12            9.16            5.97              13.78\n  Items\n  (iV) NPA ratios\n     a) Gross NPA                            121908        132965              245653          121908           245653              145815\n        b) Net NPA                            32363         39002               81872           32363            81872               46815\n     c) % of Gross NPA                         1.73             1.99             4.02             1.73             4.02               2.27\n     d) % of Net NPA                           0.47             0.59                1.38          0.47              1.38              0.74\n  (v) Return on asset\n                                               1.57             1.53                1.16            1.55            1.13               1.27\n  (annualised) (%)\n  18. Net worth2                          912308           873983              790269          912308           790269             837867\n  19. Paid up debt capital/                   18.82          31.33                 21.35        18.82             21.35               34.01\n  Outstanding debt3 (%)\n  20. Debt/equity ratio4                       0.10             0.10                0.03            0.10            0.03               0.05\n  21. Total debts to total\n                                               2.63             1.64                2.64            2.63            2.64               1.59\n  assets5 (%)\n\n       EPS not annualised for the quarter\n    2\n      Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms\n    3\n       Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\n    maturity of more than one year\n    4\n      Equity represents total of share capital and reserves less proposed dividend\n    5\n         Total assets as per Balance Sheet\n\n   @ L/                                                                        I\n\n  ,!oh FCD\n       6\n        7%\n             /4                                             ,w No:4\n                                                           Fld No-23\n                                                                  ad                            THEKARURVYSYA\n                                                                                                            BANKLIMITED\n                                                                                                Finance & Control Department\n                                                                                                Registered & Central Office, No.20. Erode Road.\n                                                                                                Vadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n                                                                                                e  : (04324)269326,269328\n                                                                                                E.mail : fcd@kvbmail.com\n                                                                                                Website : www.kvb.co.in\n                                                                                                CIN : L65110TN1916PLC001295\n                                                                                                GSTIN : 33AAACT3373JIZD\n\n\n                                                                 Page 2 of 9\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_24_Fin_0001_13052024131552.pdf",
+      "original_sha256": "38939e30d1feeded27ad817e58ee0d0b9338f09fd3571e1b57fad8fc37fef6e4",
+      "original_bytes": 5490191,
+      "published_at": "2024-05-13T13:15:59+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2024&to_date=31-05-2024",
+      "publication_proof_sha256": "d46276dde8f2f40abae3c585006eec785c6019cc0bc643f56262caf6e5ad1d30",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2024-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2024-03-31",
+        "2023-12-31",
+        "2023-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "5.67",
+        "5.12",
+        "4.20"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Classification   : PUBLiC\n\n\n\n\n                                                                                           Ball::=::===                   (Rs. in lakh)\n                                                                       Quarter ended                              Year ended\n                     Particulars                     3                       2                        3\n\n                                                         t                      c                                  Audited\n   (iii) Earnings per share (EPS)1 (Rs.)\n       a) Basic EPS before and after                           5.67                 5.13      4.21              19.99             13.81\n   extraordinary items\n       b) Diluted EPS before and after                          5.67                5.12      4.20              19.97             13.78\n   extraordinary items\n   (iv) NPA ratios\n       a) Gross NPA                                          104164         115186         145815              104164          145815\n        b) Net NPA                                            29797             30527      46815                29797            46815\n       c) % of Gross NPA                                        1.40                1.58      2.27                1.40            2.27\n       d) % of Net NPA                                         0.40                 0.42      0.74               0.40             0.74\n   (v) Return on asset (annualised) (%)                         1.76                1.65      1.50                1.63            1.27\n   18. Net worth2                                            980282         954260         837867              980282          837867\n   19. Paid up debt capital/ Outstanding                                        16.27       34.01                                 34.01\n   debt3 (%)\n   20. Debt/equity ratio4                                       0.07                0.11      0.05                0.07             0.05\n   21. Total debts tO total assets5 (%)                         2.35                2.91      1.59                2.35              1.59\n\n\n      1 \u2013 EPS not annualised for   the quarter.\n     2 \u2013 Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms,\n     3 \u2013 Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\n     maturity of more than one year.\n     4 \u2013 Equity represents total of share capital and reserves less proposed dividend.\n     5 \u2013 Total assets as per Balance Sheet,\n\n\n\n\n                                          6R, PR1                                                         f@c:\n                                        \u2019el\n                                                                                                          r!!\n                                                                                                          rf\n                                                                                                              V\n                                                                                                                 bj\n       }\n                                                                                                           &\n\n\n\n\n                                                                                            THEKARURVYSYA\n                                                                                                        BANKLIMITED\n                                                                                            Finance & Control Department\n                                                                                            Registered & Central Office, No.20, Erode Road.\n                                                                                            Vadivel Nagar, L.N.S. KARUF3 - 639 002. Tamil Nadu\n                                                                                            \u00a9 : (04324)269326,269328\n                                                                                            E.mail : fcd@kvt)mail.com\n                                                                                            Website : www.kvb.co.in\n                                                                                            CIN : L6511 OTN1916PLCO01295\n                                                                                            GSTIN : 33AAACT3373JIZD\n\n\n\n                                                                 Page 2 of 10\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_17102024134657.pdf",
+      "original_sha256": "a6a0a31f6736b4b1ba5379e285097bf8f443d8b16353f8c1944268e4b5a95c35",
+      "original_bytes": 4779599,
+      "published_at": "2024-10-17T13:46:57+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-10-2024&to_date=31-10-2024",
+      "publication_proof_sha256": "5e4f1c19ba25af141060ea2de6c588f751094b4a5c99e78ffb524faa23b2c3fe",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2024-09.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2024-09-30",
+        "2024-06-30",
+        "2023-09-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "5.88",
+        "5.70",
+        "4.70"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Cia$$ifiqatic>n } PUBLiC\n\n\n                                                                                                          Karur Vysya Bank\n\n                                                                                                                      (Rs. in lakhs)\n                                                     Quarter ended                        Half Year ended                Year ended\n             Particulars              3                             3                3                                   31-03-2024\n                                                      Unaudited                              Unaudited                    Audited\n    14. Net profit for the\n    period (12-13)\n                                            47360          45865            37845         93225             73708    1      160481\n\n    15 }aid-up equity share\n    capitat (FV Rs.2/- per                  16096          16094            16053         16096             16053             16088\n    share)\n    16. Reserves excluding                                                                                                  987920\n    revaluation reserve\n    17. Analytical ratio\n     (i) % of shares held by\n    Government of India\n    (ii) Capital adequacy ratio -            16.28          16.47           16.84          16.28 1           16.84 1           16.67\n    Basel 111 (%)\n    (iii) earnings per share (EPS)1   b)\n       a) Basic EPS before and                5.89           5.70            4.72          11.59              9.19             19.99\n    after extraordinary items\n       b} Diluted EPS before\n    and bfter extraordinary                   5.88           5.70            4.70          11.58              9.16             19.97\n    itemk\n    (iv) NPA ratios\n        a)[ Gross NPA                       88561         102453           121908         88561            121908           104164\n        b) Net NPA                          21922          29366            32363         21922             32363             29797\n        c)% of Gross NPA                      1.10           1.32             1.73           1.10             1.73              1.40\n                                              0.28           0.38            0.47           0.28              0.47              0.40\n    (v) Return on asset                       1.72           1.70            1.57            1.71             1.55              1.63\n    (annualised) (%)\n    18. Net worth2                         1081818       1032237           912308        1081818          912308            980282\n    19. Paid up debt capital/                                               18.82                            18.82\n    Outstanding debt3 (%)\n    20. Debt/equity ratio4                    0.05           0.06            0.10           0.05              0.10              0.07\n    21. Total debts to total                  1.26           1.94            2.63            1.26             2.63              2.35\n    asseds5 (%)\n\n\n            not annualised for the quarter.\n           worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n         tstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual maturity\n    of more than one year.\n    4\n       Equity represents total of share capital and free reserves less proposed dividend.\n    5\n       Total assets as pei\\Balance Sheet.\n\n\n\n\n  a                 ,'1                                                                   THE KARUR VYSYABANK LIMITED\n                                                                                          Finance & Control Department\n                                                                                          Registered & Central Office, No.20, Erode Road,\n                                                                                          Vadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n                                                                                          @ : (04324)269326,269340\n\n\n\n                                 U##,\n                                                                                          E.mail : fcd@kvbmail.com\n                                                                                          Website : www.kvb.co.in\n                                                                                          CIN : L651 IOTN1916PLCO01295\n                                                                                          GSTIN : 33AAACT3373JIZD\n\n\n                                                             Page 2 of 9\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_19052025161047_Fin_Res_25_0001.pdf",
+      "original_sha256": "87b5b0da64ff1ea2d8a3cab4fcc855c8f12852189cb7b0c96d6c9d61af89214a",
+      "original_bytes": 6679937,
+      "published_at": "2025-05-19T16:14:42+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2025&to_date=31-05-2025",
+      "publication_proof_sha256": "12d6f67c0882a7c61b00f44ef05c7b7d1b96cda91b9fd67931fa55801598fd75",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2025-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2025-03-31",
+        "2024-12-31",
+        "2024-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "6.37",
+        "6.16",
+        "5.67"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": " Classification     1 PUBLIC\n                                                                                                                  Karur Vysya Bank\n                                                                                                                  Smart ',\u201e ,) t, bi\u201ek\n\n                                                                                                                               (Rs. in lakh)\n                                                                           Quarter ended                             Year ended\n                         Particulars                     0                         2                        3\n\n                                                             r                     c                                   Audited\n        (i) % of shares held by Governme\n       India\n       W Capital adequacy ratio - Basel II                         18.17            15.91         16.67            18.17              16.67\n    (iii) Earnings per share (EPS)1 (Rs.)\n        a) Basic EPS before and after\n                                                                    6.38               6.16        5.67            24.13              19.99\n   extraordinary items\n        b) Diluted EPS before and after\n                                                                   6.37                6.16        5.67            24.12              19.97\n   extraordinary items\n   (iv) NPA ratios\n        a) Gross NPA                                             64180            69092         104164            64180            104164\n        b) Net NPA                                               16621            16669          29797            16621              29797\n        c) % of Gross NPA                                          0.76                0.83        1.40             0.76               1.40\n       d) % of Net NPA                                             0.20                0.20        0.40             0.20               0.40\n   (v) Return on asset (annualised) (%)                            1.73                1.74       1.76              1.72              1.63\n   18. Net worth2                                            1164488            113 1433       980282           1164488            980282\n   19. Paid up debt capital/ Outstanding\n   debt3 (%)\n   20. Debt/equity ratio4                                          0.06             0.06          0.07              0.06              0.07\n   O                                                               1.02                1.34       2.35              1.02              2.35\n\n   1 \u2013 EPS not annualised for the quarter.\n\n   2 \u2013 Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n\n   3 \u2013 Outstanding debt / Total debts represent total    borrowings of the Bank. Debt represents borrowings with residual maturity\n   of more than one year.\n   4 \u2013 Equity represents total   of share capital and free reserves less proposed dividend.\n   5 \u2013 Total    assets as per Balance Sheet.\n\n   SY4\n\n : eCO B q BR\n\n    CnO\n($ 9HL+ iI\n\n\n\n\n                                                                                              THE KARUR VYSYABANK LIMITED\n                                                                                              Finance & Control Department\n                                                                                              Registered & Central Office, No.20, Erode Road,\n                                                                                              Vadivel Nagar, L.N.S. KARUF3 - 639 002. Tamil Nadu\n                                                                                              (D : (04324)269326,269340\n                                                                                              E.mail : fcd@kvbmail.com\n                                                                                              Website : www.kvb.co.in\n                                                                                              CIN : L651 IOTN1916PLCOOI 295\n\n                                                                 Page 2 of 11                 GSTIN : 33AAACT3373JIZD\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102025154006_Finresq2_NSE_BSE_0001.pdf",
+      "original_sha256": "53f3f4d78a0a9e62494bbca94970093c1856686749b6a19f74d9a1c3f5f0926e",
+      "original_bytes": 4009884,
+      "published_at": "2025-10-17T15:41:56+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-10-2025&to_date=31-10-2025",
+      "publication_proof_sha256": "19faba73430c27db3b89182c1addb26e13d1c414edd3f97cb2f9595da804d87d",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2025-09.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2025-09-30",
+        "2025-06-30",
+        "2024-09-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "5.94",
+        "5.40",
+        "4.90"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter and half year",
+      "literal_extracted_page": "(   Iiassti ica{ion i PUBLiC:\n\n\n\n                                                                                                                KVB) Karur Vysya Bank\n                                                                                                                                                     a   im\n                                                                                                                                   s\n                                                          Quarter ended                                  Half Year ended            Year ended\n                  Particulars             3                30-06-20251 jO-09-2024                   3                                  31-03-2025\n                                                           Unaudited                                       Unaudited                    Audited\n     15. Paid-up equity share                    19328             16105            16096                19328 F          16096 1          16102\n     capital (FV Rs.2/- per share)\n     16. Reserves excluding                                                                                                               1176852\n     revaluation reserve\n      17. Analytical ratio\n       (i) % of shares held by\n     Government of India\n       (ii) Capital adequacy ratio -             16.58             17.36             16,28                16.58 1         16.28 t           18.17\n      Basel 111 (%)\n      (iii) Earnings per share (EPS)1    R)\n           a) Basic EPS before and                 5.94             5.40               4.90               11.34             9.65            20.10\n      after extraordinary items\n         b) Diluted EPS before\n      and after extraordinary                      5.94             5.40               4.90               11.33             9.65            20.10\n      Items\n      (iv) NPA ratios\n         a) Gross NPA                            70783             59260            88561                70783            88561             64180\n         b) Net NPA                              17575             17026            21922                17575            21922             16621\n         c) % of Gross NPA                         0.76              0.66             1.10                 0.76             1.10              0.76\n         d) % of Net NPA                           0.19             0.19              0.28                 0.19             0.28              0.20\n      (v) Return on asset\n                                                   1.81             1.73               1.72                1.77             1.71             1.72\n      (annualised) (%)\n      18. Net worth2                          1264726         1215868           1081818                 1264726        1081818            1164488\n      19. Paid up debt capital/\n      Outstanding debt3 (%)\n      20. Debt/equity ratio4                       0.06             0.06               0.05                0.06             0.05             0.06\n      21. Total debts to total\n                                                   1.93              1.47                  1.26            1.93             1.26             1.02\n      assets5 (%)\n\n         1   \u2013 EPS not annualised for the quarter and half year,\n       2 \u2013 Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms.\n       3 \u2013 Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\n       maturity of more than one year,\n       4 \u2013 Equity represents total of share capital and free reserves less proposed dividend.\n        5 \u2013 Total assets as per Balance Sheet.\n\n\n\n\n                                                                                           IsE\n                                                                                            rct)PP\n\n       rOB\n       KH{{I\n                                                                                    ,eAr\n                                                                                           C\n                                                                                               r+\n\n\n\n               \\\\- .==-/\n                                                                                                          THE KARUR VYSYABANK LIMITED\n                                                                                                           Finance & Control Department\n                                                                                                          Registered & Central Office, No.20, Erode Road,\n                                                                                                          Vadivel Nagar, L.N.S. KARUF3 - 639 002. Tamil Nadu\n                                                                                                          e : (04324)269326,269340\n                                                                                                          E.mail : fcd@kvbmail.com\n                                                                      Page 2 of 9                         Website : www.kvb.co.in\n                                                                                                           CIN : L651 IOTN1916PLCO01295\n                                                                                                           GSTIN : 33AAACT3373JIZD\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026150520_Fins_0001.pdf",
+      "original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "original_bytes": 5216656,
+      "published_at": "2026-05-07T15:08:04+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-05-2026&to_date=31-05-2026",
+      "publication_proof_sha256": "ca78e607415dac2d1fe98f8354f50f79166560b5ef4321a96b9a254b0febee64",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2026-03.pdf",
+      "pdf_page_one_based": 7,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2026-03-31",
+        "2025-12-31",
+        "2025-03-31"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "7.50",
+        "7.14",
+        "5.31"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Classification E PUBLIC\n\n                                                                                                         Karur Vysya Bank\n                                                                                                         n=          =11===1\n                                                                                                         b Ill a r t\n\n\n                                                                                                                         (Rs. in lakh)\n                                                                       Quarter ended                              Year ended\n\n                       Particulars                  [Tao                                                  3\n                                                      Audited                            Audited\n                                                                        Unaudited                                  Audited\n                                                     (Refer note 12)                   (Refer note 12)\n  (iii) Earnings per share (EPS)1 (Rs.)\n      a) Basic EPS before and after\n                                                              7.50             7.14             5.31            25.98            20.10\n  extraordinary items\n      b) Diluted EPS before and after\n                                                              7.50             7.14             5.31            25.97            20.10\n  extraordinary items\n  (iV) NPA ratios\n      a) Gross NPA                                          74391             68694         64180               74391           64180\n     b) Net NPA                                             18621             18329         16621               18621           16621\n     c) % of Gross NPA                                        0.75             0.71           0.76                0.75            0.76\n     d) % of Net NPA                                          0.19             0.19           0.20                0.19            0.20\n  (v) Return on asset (annualised) (%)                      2.10               2.05           1.73                1.93            1.72\n  18. Net worth2                                        1392118            i353n3         1164488             1392118        1164n8\n  19. Paid up debt capital/ Outstanding\n  debt3 (%)\n  20. Debt/equity ratio4                                      0.03             0.05             0.06              0.03            0.06\n A     Total debts to total assets5 (%)                       1.92             2.24             1.02              1.92            1.02\n\n\n     1 \u2013 EPS not annualised for the quarter.\n     2 \u2013 Net worth is calculated as per guidelines given under RBI Master Circular on Exposure Norms including AFS reserve\n     considered for Tier 1 capital.\n     3 \u2013 Outstanding debt / Total debts represent total borrowings of the Bank. Debt represents borrowings with residual\n     maturity of more than one year.\n     4 \u2013 Equity represents total of share capital and free reserves less proposed dividend.\n     5 \u2013 Total   assets as per Balance Sheet.\n\n\n\n\n                                                ':[Ko\u00a9FnB\n\n\n\n\n                                                                                       THE KARUR WSYA BANK LIMITED\n                                                                                       Finance & Control Department\n                                                                                       Registered & Central ORice, No.20, Erode Road,\n                                                                                       Vadivel Nagar, L.N.S. KARUR - 639 002. Tamil Nadu\n                                                                                        c ' : (04324) 269326,269340\n                                                                                       Email : fcd@kvbmail.com\n                                                                                       Website : www.kvb.bank.in\n                                                               Page 2 of 11            CIN : L65110TN1916PLC001295\n                                                                                       GSTIN : 33AAACT3373JIZD\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    },
+    {
+      "original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026142140_NSE_Res_Q1.pdf",
+      "original_sha256": "7e7cd523aebb7185bd24e35da85971c704dfe6c12eef1e4497c23292548613ca",
+      "original_bytes": 2926360,
+      "published_at": "2026-07-20T14:24:24+05:30",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KARURVYSYA&from_date=01-07-2026&to_date=31-07-2026",
+      "publication_proof_sha256": "bd7439be00440a4fe8b73e84081d04f1d36fe8e3ba35ae11bc81145f3bf0590f",
+      "local_original": "/workspace/kvb-originals/financial-pit-batch/nse-financial-2026-06.pdf",
+      "pdf_page_one_based": 5,
+      "extraction": "PDF_EMBEDDED_TEXT_PLUS_ORIGINAL_IMAGE_VISUAL_VERIFICATION",
+      "quarter_column_header_dates": [
+        "2026-06-30",
+        "2026-03-31",
+        "2025-06-30"
+      ],
+      "numeric_table_label": "b) Diluted EPS before and after extraordinary items",
+      "quarter_diluted_eps_cells": [
+        "7.82",
+        "7.50",
+        "5.40"
+      ],
+      "nonannualized_footnote": "EPS not annualised for the quarter",
+      "literal_extracted_page": "Classification I PUBLIC\n\n                                                                                                 r+             K a r u r Vy sy a B a n    \\\n                                                                                                                     (Rs. in lakh)\n                                                                          Quarter ended                             Year ended\n                                                          30-06-2026        31-03-2026          30-06-2025          31-03-2026\n                      Particulars                                            Audited\n                                                          Unaudited        (Refer Note           Unaudited           Audited\n                                                                                13)\n      b) Diluted EPS before and after\n                                                                   7.82               7.50               5.40               25.97\n  extraordinary items\n  (iv) NPA ratios\n     a) Gross NPA                                                77189             74391               59260               74391\n      b) Net NPA                                                 19576             18621               17026               18621\n        c) % of Gross NPA                                          0.74               0.75               0.66               0.75\n        d) % of Net NPA                                          0.19                 0.19               0.19               0.19\n  (v) Return on asset (annualised) (%)                           2.11              2.10                  1.73               1.93\n  18. Net worth2                                             1452634           1370180               1215868            1370180\n  19. Paid up debt capital/ Outstanding debt3\n  (%)\n  20. Debt4/equity ratio5                                         0.04                0.03               0.06               0.03\n  21. Total debts to total assets (%)                             1.44                1.92               1.47               1.92\n  1 \u2013 EPS not annualised for the quarter.\n\n  2 \u2013 Net worth is calculated as per the Reserve Bank of India (Commercial Banks - Concentration Risk Management) Directions,\n  2025, dated November 28, 2025 (including AFS Reserve considered for Tier 1 Capital), as reduced by proposed dividend.\n  3 \u2013 Outstanding debt / Total debts represent total borrowings of the Bank.\n  4 \u2013 Debt represents borrowings with residual maturity   of more than one year.\n  s \u2013 Equity represents total of share capital and reserves less proposed dividend.\n\n\n\n\n                                                                                             THEKARURVYSYA\n                                                                                                         BANKLIMITED\n                                                                                             Finance & Control Department\n                                                                                             Registered & Central Office, No.20, Erode Road,\n                                                                                             Vadivel Nagar, L.N.S. KARUFI - 639 002. Tamil Nadu\n                                                                                             (D : (04324) 269326,269340\n                                                                                             E.mail : fcd@kvbmail.com\n                                                                                             Website : www.kvb.bank.in\n                                                                                             CIN : L6511 OTN1916PLCO01295\n                                                            Page 2 of 9                      GSTIN : 33AAACT3373JIZD\n",
+      "source_scope": "SINGLE_ISSUER_STATUTORY_BANK_RESULTS",
+      "consolidation_scope": "STANDALONE",
+      "scope_proof": "Auditor report identifies The Karur Vysya Bank Limited (the Bank), not group consolidated results. No subsidiaries/associates/joint ventures is explicitly stated in current FY2026 and June2026 notes. Historical perimeter continuity must remain validated by approved source reviewer.",
+      "canonical_admitted": false
+    }
+  ],
+  "components": [
+    {
+      "quarter_start": "2020-10-01",
+      "quarter_end": "2020-12-31",
+      "eps_diluted_nonannualized": "0.43",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2020",
+      "source_original_sha256": "ccb612375f72ebb43a6ba32e2545e480a8b7ffbd6e89752767e52375503c2106",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KVBResults_NSEUpload_28052021150450.pdf",
+      "source_published_at": "2021-05-28T15:06:10+05:30",
+      "publication_proof_sha256": "ad872749e3b13d9edcbfa0d1c83d08e339f4e4878a37716aaa03e56f5274319a",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2021-01-01",
+      "quarter_end": "2021-03-31",
+      "eps_diluted_nonannualized": "1.31",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2021",
+      "source_original_sha256": "ccb612375f72ebb43a6ba32e2545e480a8b7ffbd6e89752767e52375503c2106",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KVBResults_NSEUpload_28052021150450.pdf",
+      "source_published_at": "2021-05-28T15:06:10+05:30",
+      "publication_proof_sha256": "ad872749e3b13d9edcbfa0d1c83d08e339f4e4878a37716aaa03e56f5274319a",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2021-04-01",
+      "quarter_end": "2021-06-30",
+      "eps_diluted_nonannualized": "1.36",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "30-06-2021",
+      "source_original_sha256": "bb3a42433ca6d07d270152d768d79814a2701e44153d43fd196d5cd955d729b7",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSEKVBQ2_08112021125443.pdf",
+      "source_published_at": "2021-11-08T12:56:11+05:30",
+      "publication_proof_sha256": "0eba1b595d86e853698522598f26a559a6698449d5888d07fca5a462b72a2b56",
+      "pdf_page_one_based": 5,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2021-07-01",
+      "quarter_end": "2021-09-30",
+      "eps_diluted_nonannualized": "2.07",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2021",
+      "source_original_sha256": "bb3a42433ca6d07d270152d768d79814a2701e44153d43fd196d5cd955d729b7",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSEKVBQ2_08112021125443.pdf",
+      "source_published_at": "2021-11-08T12:56:11+05:30",
+      "publication_proof_sha256": "0eba1b595d86e853698522598f26a559a6698449d5888d07fca5a462b72a2b56",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2021-10-01",
+      "quarter_end": "2021-12-31",
+      "eps_diluted_nonannualized": "2.32",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2021",
+      "source_original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022132618_KVBMar2022NSE.pdf",
+      "source_published_at": "2022-05-20T13:26:21+05:30",
+      "publication_proof_sha256": "9950c65d42e595285ac2776c636113f2c53641fdab2692063742772c62ce9aea",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2022-01-01",
+      "quarter_end": "2022-03-31",
+      "eps_diluted_nonannualized": "2.67",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2022",
+      "source_original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022132618_KVBMar2022NSE.pdf",
+      "source_published_at": "2022-05-20T13:26:21+05:30",
+      "publication_proof_sha256": "9950c65d42e595285ac2776c636113f2c53641fdab2692063742772c62ce9aea",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2022-04-01",
+      "quarter_end": "2022-06-30",
+      "eps_diluted_nonannualized": "2.86",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "30-06-2022",
+      "source_original_sha256": "eb276942a5a0fca7e528df178f59da5866536e82a262da9552f82e32ee892b25",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_21102022130409_KVBQ2FinResUpload.pdf",
+      "source_published_at": "2022-10-21T13:04:22+05:30",
+      "publication_proof_sha256": "4fca99fcba0ac7808a966cfb0de78c912e7574972c7ac626f23616e5dac0838b",
+      "pdf_page_one_based": 5,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2022-07-01",
+      "quarter_end": "2022-09-30",
+      "eps_diluted_nonannualized": "3.12",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2022",
+      "source_original_sha256": "eb276942a5a0fca7e528df178f59da5866536e82a262da9552f82e32ee892b25",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_21102022130409_KVBQ2FinResUpload.pdf",
+      "source_published_at": "2022-10-21T13:04:22+05:30",
+      "publication_proof_sha256": "4fca99fcba0ac7808a966cfb0de78c912e7574972c7ac626f23616e5dac0838b",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2022-10-01",
+      "quarter_end": "2022-12-31",
+      "eps_diluted_nonannualized": "3.60",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2022",
+      "source_original_sha256": "e199246b56eb85355724d3440d3d8ac7a3f7f6ddae39a790ba48effbbd0336f5",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/Results_NSE_BSE_0001_15052023134056.pdf",
+      "source_published_at": "2023-05-15T13:41:00+05:30",
+      "publication_proof_sha256": "5b4615ffe27937c1a9a5d8bcef5cf8d784855138aa0698b7f62f21fcc1983820",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2023-01-01",
+      "quarter_end": "2023-03-31",
+      "eps_diluted_nonannualized": "4.20",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2023",
+      "source_original_sha256": "e199246b56eb85355724d3440d3d8ac7a3f7f6ddae39a790ba48effbbd0336f5",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/Results_NSE_BSE_0001_15052023134056.pdf",
+      "source_published_at": "2023-05-15T13:41:00+05:30",
+      "publication_proof_sha256": "5b4615ffe27937c1a9a5d8bcef5cf8d784855138aa0698b7f62f21fcc1983820",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2023-04-01",
+      "quarter_end": "2023-06-30",
+      "eps_diluted_nonannualized": "4.46",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "30-06-2023",
+      "source_original_sha256": "2a0e2f55586b6d94ea50ac58e960b8b4829e820b82778b99394c4655b1165dd4",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_FINSEP23_0001_16102023132132.pdf",
+      "source_published_at": "2023-10-16T13:21:38+05:30",
+      "publication_proof_sha256": "45517b4ba6548e3b5d0f5aed75699fc83246144f24c4cba7d35ae8d169d8a643",
+      "pdf_page_one_based": 5,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2023-07-01",
+      "quarter_end": "2023-09-30",
+      "eps_diluted_nonannualized": "4.70",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2023",
+      "source_original_sha256": "2a0e2f55586b6d94ea50ac58e960b8b4829e820b82778b99394c4655b1165dd4",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_FINSEP23_0001_16102023132132.pdf",
+      "source_published_at": "2023-10-16T13:21:38+05:30",
+      "publication_proof_sha256": "45517b4ba6548e3b5d0f5aed75699fc83246144f24c4cba7d35ae8d169d8a643",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2023-10-01",
+      "quarter_end": "2023-12-31",
+      "eps_diluted_nonannualized": "5.12",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2023",
+      "source_original_sha256": "38939e30d1feeded27ad817e58ee0d0b9338f09fd3571e1b57fad8fc37fef6e4",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_24_Fin_0001_13052024131552.pdf",
+      "source_published_at": "2024-05-13T13:15:59+05:30",
+      "publication_proof_sha256": "d46276dde8f2f40abae3c585006eec785c6019cc0bc643f56262caf6e5ad1d30",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2024-01-01",
+      "quarter_end": "2024-03-31",
+      "eps_diluted_nonannualized": "5.67",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2024",
+      "source_original_sha256": "38939e30d1feeded27ad817e58ee0d0b9338f09fd3571e1b57fad8fc37fef6e4",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_24_Fin_0001_13052024131552.pdf",
+      "source_published_at": "2024-05-13T13:15:59+05:30",
+      "publication_proof_sha256": "d46276dde8f2f40abae3c585006eec785c6019cc0bc643f56262caf6e5ad1d30",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2024-04-01",
+      "quarter_end": "2024-06-30",
+      "eps_diluted_nonannualized": "5.70",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "30-06-2024",
+      "source_original_sha256": "a6a0a31f6736b4b1ba5379e285097bf8f443d8b16353f8c1944268e4b5a95c35",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_17102024134657.pdf",
+      "source_published_at": "2024-10-17T13:46:57+05:30",
+      "publication_proof_sha256": "5e4f1c19ba25af141060ea2de6c588f751094b4a5c99e78ffb524faa23b2c3fe",
+      "pdf_page_one_based": 5,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2024-07-01",
+      "quarter_end": "2024-09-30",
+      "eps_diluted_nonannualized": "5.88",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2024",
+      "source_original_sha256": "a6a0a31f6736b4b1ba5379e285097bf8f443d8b16353f8c1944268e4b5a95c35",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/NSE_BSE_17102024134657.pdf",
+      "source_published_at": "2024-10-17T13:46:57+05:30",
+      "publication_proof_sha256": "5e4f1c19ba25af141060ea2de6c588f751094b4a5c99e78ffb524faa23b2c3fe",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2024-10-01",
+      "quarter_end": "2024-12-31",
+      "eps_diluted_nonannualized": "6.16",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2024",
+      "source_original_sha256": "87b5b0da64ff1ea2d8a3cab4fcc855c8f12852189cb7b0c96d6c9d61af89214a",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_19052025161047_Fin_Res_25_0001.pdf",
+      "source_published_at": "2025-05-19T16:14:42+05:30",
+      "publication_proof_sha256": "12d6f67c0882a7c61b00f44ef05c7b7d1b96cda91b9fd67931fa55801598fd75",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2025-01-01",
+      "quarter_end": "2025-03-31",
+      "eps_diluted_nonannualized": "6.37",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2025",
+      "source_original_sha256": "87b5b0da64ff1ea2d8a3cab4fcc855c8f12852189cb7b0c96d6c9d61af89214a",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_19052025161047_Fin_Res_25_0001.pdf",
+      "source_published_at": "2025-05-19T16:14:42+05:30",
+      "publication_proof_sha256": "12d6f67c0882a7c61b00f44ef05c7b7d1b96cda91b9fd67931fa55801598fd75",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "PRE_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": "1",
+      "compatible_share_factor_for_prices_after_bonus": "5/6",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2025-04-01",
+      "quarter_end": "2025-06-30",
+      "eps_diluted_nonannualized": "5.40",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "30-06-2025",
+      "source_original_sha256": "53f3f4d78a0a9e62494bbca94970093c1856686749b6a19f74d9a1c3f5f0926e",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102025154006_Finresq2_NSE_BSE_0001.pdf",
+      "source_published_at": "2025-10-17T15:41:56+05:30",
+      "publication_proof_sha256": "19faba73430c27db3b89182c1addb26e13d1c414edd3f97cb2f9595da804d87d",
+      "pdf_page_one_based": 5,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "EXPLICIT_AS20_BONUS_RESTATEMENT_OF_JUNE2025_COMPARATIVE_AFTER_PUBLICATION_ONLY",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2025-07-01",
+      "quarter_end": "2025-09-30",
+      "eps_diluted_nonannualized": "5.94",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2025",
+      "source_original_sha256": "53f3f4d78a0a9e62494bbca94970093c1856686749b6a19f74d9a1c3f5f0926e",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102025154006_Finresq2_NSE_BSE_0001.pdf",
+      "source_published_at": "2025-10-17T15:41:56+05:30",
+      "publication_proof_sha256": "19faba73430c27db3b89182c1addb26e13d1c414edd3f97cb2f9595da804d87d",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2025-10-01",
+      "quarter_end": "2025-12-31",
+      "eps_diluted_nonannualized": "7.14",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2025",
+      "source_original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026150520_Fins_0001.pdf",
+      "source_published_at": "2026-05-07T15:08:04+05:30",
+      "publication_proof_sha256": "ca78e607415dac2d1fe98f8354f50f79166560b5ef4321a96b9a254b0febee64",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2026-01-01",
+      "quarter_end": "2026-03-31",
+      "eps_diluted_nonannualized": "7.50",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2026",
+      "source_original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026150520_Fins_0001.pdf",
+      "source_published_at": "2026-05-07T15:08:04+05:30",
+      "publication_proof_sha256": "ca78e607415dac2d1fe98f8354f50f79166560b5ef4321a96b9a254b0febee64",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2026-04-01",
+      "quarter_end": "2026-06-30",
+      "eps_diluted_nonannualized": "7.82",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-06-2026",
+      "source_original_sha256": "7e7cd523aebb7185bd24e35da85971c704dfe6c12eef1e4497c23292548613ca",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026142140_NSE_Res_Q1.pdf",
+      "source_published_at": "2026-07-20T14:24:24+05:30",
+      "publication_proof_sha256": "bd7439be00440a4fe8b73e84081d04f1d36fe8e3ba35ae11bc81145f3bf0590f",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    }
+  ],
+  "quarter_count": 23,
+  "current_ttm_components": [
+    {
+      "quarter_start": "2025-07-01",
+      "quarter_end": "2025-09-30",
+      "eps_diluted_nonannualized": "5.94",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-09-2025",
+      "source_original_sha256": "53f3f4d78a0a9e62494bbca94970093c1856686749b6a19f74d9a1c3f5f0926e",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_17102025154006_Finresq2_NSE_BSE_0001.pdf",
+      "source_published_at": "2025-10-17T15:41:56+05:30",
+      "publication_proof_sha256": "19faba73430c27db3b89182c1addb26e13d1c414edd3f97cb2f9595da804d87d",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2025-10-01",
+      "quarter_end": "2025-12-31",
+      "eps_diluted_nonannualized": "7.14",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 2,
+      "column_header_literal": "31-12-2025",
+      "source_original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026150520_Fins_0001.pdf",
+      "source_published_at": "2026-05-07T15:08:04+05:30",
+      "publication_proof_sha256": "ca78e607415dac2d1fe98f8354f50f79166560b5ef4321a96b9a254b0febee64",
+      "pdf_page_one_based": 7,
+      "selection": "PRECEDING_QUARTER_AS_REPORTED_IN_THIS_ORIGINAL",
+      "first_original_reporting_date_unproven_for_preceding_column": true,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2026-01-01",
+      "quarter_end": "2026-03-31",
+      "eps_diluted_nonannualized": "7.50",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "31-03-2026",
+      "source_original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_07052026150520_Fins_0001.pdf",
+      "source_published_at": "2026-05-07T15:08:04+05:30",
+      "publication_proof_sha256": "ca78e607415dac2d1fe98f8354f50f79166560b5ef4321a96b9a254b0febee64",
+      "pdf_page_one_based": 7,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    },
+    {
+      "quarter_start": "2026-04-01",
+      "quarter_end": "2026-06-30",
+      "eps_diluted_nonannualized": "7.82",
+      "unit": "INR_PER_SHARE",
+      "reported_decimal_places": 2,
+      "epsilon_rounding_half_unit": "0.005",
+      "column_index_one_based_among_numeric_columns": 1,
+      "column_header_literal": "30-06-2026",
+      "source_original_sha256": "7e7cd523aebb7185bd24e35da85971c704dfe6c12eef1e4497c23292548613ca",
+      "source_original_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026142140_NSE_Res_Q1.pdf",
+      "source_published_at": "2026-07-20T14:24:24+05:30",
+      "publication_proof_sha256": "bd7439be00440a4fe8b73e84081d04f1d36fe8e3ba35ae11bc81145f3bf0590f",
+      "pdf_page_one_based": 5,
+      "selection": "CURRENT_QUARTER",
+      "first_original_reporting_date_unproven_for_preceding_column": false,
+      "no_backdating": true,
+      "eps_share_basis": "POST_2025_08_26_BONUS_1_FOR_5",
+      "restatement_state": "CURRENT_OR_PRECEDING_COLUMN_AS_PUBLISHED_NO_LATER_ANNUAL_REPLACEMENT",
+      "compatible_share_factor_for_prices_before_bonus": null,
+      "compatible_share_factor_for_prices_after_bonus": "1",
+      "consolidation_scope": "STANDALONE",
+      "identity": "KARURVYSYA / CIN L65110TN1916PLC001295; raw NSE legacy ISIN aliases retained elsewhere, not silently rewritten",
+      "canonical_admitted": false
+    }
+  ],
+  "current_ttm_component_sum": "28.40",
+  "current_ttm_sum_status": "SOURCE_SUPPORTED_INPUTS_NOT_CALCULATION_ADMITTED; four quarters postbonus, no factor needed",
+  "fiscal_year_reconciliations": [
+    {
+      "financial_year_end": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "source_reported_components": [
+        "1.36",
+        "2.07",
+        "2.32",
+        "2.67"
+      ],
+      "same_share_basis": true,
+      "quarter_sum": "8.42",
+      "original_annual_diluted_eps": "8.41",
+      "difference": "0.01",
+      "absolute_maximum_approved_rounding_bound": "0.02",
+      "within_bound": true,
+      "annual_original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "annual_is_reconciliation_only": true
+    },
+    {
+      "financial_year_end": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "source_reported_components": [
+        "2.86",
+        "3.12",
+        "3.60",
+        "4.20"
+      ],
+      "same_share_basis": true,
+      "quarter_sum": "13.78",
+      "original_annual_diluted_eps": "13.78",
+      "difference": "0.00",
+      "absolute_maximum_approved_rounding_bound": "0.02",
+      "within_bound": true,
+      "annual_original_sha256": "e199246b56eb85355724d3440d3d8ac7a3f7f6ddae39a790ba48effbbd0336f5",
+      "annual_is_reconciliation_only": true
+    },
+    {
+      "financial_year_end": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "source_reported_components": [
+        "4.46",
+        "4.70",
+        "5.12",
+        "5.67"
+      ],
+      "same_share_basis": true,
+      "quarter_sum": "19.95",
+      "original_annual_diluted_eps": "19.97",
+      "difference": "-0.02",
+      "absolute_maximum_approved_rounding_bound": "0.02",
+      "within_bound": true,
+      "annual_original_sha256": "38939e30d1feeded27ad817e58ee0d0b9338f09fd3571e1b57fad8fc37fef6e4",
+      "annual_is_reconciliation_only": true
+    },
+    {
+      "financial_year_end": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "source_reported_components": [
+        "5.70",
+        "5.88",
+        "6.16",
+        "6.37"
+      ],
+      "same_share_basis": true,
+      "quarter_sum": "24.11",
+      "original_annual_diluted_eps": "24.12",
+      "difference": "-0.01",
+      "absolute_maximum_approved_rounding_bound": "0.02",
+      "within_bound": true,
+      "annual_original_sha256": "87b5b0da64ff1ea2d8a3cab4fcc855c8f12852189cb7b0c96d6c9d61af89214a",
+      "annual_is_reconciliation_only": true
+    },
+    {
+      "financial_year_end": "2026-03-31",
+      "quarter_ends": [
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "source_reported_components": [
+        "5.40",
+        "5.94",
+        "7.14",
+        "7.50"
+      ],
+      "same_share_basis": true,
+      "quarter_sum": "25.98",
+      "original_annual_diluted_eps": "25.97",
+      "difference": "0.01",
+      "absolute_maximum_approved_rounding_bound": "0.02",
+      "within_bound": true,
+      "annual_original_sha256": "7d6af29fb7b2123842d9dabf84008b70b48b3aaafa867b07f3129a55061452bc",
+      "annual_is_reconciliation_only": true
+    }
+  ],
+  "fy2021_reconciliation": "NOT_PROVEN_MISSING_CURRENT_QUARTER_JUNE2020; annual EPS not reverse-solved into missing quarters",
+  "historical_source_component_coverage": [
+    {
+      "month": "2021-10",
+      "four_components_available_by_calendar_month_end": false,
+      "latest_qualified_component_quarter": "2021-03-31",
+      "quarter_ends": [
+        "2020-06-30",
+        "2020-09-30",
+        "2020-12-31",
+        "2021-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2021-11",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2021-12",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-01",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-02",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-03",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-04",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2021-09-30",
+      "quarter_ends": [
+        "2020-12-31",
+        "2021-03-31",
+        "2021-06-30",
+        "2021-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-05",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-06",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-07",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-08",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-09",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-03-31",
+      "quarter_ends": [
+        "2021-06-30",
+        "2021-09-30",
+        "2021-12-31",
+        "2022-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-10",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-11",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2022-12",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-01",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-02",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-03",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-04",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2022-09-30",
+      "quarter_ends": [
+        "2021-12-31",
+        "2022-03-31",
+        "2022-06-30",
+        "2022-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-05",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-06",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-07",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-08",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-09",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-03-31",
+      "quarter_ends": [
+        "2022-06-30",
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-10",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-11",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2023-12",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-01",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-02",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-03",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-04",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2023-09-30",
+      "quarter_ends": [
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-05",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-06",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-07",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-08",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-09",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-03-31",
+      "quarter_ends": [
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-10",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-11",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2024-12",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-01",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-02",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-03",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-04",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2024-09-30",
+      "quarter_ends": [
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-05",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-06",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-07",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-08",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-09",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-03-31",
+      "quarter_ends": [
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-10",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-11",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": true,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2025-12",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-01",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-02",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-03",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-04",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2025-09-30",
+      "quarter_ends": [
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-05",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2026-03-31",
+      "quarter_ends": [
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-06",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2026-03-31",
+      "quarter_ends": [
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-07",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2026-06-30",
+      "quarter_ends": [
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-08",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2026-06-30",
+      "quarter_ends": [
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    },
+    {
+      "month": "2026-09",
+      "four_components_available_by_calendar_month_end": true,
+      "latest_qualified_component_quarter": "2026-06-30",
+      "quarter_ends": [
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "price_leg_conflict": false,
+      "final_valuation_qualified": false,
+      "remaining": "Use actual exchange trade-date close rather than calendar end; latest actually published financial-quarter selection and preceding-column original availability/revision proof remain required; share-basis transformation and canonical reviewed admission not executed."
+    }
+  ],
+  "source_component_four_quarter_coverage_count": 59,
+  "source_component_count_after_known_NOV2025_price_exclusion": 58,
+  "final_qualified_historical_PE_count": 0,
+  "explicit_limitations": [
+    "Preceding quarter values are available only from the later original publication in this manifest; their first reports are not established, so cannot backdate them.",
+    "Quarter-original June/December availability must be checked against actual latest published financial quarter before counting history FRESH.",
+    "Some historical quarter components may require original earlier filings to prove as-first-reported and satisfy latest-quarter rules.",
+    "Historical bonus transformation uses only then-applicable 5/6, never retrospectively imports after-bonus reported figures before publication.",
+    "Current source June2026 must be hash-pinned, archived and registered before admission; this report does not modify shared source manifest.",
+    "Canonical calculation/review/valuation coverage gates remain required."
+  ]
+}

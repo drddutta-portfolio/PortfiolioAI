@@ -439,8 +439,18 @@ export async function requirementItem(input:{code:string;family:ReviewEvidenceFa
  }
 
  if(code==="PE_TTM_RELATIVE"||code==="PB_RELATIVE"){
+  if(!definitions.some(definition=>definition.code===code&&definition.is_active))
+   return blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED","BANK_VALUATION_DEFINITION_INACTIVE_OR_MISSING","VERIFY_AND_ACTIVATE_APPROVED_VALUATION_DEFINITION")
+  if(!history)return blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED","BANK_VALUATION_CURRENT_MARKET_HISTORY_MISSING","QUALIFY_CURRENT_VALUATION_PRICE")
+  const currentPriceHistory=validateStockHistoryReadiness({rows:history.rows,minimum:252,evaluationAsOfMs,sourceCutoffAtMs,
+   freshnessPolicy:"LATEST_COMPLETED_SESSION_POST_CLOSE",proof:historyProofs.get("SECURITY:"+securityId)??historyProofFromRows(history.rows),currentSessionDecision})
+  if(currentPriceHistory.state!=="FRESH"||!currentPriceHistory.latestSession)
+   return blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED","BANK_VALUATION_CURRENT_PRICE_NOT_QUALIFIED","QUALIFY_CURRENT_VALUATION_PRICE")
+  const latestPriceRows=history.rows.filter(row=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(row.period_start))===currentPriceHistory.latestSession)
+  const latestClose=latestPriceRows[0]?.close
   const ledgerRows=records.filter(record=>record.record_kind===BANK_VALUATION_LEDGER_RECORD_KIND) as unknown as BankValuationLedgerRecord[]
-  const valuation=evaluateBankValuationLedger({code,securityId,asOf:new Date(evaluationAsOfMs).toISOString(),rows:ledgerRows})
+  const valuation=evaluateBankValuationLedger({code,securityId,asOf:new Date(evaluationAsOfMs).toISOString(),rows:ledgerRows,
+   expectedPriceSession:currentPriceHistory.latestSession,expectedCurrentRawClose:typeof latestClose==="string"?latestClose:undefined})
   return {...blocked(code,minimum,freshness,benchmarks,valuation.state,valuation.reason,valuation.state==="FRESH"?"NONE":"BUILD_PUBLICATION_BOUNDED_BANK_VALUATION_PIT_LEDGER"),
    candidate_evidence_ids:[...new Set([...(valuation.currentRecordId?[valuation.currentRecordId]:[]),...valuation.historicalRecordIds])],
    selected_evidence_id:valuation.state==="FRESH"?valuation.currentRecordId??null:null,

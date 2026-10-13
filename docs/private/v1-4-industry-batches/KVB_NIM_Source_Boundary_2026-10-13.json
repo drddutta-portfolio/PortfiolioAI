@@ -1,0 +1,141 @@
+{
+  "version": "KVB_NIM_SOURCE_BOUNDARY_V1",
+  "as_of": "2026-10-13",
+  "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+  "active_contract": "DIRECT_SOURCE_CERTIFIED_TRAILING_FOUR_QUARTER_NIM_WITH_AVERAGE_INTEREST_EARNING_ASSETS_DENOMINATOR",
+  "retained_original_presentations_hash_verified_and_searched": 22,
+  "public_source_calls": 2,
+  "source_calls_detail": [
+    "OfficialFY26annualindex (one discovery)",
+    "One exactlinkedofficialFY26MDAPDF"
+  ],
+  "paid_provider_calls": 0,
+  "retries": 0,
+  "canonical_admissions": 0,
+  "database_writes": 0,
+  "direct_current_ttm_nim": "NOT_PROVEN_IN_BOUNDED_CHECKED_SOURCES",
+  "four_daily_average_earning_assets_amounts": "NOT_PROVEN_IN_BOUNDED_CHECKED_SOURCES",
+  "regulatory_source": {
+    "url": "https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143",
+    "original_sha256": "1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834",
+    "verified_local_hash": "1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834",
+    "literal_footnote_2": "Net Interest Margin = Net Interest Income / Average Interest Earning Assets where Net Interest Income = Interest Income \u2013 Interest Expense.",
+    "boundary": "Average Working Funds/FormXtotalassets is separate footnote1, not proof of NIMAEAamounts or dailyAEAaveragingfrequency."
+  },
+  "annual_schedule": {
+    "url": "https://www.kvb.bank.in/ar-26/assets/pdfs/Karur_Vysya_Bank_IAR_Schedules.pdf",
+    "sha256": "8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9",
+    "bytes": 484578,
+    "pdf_page_one_based": 68,
+    "printed_page": 391,
+    "title": "SCHEDULE18...FOR THE YEAR ENDED31STMARCH2026",
+    "headers": [
+      "2025-26",
+      "2024-25"
+    ],
+    "nim_values": [
+      "4.11",
+      "4.09"
+    ],
+    "roa_values": [
+      "1.93",
+      "1.72"
+    ],
+    "accepted_roa_untouched": true,
+    "proof": "Original PDF image and extracted text verified; yearcolumns explicitly checked."
+  },
+  "new_annual_mda": {
+    "url": "https://www.kvb.bank.in/ar-26/assets/pdfs/Karur_Vysya_Bank_IAR_MDA.pdf",
+    "sha256": "92108f22d1a1e7e132e6976cc75f46535c4504ae51f2453471ca07b614c74396",
+    "bytes": 544618,
+    "pdf_page_one_based": 9,
+    "printed_page": 217,
+    "headers": [
+      "FY2024-25",
+      "FY2025-26",
+      "%Change"
+    ],
+    "nim_values": [
+      "4.09",
+      "4.11",
+      "0.49"
+    ],
+    "AEA_or_daily_average_method_found": false,
+    "availability_boundary": "Currentretrieval only; originalhistoricalpublicationnotestablished inthispass, so no PITbackdating."
+  },
+  "latest_quarter_presentation": {
+    "url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20072026154732_NSE_BSE_IP_DSC.pdf",
+    "sha256": "79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822",
+    "published_at": "2026-07-20T10:18:21+00:00",
+    "pdf_page_one_based": 7,
+    "printed_page": 6,
+    "annual_chart": [
+      {
+        "FY": "2023-24",
+        "nim": "4.200"
+      },
+      {
+        "FY": "2024-25",
+        "nim": "4.090"
+      },
+      {
+        "FY": "2025-26",
+        "nim": "3.970"
+      }
+    ],
+    "quarter_chart": [
+      {
+        "end": "2025-06-30",
+        "nim": "3.86"
+      },
+      {
+        "end": "2025-09-30",
+        "nim": "3.77"
+      },
+      {
+        "end": "2025-12-31",
+        "nim": "3.99"
+      },
+      {
+        "end": "2026-03-31",
+        "nim": "4.25"
+      },
+      {
+        "end": "2026-06-30",
+        "nim": "4.26"
+      }
+    ],
+    "current_TTM_not_certified": true
+  },
+  "annual_source_difference": {
+    "classification": "UNRESOLVED_SOURCE_BASIS_DIFFERENCE_NOT_YEAR_COLUMN_ERROR",
+    "same_FY_label": true,
+    "schedule_and_MDA_annual": "4.11",
+    "presentation_annual": "3.970",
+    "basis_equality_not_assumed": true,
+    "source_selection": "No newestretrievalwinner; no NIMadmission from eitherannualfigure ascurrentTTM"
+  },
+  "quarter_nii_reported_crore": [
+    {
+      "end": "2025-09-30",
+      "value": "1261",
+      "original_sha256": "0f80a30604f9ddff9516cd8f7d1fda50d905146eefaf271b047fe04e727d1e9d"
+    },
+    {
+      "end": "2025-12-31",
+      "value": "1239",
+      "original_sha256": "df3495180f264e96ae02c4ec790090a0560853b9bfa326c280ea567cab651ead"
+    },
+    {
+      "end": "2026-03-31",
+      "value": "1359",
+      "original_sha256": "d4e15a6da4122e26d8f06b9563937431e75fa5ed7f942809fb96e604d67025ec"
+    },
+    {
+      "end": "2026-06-30",
+      "value": "1423",
+      "original_sha256": "79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822"
+    }
+  ],
+  "decision_boundary": "Inactive exact-inputfallback requires explicit ownerapproval AND source-certified dailyAEAinputs. Approvalalone cannotclearcurrentevidencegap. AnnualorquarterNIM mustnotberelabelledTTM; no roundedratioinversion, quarterpercentageaverage or averageTOTALasset substitution."
+}
