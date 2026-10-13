@@ -1,0 +1,198 @@
+[
+  {
+    "id": "0345d1bb-99a1-4f45-9d76-405aa4b61afe",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "53849a4d2469f3590cdc9bc567b4c0adc89888d6ebb90410b56e07f1bee9b53b",
+    "canonical_raw_hash": "eb579d5a82a223dd1d3828f0d7805358c48367e5d957ce91b294635eca2ca632"
+  },
+  {
+    "id": "0500f74f-2f3e-486c-9529-37d8880dfcfa",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "618cd04a101eff43688eb997471a3131ec5df61a9e1c152ce18929315ce23383",
+    "canonical_raw_hash": "a16c19324673609a04cc44cef4b58abf7767b8dc5476b2ce51e21609a043dbd2"
+  },
+  {
+    "id": "08d996a1-fda9-400e-b8fc-7ba3ac9f2919",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "8015c52eb7304f0840db98ee1e103300a68765a5b0bd9bd325089a61e13193ca",
+    "canonical_raw_hash": "06dda86873d2dfda49e6f3ac65f9fbbac267722e59aeee86b195fab290b93517"
+  },
+  {
+    "id": "17eba070-d3b3-4e0e-b39e-72aa2014cf79",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "04e78e109a583f3eb2ab92c295244a61cd0ac8b7a922ad9a196d62d5f4b815bc",
+    "canonical_raw_hash": "d92eae8741bb98540289aca6690610332bb3b778fdb4306156e6bb90b454b8d1"
+  },
+  {
+    "id": "199c3891-832b-4866-82e9-8a9b02a33b17",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "345ccb8fb9002c285e0de7f94cc41609dbbf352ee15b1916959921e1e1ca162b",
+    "canonical_raw_hash": "2885453fc76c2b6bd99afea97f860c5dac6ae59a8929b4b1202b465925876a1c"
+  },
+  {
+    "id": "1e7cddf1-8c84-46be-8d10-6baef68ab01b",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "23be62d3178a77ff2111b7554c8e2e17520de3a6aa531e73fdfce50e80a93d46",
+    "canonical_raw_hash": "3f0a980787c093eb50db870fcc3aec28421d076fdb69ba1b9fec0289462b2931"
+  },
+  {
+    "id": "22687fd8-99e0-4e27-a6a4-3e1a58a81744",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "bd4363f692137b5aa9956c141886a0bca9ec198678c1e18582a7776c8a211151",
+    "canonical_raw_hash": "71b95a50f864952bec22acdee9c15ad2d156362eb34825351e5b1cc1620ebdae"
+  },
+  {
+    "id": "2445de01-c97e-4f25-b065-b3a4846ba8cf",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "a7d3d682078eb4fa754298583e4728d9fe62ff772ab5a38b91d4f549f296fe8c",
+    "canonical_raw_hash": "4d051cf1e0435f610b8a9db174c8afbeabb5a23e7be9296ee757753c056d4366"
+  },
+  {
+    "id": "3be53e80-b257-444c-b11a-0df12820653c",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_CORPORATE_ACTION_CAPTURE",
+    "ledger_hash": "6a47173c70f5499dc05005b7ef9f633a773dd8c13793ab859cd2dc15f4313c15",
+    "canonical_raw_hash": "68bb91377c70dcb53f7021f33ccee73447ab01d1e094a6ef63a1fe4cd18118fd"
+  },
+  {
+    "id": "621415ed-5e0b-486c-a750-edd1c8d24c35",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "e5387b6d499a36f19350b5febf132a62694f91947c21794118c7e1880c0f1992",
+    "canonical_raw_hash": "e76d8c8aded9b317d90621e6eca842c6de6ed936faba714c2f736e8b0a82457e"
+  },
+  {
+    "id": "621ffdab-e509-4f98-bcd1-b54858097644",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "b933faa129d70c81eb15632bf34590892472f043062d7615eb6c86a64e28a25f",
+    "canonical_raw_hash": "93638c21e5ee7dbc7d0f8a4e9b8ffc217d473804df21cbcb8734dc026bb8bc28"
+  },
+  {
+    "id": "689bec2e-c5c4-49fd-838c-376140e6e78d",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "ca01fba25954f74cd1363286b75105fab5fde8358d38321085952899eec1ed70",
+    "canonical_raw_hash": "afb108ebcf78df91aa1a792c9c884cf8566a87b286d0c9b7ff3d0f97e6bb3e2c"
+  },
+  {
+    "id": "69aad735-a567-4b65-9925-ac29a1aee3a6",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "6c63e708dad77847fd4fa7726fb948184c68c4c5880fcac71b394d400fd73a1d",
+    "canonical_raw_hash": "a47a50d35a771fb50390046379a6abb5ef9162b0c0ee99bc7655d508b3cbddcf"
+  },
+  {
+    "id": "6c4f2e4c-7267-45cf-91fb-9b205a83fec7",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_CORPORATE_ACTION_CAPTURE",
+    "ledger_hash": "3c4678bd65c3de97f3ebad17eb435f948a51ba56055805be6ab5b59bdcff6022",
+    "canonical_raw_hash": "903fb1b123793892f36b045d8893978a565a920424e8c47a89cb5d68ad4b6bec"
+  },
+  {
+    "id": "72427cb0-0a98-454b-9112-c1cd4244b553",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_CORPORATE_ACTION_CAPTURE",
+    "ledger_hash": "638967f06c9ab0c9ffba09225ae4365f927cf1c89a5fb62d1b6757e62d24899e",
+    "canonical_raw_hash": "6c94a8aa649821868edef0f633aa93072ad16489c2fd85217627f907d44c5343"
+  },
+  {
+    "id": "89044ed1-131b-4103-8473-5626bce8a6c0",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_CORPORATE_ACTION_CAPTURE",
+    "ledger_hash": "1d76985787ff71de5acfe4398f98ae3c020342b40eca04aa8b1b87f079d498f5",
+    "canonical_raw_hash": "1996158eb2cb82cdafc1e7f912dd5c71f205a17f32ee3edcc58ff5b985e4475d"
+  },
+  {
+    "id": "90bb13a7-73a4-4c20-95bf-fa523d95c038",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "13e0dc7d795692de5c54db1edaed51b3ac2511544549be7f8c4f5b8bd12fe715",
+    "canonical_raw_hash": "700c4d771a7cb3cc1580dea8a86e831b1da766b4880dd691788933acb5f3948f"
+  },
+  {
+    "id": "99937d55-5d6a-4fe1-9d5c-83eff804184b",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "a06ca10d62a74849939f33242f93d5222253d7deeabb8f04f45924a781c8eafa",
+    "canonical_raw_hash": "61545b9de78b89475d3973fc6c093bd7c622264b0ba4399c7cc62f5b6e82e532"
+  },
+  {
+    "id": "a273f5d8-bcd1-4f0a-b2d1-ae417d6c4edc",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "d5b87cc4530c9606bfa8e168112bbde4d7ad58f9d935cee2534bf909abb6861e",
+    "canonical_raw_hash": "eeb232bffc4cfb7f546fe470c74e7c0f9a5cfdd959107f98eca6b824e39c44ad"
+  },
+  {
+    "id": "ad197128-7ee0-474c-9064-0ff228417a8b",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "10a7fcb17a4163a972ba607d0dc988ae6a7583654ab31d1bc7c44fdb34d65998",
+    "canonical_raw_hash": "95d3cf102579c799657985e0dfa8e41e49c43715f56dc45f2adfe7aee38846d7"
+  },
+  {
+    "id": "b6807c6f-29f3-4d09-8865-d0a644009548",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "03660d7762f3603712de06dc8a103871abcb06385dea52dd4c98939dff788cc4",
+    "canonical_raw_hash": "df172dfefc3675285092bc7676757b3c3535531b972f48d574dc946d9a124723"
+  },
+  {
+    "id": "b80e8bd9-7cc6-4fd0-a684-bf135d21dfd2",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "86b2adb27202ee414fce3ec9f0b91ce3dbf002df6768554c322a8dfacd765c37",
+    "canonical_raw_hash": "ced903253828124709bc118bebfba7aacfc68424794fd353e61ac1f84cd2b1e5"
+  },
+  {
+    "id": "bdf5290e-07a5-4b03-ae60-b705cbc249af",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "ced0456ab7216a5a94fa63bdecda227d69926d06644b81bec02de1d5c18bbfdf",
+    "canonical_raw_hash": "8e8c933a872a681b3ac3f4bfaeb05022a91a1e30819c4213ca8538a9e1d99a41"
+  },
+  {
+    "id": "ce646eca-6cc9-414e-b7bd-1931b5d43f94",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "60c6d20f27f98c73f31966f211982872fa1d2a2305456527ce3e03db419f6c9a",
+    "canonical_raw_hash": "5d3e6df51cab16d4c9164d541d05383645b01c2df931429ba1b94a24cfa15480"
+  },
+  {
+    "id": "d5027e95-cf99-469e-9130-1a544b7c5a4b",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "278ac5ce7aabebd6c97a41cdf11bd7c8aec65d2dece5f2b2c3371c7160ac117e",
+    "canonical_raw_hash": "8feeb9f19b26a950fdd34ef6a16b1653e6e8df634b37ed6e07670a6f508f79cf"
+  },
+  {
+    "id": "e9a146fe-650e-45dc-b2a3-9d2e4ce6ce50",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "00f0d0a31b8f2e09a834ea7e489ef216494de942f552a70bd810ae63f0e17d5e",
+    "canonical_raw_hash": "3cb38a13ad7da643b7f802b5e45fd77989d0377bb816bf512a8180c30ca58495"
+  },
+  {
+    "id": "fd09f07e-7538-4c2c-9f4a-3c2af8da0c78",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "edbf9ddbdf5c99763f2c95938eea0f4459c7c51044c188fe69ed3b6e05eca564",
+    "canonical_raw_hash": "a5416982642b14ef129836c08ee353efd4f4596c29d0afd20bf53ebaaadd62d5"
+  },
+  {
+    "id": "fe035803-2291-4391-a02e-99ef0ea17274",
+    "source_code": "NSE_OFFICIAL",
+    "record_kind": "V1_4_BANK_VALUATION_MONTH_END_PRICE_CAPTURE",
+    "ledger_hash": "17df23937bdbff0ef51dad48288a801279ece221267060bfc8b58609fe7af625",
+    "canonical_raw_hash": "752ed3b031065e7156ae3ad9afdbb5f0ee860cf623e6768dd1fb6780d3102bb4"
+  }
+]

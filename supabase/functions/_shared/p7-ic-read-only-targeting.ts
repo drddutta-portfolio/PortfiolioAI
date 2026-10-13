@@ -1,5 +1,7 @@
-/** Explicit targeting is restricted to owner-authenticated validation, never writes. */
+/** Explicit targeting is owner-authenticated for validation or exactly P4-grant-scoped for canonical writes. */
 const VALIDATE_ACTION = "P7_IC3_VALIDATE_CANONICAL_INPUTS"
+const MATERIALIZE_ACTION = "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
+const MATERIALIZE_TARGETING_MODE = "P4_GRANT_SCOPED_SECURITY_IDS_V1"
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu
 
 export class ReadOnlyTargetError extends Error {
@@ -10,7 +12,9 @@ export class ReadOnlyTargetError extends Error {
 
 export function readOnlySecurityIds(body: Readonly<Record<string, unknown>>): readonly string[] | undefined {
   if (body.securityIds === undefined) return undefined
-  if (body.action !== VALIDATE_ACTION) throw new ReadOnlyTargetError("SECURITY_IDS_REQUIRE_READ_ONLY_VALIDATION", 400)
+  const validate=body.action===VALIDATE_ACTION
+  const materialize=body.action===MATERIALIZE_ACTION&&body.targetingMode===MATERIALIZE_TARGETING_MODE
+  if(!validate&&!materialize)throw new ReadOnlyTargetError("SECURITY_IDS_REQUIRE_AUTHENTICATED_VALIDATION_OR_GRANT_SCOPED_WRITE",400)
   if (body.offset !== undefined || body.limit !== undefined) throw new ReadOnlyTargetError("SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION", 400)
   if (!Array.isArray(body.securityIds) || body.securityIds.length < 1 || body.securityIds.length > 40) {
     throw new ReadOnlyTargetError("SECURITY_IDS_REQUIRE_1_TO_40_UNIQUE_UUIDS", 400)

@@ -1,0 +1,111 @@
+{
+  "boundary": "AFTER_13_FRESH_TOOL_CALLS_PLUS_CATALOG; NO_MATERIALIZATION",
+  "selectionComparison": "13_OF_13_EXACTLY_UNCHANGED",
+  "ready": 0,
+  "rows": [
+    {
+      "symbol": "AUBANK",
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "selection_id": "4bcf6208-92bc-4576-8b63-f864a65ae8dc",
+      "snapshot_id": "6193b778-5063-46df-8c9c-940d484c2963",
+      "selected_at": "2026-10-07 20:25:21.691296+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "AXISBANK",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "selection_id": "ff63f4e3-a8e2-488f-a0e9-11618e6d38f6",
+      "snapshot_id": "f81e4d3e-ba6b-496f-b3f8-8bea8da75828",
+      "selected_at": "2026-10-07 20:25:26.936189+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "selection_id": "3934ad33-8e84-4001-b571-0803fc14cae9",
+      "snapshot_id": "4eeb7ec0-151f-458c-9573-40e6fd1715e2",
+      "selected_at": "2026-10-07 20:25:27.170122+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "selection_id": "234bd0c6-ca49-4905-98bf-5d79da5bf0a0",
+      "snapshot_id": "ff6163db-fe29-4f23-aae4-cedb9cf94abe",
+      "selected_at": "2026-10-07 20:25:27.409632+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "selection_id": "ceae2763-8259-4270-8e67-03782697e710",
+      "snapshot_id": "3696242d-eb86-42e8-8dc7-152c5a40231b",
+      "selected_at": "2026-10-07 20:27:04.980631+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "selection_id": "f8bb668e-610e-428f-8e0c-78e732eb22c0",
+      "snapshot_id": "de6796b4-d076-4d1e-a120-393347019424",
+      "selected_at": "2026-10-07 20:27:02.435338+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "ICICIBANK",
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "selection_id": "fd45e8c9-69ad-4884-8bc8-b9563310a5d9",
+      "snapshot_id": "cd640846-2474-4b3d-abb0-f302c5a7bd89",
+      "selected_at": "2026-10-07 20:27:05.345751+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "IDBI",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "selection_id": "ed5172bf-0c1f-47b7-82c2-c2998a5ffc87",
+      "snapshot_id": "a3e13a87-b856-4eea-b109-81de0210738c",
+      "selected_at": "2026-10-07 20:27:09.287845+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "selection_id": "bea4c208-8485-49d5-aa29-bacb761876fc",
+      "snapshot_id": "769ddaca-ce52-4166-b48c-7da636aef070",
+      "selected_at": "2026-10-07 20:27:13.249+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "INDIANB",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "selection_id": "fc722991-2203-45a5-b67c-6eca130f9f48",
+      "snapshot_id": "c3fa5774-47cf-48cc-97ac-55be1ac5a669",
+      "selected_at": "2026-10-07 20:27:08.343521+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "symbol": "KARURVYSYA",
+      "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+      "selection_id": "3888d732-0304-449c-92ba-924a22049042",
+      "snapshot_id": "6f51ead4-b4da-46dc-85af-c7b185ab0e3c",
+      "selected_at": "2026-10-07 04:14:51.483918+00",
+      "snapshot_status": "CONFLICTING"
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "selection_id": "a9f29211-28e1-4a4e-baf4-02d1f90e1407",
+      "snapshot_id": "a02ac622-85f7-4824-9522-ce38d66524d0",
+      "selected_at": "2026-10-07 04:14:56.046937+00",
+      "snapshot_status": "CONFLICTING"
+    },
+    {
+      "symbol": "SBIN",
+      "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "selection_id": "0ee17b88-68f2-4cc5-8f25-abf33b11bb09",
+      "snapshot_id": "e2470e85-10e0-430b-a1fe-6569518c5f87",
+      "selected_at": "2026-10-05 19:56:02.903312+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    }
+  ]
+}

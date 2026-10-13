@@ -1,0 +1,14 @@
+[
+  {
+    "method": "OPTIONS",
+    "status": 204,
+    "cors": "*",
+    "body": ""
+  },
+  {
+    "method": "POST",
+    "status": 400,
+    "cors": "*",
+    "body": "{\"error\":\"Exact action, portfolioId, bounded slice, selection run, evaluation time, and bounded post-close source cutoff are required.\"}"
+  }
+]

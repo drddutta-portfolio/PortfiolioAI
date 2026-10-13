@@ -1,0 +1,28 @@
+# BANK V1-4 — M6 mandatory valuation methodology resolution package (decision required)
+Date: 2026-10-10. Draft PR #124. **Not approved for activation.**
+
+## Governing role
+`supabase/functions/_shared/p7-ic-profile-contracts.ts` BANK profile `BANK_NBFC_STAGE_8_BANK_V1` signal `PB_ADJUSTED_FOR_ROE`, order 14, **required=true**, between `PB_RELATIVE` order 13 and price momentum order 15. It is not merely a display label. M5 and M7 have independent owner-approved peer-free self-history methodology; this is a distinct third valuation signal. The existing 13 selected bank snapshots retain M6 as an applicable required item.
+
+## Why the prior heuristic is not financially defensible
+Candidate `P/B_adj=(P/B_current)*(median(last five audited annual ROE)/latest audited annual ROE)`, optionally clamped to 0.5–2.0, was previously proposed as an illustration only. The algebra is transparent but a ratio of ROEs can diverge when ROE approaches zero, reward leveraged balance sheets and transitory provision write-backs, invert during net losses, confuse accounting scope and penalize genuinely improving profitable banks. The arbitrary clamp hides model instability rather than proving economic correctness. It also double-counts M5 self P/B and ROE_ANNUAL without an approved scoring interpretation. **Recommendation: do not activate this formula.**
+
+## Decision-ready defensible alternative: governed residual-income justified P/B premium
+The residual-income / Gordon relation under restrictive steady-state assumptions is `justified_PB=(ROE_normalized-g)/(Ke-g)`, with `Ke>g`, stable long-run profitability, sustainable payout/capital and comparably measured audited equity. Proposed **M6 metric** = `observed_current_PB / justified_PB` (dimensionless). Below 1 suggests observed P/B is below the model-implied P/B; above 1 the reverse. This is a *conditional model* and not a reliable fair value unless assumptions are estimated and validated.
+
+**Source inputs:** point-in-time current adjusted-for-corporate-actions quoted price and last then-public BVPS (same standalone/consolidated basis), five complete audited FY ROE values and equity denominators, verified issuer capital adequacy/retained earnings/payout, approved risk-free yield and equity risk premium, beta or conservative regulated-bank cost of equity, long-term growth constrained by GDP/inflation/regulatory capital capacity. Each input has original URL/hash, fiscal dates, publication timestamps and bank/security source identity. No inferred quarterly annualized ROE. Required unit % for ROE/Ke/g and dimensionless relative P/B. Tenor: current as-of date and last 5 verified financial years; no future revisions/backfills.
+
+**Worked *synthetic* example:** observed P/B=2.0×, normalized ROE=15%, Ke=12%, sustainable g=5%, justified P/B=(0.15−0.05)/(0.12−0.05)=1.4286×, M6 observed/justified=1.40×. If Ke rises to 13%, justified P/B=1.25×, ratio=1.60×; if ROE falls to 12%, justified P/B=1.00×, ratio=2.0×. This material sensitivity is precisely why the model must be validated before scoring.
+
+**Failure/edge tests:** Ke≤g or unstable/negative normalized ROE; ROE≤g implies unjustified negative/zero value; nonpositive BVPS; mismatched standalone and consolidated book/equity; deferred tax/regulatory adjustments; credit-loss cycle with unusually high/low ROE; weak CET1; near-zero denominator; merger/corporate action basis changes; immature bank without 5 audited FY; RBI-SFB vs universal-bank comparability; varying payout and growth constraints; 100–300 bp changes in Ke and g; ±300bp ROE; alternative ROE normalization median vs through-cycle bank profitability. Adverse sensitivity must be surfaced, not clipped away.
+
+**Implementation blockers:** no owner-approved bank-specific Ke and g estimation, no tested residual-income backtest/scoring calibration; the historical point-in-time 5-FY ROE/BVPS data is not proven. Treat residual-income model as proposed, not source-verified evidence.
+
+## Recommended owner decision
+**Option A — Governed methodology amendment (recommended):** retain M6 as explicitly `DEFERRED_REQUIRED_METHODOLOGY_REVIEW` and **do not declare the frozen BANK Gate A complete** until owner approves either (1) a calibrated residual-income model and threshold/weight policy with sector/bank sensitivity backtests, or (2) an explicit BANK methodology revision that *replaces* M6 with a non-duplicative approved capital-adjusted valuation/risk measure. The amendment must specify the impact on 13 banks, requiredness, weight redistribution/normalization, acceptance baseline and a new versioned profile ID, while maintaining old snapshots and reason codes. No silent deletion of required M6. This is the safest financially justified approach now.
+
+**Option B — Conditional new residual-income M6:** owner approves implementation only after verified data and calibration, exact Ke/g regime, risk bounds and scoring threshold. No immediate activation, no invented denominator or source. Mandatory per-bank M6 remains REVIEW_REQUIRED until live tests prove it.
+
+**Scoring consequences:** Option A currently leaves M6 blocked for all 13, hence 0 fully-ready solely from a valuation perspective. A future removal/replacement can change total score denominator and banks' ranking and would require fresh independent 13-bank comparative score/rank, reproducible historical selections and owner approval of release acceptance; not a routine code fix. Option B leaves scores blocked until a complete source-backed and validated justified-P/B ratio exists. Existing NPA and M1–M4 acceptances, if any, remain independently possible.
+
+**No activation or bank READY assertion is granted by this package.**

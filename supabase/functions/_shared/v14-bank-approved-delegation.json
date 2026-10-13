@@ -1,0 +1,46 @@
+{
+  "id": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "authorization": "OWNER_APPROVED_SCOPED_PROPOSAL_2026_10_09",
+  "recordedAt": "2026-10-09T04:48:19Z",
+  "executor": "CODEX",
+  "securities": {
+    "f5c47463-3c6d-4db0-a815-e4301e990213": "AUBANK",
+    "b330c9fe-ae35-469a-9975-d5af26843b1c": "AXISBANK",
+    "30ce066a-6410-4b11-9b85-e41324971261": "BANDHANBNK",
+    "6771f493-c29a-477e-8cc8-2bede0941e44": "BANKBARODA",
+    "63889b52-85da-4a1b-9046-c1e975819f99": "FEDERALBNK",
+    "b47b007d-1990-4504-a5a2-4391c07687c5": "HDFCBANK",
+    "5760ce4e-97ac-40ef-af3b-d2a5dce596cf": "ICICIBANK",
+    "a5639446-3238-4e08-9d02-59bc529982db": "IDBI",
+    "ba340b06-fd44-4d80-9ce7-d280616354ed": "IDFCFIRSTB",
+    "5275dd14-35ba-4feb-94d8-f8d1facb19d3": "INDIANB",
+    "be55b3cc-0400-45af-84aa-2a95e2c361c5": "KARURVYSYA",
+    "05744a34-415b-4084-b832-ce3436ba0694": "KOTAKBANK",
+    "d77abadc-d171-49d9-bfee-0b34dd0281f4": "SBIN"
+  },
+  "requirements": [
+    "ROE_ANNUAL",
+    "NIM_TTM",
+    "GROSS_NPA",
+    "NET_NPA",
+    "ADVANCES_GROWTH_YOY",
+    "DEPOSITS_GROWTH_YOY",
+    "EPS_GROWTH_YOY",
+    "ROA_ANNUAL",
+    "CET1_RATIO",
+    "CAPITAL_ADEQUACY_RATIO",
+    "EXTERNAL_LONG_TERM_RATING",
+    "PB_ADJUSTED_FOR_ROE",
+    "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+    "GOVERNANCE_EVENT_SIGNAL",
+    "RATING_TREND"
+  ],
+  "fallbackSources": [
+    "NSE_OFFICIAL",
+    "COMPANY_EXCHANGE_FILING"
+  ],
+  "admission": "EXISTING_CANONICAL_REQUIREMENT_VALIDATORS_ONLY; NO_READINESS_OVERRIDE"
+}

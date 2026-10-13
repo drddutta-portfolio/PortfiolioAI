@@ -1,0 +1,58 @@
+[
+  {
+    "sliceId": "BANK-P1-01",
+    "http_status": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "0ded18d7-86cd-424f-9fbe-b58c18acbdc5",
+      "sourceRecordId": "c7ff0a5d-f792-424f-a8ae-24d201017f38",
+      "budgetSettled": true
+    }
+  },
+  {
+    "sliceId": "BANK-P1-02",
+    "http_status": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "63938e9b-c648-41ef-bfea-72b493bdf697",
+      "sourceRecordId": "0548bfd7-fe80-4d63-b04b-046e27bf74b7",
+      "budgetSettled": true
+    }
+  },
+  {
+    "sliceId": "BANK-P1-03",
+    "http_status": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "ff42c357-e5fb-4df1-a0aa-c0247386e91a",
+      "sourceRecordId": "54b95fde-ef71-463a-a836-5c6a396d9ac6",
+      "budgetSettled": true
+    }
+  },
+  {
+    "sliceId": "BANK-P1-04",
+    "http_status": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "b50a3c04-37c4-4170-a674-fbbbff8205dc",
+      "sourceRecordId": "93a83b21-20a4-4bd5-810f-47f58be0aaa3",
+      "budgetSettled": true
+    }
+  }
+]

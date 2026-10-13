@@ -1,0 +1,16 @@
+# KVB FY2025–26 original schedules — verified source evidence (not canonical admission)
+- PR #124 / Development only; source evidence, not an ACCEPT review or READY override.
+- Official issuer URL: https://www.kvb.bank.in/ar-26/assets/pdfs/Karur_Vysya_Bank_IAR_Schedules.pdf
+- GitHub Actions capture: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38133645597
+- Original artifact: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38133645597/artifacts/11699534515
+- Exact PDF size: 484578 bytes.
+- Independently rechecked original PDF SHA-256: `8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9`.
+- PDF page 68, Schedule 18, Note 14.1, **Business Ratios**, FY 2025–26.
+- Original table contains: `Net Interest Margin (%) 4.11 4.09` and `Return on Assets (%) 1.93 1.72`, with columns `2025-26`, `2024-25`.
+- Exact denominator-note text extracted from same page: `Working Funds are based on average of total assets as reported to RBI in Form X during the year; Employee productivity ratios are based on actual number of employees at the end of the year.`
+- Reviewed fiscal period candidate: 2025-04-01 to 2026-03-31.
+- Caveat: note formally identifies Working Funds; before equating this with the Return on Assets denominator in a canonical ACCEPT review, verify the ROA computation convention and approved direct-source contract, not merely keyword proximity.
+- Annual NIM 4.11% does **not** qualify direct-only trailing-four-quarter NIM automatically.
+- Do not invent publication time: source availability for this captured original is proven no earlier than successful GitHub Actions retrieval on 2026-10-11 10:54:52 UTC unless independently corroborated.
+- This source has NOT been inserted into canonical `data_source_records`, has no new `research_evidence_requirement_reviews` ACCEPT and has no new selected snapshot. No source-admission grant or authenticated canonical review endpoint was invoked.
+- Required next check: the approved reviewer must bind original SHA256, same-year accounting note, exact period, scope and eligible first-verified availability through the existing reviewer contract and canonical materializer; fail closed if true ROA denominator remains unproven.

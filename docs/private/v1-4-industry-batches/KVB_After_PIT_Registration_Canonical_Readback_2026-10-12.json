@@ -1,0 +1,124 @@
+{
+  "registration_run": 38203996341,
+  "repeat_run": 38204130031,
+  "canonical_admissions": 0,
+  "readback": {
+    "kvb_snapshot": {
+      "id": "2af15b91-4924-4baf-ab1b-c91d62b095dc",
+      "status": "REVIEW_REQUIRED"
+    },
+    "kvb_requirements": [
+      {
+        "code": "ADVANCES_GROWTH_YOY",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "CAPITAL_ADEQUACY_RATIO",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "CET1_RATIO",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "DEPOSITS_GROWTH_YOY",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "EPS_GROWTH_YOY",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "EXTERNAL_LONG_TERM_RATING",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "GOVERNANCE_EVENT_SIGNAL",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "GROSS_NPA",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "IC3_SNAPSHOT_LINEAGE",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "MAX_DRAWDOWN_1Y",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "NET_NPA",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "NIM_TTM",
+        "state": "REVIEW_REQUIRED",
+        "required": true
+      },
+      {
+        "code": "PB_RELATIVE",
+        "state": "REVIEW_REQUIRED",
+        "required": true
+      },
+      {
+        "code": "PE_TTM_RELATIVE",
+        "state": "REVIEW_REQUIRED",
+        "required": true
+      },
+      {
+        "code": "PRICE_MOMENTUM_12M",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "PRICE_MOMENTUM_6M",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "RATING_TREND",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "RELATIVE_STRENGTH_12M",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "ROA_ANNUAL",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "ROE_ANNUAL",
+        "state": "FRESH",
+        "required": true
+      },
+      {
+        "code": "VOLATILITY_RELATIVE",
+        "state": "FRESH",
+        "required": true
+      }
+    ],
+    "pit_original_sources": 22
+  }
+}

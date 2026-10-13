@@ -1,0 +1,10 @@
+{
+  "operation": "V14_BANK_ATOMIC_LEASE_PROOF_20261012_19EED37F",
+  "first_holder_acquired": true,
+  "second_holder_acquired": false,
+  "released": true,
+  "provider_calls": 0,
+  "review_writes": 0,
+  "snapshot_writes": 0,
+  "scope": "CONTROLLED_EXISTING_RPC_LEASE_METADATA_TEST"
+}

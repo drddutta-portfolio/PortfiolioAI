@@ -1,0 +1,153 @@
+{
+  "boundary": "RAW_CAPTURE_NOT_CANONICAL_ADMISSION",
+  "sbinCorrectedSelector": {
+    "httpStatus": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "732b641c-05cc-4b84-a517-b554b636f1d0",
+      "sourceRecordId": "7046502f-1d08-4c33-bb30-b6bc8cdd34b0",
+      "budgetSettled": true
+    }
+  },
+  "catalog": {
+    "http_status": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 0,
+      "protocolRequests": 1,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "08a7f39d-0aa4-457a-9234-f73201fd95dc",
+      "sourceRecordId": "47dad9a5-2d33-4fbd-b5b3-3680c94cab1e",
+      "budgetSettled": true
+    }
+  },
+  "coreSearch": {
+    "httpStatus": 200,
+    "response": {
+      "status": "RAW_CAPTURED_NOT_QUALIFIED",
+      "code": null,
+      "providerCalls": 1,
+      "protocolRequests": 0,
+      "retries": 0,
+      "canonicalWrites": 0,
+      "runId": "73217d21-a25c-4c1d-ab5e-56ee1aefeebe",
+      "sourceRecordId": "e3fb5878-aac8-41d1-a4b4-5d8d3143d4db",
+      "budgetSettled": true
+    }
+  },
+  "focusedSearches": [
+    {
+      "queryKey": "BANK_CAPITAL",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "a7535135-3844-4f11-bed0-4c00f602bd14",
+        "sourceRecordId": "206a01c9-6585-4c1a-8228-f7e56cdce129",
+        "budgetSettled": true
+      }
+    },
+    {
+      "queryKey": "BANK_MARGIN",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "6bf5d2e0-3f6d-4ada-a2ba-1cd030b2e2e3",
+        "sourceRecordId": "7f09fa1d-912a-4606-9855-d173a34395c5",
+        "budgetSettled": true
+      }
+    },
+    {
+      "queryKey": "BANK_GROWTH",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "1ee5861e-36b8-43b8-baf4-edb1388bb423",
+        "sourceRecordId": "d9110769-0552-4692-9303-fef15dbc10de",
+        "budgetSettled": true
+      }
+    }
+  ],
+  "exactAnnualSlices": [
+    {
+      "slice": "BANK-P1-01",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "1c4ea559-472c-45c4-ad31-c826619f5ffd",
+        "sourceRecordId": "a95a35cf-e3c3-40bc-ac53-31f81a3a4fde",
+        "budgetSettled": true
+      }
+    },
+    {
+      "slice": "BANK-P1-02",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "91e493df-18f0-4532-ab06-194564005447",
+        "sourceRecordId": "adde4733-e1b1-409c-8a1d-47d15502b2c8",
+        "budgetSettled": true
+      }
+    },
+    {
+      "slice": "BANK-P1-03",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "46639924-7543-4542-8fb2-0aea97c0a33e",
+        "sourceRecordId": "1b3a7970-8d12-4157-947e-b7f300007380",
+        "budgetSettled": true
+      }
+    },
+    {
+      "slice": "BANK-P1-04",
+      "httpStatus": 200,
+      "response": {
+        "status": "RAW_CAPTURED_NOT_QUALIFIED",
+        "code": null,
+        "providerCalls": 1,
+        "protocolRequests": 0,
+        "retries": 0,
+        "canonicalWrites": 0,
+        "runId": "a3050792-ee18-4aad-b6b2-69fdca8ec5a3",
+        "sourceRecordId": "37c96c19-5664-4f7f-a8d9-5f0483321ed4",
+        "budgetSettled": true
+      }
+    }
+  ]
+}

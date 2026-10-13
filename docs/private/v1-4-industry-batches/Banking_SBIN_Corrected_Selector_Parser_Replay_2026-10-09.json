@@ -1,0 +1,234 @@
+{
+  "sourceRecordId": "7046502f-1d08-4c33-bb30-b6bc8cdd34b0",
+  "parse": {
+    "series": {
+      "Promoter": [
+        {
+          "quarter": "Mar 2025",
+          "value": 57.4,
+          "exactValue": "57.4"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 57.4,
+          "exactValue": "57.4"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 55.5,
+          "exactValue": "55.5"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 55.5,
+          "exactValue": "55.5"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 55.5,
+          "exactValue": "55.5"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 55.5,
+          "exactValue": "55.5"
+        }
+      ],
+      "Institutional": [
+        {
+          "quarter": "Mar 2025",
+          "value": 35,
+          "exactValue": "35.0"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 35,
+          "exactValue": "35.0"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 37.4,
+          "exactValue": "37.4"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 37.5,
+          "exactValue": "37.5"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 37.6,
+          "exactValue": "37.6"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 37.5,
+          "exactValue": "37.5"
+        }
+      ],
+      "FII": [
+        {
+          "quarter": "Mar 2025",
+          "value": 9.9,
+          "exactValue": "9.9"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 9.3,
+          "exactValue": "9.3"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 9.6,
+          "exactValue": "9.6"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 10.3,
+          "exactValue": "10.3"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 11.4,
+          "exactValue": "11.4"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 10.8,
+          "exactValue": "10.8"
+        }
+      ],
+      "MF": [
+        {
+          "quarter": "Mar 2025",
+          "value": 12.2,
+          "exactValue": "12.2"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 13,
+          "exactValue": "13.0"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 14.2,
+          "exactValue": "14.2"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 13.8,
+          "exactValue": "13.8"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 13.3,
+          "exactValue": "13.3"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 13.6,
+          "exactValue": "13.6"
+        }
+      ],
+      "DII": [
+        {
+          "quarter": "Mar 2025",
+          "value": 25.1,
+          "exactValue": "25.1"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 25.7,
+          "exactValue": "25.7"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 27.8,
+          "exactValue": "27.8"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 27.2,
+          "exactValue": "27.2"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 26.2,
+          "exactValue": "26.2"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 26.7,
+          "exactValue": "26.7"
+        }
+      ],
+      "Public": [
+        {
+          "quarter": "Mar 2025",
+          "value": 7.5,
+          "exactValue": "7.5"
+        },
+        {
+          "quarter": "Jun 2025",
+          "value": 7.6,
+          "exactValue": "7.6"
+        },
+        {
+          "quarter": "Sep 2025",
+          "value": 7.1,
+          "exactValue": "7.1"
+        },
+        {
+          "quarter": "Dec 2025",
+          "value": 7,
+          "exactValue": "7.0"
+        },
+        {
+          "quarter": "Mar 2026",
+          "value": 6.8,
+          "exactValue": "6.8"
+        },
+        {
+          "quarter": "Jun 2026",
+          "value": 7.1,
+          "exactValue": "7.1"
+        }
+      ]
+    },
+    "state": "AVAILABLE",
+    "minimumQuarterSeries": 4,
+    "semanticBasisVerified": false
+  },
+  "guards": [
+    {
+      "contractVersion": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "status": "REVIEW_REQUIRED",
+      "eligibleForCanonicalPersistence": false,
+      "series": "Promoter",
+      "observedQuarters": [
+        "Mar 2025",
+        "Jun 2025",
+        "Sep 2025",
+        "Dec 2025",
+        "Mar 2026",
+        "Jun 2026"
+      ],
+      "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN"
+    },
+    {
+      "contractVersion": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "status": "REVIEW_REQUIRED",
+      "eligibleForCanonicalPersistence": false,
+      "series": "Institutional",
+      "observedQuarters": [
+        "Mar 2025",
+        "Jun 2025",
+        "Sep 2025",
+        "Dec 2025",
+        "Mar 2026",
+        "Jun 2026"
+      ],
+      "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN"
+    }
+  ]
+}

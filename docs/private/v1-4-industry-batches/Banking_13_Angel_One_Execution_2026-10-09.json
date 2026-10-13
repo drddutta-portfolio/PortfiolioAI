@@ -1,0 +1,97 @@
+{
+  "http_status": 200,
+  "response": {
+    "action": "V1_4_BANK_TAIL_2026_10_08",
+    "transport": {
+      "authenticationRequests": 1,
+      "historyRequests": 14
+    },
+    "results": [
+      {
+        "target": "f5c47463-3c6d-4db0-a815-e4301e990213",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "9ee3151b-bde1-4d60-b08c-1bc15625b474"
+      },
+      {
+        "target": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "b8c3796a-e0c2-49e1-808a-4bcaec70d163"
+      },
+      {
+        "target": "30ce066a-6410-4b11-9b85-e41324971261",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "fc1e6371-100f-4a4d-bdea-9063cf1eaf38"
+      },
+      {
+        "target": "6771f493-c29a-477e-8cc8-2bede0941e44",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "7c10a0d3-d953-4a51-ad05-d8e80b118485"
+      },
+      {
+        "target": "63889b52-85da-4a1b-9046-c1e975819f99",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "47ac646d-619a-4342-8f69-24c73a3fdfa8"
+      },
+      {
+        "target": "b47b007d-1990-4504-a5a2-4391c07687c5",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "b4170a00-f3c0-49cb-bac1-9b8f3b21394c"
+      },
+      {
+        "target": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "e0d3756f-be23-47d1-aeb5-ac571f14b5cd"
+      },
+      {
+        "target": "a5639446-3238-4e08-9d02-59bc529982db",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "5740d1bf-42d5-4629-a187-19859d1ca3b3"
+      },
+      {
+        "target": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "00f9d038-bad5-4680-a551-fac89afbd928"
+      },
+      {
+        "target": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "dbd38368-14df-4839-8651-305cf0d2a6df"
+      },
+      {
+        "target": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 2,
+        "sourceRecordId": "3484e3e6-4cbe-4bb9-b063-ceb75f8ae00a"
+      },
+      {
+        "target": "05744a34-415b-4084-b832-ce3436ba0694",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 2,
+        "sourceRecordId": "216b6b3e-8001-4b55-b87c-a49fbc321fe6"
+      },
+      {
+        "target": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 2,
+        "sourceRecordId": "fa90d184-e65e-4082-ac74-8b2bf0920e54"
+      },
+      {
+        "target": "NIFTY_BANK",
+        "status": "INGESTED_NOT_QUALIFIED",
+        "rows": 1,
+        "sourceRecordId": "bce3e295-8fb4-4758-baf9-d82042b89c1a"
+      }
+    ],
+    "canonicalMaterialization": false
+  }
+}

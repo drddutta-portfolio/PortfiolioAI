@@ -1,0 +1,30 @@
+[
+  {
+    "code": "GROSS_NPA_PERCENT",
+    "canonical_unit": "PERCENT",
+    "value_kind": "NUMERIC",
+    "is_active": true,
+    "freshness_seconds": 7776000,
+    "definition": {
+      "provider": "TRENDLYNE_MCP",
+      "selection": "REVIEWED",
+      "period_type": "QUARTER",
+      "provider_label": "Gross NPA ratio Qtr %",
+      "mapping_version": "bank-observed-v1"
+    }
+  },
+  {
+    "code": "NET_NPA_PERCENT",
+    "canonical_unit": "PERCENT",
+    "value_kind": "NUMERIC",
+    "is_active": true,
+    "freshness_seconds": 7776000,
+    "definition": {
+      "provider": "TRENDLYNE_MCP",
+      "selection": "REVIEWED",
+      "period_type": "QUARTER",
+      "provider_label": "Net NPA ratio % Qtr",
+      "mapping_version": "bank-observed-v1"
+    }
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "issuer": {
+    "originalUrl": "https://www.kvb.bank.in/ar-26/assets/pdfs/Karur_Vysya_Bank_IAR_Schedules.pdf",
+    "sha256": "8ae3d6a707135fc47c0df3fada986ecf9fdff62ebd2830da1b1eae9d8537f2b9",
+    "bytes": 484578,
+    "firstVerifiedAt": "2026-10-11T10:54:52.289Z",
+    "artifactId": 11699534515,
+    "fileName": "KARURVYSYA-FY2025-26-Financial-Schedules.pdf",
+    "contentType": "application/pdf",
+    "page": 68,
+    "table": "14.1 Business Ratios\n     Particulars                                                                               2025-26                2024-25\n     1.   Interest Income as a percentage to Working Funds (%)                                     8.53                  8.59\n     2. Non-interest income as a percentage to Working Funds (%)                                    1.61                  1.62\n     3. Cost of Deposits (%)                                                                       5.56                   5.61\n     4. Net Interest Margin (%)                                                                     4.11                 4.09\n     5. Operating Profit as a percentage to Working Funds (%)                                      3.14                   2.85\n     6. Return on Assets (%)                                                                       1.93                    1.72\n     7.   Business (Deposits plus Advances) per employee (` Crore)                                21.59                  18.91\n     8. Profit per employee (` Crore)                                                              0.25                  0.20\n\t\u0007Working Funds are based on average of total assets as reported to RBI in Form X during the year; Employee productivity ratios\n  are based on actual number of employees at the end of the year.",
+    "periodAnchor": "FOR THE YEAR ENDED 31ST MARCH 2026 (Contd.)",
+    "identityAnchor": "The Karur Vysya Bank Limited (\u2018the Bank\u2019)"
+  },
+  "regulator": {
+    "originalUrl": "https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143",
+    "sha256": "1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834",
+    "bytes": 687469,
+    "firstVerifiedAt": "2026-10-11T15:56:11.114313Z",
+    "artifactId": 11707875869,
+    "fileName": "RBI_Commercial_Banks_Financial_Statements_2025_Official.html",
+    "contentType": "text/html",
+    "denominator": "Working funds to be reckoned as average of total assets (excluding accumulated losses, if any) as reported to RBI in Form X for Commercial Banks during the 12 months of the financial year.",
+    "roa": "Return on Assets would be with reference to average working funds (i.e., total of assets excluding accumulated losses, if any).",
+    "commencement": "These Directions shall come into force with immediate effect."
+  }
+}

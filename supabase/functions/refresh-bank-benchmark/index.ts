@@ -1,3 +1,4 @@
+import { sameQualifiedHistoryNumeric } from "../_shared/v14-history-numeric-equality.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
@@ -122,8 +123,48 @@ Deno.serve(async (request) => {
       const instrument: ProviderInstrument = { mappingId: BENCHMARK_CODE, securityId: body.securityId, providerInstrumentId: resolved.token!, exchange: resolved.exchange!, tradingSymbol: resolved.symbol! }
       const candles = await new AngelOneProvider(loadAngelOneConfig()).getDailyHistory(instrument, kolkataDateTime(from), kolkataDateTime(to))
       if (candles.length < 120) throw new SafeOperationalError("BENCHMARK_HISTORY_EMPTY", "Angel One returned insufficient NIFTY Bank daily history.", 502)
-      const history = await admin.from("market_benchmark_price_history").upsert(candles.map((candle) => ({ benchmark_code: BENCHMARK_CODE, provider_code: MARKET_DATA_PROVIDER, interval: "ONE_DAY", period_start: candle.periodStart, open: candle.open, high: candle.high, low: candle.low, close: candle.close, volume: candle.volume, retrieved_at: candle.retrievedAt, provenance: { endpoint: "/rest/secure/angelbroking/historical/v1/getCandleData", benchmark_code: BENCHMARK_CODE, exchange: resolved.exchange, trading_symbol: resolved.symbol, symbol_token: resolved.token, requested_from: kolkataDateTime(from), requested_to: kolkataDateTime(to) } })), { onConflict: "benchmark_code,provider_code,interval,period_start" })
+      // Existing benchmark bars are immutable here; conflicting corrections need a
+      // separately qualified source-bound supersession, not a silent UPSERT.
+      const { data: existingBars, error: existingError } = await admin
+        .from("market_benchmark_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("benchmark_code", BENCHMARK_CODE)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", candles.map(candle => candle.periodStart))
+      if (existingError) throw existingError
+      const existingByDate = new Map((existingBars ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of candles) {
+        const previous = existingByDate.get(new Date(incoming.periodStart).toISOString())
+        if (!previous) continue
+        for (const field of ["open", "high", "low", "close", "volume"] as const) {
+          if (!sameQualifiedHistoryNumeric(previous[field], incoming[field])) {
+            throw new SafeOperationalError("BENCHMARK_CORRECTION_REQUIRES_REVIEW",
+              "A retained NIFTY_BANK bar conflicts with provider history; qualified correction review is required.", 409)
+          }
+        }
+      }
+      const history = await admin.from("market_benchmark_price_history").upsert(candles.map((candle) => ({ benchmark_code: BENCHMARK_CODE, provider_code: MARKET_DATA_PROVIDER, interval: "ONE_DAY", period_start: candle.periodStart, open: candle.open, high: candle.high, low: candle.low, close: candle.close, volume: candle.volume, retrieved_at: candle.retrievedAt, provenance: { endpoint: "/rest/secure/angelbroking/historical/v1/getCandleData", benchmark_code: BENCHMARK_CODE, exchange: resolved.exchange, trading_symbol: resolved.symbol, symbol_token: resolved.token, requested_from: kolkataDateTime(from), requested_to: kolkataDateTime(to) } })), { onConflict: "benchmark_code,provider_code,interval,period_start", ignoreDuplicates: true })
       if (history.error) throw history.error
+      // Post-conflict readback is mandatory: a racing different provider
+      // response must be detected rather than treated as an idempotent run.
+      const { data: finalBars, error: finalError } = await admin
+        .from("market_benchmark_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("benchmark_code", BENCHMARK_CODE)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", candles.map(candle => candle.periodStart))
+      if (finalError) throw finalError
+      const finalByDate = new Map((finalBars ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of candles) {
+        const persisted = finalByDate.get(new Date(incoming.periodStart).toISOString())
+        if (!persisted || (["open", "high", "low", "close", "volume"] as const).some(field =>
+          !sameQualifiedHistoryNumeric(persisted[field], incoming[field]))) {
+          throw new SafeOperationalError("BENCHMARK_CONCURRENT_CORRECTION_REQUIRES_REVIEW",
+            "Concurrent NIFTY_BANK revision or missing persisted session requires source-bound review.", 409)
+        }
+      }
 
       const derived = relativeStrength(stockRows, candles)
       const retrievedAt = candles.at(-1)!.retrievedAt

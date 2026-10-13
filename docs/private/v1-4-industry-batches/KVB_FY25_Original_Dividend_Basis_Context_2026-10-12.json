@@ -1,0 +1,42 @@
+{
+  "version": "KVB_FY25_ORIGINAL_DIVIDEND_BASIS_AND_DILUTED_EPS_CONTEXT_V1",
+  "original_url": "https://www.kvb.bank.in/docs/annual-report-for-the-financial-year-2024-2025.pdf",
+  "original_sha256": "08c3484c29aeb8b830e83691bb2cdd198257b246261b4f19a79bb795a9b9b313",
+  "original_bytes": 8988445,
+  "publication_precision": "UNKNOWN",
+  "published_at": null,
+  "exact_retrieval_timestamp_proven": false,
+  "historical_availability_inferred": false,
+  "anchors": [
+    {
+      "pdf_page": 41,
+      "anchor": "EARNINGS PER SHARE/BOOK VALUE",
+      "fragment": "aforesaid equity shares, the Issued Share Capital\nincreased from `1,61,00,85,864 to `1,61,14,46,944 comprising\n                                                                     EARNINGS PER SHARE/BOOK VALUE\nof 80,57,23,472 equity shares with a face value `2/- each and\nthe Paid-up Share Capital increased from `160,87,53,996 to           Bank\u2019s Earnings Per Share (Basic) stood at `24.13 for the\n`1,61,02,49,318 comprising of 80,51,24,659 equity shares with        financial year 2024-25 as against `19.99 for the financial year\na face value `2/- each. Other than the aforementioned, there         2023-24. The Book Value of shares was `145.57 per equity\nis no change in capital structure of the Bank during the year        share of face value `2/- each (fully paid up) as on March 31,\nunder review.                                                        2025, as against previous year position of `122.42.\n\nDEBT INSTRUMENTS & CREDIT RATING\nBank has not issued any Debt instruments and the details of credit rating received during the year under review is as follows;\nParticulars                                       Rating Agency              Rating           Rating Action       Date of Revision\nCertificate of Deposit Programme for `3,000 Crore      ICRA                ICRA A1+             Reaffirmed          21.05.2024\n                                                   "
+    },
+    {
+      "pdf_page": 315,
+      "anchor": "^Includes proposed dividend",
+      "fragment": "ue Rs.2/- each\n                                         **After reclassification of depreciation on investments as an item of other income\n                                         ^Includes proposed dividend ; #proposed dividend subject to approval at AGM\n"
+    },
+    {
+      "pdf_page": 219,
+      "anchor": "1.2 Proposed Dividend",
+      "fragment": " Auditors.\n\n     1.1 Tier II Capital\n\t\t             During the year ended 31st March 2025, the Bank did not raise any subordinated debt bonds qualifying for Tier II capital.\n\n     1.2 Proposed Dividend\n\t\t             The Board of Directors have recommended a dividend of 130% i.e. Rs.2.60 per equity share of Rs. 2.00 each for the year\n               2024-25 (Previous year 120%-Rs.2.40 per equity share), subject to the approval of the shareholders at the ensuing Annual\n               General Meeting.\n\n\t\t             In accordance with Accounting Standards 4 - Contingencies and Events Occurring after the Balance Sheet date notified under\n               the Companies (Accounting Standards) Rules 2021, the proposed dividend has not been shown as an appropriation from the\n               Profit and Loss account for the year ended 31st March 2025 and correspondingly not reported under Other Liabilities and\n               Provisions as at 31st March 2025. However, capital adequacy ratio has been computed by reducing the proposed dividend.\n\n\n\n\n252 > Integrated Annual Report 2024-25\n"
+    },
+    {
+      "pdf_page": 268,
+      "anchor": "Computation of Diluted EPS",
+      "fragment": "             19.99\n     4    Nominal Value per share (Rs.)                                                                                      2.00                 2.00\n     2.   Computation of Diluted EPS (before and after Extraordinary items)\n     1    Net Profit for the period attributable to equity shareholders (Rs. Crore)                                  1,941.64                1,604.81\n     2    Weighted average number of shares (including Potential Equity Shares)                                   80,50,91,540        80,37,66,744\n     3    Diluted EPS (1/2) (Rs.)                                                                                           24.12              19.97\n     4    Nominal Value per share (Rs.)                                                                                      2.00                 2.00\n\n\n\n                                                                                                         Integrated Annual Report 2024-25 > 301\n"
+    }
+  ],
+  "findings": {
+    "148.17_basis": "FY2024-25 table footnote expressly includes proposed dividend",
+    "145.57_basis": "Directors report book value of fully paid equity shares; distinct disclosed representation",
+    "proposed_dividend_per_share": "2.60",
+    "diluted_eps_fy2025_as_reported": "24.12",
+    "basic_eps_fy2025_as_reported": "24.13",
+    "diluted_weighted_average_shares_fy2025_as_reported": "805091540",
+    "canonical_admitted": false,
+    "then_available_financial_values_not_replaced_by_current_retrieval": true
+  }
+}

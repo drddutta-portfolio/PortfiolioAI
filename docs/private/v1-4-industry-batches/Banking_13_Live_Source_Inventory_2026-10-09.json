@@ -1,0 +1,4507 @@
+{
+  "mappings": [
+    {
+      "id": "d9ee02e7-258f-4c61-a6fb-cfc0b7cf116f",
+      "symbol": "AUBANK",
+      "exchange": "NSE",
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "AUBANK-EQ",
+      "provider_instrument_id": "21238"
+    },
+    {
+      "id": "ad9b72b6-9a33-4f9a-8b0e-89e7eea15613",
+      "symbol": "AXISBANK",
+      "exchange": "NSE",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "AXISBANK-EQ",
+      "provider_instrument_id": "5900"
+    },
+    {
+      "id": "55aca957-2967-4f56-a698-6c4e77ac56bb",
+      "symbol": "BANDHANBNK",
+      "exchange": "NSE",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "BANDHANBNK-EQ",
+      "provider_instrument_id": "2263"
+    },
+    {
+      "id": "277b65b0-8711-42ce-b2a5-7ce827a0abc8",
+      "symbol": "BANKBARODA",
+      "exchange": "NSE",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "BANKBARODA-EQ",
+      "provider_instrument_id": "4668"
+    },
+    {
+      "id": "8ccea425-a67d-436e-850f-b626fa00d8b7",
+      "symbol": "FEDERALBNK",
+      "exchange": "NSE",
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "FEDERALBNK-EQ",
+      "provider_instrument_id": "1023"
+    },
+    {
+      "id": "d25d7255-4b35-430f-9752-398d85c9b7f3",
+      "symbol": "HDFCBANK",
+      "exchange": "NSE",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "HDFCBANK-EQ",
+      "provider_instrument_id": "1333"
+    },
+    {
+      "id": "120ee7d8-d7e2-4db8-9cd9-4422eca4f1c0",
+      "symbol": "ICICIBANK",
+      "exchange": "NSE",
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "ICICIBANK-EQ",
+      "provider_instrument_id": "4963"
+    },
+    {
+      "id": "c031984a-c456-47eb-b241-2be0bd197760",
+      "symbol": "IDBI",
+      "exchange": "NSE",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "IDBI-EQ",
+      "provider_instrument_id": "1476"
+    },
+    {
+      "id": "8560d0c8-9911-4f32-b742-3e93e3d9e498",
+      "symbol": "IDFCFIRSTB",
+      "exchange": "NSE",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "IDFCFIRSTB-EQ",
+      "provider_instrument_id": "11184"
+    },
+    {
+      "id": "0082a4bb-72e9-43ff-a726-7892dc91f4b5",
+      "symbol": "INDIANB",
+      "exchange": "NSE",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "INDIANB-EQ",
+      "provider_instrument_id": "14309"
+    },
+    {
+      "id": "9f7f0d28-a83d-41c7-a133-6467617e67e6",
+      "symbol": "KARURVYSYA",
+      "exchange": "NSE",
+      "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "KARURVYSYA-EQ",
+      "provider_instrument_id": "1838"
+    },
+    {
+      "id": "8f016cc6-f1a3-47c5-9b5e-8fc5d7064ca4",
+      "symbol": "KOTAKBANK",
+      "exchange": "NSE",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "KOTAKBANK-EQ",
+      "provider_instrument_id": "1922"
+    },
+    {
+      "id": "86924e77-e8af-46e5-a6ba-0e9fe6d1e720",
+      "symbol": "SBIN",
+      "exchange": "NSE",
+      "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "provider_code": "ANGEL_ONE",
+      "mapping_status": "VERIFIED",
+      "trading_symbol": "SBIN-EQ",
+      "provider_instrument_id": "3045"
+    }
+  ],
+  "ownership_sources": [
+    {
+      "id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+      "symbol": "AUBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+      "retrieved_at": "2026-09-26T20:32:31.316+00:00"
+    },
+    {
+      "id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+      "symbol": "AUBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+      "retrieved_at": "2026-09-26T20:32:31.316+00:00"
+    },
+    {
+      "id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+      "symbol": "AUBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+      "retrieved_at": "2026-09-26T20:32:31.316+00:00"
+    },
+    {
+      "id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+      "symbol": "AUBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+      "retrieved_at": "2026-09-26T20:32:31.316+00:00"
+    },
+    {
+      "id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+      "symbol": "AUBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+      "retrieved_at": "2026-09-26T20:32:31.316+00:00"
+    },
+    {
+      "id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+      "symbol": "AXISBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+      "retrieved_at": "2026-09-26T20:40:25.346+00:00"
+    },
+    {
+      "id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+      "symbol": "AXISBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+      "retrieved_at": "2026-09-26T20:40:25.346+00:00"
+    },
+    {
+      "id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+      "symbol": "AXISBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+      "retrieved_at": "2026-09-26T20:40:25.346+00:00"
+    },
+    {
+      "id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+      "symbol": "AXISBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+      "retrieved_at": "2026-09-26T20:40:25.346+00:00"
+    },
+    {
+      "id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+      "symbol": "AXISBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+      "retrieved_at": "2026-09-26T20:40:25.346+00:00"
+    },
+    {
+      "id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+      "symbol": "BANDHANBNK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+      "retrieved_at": "2026-09-26T20:40:47.554+00:00"
+    },
+    {
+      "id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+      "symbol": "BANDHANBNK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+      "retrieved_at": "2026-09-26T20:40:47.554+00:00"
+    },
+    {
+      "id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+      "symbol": "BANDHANBNK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+      "retrieved_at": "2026-09-26T20:40:47.554+00:00"
+    },
+    {
+      "id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+      "symbol": "BANDHANBNK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+      "retrieved_at": "2026-09-26T20:40:47.554+00:00"
+    },
+    {
+      "id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+      "symbol": "BANDHANBNK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+      "retrieved_at": "2026-09-26T20:40:47.554+00:00"
+    },
+    {
+      "id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+      "symbol": "BANKBARODA",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+      "retrieved_at": "2026-09-26T19:37:05.334+00:00"
+    },
+    {
+      "id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+      "symbol": "BANKBARODA",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+      "retrieved_at": "2026-09-26T19:37:05.334+00:00"
+    },
+    {
+      "id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+      "symbol": "BANKBARODA",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+      "retrieved_at": "2026-09-26T19:37:05.334+00:00"
+    },
+    {
+      "id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+      "symbol": "BANKBARODA",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+      "retrieved_at": "2026-09-26T19:37:05.334+00:00"
+    },
+    {
+      "id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+      "symbol": "BANKBARODA",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+      "retrieved_at": "2026-09-26T19:37:05.334+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+      "symbol": "FEDERALBNK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+      "retrieved_at": "2026-09-29T16:46:50.011+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "0979c78a-d89c-414e-a22e-4a17252054dd",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "385826664280c26944671ca63e1aa01b0e85383a13d3ddb7fcc37f45155d1596",
+      "retrieved_at": "2026-10-08T15:03:09.006+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "15fba4626855139d6dd79bfb9a907b88bc81d5e0c2f56d8fc884b7ed5245fbf5",
+      "retrieved_at": "2026-10-06T16:46:47.555+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "fbb16f1b-36fd-401f-95ac-612ad4ea01c5",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "eb4d19d5d0e802155a6578ce856a435b0900784de57ac178a42ed42bc78754bc",
+      "retrieved_at": "2026-10-05T18:50:30.68+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "68292628-1d56-4a28-aced-4c9009e028dc",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "5ae3ea65a552edc37dc109b71c939c5fffa50da00d4b1b2286e165517f199aab",
+      "retrieved_at": "2026-09-30T17:15:20.461+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "p7_ic2_ownership_history",
+      "payload_hash": "c0ae5c29ec3990115cb900a59deb40076d8e86745ab3721b4f1509d2e2330a69",
+      "retrieved_at": "2026-09-30T03:07:33.804+00:00"
+    },
+    {
+      "id": "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-23T06:57:22.673+00:00"
+    },
+    {
+      "id": "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-23T06:57:22.673+00:00"
+    },
+    {
+      "id": "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-23T06:57:22.673+00:00"
+    },
+    {
+      "id": "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-23T06:57:22.673+00:00"
+    },
+    {
+      "id": "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-23T06:57:22.673+00:00"
+    },
+    {
+      "id": "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "4fa14df1cef3478ac04290320a93446b5eb95d8e8e20e84e508356f082a5d1bc",
+      "retrieved_at": "2026-09-17T13:21:23.777+00:00"
+    },
+    {
+      "id": "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "4fa14df1cef3478ac04290320a93446b5eb95d8e8e20e84e508356f082a5d1bc",
+      "retrieved_at": "2026-09-17T13:21:23.777+00:00"
+    },
+    {
+      "id": "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "4fa14df1cef3478ac04290320a93446b5eb95d8e8e20e84e508356f082a5d1bc",
+      "retrieved_at": "2026-09-17T13:21:23.777+00:00"
+    },
+    {
+      "id": "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "4fa14df1cef3478ac04290320a93446b5eb95d8e8e20e84e508356f082a5d1bc",
+      "retrieved_at": "2026-09-17T13:21:23.777+00:00"
+    },
+    {
+      "id": "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "4fa14df1cef3478ac04290320a93446b5eb95d8e8e20e84e508356f082a5d1bc",
+      "retrieved_at": "2026-09-17T13:21:23.777+00:00"
+    },
+    {
+      "id": "64360cac-6d31-4625-a690-975ccf6545bf",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-16T21:15:29.03+00:00"
+    },
+    {
+      "id": "64360cac-6d31-4625-a690-975ccf6545bf",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-16T21:15:29.03+00:00"
+    },
+    {
+      "id": "64360cac-6d31-4625-a690-975ccf6545bf",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-16T21:15:29.03+00:00"
+    },
+    {
+      "id": "64360cac-6d31-4625-a690-975ccf6545bf",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-16T21:15:29.03+00:00"
+    },
+    {
+      "id": "64360cac-6d31-4625-a690-975ccf6545bf",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "010327dad61e8759fa18a4428ebddbdaca2163b4e115adc63eaa97ce9749d94f",
+      "retrieved_at": "2026-09-16T21:15:29.03+00:00"
+    },
+    {
+      "id": "22019a45-3d18-4295-8f24-542473e20434",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "53951f56c8bd6b4cd47c61532a4be7eef2ae6dd9c3a6e799d5b4f52d08cb74fe",
+      "retrieved_at": "2026-09-13T06:00:28.419+00:00"
+    },
+    {
+      "id": "22019a45-3d18-4295-8f24-542473e20434",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "53951f56c8bd6b4cd47c61532a4be7eef2ae6dd9c3a6e799d5b4f52d08cb74fe",
+      "retrieved_at": "2026-09-13T06:00:28.419+00:00"
+    },
+    {
+      "id": "22019a45-3d18-4295-8f24-542473e20434",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "53951f56c8bd6b4cd47c61532a4be7eef2ae6dd9c3a6e799d5b4f52d08cb74fe",
+      "retrieved_at": "2026-09-13T06:00:28.419+00:00"
+    },
+    {
+      "id": "22019a45-3d18-4295-8f24-542473e20434",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "53951f56c8bd6b4cd47c61532a4be7eef2ae6dd9c3a6e799d5b4f52d08cb74fe",
+      "retrieved_at": "2026-09-13T06:00:28.419+00:00"
+    },
+    {
+      "id": "22019a45-3d18-4295-8f24-542473e20434",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "53951f56c8bd6b4cd47c61532a4be7eef2ae6dd9c3a6e799d5b4f52d08cb74fe",
+      "retrieved_at": "2026-09-13T06:00:28.419+00:00"
+    },
+    {
+      "id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+      "retrieved_at": "2026-09-10T19:03:34.677+00:00"
+    },
+    {
+      "id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+      "retrieved_at": "2026-09-10T19:03:34.677+00:00"
+    },
+    {
+      "id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+      "retrieved_at": "2026-09-10T19:03:34.677+00:00"
+    },
+    {
+      "id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+      "retrieved_at": "2026-09-10T19:03:34.677+00:00"
+    },
+    {
+      "id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+      "symbol": "HDFCBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+      "retrieved_at": "2026-09-10T19:03:34.677+00:00"
+    },
+    {
+      "id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+      "symbol": "ICICIBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+      "retrieved_at": "2026-09-27T00:46:15.173+00:00"
+    },
+    {
+      "id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+      "symbol": "ICICIBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+      "retrieved_at": "2026-09-27T00:46:15.173+00:00"
+    },
+    {
+      "id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+      "symbol": "ICICIBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+      "retrieved_at": "2026-09-27T00:46:15.173+00:00"
+    },
+    {
+      "id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+      "symbol": "ICICIBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+      "retrieved_at": "2026-09-27T00:46:15.173+00:00"
+    },
+    {
+      "id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+      "symbol": "ICICIBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+      "retrieved_at": "2026-09-27T00:46:15.173+00:00"
+    },
+    {
+      "id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+      "symbol": "IDBI",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+      "retrieved_at": "2026-09-27T00:48:39.911+00:00"
+    },
+    {
+      "id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+      "symbol": "IDBI",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+      "retrieved_at": "2026-09-27T00:48:39.911+00:00"
+    },
+    {
+      "id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+      "symbol": "IDBI",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+      "retrieved_at": "2026-09-27T00:48:39.911+00:00"
+    },
+    {
+      "id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+      "symbol": "IDBI",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+      "retrieved_at": "2026-09-27T00:48:39.911+00:00"
+    },
+    {
+      "id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+      "symbol": "IDBI",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+      "retrieved_at": "2026-09-27T00:48:39.911+00:00"
+    },
+    {
+      "id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+      "symbol": "IDFCFIRSTB",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+      "retrieved_at": "2026-09-27T00:48:40.789+00:00"
+    },
+    {
+      "id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+      "symbol": "IDFCFIRSTB",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+      "retrieved_at": "2026-09-27T00:48:40.789+00:00"
+    },
+    {
+      "id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+      "symbol": "IDFCFIRSTB",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+      "retrieved_at": "2026-09-27T00:48:40.789+00:00"
+    },
+    {
+      "id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+      "symbol": "IDFCFIRSTB",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+      "retrieved_at": "2026-09-27T00:48:40.789+00:00"
+    },
+    {
+      "id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+      "symbol": "IDFCFIRSTB",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+      "retrieved_at": "2026-09-27T00:48:40.789+00:00"
+    },
+    {
+      "id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+      "symbol": "INDIANB",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+      "retrieved_at": "2026-09-27T00:49:34.356+00:00"
+    },
+    {
+      "id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+      "symbol": "INDIANB",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+      "retrieved_at": "2026-09-27T00:49:34.356+00:00"
+    },
+    {
+      "id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+      "symbol": "INDIANB",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+      "retrieved_at": "2026-09-27T00:49:34.356+00:00"
+    },
+    {
+      "id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+      "symbol": "INDIANB",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+      "retrieved_at": "2026-09-27T00:49:34.356+00:00"
+    },
+    {
+      "id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+      "symbol": "INDIANB",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+      "retrieved_at": "2026-09-27T00:49:34.356+00:00"
+    },
+    {
+      "id": "f3d85c62-c8cb-464a-bc01-918c6300280e",
+      "symbol": "KARURVYSYA",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "1af70735375b87c2425375e422ab7a3b01332ed3d57ee79610d94d5f33023c82",
+      "retrieved_at": "2026-09-27T00:54:07.076+00:00"
+    },
+    {
+      "id": "f3d85c62-c8cb-464a-bc01-918c6300280e",
+      "symbol": "KARURVYSYA",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "1af70735375b87c2425375e422ab7a3b01332ed3d57ee79610d94d5f33023c82",
+      "retrieved_at": "2026-09-27T00:54:07.076+00:00"
+    },
+    {
+      "id": "f3d85c62-c8cb-464a-bc01-918c6300280e",
+      "symbol": "KARURVYSYA",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "1af70735375b87c2425375e422ab7a3b01332ed3d57ee79610d94d5f33023c82",
+      "retrieved_at": "2026-09-27T00:54:07.076+00:00"
+    },
+    {
+      "id": "f3d85c62-c8cb-464a-bc01-918c6300280e",
+      "symbol": "KARURVYSYA",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "1af70735375b87c2425375e422ab7a3b01332ed3d57ee79610d94d5f33023c82",
+      "retrieved_at": "2026-09-27T00:54:07.076+00:00"
+    },
+    {
+      "id": "f3d85c62-c8cb-464a-bc01-918c6300280e",
+      "symbol": "KARURVYSYA",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "1af70735375b87c2425375e422ab7a3b01332ed3d57ee79610d94d5f33023c82",
+      "retrieved_at": "2026-09-27T00:54:07.076+00:00"
+    },
+    {
+      "id": "ce80d3de-7dbe-4dee-8e67-0802d3717cb1",
+      "symbol": "KOTAKBANK",
+      "source_url": null,
+      "payload_key": "result",
+      "payload_hash": "550a6cb7c0a43bb7a687a77ee477e791d23c07c7b22c7c576f7d717ef97ef2f6",
+      "retrieved_at": "2026-09-27T00:54:43.932+00:00"
+    },
+    {
+      "id": "ce80d3de-7dbe-4dee-8e67-0802d3717cb1",
+      "symbol": "KOTAKBANK",
+      "source_url": null,
+      "payload_key": "security_id",
+      "payload_hash": "550a6cb7c0a43bb7a687a77ee477e791d23c07c7b22c7c576f7d717ef97ef2f6",
+      "retrieved_at": "2026-09-27T00:54:43.932+00:00"
+    },
+    {
+      "id": "ce80d3de-7dbe-4dee-8e67-0802d3717cb1",
+      "symbol": "KOTAKBANK",
+      "source_url": null,
+      "payload_key": "provider_tool",
+      "payload_hash": "550a6cb7c0a43bb7a687a77ee477e791d23c07c7b22c7c576f7d717ef97ef2f6",
+      "retrieved_at": "2026-09-27T00:54:43.932+00:00"
+    },
+    {
+      "id": "ce80d3de-7dbe-4dee-8e67-0802d3717cb1",
+      "symbol": "KOTAKBANK",
+      "source_url": null,
+      "payload_key": "security_symbol",
+      "payload_hash": "550a6cb7c0a43bb7a687a77ee477e791d23c07c7b22c7c576f7d717ef97ef2f6",
+      "retrieved_at": "2026-09-27T00:54:43.932+00:00"
+    },
+    {
+      "id": "ce80d3de-7dbe-4dee-8e67-0802d3717cb1",
+      "symbol": "KOTAKBANK",
+      "source_url": null,
+      "payload_key": "provider_instrument_id",
+      "payload_hash": "550a6cb7c0a43bb7a687a77ee477e791d23c07c7b22c7c576f7d717ef97ef2f6",
+      "retrieved_at": "2026-09-27T00:54:43.932+00:00"
+    }
+  ],
+  "observation_contracts": [
+    {
+      "unit": "Cr",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "a69b66cb-5835-4216-8dbd-96d280a0a984",
+        "d6d9f174-86f7-4f10-9533-2a0a55939a99"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "a69b66cb-5835-4216-8dbd-96d280a0a984",
+        "d6d9f174-86f7-4f10-9533-2a0a55939a99"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "a69b66cb-5835-4216-8dbd-96d280a0a984",
+        "d6d9f174-86f7-4f10-9533-2a0a55939a99"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AUBANK",
+      "source_ids": [
+        "186ba61a-0353-4576-83a4-7ed053799cf5"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "17a7c7ef-c9f5-4858-8084-965e2384b0ed"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "17a7c7ef-c9f5-4858-8084-965e2384b0ed"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "17a7c7ef-c9f5-4858-8084-965e2384b0ed"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "17a7c7ef-c9f5-4858-8084-965e2384b0ed"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "a69b66cb-5835-4216-8dbd-96d280a0a984"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AUBANK",
+      "source_ids": [
+        "17a7c7ef-c9f5-4858-8084-965e2384b0ed"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "2883a59b-eae5-4e80-9f2d-7962bc858124",
+        "aa738904-2fd2-4ad4-ac45-e30248442536"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "2883a59b-eae5-4e80-9f2d-7962bc858124",
+        "aa738904-2fd2-4ad4-ac45-e30248442536"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "2883a59b-eae5-4e80-9f2d-7962bc858124",
+        "aa738904-2fd2-4ad4-ac45-e30248442536"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "aa738904-2fd2-4ad4-ac45-e30248442536"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "f325dcc8-3dab-4232-84da-d9ef7420cb37"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "e0d46eba-05b4-4d55-a9e9-042bbfa31839"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "e0d46eba-05b4-4d55-a9e9-042bbfa31839"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "e0d46eba-05b4-4d55-a9e9-042bbfa31839"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "e0d46eba-05b4-4d55-a9e9-042bbfa31839"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "aa738904-2fd2-4ad4-ac45-e30248442536"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "AXISBANK",
+      "source_ids": [
+        "e0d46eba-05b4-4d55-a9e9-042bbfa31839"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26",
+        "d360e0d1-c509-486a-bd80-a0dd400fc18b"
+      ],
+      "last_period": null,
+      "metric_code": "EPS_GROWTH_YOY",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26",
+        "d360e0d1-c509-486a-bd80-a0dd400fc18b"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26",
+        "d360e0d1-c509-486a-bd80-a0dd400fc18b"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26",
+        "d360e0d1-c509-486a-bd80-a0dd400fc18b"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26",
+        "d360e0d1-c509-486a-bd80-a0dd400fc18b"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "29d8dd76-a512-4ee7-8e09-9283198fa436"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "352ceb1a-3c75-482f-9cda-f305511f4b6d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "352ceb1a-3c75-482f-9cda-f305511f4b6d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "352ceb1a-3c75-482f-9cda-f305511f4b6d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "352ceb1a-3c75-482f-9cda-f305511f4b6d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "5b3354e7-865d-4eb0-85cc-a9555d253a26"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANDHANBNK",
+      "source_ids": [
+        "352ceb1a-3c75-482f-9cda-f305511f4b6d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "2122fab8-0925-41d4-806b-42a3c5ce7dc3",
+        "7030978e-5f1e-462f-8afa-eb7215a903b0"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "2122fab8-0925-41d4-806b-42a3c5ce7dc3",
+        "7030978e-5f1e-462f-8afa-eb7215a903b0"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "2122fab8-0925-41d4-806b-42a3c5ce7dc3",
+        "7030978e-5f1e-462f-8afa-eb7215a903b0"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "2122fab8-0925-41d4-806b-42a3c5ce7dc3",
+        "7030978e-5f1e-462f-8afa-eb7215a903b0"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "e252a6c6-18e2-411c-bfe2-04ae22b7d351"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "0ff07d19-830e-41b4-ae7c-cdde5e391e96"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "0ff07d19-830e-41b4-ae7c-cdde5e391e96"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "0ff07d19-830e-41b4-ae7c-cdde5e391e96"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "0ff07d19-830e-41b4-ae7c-cdde5e391e96"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "7030978e-5f1e-462f-8afa-eb7215a903b0"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "BANKBARODA",
+      "source_ids": [
+        "0ff07d19-830e-41b4-ae7c-cdde5e391e96"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "f1ddbb57-8dc1-4212-87dc-c03ad05b2ec9"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "f1ddbb57-8dc1-4212-87dc-c03ad05b2ec9"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "f1ddbb57-8dc1-4212-87dc-c03ad05b2ec9"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "b89dbdcb-da6d-4d4a-ba48-20a6efd530c9"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "bdd1dff0-cc4a-42f6-9e34-ed6608a3ee01"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "febe4431-1ea1-448b-987c-08e29eeb9f33"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "47bce1a9-0a66-494a-9d67-fe91823395d2"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "febe4431-1ea1-448b-987c-08e29eeb9f33"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "47bce1a9-0a66-494a-9d67-fe91823395d2"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "febe4431-1ea1-448b-987c-08e29eeb9f33"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "47bce1a9-0a66-494a-9d67-fe91823395d2"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "febe4431-1ea1-448b-987c-08e29eeb9f33"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "47bce1a9-0a66-494a-9d67-fe91823395d2"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "febe4431-1ea1-448b-987c-08e29eeb9f33"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "FEDERALBNK",
+      "source_ids": [
+        "47bce1a9-0a66-494a-9d67-fe91823395d2"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "2d487791-20fe-43bd-94bb-61d76615f1e7"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "ADVANCES_GROWTH_YOY",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "STANDALONE"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "2d487791-20fe-43bd-94bb-61d76615f1e7"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "DEPOSITS_GROWTH_YOY",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "STANDALONE"
+    },
+    {
+      "unit": "INR_CRORE",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "369fd2dc-99f0-4403-b471-f3fa666a608f"
+      ],
+      "last_period": null,
+      "metric_code": "EBITDA_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "INR_PER_SHARE",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "369fd2dc-99f0-4403-b471-f3fa666a608f"
+      ],
+      "last_period": null,
+      "metric_code": "EPS_DILUTED",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "563b9059-66bc-4de9-8a3e-fef1e2afbc64"
+      ],
+      "last_period": null,
+      "metric_code": "EPS_GROWTH_YOY",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "404fedb5-9e01-4442-a3c3-6fcaac1efd41",
+        "563b9059-66bc-4de9-8a3e-fef1e2afbc64",
+        "ebc2c638-794a-4718-bd5c-3f06f9133dfc"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 3,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "13ea68d1-1ae4-4068-bb07-3c0ba86f225c",
+        "2a8a19c9-cb23-487c-a5ff-26ffb8bdf5fd",
+        "3aad40d9-5c71-4461-96ef-b8be0674fa33",
+        "404fedb5-9e01-4442-a3c3-6fcaac1efd41",
+        "563b9059-66bc-4de9-8a3e-fef1e2afbc64",
+        "62ecf53d-de2f-4d50-a633-2c0db051933e",
+        "6b5e5434-3a9f-4167-863f-37b8e24b0f90",
+        "8e55e56c-fc00-4c34-89c8-ecf7ae3f60f9",
+        "c4e4a4ca-455c-4137-8282-85b151d68528",
+        "dc06cffe-de1b-4bd8-ac85-b8993c5d5ca5",
+        "eb85b53d-f9ca-4f5b-ae85-776d02c387ec",
+        "ebc2c638-794a-4718-bd5c-3f06f9133dfc"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 12,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "369fd2dc-99f0-4403-b471-f3fa666a608f"
+      ],
+      "last_period": null,
+      "metric_code": "OPM_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0825d1e9-ce7d-4d80-bfed-59fab8084404",
+        "13ea68d1-1ae4-4068-bb07-3c0ba86f225c",
+        "2a8a19c9-cb23-487c-a5ff-26ffb8bdf5fd",
+        "3aad40d9-5c71-4461-96ef-b8be0674fa33",
+        "404fedb5-9e01-4442-a3c3-6fcaac1efd41",
+        "62ecf53d-de2f-4d50-a633-2c0db051933e",
+        "6b5e5434-3a9f-4167-863f-37b8e24b0f90",
+        "7226a58c-9ab1-4753-836c-8f5ccee5b566",
+        "8bd69723-d5a3-4950-b088-bda3ca897fe8",
+        "8e55e56c-fc00-4c34-89c8-ecf7ae3f60f9",
+        "9bcad372-767b-4d96-9acc-33b8b40177e7",
+        "c0c88b95-dd36-495a-b86c-7fb76a77c5a0",
+        "c40afd11-43a7-4d8c-9b2b-9fd1a3cb0d78",
+        "c4e4a4ca-455c-4137-8282-85b151d68528",
+        "dc06cffe-de1b-4bd8-ac85-b8993c5d5ca5",
+        "eb85b53d-f9ca-4f5b-ae85-776d02c387ec",
+        "ebc2c638-794a-4718-bd5c-3f06f9133dfc"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 17,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "13ea68d1-1ae4-4068-bb07-3c0ba86f225c",
+        "2a8a19c9-cb23-487c-a5ff-26ffb8bdf5fd",
+        "369fd2dc-99f0-4403-b471-f3fa666a608f",
+        "3aad40d9-5c71-4461-96ef-b8be0674fa33",
+        "62ecf53d-de2f-4d50-a633-2c0db051933e",
+        "6b5e5434-3a9f-4167-863f-37b8e24b0f90",
+        "8e55e56c-fc00-4c34-89c8-ecf7ae3f60f9",
+        "c4e4a4ca-455c-4137-8282-85b151d68528",
+        "dc06cffe-de1b-4bd8-ac85-b8993c5d5ca5",
+        "eb85b53d-f9ca-4f5b-ae85-776d02c387ec",
+        "ebc2c638-794a-4718-bd5c-3f06f9133dfc"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 11,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0ce64f51-36e8-4319-a9e3-15e7c86ecdfa",
+        "21deed03-ea5c-43bf-bd1d-5e65e344ba93",
+        "2ff119a3-c4d8-47c9-a923-c10fc674888f",
+        "4b7685cd-7add-468d-b4ae-298f5faaef7c",
+        "80cae125-2b73-415a-8c92-1ae1998ea998",
+        "813bfc24-06f8-4167-a464-560107f1c1c0",
+        "9168ed94-68b1-477a-9c3e-0c4bffe5db10",
+        "9384b097-8a97-42f7-a7e2-0ae4b8dd9c61",
+        "bda1ebd7-fa61-4a24-bb0d-0609b69b4270",
+        "c286660f-197b-4840-8082-c73abdd2b602"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "7a7fbef1-b4d2-493d-b35b-d593bf8b729f",
+        "ba76cffe-9b37-4a65-9891-97102ced13ef"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0979c78a-d89c-414e-a22e-4a17252054dd",
+        "22019a45-3d18-4295-8f24-542473e20434",
+        "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+        "5a951d45-a52b-4efc-8115-4d30470ae641",
+        "64360cac-6d31-4625-a690-975ccf6545bf",
+        "68292628-1d56-4a28-aced-4c9009e028dc",
+        "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+        "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+        "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+        "fbb16f1b-36fd-401f-95ac-612ad4ea01c5"
+      ],
+      "last_period": "2026-09-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2025-03-31",
+      "observations": 15,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0979c78a-d89c-414e-a22e-4a17252054dd",
+        "22019a45-3d18-4295-8f24-542473e20434",
+        "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+        "5a951d45-a52b-4efc-8115-4d30470ae641",
+        "64360cac-6d31-4625-a690-975ccf6545bf",
+        "68292628-1d56-4a28-aced-4c9009e028dc",
+        "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+        "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+        "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+        "fbb16f1b-36fd-401f-95ac-612ad4ea01c5"
+      ],
+      "last_period": "2026-09-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2025-03-31",
+      "observations": 15,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0979c78a-d89c-414e-a22e-4a17252054dd",
+        "22019a45-3d18-4295-8f24-542473e20434",
+        "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+        "5a951d45-a52b-4efc-8115-4d30470ae641",
+        "64360cac-6d31-4625-a690-975ccf6545bf",
+        "68292628-1d56-4a28-aced-4c9009e028dc",
+        "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+        "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+        "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+        "fbb16f1b-36fd-401f-95ac-612ad4ea01c5"
+      ],
+      "last_period": "2026-09-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2025-03-31",
+      "observations": 15,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0979c78a-d89c-414e-a22e-4a17252054dd",
+        "22019a45-3d18-4295-8f24-542473e20434",
+        "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+        "5a951d45-a52b-4efc-8115-4d30470ae641",
+        "64360cac-6d31-4625-a690-975ccf6545bf",
+        "68292628-1d56-4a28-aced-4c9009e028dc",
+        "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+        "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+        "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+        "fbb16f1b-36fd-401f-95ac-612ad4ea01c5"
+      ],
+      "last_period": "2026-09-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2025-03-31",
+      "observations": 15,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "13ea68d1-1ae4-4068-bb07-3c0ba86f225c",
+        "2a8a19c9-cb23-487c-a5ff-26ffb8bdf5fd",
+        "3aad40d9-5c71-4461-96ef-b8be0674fa33",
+        "62ecf53d-de2f-4d50-a633-2c0db051933e",
+        "6b5e5434-3a9f-4167-863f-37b8e24b0f90",
+        "8e55e56c-fc00-4c34-89c8-ecf7ae3f60f9",
+        "c4e4a4ca-455c-4137-8282-85b151d68528",
+        "dc06cffe-de1b-4bd8-ac85-b8993c5d5ca5",
+        "eb85b53d-f9ca-4f5b-ae85-776d02c387ec",
+        "ebc2c638-794a-4718-bd5c-3f06f9133dfc"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 10,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "0979c78a-d89c-414e-a22e-4a17252054dd",
+        "22019a45-3d18-4295-8f24-542473e20434",
+        "26c23572-09fb-40f5-bc75-3e23e3ac4500",
+        "5a951d45-a52b-4efc-8115-4d30470ae641",
+        "64360cac-6d31-4625-a690-975ccf6545bf",
+        "68292628-1d56-4a28-aced-4c9009e028dc",
+        "88af8b68-3fb4-4f1a-8c66-3de74e001253",
+        "d041efd4-bcdc-4747-9fe2-5a89f637d37a",
+        "f723e584-8906-4a40-8c3d-fc9c07a1fa19",
+        "fbb16f1b-36fd-401f-95ac-612ad4ea01c5"
+      ],
+      "last_period": "2026-09-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2025-03-31",
+      "observations": 15,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "HDFCBANK",
+      "source_ids": [
+        "a84c9a81-117c-41f0-99f0-83b8f5d56923"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "e25c2788-9e5e-44c1-a07c-f58e823b9de6"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "73eb2ca0-680c-4b51-bbff-14bbedd52b31",
+        "e25c2788-9e5e-44c1-a07c-f58e823b9de6"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "73eb2ca0-680c-4b51-bbff-14bbedd52b31",
+        "e25c2788-9e5e-44c1-a07c-f58e823b9de6"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "7e4db699-aa05-4830-a083-902f68ff1d46"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "cb3848c9-0a8d-475d-85dc-72f53c09065d"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "aace5192-1de4-4c1c-928f-1f55ea4ca3ef"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "5820959c-d995-41e9-94ed-bd7f7f67d32d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "aace5192-1de4-4c1c-928f-1f55ea4ca3ef"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "5820959c-d995-41e9-94ed-bd7f7f67d32d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "aace5192-1de4-4c1c-928f-1f55ea4ca3ef"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "5820959c-d995-41e9-94ed-bd7f7f67d32d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "aace5192-1de4-4c1c-928f-1f55ea4ca3ef"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "5820959c-d995-41e9-94ed-bd7f7f67d32d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "73eb2ca0-680c-4b51-bbff-14bbedd52b31"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "aace5192-1de4-4c1c-928f-1f55ea4ca3ef"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "ICICIBANK",
+      "source_ids": [
+        "5820959c-d995-41e9-94ed-bd7f7f67d32d"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "3cd72599-5819-4c98-be5a-a9d1aa5e58c4",
+        "b3259131-c875-4338-8f18-ec047ae9ef29"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "3cd72599-5819-4c98-be5a-a9d1aa5e58c4",
+        "b3259131-c875-4338-8f18-ec047ae9ef29"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "3cd72599-5819-4c98-be5a-a9d1aa5e58c4",
+        "b3259131-c875-4338-8f18-ec047ae9ef29"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDBI",
+      "source_ids": [
+        "4f02ccad-c1bf-4139-8881-be6f15de332f"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "e1f99fb7-059e-48ac-8e95-b7fbc9894baf"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "e1f99fb7-059e-48ac-8e95-b7fbc9894baf"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "e1f99fb7-059e-48ac-8e95-b7fbc9894baf"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "e1f99fb7-059e-48ac-8e95-b7fbc9894baf"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "IDBI",
+      "source_ids": [
+        "3cd72599-5819-4c98-be5a-a9d1aa5e58c4"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDBI",
+      "source_ids": [
+        "e1f99fb7-059e-48ac-8e95-b7fbc9894baf"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "60f6bd85-d1f5-4774-a64e-f853b44a383d"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "1d4f5cc3-44b9-4ac5-9d35-1611ea5ae7f5",
+        "60f6bd85-d1f5-4774-a64e-f853b44a383d"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "60f6bd85-d1f5-4774-a64e-f853b44a383d"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "6718aeff-cf48-44ea-b0f6-62625c7f0b54"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "60f6bd85-d1f5-4774-a64e-f853b44a383d"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "IDFCFIRSTB",
+      "source_ids": [
+        "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "1718e2fe-5018-45c7-90a1-3c241221740f",
+        "c876e23d-788b-4c2c-84bb-d4b31af3602c"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "1718e2fe-5018-45c7-90a1-3c241221740f",
+        "c876e23d-788b-4c2c-84bb-d4b31af3602c"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "1718e2fe-5018-45c7-90a1-3c241221740f",
+        "c876e23d-788b-4c2c-84bb-d4b31af3602c"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "INDIANB",
+      "source_ids": [
+        "3b9cd43f-bfd8-4758-8fa7-186658fdcca2"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "ca453da6-07c0-470f-b07c-1e675ea86dee"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "ca453da6-07c0-470f-b07c-1e675ea86dee"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "ca453da6-07c0-470f-b07c-1e675ea86dee"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "ca453da6-07c0-470f-b07c-1e675ea86dee"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "1718e2fe-5018-45c7-90a1-3c241221740f"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "INDIANB",
+      "source_ids": [
+        "ca453da6-07c0-470f-b07c-1e675ea86dee"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "b02091e8-1e6d-4a27-a060-1fc2e1df6642"
+      ],
+      "last_period": null,
+      "metric_code": "EPS_GROWTH_YOY",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "b02091e8-1e6d-4a27-a060-1fc2e1df6642",
+        "ec41aa65-c70d-4aa5-a4da-b319b22c77d7"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "ec41aa65-c70d-4aa5-a4da-b319b22c77d7"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "b02091e8-1e6d-4a27-a060-1fc2e1df6642",
+        "ec41aa65-c70d-4aa5-a4da-b319b22c77d7"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "8b68a4cd-d1d1-42a9-b3b8-e095e551d996"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "f3d85c62-c8cb-464a-bc01-918c6300280e"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "f3d85c62-c8cb-464a-bc01-918c6300280e"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "f3d85c62-c8cb-464a-bc01-918c6300280e"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "f3d85c62-c8cb-464a-bc01-918c6300280e"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "ec41aa65-c70d-4aa5-a4da-b319b22c77d7"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KARURVYSYA",
+      "source_ids": [
+        "f3d85c62-c8cb-464a-bc01-918c6300280e"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "2e1fc368-79dc-4c58-a6bd-340e3a5f8bff",
+        "f1a519b4-9933-4c72-955e-24c91a2f4957"
+      ],
+      "last_period": null,
+      "metric_code": "GROSS_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "2e1fc368-79dc-4c58-a6bd-340e3a5f8bff",
+        "f1a519b4-9933-4c72-955e-24c91a2f4957"
+      ],
+      "last_period": null,
+      "metric_code": "NET_NPA_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "2e1fc368-79dc-4c58-a6bd-340e3a5f8bff",
+        "f1a519b4-9933-4c72-955e-24c91a2f4957"
+      ],
+      "last_period": null,
+      "metric_code": "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 2,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "f1a519b4-9933-4c72-955e-24c91a2f4957"
+      ],
+      "last_period": null,
+      "metric_code": "ROCE_ANNUAL",
+      "period_type": "YEAR",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": null,
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "06838972-6fe0-49b5-bab1-64a37899de49"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "ce80d3de-7dbe-4dee-8e67-0802d3717cb1"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "ce80d3de-7dbe-4dee-8e67-0802d3717cb1"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "ce80d3de-7dbe-4dee-8e67-0802d3717cb1"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "ce80d3de-7dbe-4dee-8e67-0802d3717cb1"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT_OF_PROMOTER_HOLDING",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "f1a519b4-9933-4c72-955e-24c91a2f4957"
+      ],
+      "last_period": null,
+      "metric_code": "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "KOTAKBANK",
+      "source_ids": [
+        "ce80d3de-7dbe-4dee-8e67-0802d3717cb1"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": "UNKNOWN"
+    },
+    {
+      "unit": "Cr",
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "CFO_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr.",
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "MARKET_CAP_PROVIDER_RAW",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "NET_PROFIT_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "PBV_ADJUSTED_PROVIDER",
+      "period_type": "POINT_IN_TIME",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "PE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "Cr",
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "REVENUE_TTM",
+      "period_type": "TTM",
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": null,
+      "symbol": "SBIN",
+      "source_ids": [
+        "16a23091-52a3-48cc-89d9-d0659c770857"
+      ],
+      "last_period": null,
+      "metric_code": "ROE_ANNUAL",
+      "period_type": null,
+      "first_period": null,
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "SBIN",
+      "source_ids": [
+        "d9d35fa1-399e-4a10-b8d4-b1d0956b4860"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_DII_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "SBIN",
+      "source_ids": [
+        "d9d35fa1-399e-4a10-b8d4-b1d0956b4860"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_FII_FPI_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "SBIN",
+      "source_ids": [
+        "d9d35fa1-399e-4a10-b8d4-b1d0956b4860"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_MUTUAL_FUND_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "SBIN",
+      "source_ids": [
+        "d9d35fa1-399e-4a10-b8d4-b1d0956b4860"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PROMOTER_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    },
+    {
+      "unit": "PERCENT",
+      "symbol": "SBIN",
+      "source_ids": [
+        "d9d35fa1-399e-4a10-b8d4-b1d0956b4860"
+      ],
+      "last_period": "2026-06-30",
+      "metric_code": "SHAREHOLDING_PUBLIC_PERCENT",
+      "period_type": "QUARTER",
+      "first_period": "2026-06-30",
+      "observations": 1,
+      "consolidation_scope": null
+    }
+  ]
+}

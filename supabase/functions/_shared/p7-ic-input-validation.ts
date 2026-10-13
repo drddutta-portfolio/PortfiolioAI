@@ -1,3 +1,4 @@
+import {bankDualClockExpiry,BANK_DIRECT_CEILINGS} from "./v14-bank-dual-clock.ts"
 /** Validation only: no ingestion, source substitution, financial calculation or writes. */
 export const P7_IC_INPUT_VALIDATION_VERSION = "P7_IC_V1_4_INPUT_VALIDATION_V1"
 type Json = Readonly<Record<string, unknown>>
@@ -25,9 +26,12 @@ export interface InputObservation {
   readonly retrieved_at: string
   readonly fresh_until: string | null
   readonly published_at: string | null
+  readonly proven_availability_at?: string | null
   readonly evidence_status: string
   readonly source_code: string
   readonly source_record_id: string
+  readonly source_verified_at?: string | null
+  readonly disqualifying_event_at?: string | null
 }
 export type InputState = "FRESH" | "STALE" | "REVIEW_REQUIRED" | "CONFLICTING" | "INSUFFICIENT"
 export interface InputValidation {
@@ -98,6 +102,18 @@ export function validateObservationSeries(input: {
       : definition.value_kind === "DATE" ? validDate(row.date_value) : false
     if (!valueValid) return fail("REVIEW_REQUIRED", definition.value_kind === "NUMERIC" ? "NUMERIC_INPUT_INVALID" : "CANONICAL_VALUE_KIND_INVALID")
     if (row.evidence_status !== "AVAILABLE") return fail(row.evidence_status === "STALE" ? "STALE" : "REVIEW_REQUIRED", "OBSERVATION_NOT_AVAILABLE")
+    if (Object.hasOwn(BANK_DIRECT_CEILINGS,row.metric_code)) {
+      const availability=row.published_at??row.proven_availability_at??null
+      if (!row.source_verified_at || !availability) return fail("REVIEW_REQUIRED", "BANK_DIRECT_ORIGINAL_VERIFICATION_REQUIRED")
+      const bounded=bankDualClockExpiry({
+        code:row.metric_code,periodEnd:row.period_end!,lastVerifiedOriginalBytesAt:row.source_verified_at,
+        publishedAt:row.published_at,provenAvailabilityAt:row.proven_availability_at??null,retrievedAt:row.retrieved_at,cutoffAtMs:sourceCutoffAtMs,
+        disqualifyingEventAt:row.disqualifying_event_at,
+      });
+      if(!bounded.ok) return fail("REVIEW_REQUIRED", bounded.reason)
+      if(timestamp(row.fresh_until)>bounded.expiryMs) return fail("REVIEW_REQUIRED","BANK_DUAL_CLOCK_FRESH_UNTIL_EXCEEDS_EXPIRY")
+      if(bounded.expiryMs<evaluationAsOfMs) return fail("STALE","BANK_DUAL_CLOCK_EXPIRED")
+    }
     if (!Number.isFinite(timestamp(row.fresh_until))) return fail("REVIEW_REQUIRED", "FRESHNESS_BOUND_NOT_PROVEN")
     if (!Number.isInteger(definition.freshness_seconds) || definition.freshness_seconds <= 0
       || timestamp(row.fresh_until) > timestamp(row.retrieved_at) + definition.freshness_seconds * 1000) return fail("REVIEW_REQUIRED", "METRIC_FRESHNESS_CONTRACT_MISMATCH")

@@ -50,3 +50,5 @@ jobs:
         run: npm run build
       - name: Diff whitespace
         run: git diff --check
+      - name: Source extraction and original preservation regressions
+        run: python -m unittest discover -s scripts/v1-4 -p "test_*.py"

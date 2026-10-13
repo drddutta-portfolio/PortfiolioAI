@@ -167,6 +167,8 @@ Angel One does **not** become the authority for:
 - valuation evidence where semantically reviewed
 - provisional document/source appearances
 
+**Scoped Development banking exception approved 9 October 2026:** for the thirteen frozen banking securities only, policy `V1_4_BANK_PRIMARY_FILING_DELEGATION_V1` permits independently source-bound official issuer/NSE facts through the existing requirement-review adapter when the primary source lacks qualified evidence. The source remains `COMPANY_EXCHANGE_FILING`/`NSE_OFFICIAL`, never relabeled Trendlyne. Qualified primary evidence retains priority; comparable contradictions remain blocked. The exception does not change units, periods, scope, formulas, ownership denominators or the frozen cohort. Delegated reviews are explicitly attributed to the executor in integrity-hashed metadata with `reviewed_by = null`; they are not personal owner attestations. The approved policy is compiled with exact portfolio, owner and security scope; the append-only ledger remains service-role-write/owner-read under unchanged RLS. See `docs/private/v1-4-industry-batches/Banking_13_Approved_Delegated_Admission_Result_2026-10-09.md`.
+
 Trendlyne technical/market values must not replace Angel One as PortfolioAI's market-data authority.
 
 ### 4.4 PortfolioAI deterministic engines

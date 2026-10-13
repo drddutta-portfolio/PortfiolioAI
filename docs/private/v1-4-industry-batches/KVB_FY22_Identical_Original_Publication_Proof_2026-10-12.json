@@ -1,0 +1,63 @@
+{
+  "documents": [
+    {
+      "source_url": "https://nsearchives.nseindia.com/corporate/KVB_Results_21052022124543.pdf",
+      "original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "original_bytes": 6637197,
+      "publication_entry": {
+        "an_dt": "21-May-2022 12:45:43",
+        "attFileSize": null,
+        "attchmntFile": "https://nsearchives.nseindia.com/corporate/KVB_Results_21052022124543.pdf",
+        "attchmntText": "Karur Vysya Bank Limited has submitted to the Exchange, the financial results for the period ended March 31, 2022.",
+        "bflag": null,
+        "csvName": null,
+        "desc": "Financial Result Updates",
+        "difference": "00:01:18",
+        "dt": "21052022124543",
+        "exchdisstime": "21-May-2022 12:47:01",
+        "fileSize": "-",
+        "hasXbrl": false,
+        "old_new": null,
+        "orgid": null,
+        "seq_id": "149161",
+        "smIndustry": "Banks",
+        "sm_isin": "INE036D01010",
+        "sm_name": "Karur Vysya Bank Limited",
+        "sort_date": "2022-05-21 12:45:43",
+        "symbol": "KARURVYSYA"
+      },
+      "publication_proof_sha256": "9950c65d42e595285ac2776c636113f2c53641fdab2692063742772c62ce9aea"
+    },
+    {
+      "source_url": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022132618_KVBMar2022NSE.pdf",
+      "original_sha256": "5ff0eb0951184d8cfe91b1f172bac1e7ac30c8e079f5b0cafa54fa8f6987007f",
+      "original_bytes": 6637197,
+      "publication_entry": {
+        "an_dt": "20-May-2022 13:26:18",
+        "attFileSize": null,
+        "attchmntFile": "https://nsearchives.nseindia.com/corporate/KARURVYSYA_20052022132618_KVBMar2022NSE.pdf",
+        "attchmntText": "Karur Vysya Bank Limited  has informed the Exchange about Board Meeting held on 20-May-2022 to consider financial statements for the period ended March 2022 and Dividend",
+        "bflag": null,
+        "csvName": null,
+        "desc": "Outcome of Board Meeting",
+        "difference": "00:00:03",
+        "dt": "20052022132618",
+        "exchdisstime": "20-May-2022 13:26:21",
+        "fileSize": "-",
+        "hasXbrl": false,
+        "old_new": null,
+        "orgid": null,
+        "seq_id": "5032717",
+        "smIndustry": "Banks",
+        "sm_isin": "INE036D01010",
+        "sm_name": "Karur Vysya Bank Limited",
+        "sort_date": "2022-05-20 13:26:18",
+        "symbol": "KARURVYSYA"
+      },
+      "publication_proof_sha256": "9950c65d42e595285ac2776c636113f2c53641fdab2692063742772c62ce9aea"
+    }
+  ],
+  "identical_original_bytes": true,
+  "first_availability": "2022-05-20T13:26:21+05:30",
+  "canonical_admissions": 0
+}

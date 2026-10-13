@@ -1,0 +1,53 @@
+{
+  "boundary": "FOUR_MULTI_STOCK_TOOL_ATTEMPTS; ONE_USAGE_EVENT_AND_SETTLED_RESERVATION_PER_SLICE",
+  "rows": [
+    {
+      "id": "0ded18d7-86cd-424f-9fbe-b58c18acbdc5",
+      "status": "SUCCEEDED",
+      "requested_count": 4,
+      "attempted_call_count": 1,
+      "error_summary": null,
+      "usage_events": 1,
+      "charged_units": 1,
+      "reservation_states": [
+        "SETTLED"
+      ]
+    },
+    {
+      "id": "63938e9b-c648-41ef-bfea-72b493bdf697",
+      "status": "SUCCEEDED",
+      "requested_count": 4,
+      "attempted_call_count": 1,
+      "error_summary": null,
+      "usage_events": 1,
+      "charged_units": 1,
+      "reservation_states": [
+        "SETTLED"
+      ]
+    },
+    {
+      "id": "ff42c357-e5fb-4df1-a0aa-c0247386e91a",
+      "status": "SUCCEEDED",
+      "requested_count": 4,
+      "attempted_call_count": 1,
+      "error_summary": null,
+      "usage_events": 1,
+      "charged_units": 1,
+      "reservation_states": [
+        "SETTLED"
+      ]
+    },
+    {
+      "id": "b50a3c04-37c4-4170-a674-fbbbff8205dc",
+      "status": "SUCCEEDED",
+      "requested_count": 1,
+      "attempted_call_count": 1,
+      "error_summary": null,
+      "usage_events": 1,
+      "charged_units": 1,
+      "reservation_states": [
+        "SETTLED"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "original_url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&symbol=KARURVYSYA&from_date=01-10-2023&to_date=12-10-2026",
+  "original_sha256": "9f966a223d7b09c065ae041863a3534c757614e6c14795653dbdad2b6d1c6c01",
+  "original_bytes": 1180,
+  "retrieved_at": "2026-10-13T00:34:11.176990+00:00",
+  "http_status": 200,
+  "events": 4,
+  "provider_paid_calls": 0,
+  "canonical_admitted": false
+}

@@ -61,7 +61,12 @@ Deno.test("V1-4 read-only handler authenticates owner, rejects Production and ne
     const request = (authorization = true, body: Record<string, unknown> = parameters) => new Request("https://example.invalid/validate", {
       method: "POST", headers: { "Content-Type": "application/json", ...(authorization ? { Authorization: "Bearer test-only-session" } : {}) }, body: JSON.stringify(body),
     })
-    let response = await handler(request(false))
+    let response = await handler(new Request("https://example.invalid/validate", { method: "OPTIONS", headers: { Origin: "https://portfiolio-ai-git-codex-v1-4-bank-owner-ui-dibyendu-dutta.vercel.app", "Access-Control-Request-Method": "POST", "Access-Control-Request-Headers": "authorization,apikey,content-type,x-client-info" } }))
+    assert(response.status === 204 && requests.length === 0, "Browser preflight did not succeed without accessing storage")
+    assert(response.headers.get("Access-Control-Allow-Origin") === "*" && response.headers.get("Access-Control-Allow-Methods")?.includes("POST") === true, "Preflight is missing browser CORS headers")
+    for (const header of ["authorization", "apikey", "content-type", "x-client-info"]) assert(response.headers.get("Access-Control-Allow-Headers")?.includes(header) === true, "Preflight does not allow Supabase client headers")
+    response = await handler(request(false))
+    assert(response.headers.get("Access-Control-Allow-Origin") === "*", "Authentication error cannot be read by the browser")
     assert(response.status === 401 && requests.length === 0, "Unauthenticated request reached storage")
     validUser = false
     response = await handler(request())
@@ -72,6 +77,7 @@ Deno.test("V1-4 read-only handler authenticates owner, rejects Production and ne
     owned = true
     response = await handler(request())
     const body = await response.json()
+    assert(response.headers.get("Access-Control-Allow-Origin") === "*", "Successful validation cannot be read by the browser")
     assert(response.status === 200 && body.dryRun === true && body.providerCalls === 0, "Owner read-only evaluation failed")
     assert(body.processed === 0 && body.writeTotals.snapshotsCreated === 0 && body.writeTotals.selectionsCreated === 0, "Empty portfolio caused writes")
     assert(requests.every(row => row.method === "GET" && !row.path.includes("rpc")), "Read-only mode consumed a grant or invoked a write RPC")

@@ -1,0 +1,483 @@
+[
+  {
+    "symbol": "AUBANK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=AUBANK",
+    "masterHash": "9ecd25774931cfcdfcae1a01793c44d861e95e9e6fd3da2ad9222f7b0925d2fd",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1697776_21072026112530_WEB.xml",
+        "sha256": "773ee8ec5da68eb800b2361122747de387edd62571b62a2fec2ffffa611a0c39",
+        "bytes": 228285
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1655100_20042026045414_WEB.xml",
+        "sha256": "7078b8d42ad0891ac714fcfafb052154728ca1c94927cef801f487c0ae45879f",
+        "bytes": 285573
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1608794_23012026105208_WEB.xml",
+        "sha256": "69a449f54e7e65a5f4ccb2925ce9d8ddc92d105be632b2d845b70d41c8a9c52d",
+        "bytes": 279239
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1553627_18102025045206_WEB.xml",
+        "sha256": "21e444e0343a0351f00f218cbba14a061e775d267f58b5bb1a4fd730c66815fc",
+        "bytes": 270897
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1489757_21072025082257_WEB.xml",
+        "sha256": "a1f37682cc247bd9cd61ac95d1a0ad2d5d5685cd8174c69bbc2ce9e11118d59b",
+        "bytes": 275764
+      }
+    ]
+  },
+  {
+    "symbol": "AXISBANK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=AXISBANK",
+    "masterHash": "b76ca648462b46872721ad983b25ee2b8cb9bcc78713c40a3e2f2a8643839248",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1691686_13072026062029_WEB.xml",
+        "sha256": "032d361764ef74bba331bf88798f568fd4711317d1b58f27505e0a9074479c15",
+        "bytes": 273722
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1649482_13042026101953_WEB.xml",
+        "sha256": "573344c64c6558ce0b177f43cdacf8c3a34976017f2d3c9bc3bcf6f44a5ade70",
+        "bytes": 263657
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1597452_09012026032719_WEB.xml",
+        "sha256": "6fde7faa0ca6949565ec6cda9131e3962ee320da6a4a07f00bda828d085944b4",
+        "bytes": 254316
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1544329_10102025033704_WEB.xml",
+        "sha256": "472602c32b6ec7214d27c0e2f999ed7a5c17afc5fd1a243c7f2258927f42fc18",
+        "bytes": 254103
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1486149_18072025115612_WEB.xml",
+        "sha256": "3e3c9aef7a3e1ff5fe6d0cd71599acca23224d97df51fa9450c0ee7607ff1e06",
+        "bytes": 252911
+      }
+    ]
+  },
+  {
+    "symbol": "BANDHANBNK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=BANDHANBNK",
+    "masterHash": "c43c822a3b8a63fd8ff03dccf61ac2bcd2afe0778d652e6b1805e4e7776a9d4c",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1698905_21072026082551_WEB.xml",
+        "sha256": "fcde87a43803db312e9a9ffc7eb0be5eea3c09bbf7e67585a1c327111b081614",
+        "bytes": 270897
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1656431_21042026053534_WEB.xml",
+        "sha256": "b1c5d05d120bf2c47d43dc34d9e71ab0bbf43d13831beecd8ff21404a351d997",
+        "bytes": 301667
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1606157_20012026065055_WEB.xml",
+        "sha256": "c0e040b49f3d64477a5d6f91f29e5bc5d85a288a0f6118ed6c40b18319983a9a",
+        "bytes": 235263
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1553872_18102025075535_WEB.xml",
+        "sha256": "67d7fbee916121eb4e8e2513e6bdebd62264acc61cfccd699f5e18cd95d4c32a",
+        "bytes": 239828
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1488077_19072025085109_WEB.xml",
+        "sha256": "28e0c7d3d5bbb0be981ce5c2db08439ca748874e804551bcfd0c4002a6e38cc1",
+        "bytes": 240142
+      }
+    ]
+  },
+  {
+    "symbol": "BANKBARODA",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=BANKBARODA",
+    "masterHash": "1bdc6e0671f5093d82d417ac4092e1241b2b015a2ab17039ff435ca0c9e49938",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1689248_08072026033602_WEB.xml",
+        "sha256": "c2519ef1080854ab8024433533615cfbfe1fa3b74c129abbef781b2f9a334bbd",
+        "bytes": 144533
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1647424_08042026045921_WEB.xml",
+        "sha256": "23a42a44ae8ae34c8100902850c0a4380de8e0c10de0e62a422f318dd4403e85",
+        "bytes": 144491
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1601986_16012026122154_WEB.xml",
+        "sha256": "69562586e88a30726faa4e016e0b119ed0d270e82d1f1b112587e04c91532e07",
+        "bytes": 144440
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1543420_09102025041216_WEB.xml",
+        "sha256": "996f1f43dc73ab0f6718388784f02bcb6f1cf6d0e4a0af391065a2754800ab9c",
+        "bytes": 144218
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1483213_15072025043506_WEB.xml",
+        "sha256": "4dd8233d381dc4ebbd0ba8925d1817f62e7edbe94a62c25499a103a30cdbb875",
+        "bytes": 150119
+      }
+    ]
+  },
+  {
+    "symbol": "FEDERALBNK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=FEDERALBNK",
+    "masterHash": "56a3600be7dae57afcd3dadb4242c9f7e250bdd18acce2a242f07e326d7d14bb",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1698856_21072026075633_WEB.xml",
+        "sha256": "bbc3c3cf399954afa563b4d3aedf74331dbf83cf183347b42fd126263ff67180",
+        "bytes": 268769
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1655993_21042026015047_WEB.xml",
+        "sha256": "61280a277d629ac8cce75586f2ea3efa81b52d6999861f2bb2734901fc8d06bc",
+        "bytes": 271999
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1601863_16012026095244_WEB.xml",
+        "sha256": "1c57a14b3b126b54faa4836430c18523222905d3260f7c0ad14e1f1f3c796f8b",
+        "bytes": 222844
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1550545_16102025052741_WEB.xml",
+        "sha256": "ce1cef5fed36a9fc9ba0dfd20259e547031b81efc35d4f3a15eee6720e812581",
+        "bytes": 243405
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1489507_21072025065827_WEB.xml",
+        "sha256": "b53a61301343174eb4307a98bf6b70c03ec3eace224a4772c232682113883ecb",
+        "bytes": 238035
+      }
+    ]
+  },
+  {
+    "symbol": "HDFCBANK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=HDFCBANK",
+    "masterHash": "b6548b06bf2543527d816ac365b52f371f7440dee1b5dd6ccfc4bfae02de6569",
+    "filings": [
+      {
+        "date": "30-SEP-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1733480_06102026050037_WEB.xml",
+        "sha256": "c80d08919f28aaa72c760befd872a9ffb2b4f1bc34197238fcaa100c72af3e74",
+        "bytes": 231094
+      },
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1687801_03072026023346_WEB.xml",
+        "sha256": "61753bad377afabb41daad2740027f6e1a4bc918bd8ee0a0176bfebf02847d1a",
+        "bytes": 231504
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1645257_02042026124041_WEB.xml",
+        "sha256": "57f28c162ff78b072b64c53928a6e160ad9e4aaa8757da331695c03d2625bb8e",
+        "bytes": 223243
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1595863_07012026112853_WEB.xml",
+        "sha256": "172bcb9866827a6d11a02debe39b9611ff65eb797c0f4804a4de0e9a40c4c42a",
+        "bytes": 220296
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1574385_13112025090903_WEB.xml",
+        "sha256": "cef097fcfc0d9e98df747dfa7c54ddb9ecb6251859eb742e74161e1035c61814",
+        "bytes": 213568
+      }
+    ]
+  },
+  {
+    "symbol": "ICICIBANK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=ICICIBANK",
+    "masterHash": "de25a0fbd1bfd597da5f15450359c7a422737341460d09b988567f31ccf5cd75",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1694984_17072026015418_WEB.xml",
+        "sha256": "1f4be8c6d2cbc1676d29a727051f42c9031e158abb649f5969056c01a25bec61",
+        "bytes": 280189
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1654552_20042026113117_WEB.xml",
+        "sha256": "b22c59efd4ccebc9e7d5a87df0ba064367e3cd67a2d6e753a450002587362b2c",
+        "bytes": 283326
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1601982_16012026121720_WEB.xml",
+        "sha256": "6da95e08bfe08ce0f23c9194db2cd53d6961472c3fcfd4bd6cb398deded625e9",
+        "bytes": 268948
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1550117_16102025031434_WEB.xml",
+        "sha256": "7015c2f1bada0bd13c0d937b3a3aab2504e5804be6800605c61c4d5acabd99af",
+        "bytes": 272647
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1489434_21072025064422_WEB.xml",
+        "sha256": "25d4b76f471214e4a884b5abba0f35262e0fbc65ea327b94a027dc9ad0a9cafd",
+        "bytes": 232799
+      }
+    ]
+  },
+  {
+    "symbol": "IDBI",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=IDBI",
+    "masterHash": "6f670a8c1da3c5fe22ea13a22ed301cc490fc5d4f4e6352f33d8b9b5130177e2",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1692479_14072026055631_WEB.xml",
+        "sha256": "ab01d9bda6fc6b0c333bd7bcd1e23492727418e34b1a7177f514b7b32cb97f12",
+        "bytes": 121354
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1653997_18042026012703_WEB.xml",
+        "sha256": "c32a45dd155d83d863e5ae26ab41de4fbd941650a95b4787326e085139ab29bd",
+        "bytes": 121413
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1600170_13012026061359_WEB.xml",
+        "sha256": "08dfb50300e704d88df8741e2b67145e939cc799b9c4515e4c41302b1bae6fac",
+        "bytes": 121413
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1553694_18102025051835_WEB.xml",
+        "sha256": "ca806a151253e465556cb06250d7ba90769bbc8a04decd0e4935d4206533ae8f",
+        "bytes": 121241
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1487865_19072025050011_WEB.xml",
+        "sha256": "0c5c441d78bf75c327d81908e5d3917618627f7e77553cf8ec05bb779d86b232",
+        "bytes": 149832
+      }
+    ]
+  },
+  {
+    "symbol": "IDFCFIRSTB",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=IDFCFIRSTB",
+    "masterHash": "474e0b86aedf722c65186db5b9f6822b352581808d2759f665d9d93f33720da9",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1696139_18072026041535_WEB.xml",
+        "sha256": "2b29b996ae971041020dee929a26f892140241c8558dbfa7a431e66701c97b64",
+        "bytes": 231287
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1656596_21042026063302_WEB.xml",
+        "sha256": "4c04db352f79f62c3cb7d8c320a9cb4abe9015d35c08d0ad2f056b8dd11be0e8",
+        "bytes": 227891
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1605909_20012026053635_WEB.xml",
+        "sha256": "db0e28f2fa323f5fbb6c27199ff28a174509d4e01e7ca733e57ee6d400cef2e2",
+        "bytes": 232892
+      },
+      {
+        "date": "27-OCT-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1563479_03112025123907_WEB.xml",
+        "sha256": "9fc9c598c7e05166c6ccb93d560b58fe7a33dcb23a576107d84a54093e790458",
+        "bytes": 194506
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1547019_14102025113813_WEB.xml",
+        "sha256": "a35b3f47557f30feb44010b713a7a754e4732c9a8125598908144e8e17cebc31",
+        "bytes": 184004
+      }
+    ]
+  },
+  {
+    "symbol": "INDIANB",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=INDIANB",
+    "masterHash": "52e8c6882f8d33bde304f3ac1b6fc35b879dfef2cba66ad2d28f08d1499dbcde",
+    "filings": [
+      {
+        "date": "30-SEP-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1734139_08102026122540_WEB.xml",
+        "sha256": "b2deb07a3dfa5349cb14dc29000d3e0083c665dfca82e2d0ab7bda57aa1f5579",
+        "bytes": 140231
+      },
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1688100_04072026120445_WEB.xml",
+        "sha256": "92f1ae8a31a498588bed19b6f0097fb42a4f4f78f1dd3b6f3ed79633ad562de8",
+        "bytes": 143266
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1646673_07042026034349_WEB.xml",
+        "sha256": "f96bdfbc8803c0988e60f6d8f05b11340ffba068edf3ad8084432732fde8b8c9",
+        "bytes": 143165
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1600173_13012026061614_WEB.xml",
+        "sha256": "0018475c04e63ca90a528aec744795d037ae6b42a1773348c45345447b512884",
+        "bytes": 140229
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1548864_15102025035910_WEB.xml",
+        "sha256": "7dc56dfa1bc6ae874e61eaf8d46b6d7212eb390bdaf1154688f621e46163edc1",
+        "bytes": 140088
+      }
+    ]
+  },
+  {
+    "symbol": "KARURVYSYA",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=KARURVYSYA",
+    "masterHash": "323d246b393c45ce678edeb2a9bf32d8213fac25bb18846e4c7b714039733d8d",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1697854_21072026122222_WEB.xml",
+        "sha256": "868de108e1481faaa07153c4dc209b83aa3b6306e471d60e9f0e40be405dc884",
+        "bytes": 339113
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1686290_29062026080636_WEB.xml",
+        "sha256": "0ae6152923d49471707c47665f3796463f142ddc819fefdddc4d099d74be581b",
+        "bytes": 331778
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1600463_14012026121729_WEB.xml",
+        "sha256": "16d4002666f51cd7cfed7c3434ee749274e1b61a9654e598011bea40c2dc58a6",
+        "bytes": 390956
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1553727_18102025053450_WEB.xml",
+        "sha256": "0f6c923ab5c8a46de5784b66211cffe2ec3d4cd0b9fa093441c3585aea8b67f1",
+        "bytes": 391643
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1593640_31122025053230_WEB.xml",
+        "sha256": "7d9ebac6337e11f0fd084522d99d0fa4643e6106ce73ed337601b3169020c09e",
+        "bytes": 382667
+      }
+    ]
+  },
+  {
+    "symbol": "KOTAKBANK",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=KOTAKBANK",
+    "masterHash": "c5ebb5762ccf7b914450ddf448af67d8b931a9d9cee5df18c1f2556a64b85779",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1692686_14072026081830_WEB.xml",
+        "sha256": "8d4184b0ba209390c783774e26c61146f4cae94eb1803ab6f198a0dac68dec19",
+        "bytes": 312931
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1652717_16042026082240_WEB.xml",
+        "sha256": "f02b29ba3facd5e8ba07b27ba0b35b896423914e76769dbace3c957c9dc4431e",
+        "bytes": 314670
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1602447_16012026044851_WEB.xml",
+        "sha256": "bd7bd17738dbf6783b48314db9717d6ef500c94fcddcbdb8ad470cbf9254f655",
+        "bytes": 312591
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1547521_14102025035311_WEB.xml",
+        "sha256": "951da198c05af3e35654fe8a661209f02d531194715bbc0caf7e9ec794967424",
+        "bytes": 311721
+      },
+      {
+        "date": "30-JUN-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1483613_15072025072312_WEB.xml",
+        "sha256": "cad160ee0f79f9d4d1a4eb4860f26cf7f50d28b164662b893ea0c2444d0e0de0",
+        "bytes": 315214
+      }
+    ]
+  },
+  {
+    "symbol": "SBIN",
+    "masterUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=SBIN",
+    "masterHash": "be3aeebd5ddb58573f8921c90c67267c085f7771501d76c1d8bf346d58fe5f72",
+    "filings": [
+      {
+        "date": "30-JUN-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1693592_15072026065623_WEB.xml",
+        "sha256": "9dccd8343a91501707be398549ab3cf47776ceef1a703fd1b2e8c972c2ea799b",
+        "bytes": 173057
+      },
+      {
+        "date": "31-MAR-2026",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1653984_18042026011837_WEB.xml",
+        "sha256": "353fed0cd60b4ac88175cae3337dc498c041a78e18a8194457f20aa2f992392d",
+        "bytes": 173040
+      },
+      {
+        "date": "31-DEC-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1604495_19012026052913_WEB.xml",
+        "sha256": "f27d9250cf83567452ba72c54e7d090a13a7d3ff26c148eb9ddf927ffd868f22",
+        "bytes": 170012
+      },
+      {
+        "date": "30-SEP-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1550260_16102025040258_WEB.xml",
+        "sha256": "44c06b9ea3a1a360b18c48bcf85120115799b66c8af595d0d702dbae7173157e",
+        "bytes": 169830
+      },
+      {
+        "date": "21-JUL-2025",
+        "url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1497731_30072025033921_WEB.xml",
+        "sha256": "6d2999ff27ccfcb4f2123c451f87e42028b93a04c3cd40da4b528472cef2b218",
+        "bytes": 161366
+      }
+    ]
+  }
+]

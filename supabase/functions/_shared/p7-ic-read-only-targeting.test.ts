@@ -22,7 +22,7 @@ describe("owner read-only security targeting", () => {
     expect(() => readOnlySecurityIds({ action, securityIds: [id, id.toUpperCase()] })).toThrow("SECURITY_IDS_DUPLICATED")
   })
   it("rejects targeting on a write/provider action and ambiguous pagination", () => {
-    expect(() => readOnlySecurityIds({ action: "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS", securityIds: [a] })).toThrow("SECURITY_IDS_REQUIRE_READ_ONLY_VALIDATION")
+    expect(() => readOnlySecurityIds({ action: "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS", securityIds: [a] })).toThrow("SECURITY_IDS_REQUIRE_AUTHENTICATED_VALIDATION_OR_GRANT_SCOPED_WRITE")
     expect(() => readOnlySecurityIds({ action: "REFRESH", securityIds: [a] })).toThrow()
     expect(() => readOnlySecurityIds({ action, securityIds: [a], offset: 0 })).toThrow("SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION")
     expect(() => readOnlySecurityIds({ action, securityIds: [a], limit: 1 })).toThrow()

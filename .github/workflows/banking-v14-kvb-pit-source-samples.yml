@@ -1,0 +1,27 @@
+name: Banking V1-4 KVB PIT Sample Originals
+on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-kvb-pit-source-samples.yml'
+      - 'scripts/v1-4/kvb_capture_pit_sample_originals.py'
+      - 'docs/private/v1-4-industry-batches/KVB_PIT_Three_Source_Samples_2026-10-11.json'
+permissions:
+  contents: read
+jobs:
+  retain-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify investigated historical issuer originals
+        run: python scripts/v1-4/kvb_capture_pit_sample_originals.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kvb-pit-three-source-originals
+          path: kvb-pit-source-originals/
+          retention-days: 90
+          if-no-files-found: error

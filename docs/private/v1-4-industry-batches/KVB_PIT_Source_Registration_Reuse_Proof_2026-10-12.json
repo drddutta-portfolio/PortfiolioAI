@@ -1,0 +1,168 @@
+{
+  "workflow_run": 38204130031,
+  "implementation_head": "8d5e42ff5c9683b1fbb26730d09776847c7744b1",
+  "result": {
+    "code": "PINNED_PIT_ORIGINALS_REGISTERED_NOT_ADMITTED",
+    "expected": 22,
+    "registered": 22,
+    "results": [
+      {
+        "sourceRecordId": "6998afa4-0e0d-4a63-a2ab-625265c315ee",
+        "originalSha256": "f16a9f447f7e0783e21b0e39e24df7b38009e755b20c976b61993435ddb4110b",
+        "publishedAt": "2021-05-29T14:17:45+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "e6625b52-6636-437e-933d-313e112c8568",
+        "originalSha256": "ec0318edbae5db672b1d252ef634dcaf1717478605d1d42f37293ab326295b65",
+        "publishedAt": "2021-08-04T14:17:42+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "ffb007a5-f543-4f60-8d26-42e1d6b0c33d",
+        "originalSha256": "8d6fce32c30b70568189d5fc4f8196565411f5ea2f642cead286fa2c4b00a8f4",
+        "publishedAt": "2021-11-08T12:37:24+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "cca3a643-d73a-4cde-9c73-18e3ea4d4816",
+        "originalSha256": "2b82ff64efb0c9060b1db8d5e3fd2ff303ddb764cc32b0f265daf8095f4b6e27",
+        "publishedAt": "2022-05-20T09:27:29+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "2e3c65c3-db0a-4d4f-ab69-c20f5467c32b",
+        "originalSha256": "a8a1959ea1513069ab0b74f6202496fa861cfcb7de2639153e1b44a8dd7ac3e6",
+        "publishedAt": "2022-07-25T08:54:18+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "8a510b5b-8c35-403c-8bbf-5fa30049439a",
+        "originalSha256": "b1dfaee356337bb1c1d201c67fad6cee13b024cd1f2a57b3b9ba0bae041f52d0",
+        "publishedAt": "2022-10-21T08:53:18+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "e77b3c6d-3fde-4bf3-9fc3-3f0f47bec0f6",
+        "originalSha256": "d2986bbef728b7714156ec4a5b487bf5cdb99b81aea830f87f2068dd385b1c76",
+        "publishedAt": "2022-01-31T10:52:19+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "854b4670-c5a5-4201-bfb7-ff32cc57756c",
+        "originalSha256": "0d821b81174dd6a43203f8869ebe07ef510eaad3c8ad2ba00fe9cd58156f7914",
+        "publishedAt": "2023-01-23T10:05:10+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "6c51e56c-cfed-4705-8741-5b7d516233eb",
+        "originalSha256": "bfa67ffcde3acbc93067d2ea35187dc68175a1a1270733667a6a8613b285c620",
+        "publishedAt": "2023-05-15T11:30:39+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "f8339eb7-7152-4cb3-94db-fd6f4897617e",
+        "originalSha256": "4d22a31e6137c0bbf5abaa9d5a204a73e7bbc11f8ed6d599507eb89646a07861",
+        "publishedAt": "2023-07-17T10:52:34+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "27e52d2b-0493-43ef-8b1a-e3c5522e3d91",
+        "originalSha256": "5888f4938fe08860cc2f58633e71463b9d0e84bf46b446a79886caabb8f53798",
+        "publishedAt": "2023-10-16T11:01:22+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "cfbbdd90-2073-4594-80b3-f1479508854a",
+        "originalSha256": "491450a07d5f5afa31079455500c200ee981584c8b61dd7a7d5036d34c57f0ef",
+        "publishedAt": "2024-01-22T11:03:32+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "5d447583-b942-4076-81f8-daeee9e30092",
+        "originalSha256": "ff084644193b0bf223990b741f2568e979011d87abc83526967e80c8b8b1d7e4",
+        "publishedAt": "2024-05-13T10:43:38+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "2ea2e561-e708-412a-8912-0ffefe823593",
+        "originalSha256": "88b9375300bdf745248f74a34f57315fd0dfd440f7e795c6e30e75ea39e2aa8e",
+        "publishedAt": "2024-07-18T11:09:03+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "0bee0633-262e-41d4-9e46-f49827ce80dd",
+        "originalSha256": "6e2f03325a5730ee4d01bd7a82fda4aa5ba28aafda2f2f265ac42c9d10e21b10",
+        "publishedAt": "2024-10-17T09:19:43+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "0b72a069-c1c7-466e-9231-1c879f9d037c",
+        "originalSha256": "ffcfaf13f9334063da478252bf97dfca14f298c90b1bdb53c6f83eb444145329",
+        "publishedAt": "2025-01-20T10:18:43+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "d8e4afcf-adaa-40ff-a83a-a8afb8c4f46b",
+        "originalSha256": "a21a74c7a660622a969b0aba3e2e6718fac553839ef3ba60ab532bff4eb73a15",
+        "publishedAt": "2025-05-19T11:50:33+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "0e95eff6-1e37-4c19-a7b4-fd9b3a3c2972",
+        "originalSha256": "7fcee6f12cec28cd20acbe4f67cffffe0b0c26dd7264e89c78aa380f8fa7d97a",
+        "publishedAt": "2025-07-24T10:45:38+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "87c3e503-374e-4ac1-910d-34ad41b48fc9",
+        "originalSha256": "0f80a30604f9ddff9516cd8f7d1fda50d905146eefaf271b047fe04e727d1e9d",
+        "publishedAt": "2025-10-17T11:30:04+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "a662720b-fbde-4f53-940d-5535061b6ad8",
+        "originalSha256": "df3495180f264e96ae02c4ec790090a0560853b9bfa326c280ea567cab651ead",
+        "publishedAt": "2026-01-23T10:08:07+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "b081cf8b-f932-4265-a3e8-48fce3211a3c",
+        "originalSha256": "d4e15a6da4122e26d8f06b9563937431e75fa5ed7f942809fb96e604d67025ec",
+        "publishedAt": "2026-05-07T10:30:06+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      },
+      {
+        "sourceRecordId": "691d1e9c-99bd-492c-b2c8-44862886c102",
+        "originalSha256": "79ace6b375337a8a567f595c1228574bd1491bc3c4282418288b462b45c9b822",
+        "publishedAt": "2026-07-20T10:18:21+00:00",
+        "state": "REUSED_HASH_VERIFIED_SOURCE",
+        "canonicalAdmitted": false
+      }
+    ],
+    "providerCalls": 0,
+    "canonicalAdmissions": 0,
+    "canonicalMaterializations": 0
+  }
+}

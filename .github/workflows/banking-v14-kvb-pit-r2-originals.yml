@@ -1,0 +1,41 @@
+name: Banking V1-4 KVB PIT Immutable Originals
+on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-kvb-pit-r2-originals.yml'
+      - 'scripts/v1-4/archive_kvb_pit_originals.py'
+      - 'docs/private/v1-4-industry-batches/KVB_PIT_Exchange_Publication_Batch_2026-10-12.json'
+      - 'supabase/functions/_shared/v14-bank-pit-original-manifest.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive:
+    if: github.ref == 'refs/heads/codex/banking-source-remediation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: PortfolioAI-Development
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original-source boundaries and financial extraction regressions
+        run: python -m unittest discover -s scripts/v1-4 -p 'test_*.py'
+      - run: pip install boto3==1.35.99
+      - name: Preserve exact NSE originals with conditional creation and hash readback
+        env:
+          CLOUDFLARE_R2_ACCOUNT_ID: ced17d24f4b380721e58a08c9e9273e4
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: python scripts/v1-4/archive_kvb_pit_originals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kvb-pit-originals-r2-readback
+          path: kvb-pit-r2-original-archive/
+          retention-days: 90
+          if-no-files-found: error

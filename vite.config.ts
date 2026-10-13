@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react"
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
+    resolve: { alias: { "https://esm.sh/decimal.js@10.6.0": "decimal.js" } },
     plugins: [react()],
     test: {
       environment: "jsdom",

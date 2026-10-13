@@ -1,0 +1,282 @@
+{
+  "status": "PROPOSED_NOT_EXECUTED",
+  "project_ref": "lrgpjimipfkyoqbpsqzz",
+  "portfolio_id": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "maximum_history_requests": 14,
+  "maximum_authentication_attempts": 1,
+  "automatic_retries": 0,
+  "expected_missing_stock_sessions": 16,
+  "expected_missing_benchmark_sessions": 1,
+  "requested_completed_session_cutoff": "2026-10-08",
+  "fresh_grants_required": true,
+  "active_grants_at_readback": 0,
+  "deployment_authorized": false,
+  "source_admission_authorized": false,
+  "snapshot_materialization_authorized": false,
+  "execution_transport": "Existing AngelOneProvider behind scoped Development control plane; current October-7 fixed handlers cannot execute this package unchanged",
+  "targets": [
+    {
+      "symbol": "AUBANK",
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "mapping": {
+        "id": "d9ee02e7-258f-4c61-a6fb-cfc0b7cf116f",
+        "symbol": "AUBANK",
+        "exchange": "NSE",
+        "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "AUBANK-EQ",
+        "provider_instrument_id": "21238"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "AXISBANK",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "mapping": {
+        "id": "ad9b72b6-9a33-4f9a-8b0e-89e7eea15613",
+        "symbol": "AXISBANK",
+        "exchange": "NSE",
+        "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "AXISBANK-EQ",
+        "provider_instrument_id": "5900"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "mapping": {
+        "id": "55aca957-2967-4f56-a698-6c4e77ac56bb",
+        "symbol": "BANDHANBNK",
+        "exchange": "NSE",
+        "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "BANDHANBNK-EQ",
+        "provider_instrument_id": "2263"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "mapping": {
+        "id": "277b65b0-8711-42ce-b2a5-7ce827a0abc8",
+        "symbol": "BANKBARODA",
+        "exchange": "NSE",
+        "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "BANKBARODA-EQ",
+        "provider_instrument_id": "4668"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "mapping": {
+        "id": "8ccea425-a67d-436e-850f-b626fa00d8b7",
+        "symbol": "FEDERALBNK",
+        "exchange": "NSE",
+        "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "FEDERALBNK-EQ",
+        "provider_instrument_id": "1023"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "HDFCBANK",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "mapping": {
+        "id": "d25d7255-4b35-430f-9752-398d85c9b7f3",
+        "symbol": "HDFCBANK",
+        "exchange": "NSE",
+        "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "HDFCBANK-EQ",
+        "provider_instrument_id": "1333"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "ICICIBANK",
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "mapping": {
+        "id": "120ee7d8-d7e2-4db8-9cd9-4422eca4f1c0",
+        "symbol": "ICICIBANK",
+        "exchange": "NSE",
+        "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "ICICIBANK-EQ",
+        "provider_instrument_id": "4963"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "IDBI",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "mapping": {
+        "id": "c031984a-c456-47eb-b241-2be0bd197760",
+        "symbol": "IDBI",
+        "exchange": "NSE",
+        "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "IDBI-EQ",
+        "provider_instrument_id": "1476"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "mapping": {
+        "id": "8560d0c8-9911-4f32-b742-3e93e3d9e498",
+        "symbol": "IDFCFIRSTB",
+        "exchange": "NSE",
+        "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "IDFCFIRSTB-EQ",
+        "provider_instrument_id": "11184"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "INDIANB",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "mapping": {
+        "id": "0082a4bb-72e9-43ff-a726-7892dc91f4b5",
+        "symbol": "INDIANB",
+        "exchange": "NSE",
+        "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "INDIANB-EQ",
+        "provider_instrument_id": "14309"
+      },
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "KARURVYSYA",
+      "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+      "mapping": {
+        "id": "9f7f0d28-a83d-41c7-a133-6467617e67e6",
+        "symbol": "KARURVYSYA",
+        "exchange": "NSE",
+        "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "KARURVYSYA-EQ",
+        "provider_instrument_id": "1838"
+      },
+      "retained_last_session": "2026-10-06",
+      "requested_from": "2026-10-07 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "mapping": {
+        "id": "8f016cc6-f1a3-47c5-9b5e-8fc5d7064ca4",
+        "symbol": "KOTAKBANK",
+        "exchange": "NSE",
+        "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "KOTAKBANK-EQ",
+        "provider_instrument_id": "1922"
+      },
+      "retained_last_session": "2026-10-06",
+      "requested_from": "2026-10-07 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "symbol": "SBIN",
+      "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "mapping": {
+        "id": "86924e77-e8af-46e5-a6ba-0e9fe6d1e720",
+        "symbol": "SBIN",
+        "exchange": "NSE",
+        "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+        "provider_code": "ANGEL_ONE",
+        "mapping_status": "VERIFIED",
+        "trading_symbol": "SBIN-EQ",
+        "provider_instrument_id": "3045"
+      },
+      "retained_last_session": "2026-10-06",
+      "requested_from": "2026-10-07 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    },
+    {
+      "benchmark_code": "NIFTY_BANK",
+      "provider_code": "ANGEL_ONE",
+      "provider_instrument_id": "99926009",
+      "exchange": "NSE",
+      "mapping_status": "VERIFIED",
+      "retained_last_session": "2026-10-07",
+      "requested_from": "2026-10-08 00:00",
+      "requested_to": "2026-10-08 23:59",
+      "existing_session_overwrite_allowed": false
+    }
+  ],
+  "validation": [
+    "Re-read current history before execution and skip newly current targets",
+    "Verify exact identity, dates, ONE_DAY interval, session uniqueness, OHLC consistency, positive prices and nonnegative volume",
+    "Never overwrite an existing differing session; quarantine conflicts for review",
+    "Retain raw response and request provenance with approved append-only history writes",
+    "Append source-linked calendar/session/history proofs only after their contracts are established",
+    "Recheck corporate-action treatment and aligned benchmark sessions",
+    "Rerun owner-authenticated read-only bank validation before requesting canonical materialization"
+  ],
+  "excluded": [
+    "Trendlyne spending",
+    "fundamental ACCEPT decisions",
+    "documentary ACCEPT decisions",
+    "price rewriting",
+    "Production",
+    "migrations",
+    "scheduler activation"
+  ]
+}

@@ -1,3 +1,4 @@
+import { sameQualifiedHistoryNumeric } from "../_shared/v14-history-numeric-equality.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
@@ -320,8 +321,49 @@ Deno.serve(async (request) => {
           requested_to: kolkataDateTime(to),
         },
       }))
-      const { error: historyError } = await admin.from("market_price_history").upsert(historyRows, { onConflict: "security_id,provider_code,interval,period_start" })
+      // Fail closed on corrections: an existing OHLCV row is immutable in this legacy
+      // control plane. Corrections require a source-bound supersession path.
+      const sessionStarts = historyRows.map(row => row.period_start)
+      const { data: retainedRows, error: retainedError } = await admin
+        .from("market_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("security_id", security.id)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", sessionStarts)
+      if (retainedError) throw retainedError
+      const retainedByDate = new Map((retainedRows ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of historyRows) {
+        const previous = retainedByDate.get(new Date(incoming.period_start).toISOString())
+        if (!previous) continue
+        for (const field of ["open", "high", "low", "close", "volume"] as const) {
+          if (!sameQualifiedHistoryNumeric(previous[field], incoming[field])) {
+            throw new SafeOperationalError("HISTORY_CORRECTION_REQUIRES_REVIEW",
+              "An existing history session conflicts with provider data; source-bound correction review is required.", 409)
+          }
+        }
+      }
+      const { error: historyError } = await admin.from("market_price_history").upsert(historyRows, { onConflict: "security_id,provider_code,interval,period_start", ignoreDuplicates: true })
       if (historyError) throw historyError
+      // Re-read after ON CONFLICT DO NOTHING: a concurrent writer may have
+      // inserted a different bar after our pre-check. Never silently accept it.
+      const { data: finalBars, error: finalError } = await admin
+        .from("market_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("security_id", security.id)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", sessionStarts)
+      if (finalError) throw finalError
+      const finalByDate = new Map((finalBars ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of historyRows) {
+        const persisted = finalByDate.get(new Date(incoming.period_start).toISOString())
+        if (!persisted || (["open", "high", "low", "close", "volume"] as const).some(field =>
+          !sameQualifiedHistoryNumeric(persisted[field], incoming[field]))) {
+          throw new SafeOperationalError("HISTORY_CONCURRENT_CORRECTION_REQUIRES_REVIEW",
+            "Concurrent price revision or missing persisted session requires a source-bound review.", 409)
+        }
+      }
 
       const metrics = deriveMetrics(candles)
       if (metrics.length) {

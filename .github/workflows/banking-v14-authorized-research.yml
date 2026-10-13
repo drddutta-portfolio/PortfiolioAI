@@ -1,0 +1,57 @@
+name: Banking V1-4 Authorized Current Research
+on:
+  push:
+    branches: [codex/banking-source-remediation]
+    paths:
+      - '.github/workflows/banking-v14-authorized-research.yml'
+      - 'scripts/v1-4/bank_authorized_current_research.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git fetch origin refs/heads/program-d-operations-optional-ai:refs/remotes/origin/program-d-operations-optional-ai
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check:architecture
+      - run: npm run lint:architecture
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run lint:edge
+      - run: npm run test:edge
+      - run: npm test
+      - run: npm run build
+      - run: git diff --check
+      - run: python -m unittest discover -s scripts/v1-4 -p "test_extract_bank_filing_observations.py"
+  research:
+    if: github.event_name == 'workflow_dispatch'
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute exact owner-approved batch through signed scoped grants
+        run: python scripts/v1-4/bank_authorized_current_research.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bank-authorized-current-research
+          path: bank-authorized-research-result/
+          retention-days: 90
+          if-no-files-found: warn

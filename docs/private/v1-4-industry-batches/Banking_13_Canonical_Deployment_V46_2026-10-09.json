@@ -1,0 +1,17 @@
+{
+  "project": "lrgpjimipfkyoqbpsqzz",
+  "id": "6831e28c-0bce-4a59-b069-544b8726465f",
+  "slug": "p7-ic2-materialize-readiness",
+  "name": "p7-ic2-materialize-readiness",
+  "status": "ACTIVE",
+  "version": 46,
+  "created_at": 1790682388961,
+  "updated_at": 1791522083306,
+  "verify_jwt": false,
+  "import_map": true,
+  "entrypoint_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_6831e28c-0bce-4a59-b069-544b8726465f_46/source/supabase/functions/p7-ic2-materialize-readiness/index.ts",
+  "import_map_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_6831e28c-0bce-4a59-b069-544b8726465f_46/source/supabase/functions/p7-ic2-materialize-readiness/deno.json",
+  "ezbr_sha256": "8a5ba7e87577fff8ae1c938ed537cd861fc89643e0a0994e47f98ee265b28e57",
+  "authentication": "Existing custom owner / scoped grant authentication retained; gateway unchanged",
+  "policy": "V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"
+}

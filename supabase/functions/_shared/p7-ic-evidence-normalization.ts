@@ -95,6 +95,9 @@ export function normalizeNumericEvidence(input:{readonly providerResult:string;r
 export function normalizeDocumentEvidence(input:{readonly providerResult:string;readonly expectedSymbol:string;readonly expectedInstrumentId:string;readonly requirements:readonly EvidenceRequirementPlan[]}){const markdown=unwrapTrendlyneMarkdown(input.providerResult),identityRows=markdown.split(/\r?\n/u).map(line=>line.trim()).filter(line=>line.includes("|")).slice(0,100),expected=identityRows.some(line=>{const fields=line.split("|").map(x=>x.trim());return fields.length>=4&&fields[2]?.toUpperCase()===input.expectedSymbol.toUpperCase()&&(fields[3]===input.expectedInstrumentId||fields[0]===input.expectedInstrumentId)});if(!expected)throw new Error("PROVIDER_PRIMARY_ENTITY_MISMATCH");const flat=markdown.replace(/\s+/gu," ");return input.requirements.filter(req=>req.channels.includes("TRENDLYNE_DOCUMENTS")).map(req=>{const hits=req.documentKeywords.filter(keyword=>flat.toLowerCase().includes(keyword.toLowerCase()));return {evidenceCode:req.evidenceCode,state:hits.length?"EVIDENCE_PRESENT_REVIEW_REQUIRED":"MISSING",matchedKeywords:hits,deterministicScoreReady:false}})}
 export const V14_OWNERSHIP_METHOD_VERSION="V1_4_OWNERSHIP_METHOD_SELECTION_V1" as const
 export type V14OwnershipRequirement="OWNERSHIP_TREND_4Q"|"INSTITUTIONAL_OWNERSHIP_TREND_4Q"|"OWNERSHIP_GOVERNANCE"
+export function selectedV14OwnershipSeries(requirementCode:string):"Promoter"|"Institutional"|null{
+ return requirementCode==="OWNERSHIP_TREND_4Q"?"Promoter":requirementCode==="INSTITUTIONAL_OWNERSHIP_TREND_4Q"?"Institutional":null
+}
 export interface V14OwnershipValidation{
  readonly contractVersion:typeof V14_OWNERSHIP_METHOD_VERSION
  readonly status:"REVIEW_REQUIRED"
@@ -113,7 +116,7 @@ export function validateV14SelectedOwnership(input:{
 }):V14OwnershipValidation{
  const base={contractVersion:V14_OWNERSHIP_METHOD_VERSION,status:"REVIEW_REQUIRED" as const,eligibleForCanonicalPersistence:false as const}
  if(input.requirementCode==="OWNERSHIP_GOVERNANCE")return {...base,series:null,observedQuarters:[],reason:"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED" as const}
- const series=input.requirementCode==="OWNERSHIP_TREND_4Q"?"Promoter" as const:"Institutional" as const
+ const series=selectedV14OwnershipSeries(input.requirementCode)!
  const entries=input.history.series[series]??[]
  const quarters=entries.map(x=>x.quarter)
  if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING" as const}
