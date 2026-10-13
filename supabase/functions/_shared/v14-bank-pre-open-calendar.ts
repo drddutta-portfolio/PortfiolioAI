@@ -3,13 +3,13 @@ export interface CalendarRecord { id:string; record_kind:string; retrieved_at:st
 export interface PreOpenCalendarProof { latestCompletedSession:string; sourceRecordIds:readonly string[]; verifiedAt:string; validBefore:string }
 const LIVE_URL="https://www.nseindia.com/resources/exchange-communication-holidays?apiversion=v2"
 const SEMANTIC_HASH="64b65c5f42f6694cc1ad30feada7272e7f5dff28226b50083f7b45accbd6c295"
-export function verifiedPreOpenCalendar(records:readonly CalendarRecord[],at:string):PreOpenCalendarProof|null {
+export function verifiedOrdinaryCompletedSessionCalendar(records:readonly CalendarRecord[],at:string):PreOpenCalendarProof|null {
  const now=Date.parse(at);if(!Number.isFinite(now))return null
  const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date(now))
  const part=(key:Intl.DateTimeFormatPartTypes)=>parts.find(p=>p.type===key)?.value??""
  const date=`${part("year")}-${part("month")}-${part("day")}`
  // Stop before the ordinary pre-open auction; this is not an OPEN-session acquisition permission.
- if(date<"2026-01-01"||date>"2026-12-31"||Number(part("hour"))>=9)return null
+ if(date<"2026-01-01"||date>"2026-12-31")return null
  const available=records.filter(r=>Number.isFinite(Date.parse(r.retrieved_at))&&Date.parse(r.retrieved_at)<=now)
  const latest=(kind:string)=>{
   const candidates=available.filter(r=>r.record_kind===kind).sort((a,b)=>Date.parse(b.retrieved_at)-Date.parse(a.retrieved_at))
@@ -26,7 +26,7 @@ export function verifiedPreOpenCalendar(records:readonly CalendarRecord[],at:str
  const specialDates=new Set<string>()
  for(const s of specials){if(!s||typeof s!=="object"||!("session_date" in s)||typeof s.session_date!=="string")return null;specialDates.add(s.session_date)}
  // Qualified special-session timing is deliberately not inferred by this ordinary-session path.
- if(specialDates.has(date))return null
+ if(specialDates.has(date)||holidays.includes(date)||[0,6].includes(new Date(date+"T00:00:00Z").getUTCDay()))return null
  let cursor=Date.parse(date+"T00:00:00Z")-86400000
  for(let n=0;n<10;n++,cursor-=86400000){
   const d=new Date(cursor),candidate=d.toISOString().slice(0,10)
@@ -35,4 +35,9 @@ export function verifiedPreOpenCalendar(records:readonly CalendarRecord[],at:str
   return{latestCompletedSession:candidate,sourceRecordIds:[base.id,baseline.id,refresh.id],verifiedAt:at,validBefore:date+"T09:00:00+05:30"}
  }
  return null
+}
+
+export function verifiedPreOpenCalendar(records:readonly CalendarRecord[],at:string):PreOpenCalendarProof|null {
+ const ordinary=verifiedOrdinaryCompletedSessionCalendar(records,at)
+ return ordinary&&Date.parse(at)<Date.parse(ordinary.validBefore)?ordinary:null
 }

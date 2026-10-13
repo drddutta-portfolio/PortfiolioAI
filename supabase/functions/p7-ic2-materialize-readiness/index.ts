@@ -1,3 +1,4 @@
+import {loadVerifiedOpenSessionStatus} from '../_shared/v14-bank-open-session-status-runtime.ts'
 import { P7_IC_CANONICAL_REQUIREMENT_METRICS } from "../_shared/p7-ic-requirement-metrics.ts"
 import {readOnlySecurityIds,selectReadOnlySecurities,ReadOnlyTargetError} from "../_shared/p7-ic-read-only-targeting.ts"
 import {createClient,type SupabaseClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
@@ -211,7 +212,10 @@ async function loadCurrentSessionDecision(admin:Admin,sourceCutoffAt:string):Pro
    .lte("retrieved_at",sourceCutoffAt).order("retrieved_at",{ascending:false}).limit(100)
   if(calendar.error)throw calendar.error
   const preOpenCalendar=verifiedPreOpenCalendar((calendar.data??[]) as CalendarRecord[],sourceCutoffAt)
-  if(!preOpenCalendar)return null
+  if(!preOpenCalendar){
+   const open=await loadVerifiedOpenSessionStatus(admin,sourceCutoffAt)
+   return open?{sessionDate,decision:"OPEN",recordId:open.record.id,reason:"OFFICIAL_OPEN_LATEST_COMPLETED_SESSION_VERIFIED",openSessionStatus:open.proof}:null
+  }
   // Calendar proof is separate; do not fabricate a current CLOSED or OPEN decision record.
   return{sessionDate,decision:"UNKNOWN",recordId:"",reason:"PRE_OPEN_LATEST_COMPLETED_SESSION_VERIFIED",preOpenCalendar}
  }
@@ -220,6 +224,10 @@ async function loadCurrentSessionDecision(admin:Admin,sourceCutoffAt:string):Pro
  if(tied.length>1&&new Set(tied.map(row=>JSON.stringify(row.raw_payload))).size>1)throw new Error("CURRENT_SESSION_DECISION_CONFLICT")
  const decision=String(latest.raw_payload.decision??"")
  if(!["OPEN","CLOSED","UNKNOWN"].includes(decision))return null
+ if(decision==="OPEN"){
+  const open=await loadVerifiedOpenSessionStatus(admin,sourceCutoffAt)
+  if(open)return{sessionDate,decision:"OPEN",recordId:open.record.id,reason:"OFFICIAL_OPEN_LATEST_COMPLETED_SESSION_VERIFIED",openSessionStatus:open.proof}
+ }
  const reason=String(latest.raw_payload.reason??"")
  return{sessionDate,decision:decision as CurrentSessionDecision["decision"],recordId:latest.id,reason}
 }
