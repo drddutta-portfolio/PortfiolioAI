@@ -1,0 +1,124 @@
+{
+  "version": "BANK12_SOURCE_REPORTED_CURRENT_GROWTH_V1",
+  "sources": [
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "source_id": "60ec9bcc-62f2-5c3d-9110-8565edd91084",
+      "original_url": "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf",
+      "original_sha256": "2ce02e78de37cbbdf4023d45f99c56e65a5ebc988fa524d5ef4abf56dc18758c",
+      "original_bytes": 3115724,
+      "exchange_publication_literal": "24-Jul-2026 17:04:39",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=BANKBARODA&from_date=01-07-2026&to_date=31-08-2026",
+      "publication_proof_sha256": "90b942f2df5be4845b7a4a9cf373bc8c068d9ffe596820c1e60c6d5b6424b694",
+      "published_at": "2026-07-24T17:04:39+05:30",
+      "reporting_period_end": "2026-06-30",
+      "consolidation_scope": "STANDALONE",
+      "scope_binding": "Original issuer bank performance section; BOB Global excludes separately labelled Consolidated appendix; Bandhan original Bank single-entity financial highlights. Original entity+reporting-period disclosure must be checked before deployedreview.",
+      "facts": [
+        {
+          "requirement_code": "ADVANCES_GROWTH_YOY",
+          "value": "17.4",
+          "metric_label": "Global Gross Advances",
+          "quote": "                                                                                 Advances\n Particulars\n                                            Jun\u201925        Jun\u201926     YOY (%)                 Mar\u201926            Jun\u201926    QOQ (%)\n (INR crore)                                                                                                                                   % share in Gross Domestic Credit in Jun\u201926\n Retail*                                  2,61,479       3,09,674         18.4             3,02,598          3,09,674           2.3\n                                                                                                                                              Agriculture\n                                                                                                                                                16.7%\n           Home Loans*                    1,33,673       1,53,285         14.7             1,50,305          1,53,285           2.0\n\n           Auto Loans*                      47,446         59,436         25.3               56,157            59,436           5.8\n\n           Mortgages Loans*                 22,529         28,694         27.4               26,559            28,694           8.0                                                     Corporate\n                                                                                                                                                                                         37.1%\n           Education Loans                  11,515         12,754         10.8               12,599            12,754           1.2\n                                                                                                                                      Retail^\n           Personal Loans                   36,690         39,431          7.5               39,262            39,431           0.4 31.6%\n\n           Gold Loans                        7,322         13,536         84.9               14,010            13,536          -3.4\n                                                                                                                                              RAM \u2013 62.9%                              MSME\n           Others                            2,304          2,537         10.1                 3,707            2,537         -31.6                                                    14.6%\n\n Agriculture                              1,61,764       1,91,989         18.7             1,91,063          1,91,989           0.5\n                                                                                                                                               % share in Gross Domestic Credit in Jun\u201925\n       Gold Loans                           60,992         84,412         38.4               83,225            84,412           1.4           Agriculture\n                                                                                                                                                16.3%\n MSME*                                    1,35,660       1,63,264         20.3             1,59,786          1,63,264           2.2\n\n Corporate                                3,70,266       4,27,082         15.3             4,56,584          4,27,082          -6.5\n\n Others                                     62,195         58,896         -5.3               59,427            58,896          -0.9                                                      Corporate\n                                                                                                                                                                                          37.3%\n Gross Domestic Advances                  9,91,363     11,50,906          16.1            11,69,458         11,50,906          -1.6\n                                                                                                                                      Retail^\n International Gross Advances             2,15,693       2,65,992         23.3             2,60,421          2,65,992           2.1 32.1%\n\n Global Gross Advances                   12,07,056     14,16,898          17.4            14,29,879         14,16,898          -0.9\n                                                                                                                                              RAM \u2013 62.7%                              MSME\n                                                                                                                                                                                       14.3%\n*ex-pool purchase. Retail including pool stands at INR 3,26,384 crore. MSME including pool at INR 1,67,690 crore as on 30 June 2026\n                                                                                                                                      ^ Retail including Pool, Staff, LABOD & Others\n                                                                                                                                                                                                13\n",
+          "page_one_based": 14,
+          "period_anchor": "Jun\u201926",
+          "review_id": "7b09797b-4bc5-5039-83ab-bae800aad322"
+        },
+        {
+          "requirement_code": "DEPOSITS_GROWTH_YOY",
+          "value": "13.8",
+          "metric_label": "Global Deposits",
+          "quote": "                                                                       Key Highlights\n                            Business Details (INR crore)                                                                  Key Performance Drivers\n                                      Jun 30, 2025         Jun 30, 2026   YOY (%)\n                                                                                                                                            Net Profit (INR crore)\n                                                                                      Net Interest Margin (%)                                                                   Without       considering\nDomestic Deposits                        12,04,283            13,81,535       14.7                                                                                              Exceptional Item Net\n                                                                                                                                                                                Profit: INR 5,528 crore\nInternational Deposits                    2,31,351             2,52,024        8.9\nGlobal Deposits                          14,35,634            16,33,559       13.8                                                                                             20,021\n                                                                                        2.91     2.89              2.89\nRetail Advances (Organic)                 2,61,479             3,09,674       18.4                        2.77               2.77\nDomestic Gross Advances                   9,91,363            11,50,906       16.1\nInternational Advances                    2,15,693             2,65,992       23.3\n                                                                                                                                              4,541       5,616\nGlobal Advances                          12,07,056            14,16,898       17.4\n                                                                                                                                                                       1,278               1,278\nTotal Business                           26,42,690            30,50,457       15.4\n                                                                                       Q1FY26   Q4FY26   Q1FY27    FY26     Q1FY27           Q1FY26      Q4FY26       Q1FY27    FY26      Q1FY27\n\n                         Financial Performance (INR crore)\n                                                                                       Return on Assets (%)                                 Return on Equity (%) #\n                                                                                                                  Without     considering                                       Without     considering\n                                         Q1FY26              Q1FY27        YoY (%)                                                                                              Exceptional Item RoE :\n                                                                                                                  Exceptional Item RoA :\n                                                                                                                  1.10%                                                         16.57%\nNet Interest Income                       11,435              12,524            9.5\n                                                                                                 1.15                                                    17.29\n                                                                                                                                                                               16.30\nNon-Interest Income                        4,675               3,470          -25.8     1.03                       1.06                      15.38\n\nOperating Profit                           8,236               8,127           -1.3\nNet Profit                                 4,541               1,278          -71.8\nGNPA Ratio (%)                              2.28                1.99       (29 bps)                       0.25                0.25                                    3.89               3.89\nNNPA Ratio (%)                              0.60                0.50       (10 bps)\n\nCapital Adequacy Ratio                   17.61%              16.30%       (131 bps)    Q1FY26   Q4FY26   Q1FY27    FY26      Q1FY27          Q1FY26 Q4FY26 Q1FY27              FY26     Q1FY27\n                                                                                                                                             #Calculated on Avg. Networth                              3\n",
+          "page_one_based": 4,
+          "period_anchor": "Jun 30, 2026",
+          "review_id": "84ee3077-a5db-5924-b3ab-8d73c9ac54d2"
+        }
+      ],
+      "publication_entry": {
+        "an_dt": "24-Jul-2026 17:04:38",
+        "attFileSize": "2.97 MB",
+        "attchmntFile": "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf",
+        "attchmntText": "Bank Of Baroda has informed the Exchange about Investor Presentation",
+        "bflag": null,
+        "csvName": null,
+        "desc": "General Updates",
+        "difference": "00:00:01",
+        "dt": "24072026170438",
+        "exchdisstime": "24-Jul-2026 17:04:39",
+        "fileSize": "2.97 MB",
+        "hasXbrl": true,
+        "old_new": null,
+        "orgid": null,
+        "seq_id": "106709908",
+        "smIndustry": "Banks",
+        "sm_isin": "INE028A01013",
+        "sm_name": "Bank of Baroda",
+        "sort_date": "2026-07-24 17:04:38",
+        "symbol": "BANKBARODA"
+      },
+      "publication_binding": "Exact symbol, original attachment URL and exchange dissemination timestamp from independent original NSE announcement response; response SHA pinned separately. Retrieval never relabelled publication."
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "source_id": "c1702379-ca61-54c9-9a4e-fc0b9940ea48",
+      "original_url": "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf",
+      "original_sha256": "bb48052d6d5b7ec1ebb9d995916d5e0a919deaea74a00f7965726bb5ef42fba4",
+      "original_bytes": 2161472,
+      "exchange_publication_literal": "21-Jul-2026 16:25:15",
+      "publication_proof_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=BANDHANBNK&from_date=01-07-2026&to_date=31-08-2026",
+      "publication_proof_sha256": "6cf1747c1b940c0b9874cd4aa582e942cce48c8607d83a1ac345138b575c041d",
+      "published_at": "2026-07-21T16:25:15+05:30",
+      "reporting_period_end": "2026-06-30",
+      "consolidation_scope": "STANDALONE",
+      "scope_binding": "Original issuer bank performance section; BOB Global excludes separately labelled Consolidated appendix; Bandhan original Bank single-entity financial highlights. Original entity+reporting-period disclosure must be checked before deployedreview.",
+      "facts": [
+        {
+          "requirement_code": "ADVANCES_GROWTH_YOY",
+          "value": "16.4",
+          "metric_label": "Gross Advances",
+          "quote": "Key Financial Highlights: Q1FY27\n                                     Gross Advances                                 Secured Mix                           Non-EEB Book                 Share Of Non-East\n\n    Advances                      \u20b9 1,555.6 bn*                                       56.8%                               \u20b9 1,029.1 bn                       62.1%^\n                             (16.4% YoY & 0.9% QoQ)                        (473 bps YoY & 67 bps QoQ)                (27.4% YoY & 2.6% QoQ)        (30 bps YoY & 19 bps QoQ)\n\n\n                                     Total Deposit                                   CASA Ratio                           Retail Deposits             Share Of Non-East\n\n     Deposits                     \u20b9 1,648.9 bn                                       29.4%                                \u20b9 1,219.6 bn                       43.5%\n                             (6.6% YoY & -0.9% QoQ)                        (234 bps YoY & 9 bps QoQ)                (15.6% YoY & -0.5% QoQ)      (-167 bps YoY & -154 bps QoQ)\n\n\n\n                                      GNPA Ratio                                     NNPA Ratio                                PCR**                      Credit Cost\n\n   Asset Quality                      3.1%                                            0.9%                                     71.1%                         1.8%\n                          (-182 bps YoY & -12 bps QoQ)                     (-43 bps YoY & -4 bps QoQ)               (-259 bps YoY & 1 bps QoQ)   (-167 bps YoY & -15 bps QoQ)\n\n\n                                          NII                                   Total Revenue (Net)                      Operating Profit                     PAT\n\n    Profitability                    \u20b9 29.2 bn                                      \u20b9 35.2 bn                               \u20b9 13.6 bn                      \u20b9 5.0 bn\n                              (5.9% YoY & 4.5% QoQ)                          (1.2% YoY & -1.2% QoQ)                 (-18.6% YoY & -5.8% QoQ)       (34.9% YoY & -6.1% QoQ)\n\n\n                                         NIM                                       OPEX / Assets                                ROA                          ROE\n\n      Ratios                           6.2%                                           4.3%                                     1.0%                          7.7%\n                            (-16 bps YoY & 2 bps QoQ)                      (41 bps YoY & -9 bps QoQ)                (20 bps YoY & -11 bps QoQ)    (179 bps YoY & -82 bps QoQ)\n                                                                                                                                                                                 5\n       * Includes PTC of \u20b9 4.03 bn        ** PCR including SR provision is at 74.3%, which is stable on QoQ basis     ^ excludes PTC & IBPC\n",
+          "page_one_based": 6,
+          "period_anchor": "Q1FY27",
+          "review_id": "96f5ee1e-f58f-510a-9004-75b9a0d4a783"
+        },
+        {
+          "requirement_code": "DEPOSITS_GROWTH_YOY",
+          "value": "6.6",
+          "metric_label": "Total Deposit",
+          "quote": "Key Financial Highlights: Q1FY27\n                                     Gross Advances                                 Secured Mix                           Non-EEB Book                 Share Of Non-East\n\n    Advances                      \u20b9 1,555.6 bn*                                       56.8%                               \u20b9 1,029.1 bn                       62.1%^\n                             (16.4% YoY & 0.9% QoQ)                        (473 bps YoY & 67 bps QoQ)                (27.4% YoY & 2.6% QoQ)        (30 bps YoY & 19 bps QoQ)\n\n\n                                     Total Deposit                                   CASA Ratio                           Retail Deposits             Share Of Non-East\n\n     Deposits                     \u20b9 1,648.9 bn                                       29.4%                                \u20b9 1,219.6 bn                       43.5%\n                             (6.6% YoY & -0.9% QoQ)                        (234 bps YoY & 9 bps QoQ)                (15.6% YoY & -0.5% QoQ)      (-167 bps YoY & -154 bps QoQ)\n\n\n\n                                      GNPA Ratio                                     NNPA Ratio                                PCR**                      Credit Cost\n\n   Asset Quality                      3.1%                                            0.9%                                     71.1%                         1.8%\n                          (-182 bps YoY & -12 bps QoQ)                     (-43 bps YoY & -4 bps QoQ)               (-259 bps YoY & 1 bps QoQ)   (-167 bps YoY & -15 bps QoQ)\n\n\n                                          NII                                   Total Revenue (Net)                      Operating Profit                     PAT\n\n    Profitability                    \u20b9 29.2 bn                                      \u20b9 35.2 bn                               \u20b9 13.6 bn                      \u20b9 5.0 bn\n                              (5.9% YoY & 4.5% QoQ)                          (1.2% YoY & -1.2% QoQ)                 (-18.6% YoY & -5.8% QoQ)       (34.9% YoY & -6.1% QoQ)\n\n\n                                         NIM                                       OPEX / Assets                                ROA                          ROE\n\n      Ratios                           6.2%                                           4.3%                                     1.0%                          7.7%\n                            (-16 bps YoY & 2 bps QoQ)                      (41 bps YoY & -9 bps QoQ)                (20 bps YoY & -11 bps QoQ)    (179 bps YoY & -82 bps QoQ)\n                                                                                                                                                                                 5\n       * Includes PTC of \u20b9 4.03 bn        ** PCR including SR provision is at 74.3%, which is stable on QoQ basis     ^ excludes PTC & IBPC\n",
+          "page_one_based": 6,
+          "period_anchor": "Q1FY27",
+          "review_id": "f36840d5-14a0-568d-a540-52ed5bf2b394"
+        }
+      ],
+      "publication_entry": {
+        "an_dt": "21-Jul-2026 16:25:14",
+        "attFileSize": "2.06 MB",
+        "attchmntFile": "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf",
+        "attchmntText": "Bandhan Bank Limited has informed the Exchange about Investor Presentation",
+        "bflag": null,
+        "csvName": null,
+        "desc": "Investor Presentation",
+        "difference": "00:00:01",
+        "dt": "21072026162514",
+        "exchdisstime": "21-Jul-2026 16:25:15",
+        "fileSize": "2.06 MB",
+        "hasXbrl": true,
+        "old_new": null,
+        "orgid": null,
+        "seq_id": "106705063",
+        "smIndustry": null,
+        "sm_isin": "INE545U01014",
+        "sm_name": "Bandhan Bank Limited",
+        "sort_date": "2026-07-21 16:25:14",
+        "symbol": "BANDHANBNK"
+      },
+      "publication_binding": "Exact symbol, original attachment URL and exchange dissemination timestamp from independent original NSE announcement response; response SHA pinned separately. Retrieval never relabelled publication."
+    }
+  ],
+  "source_semantics_only": true,
+  "no_calculation": true,
+  "canonical_admitted": false
+}

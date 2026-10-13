@@ -1,0 +1,59 @@
+name: Banking V1-4 Twelve Bank Capital Admission
+on:
+  push:
+    branches: [codex/banking-twelve-evidence]
+    paths:
+      - '.github/workflows/banking-v14-twelve-capital.yml'
+      - 'docs/private/v1-4-industry-batches/Banking_12_Federal_One_Shot_Execution_Request_2026-10-12.json'
+  workflow_dispatch:
+    inputs:
+      materialize:
+        description: Materialize only after verified OPEN-session stock and benchmark persistence
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:edge -- supabase/functions/_shared/v14-bank-twelve-capital-review.test.ts supabase/functions/_shared/v14-reviewed-evidence.test.ts
+      - run: npm run lint:edge
+  execute:
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[bank-twelve-one-shot-approved]'))) && github.ref == 'refs/heads/codex/banking-twelve-evidence'
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install boto3==1.35.99
+      - name: Archive exact original and execute signed qualified capital admission
+        env:
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          BANK_TWELVE_MATERIALIZE: ${{ inputs.materialize || github.event_name == 'push' }}
+          BANK_TWELVE_ONE_SHOT: ${{ github.event_name == 'push' }}
+        run: python scripts/v1-4/bank_twelve_capital_execute.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bank-twelve-capital-execution
+          path: bank-twelve-capital-execution/
+          retention-days: 90
+          if-no-files-found: warn

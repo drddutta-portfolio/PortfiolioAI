@@ -1,7 +1,7 @@
 import {kvbRoaBindingQualified,KVB_BINDING_KIND} from "./v14-kvb-roa-original-proof.ts"
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
 import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
-import {approvedBankDelegatedReview,approvedBankOfficialFallback} from "./v14-bank-approved-delegation.ts"
+import {approvedBankDelegatedReview,approvedBankOfficialFallback,approvedBankFallbackLineage,approvedBankFallbackPolicyId} from "./v14-bank-approved-delegation.ts"
 import {evaluateBankPublicationAvailability,type BankPublicationProof} from "./v14-bank-publication-precision.ts"
 
 type Json = Readonly<Record<string, unknown>>
@@ -251,9 +251,9 @@ export async function validateReviewedRequirementEvidence(input:{
          !/basel\s*(iii|3)/i.test(literal)||
          !/(risk.weighted assets|rwa)/i.test(literal)
        ))return fail("REVIEW_REQUIRED","BANK_DIRECT_BASEL_III_SOURCE_PROOF_MISSING",[r.id])
-       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?1)/i.test(literal))
+       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?(?:1|i)\b)/i.test(literal))
          return fail("REVIEW_REQUIRED","BANK_CET1_NOT_EXPLICITLY_SOURCED",[r.id])
-       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total regulatory capital)/i.test(literal))
+       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total capital ratio|total regulatory capital)/i.test(literal))
          return fail("REVIEW_REQUIRED","BANK_TOTAL_CAR_NOT_EXPLICITLY_SOURCED",[r.id])
        if(requirementCode==="ROA_ANNUAL"&&(
          !start||r.period_type!=="YEAR"||
@@ -319,14 +319,17 @@ export async function validateReviewedRequirementEvidence(input:{
     if(!relevant.length||!relevant.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)}))return d
     const sourceCodes=uniq(observations.filter(o=>o.metric_code===d.code).map(o=>o.source_code))
     if(sourceCodes.length!==1)return d
-    return {...d,definition:{...d.definition,provider:sourceCodes[0],source_priority:sourceCodes,bank_source_admission_policy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"}}
+    return {...d,definition:{...d.definition,provider:sourceCodes[0],source_priority:sourceCodes,bank_source_admission_policy:uniq(relevant.map(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s?approvedBankFallbackLineage(r,s,input.portfolioOwnerId,family)?.sourceAdmissionPolicy:null})).filter(Boolean).join(",")}}
    })
    const v=validateObservationSeries({rows:observations,definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
    if(v.state!=="FRESH")return {...fail(v.state,v.reason,support.map(x=>x.id)),observations,sourceRecordIds:uniq(observations.map(x=>x.source_record_id)),
     researchDocumentIds:uniq(support.map(x=>x.research_document_id).filter((x):x is string=>Boolean(x))),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:support.map(x=>x.id),reason:v.reason}}
    const result=resultFrom(v.selected,support,input.documentSources,"REVIEWED_CANONICAL_OBSERVATION_READY")
    const approvedFallback=support.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)})
-   return approvedFallback?{...result,lineage:{...result.lineage,sourceAdmissionPolicy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",executor:"CODEX",personalOwnerReview:false}}:result
+   const delegations=approvedFallback?support.map(r=>approvedBankFallbackLineage(r,sourceById.get(r.source_record_id!)!,input.portfolioOwnerId,family)):[]
+   const policies=uniq(delegations.map(d=>d?.sourceAdmissionPolicy).filter((x):x is string=>Boolean(x)))
+   const executors=uniq(delegations.map(d=>d?.executor).filter((x):x is string=>Boolean(x)))
+   return approvedFallback?{...result,lineage:{...result.lineage,sourceAdmissionPolicy:policies.length===1?policies[0]:null,sourceAdmissionPolicies:policies,executor:executors.length===1?executors[0]:null,executors,personalOwnerReview:false}}:result
  }
  if(family==="OWNERSHIP_4Q"){
    const series=uniq(ownershipRows.map(x=>x.series)),bases=uniq(ownershipRows.map(x=>x.basis));if(series.length!==1||bases.length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SERIES_OR_BASIS_MIXED",support.map(x=>x.id))
@@ -370,7 +373,7 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
  const r=input.reviewed
  if(canonical.state==="CONFLICTING")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_CONFLICT_PRESERVED"}
  if(r?.state==="CONFLICTING")return {authority:"CONFLICT" as const,validation:{state:"CONFLICTING" as const,reason:r.reason,selected:[]},reviewed:r,reason:"REVIEW_CONFLICT_PRESERVED"}
- const approvedFallback=r?.state==="FRESH"&&r.lineage.sourceAdmissionPolicy==="V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"
+ const approvedFallback=r?.state==="FRESH"&&approvedBankFallbackPolicyId(r.lineage.sourceAdmissionPolicy)
  if(approvedFallback&&input.family==="NUMERIC_SERIES"){
    const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
    // Comparable retained facts may contradict a fallback even if other metadata

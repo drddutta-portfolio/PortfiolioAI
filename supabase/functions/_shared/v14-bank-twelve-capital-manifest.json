@@ -1,0 +1,46 @@
+{
+  "symbol": "FEDERALBNK",
+  "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+  "original_url": "https://www.federal.bank.in/documents/10180/1152748795/BASEL+III+DISCLOSURES-+Jun%2726+%281%29.pdf/4540b214-0510-c360-b9d5-ae260f8cb8c1?t=1784376400142",
+  "original_sha256": "f55bb3605fcb712c38e367b33ea9d794acf20a43bed202eef5c1e4269aafd1ff",
+  "original_bytes": 1124592,
+  "proven_availability_at": "2026-10-12T12:35:42.253512+00:00",
+  "source_id": "3ce7f8ee-608f-4e64-b74b-9d1d09fb4338",
+  "review_ids": {
+    "CET1_RATIO": "a6e6183e-ae59-490a-b7e8-a419abf204a5",
+    "CAPITAL_ADEQUACY_RATIO": "93a48726-ec02-4c97-84ae-03fe8dbb62f2"
+  },
+  "period_end": "2026-06-30",
+  "period_anchor": "30th June 2026",
+  "consolidation_scope": "STANDALONE",
+  "publication_precision": "UNKNOWN_DATE",
+  "published_at": null,
+  "source_page": 1,
+  "source_normalized_page": "BASEL III \u2013 PILLAR 3 DISCLOSURES AS ON 30th June 2026 TABLE DF -2: CAPITAL ADEQUACY 1 Qualitative disclosures 1.1 A summary discussion of the Bank\u2019s approach to assess the adequacy of its capital to support current and future activities 1. Policy on Internal Capital Adequacy Assessment Process has been put in place and the assessment of capital commensurate to the risk profile is reviewed on a quarterly basis. 2. Capital requirement for current business levels and estimated future business levels are assessed on a periodic basis. 3. The minimum capital required to be maintained by the Bank (including CCB) for the period ended June 30,2026 is 11.50%. The given minimum capital requirement includes capital conservative buffer of 2.50%. Bank\u2019s CRAR is above the regulatory minimum as stipulated in Based III Capital Regulations. 2 Quantitative disclosures (Solo Bank) (Amount in \u20b9 Mn.) 2.1 Capital requirements for credit risk 245925.58 Portfolios subject to Standardized approach 243246.15 Securitization exposures 2679.43 Capital requirements for market risk 2.2 4000.07 (Standardized duration approach) Interest rate risk 3503.82 Foreign exchange risk (including gold) 69.31 Equity risk 426.94 2.3 Capital requirements for operational risk 27954.43 Basic Indicator Approach 27954.43 Total Capital Requirements 277880.08 2.4 Common Equity Tier I, Tier I & Total Capital Ratios Standalone Consolidated Common Equity Tier I capital Ratio 15.89% 16.13% Tier I capital ratio 15.89% 16.13% Total capital ratio 16.97% 17.35% *Capital requirement has been computed at 11.5% of RWA. Risk Governance Risk governance framework is a significant part of the overall governance framework, the framework through which the Board establishes the Bank\u2019s strategy as well as the risk approach, and the management takes decisions in adherence to the same. It also articulates and monitors adherence to the overall risk appetite as well as specific risk limits vis-\u00e0-vis Bank\u2019s strategy; and identifies, measures, manages or controls risks. Page 1 of 20",
+  "facts": [
+    {
+      "requirement_code": "CET1_RATIO",
+      "value": "15.89",
+      "metric_label": "Common Equity Tier I capital Ratio",
+      "quote": "BASEL III \u2013 PILLAR 3 DISCLOSURES AS ON 30th June 2026\nCommon Equity Tier I, Tier I & Total Capital Ratios Standalone Consolidated\nCommon Equity Tier I capital Ratio 15.89% 16.13%\n*Capital requirement has been computed at 11.5% of RWA.",
+      "source_segments": [
+        "BASEL III \u2013 PILLAR 3 DISCLOSURES AS ON 30th June 2026",
+        "Common Equity Tier I, Tier I & Total Capital Ratios Standalone Consolidated",
+        "Common Equity Tier I capital Ratio 15.89% 16.13%",
+        "*Capital requirement has been computed at 11.5% of RWA."
+      ]
+    },
+    {
+      "requirement_code": "CAPITAL_ADEQUACY_RATIO",
+      "value": "16.97",
+      "metric_label": "Total capital ratio",
+      "quote": "BASEL III \u2013 PILLAR 3 DISCLOSURES AS ON 30th June 2026\nCommon Equity Tier I, Tier I & Total Capital Ratios Standalone Consolidated\nTotal capital ratio 16.97% 17.35%\n*Capital requirement has been computed at 11.5% of RWA.",
+      "source_segments": [
+        "BASEL III \u2013 PILLAR 3 DISCLOSURES AS ON 30th June 2026",
+        "Common Equity Tier I, Tier I & Total Capital Ratios Standalone Consolidated",
+        "Total capital ratio 16.97% 17.35%",
+        "*Capital requirement has been computed at 11.5% of RWA."
+      ]
+    }
+  ]
+}
