@@ -27,7 +27,7 @@ describe("ResultsLivePage R3 boundary", () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])
     render(<ResultsLivePage/>)
-    expect(await screen.findByText("2 equities")).toBeInTheDocument()
+    expect(await screen.findByRole("columnheader", { name: "2 equities" })).toBeInTheDocument()
     expect(screen.getByText("TCS")).toBeInTheDocument()
     expect(screen.getByText("INFY")).toBeInTheDocument()
     expect(screen.queryByText("TESTETF")).not.toBeInTheDocument()

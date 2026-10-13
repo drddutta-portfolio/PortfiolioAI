@@ -21,7 +21,13 @@ def ensure_original(s3,pin,fetch):
     except Exception as e:
         if getattr(e,'response',{}).get('Error',{}).get('Code') not in ('NoSuchKey','404'):raise
     data=original_valid(pin,fetch(pin))
-    s3.put_object(Bucket=BUCKET,Key=key,Body=data,ContentType='application/pdf' if pin['extension']=='pdf' else 'text/html',IfNoneMatch='*')
+    try:
+        s3.put_object(Bucket=BUCKET,Key=key,Body=data,ContentType='application/pdf' if pin['extension']=='pdf' else 'text/html',IfNoneMatch='*')
+    except Exception:
+        # A failed transport response may follow a completed conditional write.
+        # Confirm actual bytes; never repeat PUT or overwrite to manufacture success.
+        original_valid(pin,s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
+        return key,True
     original_valid(pin,s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
     return key,True
 
