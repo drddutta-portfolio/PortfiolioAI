@@ -1,12 +1,12 @@
 ## Results module — planned requirements overlay (13 October 2026)
 
-**Status: R1 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R2–R8 REMAIN GATED.** Subordinate to [UI-first implementation plan](PortfolioAI_RESULTS_UI_FIRST_IMPLEMENTATION_PLAN_2026-10-13.md), [R1 execution record](PortfolioAI_RESULTS_R1_EXECUTION_ACCEPTANCE_2026-10-13.md) and [reuse, R2, cron contract](PortfolioAI_RESULTS_DATA_R2_AND_DAILY_COLLECTION_CONTRACT_2026-10-13.md). Requirements do not alter previous V1-4 completion/readiness assertions or authorize V1-5.
+**Status: R1 AND R2 UI IMPLEMENTED / VERIFIED IN DEVELOPMENT; R3–R8 REMAIN GATED.** Subordinate to [UI-first implementation plan](PortfolioAI_RESULTS_UI_FIRST_IMPLEMENTATION_PLAN_2026-10-13.md), [R1 execution record](PortfolioAI_RESULTS_R1_EXECUTION_ACCEPTANCE_2026-10-13.md) and [reuse, R2, cron contract](PortfolioAI_RESULTS_DATA_R2_AND_DAILY_COLLECTION_CONTRACT_2026-10-13.md). Requirements do not alter previous V1-4 completion/readiness assertions or authorize V1-5.
 
 | Requirement | Gate | Acceptance |
 |---|---|---|
 | RESULTS-001 Top menu Results, Quarterly and deferred Annual tabs | R1 | **IMPLEMENTED / VERIFIED** — authenticated route/nav, Quarterly active, Annual disabled |
 | RESULTS-002 Stocks vertical, newest quarter left, scroll/sticky/virtualization | R1 | **IMPLEMENTED / VERIFIED** — sticky row/period headers, latest-first fixture matrix, bounded row virtualization and responsive matrix |
-| RESULTS-003 Tooltip on hover/focus/touch, click opens details below matrix | R1–R2 | **R1 IMPLEMENTED / VERIFIED** — hover/focus/touch presentation and click selection panel; richer R2 templates remain gated |
+| RESULTS-003 Tooltip on hover/focus/touch, click opens details below matrix | R1–R2 | **R1–R2 IMPLEMENTED / VERIFIED** — hover/focus/touch and selection detail, industry templates, chart metric switching, evidence disclosure, mobile cards; still demo-only |
 | RESULTS-004 Unique current plus fully exited equity universe | R3 | Reconcile against canonical transactions/security identity |
 | RESULTS-005 Correct period/accounting scope and quarter-by-quarter financial metrics | R3–R4 | Readback with source lineage; no TTM/annual substitutions |
 | RESULTS-006 Existing Trendlyne and document reuse before new source calls | R3–R4 | Coverage map with provenance and documented misses |
@@ -15,7 +15,7 @@
 | RESULTS-009 Industry-specific quality/trend/holdings analysis and thesis review | R7 | Calibrated methodology, deterministic test and no scoring overwrite |
 | RESULTS-010 Annual Results extension | Future R8 | Separate owner approval and audited annual source contracts |
 
-**Implementation boundary:** R1 UI is complete in Development using isolated DEMO fixtures. R2–R8 remain gated. No cron, bulk R2 writes, DB migrations, provider acquisition campaign or Production/main release occurred. No financial-results coverage claim is made beyond evidence in the reuse contract.
+**Implementation boundary:** R1 and R2 UI are complete in Development using isolated DEMO fixtures. R3–R8 remain gated. No cron, bulk R2 writes, DB migrations, provider acquisition campaign or Production/main release occurred. No financial-results coverage claim is made beyond evidence in the reuse contract.
 
 ---
 

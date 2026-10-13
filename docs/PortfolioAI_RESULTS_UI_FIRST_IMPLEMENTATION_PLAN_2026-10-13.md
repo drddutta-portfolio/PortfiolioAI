@@ -1,6 +1,6 @@
 # PortfolioAI Results — UI-first implementation plan
 **Date:** 2026-10-13  
-**Status:** R1 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R2–R8 PLANNED / GATED
+**Status:** R1 AND R2 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R3–R8 PLANNED / GATED
 **Repository/branch:** `drddutta-portfolio/PortfiolioAI` / `PortfolioAI-Development`  
 **Development database:** `lrgpjimipfkyoqbpsqzz`  
 **R2 candidate:** `portfolioai-history-dev` (existing bucket; access/usage rights require verification before writes)  
@@ -31,7 +31,7 @@ Visible quarterly history begins with the reporting period **January–March 202
 | R6 — daily operations | reliable 07:00 Asia/Kolkata scheduled discovery, incremental source checks, correction detection, bounded retries, idempotent jobs, manual scan | at least one observed scheduled run plus zero-change, revision, duplicate and failure/recovery proofs; no silent stale-success |
 | R7 — decision intelligence/release | methodology-approved industry scoring, historical charts, price reaction/market controls, thesis-review, cross-page integration, performance/security and hosted acceptance | proven calculations and confidence, independent live readback, full tests, Dev release candidate only, no Production activation |
 
-R1 is **complete in Development** at merge commit `a10191b85e4539308e13db9612af73a5aa83253c`; acceptance evidence is recorded in `PortfolioAI_RESULTS_R1_EXECUTION_ACCEPTANCE_2026-10-13.md`. The remaining gates describe the plan, not blanket permission for schema migrations, new external provider campaigns or deployments to Production. Before implementation read AGENTS.md and governing documents in authority order, inspect actual remote HEAD/working state, and identify architecture conflicts. Progress is reported by independent evidence, not by green builds alone.
+R1 and R2 are **complete in Development** at merge commit `a10191b85e4539308e13db9612af73a5aa83253c`; acceptance evidence is recorded in `PortfolioAI_RESULTS_R1_EXECUTION_ACCEPTANCE_2026-10-13.md`. The remaining gates describe the plan, not blanket permission for schema migrations, new external provider campaigns or deployments to Production. Before implementation read AGENTS.md and governing documents in authority order, inspect actual remote HEAD/working state, and identify architecture conflicts. Progress is reported by independent evidence, not by green builds alone.
 
 ## Financial semantics and intelligence
 - Trendlyne MCP is the structured research source **for currently approved domains**; consult cached source rows before spending provider calls. NSE/BSE/company originals may qualify disclosures and publication availability. Angel One remains the market price authority under the existing research contract; do not silently substitute Trendlyne technical prices.
