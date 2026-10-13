@@ -66,8 +66,8 @@ const SettingsPage = lazy(async () => {
   return { default: module.SettingsPage }
 })
 const ResultsPage = lazy(async () => {
-  const module = await import("../features/results/ResultsPage")
-  return { default: module.ResultsPage }
+  const module = await import("../features/results/ResultsLivePage")
+  return { default: module.ResultsLivePage }
 })
 
 export function AppRoutes() {
