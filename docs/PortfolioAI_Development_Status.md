@@ -1,3 +1,11 @@
+## Results R2 polish — R3 presentation-readiness checkpoint (13 October 2026)
+
+**Status: IMPLEMENTED IN PR #130; acceptance pending CI at time of this record.** R2 fixture-only polish improves filter/selection consistency, resets the virtual viewport on filter changes, avoids touch hover obstruction, constrains tooltip placement to the visible viewport, presents a zero baseline for signed metric bars and an explicit unavailable marker for missing quarters, and improves small-screen legibility and focus indicators. Tests cover hidden stale selections and missing-quarter chart behavior. No real data wiring, migration, provider acquisition, R2 writes, cron, Production/main, or V1-4 mutation.
+
+**R3 handoff constraint:** Replace all isolated demo amounts and heuristic classifications using canonical read-only repositories and proven observation lineage. Preserve unknown as unknown; the R2 test fixture strength threshold is *not an R3 scoring contract*. For chart axes, use source-qualified values and period/accounting basis, not cross-metric mixing. Further authenticated/browser visual acceptance may identify layout polish; no pixel-diff proof is claimed by this code/CI review.
+
+---
+
 ## Results page — UI-first plan and existing-data audit (13 October 2026)
 
 **Status: R1 + R2 UI COMPLETE / DEVELOPMENT DEPLOYED / R3–R7 NOT STARTED / DAILY CRON NOT DEPLOYED.** Owner chose a UI-first approach for a new top-navigation **Results** module (Quarterly first; Annual later) while maintaining V1-4 and frozen banking work independently. R1 was implemented and merged through PR #126 at Development commit `a10191b85e4539308e13db9612af73a5aa83253c`; verified Vercel Development deployment `dpl_AMsuFq4UvfFrYeCNRwktks7QWcFJ` is READY and `/app/results` returns HTTP 200. See [Results UI-first implementation plan](PortfolioAI_RESULTS_UI_FIRST_IMPLEMENTATION_PLAN_2026-10-13.md) and [Results data reuse, R2 and daily collection contract](PortfolioAI_RESULTS_DATA_R2_AND_DAILY_COLLECTION_CONTRACT_2026-10-13.md).
