@@ -16,7 +16,7 @@ def main():
     with urllib.request.urlopen(oidc,timeout=30) as r:token=json.load(r)['value']
     now=datetime.now(timezone.utc).isoformat()
     body={'action':'P7_IC3_VALIDATE_CANONICAL_INPUTS','portfolioId':policy['portfolioId'],'securityIds':policy['securityIds'],'ownerExecutionAuthorization':policy['directiveSha256'],'selectionRunId':str(uuid.uuid4()),'evaluationAsOf':now,'sourceCutoffAt':now}
-    request=urllib.request.Request(AUD,data=json.dumps(body).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
+    request=urllib.request.Request(AUD,data=json.dumps(body).encode(),method='POST',headers={'Authorization':'Bearer '+json.loads(Path('supabase/functions/_shared/v14-g02-public-gateway.json').read_text())['anonKey'],'X-G02-Execution-Token':token,'Content-Type':'application/json'})
     try:
         with urllib.request.urlopen(request,timeout=180) as r:result=json.load(r)
     except urllib.error.HTTPError as e:

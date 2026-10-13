@@ -431,7 +431,7 @@ Deno.serve(async request=>{
   if(dryRun){
    const authorization=request.headers.get("Authorization")??""
    if(!authorization.startsWith("Bearer "))return reply(401,{error:"An authenticated owner session is required."})
-   const delegated=await authorizeG02SignedValidation(authorization.slice(7),body)
+   const delegated=await authorizeG02SignedValidation(request.headers.get("X-G02-Execution-Token")??"",body)
    const user=delegated?null:await admin.auth.getUser(authorization.slice(7))
    const ownerId=delegated?.authorizingOwnerId??user?.data.user?.id
    if(!ownerId||(!delegated&&user?.error))return reply(401,{error:"Invalid owner session or signed G02 validation scope."})
