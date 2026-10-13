@@ -125,6 +125,6 @@ Append outcomes without changing original frozen rows or historical records. Rep
 
 Architecture: existing canonical source ledger, observations/review ledger, registered industry profile, deterministic calculation modules, canonical materializer and selected snapshot view. No competing research database, speculative score or UI-local formula.
 
-Frozen release still requires the approved count and value threshold (at least 100 frozen READY members and 119,327,127 paise). Banking deferral does not reduce it; successful G02 alone cannot satisfy it. No V1-5 or Production work is implied.
+Frozen release still requires the approved count and value threshold (at least 100 frozen READY members and 119,327,127 paise). Banking deferral does not reduce it; successful G02 alone cannot satisfy it. With all 13 banking members deferred, only 98 other frozen members remain, so the unchanged 100-member acceptance minimum eventually requires at least two banks to become READY; the frozen-value test must also pass. This does not prevent other industries from progressing now. No V1-5 or Production work is implied.
 
 This is a research preservation and execution-priority plan, not a promise that all three G02 stocks can pass using current retained data. The first next action is Phase 1 source triage and authenticated prospective validation, not another Banking continuation.
