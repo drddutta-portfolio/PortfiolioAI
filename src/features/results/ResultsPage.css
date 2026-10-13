@@ -431,3 +431,23 @@
   .metrics-table-wrap { overflow-x: auto; }
   .metrics-table { min-width: 18rem; }
 }
+
+/* R2 polish: small-screen readability, directional bars and chart absence */
+.r2-scroll-hint { padding: .45rem 1rem; margin: 0; color: #536883; font-size: .75rem; background: #f4f8fe; }
+.results-matrix-shell:focus-visible { outline: 2px solid #3679e8; outline-offset: -2px; }
+.r2-signed-track { position: relative; min-height: 5rem; }
+.r2-signed-track .r2-axis { position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #8394aa; z-index: 1; }
+.r2-signed-track i { position: absolute; left: 15%; width: 70%; border-radius: .2rem .2rem 0 0; }
+.r2-signed-track .r2-negative-bar { border-radius: 0 0 .2rem .2rem; }
+.r2-bar-missing { position: absolute; left: 0; right: 0; top: 43%; color: #9caabe; font-size: .8rem; }
+.r2-signed-chart .results-bar-item strong { font-size: .62rem; }
+.results-page .result-pill:focus-visible, .results-page button:focus-visible, .results-page select:focus-visible, .results-page input:focus-visible { outline: 2px solid #276de5; outline-offset: 2px; }
+@media (max-width: 760px) {
+  .results-page-header { min-width: 0; }
+  .results-filter-bar input { width: 12rem; }
+  .results-collection-status > div { min-height: 3rem; }
+  .results-card { padding: .85rem; }
+  .results-card-heading h3 { font-size: .84rem; }
+  .r2-industry-metrics > div, .r2-evidence-card dl div { font-size: .74rem; }
+  .result-pill { min-height: 2.65rem; }
+}
