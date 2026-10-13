@@ -5,6 +5,7 @@ import {validateBankTail,bankTailDay} from "../_shared/v14-bank-tail-validation.
 import {bankMaintenanceExecutionWindow} from "../_shared/v14-bank-maintenance-time.ts"
 import {beginBankSessionDispatch,bankSessionLeaseOperation} from "../_shared/v14-bank-maintenance-dispatch.ts"
 import {verifiedUsageEvent,verifiedBudgetSettlement} from "../_shared/v14-bank-maintenance-accounting.ts"
+import {waitForBankBudgetWindow} from "../_shared/v14-bank-budget-window.ts"
 import scope from "./scope.json" with {type:"json"}
 
 const PROJECT="lrgpjimipfkyoqbpsqzz"
@@ -89,6 +90,19 @@ Deno.serve(async req=>{
   if(run.error||!run.data?.id)throw new Error("BANK_MAINTENANCE_RUN_CREATE_FAILED")
   const runId=String(run.data.id)
 
+  // Before the FIRST reservation only. No reserve/provider retry and no budget override.
+  try{await waitForBankBudgetWindow(async now=>{
+   const control=await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,rolling_internal_attempt_limit,rolling_window_days,per_run_internal_attempt_limit,concurrency_limit").eq("source_code",SOURCE).single()
+   if(control.error||!control.data)throw Error("BANK_MAINTENANCE_BUDGET_PREFLIGHT_UNPROVEN")
+   const windowStart=new Date(now-control.data.rolling_window_days*86400000).toISOString()
+   const usage=await admin.from("provider_usage_events").select("attempted_at,actual_internal_units").eq("source_code",SOURCE).eq("accounting_class","PROVIDER_TOOL_ATTEMPT").gte("attempted_at",windowStart).limit(1000)
+   const active=await admin.from("provider_budget_reservations").select("expires_at,estimated_units,consumed_units,failed_units,released_units,ingestion_run_id").eq("source_code",SOURCE).eq("status","RESERVED").gt("expires_at",new Date(now).toISOString()).limit(1000)
+   if(usage.error||active.error||!usage.data||!active.data||usage.data.length>=1000||active.data.length>=1000)throw Error("BANK_MAINTENANCE_BUDGET_PREFLIGHT_UNPROVEN")
+   return{controls:control.data,usage:usage.data,reservations:active.data}
+  })}catch(error){
+   await admin.from("data_ingestion_runs").update({status:"FAILED",completed_at:new Date().toISOString(),error_summary:safe(error)}).eq("id",runId)
+   return reply(409,{code:safe(error),runId,providerCalls:0,reservationAttempts:0})
+  }
   const reservation=await admin.rpc("reserve_provider_budget_v1",{
    p_source_code:SOURCE,p_ingestion_run_id:runId,
    p_reservation_key:`${ACTION}:${body.grantId}`,p_estimated_units:HISTORY_LIMIT,p_reservation_seconds:1800,
