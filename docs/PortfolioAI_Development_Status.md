@@ -1,3 +1,13 @@
+## Results R3 simplified operating-performance split — 14 October 2026
+
+**Implemented as Development candidate / NOT a full R3 pass.** The owner approved separate quarterly operating-performance status from V1-4 investment research scoring, without introducing duplicate financial tables or unnecessary provider calls. Results-only pure module `quarterlyPerformance.ts` assesses a narrowly evidenced bank advances/deposit growth directional signal using selected matching-quarter, matching-basis, published observations; all other cases explicitly report INSUFFICIENT DATA. The view labels this as a limited operating signal, not an investment recommendation, research READY decision, or full earnings grade. No V1-4 methodology or canonical selections were changed.
+
+**Supabase readback:** existing quarterly result metrics still have only 16 date-qualified observation rows spanning 2 stocks and 10 stock-quarter combinations, while canonical selections remain zero. Existing Trendlyne cached capture categories contain 236 structured-metric payloads, 236 P8 fundamentals payloads and 225 document-search payloads. These are *unparsed source containers*, not approved quarterly results. Recover and verify source fields before any provider call or display selection. No acquisitions, schema migrations, Cloudflare R2 writes, scheduled jobs or Production changes are part of this implementation.
+
+**R3 acceptance still pending:** actual independently qualified operating result figures and auditable readback on the authenticated Development Results view. A Results-only methodology can progress independently from V1-4 but cannot treat missing dates/bases as valid or reuse raw trendlyne captures as verified quarterly values by assertion.
+
+---
+
 ## V1-4 owner execution-priority amendment — 14 October 2026 (Asia/Kolkata)
 
 The owner directed Banking/KVB active evidence closure to be deferred and research preserved so other industries can proceed. **Banking remains PARTIAL RESEARCH / NOT PROVEN; 0/13 selected READY and ₹0 READY frozen banking value.** Existing canonical selections, accepted ROA, original evidence, provider controls and scheduled Development maintenance are preserved. This documentation amendment neither activates a new methodology nor changes the frozen release threshold.
