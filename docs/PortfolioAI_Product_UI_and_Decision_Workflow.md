@@ -13,6 +13,14 @@ All application surfaces use the same presentation tokens for canonical signed f
 
 Prices, quantities, balances, categorical allocation charts, transaction types and research-readiness/quality states retain their own meanings. A green gain is not a research approval or buy recommendation. The common stock shell includes this rule for every stock; specialist research remains Industry-first and uses the effective canonical assignment.
 
+## Results navigation amendment — 13 October 2026
+
+Owner approved the Results module as a bounded addition to the existing authenticated PortfolioAI shell. During Results R1, top-level navigation is:
+
+**Dashboard | Holdings | Portfolio Structure | Research | Results | Intelligence | Transactions | Import | Settings**
+
+This amendment changes navigation placement only. It does not alter V1-4 research-readiness semantics, transaction/accounting authority, Production scope, or the staged Results data/storage boundaries. Results R1 remains fixture-only UI; canonical financial evidence and portfolio facts are integrated only in later authorized Results gates.
+
 ## Scope Freeze A UI/release boundary — 5 October 2026
 
 The V1 release boundary is governed by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
