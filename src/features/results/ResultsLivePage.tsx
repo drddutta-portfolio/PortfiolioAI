@@ -150,6 +150,7 @@ export function ResultsLivePage() {
                   title={`${position.symbol} — ${period.label}. ${candidate.length ? candidate.map((row) => `${LABELS[row.code] ?? row.code}: ${row.value} ${row.unit}; ${row.selected ? "selected" : "review pending"}; source ${row.source}; basis ${row.scope ?? "unknown"}`).join(" | ") : "No quarter-dated observation in connected data"}`}
                   onClick={() => setSelected({ id: position.securityId, end: period.end })}>
                   <i className={`r3-dot ${candidate.length ? tone : "unavailable"}`} aria-hidden="true"/>{loadingEvidence ? "Loading…" : selectedEvidence ? `${LABELS[selectedEvidence.code] ?? selectedEvidence.code}: ${selectedEvidence.value} ${selectedEvidence.unit}` : pending ? `${LABELS[candidate[0]!.code] ?? candidate[0]!.code}: ${candidate[0]!.value} ${candidate[0]!.unit} · Review pending` : "Not in current data"}
+                  <span className="r3-hover-popover" role="tooltip"><strong>{position.symbol} — {period.label}</strong>{candidate.length ? candidate.map((row) => <span key={row.id}>{LABELS[row.code] ?? row.code}: {row.value} {row.unit} · {row.selected ? "Selected" : "Review pending"} · {row.scope ?? "Scope unknown"}</span>) : <span>No matching quarter observation in the connected data.</span>}<small>Click for position and full source context</small></span>
                 </button>
               </td>
             })}
