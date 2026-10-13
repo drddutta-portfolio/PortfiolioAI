@@ -42,8 +42,8 @@ describe("ResultsLivePage R3 boundary", () => {
       periodEnd: "2026-06-30", value: "123456.78", unit: "Cr", source: "TRENDLYNE_MCP",
       scope: "UNKNOWN", publishedAt: null, retrievedAt: "2026-07-20T00:00:00Z", selected: false }])
     render(<ResultsLivePage/>)
-    expect(await screen.findByText("Data · Review pending")).toBeInTheDocument()
-    fireEvent.click(screen.getByText("Data · Review pending"))
+    expect(await screen.findByText(/Operating revenue: 123456.78 Cr · Review pending/)).toBeInTheDocument()
+    fireEvent.click(screen.getByText(/Operating revenue: 123456.78 Cr · Review pending/))
     expect(screen.getByText(/No selected quarterly financial observation/)).toBeInTheDocument()
     expect(screen.getByText(/123456.78 Cr \(Review pending\)/)).toBeInTheDocument()
     expect(screen.getByRole("list", { name: "Unselected source provenance" })).toBeInTheDocument()
