@@ -2,6 +2,7 @@ import historicalBodyPins from '../_shared/v14-kvb-valuation-historical-source-p
 import historyBodyPins from '../_shared/v14-kvb-history-renewal-source-pins.json' with {type:'json'}
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
+import {releaseKvbBatchLease} from '../_shared/v14-kvb-batch-lease.ts'
 import {kvbPbHash,kvbPbStableId,KVB_PB_SECURITY,KVB_PB_OWNER,KVB_PB_PORTFOLIO} from '../_shared/v14-kvb-pb-admission.ts'
 import {kvbPbSourceRequest,prepareKvbPbFromCanonical,kvbPbCurrentPriceStillMatches,kvbPbCurrentHistoryQualified,type KvbPbRawArchiveReceipt} from '../_shared/v14-kvb-pb-admission-runtime.ts'
 import {prepareKvbValuationCaSources} from '../_shared/v14-kvb-valuation-ca-runtime.ts'
@@ -96,6 +97,5 @@ Deno.serve(async req=>{
  }catch(e){const message=e instanceof Error?e.message:'';const code=/^[A-Z0-9_:]+$/.test(message)?message:'KVB_VALUATION_EXECUTION_FAILED';return reply(409,code,{stage})}
  }
  const response=await execute()
- try{const released=await db.rpc('release_data_ingestion_lease_v1',{p_source_code:'OWNER_REVIEWED_CLASSIFICATION',p_operation:operation,p_lease_holder:holder});if(released.error)return reply(503,'KVB_BATCH_LEASE_RELEASE_FAILED',{stage:'LEASE_RELEASE'})}catch{return reply(503,'KVB_BATCH_LEASE_RELEASE_FAILED',{stage:'LEASE_RELEASE'})}
- return response
+ return await releaseKvbBatchLease(db,operation,holder,response,headers)
 })

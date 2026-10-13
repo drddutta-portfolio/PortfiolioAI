@@ -16,7 +16,7 @@ def invoke(action,extra=None):
     try:
         with urllib.request.urlopen(request,timeout=240) as r:return json.load(r)
     except urllib.error.HTTPError as e:
-        details=json.load(e);print(json.dumps({'failedAction':action,'code':details.get('code'),'status':e.code}));raise RuntimeError(details.get('code','EXECUTION_FAILED')) from None
+        details=json.load(e);print(json.dumps({'failedAction':action,'code':details.get('code'),'stage':details.get('stage'),'primaryCode':details.get('primaryCode'),'primaryStage':details.get('primaryStage'),'status':e.code}));raise RuntimeError(details.get('code','EXECUTION_FAILED')) from None
 request=invoke('READ_KVB_VALUATION_SOURCE_REQUEST');receipts=extract(s3,BUCKET,request['archives'])
 def original_read_url(data,pin,extension="json"):
     sha=hashlib.sha256(data).hexdigest()
