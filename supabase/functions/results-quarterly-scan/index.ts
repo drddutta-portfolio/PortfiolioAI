@@ -38,7 +38,7 @@ function rejectUrl(raw: string): string | null {
 }
 function period(text: string): string | null {
   // The source text, not its URL or retrieval date, must name its quarter.
-  const m = /\b(?:quarter|three months)\s+ended\s+(?:on\s+)?(30[\/.\-\s](?:jun|june|06)[\/.\-\s]20\d\d|30[\/.\-\s](?:sep|september|09)[\/.\-\s]20\d\d|31[\/.\-\s](?:dec|december|12)[\/.\-\s]20\d\d|31[\/.\-\s](?:mar|march|03)[\/.\-\s]20\d\d)\b/i.exec(text)
+  const m = /\b(?:quarter|three months)\s+ended\s+(?:on\s+)?(30[.\s\x2F-](?:jun|june|06)[.\s\x2F-]20\d\d|30[.\s\x2F-](?:sep|september|09)[.\s\x2F-]20\d\d|31[.\s\x2F-](?:dec|december|12)[.\s\x2F-]20\d\d|31[.\s\x2F-](?:mar|march|03)[.\s\x2F-]20\d\d)\b/i.exec(text)
   if (!m) return null
   const v=m[1].toLowerCase(), y=/20\d\d/.exec(v)?.[0]
   const mon=/jun|june|06/.test(v)?"06":/sep|september|09/.test(v)?"09":/dec|december|12/.test(v)?"12":/mar|march|03/.test(v)?"03":null
