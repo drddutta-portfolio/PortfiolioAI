@@ -1,3 +1,17 @@
+## G02 current execution and provisional research — 14 October 2026
+
+**Operational acceptance: NOT COMPLETE; 0/3 selected READY, ₹0 READY frozen value.** Independent Development readback confirms the October 13 selected snapshots remain REVIEW_REQUIRED with nine blockers per stock (27 total). Business durability and snapshot lineage are FRESH for each stock. Prior October 7 start counts below are historical baselines.
+
+Actual original registration now covers 28 pinned issuer/exchange originals. Governed Angel One acquisition completed in run `72ed805d-7fe5-4ffc-8f0f-0a0bc7a44538`: three successful history calls, three consumed units, zero retries, prices persisted through October 13 for CGPOWER, AVALON and TDPOWERSYS. This is INGESTED_NOT_QUALIFIED; it does not renew the selected stale history proofs. Existing budget and provider controls remain unchanged.
+
+A [provisional research package](private/v1-4-industry-batches/G02_Provisional_Stock_Research_2026-10-14.md) now preserves useful findings and company-specific interpretation without generating an incomplete mandatory score or claiming numeric admission. Fifteen literal findings were re-extracted from three hash-verified annual-report originals with PDF-page references. Reported scope, ROCE definitions, source anomalies and unproven publication timestamps remain explicit. The TD Power order-book comparative carries conflicting dates in the original and is not silently corrected.
+
+Five official NIFTY Capital Goods price-index sessions (October 7, 8, 9, 12 and 13) and the October 8–13 NSE corporate-action window were checked against original bytes, exact dates and identities. The corporate-action report contains ten entries and no G02 symbol/ISIN matches. These are source qualification inputs, not registered/admitted history proofs. Remaining work is canonical tail registration, compatible multi-session benchmark append, append-only history-proof renewal, and financial/documentary contract admission. Seven financial/documentary families plus two market requirements remain blocked per stock.
+
+No database migration, new factual acceptance, new materialization, scheduler modification, Production/main change or completed G02 declaration occurred in this research-delivery continuation. Earlier executed Development admissions and market acquisition are preserved.
+
+---
+
 ## G02 V1-4 execution started — 14 October 2026 (Asia/Kolkata)
 
 G02 source and classification triage has executed for TDPOWERSYS, AVALON and CGPOWER. CGPOWER is the pilot because the approved Industrials contract explicitly names it as the reference. All three retain their existing Sector/Industry labels and bundled CAPITAL_EQUIPMENT_ELECTRICAL assignments; separate business-model suitability checks are required. No taxonomy or financial-methodology change was made.

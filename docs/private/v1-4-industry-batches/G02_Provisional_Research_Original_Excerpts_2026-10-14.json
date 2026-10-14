@@ -1,0 +1,254 @@
+{
+  "purpose": "Auditable research support; no canonical numeric admission, scoring or READY assignment",
+  "extraction_method": "POPPLER_LAYOUT_FROM_SHA256_VERIFIED_PDF",
+  "findings": [
+    {
+      "symbol": "CGPOWER",
+      "original_sha256": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+      "original_url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/89th%20Annual%20Report.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "delivered consolidated revenue",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 7,
+          "literal_layout_excerpt": "home and internationally.\n                                               delivered consolidated revenue of `12,418 Cr in FY26, growing 25%\n                                               over the prior year, with Profit After Tax rising 23% to `1,196 Cr. These                                                                                  I want to express my appreciation to Mr. Amar Kaul and the entire\n                                                                                                                            Semiconductors, and the Long Game\n                                               results were achieved in a year of significant global disruption: conflict                                                                                 CG leadership team for the quality of thinking and execution that"
+        }
+      ]
+    },
+    {
+      "symbol": "CGPOWER",
+      "original_sha256": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+      "original_url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/89th%20Annual%20Report.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "unexecuted order book stood",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 8,
+          "literal_layout_excerpt": "PAT at `1,196 Cr. Order intake reached `19,616 Cr, while the closing       a healthy order backlog.\n                                                                                                                            unexecuted order book stood at `17,107 Cr, offering a solid foundation\n                                                MANAGING DIRECTOR                                                           for future growth.                                                         Semiconductors: Building India’s Future, One Chip at a Time"
+        }
+      ]
+    },
+    {
+      "symbol": "CGPOWER",
+      "original_sha256": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+      "original_url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/89th%20Annual%20Report.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Operating Profit Margin (Excluding OI)",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 30,
+          "literal_layout_excerpt": "EBITDA Margin (Excluding OI)                         14.47%         13.65%                                                                                 remain embedded across our operations and value chain.                     translate it into consistent workplace behaviours.\n Operating Profit Margin (Excluding OI)               13.64%         12.71%\n                                                                                                                                                                                                                                       DIGITAL LEARNING & FUTURE-READY CAPABILITIES\n Net Profit Margin (before exceptional items)         11.94%         10.44%\n                                                                                                                                                                                                                                       LinkedIn Learning: To foster a culture of continuous, self-directed"
+        }
+      ]
+    },
+    {
+      "symbol": "CGPOWER",
+      "original_sha256": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+      "original_url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/89th%20Annual%20Report.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "ROCE (excluding exceptional item) (terminal)",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 30,
+          "literal_layout_excerpt": "proceeds from Qualified Institutional Placements (QIP) proceeds.                                                                                      over 10,000 courses that support professional growth, personal\n ROCE (excluding exceptional item) (terminal) on      22.08%         33.34%      Decrease due to amount invested out of QIP proceeds is included in                                                                                    effectiveness, and capability enhancement across roles.\n continuing operations                                                           capital employed.\n                                                                                                                                                                                                                                       Mandatory Compliance Training: Under the One Hour Learning\n Per share Ratios                                                                                                                                                                                                                      initiative, interactive e-learning modules covering key areas such as"
+        }
+      ]
+    },
+    {
+      "symbol": "CGPOWER",
+      "original_sha256": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+      "original_url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/89th%20Annual%20Report.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Interest Coverage Ratio for continuing operations",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 30,
+          "literal_layout_excerpt": "remains a strategic priority. During FY26, CG welcomed 821\n Interest Coverage Ratio for continuing operations      85.77            90.59                                                                                                                                                              The Project Management Professional (PMP) Program was\n                                                                                                                                                            professionals across functions and locations, supported by focused\n                                                                                                                                                                                                                                            launched to strengthen execution capabilities and build project-\n Assets Efficiency Ratios                                                                                                                                   outreach to women’s engineering and diploma institutes in Tier 2 and"
+        }
+      ]
+    },
+    {
+      "symbol": "AVALON",
+      "original_sha256": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+      "original_url": "https://www.avalontec.com/investor/financials/annual-reports/AR-Dispatch_Final.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Revenue grew 46%",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 11,
+          "literal_layout_excerpt": "FY2026 was a year of strong execution and broad-                companies and equipment manufacturers are expanding\nbased progress for Avalon. Revenue grew 46% to                  their manufacturing networks globally, increasingly\n₹ 1,603 Cr. EBITDA grew 51% to ₹ 173 Cr, with margins at        working with qualified external partners for complex\n10.8%. PAT grew 78% to ₹ 113 Cr. ROCE improved from 15.7%       equipment and assemblies. These programs demand\nto 20.6%. Net working capital improved to 112 days from         precision manufacturing, stringent quality controls and"
+        },
+        {
+          "pdf_page": 13,
+          "literal_layout_excerpt": "FY2026 was our best year, and we are genuinely                small steps in the larger journey of building a finance\nproud of what the team delivered. Revenue grew 46%            function that scales well with the business.\nto ₹ 1,603 Cr EBITDA grew 51% to ₹ 173 Cr, with margins\nat 10.8%. PAT grew 78% to ₹ 113 Cr. Net working capital       THE ROAD AHEAD – TAILWINDS IN PLACE\nimproved to 112 days from 124 days a year ago, driven         We are cautious about getting ahead of ourselves."
+        }
+      ]
+    },
+    {
+      "symbol": "AVALON",
+      "original_sha256": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+      "original_url": "https://www.avalontec.com/investor/financials/annual-reports/AR-Dispatch_Final.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Net working capital improved",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 11,
+          "literal_layout_excerpt": "10.8%. PAT grew 78% to ₹ 113 Cr. ROCE improved from 15.7%       equipment and assemblies. These programs demand\nto 20.6%. Net working capital improved to 112 days from         precision manufacturing, stringent quality controls and\n124 days, supporting operating cash flow of ₹ 57 Cr —           close coordination — they are not programs where\nmore than double the prior year.                                customers take risks on their partners. Our partnership\n                                                                with a leading global player in this space reached project"
+        }
+      ]
+    },
+    {
+      "symbol": "AVALON",
+      "original_sha256": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+      "original_url": "https://www.avalontec.com/investor/financials/annual-reports/AR-Dispatch_Final.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Today it is 54%",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 5,
+          "literal_layout_excerpt": "BUILDING FOR WHAT’S NEXT\nFour years ago, box build was 44% of our business. Today it is 54%.\nThat shift — deliberate, customer-led, capability-backed — is what growing\nwith conviction looks like. The same discipline that got us here is what we\nbelieve will take us forward."
+        },
+        {
+          "pdf_page": 11,
+          "literal_layout_excerpt": "Four years ago, box-build was 44% of our revenue.               engineering involvement, qualification discipline, close\nToday it is 54%. That shift reflects a conscious choice         customer coordination and manufacturing precision.\n— to move up the complexity ladder within our existing          We enter FY2027 with several of these programs in\nspace, take on harder programs, and earn the right to           active production or at the cusp of it. The contribution\nbe considered for them. As we do more complex work,             will build through the year. We are encouraged — and"
+        }
+      ]
+    },
+    {
+      "symbol": "AVALON",
+      "original_sha256": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+      "original_url": "https://www.avalontec.com/investor/financials/annual-reports/AR-Dispatch_Final.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "order book of ₹ 2,196",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 11,
+          "literal_layout_excerpt": "production and volume ramp-up. We secured new                   FY2026 was a strong year. We enter FY2027 with a healthy\nbusiness across rail, aerospace, industrial, clean energy,      order book of ₹ 2,196 Cr and new programs entering\npower, communications, semiconductor equipment and              production. The foundation for the next phase is in place.\nsatellite communications. Growth was broad-based —              We will keep building - with discipline, with conviction, and\nno single program or customer carried the year.                 with gratitude for the trust you place in us."
+        }
+      ]
+    },
+    {
+      "symbol": "AVALON",
+      "original_sha256": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+      "original_url": "https://www.avalontec.com/investor/financials/annual-reports/AR-Dispatch_Final.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "time it takes for new",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 11,
+          "literal_layout_excerpt": "be considered for them. As we do more complex work,             will build through the year. We are encouraged — and\nour value to customers deepens. We are grateful they            appropriately cautious about the time it takes for new\nhave responded with continued confidence.                       programs to fully ramp.\n\nOur diversified business model also provided resilience.        OUR DUAL-SHORE MANUFACTURING"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "original_sha256": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+      "original_url": "https://www.tdps.co.in/_files/ugd/6c2f9d_c1b9ced188b745cd8fb044c493a4bbb5.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "The pending order book as on April 01",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 49,
+          "literal_layout_excerpt": "The Company believes that strengthening manufacturing          The pending order book as on April 01, 2026 is\nexcellence and process standardisation will be critical to     ` 1,97,288.60 lakhs (April 01, 2026: ` 1,36,801.40\nsupporting future scale-up plans, improving execution          lakhs) including traction business of ` 24,762.20\ncapabilities and enhancing overall competitiveness.            lakhs (Previous Year: ` 31,636.77 lakhs). Out of this,"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "original_sha256": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+      "original_url": "https://www.tdps.co.in/_files/ugd/6c2f9d_c1b9ced188b745cd8fb044c493a4bbb5.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "top 10 customers contributed 84%",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 49,
+          "literal_layout_excerpt": "including deemed exports, orders stood at 79% of the           ` 2,129.82 lakhs in Fiscal 2026 from ₹ ` 2,364.95 lakhs in\norder inflow. While top 10 customers contributed 84% of        Fiscal 2025. The profit after tax and other comprehensive\nconsolidated revenues in fiscal 2026 (84% in fiscal 2025).     income was ₹ ` 23,604.28 lakhs in Fiscal 2026 as compared\nThe total sales on a standalone basis were ` 1,71,666.38       to `₹ 17,335.82 lakhs in Fiscal 2025, an increase of 36.16%.\n                                                               The performance review of the overseas subsidiaries is"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "original_sha256": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+      "original_url": "https://www.tdps.co.in/_files/ugd/6c2f9d_c1b9ced188b745cd8fb044c493a4bbb5.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Consolidated Basis",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 49,
+          "literal_layout_excerpt": "growth with improved efficiency, reliability and quality\n                                                               Consolidated Basis\noutcomes.\n                                                               Total income increased by ₹ ` 57,512.08 lakhs, or 44.16%,\n                                                               to ₹ ` 1,87,753.20 lakhs in Fiscal 2026 from ` 1,30,241.12"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "original_sha256": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+      "original_url": "https://www.tdps.co.in/_files/ugd/6c2f9d_c1b9ced188b745cd8fb044c493a4bbb5.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "The opening order book for Fiscal 2026",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 49,
+          "literal_layout_excerpt": "` 1,27,876.17 lakhs in Fiscal 2025, predominantly due to\nThe opening order book for Fiscal 2026 was ` 1,36,801.40\n                                                               an increased sales volume. Expressed as a percentage of\nlakhs (` 1,33,912.44 lakhs for India and ` 2,888.98 lakhs\n                                                               total income, net sales contributed 98.87% in Fiscal 2026"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "original_sha256": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+      "original_url": "https://www.tdps.co.in/_files/ugd/6c2f9d_c1b9ced188b745cd8fb044c493a4bbb5.pdf",
+      "reporting_period_end": "2026-03-31",
+      "published_at": null,
+      "publication_precision": "UNPROVEN",
+      "finding_key": "Includes Profit After Tax + Depreciation",
+      "evidence_level": "ORIGINAL_PASSAGE_VERIFIED_NOT_NUMERIC_ADMISSION",
+      "occurrences": [
+        {
+          "pdf_page": 180,
+          "literal_layout_excerpt": "a    Includes Profit After Tax + Depreciation and Amortisation + Finance Cost\n                           b    Shareholder’s Equity + Deferred Tax liabilities + Total debt (Refer Note No.20)\n                           c    Total debt includes working capital borrowing as company does not have long term debts\n                           d    Earnings available for debt service = Profit after tax + Depreciation and Amortisation + Finance Cost"
+        }
+      ]
+    }
+  ]
+}

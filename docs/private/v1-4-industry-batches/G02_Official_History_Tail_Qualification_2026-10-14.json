@@ -1,0 +1,85 @@
+{
+  "scope": "G02 incremental history qualification inputs; not a freshness proof or admission",
+  "benchmark_tail": [
+    {
+      "session_date": "2026-10-07",
+      "official_identity": "NIFTY CAPITAL GOODS",
+      "benchmark_code": "NIFTY_CAPITAL_GOODS",
+      "return_basis": "PRICE_RETURN_RAW_CLOSE",
+      "close": "16651.27",
+      "ohlc_available": false,
+      "source_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_07102026.csv",
+      "original_sha256": "fb867de164347563318faa077c2f1cf059a21d1a43fd42a136ec1bdf08128e98",
+      "original_bytes": 17703,
+      "retrieved_at": "2026-10-14T02:43:00.474107+00:00",
+      "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+    },
+    {
+      "session_date": "2026-10-08",
+      "official_identity": "NIFTY CAPITAL GOODS",
+      "benchmark_code": "NIFTY_CAPITAL_GOODS",
+      "return_basis": "PRICE_RETURN_RAW_CLOSE",
+      "close": "16137.42",
+      "ohlc_available": false,
+      "source_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_08102026.csv",
+      "original_sha256": "c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512",
+      "original_bytes": 17939,
+      "retrieved_at": "2026-10-14T02:15:11.592757+00:00",
+      "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+    },
+    {
+      "session_date": "2026-10-09",
+      "official_identity": "NIFTY CAPITAL GOODS",
+      "benchmark_code": "NIFTY_CAPITAL_GOODS",
+      "return_basis": "PRICE_RETURN_RAW_CLOSE",
+      "close": "16195.87",
+      "ohlc_available": false,
+      "source_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_09102026.csv",
+      "original_sha256": "7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01",
+      "original_bytes": 17585,
+      "retrieved_at": "2026-10-14T02:15:12.299157+00:00",
+      "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+    },
+    {
+      "session_date": "2026-10-12",
+      "official_identity": "NIFTY CAPITAL GOODS",
+      "benchmark_code": "NIFTY_CAPITAL_GOODS",
+      "return_basis": "PRICE_RETURN_RAW_CLOSE",
+      "close": "16398.32",
+      "ohlc_available": false,
+      "source_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_12102026.csv",
+      "original_sha256": "e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621",
+      "original_bytes": 17552,
+      "retrieved_at": "2026-10-14T02:15:12.908420+00:00",
+      "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+    },
+    {
+      "session_date": "2026-10-13",
+      "official_identity": "NIFTY CAPITAL GOODS",
+      "benchmark_code": "NIFTY_CAPITAL_GOODS",
+      "return_basis": "PRICE_RETURN_RAW_CLOSE",
+      "close": "16504.52",
+      "ohlc_available": false,
+      "source_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_13102026.csv",
+      "original_sha256": "875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696",
+      "original_bytes": 17563,
+      "retrieved_at": "2026-10-14T02:15:13.591054+00:00",
+      "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+    }
+  ],
+  "corporate_action_tail": {
+    "from": "2026-10-08",
+    "to": "2026-10-13",
+    "official_rows_checked": 10,
+    "g02_symbol_or_isin_matches": 0,
+    "original_sha256": "561382eba3c4a39f0d34e33d0ffca5f153080931ee17c267f240a995c0156d2d",
+    "state": "ORIGINAL_VERIFIED_NOT_CANONICALLY_ADMITTED"
+  },
+  "preserve_existing_history_proofs": true,
+  "remaining": [
+    "Immutable source registration for tail originals",
+    "Bounded multi-session benchmark append instead of selecting only the last scalar delta",
+    "Append-only renewal of official calendar and corporate-action proof",
+    "Canonical relative-return pair validation and materialization readback"
+  ]
+}
