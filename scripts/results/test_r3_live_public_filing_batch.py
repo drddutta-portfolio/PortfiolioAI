@@ -53,6 +53,27 @@ class ResultsAcquisitionTests(unittest.TestCase):
         v,reason=module.extract(fixture(qstart="01-04-2025"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
         self.assertEqual(reason,"PERIOD_NOT_THREE_MONTHS")
+    def test_e2e_verified_prior_isin_quarter(self):
+        html=fixture(qstart="01-10-2025",qend="31-12-2025",isin="INE255Z01019")
+        html=html.replace("<td>RELIANCE</td>","<td>E2E</td>")
+        v,reason=module.extract(html,"E2E","INE255Z01027")
+        self.assertIsNone(reason)
+        self.assertEqual(v["source_isin"],"INE255Z01019")
+        self.assertEqual(v["historical_identity_link"]["split_new_per_old"],"10")
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"15.48")
+    def test_pocl_verified_prior_isin_quarter(self):
+        html=fixture(qstart="01-10-2025",qend="31-12-2025",isin="INE063E01053")
+        html=html.replace("<td>RELIANCE</td>","<td>POCL</td>")
+        v,reason=module.extract(html,"POCL","INE063E01061")
+        self.assertIsNone(reason)
+        self.assertEqual(v["source_isin"],"INE063E01053")
+        self.assertEqual(v["historical_identity_link"]["split_new_per_old"],"2.5")
+    def test_identity_bridge_rejects_post_split_old_isin(self):
+        html=fixture(qstart="01-07-2026",qend="30-09-2026",isin="INE255Z01019")
+        html=html.replace("<td>RELIANCE</td>","<td>E2E</td>")
+        v,reason=module.extract(html,"E2E","INE255Z01027")
+        self.assertIsNone(v)
+        self.assertEqual(reason,"IDENTITY_MISMATCH_OR_UNKNOWN")
     def test_unit_not_proven(self):
         v,reason=module.extract(fixture(unit="Millions"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)

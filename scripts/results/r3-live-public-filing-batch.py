@@ -46,6 +46,30 @@ BANK_TICKERS = frozenset((
 RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
                   "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
                   "GROSS_NPA_PERCENT", "NET_NPA_PERCENT")
+
+# Source-period identity bridge only for official pre-split filings. Never
+# modify canonical security identity, historical backtests or share basis.
+HISTORICAL_RESULTS_IDENTITIES = {
+    "E2E": {
+        "source_isin": "INE255Z01019", "current_isin": "INE255Z01027",
+        "ex_date": "2026-06-05", "split_new_per_old": "10",
+        "evidence": "MSE/LIST/19135/2026, 2026-06-03",
+    },
+    "POCL": {
+        "source_isin": "INE063E01053", "current_isin": "INE063E01061",
+        "ex_date": "2026-07-21", "split_new_per_old": "2.5",
+        "evidence": "NSE change in ISIN notice 2026-07-17 / BSE DR-676/2026-2027",
+    },
+}
+
+def historical_result_identity(symbol: str, current_isin: str, source_isin: str, period_end: str):
+    link=HISTORICAL_RESULTS_IDENTITIES.get(symbol)
+    if (link and current_isin==link["current_isin"]
+        and source_isin==link["source_isin"]
+        and period_end<link["ex_date"]):
+        return dict(link)
+    return None
+
 NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
 DATE = re.compile(r"^\d\d[-/.](?:\d\d|[A-Za-z]{3,9})[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
@@ -104,7 +128,7 @@ def extract(html: str, symbol: str, isin: str):
     tables=list(html_rows(soup))
     doc_symbol=unique_field(tables,"nse symbol")
     doc_isin=unique_field(tables,"isin")
-    if doc_symbol!=symbol or doc_isin!=isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
+    if doc_symbol!=symbol or not doc_isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit=unique_field(tables,"level of rounding used in financial results")
     unit_kind=normalize(unit) if unit else ""
     if unit_kind not in ("lakhs","crores"): return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
@@ -134,6 +158,9 @@ def extract(html: str, symbol: str, isin: str):
     if scope not in ("CONSOLIDATED","STANDALONE"):return None,"SCOPE_UNKNOWN"
     report=unique_field(tables,"reporting type")
     if report and normalize(report)!="quarterly":return None,"NOT_QUARTERLY"
+    link=historical_result_identity(symbol,isin,doc_isin,qend) if doc_isin!=isin else None
+    if doc_isin!=isin and not link:
+        return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     facts={}
     for label,metric in FIELDS.items():
         values=field_values(stmt,label)
@@ -148,7 +175,11 @@ def extract(html: str, symbol: str, isin: str):
             if abs(n)>Decimal("100000000"):continue
             facts[metric]={"value":str(n),"unit":"INR_CRORE","original_value":values[0],"original_unit":original_unit}
     if not facts:return None,"NO_QUALIFIED_FINANCIAL_VALUES"
-    return {"symbol":symbol,"isin":isin,"period_start":qstart,"period_end":qend,"scope":scope,"facts":facts},None
+    result={"symbol":symbol,"isin":isin,"period_start":qstart,"period_end":qend,"scope":scope,"facts":facts}
+    if link:
+        result["source_isin"]=doc_isin
+        result["historical_identity_link"]=link
+    return result,None
 
 def extract_bank(html: str, symbol: str, isin: str):
     """Financial Results - Banking, NOT Ind-AS. All values from first quarter column."""
@@ -341,6 +372,10 @@ def persist(conn,s3,parsed,url,original_sha):
         "raw_nse_bytes_retained":False,"publication_timestamp":None,
         "figures_review_pending":True,"facts":parsed["facts"]
     }
+    if parsed.get("historical_identity_link"):
+        manifest["source_isin"]=parsed["source_isin"]
+        manifest["historical_identity_link"]=parsed["historical_identity_link"]
+        manifest["eps_as_originally_reported_before_split"]=True
     payload=json.dumps(manifest,sort_keys=True,separators=(",",":")).encode()
     ph=sha(payload)
     key=(R2_PREFIX+f"security_id={parsed['isin']}/period_end={parsed['period_end']}/"
