@@ -171,6 +171,7 @@ def verify(db,s3,apply):
                                'EVIDENCE_PRIORITY',now(),NULL,
                                'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                         FROM proposals p
+                        WHERE TRUE
                         ON CONFLICT DO NOTHING RETURNING selected_observation_id""",(payload,))
                     inserted=len(cur.fetchall())
                     if inserted+unchanged!=len(proposals):
