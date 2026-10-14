@@ -51,11 +51,15 @@ WITH sources(symbol,isin,filing,approval_date,revenue_lakhs,profit_lakhs,eps,man
  JOIN records r ON d.external_record_id=r.symbol||':'||r.filing
  WHERE d.source_code='COMPANY_EXCHANGE_FILING'
    AND d.record_kind='RESULTS_QUARTERLY_ISSUER_IXBRL_FACTS'
+), source_rows AS MATERIALIZED (
+ SELECT id,external_record_id FROM insert_source
+ UNION
+ SELECT id,external_record_id FROM stored
 ), numbers AS (
  SELECT r.security_id,r.symbol,d.id source_record_id,
     x.metric_code,x.numeric_value,x.unit
  FROM records r
- JOIN stored d ON d.external_record_id=r.symbol||':'||r.filing
+ JOIN source_rows d ON d.external_record_id=r.symbol||':'||r.filing
  CROSS JOIN LATERAL (VALUES
     ('OPERATING_REVENUE_QUARTER',r.revenue_lakhs/100::numeric,'INR_CRORE'),
     ('NET_PROFIT_QUARTER',r.profit_lakhs/100::numeric,'INR_CRORE'),
