@@ -49,6 +49,22 @@ class R4Tests(unittest.TestCase):
       row("NET_PROFIT_QUARTER",1,symbol="HDFCBANK"),row("EPS_DILUTED",1,symbol="HDFCBANK")]
   chosen,blocked,_=m.select_quarters(xs)
   self.assertEqual(len(chosen),3);self.assertFalse(blocked)
+ def test_historical_isin_original_eps_qualification(self):
+  e=dict(symbol="E2E",source_isin="INE255Z01019",isin="INE255Z01027",
+     period_end="2026-03-31",eps_as_originally_reported_before_split=True,
+     historical_identity_link=dict(source_isin="INE255Z01019",current_isin="INE255Z01027",
+       ex_date="2026-06-05",split_new_per_old="10",
+       evidence="MSE/LIST/19135/2026, 2026-06-03"))
+  self.assertIsNone(m.historical_original_eps_proof(e))
+  self.assertEqual(m.historical_original_eps_proof({**e,"period_end":"2026-06-30"}),"HISTORICAL_ORIGINAL_EPS_UNPROVEN")
+  self.assertEqual(m.historical_original_eps_proof({**e,"source_isin":"fake"}),"HISTORICAL_IDENTITY_MISMATCH")
+  p=dict(symbol="POCL",source_isin="INE063E01053",isin="INE063E01061",
+     period_end="2025-09-30",eps_as_originally_reported_before_split=True,
+     historical_identity_link=dict(source_isin="INE063E01053",current_isin="INE063E01061",
+       ex_date="2026-07-21",split_new_per_old="2.5",
+       evidence="NSE change in ISIN notice 2026-07-17 / BSE DR-676/2026-2027"))
+  self.assertIsNone(m.historical_original_eps_proof(p))
+  self.assertEqual(m.historical_original_eps_proof({**p,"eps_as_originally_reported_before_split":False}),"HISTORICAL_ORIGINAL_EPS_UNPROVEN")
  def test_original_hash_and_source_match(self):
   src=dict(contract="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",period_end="2026-06-30",
      period_start="2026-04-01",consolidation_scope="CONSOLIDATED",
