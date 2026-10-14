@@ -1,0 +1,39 @@
+name: G02 Governed Three-Stock Market Tail
+on:
+  workflow_dispatch:
+    inputs:
+      sessionDate:
+        description: Verified completed NSE OPEN session
+        required: true
+        default: '2026-10-13'
+      calendarDecisionId:
+        description: Retained authoritative NSE OPEN decision record
+        required: true
+        default: '69a2fbc4-0184-4443-b15f-2ce6a230665a'
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-22.04
+    environment: PortfolioAI-Development
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Single governed acquisition with zero provider retries
+        env:
+          G02_SESSION_DATE: ${{ inputs.sessionDate }}
+          G02_CALENDAR_DECISION_ID: ${{ inputs.calendarDecisionId }}
+        run: python scripts/v1-4/g02_market_history.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g02-governed-market-history
+          path: g02-market-history-result/
+          retention-days: 90
+          if-no-files-found: ignore
