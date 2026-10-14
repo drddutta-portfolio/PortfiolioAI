@@ -113,7 +113,9 @@ def verify(db,s3,apply):
                         b=s3.get_object(Bucket=BUCKET,Key=pointer)["Body"].read()
                         if sha(b)!=expected:error="R2_READBACK_HASH_MISMATCH"
                         else:document=json.loads(b)
-                    except Exception:error="R2_OBJECT_UNAVAILABLE"
+                    except Exception as exc:
+                        code=getattr(exc,"response",{}).get("Error",{}).get("Code","")
+                        error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
                 if not error:error=check_manifest(r,document)
                 cache[k]=(document,error)
             doc,error=cache[k]
@@ -158,6 +160,8 @@ def verify(db,s3,apply):
             "exceptions":dict(sorted(invalid.items())),
             "publication_precision":"UNKNOWN; only current display, never historical point-in-time"}
     if protected:raise RuntimeError("R4_PRIOR_SELECTION_CONFLICT_ROLLED_BACK:"+json.dumps(report))
+    if observations and not facts:
+        raise RuntimeError("R4_ZERO_VALID_SOURCES_FAIL_CLOSED:"+json.dumps(report["exceptions"]))
     return report
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
@@ -165,7 +169,19 @@ def main():
     db=os.environ.get("SUPABASE_DB_URL","")
     if REF not in db:raise SystemExit("NOT_DEVELOPMENT_DATABASE")
     if os.environ.get("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise SystemExit("NOT_DEVELOPMENT_BUCKET")
-    s3=boto3.client("s3",endpoint_url="https://"+os.environ["CLOUDFLARE_R2_ACCOUNT_ID"]+".r2.cloudflarestorage.com",
+    account=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip()
+    from urllib.parse import urlparse
+    import re
+    if re.fullmatch(r"[a-f0-9]{32}",account):
+        endpoint="https://"+account+".r2.cloudflarestorage.com"
+    elif account.startswith("https://"):
+        u=urlparse(account)
+        if not re.fullmatch(r"[a-f0-9]{32}\\.r2\\.cloudflarestorage\\.com",u.hostname or "") or u.port or u.path not in ("","/") or u.query or u.fragment:
+            raise SystemExit("INVALID_R2_ENDPOINT")
+        endpoint=account.rstrip("/")
+    else:
+        raise SystemExit("INVALID_R2_ACCOUNT_SETTING")
+    s3=boto3.client("s3",endpoint_url=endpoint,
                     aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
                     aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
                     region_name="auto",config=Config(retries={"max_attempts":2,"mode":"standard"}))
