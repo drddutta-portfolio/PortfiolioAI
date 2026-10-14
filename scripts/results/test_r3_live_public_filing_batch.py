@@ -166,6 +166,45 @@ class ResultsAcquisitionTests(unittest.TestCase):
               ("2025-09-30","STANDALONE","source-b","GROSS_NPA_PERCENT")]
         self.assertEqual(module.completed_quarters(rows,banking=False), {"2025-09-30"})
         self.assertEqual(module.completed_quarters(rows,banking=True), set())
+    def test_bank_inline_nested_eps_in_outer_table_header(self):
+        html="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>AUBANK</td></tr>
+        <tr><td>ISIN</td><td>INE949L01017</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+        </table><table>
+        <tr><td>Date of start of reporting period</td><td>01-04-2026</td></tr>
+        <tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>530274.23</td></tr>
+        <tr><td>Interest expenses</td><td>260724.46</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>79595.29</td></tr>
+        <tr><th></th><th><table><tr><th>Diluted earnings per share after extraordinary items</th><td>10.51</td><td>10.51</td></tr></table></th></tr>
+        </table></body></html>"""
+        data,reason=module.extract_bank(html,"AUBANK","INE949L01017")
+        self.assertIsNone(reason)
+        self.assertIn("EPS_DILUTED",data["facts"])
+        self.assertEqual(data["facts"]["EPS_DILUTED"]["value"],"10.51")
+
+    def test_bank_inline_eps_does_not_read_before_extraordinary_items(self):
+        html="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>AUBANK</td></tr>
+        <tr><td>ISIN</td><td>INE949L01017</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+        </table><table>
+        <tr><td>Date of start of reporting period</td><td>01-04-2026</td></tr>
+        <tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>530274.23</td></tr>
+        <tr><td>Interest expenses</td><td>260724.46</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>79595.29</td></tr>
+        <tr><th></th><th><table><tr><th>Diluted earnings per share before extraordinary items</th><td>10.51</td></tr></table></th></tr>
+        </table></body></html>"""
+        data,reason=module.extract_bank(html,"AUBANK","INE949L01017")
+        self.assertIsNone(reason)
+        self.assertNotIn("EPS_DILUTED",data["facts"])
+
     def test_bank_npa_only_not_complete(self):
         rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
         self.assertEqual(module.completed_quarters(rows),set())

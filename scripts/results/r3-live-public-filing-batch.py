@@ -276,6 +276,28 @@ def extract_bank(html: str, symbol: str, isin: str):
                     candidates.append((candidate,raw))
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
+    if eps is None:
+        # Some official Banking iXBRL files nest EPS <th>/<td> inside
+        # a single outer <th>: our HTML row iterator then sees one cell
+        # containing "Diluted earnings ... 10.51 10.51".
+        # Match an explicit, exactly named after-extraordinary diluted EPS
+        # label followed by the *first quarterly* numeric value only.
+        # Conflicting same-document values stay unqualified.
+        inline_eps=[]
+        prefix="diluted earnings per share after extraordinary items"
+        for rows in tables:
+            for cells in rows:
+                for cell in cells:
+                    normalized=normalize(cell)
+                    if not normalized.startswith(prefix+" "):
+                        continue
+                    suffix=normalized[len(prefix):].strip()
+                    first_value=suffix.split()[0] if suffix else ""
+                    parsed=number(first_value)
+                    if parsed is not None and abs(parsed)<=Decimal("100000"):
+                        inline_eps.append((parsed,first_value))
+        if len({candidate for candidate,raw in inline_eps})==1:
+            eps,eps_raw=inline_eps[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
         facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
           "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
