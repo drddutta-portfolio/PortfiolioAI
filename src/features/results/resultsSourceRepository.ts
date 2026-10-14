@@ -16,6 +16,7 @@ export interface ResultsSourceObservation {
   readonly publishedAt: string | null
   readonly retrievedAt: string
   readonly selected: boolean
+  readonly originalShareBasis?: boolean
 }
 
 const METRICS = [
@@ -44,16 +45,20 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
   for (let offset = 0; offset < ids.length; offset += 80) {
     const batch = ids.slice(offset, offset + 80)
     const selected = new Set<string>()
+    const originalShareIds = new Set<string>()
     for (let page = 0; page < MAX_PAGES_PER_BATCH; page++) {
       const { data, error } = await supabase.from("fundamental_observation_decisions")
-        .select("security_id,metric_code,period_end,selected_observation_id")
+        .select("security_id,metric_code,period_end,selected_observation_id,notes")
         .in("security_id", [...batch])
         .order("security_id", { ascending: true })
         .order("metric_code", { ascending: true })
         .order("period_end", { ascending: true })
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1)
       if (error) throw error
-      for (const row of data) if (row.selected_observation_id) selected.add(row.selected_observation_id)
+      for (const row of data) if (row.selected_observation_id) {
+        selected.add(row.selected_observation_id)
+        if (row.notes?.includes("REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED")) originalShareIds.add(row.selected_observation_id)
+      }
       if (data.length < PAGE_SIZE) break
       if (page === MAX_PAGES_PER_BATCH - 1) throw new Error("Results decisions exceeded bounded read capacity")
     }
@@ -82,6 +87,7 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
           publishedAt: row.published_at,
           retrievedAt: row.retrieved_at,
           selected: selected.has(row.id),
+          originalShareBasis: originalShareIds.has(row.id),
         })
       }
       if (data.length < PAGE_SIZE) break

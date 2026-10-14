@@ -26,6 +26,29 @@ def canonical_bytes(x):
     return json.dumps(x,sort_keys=True,separators=(",",":")).encode()
 def sha(x):return hashlib.sha256(x).hexdigest()
 
+# Only specific original reported share bases documented by original NSE
+# iXBRL identity and the official exchange split/ISIN circulars qualify.
+# No EPS adjustment; cross-split comparisons remain prohibited.
+APPROVED_SPLIT_ISINS={
+"E2E":("INE255Z01019","INE255Z01027","2026-06-05","10","MSE/LIST/19135/2026"),
+"POCL":("INE063E01053","INE063E01061","2026-07-21","2.5","NSE change in ISIN notice 2026-07-17")}
+def historical_original_eps_proof(m):
+    link=m.get("historical_identity_link")
+    if not link:return None
+    if not isinstance(link,dict):return "HISTORICAL_IDENTITY_MALFORMED"
+    known=APPROVED_SPLIT_ISINS.get(m.get("symbol"))
+    if not known:return "HISTORICAL_IDENTITY_NOT_APPROVED"
+    old,new,exdate,factor,circular=known
+    if (m.get("source_isin")!=old or m.get("isin")!=new
+        or link.get("source_isin")!=old or link.get("current_isin")!=new
+        or link.get("ex_date")!=exdate or str(link.get("split_new_per_old"))!=factor):
+        return "HISTORICAL_IDENTITY_MISMATCH"
+    if circular not in link.get("evidence",""):return "HISTORICAL_SPLIT_CIRCULAR_MISSING"
+    if (m.get("period_end") is None or m["period_end"]>=exdate
+        or m.get("eps_as_originally_reported_before_split") is not True):
+        return "HISTORICAL_ORIGINAL_EPS_UNPROVEN"
+    return None
+
 def check_manifest(record,manifest):
     raw=record["raw_payload"]
     if not isinstance(raw,dict) or not isinstance(manifest,dict):return "MALFORMED_MANIFEST"
@@ -45,6 +68,8 @@ def check_manifest(record,manifest):
     if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
     if not record["source_retrieved"]:return "SOURCE_RETRIEVAL_UNKNOWN"
     if not isinstance(manifest.get("facts"),dict):return "FACTS_NOT_OBJECT"
+    historical_error=historical_original_eps_proof(manifest)
+    if historical_error:return historical_error
     return None
 
 def check_fact(r,m):
@@ -59,7 +84,10 @@ def check_fact(r,m):
     try:
         if Decimal(str(r["numeric_value"]))!=Decimal(str(fact["value"])):return "NUMERIC_MISMATCH"
     except (ValueError,InvalidOperation,KeyError,TypeError):return "INVALID_DECIMAL"
-    if key=="EPS_DILUTED" and m.get("historical_identity_link"):return "PRE_SPLIT_EPS_REVIEW"
+    if key=="EPS_DILUTED" and m.get("historical_identity_link"):
+        if (m.get("eps_as_originally_reported_before_split") is not True
+            or fact.get("original_unit")!="INR_PER_SHARE"):
+            return "HISTORICAL_EPS_ORIGINAL_VALUE_UNPROVEN"
     return None
 
 def select_quarters(rows):
@@ -156,11 +184,14 @@ def verify(db,s3,apply):
                         "metric_code":r["metric_code"],
                         "period_end":str(r["period_end"]),
                         "consolidation_scope":r["consolidation_scope"],
-                        "selected_observation_id":str(r["id"])} for r in selections]
+                        "selected_observation_id":str(r["id"]),
+                        "original_share_basis":bool(
+                            r["metric_code"]=="EPS_DILUTED" and
+                            r["raw_payload"].get("historical_identity_link"))} for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -186,7 +217,9 @@ def verify(db,s3,apply):
                         SELECT p.security_id,p.metric_code,p.period_end,'QUARTER',
                                p.consolidation_scope,p.selected_observation_id,
                                'EVIDENCE_PRIORITY',now(),NULL,
-                               'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               CASE WHEN p.original_share_basis THEN
+                                 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED; DO_NOT_COMPARE_EPS_ACROSS_SPLIT; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               ELSE 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY' END
                         FROM proposals p
                         WHERE TRUE
                         ON CONFLICT DO NOTHING RETURNING selected_observation_id""",(payload,))

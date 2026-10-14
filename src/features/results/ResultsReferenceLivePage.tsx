@@ -123,7 +123,7 @@ function PreviewCard({ preview }: { readonly preview: Preview }) {
         {observations.filter((row) => row.id !== displayed.id).slice(0, 2).map((row) =>
           <div key={row.id}><dt>{LABELS[row.code] ?? row.code}</dt><dd>{formattedValue(row)}</dd></div>)}
       </dl> : <p>No stored quarter-specific result is connected.</p>}
-      <small>{observations.some((row) => !row.selected) ? "Unselected evidence remains under review." : "Source figures reconciled for current display. Publication timing and performance grading are separate."}</small>
+      <small>{observations.some((row) => !row.selected) ? "Unselected evidence remains under review." : observations.some((row) => row.originalShareBasis) ? "Reported pre-split EPS is not adjusted. Do not compare EPS across a share split." : "Source figures reconciled for current display. Publication timing and performance grading are separate."}</small>
     </div>,
     document.body,
   )
@@ -229,6 +229,7 @@ function EvidenceDetails({ rows, period }: { readonly rows: readonly ResultsSour
     <summary>Source &amp; verification details <span>· {rows.filter((r) => !r.selected).length} review pending</span></summary>
     <div className="ref-evidence-body">
       <p>Reporting period end: {period.end}. Source reconciliation uses retained, checksum-checked evidence; a missing publication timestamp remains unverified and does not establish point-in-time availability. Alternative accounting bases are preserved below.</p>
+      {rows.some((row) => row.originalShareBasis) && <p>Historical ISIN/share split: EPS is originally reported before the split and not adjusted. YoY/QoQ EPS comparisons across the split are prohibited until a separate share-basis contract is proven.</p>}
       {rows.length ? rows.map((r) => <p key={r.id}>
         <strong>{LABELS[r.code] ?? r.code}:</strong> {formattedValue(r)} · {r.selected ? "Selected" : "Review pending"}
         {" · "}Source: {r.source} · Scope: {r.scope ?? "Unknown"} · Published: {r.publishedAt ?? "Unknown"} · Retrieved: {r.retrievedAt}
