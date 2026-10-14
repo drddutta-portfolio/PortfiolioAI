@@ -4,7 +4,7 @@
     "symbol": "AVALON",
     "originalHash": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
     "requirementCode": "BUSINESS_DURABILITY",
-    "fragment": "These are not commodity programs. They require Four years ago, box-build was 44% of our revenue. engineering involvement, qualification discipline, close Today it is 54%. That shift reflects a conscious choice customer coordination and manufacturing precision. \u2014 to move up the complexity ladder within our existing We enter FY2027 with several of these programs in space, take on harder programs, and earn the right to active production or at the cusp of it. The contribution be considered for them. As we do more complex work, will build through the year. We are encouraged \u2014 and our value to customers deepens. We are grateful they appropriately cautious about the time it takes for new have responded with continued confidence. programs to fully ramp. Our diversified business model also provided resilience.",
+    "fragment": "These are not commodity programs. They require Four years ago, box-build was 44% of our revenue. engineering involvement, qualification discipline, close Today it is 54%. That shift reflects a conscious choice customer coordination and manufacturing precision. — to move up the complexity ladder within our existing We enter FY2027 with several of these programs in space, take on harder programs, and earn the right to active production or at the cusp of it. The contribution be considered for them. As we do more complex work, will build through the year. We are encouraged — and our value to customers deepens. We are grateful they appropriately cautious about the time it takes for new have responded with continued confidence. programs to fully ramp. Our diversified business model also provided resilience.",
     "assessment": "Product complexity, qualification discipline and dual-shore delivery are documented. Ramp-up duration and customer-program execution remain explicit risks; this supports evidence availability, not a positive durability score.",
     "reportingPeriodStart": "2025-04-01",
     "reportingPeriodEnd": "2026-03-31",
@@ -22,7 +22,7 @@
     "symbol": "TDPOWERSYS",
     "originalHash": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
     "requirementCode": "BUSINESS_DURABILITY",
-    "fragment": "The Company\u2019s portfolio includes generators for steam, gas engines, gas turbines, hydro and diesel power plants, as well as geothermal and wind applications. It also serves specialised industrial sectors, including oil & gas, through its motor offerings. Supported by leading OEMs and utilities, TDPS has established a strong position in global power equipment markets.",
+    "fragment": "The Company’s portfolio includes generators for steam, gas engines, gas turbines, hydro and diesel power plants, as well as geothermal and wind applications. It also serves specialised industrial sectors, including oil & gas, through its motor offerings. Supported by leading OEMs and utilities, TDPS has established a strong position in global power equipment markets.",
     "assessment": "The original report identifies generator applications, OEM/utility relationships and global market positioning. This supports the product/customer evidence contract; issuer positioning claims are not independently scored as market leadership.",
     "reportingPeriodStart": "2025-04-01",
     "reportingPeriodEnd": "2026-03-31",
@@ -40,7 +40,7 @@
     "symbol": "CGPOWER",
     "originalHash": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
     "requirementCode": "BUSINESS_DURABILITY",
-    "fragment": "CG has always had a global DNA. Our manufacturing operations supply chains are equally durable span across India and Europe catering to customer demand across EdgeCortix. The OSAT project is being developed to support a capacity of up to 14.5 million chips per day, reflecting our ambition to build Warm regards, forces. Together, they are reshaping all major continents, including the Americas, Europe, Africa and Asia. globally competitive semiconductor capabilities. The global imperative What has changed in FY26 is the ambition and momentum behind our demand across every segment of international growth. to build resilient, geographically diversified semiconductor supply Vellayan Subbiah CG\u2019s portfolio in ways that are deep, chains is precisely what creates the opportunity for CG Semi to serve Chairman Export order bookings more than doubled year-on-year. The single international customers at scale. sustained, and accelerating. largest order in CG\u2019s history was not a domestic order, rather it was a Semiconductors are a long-gestation business that demand patient `900 Cr contract to supply power transformers for a hyperscale data capital, technological depth and sustained execution. We are centre in the United States. Our drives and automation business in approaching this opportunity with a long-term perspective, with the Europe continues to serve markets across the continent and beyond. ambition of building globally competitive capabilities that contribute Furthermore, India\u2019s expanding trade architecture with several FTAs, meaningfully to India\u2019s semiconductor journey. including agreements with the UK, Oman, New Zealand, and others, is materially expanding the addressable market for Indian-manufactured",
+    "fragment": "CG has always had a global DNA. Our manufacturing operations supply chains are equally durable span across India and Europe catering to customer demand across EdgeCortix. The OSAT project is being developed to support a capacity of up to 14.5 million chips per day, reflecting our ambition to build Warm regards, forces. Together, they are reshaping all major continents, including the Americas, Europe, Africa and Asia. globally competitive semiconductor capabilities. The global imperative What has changed in FY26 is the ambition and momentum behind our demand across every segment of international growth. to build resilient, geographically diversified semiconductor supply Vellayan Subbiah CG’s portfolio in ways that are deep, chains is precisely what creates the opportunity for CG Semi to serve Chairman Export order bookings more than doubled year-on-year. The single international customers at scale. sustained, and accelerating. largest order in CG’s history was not a domestic order, rather it was a Semiconductors are a long-gestation business that demand patient `900 Cr contract to supply power transformers for a hyperscale data capital, technological depth and sustained execution. We are centre in the United States. Our drives and automation business in approaching this opportunity with a long-term perspective, with the Europe continues to serve markets across the continent and beyond. ambition of building globally competitive capabilities that contribute Furthermore, India’s expanding trade architecture with several FTAs, meaningfully to India’s semiconductor journey. including agreements with the UK, Oman, New Zealand, and others, is materially expanding the addressable market for Indian-manufactured",
     "assessment": "The original report documents manufacturing footprint, export orders and power-transformer positioning. Semiconductor investment has long gestation and execution risk; projected capacity is not treated as realised capacity or durable financial growth.",
     "reportingPeriodStart": "2025-04-01",
     "reportingPeriodEnd": "2026-03-31",
@@ -49,6 +49,63 @@
     "doesNotProve": [
       "financial_growth",
       "governance_clearance",
+      "positive_score",
+      "overall_READY"
+    ]
+  },
+  {
+    "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+    "symbol": "CGPOWER",
+    "originalHash": "c907757657f4fd49eff0da6d96bd997c399af9eaef4266fae7cfe431ad60975e",
+    "requirementCode": "OWNERSHIP_GOVERNANCE",
+    "fragment": "UPDATE ON INVESTIGATIONS INITIATED IN THE PREVIOUS TRANSFER TO RESERVES efficient products and solutions. It develops, manufactures and markets the equipment for control and protection of industrial CG Semi Private Limited (“CG Semi”) is Company’s Subsidiary. YEARS Your Directors do not propose to transfer any amount to the reserves. Your Company holds 92.34% equity share capital of CG Semi. It processes. The investigations by Central Bureau of Investigation (CBI), Serious is currently developing Outsourced Semiconductor Assembly and Fraud Investigation Office (SFIO) and Enforcement Directorate (ED) into SUBSIDIARIES & ASSOCIATES Test (“OSAT”) facility in Sanand, Gujarat. During the year under review, CG Drives & Automation Sweden the affairs of your Company and its Subsidiaries pertaining to the past Details of subsidiaries as on 31 March, 2026: There are 5 Indian and AB recorded a revenue of SEK 295.86 Mn i.e. equivalent to period and against the erstwhile Promoters/Directors of the Company 20 foreign subsidiaries (including 2 subsidiaries in Belgium along with The OSAT project is moving forward in two phases. During ` 296.01 crores (previous year: SEK 365.53 Mn i.e. equivalent relating to transactions that took place when the Company was under their subsidiaries declared as bankrupt; 3 subsidiaries under voluntary the year under review, the Mini Plant (G1) was inaugurated in to ` 302.57 crores) and registered profit before tax of SEK 9.78 the control of the previous Management / Promoters, details of which liquidation and 1 subsidiary declared insolvent). Chola Foundation is Sanand, Gujarat. The said plant is equipped to handle end-to- Mn i.e. equivalent to ` 9.79 crores. (previous year: SEK 21.12 have already been reported to the Stock Exchanges/ in the previous an Associate of the Company. end chip assembly, packaging, testing, and post-test services. Mn i.e. equivalent to ` 17.49 crores). Annual Reports of the Company, are in progress. Your Company is Further, the Main Plant (G2) is under construction and expected to be completed by the end of calendar year 2026. extending full co-operation to these agencies and information and During the year under review, PT Crompton Prima Switchgear 3. CG Drives & Automation Germany GmbH: documents as sought by them are being promptly provided by the Indonesia (CPSI), a Subsidiary of CG International Holdings Singapore CG Drives & Automation Germany GmbH is a Subsidiary of CG During the year under review, CG Semi recorded a revenue of Company. Pte Limited (CGS), a Wholly Owned foreign Subsidiary of the Company, Drives & Automation Sweden AB and a wholly owned step-down ` 0.42 crores and registered loss before tax of ` 80.28 crores entered into Heads of Agreement regarding Sale and Purchase Subsidiary of your Company in Germany. It is into manufacture,",
+    "assessment": "The issuer discloses continuing CBI, SFIO and ED investigations concerning previous management. The investigation is a material unresolved governance risk, not cleared by current audit wording. This review establishes documentary evidence availability, not clean governance, absence of litigation, ownership-series qualification or a favourable score.",
+    "reportingPeriodStart": "2025-04-01",
+    "reportingPeriodEnd": "2026-03-31",
+    "periodType": "YEAR",
+    "finding": "SOURCE_BACKED_GOVERNANCE_DISCLOSURE_WITH_EXPLICIT_LIMITATIONS",
+    "doesNotProve": [
+      "ownership_trend_semantics",
+      "absence_of_fraud",
+      "clean_governance",
+      "positive_score",
+      "overall_READY"
+    ]
+  },
+  {
+    "securityId": "87132afb-e054-4ba2-adae-dc325637c001",
+    "symbol": "AVALON",
+    "originalHash": "ed0b8179580589d45c2996fca429e7b9335c122c727d66a6af4f3acc4c78feba",
+    "requirementCode": "OWNERSHIP_GOVERNANCE",
+    "fragment": "The Audit Committee of the Company reviews the to reduce business risks through a framework of internal internal audit findings and monitors the implementation controls and processes. These controls are structured of agreed corrective actions. The Committee also to offer reasonable assurance regarding the accuracy engages with the Statutory Auditors to understand their and reliability of financial and operational reporting, assessment of the adequacy of the internal control compliance with applicable laws and regulations, systems. The Statutory Auditors have independently protection of assets from unauthorized access or audited the internal financial controls over financial loss, proper authorization of transactions, adherence reporting as at March 31, 2026, and have issued an to corporate policies and efficient conduct of its unmodified opinion, confirming that adequate internal operations. The Internal control framework covers the controls were in place and that such controls were following key areas: operating effectively. • \u0007Protection and proper use of company assets",
+    "assessment": "The report describes Audit Committee review and an unmodified internal-financial-control opinion. This is issuer-backed governance evidence, not assurance that every governance or related-party risk is absent. Ownership percentages and trend semantics are not inferred.",
+    "reportingPeriodStart": "2025-04-01",
+    "reportingPeriodEnd": "2026-03-31",
+    "periodType": "YEAR",
+    "finding": "SOURCE_BACKED_GOVERNANCE_DISCLOSURE_WITH_EXPLICIT_LIMITATIONS",
+    "doesNotProve": [
+      "ownership_trend_semantics",
+      "absence_of_fraud",
+      "clean_governance",
+      "positive_score",
+      "overall_READY"
+    ]
+  },
+  {
+    "securityId": "7202b7b7-237c-439b-936d-c75bab806678",
+    "symbol": "TDPOWERSYS",
+    "originalHash": "290281e00a2ef54e4e052f7a4b034077a43a098b92d2e19c1cec46864bea3611",
+    "requirementCode": "OWNERSHIP_GOVERNANCE",
+    "fragment": "The Auditors’ Report on the financial statements for 2026, is made available on the website of the Company the fiscal year 2026 does not contain any qualification, at www.tdps.co.in. reservation or adverse remark. There have been no Conservation of Energy, Research and Development, instances of fraud committed against the Company by Technology Absorption, Foreign Exchange Earnings its officers or employees during the year reportable by and Outgo the Auditors in terms of Section 143(12) of the Act. Information required under Section 134(3)(m) of the",
+    "assessment": "The directors report describes the FY26 statutory audit as having no qualification, reservation or adverse remark and states the statutory fraud-reporting position. This is a bounded source-backed disclosure, not an independent absence-of-fraud finding, ownership-series approval or positive governance score.",
+    "reportingPeriodStart": "2025-04-01",
+    "reportingPeriodEnd": "2026-03-31",
+    "periodType": "YEAR",
+    "finding": "SOURCE_BACKED_GOVERNANCE_DISCLOSURE_WITH_EXPLICIT_LIMITATIONS",
+    "doesNotProve": [
+      "ownership_trend_semantics",
+      "absence_of_fraud",
+      "clean_governance",
       "positive_score",
       "overall_READY"
     ]

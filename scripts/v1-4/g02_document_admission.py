@@ -16,7 +16,7 @@ def main():
    if b['fragment'] not in text:raise ValueError('G02_LITERAL_ORIGINAL_PASSAGE_NOT_FOUND:'+b['symbol'])
   oidc=urllib.request.Request(os.environ['ACTIONS_ID_TOKEN_REQUEST_URL']+'&audience='+urllib.parse.quote(AUD,safe=''),headers={'Authorization':'Bearer '+os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']})
   with urllib.request.urlopen(oidc,timeout=30) as r:token=json.load(r)['value']
-  body={'action':'ADMIT_FIXED_G02_DURABILITY_DOCUMENT','authorizationHash':policy['directiveSha256'],'securityId':b['securityId'],'originalHash':b['originalHash'],'normalizedFragment':b['fragment'],'extractionMethod':'POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES'}
+  body={'action':'ADMIT_FIXED_G02_DURABILITY_DOCUMENT','authorizationHash':policy['directiveSha256'],'securityId':b['securityId'],'requirementCode':b['requirementCode'],'originalHash':b['originalHash'],'normalizedFragment':b['fragment'],'extractionMethod':'POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES'}
   req=urllib.request.Request(AUD,data=json.dumps(body).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
   try:
    with urllib.request.urlopen(req,timeout=90) as r:result=json.load(r)
