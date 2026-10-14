@@ -1,0 +1,42 @@
+name: G03 Immutable Development Original Archive
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths:
+      - .github/workflows/g03-archive-retained-originals.yml
+      - scripts/v1-4/g03_archive_retained_originals.py
+permissions:
+  contents: read
+  actions: read
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/v1-4/test_g03_archive_retained_originals.py
+      - run: pip install boto3==1.35.99
+      - uses: actions/download-artifact@v4
+        with:
+          name: g03-official-originals-not-admitted
+          run-id: 38542800240
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: retained-originals
+      - name: Archive only verified G03 original bytes
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/g03_archive_retained_originals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-original-archive-readback
+          path: g03-original-archive-result/
+          retention-days: 90
+          if-no-files-found: ignore

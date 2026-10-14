@@ -1,0 +1,187 @@
+{
+  "group": "G03",
+  "purpose": "MISSING_GROWTH_QUARTER_SOURCE_QUALIFICATION",
+  "rows": [
+    {
+      "symbol": "DATAPATTNS",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q1-2025-26.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:13.065773+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q1-2025-26.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "bd9261b66339f4b18c54cb3d2cf4a343afce5075df89129f1245c25dea3465cf",
+      "byte_length": 876402,
+      "artifact_pdf": "DATAPATTNS-bd9261b66339f4b18c54cb3d2cf4a343afce5075df89129f1245c25dea3465cf.pdf",
+      "artifact_text": "DATAPATTNS-bd9261b66339f4b18c54cb3d2cf4a343afce5075df89129f1245c25dea3465cf.txt",
+      "extraction_method": "OCR_DERIVATIVE_REQUIRES_VISUAL_NUMERIC_REVIEW",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "quarter ended June 30, 2025"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Audited-Financial-Results-Q4-&-FY-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:13.066601+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://www.datapatternsindia.com/investors/files/Audited-Financial-Results-Q4-%26-FY-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "886ddfaea423ce463e6e9834259999edc9abe92b3e6c2c2926cbb65d589a7bbc",
+      "byte_length": 1825078,
+      "artifact_pdf": "DATAPATTNS-886ddfaea423ce463e6e9834259999edc9abe92b3e6c2c2926cbb65d589a7bbc.pdf",
+      "artifact_text": "DATAPATTNS-886ddfaea423ce463e6e9834259999edc9abe92b3e6c2c2926cbb65d589a7bbc.txt",
+      "extraction_method": "PDF_TEXT",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "year ended March 31, 2025"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q2-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:13.067137+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q2-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "03b5f8b1e001ea9e1dd1bb2ee7f477b80ea059f5e9e841a925292a222d77d9c7",
+      "byte_length": 2502295,
+      "artifact_pdf": "DATAPATTNS-03b5f8b1e001ea9e1dd1bb2ee7f477b80ea059f5e9e841a925292a222d77d9c7.pdf",
+      "artifact_text": "DATAPATTNS-03b5f8b1e001ea9e1dd1bb2ee7f477b80ea059f5e9e841a925292a222d77d9c7.txt",
+      "extraction_method": "PDF_TEXT",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "quarter and period ended September 30, 2024"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q3-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:13.067531+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://www.datapatternsindia.com/investors/files/Unaudited-Financial-Results-Q3-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "242bfef8ee834d571ec20bcd97705bc2f5b359f969e73594b36d65c82799543c",
+      "byte_length": 1865362,
+      "artifact_pdf": "DATAPATTNS-242bfef8ee834d571ec20bcd97705bc2f5b359f969e73594b36d65c82799543c.pdf",
+      "artifact_text": "DATAPATTNS-242bfef8ee834d571ec20bcd97705bc2f5b359f969e73594b36d65c82799543c.txt",
+      "extraction_method": "OCR_DERIVATIVE_REQUIRES_VISUAL_NUMERIC_REVIEW",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 2,
+          "source_anchor": "QUARTER AND NINE MONTHS ENDED 31 DECEMBER 2024"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "MTARTECH",
+      "source_url": "https://mtar.in/wp-content/uploads/2026/04/Q1-Results-2025-26.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:16.801198+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://mtar.in/wp-content/uploads/2026/04/Q1-Results-2025-26.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "132792731cde5b0c82336a4c8861f3ac0fe2a514156b56f11853bbd2503eae4c",
+      "byte_length": 999597,
+      "artifact_pdf": "MTARTECH-132792731cde5b0c82336a4c8861f3ac0fe2a514156b56f11853bbd2503eae4c.pdf",
+      "artifact_text": "MTARTECH-132792731cde5b0c82336a4c8861f3ac0fe2a514156b56f11853bbd2503eae4c.txt",
+      "extraction_method": "OCR_DERIVATIVE_REQUIRES_VISUAL_NUMERIC_REVIEW",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "QUARTER ENDED JUNE 30, 2025"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "MTARTECH",
+      "source_url": "https://mtar.in/wp-content/uploads/2026/04/Q2-Results-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:18.191157+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://mtar.in/wp-content/uploads/2026/04/Q2-Results-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "1b8db1a7ff579973c4454ee73e295df0124892a32e6ac68f7972774a79f6e489",
+      "byte_length": 3825273,
+      "artifact_pdf": "MTARTECH-1b8db1a7ff579973c4454ee73e295df0124892a32e6ac68f7972774a79f6e489.pdf",
+      "artifact_text": "MTARTECH-1b8db1a7ff579973c4454ee73e295df0124892a32e6ac68f7972774a79f6e489.txt",
+      "extraction_method": "OCR_DERIVATIVE_REQUIRES_VISUAL_NUMERIC_REVIEW",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 2,
+          "source_anchor": "QUARTER AND HALF YEAR ENDED SEPTEMBER 30, 2024"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "MTARTECH",
+      "source_url": "https://mtar.in/wp-content/uploads/2026/04/Q3-Results-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:18.533978+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://mtar.in/wp-content/uploads/2026/04/Q3-Results-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "de39067c62347aa12fbe0f6384ecf62e3fa428c9acafbd1e3f68eafe808ceba7",
+      "byte_length": 3167339,
+      "artifact_pdf": "MTARTECH-de39067c62347aa12fbe0f6384ecf62e3fa428c9acafbd1e3f68eafe808ceba7.pdf",
+      "artifact_text": "MTARTECH-de39067c62347aa12fbe0f6384ecf62e3fa428c9acafbd1e3f68eafe808ceba7.txt",
+      "extraction_method": "OCR_DERIVATIVE_REQUIRES_VISUAL_NUMERIC_REVIEW",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "quarter ended December 31, 2024"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    },
+    {
+      "symbol": "MTARTECH",
+      "source_url": "https://mtar.in/wp-content/uploads/2026/04/Q4-Results-2024-25.pdf",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T10:08:18.588692+00:00",
+      "canonical_admission": false,
+      "resolved_url": "https://mtar.in/wp-content/uploads/2026/04/Q4-Results-2024-25.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "sha256": "222347b894aecfa28a6e6e7948014de3cc45284f6cb9c44419cc96f25cbcc64d",
+      "byte_length": 4687641,
+      "artifact_pdf": "MTARTECH-222347b894aecfa28a6e6e7948014de3cc45284f6cb9c44419cc96f25cbcc64d.pdf",
+      "artifact_text": "MTARTECH-222347b894aecfa28a6e6e7948014de3cc45284f6cb9c44419cc96f25cbcc64d.txt",
+      "extraction_method": "PDF_TEXT",
+      "date_reference_anchor": [
+        {
+          "pdf_page": 1,
+          "source_anchor": "QUARTER AND YEA R ENDED MARCH 31 , 2025"
+        }
+      ],
+      "scope_and_numeric_admission": "NOT_PROVEN",
+      "publication_precision": "UNKNOWN"
+    }
+  ],
+  "successful_originals": 8,
+  "provider_api_calls": 0,
+  "accepted_reviews": 0,
+  "canonical_materialization": false,
+  "ocr_pages_extracted": 21
+}
