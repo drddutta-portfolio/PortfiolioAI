@@ -115,6 +115,41 @@ def check_fact(r,m):
             return "HISTORICAL_EPS_ORIGINAL_VALUE_UNPROVEN"
     return None
 
+# Corrected issuer-filed financial results are admitted ONLY with an
+# immutable original NSE correction notice, source-version identity and
+# exact revised metrics. Never resolve conflicts by "latest filing" alone.
+EXIDE_CORRECTION_SHA="0f62c1e6611a4ff318e53c725c2e3e117283547b5ff6b5f0628cbf6eba10d435"
+EXIDE_OLD_SOURCE="383002e5-7e7c-4782-9906-5493eeae0fb1"
+EXIDE_REVISED_SOURCE="ace1b679-2cc7-46e9-854b-c117eb1ee37c"
+EXIDE_CORRECTION_KEY=(PREFIX+"security_id=INE302A01020/period_end=2025-12-31/"
+    "original_version="+EXIDE_CORRECTION_SHA+"/issuer-correction.pdf")
+def qualify_exide_correction(facts,s3):
+    relevant=[r for r in facts if r["symbol"]=="EXIDEIND"
+        and str(r["period_end"])=="2025-12-31"
+        and r["consolidation_scope"]=="CONSOLIDATED"
+        and str(r["source_record_id"]) in(EXIDE_OLD_SOURCE,EXIDE_REVISED_SOURCE)]
+    if len(relevant)!=6:
+        return facts,False
+    by_source=defaultdict(dict)
+    for r in relevant:
+        if r["isin"]!="INE302A01020":return facts,False
+        by_source[str(r["source_record_id"])][r["metric_code"]]=Decimal(str(r["numeric_value"]))
+    correct={"OPERATING_REVENUE_QUARTER":Decimal("4200.59"),
+             "NET_PROFIT_QUARTER":Decimal("194.97"),
+             "EPS_DILUTED":Decimal("2.29")}
+    original=dict(correct);original["EPS_DILUTED"]=Decimal("0")
+    if by_source.get(EXIDE_OLD_SOURCE)!=original or by_source.get(EXIDE_REVISED_SOURCE)!=correct:
+        return facts,False
+    try:
+        notice=s3.get_object(Bucket=BUCKET,Key=EXIDE_CORRECTION_KEY)["Body"].read()
+    except Exception:return facts,False
+    if not notice.startswith(b"%PDF") or sha(notice)!=EXIDE_CORRECTION_SHA:
+        return facts,False
+    return [r for r in facts if not (
+        r["symbol"]=="EXIDEIND" and str(r["period_end"])=="2025-12-31"
+        and r["consolidation_scope"]=="CONSOLIDATED"
+        and str(r["source_record_id"])==EXIDE_OLD_SOURCE)],True
+
 def select_quarters(rows):
     groups=defaultdict(lambda:defaultdict(list))
     for r in rows: groups[(r["security_id"],str(r["period_end"]))][r["consolidation_scope"]].append(r)
@@ -211,7 +246,9 @@ def verify(db,s3,apply):
             reason=check_fact(r,doc)
             if reason:invalid[reason]+=1;continue
             facts.append(r)
+        facts,exide_corrected=qualify_exide_correction(facts,s3)
         selections,blocked,quarters=select_quarters(facts);invalid.update(blocked)
+        if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -221,11 +258,14 @@ def verify(db,s3,apply):
                         "selected_observation_id":str(r["id"]),
                         "original_share_basis":bool(
                             r["metric_code"]=="EPS_DILUTED" and
-                            r["raw_payload"].get("historical_identity_link"))} for r in selections]
+                            r["raw_payload"].get("historical_identity_link")),
+                        "issuer_correction":bool(
+                            exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE)
+                        } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -251,7 +291,9 @@ def verify(db,s3,apply):
                         SELECT p.security_id,p.metric_code,p.period_end,'QUARTER',
                                p.consolidation_scope,p.selected_observation_id,
                                'EVIDENCE_PRIORITY',now(),NULL,
-                               CASE WHEN p.original_share_basis THEN
+                               CASE WHEN p.issuer_correction THEN
+                                 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.original_share_basis THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED; DO_NOT_COMPARE_EPS_ACROSS_SPLIT; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                ELSE 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY' END
                         FROM proposals p

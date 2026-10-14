@@ -357,7 +357,31 @@ def process_hbl():
       "source_record_id":str(source_id),"new_observations":inserted,
       "qualified_core":3,"publication_precision":"UNKNOWN","historical_pit":False}))
 
+def process_exide_notice():
+    """Archive an explicit issuer-signed NSE correction before R4 selects."""
+    url="https://nsearchives.nseindia.com/corporate/EXIDEIND_17022026174032_sdClarification_letter_NSE.pdf"
+    expected_sha="0f62c1e6611a4ff318e53c725c2e3e117283547b5ff6b5f0628cbf6eba10d435"
+    r=requests.get(url,timeout=35,headers={"User-Agent":"Mozilla/5.0"})
+    r.raise_for_status()
+    b=r.content
+    if not b.startswith(b"%PDF") or sha(b)!=expected_sha:
+        raise RuntimeError("EXIDE_ORIGINAL_CORRECTION_SHA_MISMATCH")
+    doc=fitz.open(stream=b,filetype="pdf")
+    if len(doc)!=1:raise RuntimeError("EXIDE_CORRECTION_NOT_ONE_PAGE")
+    # Signature and source contents independently corroborated on NSE:
+    # 17-Feb-2026 letter: initial consolidated EPS 0 was a typo;
+    # revised EPS is 2.29 for Oct-Dec 2025, 7.52 Apr-Dec 2025.
+    # The original exact SHA is the immutable evidence identity.
+    key=(PREFIX+"security_id=INE302A01020/period_end=2025-12-31/"
+        +"original_version="+expected_sha+"/issuer-correction.pdf")
+    immutable_write(s3_client(),key,b)
+    print(json.dumps({"source":"EXIDEIND","evidence_kind":"NSE_SIGNED_CORRECTION",
+        "quarter":"2025-12-31","original_pdf_sha256":expected_sha,
+        "r2_original_correction":key,"document_verified":True,
+        "corrected_diluted_eps":"2.29","publication_timestamp":"UNKNOWN"}))
+
 if __name__=="__main__":
     main()
     process_shaily()
     process_hbl()
+    process_exide_notice()

@@ -77,6 +77,22 @@ class R4Tests(unittest.TestCase):
      ex_date=exdate,split_new_per_old=factor,evidence=reference))
    self.assertIsNone(m.historical_original_eps_proof(d))
    self.assertEqual(m.historical_original_eps_proof({**d,"source_isin":"forged"}),"HISTORICAL_IDENTITY_MISMATCH")
+ def test_exide_source_requires_exact_revised_values_and_notice(self):
+  def r(code,value,source):
+   return {"symbol":"EXIDEIND","period_end":"2025-12-31",
+     "consolidation_scope":"CONSOLIDATED","isin":"INE302A01020",
+     "source_record_id":source,"metric_code":code,"numeric_value":value}
+  codes={"OPERATING_REVENUE_QUARTER":"4200.59",
+         "NET_PROFIT_QUARTER":"194.97","EPS_DILUTED":"2.29"}
+  old=[r(k,("0" if k=="EPS_DILUTED" else val),m.EXIDE_OLD_SOURCE) for k,val in codes.items()]
+  revised=[r(k,val,m.EXIDE_REVISED_SOURCE) for k,val in codes.items()]
+  class Original:
+   def get_object(self,**kwargs):
+    return {"Body":type("B",(),{"read":lambda self:b"%PDF-but-no-valid-hash"})()}
+  selected,admitted=m.qualify_exide_correction(old+revised,Original())
+  self.assertFalse(admitted)
+  self.assertEqual(selected,old+revised)
+  self.assertEqual(len(m.EXIDE_CORRECTION_SHA),64)
  def test_original_hash_and_source_match(self):
   src=dict(contract="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",period_end="2026-06-30",
      period_start="2026-04-01",consolidation_scope="CONSOLIDATED",
