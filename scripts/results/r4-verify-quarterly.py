@@ -135,28 +135,49 @@ def verify(db,s3,apply):
         selections,blocked,quarters=select_quarters(facts);invalid.update(blocked)
         inserted=unchanged=protected=0
         if apply:
+            proposals=[{"security_id":str(r["security_id"]),
+                        "metric_code":r["metric_code"],
+                        "period_end":str(r["period_end"]),
+                        "consolidation_scope":r["consolidation_scope"],
+                        "selected_observation_id":str(r["id"])} for r in selections]
+            payload=json.dumps(proposals,separators=(",",":"))
+            fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
+                AS x(security_id uuid,metric_code text,period_end date,
+                     consolidation_scope text,selected_observation_id uuid)"""
             with conn.cursor() as cur:
-                for r in selections:
-                    args=(r["security_id"],r["metric_code"],r["period_end"],r["consolidation_scope"])
-                    cur.execute("""SELECT selected_observation_id FROM public.fundamental_observation_decisions
-                    WHERE security_id=%s AND metric_code=%s AND period_end=%s
-                    AND period_type='QUARTER' AND consolidation_scope=%s FOR UPDATE""",args)
-                    existing=cur.fetchone()
-                    if existing:
-                        if existing["selected_observation_id"]==r["id"]:unchanged+=1
-                        else:protected+=1
-                        continue
-                    cur.execute("""INSERT INTO public.fundamental_observation_decisions
-                    (security_id,metric_code,period_end,period_type,consolidation_scope,
-                    selected_observation_id,decision_basis,decided_at,decided_by,notes)
-                    VALUES (%s,%s,%s,'QUARTER',%s,%s,'EVIDENCE_PRIORITY',now(),NULL,%s)
-                    ON CONFLICT DO NOTHING RETURNING selected_observation_id""",
-                    (*args,r["id"],"RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; "
-                     "ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY"))
-                    if cur.fetchone():inserted+=1
-                    else:protected+=1
-            if protected:conn.rollback()
-            else:conn.commit()
+                cur.execute("""WITH proposals AS ("""+fields+""")
+                    SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
+                           count(*) FILTER (WHERE d.selected_observation_id=p.selected_observation_id) AS unchanged
+                    FROM proposals p JOIN public.fundamental_observation_decisions d
+                      ON d.security_id=p.security_id
+                     AND d.metric_code=p.metric_code
+                     AND d.period_end=p.period_end
+                     AND d.period_type='QUARTER'
+                     AND d.consolidation_scope=p.consolidation_scope
+                    """,(payload,))
+                outcome=cur.fetchone()
+                protected=int(outcome["conflicts"] or 0)
+                unchanged=int(outcome["unchanged"] or 0)
+                if protected:
+                    conn.rollback()
+                else:
+                    cur.execute("""WITH proposals AS ("""+fields+""")
+                        INSERT INTO public.fundamental_observation_decisions
+                        (security_id,metric_code,period_end,period_type,
+                         consolidation_scope,selected_observation_id,decision_basis,
+                         decided_at,decided_by,notes)
+                        SELECT p.security_id,p.metric_code,p.period_end,'QUARTER',
+                               p.consolidation_scope,p.selected_observation_id,
+                               'EVIDENCE_PRIORITY',now(),NULL,
+                               'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                        FROM proposals p
+                        ON CONFLICT DO NOTHING RETURNING selected_observation_id""",(payload,))
+                    inserted=len(cur.fetchall())
+                    if inserted+unchanged!=len(proposals):
+                        protected=len(proposals)-inserted-unchanged
+                        conn.rollback()
+                    else:
+                        conn.commit()
         else:conn.rollback()
     report={"mode":"APPLY" if apply else "DRY_RUN",
             "source_observations":len(observations),"r2_sources_checked":len(cache),
