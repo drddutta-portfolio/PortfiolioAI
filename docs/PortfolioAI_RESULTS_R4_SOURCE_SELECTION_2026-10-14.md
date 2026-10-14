@@ -29,3 +29,8 @@
 A green CI alone does not pass R4. The workflow must finish; its artifact must report source-readback/fact qualification, number of selected facts, distinct company-quarters and reasons for exclusions. Independent Dev SQL must confirm decision IDs are valid for their exact metric/period/scope, source rows unchanged and no V1-4 scoring mutations. Verify Development preview UI after merge with an authenticated session, then record remaining pending cases. No Production/main changes.
 
 **Status at implementation commit**: built, PR #143 open; awaiting workflow/decision readback. Do not advertise 231/231 verified or Strong/Mixed/Weak before their actual gates.
+
+
+## 2026-10-14 R4 exception audit
+
+The source-validation follow-on PR #144 admits complete nonconflicting Standalone source records when consolidated is incomplete; it does not permit conflicts or cross-filing metric blending. The independent readback recorded **2,743 selections, 898 selected stock-quarters, 212 equities with all four and 19 equities incomplete**. Original publication timestamps remain UNKNOWN for most observations. Exact company/quarter failure ledger and requisite evidence: `docs/PortfolioAI_RESULTS_R4_EXCEPTION_AUDIT_2026-10-14.md`. Full acceptance is **NOT PASS**; R5 Strong/Mixed/Weak remains unimplemented.

@@ -26,6 +26,24 @@ class R4Tests(unittest.TestCase):
   chosen,blocked,_=m.select_quarters(xs)
   self.assertEqual(len(chosen),0)
   self.assertEqual(blocked["NO_COMPLETE_SINGLE_SOURCE"],1)
+ def test_bank_standalone_complete_when_consolidated_missing_eps(self):
+  rs=[row("NET_INTEREST_INCOME_QUARTER",10,"c","CONSOLIDATED","FEDERALBNK"),
+      row("NET_PROFIT_QUARTER",2,"c","CONSOLIDATED","FEDERALBNK")]
+  rs.extend([row("NET_INTEREST_INCOME_QUARTER",8,"s","STANDALONE","FEDERALBNK"),
+     row("NET_PROFIT_QUARTER",1,"s","STANDALONE","FEDERALBNK"),
+     row("EPS_DILUTED",5,"s","STANDALONE","FEDERALBNK")])
+  chosen,blocked,quarters=m.select_quarters(rs)
+  self.assertEqual(len(chosen),3)
+  self.assertEqual({r["consolidation_scope"] for r in chosen},{"STANDALONE"})
+  self.assertEqual(blocked["STANDALONE_COMPLETE_CONSOLIDATED_INCOMPLETE_ADMITTED"],1)
+ def test_conflicting_consolidated_never_falls_back(self):
+  c=["OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"]
+  rs=[row(x,10,"a","CONSOLIDATED") for x in c]
+  rs.append(row("NET_PROFIT_QUARTER",11,"new","CONSOLIDATED"))
+  rs += [row(x,20,"b","STANDALONE") for x in c]
+  selected,bad,_=m.select_quarters(rs)
+  self.assertEqual(selected,[])
+  self.assertEqual(bad["CONFLICTING_SAME_SCOPE_FILING_VALUES"],1)
  def test_bank_uses_nii(self):
   xs=[row("NET_INTEREST_INCOME_QUARTER",1,symbol="HDFCBANK"),
       row("NET_PROFIT_QUARTER",1,symbol="HDFCBANK"),row("EPS_DILUTED",1,symbol="HDFCBANK")]

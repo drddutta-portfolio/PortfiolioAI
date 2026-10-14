@@ -123,15 +123,35 @@ def unique_field(tables, label: str) -> str | None:
     good=list({v.strip() for v in vals if v.strip()})
     return good[0] if len(good)==1 else None
 
+def source_filing_unit(soup, tables):
+    """Resolve an explicitly reported INR unit; never infer from magnitudes."""
+    declared=[]
+    for table in tables:
+        declared += field_values(table,"level of rounding used in financial results")
+    declared={normalize(x) for x in declared if x.strip()}
+    if len(declared)>1:return None,"CONFLICTING_DECLARED_FINANCIAL_UNITS"
+    if declared:
+        unit=next(iter(declared))
+        if unit not in ("lakhs","crores"):
+            return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+unit[:45]
+        return unit,None
+    text=soup.get_text(" ",strip=True)
+    heads=set(re.findall(
+        r"(?:amount|figures)\s+in\s*\(\s*(?:rs\.?\s*|rupees\s*|inr\s*|₹\s*)?(lakhs|crores)\s*\)",
+        text,re.I))
+    heads={h.lower() for h in heads}
+    if len(heads)==1:return next(iter(heads)),None
+    if len(heads)>1:return None,"CONFLICTING_EXPLICIT_AMOUNT_HEADINGS"
+    return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:None"
+
 def extract(html: str, symbol: str, isin: str):
     soup=BeautifulSoup(html,"html.parser")
     tables=list(html_rows(soup))
     doc_symbol=unique_field(tables,"nse symbol")
     doc_isin=unique_field(tables,"isin")
     if doc_symbol!=symbol or not doc_isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
-    unit=unique_field(tables,"level of rounding used in financial results")
-    unit_kind=normalize(unit) if unit else ""
-    if unit_kind not in ("lakhs","crores"): return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    unit_kind,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     # Match one genuine Ind-AS financial statement, never the segment reporting
@@ -187,10 +207,8 @@ def extract_bank(html: str, symbol: str, isin: str):
     tables=list(html_rows(soup))
     if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
         return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
-    unit=unique_field(tables,"level of rounding used in financial results")
-    unit_kind=normalize(unit) if unit else ""
-    if unit_kind not in ("lakhs","crores"):
-        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    unit_kind,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     report=unique_field(tables,"reporting type")
@@ -455,6 +473,17 @@ def main():
                         AND f.metric_code=ANY(%s))
                 ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,list(RESULT_METRICS),maxstocks))
             stocks=cur.fetchall()
+        # Narrow optional Development backfill; never expand the set or
+        # silently process unrelated securities when a caller requests a
+        # specific audited company shortlist.
+        raw_targets=os.getenv("RESULTS_TARGET_SYMBOLS","").strip()
+        if raw_targets:
+            target=set(x.strip().upper() for x in raw_targets.split(","))
+            if len(target)>12 or not target or any(not re.fullmatch(r"[A-Z0-9&-]{2,24}",x) for x in target):
+                raise RuntimeError("INVALID_TARGET_STOCK_SET")
+            stocks=[x for x in stocks if x[0] in target]
+            if {x[0] for x in stocks}!=target:
+                raise RuntimeError("TARGET_SECURITY_NOT_IN_QUALIFIED_COHORT")
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
@@ -507,6 +536,27 @@ def main():
                             data,reason=extract_source(res.text,symbol,isin,url)
                             if not data:
                                 entry["reason"]=reason
+                                if reason.startswith("UNSUPPORTED_OR_UNKNOWN_UNIT"):
+                                    examples=entry.setdefault("unit_source_diagnostics",[])
+                                    if len(examples)<3:
+                                        public_soup=BeautifulSoup(res.text,"html.parser")
+                                        tt=list(html_rows(public_soup))
+                                        declared=[v for table in tt for v in field_values(
+                                            table,"level of rounding used in financial results")]
+                                        headings=re.findall(
+                                            r"(?i)(?:amount|figures)[^<\\n]{0,110}(?:lakhs|crores|millions|rupees|inr)",
+                                            res.text)[:3]
+                                        examples.append({"issuer_url":url,
+                                                         "declared_values":declared[:6],
+                                                         "html_amount_fragments":headings,
+                                                         "text_excerpt":public_soup.get_text(" ",strip=True)[:220]})
+                                if reason=="IDENTITY_MISMATCH_OR_UNKNOWN":
+                                    examples=entry.setdefault("identity_source_diagnostics",[])
+                                    if len(examples)<3:
+                                        tt=list(html_rows(BeautifulSoup(res.text,"html.parser")))
+                                        examples.append({"issuer_url":url,
+                                                         "nse_symbol":unique_field(tt,"nse symbol"),
+                                                         "source_isin":unique_field(tt,"isin")})
                                 continue
                             if data["period_end"] not in TARGET_QUARTERS or data["period_end"] in completed:
                                 continue  # Preserve qualified quarters without duplicate writes.
