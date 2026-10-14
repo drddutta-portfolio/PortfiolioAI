@@ -58,6 +58,9 @@ jobs:
             'requests==2.32.5' 'beautifulsoup4==4.13.5'
       - name: Verify parser, units, identity and source URL policy
         run: python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: Inspect public NSE banking EPS source format (no database writes)
+        continue-on-error: true
+        run: python scripts/results/r3-diagnose-bank-eps.py
       - name: Run bounded NSE issuer-data acquisition to R2 then Supabase
         shell: bash
         run: |
