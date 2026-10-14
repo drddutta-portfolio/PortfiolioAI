@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - results-r3-batch-scan-20261014
+      - results-r4-exception-closure-20261014
     paths:
       - scripts/results/r3-live-public-filing-batch.py
       - scripts/results/test_r3_live_public_filing_batch.py
@@ -36,6 +37,7 @@ jobs:
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
       RESULTS_MAX_STOCKS: ${{ inputs.max_stocks || '262' }}
+      RESULTS_TARGET_SYMBOLS: ${{ github.ref_name == 'results-r4-exception-closure-20261014' && 'BECTORFOOD,COFORGE,HBLENGINE,KOTAKBANK,SHAILY,V2RETAIL,VAML' || '' }}
 
     steps:
       - uses: actions/checkout@v4

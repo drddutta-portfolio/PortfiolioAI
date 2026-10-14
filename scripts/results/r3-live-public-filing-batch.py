@@ -131,7 +131,8 @@ def extract(html: str, symbol: str, isin: str):
     if doc_symbol!=symbol or not doc_isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit=unique_field(tables,"level of rounding used in financial results")
     unit_kind=normalize(unit) if unit else ""
-    if unit_kind not in ("lakhs","crores"): return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    if unit_kind not in ("lakhs","crores"):
+        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+str(unit)[:45]
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     # Match one genuine Ind-AS financial statement, never the segment reporting
@@ -190,7 +191,7 @@ def extract_bank(html: str, symbol: str, isin: str):
     unit=unique_field(tables,"level of rounding used in financial results")
     unit_kind=normalize(unit) if unit else ""
     if unit_kind not in ("lakhs","crores"):
-        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+str(unit)[:45]
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     report=unique_field(tables,"reporting type")
@@ -455,6 +456,17 @@ def main():
                         AND f.metric_code=ANY(%s))
                 ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,list(RESULT_METRICS),maxstocks))
             stocks=cur.fetchall()
+        # Narrow optional Development backfill; never expand the set or
+        # silently process unrelated securities when a caller requests a
+        # specific audited company shortlist.
+        raw_targets=os.getenv("RESULTS_TARGET_SYMBOLS","").strip()
+        if raw_targets:
+            target=set(x.strip().upper() for x in raw_targets.split(","))
+            if len(target)>12 or not target or any(not re.fullmatch(r"[A-Z0-9&-]{2,24}",x) for x in target):
+                raise RuntimeError("INVALID_TARGET_STOCK_SET")
+            stocks=[x for x in stocks if x[0] in target]
+            if {x[0] for x in stocks}!=target:
+                raise RuntimeError("TARGET_SECURITY_NOT_IN_QUALIFIED_COHORT")
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
