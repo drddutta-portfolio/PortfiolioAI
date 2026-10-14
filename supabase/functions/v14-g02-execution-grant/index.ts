@@ -1,4 +1,4 @@
-import {handleG02MarketHistory} from '../v14-g02-market-history/index.ts'
+import {handleG02MarketHistory} from '../_shared/v14-g02-market-history-runtime.ts'
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
 import policy from '../_shared/v14-g02-owner-authorization.json' with {type:'json'}
