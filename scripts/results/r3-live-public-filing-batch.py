@@ -35,13 +35,14 @@ FIELDS = {
 }
 TARGET_QUARTERS = ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
 CORE_METRICS = frozenset(FIELDS.values())
+BANK_REQUIRED = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
 RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
                   "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
                   "GROSS_NPA_PERCENT", "NET_NPA_PERCENT")
 NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
-DATE = re.compile(r"^\d\d[-/.]\d\d[-/.]20\d\d$")
+DATE = re.compile(r"^\d\d[-/.](?:\d\d|[A-Za-z]{3,9})[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
-ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/INTEGRATED_FILING_INDAS_[A-Za-z0-9_]+\.html$",re.I)
+ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\.html$",re.I)
 
 def sha(raw: bytes) -> str: return hashlib.sha256(raw).hexdigest()
 
@@ -79,8 +80,11 @@ def field_values(rows, field: str) -> list[str]:
 def date_of(text: str) -> str | None:
     t=text.strip()
     if not DATE.fullmatch(t): return None
-    try: return datetime.strptime(t.replace("/","-").replace(".","-"),"%d-%m-%Y").date().isoformat()
-    except ValueError: return None
+    t=t.replace("/","-").replace(".","-")
+    for fmt in ("%d-%m-%Y", "%d-%b-%Y", "%d-%B-%Y"):
+        try: return datetime.strptime(t,fmt).date().isoformat()
+        except ValueError: continue
+    return None
 
 def unique_field(tables, label: str) -> str | None:
     vals=[]
@@ -135,6 +139,75 @@ def extract(html: str, symbol: str, isin: str):
             facts[metric]={"value":str(n),"unit":"INR_CRORE","original_value":values[0],"original_unit":"INR_LAKH"}
     if not facts:return None,"NO_QUALIFIED_FINANCIAL_VALUES"
     return {"symbol":symbol,"isin":isin,"period_start":qstart,"period_end":qend,"scope":scope,"facts":facts},None
+
+def extract_bank(html: str, symbol: str, isin: str):
+    """Financial Results - Banking, NOT Ind-AS. All values from first quarter column."""
+    soup=BeautifulSoup(html,"html.parser")
+    tables=list(html_rows(soup))
+    if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
+        return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
+    unit=unique_field(tables,"level of rounding used in financial results")
+    if not unit or normalize(unit)!="lakhs":
+        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    report=unique_field(tables,"reporting type")
+    if report and normalize(report)!="quarterly":
+        return None,"NOT_QUARTERLY"
+    statements=[]
+    for table in tables:
+        names={normalize(cell) for row in table for cell in row}
+        if {"total interest earned","interest expenses","net profit (loss) for the period"}.issubset(names):
+            statements.append(table)
+    if len(statements)!=1:
+        return None,"BANKING_STATEMENT_NOT_UNIQUE"
+    stmt=statements[0]
+    starts=field_values(stmt,"date of start of reporting period")
+    ends=field_values(stmt,"date of end of reporting period")
+    qstart=date_of(starts[0]) if starts else None
+    qend=date_of(ends[0]) if ends else None
+    if not qstart or not qend or qend not in TARGET_QUARTERS:
+        return None,"PERIOD_NOT_PROVEN"
+    if (date.fromisoformat(qend)-date.fromisoformat(qstart)).days not in range(75,100):
+        return None,"PERIOD_NOT_THREE_MONTHS"
+    scopes=field_values(stmt,"nature of report standalone or consolidated")
+    scope=scopes[0].upper() if scopes else None
+    if scope not in ("STANDALONE","CONSOLIDATED"):
+        return None,"SCOPE_UNKNOWN"
+    facts={}
+    def issuer_number(label):
+        values=field_values(stmt,label)
+        return (number(values[0]),values[0]) if values else (None,None)
+    profit,profit_raw=issuer_number("net profit (loss) for the period")
+    if profit is not None:
+        facts["NET_PROFIT_QUARTER"]={"value":str(profit/Decimal(100)),"unit":"INR_CRORE",
+          "original_value":profit_raw,"original_unit":"INR_LAKH"}
+    ppop,ppop_raw=issuer_number("operating profit before provision and contingencies")
+    if ppop is not None:
+        facts["OPERATING_PROFIT_QUARTER"]={"value":str(ppop/Decimal(100)),"unit":"INR_CRORE",
+          "original_value":ppop_raw,"original_unit":"INR_LAKH",
+          "metric_definition":"PRE_PROVISION_OPERATING_PROFIT"}
+    eps,eps_raw=issuer_number("diluted earnings per share after extraordinary items")
+    if eps is not None and abs(eps)<=Decimal("100000"):
+        facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
+          "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
+    earned,earned_raw=issuer_number("total interest earned")
+    expense,expense_raw=issuer_number("interest expenses")
+    if earned is not None and expense is not None:
+        nii=(earned-expense)/Decimal(100)
+        facts["NET_INTEREST_INCOME_QUARTER"]={"value":str(nii),"unit":"INR_CRORE",
+          "original_value":None,"original_unit":"INR_LAKH",
+          "derivation":"TOTAL_INTEREST_EARNED_MINUS_INTEREST_EXPENSES",
+          "components":{"total_interest_earned_lakh":earned_raw,
+                        "interest_expenses_lakh":expense_raw}}
+    if not facts:
+        return None,"NO_QUALIFIED_BANK_FINANCIAL_VALUES"
+    return {"symbol":symbol,"isin":isin,"period_start":qstart,
+            "period_end":qend,"scope":scope,"facts":facts},None
+
+def extract_source(html: str, symbol: str, isin: str, source_url: str):
+    if re.search(r"/INTEGRATED_FILING_BANKING_[A-Za-z0-9_]+\.html$",
+                 urlparse(source_url).path,re.I):
+        return extract_bank(html,symbol,isin)
+    return extract(html,symbol,isin)
 
 def listing_urls(payload, symbol):
     """Trust only explicitly linked NSE integrated INDAS iXBRL source URLs."""
@@ -256,17 +329,16 @@ def persist(conn,s3,parsed,url,original_sha):
     return saved
 
 def completed_quarters(rows):
-    """Only a matching security, scope AND source version may complete a quarter.
-
-    Cross-filing mixtures cannot be used to manufacture financial completeness.
-    """
+    """Require complete same-source metrics; bank NPA-only data never qualifies."""
     by_filing = {}
+    banking = any(metric=="GROSS_NPA_PERCENT" for _, _, _, metric in rows)
+    required = BANK_REQUIRED if banking else CORE_METRICS
     for period_end, scope, source_record_id, metric_code in rows:
         if str(period_end) not in TARGET_QUARTERS or not scope or not source_record_id:
             continue
         by_filing.setdefault((str(period_end), scope, str(source_record_id)), set()).add(metric_code)
     return {period for (period, _, _), metrics in by_filing.items()
-            if CORE_METRICS.issubset(metrics)}
+            if required.issubset(metrics)}
 
 
 def main():
@@ -310,7 +382,7 @@ def main():
                     WHERE security_id=%s AND period_end=ANY(%s::date[])
                       AND period_type='QUARTER' AND numeric_value IS NOT NULL
                       AND metric_code=ANY(%s)""",
-                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS)))
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | {"GROSS_NPA_PERCENT"})))
                 completed=completed_quarters(cur.fetchall())
             conn.rollback()
             if len(completed)==len(TARGET_QUARTERS):
@@ -336,7 +408,7 @@ def main():
                             if len(res.content)>2_000_000:
                                 entry["reason"]="FILING_TOO_LARGE"
                                 continue
-                            data,reason=extract(res.text,symbol,isin)
+                            data,reason=extract_source(res.text,symbol,isin,url)
                             if not data:
                                 entry["reason"]=reason
                                 continue
@@ -345,7 +417,7 @@ def main():
                             entry["qualified"]+=1
                             log["documents_parsed"]+=1
                             entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
-                            if CORE_METRICS.issubset(data["facts"]):
+                            if (BANK_REQUIRED if "INTEGRATED_FILING_BANKING_" in url else CORE_METRICS).issubset(data["facts"]):
                                 completed.add(data["period_end"])
                             if len(completed)==len(TARGET_QUARTERS):
                                 break

@@ -51,6 +51,39 @@ class ResultsAcquisitionTests(unittest.TestCase):
         v,reason=module.extract(fixture(unit="Crores"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
         self.assertEqual(reason,"UNSUPPORTED_OR_UNKNOWN_UNIT")
+    def test_bank_original_filing_extract(self):
+        html="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+        <table>
+        <tr><td>Date of start of reporting period</td><td>01-10-2025</td><td>01-04-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>500,000.00</td><td>1,400,000.00</td></tr>
+        <tr><td>Interest expenses</td><td>275,000.00</td><td>800,000.00</td></tr>
+        <tr><td>Operating profit before provision and contingencies</td><td>135,000.00</td><td>300,000.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>50,000.00</td><td>120,000.00</td></tr>
+        <tr><td>Diluted earnings per share after extraordinary items</td><td>3.11</td><td>8.62</td></tr></table></body></html>"""
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_123_01012026_iXBRL_WEB.html"
+        value,reason=module.extract_source(html,"BANDHANBNK","INE545U01014",url)
+        self.assertIsNone(reason)
+        self.assertEqual(value["period_end"],"2025-12-31")
+        self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"2250.00")
+        self.assertEqual(value["facts"]["NET_PROFIT_QUARTER"]["value"],"500.00")
+        self.assertEqual(value["facts"]["OPERATING_PROFIT_QUARTER"]["value"],"1350.00")
+        self.assertEqual(value["facts"]["EPS_DILUTED"]["value"],"3.11")
+        self.assertEqual(value["scope"],"STANDALONE")
+    def test_bank_npa_only_not_complete(self):
+        rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
+        self.assertEqual(module.completed_quarters(rows),set())
+    def test_bank_formatted_date(self):
+        self.assertEqual(module.date_of("01-Apr-2025"),"2025-04-01")
+    def test_bank_allowed_listing(self):
+        payload={"data":[{"symbol":"BANDHANBNK","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_176500_21072026172514_iXBRL_WEB.html"}]}
+        self.assertEqual(len(module.listing_urls(payload,"BANDHANBNK")),1)
+
     def test_listing_links_only_allow_trusted_source(self):
         items={"data":[{"symbol":"RELIANCE","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_175608_17072026195004_iXBRL_WEB.html"},
                        {"symbol":"SOMEBODY","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_444_fake.html"},
