@@ -1,0 +1,56 @@
+name: Results R4 Development Source Verification
+on:
+  push:
+    branches:
+      - results-r4-source-verification-20261014
+    paths:
+      - scripts/results/r4-verify-quarterly.py
+      - scripts/results/test_r4_verify_quarterly.py
+      - .github/workflows/results-r4-source-verification.yml
+  workflow_dispatch:
+    inputs:
+      apply_selections:
+        description: "Persist qualified current-display source selections in Development"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: results-r4-source-verification-development
+  cancel-in-progress: false
+jobs:
+  verify-and-select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+      - name: Deterministic verifier tests
+        run: python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Development guard and R2-based selection
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+          python scripts/results/r4-verify-quarterly.py ${{ github.event_name == 'push' && '--apply' || (inputs.apply_selections && '--apply' || '') }}
+      - name: Upload nonsecret report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r4-source-verification
+          path: tmp/results-r4/readback.json
+          if-no-files-found: warn
+          retention-days: 21
