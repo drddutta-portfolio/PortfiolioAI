@@ -285,13 +285,20 @@ def extract_bank(html: str, symbol: str, isin: str):
         for tr in soup.find_all("tr"):
             cells=tr.find_all(["th","td"], recursive=False)
             for idx,cell in enumerate(cells[:-1]):
-                label=normalize(cell.get_text(" ",strip=True))
-                if label!="diluted earnings per share after extraordinary items":
+                label=normalize(cell.get_text(" ",strip=True)).replace("\u200b","")
+                # Same issuer filing, explicit AFTER-extraordinary diluted EPS;
+                # a trailing footnote/qualifier or spacer TD must not make
+                # a published first-quarter number disappear.
+                if (len(label)>140
+                    or "diluted earnings per share after extraordinary items" not in label
+                    or "before extraordinary" in label):
                     continue
-                raw=cells[idx+1].get_text(" ",strip=True)
-                candidate=number(re.sub(r"[\\s*†‡#]+$", "", raw))
-                if candidate is not None:
-                    candidates.append((candidate,raw))
+                for field in cells[idx+1:]:
+                    raw=field.get_text(" ",strip=True)
+                    candidate=number(re.sub(r"[\\s*†‡#]+$", "",raw))
+                    if candidate is not None:
+                        candidates.append((candidate,raw))
+                        break
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
