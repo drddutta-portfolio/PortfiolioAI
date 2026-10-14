@@ -176,7 +176,7 @@ def main():
         endpoint="https://"+account+".r2.cloudflarestorage.com"
     elif account.startswith("https://"):
         u=urlparse(account)
-        if not re.fullmatch(r"[a-f0-9]{32}\\.r2\\.cloudflarestorage\\.com",u.hostname or "") or u.port or u.path not in ("","/") or u.query or u.fragment:
+        if not re.fullmatch(r"[a-f0-9]{32}\.r2\.cloudflarestorage\.com",u.hostname or "") or u.port or u.path not in ("","/") or u.query or u.fragment:
             raise SystemExit("INVALID_R2_ENDPOINT")
         endpoint=account.rstrip("/")
     else:
