@@ -1,5 +1,15 @@
 # G03 — executed qualification and remaining canonical gates
 
+## Latest approved execution — BEL documentary requirements persisted FRESH
+
+The scoped owner approval was received and executed. Canonical v69 and grant handler v6 are active, with actual deployment file/hash readback. Workflow 38600061668 passed seven-stock validation, BEL-only one-use grant/save, duplicate-issuance idempotence and replay rejection. Independent selected-snapshot readback proves BUSINESS_DURABILITY and OWNERSHIP_GOVERNANCE FRESH in BEL successor `e1170d5b-5173-453c-a599-ea48df83c7bf`; the other six selected snapshots are unchanged.
+
+BEL current prospective blockers are **10 → 8**; total G03 current prospective blockers are **70 → 68**, frozen-member current prospective blockers **40 → 38**. The old selected BEL total was eight before its market evidence expired. The successor total is also eight because two genuinely cleared documentary requirements offset two expired market requirements. No false 8 → 6 reduction or unsupported READY status is asserted. G03 remains 0/7 wider / 0/4 frozen READY, ₹0.
+
+Remaining source work advanced: BEL's FY2025 annual original was acquired from official MSEI after the direct issuer URL failed. Precise standalone ROCE is now source-qualified for FY2024–FY2026 at **36.44%, 39.22%, 35.92%**; the overlapping year, numerator, denominator and declared basis match across originals. No financial factual review or canonical ROCE FRESH result is implied. The explicit three-year source series is ready for the next source-bound admission step.
+
+The [executed pilot](G03_BEL_Documentary_Pilot_Execution_2026-10-14.md) records the granted scope, deployed hashes, actual materialization, independent readback and remaining requirements. Earlier pending-approval sections below are retained as historical checkpoints and are superseded by this result. No additional deployment approval is pending for the executed BEL pilot.
+
 ## Latest successor checkpoint — actual BEL reviews admitted
 
 The earlier read-only deployment restriction below is resolved: materializer v68 is active and seven-stock signed read-only runs 38566313967 and 38570933879 succeeded. The current replay has ten mandatory blockers per stock, including newly stale market evidence; the older persisted census below remains unchanged.

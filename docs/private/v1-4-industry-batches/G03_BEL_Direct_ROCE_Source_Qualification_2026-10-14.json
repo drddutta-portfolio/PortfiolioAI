@@ -17,7 +17,9 @@
       "supportingDenominatorINRLakh": "2249722",
       "publishedAt": null,
       "publicationPrecision": "UNKNOWN",
-      "factualAdmission": false
+      "factualAdmission": false,
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "originalSourceUrl": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf"
     },
     {
       "metricCode": "ROCE_MANAGEMENT_ANNUAL",
@@ -34,16 +36,45 @@
       "supportingDenominatorINRLakh": "1810176",
       "publishedAt": null,
       "publicationPrecision": "UNKNOWN",
-      "factualAdmission": false
+      "factualAdmission": false,
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "originalSourceUrl": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf"
+    },
+    {
+      "metricCode": "ROCE_MANAGEMENT_ANNUAL",
+      "numericValue": "36.44",
+      "unit": "PERCENT",
+      "scope": "STANDALONE",
+      "periodType": "YEAR",
+      "periodStart": "2023-04-01",
+      "periodEnd": "2024-03-31",
+      "pdfPage": 170,
+      "sourceSection": "Standalone notes, Schedule III financial ratios, row (j)",
+      "sourceBasis": "Issuer-reported EBIT / capital employed; no provider or consolidated mixing",
+      "supportingNumeratorINRLakh": "534158",
+      "supportingDenominatorINRLakh": "1466000",
+      "publishedAt": null,
+      "publicationPrecision": "UNKNOWN",
+      "factualAdmission": false,
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "originalSourceUrl": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2025/BEL-2025.pdf"
     }
   ],
   "requiredAnnualYears": 3,
-  "verifiedDirectRows": 2,
-  "minimumSeriesSatisfied": false,
+  "verifiedDirectRows": 3,
+  "minimumSeriesSatisfied": true,
   "canonicalAdmission": false,
   "notes": [
-    "Precise standalone Schedule III ratios are kept separate from rounded corporate-overview ROCE.",
-    "A third compatible annual source and source-bound factual review remain required.",
-    "Retrieval does not prove historical publication availability."
-  ]
+    "Three consecutive standalone issuer-reported annual ROCE rows have matching declared EBIT/capital-employed basis.",
+    "The FY2025 overlap matches ratio, numerator and denominator exactly across both original documents.",
+    "No factual review, canonical FRESH or PIT publication availability is inferred from source qualification.",
+    "Rounded corporate-overview and provider-calculated ROCE have not been mixed."
+  ],
+  "overlapCompatibility": {
+    "periodEnd": "2025-03-31",
+    "ratio": "39.22",
+    "numeratorINRLakh": "709960",
+    "denominatorINRLakh": "1810176",
+    "allCellsMatch": true
+  }
 }

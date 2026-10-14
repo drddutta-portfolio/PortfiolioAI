@@ -1,5 +1,31 @@
 # G03 BEL documentary pilot — Development execution contract
 
+## Latest owner-approved canonical result
+
+The owner replied **“Please proceed”** to the concrete shared-adapter/BEL-only-grant/save approval checkpoint on 14 October 2026. The previously rejected action was retried only after that explicit scoped approval.
+
+Canonical materializer **v69 ACTIVE**, SHA `28c82538a70eee4fe22bdc7caeac295920c07b6d0c4c425c8d572efaab5a8f2c`, retains gateway JWT verification. Execution-grant handler **v6 ACTIVE**, SHA `f43d044724555d2b975eeed31cdc7ed22b25f5eefad4102afc1d93c4dab10e27`, retains its existing custom signed GitHub OIDC authentication. Fresh deployment readback confirms every deployed candidate file matches; 46/47 original canonical files are unchanged. No financial/BANK code, write RPC, grant-consumption semantics, schedule or schema was changed.
+
+Actual workflow **38600061668 SUCCESS** first validated all seven G03 stocks read-only and proved BEL's two admitted documentary requirements FRESH. It then issued the exact BEL-only zero-provider P4 grant, proved duplicate issuance idempotent, consumed it once, saved one successor snapshot/selection and proved replay rejected as `P4_GRANT_ALREADY_USED`.
+
+Independent Development readback confirms:
+
+- Snapshot **`e1170d5b-5173-453c-a599-ea48df83c7bf`**, selection **`4b86746c-74ef-45e3-97d3-cc117355ed8f`**.
+- `BUSINESS_DURABILITY` is persisted **FRESH**, bound to review `d66deded-c38c-5c07-a054-6597b302f6f5`.
+- `OWNERSHIP_GOVERNANCE` is persisted **FRESH**, bound to review `a3fabf47-dd0c-5339-a1c0-ade81c51c4ea`; adverse governance findings remain in its source lineage.
+- Grant `2c849468-6a17-4af9-aa47-1e5785e9dbc7` has `SECURITY_IDS:fdec39e9-08a7-418d-ae96-9d8ce834d26c`, zero allowed provider calls and exactly one consumption record.
+- The other six G03 selected snapshot IDs are unchanged. Previous BEL snapshots and reviews remain preserved.
+
+**BEL current prospective blockers: 10 → 8**, with two genuine documentary requirements cleared. The older selected snapshot also had eight total blockers because its two market requirements were then FRESH. The new selection correctly records those as STALE; documentary success has not been used to conceal market expiry. Seven-stock current prospective blockers: **70 → 68**; frozen-member prospective blockers: **40 → 38**.
+
+Remaining BEL requirements are operating-margin history, four-period order/execution review, three-year ROCE/ROIC, three-year CFO/FCF conversion, three-year debt/interest coverage, valuation, relative momentum and drawdown/volatility history freshness. Selected status remains REVIEW_REQUIRED. **G03 READY: 0/7 wider, 0/4 frozen; frozen READY value ₹0.**
+
+Evidence: [actual seven-stock validation](G03_Approved_Seven_Stock_Validation_2026-10-14.json), [actual grant-scoped materialization](G03_BEL_Actual_Grant_Scoped_Materialization_2026-10-14.json), [independent persisted readback](G03_BEL_Persisted_Documentary_FRESH_Readback_2026-10-14.json). The implementation remains the already tested `1dece3cc…`; no runtime code repair or extra full-suite rerun was needed for this approved activation. No provider expenditure, R2 upload, migration, Production/main change or PR merge occurred.
+
+Remaining financial-source work also progressed. The direct issuer FY2025 URL returned HTTP 503; a distinct original report from the official MSEI exchange archive was acquired once and hash-verified, SHA `db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d`, 15,543,216 bytes. Its standalone Schedule III row on PDF page 170 supplies FY2024 ROCE **36.44%**. FY2025 overlaps the retained FY2026 original exactly at **39.22%**, with matching EBIT 709,960 lakh and capital employed 1,810,176 lakh. The [qualified series](G03_BEL_Direct_ROCE_Source_Qualification_2026-10-14.json) now contains three consecutive compatible issuer rows: **36.44%, 39.22%, 35.92%** for FY2024–FY2026. This is qualified source evidence, not a new factual admission or canonical ROCE FRESH result. Publication remains UNKNOWN/NULL; the later comparative column is not backdated as historical point-in-time availability.
+
+Earlier sections below preserve the prepared/pending checkpoints as historical audit context; their pending-deployment statements are superseded by this actual approved result.
+
 Owner milestone: “Please complete G03 and make the stocks READY.” The pilot converts existing source research into two independently validated requirement results. It does not change the Industrials methodology, frozen population, financial contracts or another group's selected evidence.
 
 ## Current execution baseline

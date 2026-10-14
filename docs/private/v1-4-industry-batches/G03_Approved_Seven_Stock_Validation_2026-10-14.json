@@ -1,0 +1,3357 @@
+{
+  "status": "IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY",
+  "dryRun": true,
+  "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+  "results": [
+    {
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "839b9a129d3b6cb8c618e5a9ca5c937db479d0c11431912155026a782c8adae7",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "afa3d27f-1f80-4eba-8f5e-670caddb8879"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "afa3d27f-1f80-4eba-8f5e-670caddb8879",
+                "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+                "metric_code": "OPM_TTM",
+                "numeric_value": "28.590000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "TTM",
+                "retrieved_at": "2026-09-29T16:36:43.593+00:00",
+                "fresh_until": "2026-12-28T16:36:43.593+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "c46a1384-693f-4d29-9c4d-7c3ff676045c"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "6778b629-e6e2-4c49-95d9-8595c62fe0f3"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:32:17.619+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "normalized_value": {
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "order",
+              "execution",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "72b0a8e2-ba84-4fa8-8868-139171476c0d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:32:12.41+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "normalized_value": {
+            "evidenceCode": "ROCE_OR_ROIC",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "minimumPeriods": 3,
+            "matchedSections": [
+              {
+                "label": "ROCE Ann. 1Y Ago %",
+                "numericValue": 20.84
+              },
+              {
+                "label": "ROCE Ann. 5Y Avg %",
+                "numericValue": 17.71
+              },
+              {
+                "label": "ROCE Ann. 3Y Avg %",
+                "numericValue": 19.66
+              }
+            ],
+            "reasonCode": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "72b0a8e2-ba84-4fa8-8868-139171476c0d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:32:12.41+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "normalized_value": {
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "minimumPeriods": 3,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 1618.31
+              }
+            ],
+            "reasonCode": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "6778b629-e6e2-4c49-95d9-8595c62fe0f3"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:32:17.619+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "normalized_value": {
+            "evidenceCode": "BUSINESS_DURABILITY",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "customer",
+              "distribution"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "72b0a8e2-ba84-4fa8-8868-139171476c0d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:32:12.41+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "normalized_value": {
+            "evidenceCode": "VALUATION",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "minimumPeriods": 3,
+            "matchedSections": [
+              {
+                "label": "Fair Price 5YrPE",
+                "numericValue": 1278.91
+              },
+              {
+                "label": "Fair Price 5YrPE Upside",
+                "numericValue": -317.29
+              },
+              {
+                "label": "Fair Price 5YrPE Upside Fwd 1Yr",
+                "numericValue": 21.14
+              },
+              {
+                "label": "Fair Price 5YrPE Upside%",
+                "numericValue": -19.88
+              },
+              {
+                "label": "Fair Price 5YrPE Upside% Fwd 1Yr",
+                "numericValue": 1.32
+              }
+            ],
+            "reasonCode": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:52:53.022+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:52:53.022+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:52:53.022+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:52:53.022+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 277,
+              "latestSession": "2026-10-07",
+              "retrievedAt": "2026-10-07T16:52:53.022+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-07T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Industrial",
+            "industry": "Aerospace & Defence",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:eb3bc12d-6d21-40ec-8bcc-054713ee91b6:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "0398573de9c162baac0cbeb603707472fd6a8ba34bd412fed6f89d8c23de6e8b",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb",
+                "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+                "metric_code": "OPM_TTM",
+                "numeric_value": "28.550000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "TTM",
+                "retrieved_at": "2026-09-29T16:36:56.954+00:00",
+                "fresh_until": "2026-12-28T16:36:56.954+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "cf472a75-1d5d-4045-b3c0-f7cc36f10d8d"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "964382a6-f4b9-44e3-ab45-ec407dba92ce"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T19:35:36.993+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "964382a6-f4b9-44e3-ab45-ec407dba92ce",
+          "normalized_value": {
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "order",
+              "execution",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "d05643f4-6d55-4085-af1c-88ca9e5f8ab5"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "d05643f4-6d55-4085-af1c-88ca9e5f8ab5",
+                "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+                "metric_code": "ROCE_ANNUAL",
+                "numeric_value": "31.880000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "YEAR",
+                "retrieved_at": "2026-09-26T19:35:31.851+00:00",
+                "fresh_until": "2026-12-25T19:35:31.851+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "cf472a75-1d5d-4045-b3c0-f7cc36f10d8d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:36:56.954+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "cf472a75-1d5d-4045-b3c0-f7cc36f10d8d",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 162.75
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 21.67
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T19:35:31.851+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+          "normalized_value": {
+            "evidenceCode": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "minimumPeriods": 3,
+            "matchedSections": [
+              {
+                "label": "Interest Coverage Ratio Ann. 1Y Ago",
+                "numericValue": 782.65
+              }
+            ],
+            "reasonCode": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [
+            "d66deded-c38c-5c07-a054-6597b302f6f5"
+          ],
+          "selected_evidence_id": "d66deded-c38c-5c07-a054-6597b302f6f5",
+          "evidence_as_of_date": "2026-03-31",
+          "retrieved_at": "2026-10-14T13:17:15.141+00:00",
+          "fresh_through": "2027-03-31",
+          "source_provider": "COMPANY_EXCHANGE_FILING",
+          "raw_source_record_id": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "d66deded-c38c-5c07-a054-6597b302f6f5"
+              ],
+              "sourceRecordIds": [
+                "a0b3e336-9136-546e-ac03-edaf13ddd8dc"
+              ],
+              "sourcePayloadHashes": [
+                "8f2fe329e145057be3c38fed6ba67511eb04a1c633a80e535eee45f5437b3e9c"
+              ],
+              "researchDocumentIds": [
+                "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+              ],
+              "documentSourceIds": [
+                "d1059e3a-0584-517c-afcd-f15f594a20b5"
+              ],
+              "contentHashes": [
+                "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453"
+              ]
+            },
+            "series": []
+          },
+          "validation_state": "VALIDATED_REVIEW_LEDGER",
+          "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+          "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+          "recommended_remediation_action": "NONE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T19:35:31.851+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+          "normalized_value": {
+            "evidenceCode": "VALUATION",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "minimumPeriods": 3,
+            "matchedSections": [
+              {
+                "label": "Fair Price 5YrPE",
+                "numericValue": 364.82
+              },
+              {
+                "label": "PE 5Yr Average",
+                "numericValue": 43.39
+              },
+              {
+                "label": "PE 3Yr Average",
+                "numericValue": 52.56
+              },
+              {
+                "label": "Fair Price 5YrPE Upside",
+                "numericValue": -27.18
+              },
+              {
+                "label": "Fair Price 5YrPE Upside Fwd 1Yr",
+                "numericValue": 21.48
+              },
+              {
+                "label": "Fair Price 5YrPE Upside%",
+                "numericValue": -6.93
+              },
+              {
+                "label": "Fair Price 5YrPE Upside% Fwd 1Yr",
+                "numericValue": 5.48
+              }
+            ],
+            "reasonCode": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:53:12.809+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:53:12.809+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:53:12.809+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:53:12.809+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 277,
+              "latestSession": "2026-10-07",
+              "retrievedAt": "2026-10-07T16:53:12.809+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-07T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [
+            "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+          ],
+          "selected_evidence_id": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea",
+          "evidence_as_of_date": "2026-03-31",
+          "retrieved_at": "2026-10-14T13:17:21.086+00:00",
+          "fresh_through": "2027-03-31",
+          "source_provider": "COMPANY_EXCHANGE_FILING",
+          "raw_source_record_id": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+              ],
+              "sourceRecordIds": [
+                "6a2f01d9-da63-5331-ac97-f97aa64e6b40"
+              ],
+              "sourcePayloadHashes": [
+                "165beb80d8724fb8728960ef045fea03839ed18e2b9f92eaea94849c93cb4021"
+              ],
+              "researchDocumentIds": [
+                "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+              ],
+              "documentSourceIds": [
+                "d1059e3a-0584-517c-afcd-f15f594a20b5"
+              ],
+              "contentHashes": [
+                "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453"
+              ]
+            },
+            "series": []
+          },
+          "validation_state": "VALIDATED_REVIEW_LEDGER",
+          "canonical_selection_state": "DETERMINISTIC_REVIEW_LEDGER",
+          "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+          "recommended_remediation_action": "NONE"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Capital Goods",
+            "industry": "Aerospace & Defence",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:fdec39e9-08a7-418d-ae96-9d8ce834d26c:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "447501e3bf587dce19adf21ca8a29414c6b5e2edda3d28770f8162e9a5cdda04",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "33688875-6eb6-4c99-b146-bbb7ece3cab8"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "33688875-6eb6-4c99-b146-bbb7ece3cab8",
+                "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+                "metric_code": "OPM_TTM",
+                "numeric_value": "39.650000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "TTM",
+                "retrieved_at": "2026-09-29T16:32:39.253+00:00",
+                "fresh_until": "2026-12-28T16:32:39.253+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:52:48.159+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "normalized_value": {
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "order",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "6da22111-2f50-4d4a-b972-e2c00204a305"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "6da22111-2f50-4d4a-b972-e2c00204a305",
+                "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+                "metric_code": "ROCE_ANNUAL",
+                "numeric_value": "21.180000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "YEAR",
+                "retrieved_at": "2026-09-29T16:32:39.253+00:00",
+                "fresh_until": "2026-12-28T16:32:39.253+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:32:39.253+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 189.17
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 564.91
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:52:48.159+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "normalized_value": {
+            "evidenceCode": "BUSINESS_DURABILITY",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "customer",
+              "capacity"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:54:13.688+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:54:13.688+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T16:54:13.688+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T16:54:13.688+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 277,
+              "latestSession": "2026-10-07",
+              "retrievedAt": "2026-10-07T16:54:13.688+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-07T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-26T20:52:48.159+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "normalized_value": {
+            "evidenceCode": "OWNERSHIP_GOVERNANCE",
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "matchedKeywords": [
+              "auditor"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Capital Goods",
+            "industry": "Aerospace & Defense",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:4cd44d45-e5c6-4696-9744-25c19f44ac8e:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "a971b7b0b17352d879e637ab686c68430f2a484df8074639eb3816245ddf0ed8",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "34fe259b-056c-4b65-af6a-3e7b2ce70df4"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:03.647+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "OPERATING_MARGIN_HISTORY",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "OPM TTM %",
+                "numericValue": 11.09
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "500ebeb1-acf8-4e09-a3c9-b58358797dd0"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:09.342+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "matchedKeywords": [
+              "order",
+              "execution",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "34fe259b-056c-4b65-af6a-3e7b2ce70df4"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:03.647+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "ROCE_OR_ROIC",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "ROCE Ann. 3Y Avg %",
+                "numericValue": 32.18
+              },
+              {
+                "label": "ROCE Ann. 1Y Ago %",
+                "numericValue": 32.36
+              },
+              {
+                "label": "ROCE Ann. %",
+                "numericValue": 36.76
+              },
+              {
+                "label": "ROCE Ann. 5Y Avg %",
+                "numericValue": 27.23
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "34fe259b-056c-4b65-af6a-3e7b2ce70df4"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:03.647+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "FC Est. 1Y fwd Free Cash Flow Growth Ann. %",
+                "numericValue": -1196.71
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": -119.98
+              },
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -1958.69
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "500ebeb1-acf8-4e09-a3c9-b58358797dd0"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:09.342+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "BUSINESS_DURABILITY",
+            "matchedKeywords": [
+              "competitive advantage",
+              "customer",
+              "capacity"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "34fe259b-056c-4b65-af6a-3e7b2ce70df4"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:32:03.647+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "VALUATION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Fair Price 5YrPE Upside Fwd 1Yr",
+                "numericValue": 955.63
+              },
+              {
+                "label": "Fair Price 5YrPE Upside%",
+                "numericValue": 33.67
+              },
+              {
+                "label": "Fair Price 5YrPE",
+                "numericValue": 2857.03
+              },
+              {
+                "label": "Fair Price 5YrPE Upside",
+                "numericValue": 719.73
+              },
+              {
+                "label": "Fair Price 5YrPE Upside% Fwd 1Yr",
+                "numericValue": 44.71
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T18:55:01.996+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T18:55:01.996+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T18:55:01.996+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T18:55:01.996+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 277,
+              "latestSession": "2026-10-07",
+              "retrievedAt": "2026-10-07T18:55:01.996+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-07T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Ship Building",
+            "industry": "Aerospace & Defense",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:5661e19b-de4b-4ddf-a034-46d6c9f0af8f:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "1521348819bc6d34f198564cf504adc7e9f7c59e52b2e971cadc0f463216a324",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "dc9b6725-67f4-4200-be6d-9b05e5e185bd"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:09.929+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "OPERATING_MARGIN_HISTORY",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "OPM TTM %",
+                "numericValue": 29.64
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "187d2ca6-053e-492e-9b55-1f34ac9b91f3"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:15.912+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "matchedKeywords": [
+              "order",
+              "execution",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "dc9b6725-67f4-4200-be6d-9b05e5e185bd"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:09.929+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "ROCE_OR_ROIC",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "ROCE Ann. 3Y Avg %",
+                "numericValue": 18.55
+              },
+              {
+                "label": "ROCE Ann. 1Y Ago %",
+                "numericValue": 17.41
+              },
+              {
+                "label": "ROCE Ann. 5Y Avg %",
+                "numericValue": 17.9
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "dc9b6725-67f4-4200-be6d-9b05e5e185bd"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:09.929+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -20.06
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "dc9b6725-67f4-4200-be6d-9b05e5e185bd"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:09.929+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Interest Coverage Ratio Ann. 1Y Ago",
+                "numericValue": 1402.05
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "187d2ca6-053e-492e-9b55-1f34ac9b91f3"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:15.912+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "BUSINESS_DURABILITY",
+            "matchedKeywords": [
+              "customer",
+              "capacity",
+              "distribution"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "dc9b6725-67f4-4200-be6d-9b05e5e185bd"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-10-07T09:33:09.929+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "VALUATION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Fair Price 5YrPE Upside Fwd 1Yr",
+                "numericValue": -465.87
+              },
+              {
+                "label": "PE 5Yr Average",
+                "numericValue": 29.09
+              },
+              {
+                "label": "Fair Price 5YrPE Upside%",
+                "numericValue": -15.81
+              },
+              {
+                "label": "Fair Price 5YrPE",
+                "numericValue": 4054.63
+              },
+              {
+                "label": "Fair Price 5YrPE Upside",
+                "numericValue": -761.37
+              },
+              {
+                "label": "Fair Price 5YrPE Upside% Fwd 1Yr",
+                "numericValue": -9.67
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T18:55:10.141+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T18:55:10.141+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 277,
+                  "latestSession": "2026-10-07",
+                  "retrievedAt": "2026-10-07T18:55:10.141+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-07T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-07",
+          "retrieved_at": "2026-10-07T18:55:10.141+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 277,
+              "latestSession": "2026-10-07",
+              "retrievedAt": "2026-10-07T18:55:10.141+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-07T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Defence",
+            "industry": "Aerospace & Defense",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:ece0aa93-0d35-4748-9316-dd2eb100ad63:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "2d3acf27834ec8df9e7fb8f20f8e3a0ec09f033c8b1717ec8277a51dca8af69e",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "4810438e-6618-448e-96b4-d3318d374a3b"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "4810438e-6618-448e-96b4-d3318d374a3b",
+                "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+                "metric_code": "OPM_TTM",
+                "numeric_value": "21.090000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "TTM",
+                "retrieved_at": "2026-09-29T16:46:14.979+00:00",
+                "fresh_until": "2026-12-28T16:46:14.979+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "9df81d0b-df32-4ec3-aa77-9be14855648d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:46:19.394+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "matchedKeywords": [
+              "order",
+              "execution",
+              "growth"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "351b2150-2ec0-47ad-8e0c-b3ebad12ed54"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "canonical": [
+              {
+                "id": "351b2150-2ec0-47ad-8e0c-b3ebad12ed54",
+                "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+                "metric_code": "ROCE_ANNUAL",
+                "numeric_value": "15.660000000000000000",
+                "text_value": null,
+                "boolean_value": null,
+                "date_value": null,
+                "unit": "PERCENT",
+                "currency": null,
+                "consolidation_scope": "UNKNOWN",
+                "period_start": null,
+                "period_end": null,
+                "period_type": "YEAR",
+                "retrieved_at": "2026-09-29T16:46:14.979+00:00",
+                "fresh_until": "2026-12-28T16:46:14.979+00:00",
+                "published_at": null,
+                "evidence_status": "AVAILABLE",
+                "source_code": "TRENDLYNE_MCP",
+                "source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02"
+              }
+            ],
+            "reviewed": null
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "recommended_remediation_action": "RECONCILE_CANONICAL_INPUT_CONTRACT"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "5c42aacf-abec-4fe4-a810-3ed9b6dabe02"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:46:14.979+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 94.47
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 2558.34
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "5c42aacf-abec-4fe4-a810-3ed9b6dabe02"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:46:14.979+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Interest Coverage Ratio Ann. 1Y Ago",
+                "numericValue": 5.68
+              },
+              {
+                "label": "Interest Coverage Post Tax Ann. %",
+                "numericValue": 4.33
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "9df81d0b-df32-4ec3-aa77-9be14855648d"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:46:19.394+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "normalized_value": {
+            "state": "EVIDENCE_PRESENT_REVIEW_REQUIRED",
+            "evidenceCode": "BUSINESS_DURABILITY",
+            "matchedKeywords": [
+              "market share",
+              "customer",
+              "capacity"
+            ],
+            "deterministicScoreReady": false
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "recommended_remediation_action": "REVIEW_DOCUMENT_EVIDENCE"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [
+            "5c42aacf-abec-4fe4-a810-3ed9b6dabe02"
+          ],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": "2026-09-29T16:46:14.979+00:00",
+          "fresh_through": null,
+          "source_provider": "TRENDLYNE_MCP",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "VALUATION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "PE 5Yr Average",
+                "numericValue": 104.34
+              },
+              {
+                "label": "Fair Price 5YrPE Upside% Fwd 1Yr",
+                "numericValue": 17.32
+              },
+              {
+                "label": "Fair Price 5YrPE",
+                "numericValue": 4526.77
+              },
+              {
+                "label": "Fair Price 5YrPE Upside Fwd 1Yr",
+                "numericValue": 1224.99
+              },
+              {
+                "label": "Fair Price 5YrPE Upside",
+                "numericValue": -2545.73
+              },
+              {
+                "label": "Fair Price 5YrPE Upside%",
+                "numericValue": -35.99
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "recommended_remediation_action": "RECONCILE_DATED_REPORTING_PERIODS"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-06",
+          "retrieved_at": "2026-10-07T05:06:49.233+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 276,
+                  "latestSession": "2026-10-06",
+                  "retrievedAt": "2026-10-07T05:06:49.233+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-06T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "STALE",
+                  "reason": "HISTORY_LATEST_SESSION_STALE",
+                  "distinctSessions": 276,
+                  "latestSession": "2026-10-06",
+                  "retrievedAt": "2026-10-07T05:06:49.233+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1",
+                    "freshnessThrough": "2026-10-06T23:59:59Z",
+                    "dailyCloseGraceMs": 14400000,
+                    "currentSessionDecision": {
+                      "sessionDate": "2026-10-14",
+                      "decision": "OPEN",
+                      "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                      "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "STALE",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-10-06",
+          "retrieved_at": "2026-10-07T05:06:49.233+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "STALE",
+              "reason": "HISTORY_LATEST_SESSION_STALE",
+              "distinctSessions": 276,
+              "latestSession": "2026-10-06",
+              "retrievedAt": "2026-10-07T05:06:49.233+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1",
+                "freshnessThrough": "2026-10-06T23:59:59Z",
+                "dailyCloseGraceMs": 14400000,
+                "currentSessionDecision": {
+                  "sessionDate": "2026-10-14",
+                  "decision": "OPEN",
+                  "recordId": "8901d258-6be7-43ec-8d41-6265860542e4",
+                  "reason": "APPROVED_CM_CALENDAR_WEEKDAY_SEMANTIC_LIVE_PAGE_UNCHANGED_RAW_BYTES_CHANGED"
+                }
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Information Technology",
+            "industry": "Aerospace & Defence",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:8d0db594-078d-4663-bfcd-ba8e3cf1ec32:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    },
+    {
+      "securityId": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "status": "REVIEW_REQUIRED",
+      "snapshotHash": "3e2bb2c08e23c353b3688548f6340cf97125b38a225fa2201953bf5909ef2bee",
+      "items": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 8,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 4,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "BUSINESS_DURABILITY",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 3,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-09-25",
+          "retrieved_at": "2026-09-27T01:08:02.98+00:00",
+          "fresh_through": null,
+          "source_provider": "NIFTY_OFFICIAL",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "benchmarkCodes": [
+              "NIFTY_INDIA_DEFENCE",
+              "NIFTY_CAPITAL_GOODS"
+            ],
+            "benchmarkProviders": [
+              "NIFTY_OFFICIAL"
+            ],
+            "validations": [
+              {
+                "code": "NIFTY_INDIA_DEFENCE",
+                "result": {
+                  "state": "REVIEW_REQUIRED",
+                  "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+                  "distinctSessions": 270,
+                  "latestSession": "2026-09-25",
+                  "retrievedAt": "2026-09-27T01:08:02.98+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1"
+                  }
+                }
+              },
+              {
+                "code": "NIFTY_CAPITAL_GOODS",
+                "result": {
+                  "state": "REVIEW_REQUIRED",
+                  "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+                  "distinctSessions": 270,
+                  "latestSession": "2026-09-25",
+                  "retrievedAt": "2026-09-27T01:08:02.98+00:00",
+                  "selectedSessions": [],
+                  "returnBasis": null,
+                  "lineage": {
+                    "version": "V1_4_HISTORY_READINESS_V1"
+                  }
+                }
+              }
+            ]
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_CONTRACT_NOT_PROVEN",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 252,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": "2026-09-25",
+          "retrieved_at": "2026-09-27T01:08:02.98+00:00",
+          "fresh_through": null,
+          "source_provider": "ANGEL_ONE",
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+            "historyValidationVersion": "V1_4_HISTORY_READINESS_V1",
+            "validation": {
+              "state": "REVIEW_REQUIRED",
+              "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+              "distinctSessions": 270,
+              "latestSession": "2026-09-25",
+              "retrievedAt": "2026-09-27T01:08:02.98+00:00",
+              "selectedSessions": [],
+              "returnBasis": null,
+              "lineage": {
+                "version": "V1_4_HISTORY_READINESS_V1"
+              }
+            }
+          },
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "HISTORY_CONTRACT_NOT_PROVEN",
+          "recommended_remediation_action": "VALIDATE_APPROVED_HISTORY_CONTRACT"
+        },
+        {
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [
+            "NIFTY_INDIA_DEFENCE",
+            "NIFTY_CAPITAL_GOODS"
+          ],
+          "applicability": "APPLICABLE",
+          "evidence_state": "MISSING",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": null,
+          "validation_state": "FAIL_CLOSED",
+          "canonical_selection_state": "NO_SELECTION",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "recommended_remediation_action": "CACHE_FIRST_PROVIDER_REFRESH"
+        },
+        {
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "metric_code": null,
+          "required": true,
+          "minimum_history": 1,
+          "freshness_policy": null,
+          "benchmark_authority": [],
+          "applicability": "APPLICABLE",
+          "evidence_state": "FRESH",
+          "candidate_evidence_ids": [],
+          "selected_evidence_id": null,
+          "evidence_as_of_date": null,
+          "retrieved_at": null,
+          "fresh_through": null,
+          "source_provider": null,
+          "raw_source_record_id": null,
+          "normalized_value": {
+            "sector": "Capital Goods",
+            "industry": "Aerospace & Defense",
+            "classification_authority": "current_security_enrichment_v1",
+            "classification_version": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+            "methodology_role": "DEFENCE_AEROSPACE",
+            "assignment_authority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+            "assignment_id": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:92fbe654-b418-4f72-b63c-36c57aec095b:DEFENCE_AEROSPACE",
+            "assignment_version": "e7c021b865fcd1d49a7c59924ef9c44f0383f301"
+          },
+          "validation_state": "VALIDATED",
+          "canonical_selection_state": "IMMUTABLE_LINEAGE",
+          "reason_code": "IC3_LINEAGE_READY",
+          "recommended_remediation_action": "NONE"
+        }
+      ]
+    }
+  ],
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "selectionRunId": "8521ec48-7092-41d3-af26-42e70beb6f17",
+  "evaluationAsOf": "2026-10-14T16:40:29.231453+00:00",
+  "sourceCutoffAt": "2026-10-14T16:40:29.231453+00:00",
+  "offset": null,
+  "processed": 7,
+  "totalEquities": 239,
+  "nextOffset": null,
+  "selectionMode": "SECURITY_IDS",
+  "requestedSecurityIds": [
+    "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "92fbe654-b418-4f72-b63c-36c57aec095b"
+  ],
+  "providerCalls": 0,
+  "totals": {
+    "REVIEW_REQUIRED": 7
+  },
+  "writeTotals": {
+    "snapshotsCreated": 0,
+    "snapshotsReused": 0,
+    "selectionsCreated": 0,
+    "selectionsReused": 0
+  },
+  "snapshotIds": [],
+  "selectionIds": []
+}

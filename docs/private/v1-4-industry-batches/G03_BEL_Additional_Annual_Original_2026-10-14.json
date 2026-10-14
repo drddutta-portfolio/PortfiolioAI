@@ -1,0 +1,24 @@
+{
+  "symbol": "BEL",
+  "source_url": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2025/BEL-2025.pdf",
+  "retrieved_at": "2026-10-14T16:46:20.389576+00:00",
+  "published_at": null,
+  "publication_precision": "UNKNOWN",
+  "financial_admission": false,
+  "status": "ACQUIRED_NOT_ADMITTED",
+  "original_sha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+  "original_bytes": 15543216,
+  "identity_verification": "Original integrated annual report 2024-25; standalone Schedule III table; overlap with retained FY2026 original matched",
+  "original_url_attempts": [
+    {
+      "url": "https://bel-india.in/wp-content/uploads/2025/08/Integrated-Annual-Report-2024-25-1.pdf",
+      "status": 503
+    },
+    {
+      "url": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2025/BEL-2025.pdf",
+      "status": "ACQUIRED_NOT_ADMITTED"
+    }
+  ],
+  "verified_parent_cin": "L32309KA1954GOI000787",
+  "source_original_byte_identity_verified": true
+}

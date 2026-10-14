@@ -1,0 +1,601 @@
+{
+  "snapshot": {
+    "id": "4b86746c-74ef-45e3-97d3-cc117355ed8f",
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+    "selection_run_id": "8521ec48-7092-41d3-af26-42e70beb6f17",
+    "execution_grant_id": "2c849468-6a17-4af9-aa47-1e5785e9dbc7",
+    "evaluation_as_of": "2026-10-14 16:40:29.231453+00",
+    "source_cutoff_at": "2026-10-14 16:40:29.231453+00",
+    "selection_basis": "IC3_CANONICAL_MATERIALIZATION",
+    "materializer_version": "P7_IC3_CANONICAL_SNAPSHOT_V6_BANK_V2_AND_PUBLICATION_PRECISION",
+    "selected_at": "2026-10-14 16:40:48.700001+00"
+  },
+  "requirements": [
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "BUSINESS_DURABILITY",
+      "evidence_state": "FRESH",
+      "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+      "selected_evidence_id": "d66deded-c38c-5c07-a054-6597b302f6f5",
+      "raw_source_record_id": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "CFO_FCF_CONVERSION",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+      "selected_evidence_id": null,
+      "raw_source_record_id": "cf472a75-1d5d-4045-b3c0-f7cc36f10d8d",
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+      "evidence_state": "STALE",
+      "reason_code": "HISTORY_LATEST_SESSION_STALE",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+      "evidence_state": "FRESH",
+      "reason_code": "IC3_LINEAGE_READY",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "MOMENTUM_12M_RELATIVE",
+      "evidence_state": "STALE",
+      "reason_code": "HISTORY_LATEST_SESSION_STALE",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+      "selected_evidence_id": null,
+      "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "OPERATING_MARGIN_HISTORY",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "REPORTING_PERIOD_INVALID",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+      "selected_evidence_id": null,
+      "raw_source_record_id": "964382a6-f4b9-44e3-ab45-ec407dba92ce",
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "OWNERSHIP_GOVERNANCE",
+      "evidence_state": "FRESH",
+      "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+      "selected_evidence_id": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea",
+      "raw_source_record_id": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "ROCE_OR_ROIC",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "REPORTING_PERIOD_INVALID",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "requirement_code": "VALUATION",
+      "evidence_state": "REVIEW_REQUIRED",
+      "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+      "selected_evidence_id": null,
+      "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+      "fresh_through": null
+    }
+  ],
+  "grantAccounting": [
+    {
+      "id": "2c849468-6a17-4af9-aa47-1e5785e9dbc7",
+      "record_kind": "P4_EXECUTION_GRANT",
+      "external_record_id": "V14_G03_CANONICAL:38600061668:1",
+      "action": "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",
+      "scope": "SECURITY_IDS:fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "provider_calls_allowed": "0",
+      "consumed_grant_id": null,
+      "issuance_run_id": "38600061668"
+    },
+    {
+      "id": "d6cec3cf-0094-4fca-8290-c540d6ca309d",
+      "record_kind": "P4_EXECUTION_GRANT_CONSUMED",
+      "external_record_id": "2c849468-6a17-4af9-aa47-1e5785e9dbc7",
+      "action": "P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS",
+      "scope": "SECURITY_IDS:fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "provider_calls_allowed": null,
+      "consumed_grant_id": "2c849468-6a17-4af9-aa47-1e5785e9dbc7",
+      "issuance_run_id": null
+    }
+  ],
+  "selectedGroup": [
+    {
+      "symbol": "ASTRAMICRO",
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "BEL",
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "snapshot_id": "e1170d5b-5173-453c-a599-ea48df83c7bf",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        }
+      ]
+    },
+    {
+      "symbol": "GRSE",
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "HAL",
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "MTARTECH",
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 10,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "ZENTEC",
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "mandatory_blockers": 10,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        }
+      ]
+    }
+  ],
+  "otherSixSelectionsUnchanged": true,
+  "readyStocks": 0,
+  "frozenReadyValuePaise": 0
+}
