@@ -1,0 +1,136 @@
+{
+  "group": "G03",
+  "rows": [
+    {
+      "symbol": "ASTRAMICRO",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ]
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "BEL",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ]
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": []
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "GRSE",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": []
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "HAL",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ]
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "MTARTECH",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ]
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    },
+    {
+      "symbol": "ZENTEC",
+      "revenue_quarter_dates_by_scope": {
+        "STANDALONE": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ],
+        "CONSOLIDATED": [
+          "2025-09-30",
+          "2025-12-31",
+          "2026-03-31",
+          "2026-06-30"
+        ]
+      },
+      "required_growth_quarters": 8,
+      "dated_observations_not_factual_admission": true,
+      "eight_quarters_established": false
+    }
+  ],
+  "scope_mixing_allowed": false
+}

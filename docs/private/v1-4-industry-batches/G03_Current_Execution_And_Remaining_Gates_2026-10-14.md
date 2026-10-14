@@ -1,0 +1,49 @@
+# G03 — executed qualification and remaining canonical gates
+
+## Actual work completed
+
+All seven portfolio stocks have source-backed provisional research. Sixteen official annual-report PDFs were captured through a bounded read-only executor, including BEL/Astra's FY2025–26 BSE originals. The captured PDFs were independently integrity-checked in the retained-text job. Seven current-quarter NSE originals were separately fetched; 21 revenue/profit/EPS values matched their actual tables, with identity, period, standalone scope and precise units checked.
+
+Artifacts and evidence: [provisional research](G03_Provisional_Stock_Research_2026-10-14.md), [original manifest](G03_Official_Original_Acquisition_Manifest_2026-10-14.json), [qualification inventory](G03_Original_Qualification_Inventory_2026-10-14.json), [current-quarter comparison](G03_Current_Quarter_Original_Comparison_2026-10-14.json), [retained dated facts](G03_Retained_Dated_Issuer_Facts_2026-10-14.json), [quarterly coverage gaps](G03_Quarterly_Coverage_Gaps_2026-10-14.json), [stock execution status](G03_Stock_Execution_Status_2026-10-14.csv).
+
+The tested G03 signed-validation capability has its own exact seven-security scope and protected workflow. It cannot acquire providers, accept reviews, grant writes or materialize. Existing G02's scope remains unchanged. Candidate live-bundle checking preserves 43 existing files and changes only the read-only authorization entrypoint.
+
+Verification on implementation `30a0f26c…`: 2,345 application tests, 405 Edge tests, six Python acquisition/comparison checks, architecture/type/lint/build and Deno candidate-live-bundle check PASS. Full Repository Verification 38544922954 and Architecture Guard 38544926963 both SUCCESS. Original acquisition 38542800240 and retained integrity 38543437026 SUCCESS. Subsequent workflow/documentation changes do not change the tested financial/authorization implementation.
+
+## Live result remains unchanged
+
+Independent current-selected-snapshot readback still shows **0/7 READY**; frozen contribution **0/4 READY / 0 paise**, target population value **8,860,120 paise**. This is a database readback of retained selections, not a new current-validator execution.
+
+| Stock | Retained mandatory blockers | Selected status |
+|---|---:|---|
+| MTARTECH | 10 | REVIEW_REQUIRED |
+| BEL | 8 | REVIEW_REQUIRED |
+| ASTRAMICRO | 8 | REVIEW_REQUIRED |
+| DATAPATTNS | 8 | REVIEW_REQUIRED |
+| GRSE | 8 | REVIEW_REQUIRED |
+| HAL | 8 | REVIEW_REQUIRED |
+| ZENTEC | 10 | REVIEW_REQUIRED |
+
+Exact snapshot IDs and requirement reasons: [independent selected readback](G03_Selected_Readback_After_Source_Qualification_2026-10-14.json). Source acquisition did not mutate those selections. No unsupported PARTIAL_READY enum or waived requirement was introduced.
+
+## Immediate controlled-operation dependency
+
+Automatic approval review twice rejected the shared canonical materializer deployment because G03 completion authorization was judged insufficiently explicit for the shared-service blast radius that includes G02/BANK reads/writes. The second review followed exact-diff and full-test evidence. The rejection was not bypassed. A narrowly scoped owner approval request is pending for the [tested change and rollback package](G03_Read_Only_Deployment_Safety_Assessment_2026-10-14.md).
+
+No successful deployment or G03 handler replay is claimed. The existing Development validator remains authoritative. This approval would unblock **read-only current validation**, not automatically complete financial admission or make a stock READY.
+
+## Source and engineering gates after current validation
+
+1. Register verified originals through a supported, separately scoped canonical source route. Preserve original bytes/hash/storage references and unknown publication dates. Fifteen PDFs fit the existing importer size limit; Zen's latest 102 MB original needs a supported large-original route or another independently qualified official source. Do not relabel extracted text as original PDF bytes.
+2. Admit source-bound durability/governance reviews without treating good disclosure coverage as clean governance. HAL's older annual governance exception requires a current-source assessment. Preserve MTAR's approved assignment while reviewing its material clean-energy exposure.
+3. Qualify three compatible annual years of operating margins, ROCE/ROIC, cash conversion/working capital and debt/interest coverage. Do not mix standalone/consolidated series, EBITDA/operating margins, different ROCE definitions or cash-growth/absolute-cash measures. Zero-interest ratios require the existing defined treatment; do not invent infinity or zero.
+4. Complete eight dated growth quarters and four dated order/execution periods. Retained standalone/consolidated versions of the same quarter count as one period per chosen scope. Post-balance-sheet orders, GST-inclusive amounts, L1 bids and forecasts remain distinct from realized/tax-compatible contract observations.
+5. Qualify the approved Industrials valuation inputs and self/peer context. Do not copy BANK's M5/M7 contract or invent a valuation score from current-quarter EPS. PE, EV/EBITDA and FCF yield must use compatible price, financial, scope and share-basis provenance.
+6. Refresh/qualify stock histories and the exact `NIFTY_INDIA_DEFENCE` benchmark, with compatible sessions, corporate-action treatment and return basis. Capital Goods remains context; it cannot replace the primary Defence benchmark.
+7. Revalidate, issue/consume only supported one-use G03 materialization authority, and independently read back selected FRESH requirements and READY stocks/value. Partial passed requirements do not substitute for all mandatory acceptance.
+
+## Execution accounting and preservation
+
+Paid/provider API calls: **0** in this continuation. Public original-document requests were executed and are recorded separately. New accepted requirement reviews: **0**. Canonical snapshot/selection writes: **0**. R2 writes: **0**. Migrations: **0**. Successful Development deployments: **0**. BANK evidence/scheduler, Production/main and frozen cohort are unchanged.
+
+Four source-research events were appended to the frozen execution ledger; its previous bytes and original 111 initialization rows were preserved. G03 remains active and **NOT PROVEN**. The next group has not been activated by this record, because the latest owner instruction requests G03 canonical READY rather than another partial handoff.

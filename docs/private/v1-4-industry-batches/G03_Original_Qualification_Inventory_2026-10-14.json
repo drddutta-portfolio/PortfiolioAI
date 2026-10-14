@@ -1,0 +1,222 @@
+{
+  "group": "G03",
+  "source_originals": [
+    {
+      "symbol": "MTARTECH",
+      "sha256": "911187bf984fd39de8362a4f8a8be373beb6d13322357186489571284d6b8fc6",
+      "source_url": "https://mtar.in/wp-content/uploads/2026/09/Annual-Report-FY-2025-26.pdf",
+      "byte_length": 13819589,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025 - 26",
+        "2025 -26"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "MTARTECH",
+      "sha256": "5bf1556b03f181d421a823cc7eccc33a1f473c3939ccc8be7425dbbb5467b212",
+      "source_url": "https://mtar.in/wp-content/uploads/2025/09/Annual-Report-FY-2025-26-Aug-2025-11-Sept.pdf",
+      "byte_length": 31298569,
+      "annual_report_year_strings_in_opening_pages": [
+        "2024 - 25",
+        "2024\u201325"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "MTARTECH",
+      "sha256": "6032f594f58c9fe743b6021ef9cde403158d67ad1429244f823e0b1461da0f4a",
+      "source_url": "https://mtar.in/wp-content/uploads/2025/03/Annual-Report-FY-2024-Aug-17-2024.pdf",
+      "byte_length": 18055428,
+      "annual_report_year_strings_in_opening_pages": [
+        "2023 - 24"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "sha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2025-26.pdf",
+      "byte_length": 7663843,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025 -2026",
+        "2025-26"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "sha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2024-25.pdf",
+      "byte_length": 13207936,
+      "annual_report_year_strings_in_opening_pages": [
+        "2024-25"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "sha256": "b3f745de43da95f6bee52e81a966dfba6f476924888f84e944b925a06964bc98",
+      "source_url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2023-24.pdf",
+      "byte_length": 1993531,
+      "annual_report_year_strings_in_opening_pages": [
+        "2023-24"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "ZENTEC",
+      "sha256": "bce2c05a480d95327ea1afabdb265cc20c4752e6bcb30088ad51de473bbe7adc",
+      "source_url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-33rd-Annual-Report-2025-26.pdf",
+      "byte_length": 102424464,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025-26"
+      ],
+      "canonical_importer_size_eligible": false,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "ZENTEC",
+      "sha256": "7c9f0173681de37c23477d6b01a2b95bd82b0b7ebd0722d90d8061caea2355ba",
+      "source_url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-32nd-Annual-Report-2024-25.pdf",
+      "byte_length": 3591147,
+      "annual_report_year_strings_in_opening_pages": [
+        "2024-25"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "ZENTEC",
+      "sha256": "107e7ede71301690f5d29da7ea6c5a3f4f3707f6f9760d875e5c7c6f43d0f3d3",
+      "source_url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-31st-annual-report-2023-24.pdf",
+      "byte_length": 28235815,
+      "annual_report_year_strings_in_opening_pages": [
+        "2023-24"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "GRSE",
+      "sha256": "15116e4cee11072ebd288085e502fb1f3a0e4c5e2247d8186be5e636319660ce",
+      "source_url": "https://www.grse.in/annual-reports/Annual Report FY 2025-26.pdf",
+      "byte_length": 6457019,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025-26"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "GRSE",
+      "sha256": "4fe8c3e5dad84c683e8eedbff8b9fa1cb8d429f1aa21498138479b126deaaacd",
+      "source_url": "https://www.grse.in/annual-reports/Annual Report 2024-25.pdf",
+      "byte_length": 7182554,
+      "annual_report_year_strings_in_opening_pages": [
+        "2024-25",
+        "2024\u201325"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "GRSE",
+      "sha256": "7680c27aa08296039a1b31f44b01633cf4cac379fb763c9aebd3fd6310f0a131",
+      "source_url": "https://www.grse.in/annual-reports/Annual_Report_2023_24_English.pdf",
+      "byte_length": 13247540,
+      "annual_report_year_strings_in_opening_pages": [
+        "2023-24"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "sha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "source_url": "https://astramwp.com/wp-content/uploads/2025/08/Astra-Annual-Report-FY25.pdf",
+      "byte_length": 6462595,
+      "annual_report_year_strings_in_opening_pages": [
+        "2024-25",
+        "2024\u201325"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "HAL",
+      "sha256": "5a5ba7c81d61d7c29c7d99d410063d151f6cc7aa7ec211ce62b26d868519fbec",
+      "source_url": "https://www.hal-india.co.in/backend/wp-content/uploads/2024/07/AR24English.pdf",
+      "byte_length": 5958829,
+      "annual_report_year_strings_in_opening_pages": [
+        "2023-24"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "BEL",
+      "sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf",
+      "byte_length": 16199415,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025 - 26",
+        "2025- 26",
+        "2025-26"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "sha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/006109cf-3709-427d-8b15-87513e040708.pdf",
+      "byte_length": 8389931,
+      "annual_report_year_strings_in_opening_pages": [
+        "2025-26"
+      ],
+      "canonical_importer_size_eligible": true,
+      "scope_status": "STANDALONE_AND_CONSOLIDATED_MUST_BE_SEPARATELY_QUALIFIED",
+      "publication_precision": "UNKNOWN",
+      "review_admission": false
+    }
+  ],
+  "canonical_reviews_accepted": 0,
+  "ready_claim": false
+}

@@ -1,0 +1,548 @@
+{
+  "group": "G03",
+  "kind": "INDEPENDENT_READ_ONLY_PERSISTED_SELECTION_READBACK_NOT_NEW_VALIDATOR_EXECUTION",
+  "rows": [
+    {
+      "symbol": "ASTRAMICRO",
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 17:08:17.735399+00",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "BEL",
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "snapshot_id": "f80ff300-3a87-4958-901c-586fd857cdf2",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 17:08:20.237118+00",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 17:08:23.185715+00",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "GRSE",
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 19:16:28.370972+00",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "HAL",
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 19:16:28.486104+00",
+      "mandatory_blockers": 8,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "MTARTECH",
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-07",
+      "created_at": "2026-10-07 04:15:48.867561+00",
+      "mandatory_blockers": 10,
+      "requirements": [
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    },
+    {
+      "symbol": "ZENTEC",
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "as_of_date": "2026-10-05",
+      "created_at": "2026-10-05 19:57:21.107944+00",
+      "mandatory_blockers": 10,
+      "requirements": [
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "BUSINESS_DURABILITY"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "CFO_FCF_CONVERSION"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "minimum_history": 252,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK"
+        },
+        {
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE"
+        },
+        {
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "minimum_history": 252,
+          "requirement_code": "MOMENTUM_12M_RELATIVE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "OPERATING_MARGIN_HISTORY"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 4,
+          "requirement_code": "OWNERSHIP_GOVERNANCE"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "ROCE_OR_ROIC"
+        },
+        {
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1,
+          "requirement_code": "VALUATION"
+        }
+      ]
+    }
+  ],
+  "canonicalWritesThisContinuation": 0,
+  "readyFrozenMembers": 0,
+  "readyFrozenValuePaise": 0
+}
