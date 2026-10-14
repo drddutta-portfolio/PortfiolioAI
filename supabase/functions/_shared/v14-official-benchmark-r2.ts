@@ -68,10 +68,11 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
   if(d.readback_verified!==true||d.r2_bucket!=="portfolioai-history-dev"||typeof d.r2_key!=="string")throw new Error("OFFICIAL_BENCHMARK_DELTA_R2_VERIFICATION_MISSING")
   if(String(d.sha256??"")!==delta.payload_hash||!/^[a-f0-9]{64}$/u.test(delta.payload_hash))throw new Error("OFFICIAL_BENCHMARK_DELTA_HASH_INVALID")
   rows.push(...officialBenchmarkDeltaPoints(d,rows.at(-1)?.session??''))
-  sourceRecordIds.push(delta.id)
+  sourceRecordIds.push(delta.id,...(Array.isArray(d.session_source_record_ids)?d.session_source_record_ids.filter((x):x is string=>typeof x==="string"):[]))
  }
  if(rows.length<(input.minimum??252)||rows.length>(input.maximum??400))throw new Error("OFFICIAL_BENCHMARK_COMBINED_SESSION_COUNT_INVALID")
  const deltaSessions=new Set(input.deltaRecord?officialBenchmarkDeltaPoints(input.deltaRecord.raw_payload,parsed.rows.at(-1)?.session??'').map(x=>x.session):[])
+ const tailSources=(input.deltaRecord?.raw_payload.session_sources??{}) as Record<string,{source_record_id:string;sha256:string;r2_key:string}>
  const proof=historyProof({sourceRecordIds,freshnessThrough:rows.at(-1)!.session,returnBasis:basis,exchangeCalendarSourceRecordIds:input.exchangeCalendarSourceRecordIds??[]})
  return {
   rows:rows.map(row=>({
@@ -82,10 +83,10 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
    provenance:{
     source_authority:"NIFTY_OFFICIAL",
     official_identity:row.officialIdentity,
-    source_record_id:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.id:record.id,
-    payload_hash:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.payload_hash:record.payload_hash,
+    source_record_id:deltaSessions.has(row.session)&&input.deltaRecord?(tailSources[row.session]?.source_record_id??input.deltaRecord.id):record.id,
+    payload_hash:deltaSessions.has(row.session)&&input.deltaRecord?(tailSources[row.session]?.sha256??input.deltaRecord.payload_hash):record.payload_hash,
     r2_bucket:"portfolioai-history-dev",
-    r2_key:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.raw_payload.r2_key:raw.r2_key,
+    r2_key:deltaSessions.has(row.session)&&input.deltaRecord?(tailSources[row.session]?.r2_key??input.deltaRecord.raw_payload.r2_key):raw.r2_key,
     return_basis:basis,
     ohlc_available:false,
     reader_version:V1_4_OFFICIAL_BENCHMARK_READER_VERSION,
