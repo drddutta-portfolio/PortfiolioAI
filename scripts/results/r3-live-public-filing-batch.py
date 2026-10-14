@@ -536,6 +536,27 @@ def main():
                             data,reason=extract_source(res.text,symbol,isin,url)
                             if not data:
                                 entry["reason"]=reason
+                                if reason.startswith("UNSUPPORTED_OR_UNKNOWN_UNIT"):
+                                    examples=entry.setdefault("unit_source_diagnostics",[])
+                                    if len(examples)<3:
+                                        public_soup=BeautifulSoup(res.text,"html.parser")
+                                        tt=list(html_rows(public_soup))
+                                        declared=[v for table in tt for v in field_values(
+                                            table,"level of rounding used in financial results")]
+                                        headings=re.findall(
+                                            r"(?i)(?:amount|figures)[^<\\n]{0,110}(?:lakhs|crores|millions|rupees|inr)",
+                                            res.text)[:3]
+                                        examples.append({"issuer_url":url,
+                                                         "declared_values":declared[:6],
+                                                         "html_amount_fragments":headings,
+                                                         "text_excerpt":public_soup.get_text(" ",strip=True)[:220]})
+                                if reason=="IDENTITY_MISMATCH_OR_UNKNOWN":
+                                    examples=entry.setdefault("identity_source_diagnostics",[])
+                                    if len(examples)<3:
+                                        tt=list(html_rows(BeautifulSoup(res.text,"html.parser")))
+                                        examples.append({"issuer_url":url,
+                                                         "nse_symbol":unique_field(tt,"nse symbol"),
+                                                         "source_isin":unique_field(tt,"isin")})
                                 continue
                             if data["period_end"] not in TARGET_QUARTERS or data["period_end"] in completed:
                                 continue  # Preserve qualified quarters without duplicate writes.
