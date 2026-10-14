@@ -60,6 +60,21 @@ HISTORICAL_RESULTS_IDENTITIES = {
         "ex_date": "2026-07-21", "split_new_per_old": "2.5",
         "evidence": "NSE change in ISIN notice 2026-07-17 / BSE DR-676/2026-2027",
     },
+    "BECTORFOOD":{
+        "source_isin":"INE495P01012","current_isin":"INE495P01020",
+        "ex_date":"2025-12-12","split_new_per_old":"5",
+        "evidence":"MSE/LIST/18238/2025, 2025-12-03",
+    },
+    "V2RETAIL":{
+        "source_isin":"INE945H01013","current_isin":"INE945H01021",
+        "ex_date":"2026-03-25","split_new_per_old":"10",
+        "evidence":"BSE DR-847/2025-2026, March 2026",
+    },
+    "KOTAKBANK":{
+        "source_isin":"INE237A01028","current_isin":"INE237A01036",
+        "ex_date":"2026-01-14","split_new_per_old":"5",
+        "evidence":"Kotak Mahindra Bank issuer split disclosure 2026-01-16",
+    },
 }
 
 def historical_result_identity(symbol: str, current_isin: str, source_isin: str, period_end: str):
@@ -205,7 +220,9 @@ def extract_bank(html: str, symbol: str, isin: str):
     """Financial Results - Banking, NOT Ind-AS. All values from first quarter column."""
     soup=BeautifulSoup(html,"html.parser")
     tables=list(html_rows(soup))
-    if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
+    doc_symbol=unique_field(tables,"nse symbol")
+    doc_isin=unique_field(tables,"isin")
+    if doc_symbol!=symbol or not doc_isin:
         return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit_kind,reason=source_filing_unit(soup,tables)
     if reason:return None,reason
@@ -301,13 +318,14 @@ def extract_bank(html: str, symbol: str, isin: str):
                         break
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
-    if eps is None and qstart.endswith("-04-01") and qend.endswith("-06-30"):
-        # NSE Banking iXBRL sometimes nests the AFTER-extraordinary EPS
-        # label plus Q1 / year-to-date numbers inside ONE cell:
-        # "Diluted earnings per share after extraordinary items 12.35 12.35".
-        # Only Q1 is eligible: Q1 and YTD are the same reporting interval.
-        # Both printed values must parse and agree; no fallback to BEFORE-
-        # extraordinary EPS or to another issuer-filing/source record.
+    if eps is None:
+        # NSE Banking iXBRL nests AFTER-extraordinary EPS and two values
+        # inside a single cell. The statement header explicitly orders them
+        # QUARTER (first) and YEAR-TO-DATE (second). For Q1 these must be
+        # equal; for Q2/Q3 they normally differ. Never admit the cumulative
+        # EPS as the quarterly observation, nor before-extraordinary EPS.
+        # Require a genuine 3-month first statement column plus one unique
+        # first-quarter value across all source rows.
         packed=[]
         pattern=re.compile(
             r"^diluted earnings per share after extraordinary items\s+"
@@ -319,7 +337,9 @@ def extract_bank(html: str, symbol: str, isin: str):
                     match=pattern.fullmatch(normalize(cell).replace("\u200b",""))
                     if not match:continue
                     first,year_to_date=number(match.group(1)),number(match.group(2))
-                    if first is not None and year_to_date is not None and first==year_to_date:
+                    if first is not None and year_to_date is not None:
+                        if qstart.endswith("-04-01") and qend.endswith("-06-30") and first!=year_to_date:
+                            continue  # Q1 cannot disagree with YTD
                         packed.append((first,match.group(1)))
         if len({val for val,raw in packed})==1:
             eps,eps_raw=packed[0]
@@ -337,8 +357,15 @@ def extract_bank(html: str, symbol: str, isin: str):
                         "interest_expenses_original":expense_raw,"source_unit":original_unit}}
     if not facts:
         return None,"NO_QUALIFIED_BANK_FINANCIAL_VALUES"
-    return {"symbol":symbol,"isin":isin,"period_start":qstart,
-            "period_end":qend,"scope":scope,"facts":facts},None
+    link=historical_result_identity(symbol,isin,doc_isin,qend) if doc_isin!=isin else None
+    if doc_isin!=isin and not link:
+        return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
+    result={"symbol":symbol,"isin":isin,"period_start":qstart,
+            "period_end":qend,"scope":scope,"facts":facts}
+    if link:
+        result["source_isin"]=doc_isin
+        result["historical_identity_link"]=link
+    return result,None
 
 def extract_source(html: str, symbol: str, isin: str, source_url: str):
     if re.search(r"/INTEGRATED_FILING_BANKING_[A-Za-z0-9_]+\.html$",
@@ -518,8 +545,9 @@ def main():
             if {x[0] for x in stocks}!=target:
                 raise RuntimeError("TARGET_SECURITY_NOT_IN_QUALIFIED_COHORT")
         requalify=os.getenv("RESULTS_R4_REQUALIFY","0")=="1"
-        if requalify and set(x[0] for x in stocks)!={"HCLTECH","HDFCBANK"}:
-            raise RuntimeError("REQUALIFICATION_NOT_TARGETED_LEGACY_PAIR")
+        qualified_sets=({"HCLTECH","HDFCBANK"},{"BECTORFOOD","KOTAKBANK","V2RETAIL"})
+        if requalify and {x[0] for x in stocks} not in qualified_sets:
+            raise RuntimeError("REQUALIFICATION_NOT_TARGETED_APPROVED_COHORT")
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})

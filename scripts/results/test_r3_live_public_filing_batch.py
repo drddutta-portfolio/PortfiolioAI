@@ -34,6 +34,17 @@ class ResultsAcquisitionTests(unittest.TestCase):
         found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
         self.assertEqual(found,{"2026-03-31"})
         self.assertNotIn("2026-06-30",found)
+    def test_confirmed_historical_isin_mapping_for_new_cohort(self):
+        self.assertIsNotNone(module.historical_result_identity(
+            "BECTORFOOD","INE495P01020","INE495P01012","2025-09-30"))
+        self.assertIsNotNone(module.historical_result_identity(
+            "V2RETAIL","INE945H01021","INE945H01013","2025-12-31"))
+        self.assertIsNotNone(module.historical_result_identity(
+            "KOTAKBANK","INE237A01036","INE237A01028","2025-12-31"))
+        self.assertIsNone(module.historical_result_identity(
+            "KOTAKBANK","INE237A01036","INE237A01028","2026-03-31"))
+        self.assertIsNone(module.historical_result_identity(
+            "SHAILY","INE151G01028","INE151G10208","2025-09-30"))
     def test_quarter_and_exact_unit_conversion(self):
         v,reason=module.extract(fixture(),"RELIANCE","INE002A01018")
         self.assertIsNone(reason)
@@ -221,6 +232,26 @@ class ResultsAcquisitionTests(unittest.TestCase):
         value,reason=module.extract_bank(sample,"HDFCBANK","INE040A01034")
         self.assertIsNone(reason)
         self.assertNotIn("EPS_DILUTED",value["facts"])
+    def test_bank_q3_packed_reported_eps_vs_cumulative(self):
+        html="""<table><tr><td>NSE Symbol</td><td>KOTAKBANK</td></tr>
+          <tr><td>ISIN</td><td>INE237A01028</td></tr>
+          <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+          <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+          <table><tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+          <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+          <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+          <tr><td>Total interest earned</td><td>15,00,000.00</td></tr>
+          <tr><td>Interest expenses</td><td>7,43,543.00</td></tr>
+          <tr><td>Net profit (loss) for the period</td><td>3,44,614.00</td></tr>
+          <tr><td></td><td>Diluted earnings per share before extraordinary items 99.00 199.00</td></tr>
+          <tr><td></td><td>Diluted earnings per share after extraordinary items 3.47 10.04</td></tr></table>"""
+        # Extract the genuine historical source ISIN using approved issuer
+        # split mapping, not the current listed security identity.
+        value,reason=module.extract_bank(html,"KOTAKBANK","INE237A01036")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["EPS_DILUTED"]["value"],"3.47")
+        self.assertNotEqual(value["facts"]["EPS_DILUTED"]["value"],"10.04")
+        self.assertEqual(value["source_isin"],"INE237A01028")
     def test_bank_crores_unit_no_lakhs_conversion(self):
 
         sample="""<html><body><table>
