@@ -318,13 +318,14 @@ def extract_bank(html: str, symbol: str, isin: str):
                         break
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
-    if eps is None and qstart.endswith("-04-01") and qend.endswith("-06-30"):
-        # NSE Banking iXBRL sometimes nests the AFTER-extraordinary EPS
-        # label plus Q1 / year-to-date numbers inside ONE cell:
-        # "Diluted earnings per share after extraordinary items 12.35 12.35".
-        # Only Q1 is eligible: Q1 and YTD are the same reporting interval.
-        # Both printed values must parse and agree; no fallback to BEFORE-
-        # extraordinary EPS or to another issuer-filing/source record.
+    if eps is None:
+        # NSE Banking iXBRL nests AFTER-extraordinary EPS and two values
+        # inside a single cell. The statement header explicitly orders them
+        # QUARTER (first) and YEAR-TO-DATE (second). For Q1 these must be
+        # equal; for Q2/Q3 they normally differ. Never admit the cumulative
+        # EPS as the quarterly observation, nor before-extraordinary EPS.
+        # Require a genuine 3-month first statement column plus one unique
+        # first-quarter value across all source rows.
         packed=[]
         pattern=re.compile(
             r"^diluted earnings per share after extraordinary items\s+"
@@ -336,7 +337,9 @@ def extract_bank(html: str, symbol: str, isin: str):
                     match=pattern.fullmatch(normalize(cell).replace("\u200b",""))
                     if not match:continue
                     first,year_to_date=number(match.group(1)),number(match.group(2))
-                    if first is not None and year_to_date is not None and first==year_to_date:
+                    if first is not None and year_to_date is not None:
+                        if qstart.endswith("-04-01") and qend.endswith("-06-30") and first!=year_to_date:
+                            continue  # Q1 cannot disagree with YTD
                         packed.append((first,match.group(1)))
         if len({val for val,raw in packed})==1:
             eps,eps_raw=packed[0]
