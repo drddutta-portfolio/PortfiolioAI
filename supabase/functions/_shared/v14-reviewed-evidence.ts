@@ -96,7 +96,9 @@ function validateDocumentBinding(review:RequirementReview,document:ReviewedResea
  if(!document)return {ok:false as const,reason:"DOCUMENTARY_REVIEW_REQUIRES_DOCUMENT",documentSource:null}
  if(document.security_id!==review.security_id||document.identity_status!=="VERIFIED"||!document.canonical_content_hash||!HASH.test(document.canonical_content_hash))
   return {ok:false as const,reason:"DOCUMENT_CONTENT_IDENTITY_NOT_VERIFIED",documentSource:null}
- const links=documentSources.filter(x=>x.research_document_id===document.id&&x.source_record_id===source.id&&x.source_status==="VERIFIED")
+ const associationId=approvedG02DocumentSource(review,source)&&review.requirement_code==="OWNERSHIP_GOVERNANCE"?str(source.raw_payload.original_source_record_id):source.id
+ if(!associationId)return {ok:false as const,reason:"DOCUMENT_ORIGINAL_ASSOCIATION_MISSING",documentSource:null}
+ const links=documentSources.filter(x=>x.research_document_id===document.id&&x.source_record_id===associationId&&x.source_status==="VERIFIED")
  if(links.length!==1)return {ok:false as const,reason:"DOCUMENT_SOURCE_ASSOCIATION_NOT_UNIQUE",documentSource:null}
  const link=links[0]!
  if(!link.content_hash||link.content_hash!==document.canonical_content_hash)return {ok:false as const,reason:"DOCUMENT_SOURCE_CONTENT_HASH_MISMATCH",documentSource:link}
