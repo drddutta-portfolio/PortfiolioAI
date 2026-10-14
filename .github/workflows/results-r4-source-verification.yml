@@ -17,7 +17,7 @@ permissions:
   contents: read
 concurrency:
   group: results-r4-source-verification-development
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   verify-and-select:
     runs-on: ubuntu-latest

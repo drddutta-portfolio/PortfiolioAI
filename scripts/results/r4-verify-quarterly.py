@@ -4,6 +4,7 @@ facts that agree with the immutable filing. Does not establish issuer publicatio
 time, adjust historical share basis or change any investment research score."""
 import argparse, hashlib, json, os
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from urllib.parse import urlparse
@@ -100,24 +101,32 @@ def verify(db,s3,apply):
         with conn.cursor() as cur:
             cur.execute(SQL,(list(QUARTERS),list(UNITS)))
             observations=cur.fetchall()
+        # Bound R2 reads without making any concurrent database writes. S3
+        # clients support concurrent GET; each source is fetched at most once.
+        by_id={str(r["source_record_id"]):r for r in observations}
+        def check_one(pair):
+            k,r=pair
+            raw=r["raw_payload"];pointer=raw.get("r2_key") if isinstance(raw,dict) else None
+            expected=raw.get("r2_manifest_sha256") if isinstance(raw,dict) else None
+            document=None;error=None
+            if not isinstance(pointer,str) or not pointer.startswith(PREFIX) or not isinstance(expected,str) or "/source_version="+expected+"/" not in pointer:
+                error="INVALID_R2_POINTER"
+            else:
+                try:
+                    b=s3.get_object(Bucket=BUCKET,Key=pointer)["Body"].read()
+                    if sha(b)!=expected:error="R2_READBACK_HASH_MISMATCH"
+                    else:document=json.loads(b)
+                except Exception as exc:
+                    response=getattr(exc,"response",{})
+                    code=response.get("Error",{}).get("Code","") if isinstance(response,dict) else ""
+                    error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
+            if not error:error=check_manifest(r,document)
+            return k,(document,error)
+        with ThreadPoolExecutor(max_workers=12) as pool:
+            for k,validated in pool.map(check_one,by_id.items()):
+                cache[k]=validated
         for r in observations:
             k=str(r["source_record_id"])
-            if k not in cache:
-                raw=r["raw_payload"];pointer=raw.get("r2_key") if isinstance(raw,dict) else None
-                expected=raw.get("r2_manifest_sha256") if isinstance(raw,dict) else None
-                document=None;error=None
-                if not isinstance(pointer,str) or not pointer.startswith(PREFIX) or not isinstance(expected,str) or "/source_version="+expected+"/" not in pointer:
-                    error="INVALID_R2_POINTER"
-                else:
-                    try:
-                        b=s3.get_object(Bucket=BUCKET,Key=pointer)["Body"].read()
-                        if sha(b)!=expected:error="R2_READBACK_HASH_MISMATCH"
-                        else:document=json.loads(b)
-                    except Exception as exc:
-                        code=getattr(exc,"response",{}).get("Error",{}).get("Code","")
-                        error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
-                if not error:error=check_manifest(r,document)
-                cache[k]=(document,error)
             doc,error=cache[k]
             if error:invalid[error]+=1;continue
             reason=check_fact(r,doc)
