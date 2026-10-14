@@ -31,6 +31,10 @@ const LABELS: Readonly<Record<string, string>> = {
   NET_NPA_PERCENT: "Net NPA",
 }
 const isBank = (industry: string | null) => /bank/i.test(industry ?? "")
+// Portfolio classification can lag source acquisition: rely on a bank-only
+// financial metric for display selection without changing its research scores.
+const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
+  rows.some((row) => row.code === "NET_INTEREST_INCOME_QUARTER" || row.code === "GROSS_NPA_PERCENT" || row.code === "NET_NPA_PERCENT")
 
 function makePeriods(): Period[] {
   const today = new Date()
@@ -100,7 +104,7 @@ function StatusDot({ status, pending = false }: { readonly status: string; reado
 function PreviewCard({ preview }: { readonly preview: Preview }) {
   const { entry, period, observations } = preview
   const grade = resultStatus(observations, entry.position.industry)
-  const displayed = primaryObservation(observations, isBank(entry.position.industry))
+  const displayed = primaryObservation(observations, isBank(entry.position.industry) || hasBankMetrics(observations))
   return createPortal(
     <div className="ref-preview" role="tooltip" style={{ left: preview.left, top: preview.top }}>
       <strong>{entry.position.symbol} — {period.label}</strong>
@@ -141,7 +145,9 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
 }) {
   const index = periods.findIndex((p) => p.end === selectedPeriodEnd)
   const recent = (index < 0 ? periods.slice(0, 6) : periods.slice(index, index + 6)).slice().reverse()
-  const bank = isBank(entry.position.industry)
+  const bank = isBank(entry.position.industry) || hasBankMetrics(
+    observations.filter((row) => row.securityId === entry.position.securityId),
+  )
   const hasNii = bank && observations.some((row) => row.securityId === entry.position.securityId && row.code === "NET_INTEREST_INCOME_QUARTER")
   const code = bank ? (hasNii ? "NET_INTEREST_INCOME_QUARTER" : "ADVANCES_GROWTH_YOY") : "OPERATING_REVENUE_QUARTER"
   const label = bank ? (hasNii ? "Net Interest Income" : "Advances Growth YoY") : "Revenue"
@@ -294,6 +300,8 @@ export function ResultsLivePage() {
     }
   }
 
+  const sourceCompanyCount = new Set(observations.map((r) => r.securityId)).size
+  const sourceQuarterCount = new Set(observations.map((r) => r.securityId + "|" + r.periodEnd)).size
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
   const filtered = useMemo(() => entries.filter((e) => {
     const p = e.position
@@ -357,7 +365,7 @@ export function ResultsLivePage() {
       <section className="results-collection-status" aria-label="Results collection status">
         <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? "Running…" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
         <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New stored metric observations</small></div>
-        <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{entries.length} equities connected</small></div>
+        <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{loadingEvidence ? "Loading quarterly evidence…" : sourceCompanyCount + " of " + entries.length + " with results · " + sourceQuarterCount + " stock-quarters"}</small></div>
         <button type="button" disabled={scanBusy || entries.length === 0} onClick={() => void runScan()} title={scanBusy ? "Processing quarterly data" : "Check existing and newly linked source data"}>{scanBusy ? "↻ Scanning…" : scanStatus?.run?.status === "RUNNING" ? "↻ Resume Scan" : "↻ Run Scan Now"}</button>
       </section>
     </header>
@@ -385,7 +393,7 @@ export function ResultsLivePage() {
             {start > 0 ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: start * rowHeight }} /></tr> : null}
             {visible.map((entry) => <tr key={entry.position.securityId}><th scope="row" className="stock-column">{entry.position.symbol}<small>{entry.position.industry ?? "Unclassified"} · {entry.kind === "CURRENT" ? "Current" : "Closed"}</small></th>{periods.map((p) => {
               const rows = forQuarter(observations, entry.position.securityId, p.end)
-              const primary = primaryObservation(rows, isBank(entry.position.industry))
+              const primary = primaryObservation(rows, isBank(entry.position.industry) || hasBankMetrics(rows))
               const status = resultStatus(rows, entry.position.industry)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end

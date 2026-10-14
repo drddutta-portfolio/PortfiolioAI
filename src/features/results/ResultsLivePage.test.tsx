@@ -98,6 +98,23 @@ describe("Results live approved visual contract", () => {
     expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
   })
 
+  it("shows source-backed banking NII even when portfolio industry is unclassified", async () => {
+    const unclassified = { ...position("a", "HDFCBANK", "CURRENT"), industry: null }
+    const unclassifiedView = { ...view, openPositions: [unclassified], closedPositions: [] }
+    mock.usePortfolio.mockReturnValue({ portfolio: unclassifiedView, error: null, isLoading: false })
+    mock.load.mockResolvedValue([
+      { ...observation("NET_INTEREST_INCOME_QUARTER", "33533.95"), unit: "INR_CRORE" },
+      { ...observation("NET_PROFIT_QUARTER", "19059.72"), unit: "INR_CRORE" },
+      observation("GROSS_NPA_PERCENT", "1.17"),
+    ])
+    render(<ResultsLivePage />)
+    const row = await screen.findByText("HDFCBANK")
+    const q1 = row.closest("tr")?.querySelector('button[aria-label*="Q1 FY27"]')
+    expect(q1?.textContent).toContain("Net Interest Income")
+    expect(q1?.textContent).toContain("33,533.95")
+    expect(screen.getByText(/1 of 1 with results/)).toBeInTheDocument()
+  })
+
   it("preserves closed-history search and filters without stale analysis", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])

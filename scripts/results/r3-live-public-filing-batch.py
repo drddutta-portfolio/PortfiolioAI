@@ -36,6 +36,13 @@ FIELDS = {
 TARGET_QUARTERS = ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
 CORE_METRICS = frozenset(FIELDS.values())
 BANK_REQUIRED = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
+# Investment banking cohort is explicit so unrelated non-bank NPA observations
+# never reclassify a company into the Banking financial statement contract.
+BANK_TICKERS = frozenset((
+    "AUBANK", "AXISBANK", "BANDHANBNK", "BANKBARODA", "FEDERALBNK",
+    "HDFCBANK", "ICICIBANK", "IDBI", "IDFCFIRSTB", "INDIANB",
+    "KARURVYSYA", "KOTAKBANK", "SBIN",
+))
 RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
                   "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
                   "GROSS_NPA_PERCENT", "NET_NPA_PERCENT")
@@ -221,6 +228,23 @@ def extract_bank(html: str, symbol: str, isin: str):
                                 break
         if len({val for val,raw in eps_candidates})==1:
             eps,eps_raw=eps_candidates[0]
+    if eps is None:
+        # Read the explicit reported first quarter-column value from a
+        # financial filing's EPS row, including differently nested tables.
+        # Never infer diluted EPS from profit/share capital or use annual EPS.
+        candidates=[]
+        for tr in soup.find_all("tr"):
+            cells=tr.find_all(["th","td"], recursive=False)
+            for idx,cell in enumerate(cells[:-1]):
+                label=normalize(cell.get_text(" ",strip=True))
+                if label!="diluted earnings per share after extraordinary items":
+                    continue
+                raw=cells[idx+1].get_text(" ",strip=True)
+                candidate=number(re.sub(r"[\\s*†‡#]+$", "", raw))
+                if candidate is not None:
+                    candidates.append((candidate,raw))
+        if len({value for value,raw in candidates})==1:
+            eps,eps_raw=candidates[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
         facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
           "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
@@ -363,10 +387,9 @@ def persist(conn,s3,parsed,url,original_sha):
     conn.commit()
     return saved
 
-def completed_quarters(rows):
-    """Require complete same-source metrics; bank NPA-only data never qualifies."""
+def completed_quarters(rows, banking=False):
+    """Require complete same-source metrics and correct business-type contract."""
     by_filing = {}
-    banking = any(metric=="GROSS_NPA_PERCENT" for _, _, _, metric in rows)
     required = BANK_REQUIRED if banking else CORE_METRICS
     for period_end, scope, source_record_id, metric_code in rows:
         if str(period_end) not in TARGET_QUARTERS or not scope or not source_record_id:
@@ -418,7 +441,7 @@ def main():
                       AND period_type='QUARTER' AND numeric_value IS NOT NULL
                       AND metric_code=ANY(%s)""",
                     (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | {"GROSS_NPA_PERCENT"})))
-                completed=completed_quarters(cur.fetchall())
+                completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
             conn.rollback()
             if len(completed)==len(TARGET_QUARTERS):
                 entry["reason"]="FOUR_QUARTERS_ALREADY_COMPLETE"
@@ -455,7 +478,7 @@ def main():
                             entry["qualified"]+=1
                             log["documents_parsed"]+=1
                             entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
-                            if (BANK_REQUIRED if "INTEGRATED_FILING_BANKING_" in url else CORE_METRICS).issubset(data["facts"]):
+                            if (BANK_REQUIRED if symbol in BANK_TICKERS else CORE_METRICS).issubset(data["facts"]):
                                 completed.add(data["period_end"])
                             if len(completed)==len(TARGET_QUARTERS):
                                 break

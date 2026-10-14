@@ -54,7 +54,7 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertIsNone(v)
         self.assertEqual(reason,"PERIOD_NOT_THREE_MONTHS")
     def test_unit_not_proven(self):
-        v,reason=module.extract(fixture(unit="Crores"),"RELIANCE","INE002A01018")
+        v,reason=module.extract(fixture(unit="Millions"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
         self.assertEqual(reason,"UNSUPPORTED_OR_UNKNOWN_UNIT")
     def test_bank_original_filing_extract(self):
@@ -138,6 +138,13 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertIsNone(reason)
         self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"250.00")
         self.assertEqual(value["facts"]["NET_PROFIT_QUARTER"]["original_unit"],"INR_CRORE")
+    def test_bank_eligibility_does_not_depend_on_foreign_npa(self):
+        rows=[("2025-09-30","STANDALONE","source-a","OPERATING_REVENUE_QUARTER"),
+              ("2025-09-30","STANDALONE","source-a","NET_PROFIT_QUARTER"),
+              ("2025-09-30","STANDALONE","source-a","EPS_DILUTED"),
+              ("2025-09-30","STANDALONE","source-b","GROSS_NPA_PERCENT")]
+        self.assertEqual(module.completed_quarters(rows,banking=False), {"2025-09-30"})
+        self.assertEqual(module.completed_quarters(rows,banking=True), set())
     def test_bank_npa_only_not_complete(self):
         rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
         self.assertEqual(module.completed_quarters(rows),set())
