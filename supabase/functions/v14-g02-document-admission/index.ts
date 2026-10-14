@@ -1,3 +1,4 @@
+import {renewG02History} from '../_shared/v14-g02-history-renewal-runtime.ts'
 import {g02DocumentExecutorQualified} from '../_shared/v14-g02-executor-identity.ts'
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
@@ -11,7 +12,9 @@ Deno.serve(async req=>{
  if(url!==`https://${policy.developmentProject}.supabase.co`||!key)return reply(409,'DEVELOPMENT_ONLY')
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload;if(!g02DocumentExecutorQualified(claims))return reply(403,'G02_EXECUTOR_SCOPE_INVALID')}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
- const body=await req.json().catch(()=>null),b=batch.find(x=>x.securityId===body?.securityId)
+ const body=await req.json().catch(()=>null)
+ if(body?.action==='RENEW_FIXED_G02_STOCK_HISTORY'){try{return reply(200,'G02_STOCK_HISTORY_PROOFS_RENEWED_NOT_READY',await renewG02History(createClient(url,key,{auth:{persistSession:false}}),body))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G02_HISTORY_RENEWAL_FAILED')}}
+ const b=batch.find(x=>x.securityId===body?.securityId)
  if(body?.action!=='ADMIT_FIXED_G02_DURABILITY_DOCUMENT'||body.authorizationHash!==policy.directiveSha256||!b||body.originalHash!==b.originalHash||body.normalizedFragment!==b.fragment||body.extractionMethod!=='POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES')return reply(400,'EXACT_G02_DOCUMENT_BATCH_REQUIRED')
  const db=createClient(url,key,{auth:{persistSession:false}})
  try{

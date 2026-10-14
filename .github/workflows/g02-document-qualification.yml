@@ -1,6 +1,10 @@
 name: G02 Original Document Qualification and Admission
 on:
   workflow_dispatch:
+    inputs:
+      renew_history:
+        type: boolean
+        default: false
   push:
     branches: [codex/g02-industry-evidence]
     paths:
@@ -30,6 +34,13 @@ jobs:
           CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
         run: python scripts/v1-4/g02_document_admission.py
+      - name: Renew only pinned G02 market history proof
+        if: github.event_name == 'workflow_dispatch' && inputs.renew_history
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/g02_history_renewal.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

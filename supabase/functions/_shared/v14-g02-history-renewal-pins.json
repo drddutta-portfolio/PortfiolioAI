@@ -1,0 +1,72 @@
+{
+  "version": "G02_HISTORY_TAIL_RENEWAL_V1",
+  "through": "2026-10-13",
+  "sources": [
+    {
+      "hash": "fb867de164347563318faa077c2f1cf059a21d1a43fd42a136ec1bdf08128e98",
+      "bytes": 17703,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_07102026.csv",
+      "session": "2026-10-07",
+      "close": "16651.27"
+    },
+    {
+      "hash": "c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512",
+      "bytes": 17939,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_08102026.csv",
+      "session": "2026-10-08",
+      "close": "16137.42"
+    },
+    {
+      "hash": "7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01",
+      "bytes": 17585,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_09102026.csv",
+      "session": "2026-10-09",
+      "close": "16195.87"
+    },
+    {
+      "hash": "e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621",
+      "bytes": 17552,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_12102026.csv",
+      "session": "2026-10-12",
+      "close": "16398.32"
+    },
+    {
+      "hash": "875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696",
+      "bytes": 17563,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_13102026.csv",
+      "session": "2026-10-13",
+      "close": "16504.52"
+    },
+    {
+      "hash": "561382eba3c4a39f0d34e33d0ffca5f153080931ee17c267f240a995c0156d2d",
+      "bytes": 2931,
+      "extension": "json",
+      "url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=08-10-2026&to_date=13-10-2026"
+    }
+  ],
+  "stocks": [
+    {
+      "id": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "symbol": "CGPOWER",
+      "parent": "bfd29a87-2315-4bdd-9bcb-8d415874b229",
+      "capture": "fbdb3c24-9965-4a4b-96e3-1582e1fc7489"
+    },
+    {
+      "id": "87132afb-e054-4ba2-adae-dc325637c001",
+      "symbol": "AVALON",
+      "parent": "e1257509-8e25-41fd-a638-ffc358cbc13d",
+      "capture": "368cde65-a48d-4793-a624-e17474dca92f"
+    },
+    {
+      "id": "7202b7b7-237c-439b-936d-c75bab806678",
+      "symbol": "TDPOWERSYS",
+      "parent": "77c60edb-3ad4-47a3-abbc-42488d3b6381",
+      "capture": "19695135-65c0-4297-81f9-7f4940ba8092"
+    }
+  ]
+}
