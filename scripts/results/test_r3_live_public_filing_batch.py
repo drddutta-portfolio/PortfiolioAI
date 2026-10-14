@@ -36,8 +36,8 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertEqual(v["period_start"],"2026-04-01")
         self.assertEqual(v["period_end"],"2026-06-30")
         self.assertEqual(v["scope"],"CONSOLIDATED")
-        self.assertEqual(v["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"311850.0000")
-        self.assertEqual(v["facts"]["NET_PROFIT_QUARTER"]["value"],"23196.0000")
+        self.assertEqual(v["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"311850.00")
+        self.assertEqual(v["facts"]["NET_PROFIT_QUARTER"]["value"],"23196.00")
         self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"15.48")
     def test_identity_must_match(self):
         v,reason=module.extract(fixture(isin="INE999999999"),"RELIANCE","INE002A01018")
