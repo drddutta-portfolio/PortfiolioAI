@@ -6,6 +6,10 @@ on:
         description: Save only BEL after both fixed documentary reviews validate FRESH
         type: boolean
         default: false
+      require_bel_roce:
+        description: Require the admitted three-year BEL issuer ROCE series before saving
+        type: boolean
+        default: false
   push:
     branches: [codex/g02-industry-evidence]
     paths: [.github/workflows/g03-canonical-validation.yml]
@@ -28,6 +32,7 @@ jobs:
       - run: python scripts/v1-4/g03_canonical_validation.py
         env:
           G03_MATERIALIZE_BEL: ${{ inputs.materialize_bel }}
+          G03_REQUIRE_BEL_ROCE: ${{ inputs.require_bel_roce }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

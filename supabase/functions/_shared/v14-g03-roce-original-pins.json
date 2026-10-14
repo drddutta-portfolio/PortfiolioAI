@@ -1,0 +1,34 @@
+[
+  {
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "symbol": "BEL",
+    "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf",
+    "resolved_url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf",
+    "original_sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "original_bytes": 16199415,
+    "extension": "pdf",
+    "document_type": "ANNUAL_REPORT",
+    "source_code": "COMPANY_EXCHANGE_FILING",
+    "title": "BEL_FY2025_26_INTEGRATED_ANNUAL_REPORT",
+    "identity_fragment": "L32309KA1954GOI000787",
+    "first_observed_at": "2026-10-14T09:30:59.823323+00:00",
+    "published_at": null,
+    "publication_precision": "UNKNOWN"
+  },
+  {
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "symbol": "BEL",
+    "original_url": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2025/BEL-2025.pdf",
+    "resolved_url": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2025/BEL-2025.pdf",
+    "original_sha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+    "original_bytes": 15543216,
+    "extension": "pdf",
+    "document_type": "ANNUAL_REPORT",
+    "source_code": "COMPANY_EXCHANGE_FILING",
+    "title": "BEL_FY2024_25_INTEGRATED_ANNUAL_REPORT",
+    "identity_fragment": "L32309KA1954GOI000787",
+    "first_observed_at": "2026-10-14T16:46:20.389576+00:00",
+    "published_at": null,
+    "publication_precision": "UNKNOWN"
+  }
+]

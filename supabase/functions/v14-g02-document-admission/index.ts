@@ -1,4 +1,6 @@
 import {g03DocumentExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {g03RoceExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {admitFixedG03Roce} from '../_shared/v14-g03-roce-admission-runtime.ts'
 import {G02_SOURCE_SCOPE,G03_SOURCE_SCOPE} from '../_shared/v14-g02-source-import.ts'
 import {G03_DOCUMENT_REVIEW_BATCH,G03_DOCUMENT_KIND,G03_DOCUMENT_REVIEW_KIND} from '../_shared/v14-g03-document-review.ts'
 import {renewG02History} from '../_shared/v14-g02-history-renewal-runtime.ts'
@@ -16,6 +18,10 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
+ if(body?.action==='ADMIT_FIXED_G03_BEL_ROCE_BATCH'){
+  if(!g03RoceExecutorQualified(claims))return reply(403,'G03_ROCE_EXECUTOR_SCOPE_INVALID')
+  try{return reply(200,'G03_FIXED_ROCE_REVIEWS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Roce(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_ROCE_ADMISSION_FAILED')}
+ }
  const g03=body?.action==='ADMIT_FIXED_G03_DOCUMENT',scope=g03?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE,sourcePolicy=scope.policy,selectedBatch=g03?G03_DOCUMENT_REVIEW_BATCH:batch,documentKind=g03?G03_DOCUMENT_KIND:G02_DOCUMENT_KIND,reviewKind=g03?G03_DOCUMENT_REVIEW_KIND:G02_DOCUMENT_REVIEW_KIND
  if(!(g03?g03DocumentExecutorQualified(claims):g02DocumentExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
  if(body?.action==='RENEW_FIXED_G02_STOCK_HISTORY'){try{return reply(200,'G02_STOCK_HISTORY_PROOFS_RENEWED_NOT_READY',await renewG02History(createClient(url,key,{auth:{persistSession:false}}),body))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G02_HISTORY_RENEWAL_FAILED')}}

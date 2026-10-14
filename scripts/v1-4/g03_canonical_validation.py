@@ -43,6 +43,10 @@ def main():
         if any(not any(i.get('requirement_code') == code and i.get('evidence_state') == 'FRESH'
                        for i in bel['items']) for code in pilot['allowedRequirementCodes']):
             raise ValueError('G03_BEL_DOCUMENTARY_REVIEWS_NOT_CANONICALLY_FRESH')
+        if os.environ.get('G03_REQUIRE_BEL_ROCE') == 'true' and not any(
+                i.get('requirement_code') == 'ROCE_OR_ROIC' and i.get('evidence_state') == 'FRESH'
+                for i in bel['items']):
+            raise ValueError('G03_BEL_ISSUER_ROCE_NOT_CANONICALLY_FRESH')
         from g03_source_qualification import invoke
         grant_body = {'action': 'ISSUE_G03_CANONICAL_ONLY_GRANT', 'authorizationHash': pilot['directiveSha256']}
         grant = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
