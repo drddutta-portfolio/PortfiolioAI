@@ -21,7 +21,8 @@ jobs:
           urls={
           'COFORGE':'https://www.coforge.com/hubfs/Outcome-of-Board-Meeting-Q3-FY2026.pdf',
           'HBLENGINE':'https://www.hbl.in/reports/results_sep2025.pdf',
-          'SHAILY':'https://static.shaily.com/y7GuSh95RsG5gOUUnd6i-covering-letter-reg-33-30092025-signed-pdf'}
+          'SHAILY':'https://static.shaily.com/y7GuSh95RsG5gOUUnd6i-covering-letter-reg-33-30092025-signed-pdf',
+          'EXIDE_CORRECTION':'https://nsearchives.nseindia.com/corporate/EXIDEIND_17022026174032_sdClarification_letter_NSE.pdf'}
           for symbol,url in urls.items():
               try:
                   r=requests.get(url,timeout=24,headers={'User-Agent':'Mozilla/5.0'})
