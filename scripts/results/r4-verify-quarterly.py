@@ -57,7 +57,10 @@ def check_manifest(record,manifest):
     if not isinstance(raw,dict) or not isinstance(manifest,dict):return "MALFORMED_MANIFEST"
     if sha(canonical_bytes(raw))!=record["payload_hash"]:return "SOURCE_HASH_MISMATCH"
     if {k:v for k,v in raw.items() if k not in ("r2_key","r2_manifest_sha256")}!=manifest:return "SOURCE_MANIFEST_MISMATCH"
-    if manifest.get("contract")!="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":return "UNAPPROVED_CONTRACT"
+    contract=manifest.get("contract")
+    if contract not in ("PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",
+                         "PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1"):
+        return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
         days=(date.fromisoformat(manifest["period_end"])-date.fromisoformat(manifest["period_start"])).days
@@ -65,10 +68,27 @@ def check_manifest(record,manifest):
     except (KeyError,ValueError,TypeError):return "INVALID_QUARTER_DATES"
     if manifest.get("consolidation_scope") not in ("STANDALONE","CONSOLIDATED"):return "SCOPE_NOT_PROVEN"
     u=urlparse(manifest.get("issuer_filing_url",""))
-    if u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):return "UNQUALIFIED_ORIGIN"
+    if contract=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
+        approved={"COFORGE":("www.coforge.com","/hubfs/Outcome-of-Board-Meeting-Q3-FY2026.pdf")}
+        expected=approved.get(manifest.get("symbol"))
+        if not expected or u.scheme!="https" or (u.hostname,u.path)!=expected or u.query or u.fragment:
+            return "UNAPPROVED_ORIGINAL_ISSUER_PDF"
+        original=manifest.get("original_sha256_retained")
+        original_key=manifest.get("original_r2_key")
+        if (not isinstance(original,str) or len(original)!=64
+            or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
+            or not original_key.endswith("/issuer-original.pdf")
+            or "/source_version="+manifest.get("source_version","")+"/" not in original_key):
+            return "INVALID_RETAINED_ORIGINAL_REFERENCE"
+        if manifest.get("original_pdf_retained") is not True:return "ORIGINAL_PDF_NOT_RETAINED"
+    elif u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):
+        return "UNQUALIFIED_ORIGIN"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
-    if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
-    if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
+    if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
+        if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
+        if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
+    elif manifest.get("reporting_currency")!="INR":
+        return "PDF_CURRENCY_UNKNOWN"
     if not record["source_retrieved"]:return "SOURCE_RETRIEVAL_UNKNOWN"
     if not isinstance(manifest.get("facts"),dict):return "FACTS_NOT_OBJECT"
     historical_error=historical_original_eps_proof(manifest)
@@ -140,7 +160,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind='RESULTS_QUARTERLY_NSE_DISCOVERY_V1'
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -169,6 +189,15 @@ def verify(db,s3,apply):
                     code=response.get("Error",{}).get("Code","") if isinstance(response,dict) else ""
                     error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
             if not error:error=check_manifest(r,document)
+            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
+                try:
+                    original_bytes=s3.get_object(
+                        Bucket=BUCKET,Key=document["original_r2_key"])["Body"].read()
+                    if (not original_bytes.startswith(b"%PDF")
+                        or sha(original_bytes)!=document["original_sha256_retained"]):
+                        error="R2_RETAINED_ORIGINAL_PDF_HASH_MISMATCH"
+                except Exception:
+                    error="R2_RETAINED_ORIGINAL_PDF_UNAVAILABLE"
             return k,(document,error)
         with ThreadPoolExecutor(max_workers=12) as pool:
             for k,validated in pool.map(check_one,by_id.items()):
