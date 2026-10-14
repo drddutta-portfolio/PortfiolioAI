@@ -1,3 +1,4 @@
+import {handleG02MarketHistory} from '../v14-g02-market-history/index.ts'
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
 import policy from '../_shared/v14-g02-owner-authorization.json' with {type:'json'}
@@ -10,7 +11,9 @@ Deno.serve(async req=>{
  const url=Deno.env.get('SUPABASE_URL')??'',key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')??'';if(url!==`https://${policy.developmentProject}.supabase.co`||!key)return reply(409,'DEVELOPMENT_ONLY')
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload;if(!g02ValidationExecutorQualified(claims)&&!g02HistoryExecutorQualified(claims))return reply(403,'G02_EXECUTOR_SCOPE_INVALID')}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
- const body=await req.json().catch(()=>null),history=body?.action==='ISSUE_G02_HISTORY_TAIL_GRANT'
+ const body=await req.json().catch(()=>null)
+ if(body?.action==='V1_4_G02_HISTORY_TAIL'){if(!g02HistoryExecutorQualified(claims))return reply(403,'G02_HISTORY_EXECUTOR_REQUIRED');return handleG02MarketHistory(new Request(req.url,{method:'POST',headers:req.headers,body:JSON.stringify(body)}))}
+ const history=body?.action==='ISSUE_G02_HISTORY_TAIL_GRANT'
  if(body?.authorizationHash!==policy.directiveSha256||history&&!g02HistoryExecutorQualified(claims)||!history&&(body?.action!=='ISSUE_G02_CANONICAL_ONLY_GRANT'||!g02ValidationExecutorQualified(claims)))return reply(400,'EXACT_G02_EXECUTION_AUTHORIZATION_REQUIRED')
  const sessionDate=String(body?.sessionDate??'')
  if(history&&(!/^\d{4}-\d{2}-\d{2}$/.test(sessionDate)||!Number.isFinite(Date.parse(sessionDate+'T19:00:00+05:30'))||Date.now()<Date.parse(sessionDate+'T19:00:00+05:30')||Date.now()-Date.parse(sessionDate+'T19:00:00+05:30')>3*86400000))return reply(409,'G02_HISTORY_SESSION_NOT_PUBLICATION_ELIGIBLE')

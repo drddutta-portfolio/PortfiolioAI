@@ -8,7 +8,7 @@ import policy from '../_shared/v14-g02-owner-authorization.json' with {type:'jso
 const ACTION='V1_4_G02_HISTORY_TAIL',SOURCE='ANGEL_ONE',LIMIT=3
 const hash=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(v))))).map(x=>x.toString(16).padStart(2,'0')).join('')
 const safe=(e:unknown)=>e instanceof AngelProviderError?e.code:e instanceof Error&&/^G02_[A-Z0-9_]+$/.test(e.message)?e.message:'G02_PROVIDER_OR_RUNTIME_FAILURE'
-Deno.serve(async req=>{
+export async function handleG02MarketHistory(req:Request){
  const reply=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{'content-type':'application/json','cache-control':'no-store'}})
  if(req.method!=='POST')return reply(405,{code:'METHOD_NOT_ALLOWED'})
  const url=Deno.env.get('SUPABASE_URL')??'',key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')??'';if(url!==`https://${policy.developmentProject}.supabase.co`||!key)return reply(409,{code:'DEVELOPMENT_ONLY'})
@@ -32,8 +32,8 @@ Deno.serve(async req=>{
    for(const id of policy.securityIds){
     const before=transport.historyRequests,attemptedAt=new Date().toISOString();let outcome='FAILED',errorCode:string|null=null
     try{
-     const holding=await db.from('current_holdings').select('current_quantity').eq('portfolio_id',policy.portfolioId).eq('security_id',id).gt('current_quantity',0).maybeSingle(),mapping=await db.from('market_data_instrument_mappings').select('id,provider_instrument_id,exchange,trading_symbol,mapping_status').eq('security_id',id).eq('provider_code',SOURCE).single()
-     if(holding.error||!holding.data||mapping.error||mapping.data.mapping_status!=='VERIFIED')throw Error('G02_HISTORY_HELD_EQUITY_MAPPING_NOT_VERIFIED')
+     const holding=await db.from('current_holdings').select('current_quantity').eq('portfolio_id',policy.portfolioId).eq('security_id',id).gt('current_quantity',0).maybeSingle(),security=await db.from('securities').select('symbol,asset_class').eq('id',id).single(),mapping=await db.from('market_data_instrument_mappings').select('id,provider_instrument_id,exchange,trading_symbol,mapping_status').eq('security_id',id).eq('provider_code',SOURCE).single()
+     if(holding.error||!holding.data||security.error||security.data.asset_class!=='EQUITY'||mapping.error||mapping.data.mapping_status!=='VERIFIED'||mapping.data.exchange!=='NSE'||mapping.data.trading_symbol!==security.data.symbol+'-EQ')throw Error('G02_HISTORY_HELD_EQUITY_MAPPING_NOT_VERIFIED')
      const latest=await db.from('market_price_history').select('period_start').eq('security_id',id).eq('provider_code',SOURCE).eq('interval','ONE_DAY').order('period_start',{ascending:false}).limit(1).maybeSingle();if(latest.error||!latest.data)throw Error('G02_RETAINED_HISTORY_START_NOT_PROVEN');const from=bankTailDay(latest.data.period_start)
      if(from>=date){results.push({securityId:id,status:'SKIPPED_ALREADY_CURRENT'});continue}
      if(Date.parse(date)-Date.parse(from)>14*86400000)throw Error('G02_INCREMENTAL_WINDOW_EXCEEDS_14_DAYS')
@@ -59,4 +59,4 @@ Deno.serve(async req=>{
   return reply(200,{action:ACTION,runId,reservationId,transport,results,retryAttempts:0,canonicalMaterialization:false})
  }catch(e){return reply(500,{code:safe(e)})}
  finally{if(release)await db.rpc('release_data_ingestion_lease_v1',{p_source_code:SOURCE,p_operation:operation,p_lease_holder:holder,p_cooldown_seconds:0})}
-})
+}
