@@ -40,3 +40,19 @@ The acquisition manifest is an input for a future bounded collector, **not evide
 - `scripts/results/r3-cgpower-q1fy27-already-stored-ixbrl-facts.sql`
 - Existing R3 source ingestion/Results UI PR #140 remains under review, not a claim of full pipeline completion.
 - No Production/main changes. No scheduled collector enabled.
+
+
+## Follow-on source recovery — 14 October 2026, Development only
+
+**Updated canonical readback (subsequent to the 15/262 figures above):** **357** dated numeric observations across **28** distinct equities and **92** stock/quarter combinations. This includes **39 newly persisted observations** from **13 issuer Ind-AS Q1 FY2026–27 filings**: HCLTECH, INFY, BHARTIARTL, HINDUNILVR, RELIANCE, DRREDDY, AUROPHARMA, ETERNAL, HAL, BEL, GRASIM, HINDALCO and CIPLA. Each company received authentic **2026-06-30 consolidated revenue from operations, total profit for the period and diluted EPS**. Original financial amounts in INR lakhs were deterministically divided by 100 to produce INR crore; EPS retained INR per share. Fields came from the actual issuer filing table, never extrapolated from TTM or publication dates.
+
+**Cloudflare first:** 13 additional content-addressed compact Results manifests were written to R2 at \`portfolioai-results/development/v1/quarterly/security_id=<ISIN>/period_end=2026-06-30/source_version=<SHA256>/manifest.json\`, with returned object-key/size list readback before corresponding 39 Supabase observations were committed. Original NSE iXBRL bytes were **not** retained or archived because the NSE_OFFICIAL source row has \`retention_rights_verified=false\`. The original URLs, financial reporting scope, source units, period, and R2 manifest keys/hashes are retained in the existing \`data_source_records\` rows. These remain **Results review pending**, not V1-4 READY or canonically selected; no pricing, accounting, scoring, or Production/main changes.
+
+**As at this readback: 234 of 262 equities still have no dated Results observation,** and even the 28 covered equities are not claimed fully covered across all historic quarters or mandatory industry-specific metrics. Total cached Trendlyne archival remains 933 objects, separate from the 13 new Results manifests. No direct Trendlyne provider calls were spent in this recovery.
+
+**Reproducible DB executions added to this same Development PR:**
+- \`scripts/results/r3-five-issuer-q1fy27-ixbrl-facts.sql\`
+- \`scripts/results/r3-five-more-issuer-q1fy27-ixbrl-facts.sql\`
+- \`scripts/results/r3-three-additional-issuer-q1fy27-ixbrl-facts.sql\`
+
+**Reusable acquisition (experimental, not yet accepted):** \`scripts/results/r3-live-public-filing-batch.py\`, \`scripts/results/test_r3_live_public_filing_batch.py\`, and \`.github/workflows/results-r3-original-filings-acquisition.yml\` implement a bounded development-only read/qualify/store loop using NSE-listed issuer links, strict identity and period checks, R2 hash readback and small Supabase observations. The first GitHub pilot found a test fixture decimal-scale mismatch and was corrected; execution acceptance depends on observed subsequent workflow results and a fresh independent database readback. It must NOT be counted complete solely from successful CI or source-discovery counts. The approved Results UI remains unchanged.
