@@ -1,5 +1,8 @@
 name: G02 Governed Three-Stock Market Tail
 on:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g02-market-history.yml]
   workflow_dispatch:
     inputs:
       sessionDate:
@@ -14,6 +17,7 @@ permissions:
   contents: read
 jobs:
   acquire:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-22.04
     environment: PortfolioAI-Development
     timeout-minutes: 10

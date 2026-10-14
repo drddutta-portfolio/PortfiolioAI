@@ -28,7 +28,8 @@ export async function handleG02MarketHistory(req:Request){
   if(reservation.error||!reserved?.reserved||!reserved.reservation_id){await db.from('data_ingestion_runs').update({status:'FAILED',completed_at:new Date().toISOString(),error_summary:String(reserved?.reason_code??'G02_BUDGET_RESERVATION_FAILED')}).eq('id',runId);return reply(409,{code:'G02_HISTORY_BUDGET_NOT_RESERVED',reason:reserved?.reason_code??null,providerCalls:0,runId})}
   const reservationId=String(reserved.reservation_id),transport={authenticationRequests:0,authenticationResponses:0,historyRequests:0},results:Array<Record<string,unknown>>=[];let consumed=0,failed=0,completedRunVerified=false
   try{
-   const provider=new AngelOneProvider(loadAngelOneConfig(),{onAttempt(kind){if(kind==='AUTHENTICATE'&&++transport.authenticationRequests>1)throw Error('G02_AUTH_ATTEMPT_LIMIT');if(kind==='HISTORY'&&++transport.historyRequests>LIMIT)throw Error('G02_HISTORY_ATTEMPT_LIMIT')},onResponse(kind,ok){if(kind==='AUTHENTICATE'&&ok)transport.authenticationResponses++}})
+   const configuration=(()=>{try{return loadAngelOneConfig()}catch{throw Error('G02_ANGEL_RUNTIME_CONFIGURATION_NOT_AVAILABLE')}})()
+   const provider=new AngelOneProvider(configuration,{onAttempt(kind){if(kind==='AUTHENTICATE'&&++transport.authenticationRequests>1)throw Error('G02_AUTH_ATTEMPT_LIMIT');if(kind==='HISTORY'&&++transport.historyRequests>LIMIT)throw Error('G02_HISTORY_ATTEMPT_LIMIT')},onResponse(kind,ok){if(kind==='AUTHENTICATE'&&ok)transport.authenticationResponses++}})
    for(const id of policy.securityIds){
     const before=transport.historyRequests,attemptedAt=new Date().toISOString();let outcome='FAILED',errorCode:string|null=null
     try{
