@@ -30,6 +30,10 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_r4_requalification_ignores_unselected_observation_presence(self):
+        found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
+        self.assertEqual(found,{"2026-03-31"})
+        self.assertNotIn("2026-06-30",found)
     def test_quarter_and_exact_unit_conversion(self):
         v,reason=module.extract(fixture(),"RELIANCE","INE002A01018")
         self.assertIsNone(reason)
@@ -166,7 +170,59 @@ class ResultsAcquisitionTests(unittest.TestCase):
         v,reason=module.extract_bank(html,"BANDHANBNK","INE545U01014")
         self.assertIsNone(reason)
         self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
+    def test_bank_after_extraordinary_eps_with_footnote_and_blank_spacer(self):
+        html="""<table>
+         <tr><td>NSE Symbol</td><td>HDFCBANK</td></tr>
+         <tr><td>ISIN</td><td>INE040A01034</td></tr>
+         <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+         <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+         <table><tr><td>Date of start of reporting period</td><td>01-04-2026</td></tr>
+          <tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+          <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+          <tr><td>Total interest earned</td><td>79,36,278.00</td></tr>
+          <tr><td>Interest expenses</td><td>45,82,883.00</td></tr>
+          <tr><td>Net profit (loss) for the period</td><td>19,05,972.00</td></tr></table>
+          <table><tr><td>Diluted earnings per share after extraordinary items [Quarterly]</td>
+            <td> </td><td>12.35</td><td>12.35</td></tr></table>"""
+        value,reason=module.extract_bank(html,"HDFCBANK","INE040A01034")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["EPS_DILUTED"]["value"],"12.35")
+        self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"33533.95")
+    def test_hdfc_packed_after_extraordinary_q1_eps(self):
+        sample="""<table>
+          <tr><td>NSE Symbol</td><td>HDFCBANK</td></tr>
+          <tr><td>ISIN</td><td>INE040A01034</td></tr>
+          <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+          <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+          </table>
+          <table><tr><td>Date of start of reporting period</td><td>01-04-2026</td></tr>
+          <tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+          <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+          <tr><td>Total interest earned</td><td>79,36,278.00</td></tr>
+          <tr><td>Interest expenses</td><td>45,82,883.00</td></tr>
+          <tr><td>Net profit (loss) for the period</td><td>19,05,972.00</td></tr>
+          <tr><td></td><td>Diluted earnings per share before extraordinary items 99.00 99.00</td></tr>
+          <tr><td></td><td>Diluted earnings per share after extraordinary items 12.35 12.35</td></tr></table>"""
+        value,reason=module.extract_bank(sample,"HDFCBANK","INE040A01034")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["EPS_DILUTED"]["value"],"12.35")
+        self.assertNotEqual(value["facts"]["EPS_DILUTED"]["value"],"99.00")
+    def test_packed_q1_eps_requires_matching_year_to_date(self):
+        sample="""<table><tr><td>NSE Symbol</td><td>HDFCBANK</td></tr>
+          <tr><td>ISIN</td><td>INE040A01034</td></tr>
+          <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr></table>
+          <table><tr><td>Date of start of reporting period</td><td>01-04-2026</td></tr>
+          <tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+          <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+          <tr><td>Total interest earned</td><td>200.00</td></tr>
+          <tr><td>Interest expenses</td><td>100.00</td></tr>
+          <tr><td>Net profit (loss) for the period</td><td>50.00</td></tr>
+          <tr><td></td><td>Diluted earnings per share after extraordinary items 12.35 13.35</td></tr></table>"""
+        value,reason=module.extract_bank(sample,"HDFCBANK","INE040A01034")
+        self.assertIsNone(reason)
+        self.assertNotIn("EPS_DILUTED",value["facts"])
     def test_bank_crores_unit_no_lakhs_conversion(self):
+
         sample="""<html><body><table>
         <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
         <tr><td>ISIN</td><td>INE545U01014</td></tr>

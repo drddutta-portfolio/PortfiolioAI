@@ -1,3 +1,9 @@
+## Results R4 recovery verification — 2026-10-14, 18:04 UTC
+
+**Current Development acceptance: 214/231 companies with all four source-selected quarters; 17 companies / 24 stock-quarter gaps remain.** 2,750 selected financial observations across 900 selected company-quarters. Targeted official NSE requalification recovered HCLTECH (3 metrics) and HDFCBANK (4 metrics) Q1 FY27. The latter required a narrow original-banking-iXBRL EPS parsing correction verified by regression tests; no cross-source metric mixing. The final [verification run 38611928424](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38611928424) checked 1,902 R2 source manifests, added four HDFCBANK source selections and found zero conflicting existing decisions. Publication timestamp remains unknown for most original disclosures. **R4 portfolio-wide acceptance remains NOT PASS**, R5 grading not active. Exception register: `docs/PortfolioAI_RESULTS_R4_EXCEPTION_AUDIT_2026-10-14.md`. No Production/main or V1-4 score modifications.
+
+---
+
 ## R4 exception-closeout readback — 2026-10-14
 
 **R4 engineering operational, portfolio-wide acceptance NOT PASS.** 2,743 selected financial observations / 898 company-quarters; 212/231 equities have all four quarterly source selections; 19 incomplete equities / 26 unselected quarters. Recovered five coherent Standalone quarter selections under original source integrity without mixing scopes. Targeted NSE reruns did not admit further values because original unit/ISIN evidence remains incomplete. Publication time mostly UNKNOWN. Detailed cases: `docs/PortfolioAI_RESULTS_R4_EXCEPTION_AUDIT_2026-10-14.md`. Production/main untouched; no R5 grading claims.

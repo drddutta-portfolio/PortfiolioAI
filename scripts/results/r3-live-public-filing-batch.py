@@ -285,15 +285,44 @@ def extract_bank(html: str, symbol: str, isin: str):
         for tr in soup.find_all("tr"):
             cells=tr.find_all(["th","td"], recursive=False)
             for idx,cell in enumerate(cells[:-1]):
-                label=normalize(cell.get_text(" ",strip=True))
-                if label!="diluted earnings per share after extraordinary items":
+                label=normalize(cell.get_text(" ",strip=True)).replace("\u200b","")
+                # Same issuer filing, explicit AFTER-extraordinary diluted EPS;
+                # a trailing footnote/qualifier or spacer TD must not make
+                # a published first-quarter number disappear.
+                if (len(label)>140
+                    or "diluted earnings per share after extraordinary items" not in label
+                    or "before extraordinary" in label):
                     continue
-                raw=cells[idx+1].get_text(" ",strip=True)
-                candidate=number(re.sub(r"[\\s*†‡#]+$", "", raw))
-                if candidate is not None:
-                    candidates.append((candidate,raw))
+                for field in cells[idx+1:]:
+                    raw=field.get_text(" ",strip=True)
+                    candidate=number(re.sub(r"[\\s*†‡#]+$", "",raw))
+                    if candidate is not None:
+                        candidates.append((candidate,raw))
+                        break
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
+    if eps is None and qstart.endswith("-04-01") and qend.endswith("-06-30"):
+        # NSE Banking iXBRL sometimes nests the AFTER-extraordinary EPS
+        # label plus Q1 / year-to-date numbers inside ONE cell:
+        # "Diluted earnings per share after extraordinary items 12.35 12.35".
+        # Only Q1 is eligible: Q1 and YTD are the same reporting interval.
+        # Both printed values must parse and agree; no fallback to BEFORE-
+        # extraordinary EPS or to another issuer-filing/source record.
+        packed=[]
+        pattern=re.compile(
+            r"^diluted earnings per share after extraordinary items\s+"
+            r"(\(?-?[\d,]+(?:\.\d+)?\)?)\s+"
+            r"(\(?-?[\d,]+(?:\.\d+)?\)?)$",re.I)
+        for table in tables:
+            for row in table:
+                for cell in row:
+                    match=pattern.fullmatch(normalize(cell).replace("\u200b",""))
+                    if not match:continue
+                    first,year_to_date=number(match.group(1)),number(match.group(2))
+                    if first is not None and year_to_date is not None and first==year_to_date:
+                        packed.append((first,match.group(1)))
+        if len({val for val,raw in packed})==1:
+            eps,eps_raw=packed[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
         facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
           "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
@@ -440,6 +469,10 @@ def persist(conn,s3,parsed,url,original_sha):
     conn.commit()
     return saved
 
+def missing_r4_selected_quarters(rows):
+    """Only an existing R4 selection closes a requalification target period."""
+    return {str(row[0]) for row in rows if str(row[0]) in TARGET_QUARTERS}
+
 def completed_quarters(rows, banking=False):
     """Require complete same-source metrics and correct business-type contract."""
     by_filing = {}
@@ -484,6 +517,9 @@ def main():
             stocks=[x for x in stocks if x[0] in target]
             if {x[0] for x in stocks}!=target:
                 raise RuntimeError("TARGET_SECURITY_NOT_IN_QUALIFIED_COHORT")
+        requalify=os.getenv("RESULTS_R4_REQUALIFY","0")=="1"
+        if requalify and set(x[0] for x in stocks)!={"HCLTECH","HDFCBANK"}:
+            raise RuntimeError("REQUALIFICATION_NOT_TARGETED_LEGACY_PAIR")
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
@@ -506,6 +542,14 @@ def main():
                       AND metric_code=ANY(%s)""",
                     (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | {"GROSS_NPA_PERCENT"})))
                 completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                if requalify:
+                    cur.execute("""SELECT DISTINCT period_end
+                        FROM public.fundamental_observation_decisions
+                        WHERE security_id=%s AND period_type='QUARTER'
+                        AND selected_observation_id IS NOT NULL
+                        AND period_end=ANY(%s::date[])""",
+                        (security_id,list(TARGET_QUARTERS)))
+                    completed=missing_r4_selected_quarters(cur.fetchall())
             conn.rollback()
             if len(completed)==len(TARGET_QUARTERS):
                 entry["reason"]="FOUR_QUARTERS_ALREADY_COMPLETE"
