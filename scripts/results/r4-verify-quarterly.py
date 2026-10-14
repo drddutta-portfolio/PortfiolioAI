@@ -137,6 +137,10 @@ def verify(db,s3,apply):
                 print("R4_LEGACY_SOURCE_DIAGNOSTIC",json.dumps({
                     "r2_hash_matches":sha(body)==record.get("r2_manifest_sha256"),
                     "manifest_keys":sorted(candidate.keys()),
+                    "manifest_financials":candidate.get("facts"),
+                    "manifest_format":{k:candidate.get(k) for k in
+                        ("schema","method","scope","original_unit",
+                         "original_source_bytes_stored","source_bytes_retention")},
                     "values":{k:candidate.get(k) for k in (
                         "security_symbol","isin","source_kind","source_url",
                         "reporting_period_start","reporting_period_end",
