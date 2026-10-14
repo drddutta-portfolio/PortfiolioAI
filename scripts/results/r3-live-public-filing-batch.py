@@ -301,6 +301,28 @@ def extract_bank(html: str, symbol: str, isin: str):
                         break
         if len({value for value,raw in candidates})==1:
             eps,eps_raw=candidates[0]
+    if eps is None and qstart.endswith("-04-01") and qend.endswith("-06-30"):
+        # NSE Banking iXBRL sometimes nests the AFTER-extraordinary EPS
+        # label plus Q1 / year-to-date numbers inside ONE cell:
+        # "Diluted earnings per share after extraordinary items 12.35 12.35".
+        # Only Q1 is eligible: Q1 and YTD are the same reporting interval.
+        # Both printed values must parse and agree; no fallback to BEFORE-
+        # extraordinary EPS or to another issuer-filing/source record.
+        packed=[]
+        pattern=re.compile(
+            r"^diluted earnings per share after extraordinary items\s+"
+            r"(\(?-?[\d,]+(?:\.\d+)?\)?)\s+"
+            r"(\(?-?[\d,]+(?:\.\d+)?\)?)$",re.I)
+        for table in tables:
+            for row in table:
+                for cell in row:
+                    match=pattern.fullmatch(normalize(cell).replace("\u200b",""))
+                    if not match:continue
+                    first,year_to_date=number(match.group(1)),number(match.group(2))
+                    if first is not None and year_to_date is not None and first==year_to_date:
+                        packed.append((first,match.group(1)))
+        if len({val for val,raw in packed})==1:
+            eps,eps_raw=packed[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
         facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
           "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
