@@ -1,10 +1,14 @@
 name: G03 Signed Canonical Read-Only Validation
 on:
   workflow_dispatch:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-canonical-validation.yml]
 permissions:
   contents: read
 jobs:
   validate:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: PortfolioAI-Development
     timeout-minutes: 10
