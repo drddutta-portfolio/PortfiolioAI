@@ -1,0 +1,36 @@
+[
+  {
+    "review_id": "d66deded-c38c-5c07-a054-6597b302f6f5",
+    "requirement_code": "BUSINESS_DURABILITY",
+    "review_kind": "DELEGATED_G03_DOCUMENT_REVIEW",
+    "decision": "SUPPORTS",
+    "reviewed_by": null,
+    "review_hash": "fdc6fd4d8ae65d6b47f157347c26cd206bf3e9a1ebcf11b5de49864c7209091c",
+    "source_record_id": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+    "research_document_id": "2a84c944-86cc-557d-aaf6-07e1e88aedaf",
+    "fresh_through": "2027-03-31 00:00:00+00",
+    "payload_hash": "8f2fe329e145057be3c38fed6ba67511eb04a1c633a80e535eee45f5437b3e9c",
+    "original_sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "assessment": "The original integrated report identifies defence electronics products, programme participation, indigenous design and export/order context. Procurement and government-customer concentration, programme execution and working-capital conversion remain risks. This admits source-backed business context; it does not assign a positive durability score or prove financial growth.",
+    "finding": "DEFENCE_PRODUCT_PROGRAMME_AND_CUSTOMER_CONTEXT_SOURCE_REVIEWED",
+    "canonical_content_hash": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "identity_status": "VERIFIED"
+  },
+  {
+    "review_id": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea",
+    "requirement_code": "OWNERSHIP_GOVERNANCE",
+    "review_kind": "DELEGATED_G03_DOCUMENT_REVIEW",
+    "decision": "SUPPORTS",
+    "reviewed_by": null,
+    "review_hash": "8526c131f17a0e96910483d5cc9e14216dcfff4a0ec895773f8d7f2fc9bf81c3",
+    "source_record_id": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+    "research_document_id": "2a84c944-86cc-557d-aaf6-07e1e88aedaf",
+    "fresh_through": "2027-03-31 00:00:00+00",
+    "payload_hash": "165beb80d8724fb8728960ef045fea03839ed18e2b9f92eaea94849c93cb4021",
+    "original_sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "assessment": "The original annual governance disclosures identify insufficient independent-director appointments and associated exchange non-compliance/penalties, alongside audit, related-party and governance disclosures. These adverse findings are preserved. Documentary review completeness is not clean governance, independent-director compliance or governance quality clearance.",
+    "finding": "GOVERNANCE_DISCLOSURES_REVIEWED_WITH_INDEPENDENT_DIRECTOR_NONCOMPLIANCE_RETAINED",
+    "canonical_content_hash": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "identity_status": "VERIFIED"
+  }
+]

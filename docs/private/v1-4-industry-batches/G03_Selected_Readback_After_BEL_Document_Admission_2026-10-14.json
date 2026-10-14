@@ -1,0 +1,51 @@
+[
+  {
+    "symbol": "ASTRAMICRO",
+    "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 8
+  },
+  {
+    "symbol": "BEL",
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "snapshot_id": "f80ff300-3a87-4958-901c-586fd857cdf2",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 8
+  },
+  {
+    "symbol": "DATAPATTNS",
+    "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 8
+  },
+  {
+    "symbol": "GRSE",
+    "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 8
+  },
+  {
+    "symbol": "HAL",
+    "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 8
+  },
+  {
+    "symbol": "MTARTECH",
+    "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 10
+  },
+  {
+    "symbol": "ZENTEC",
+    "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+    "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+    "snapshot_status": "REVIEW_REQUIRED",
+    "mandatory_blockers": 10
+  }
+]

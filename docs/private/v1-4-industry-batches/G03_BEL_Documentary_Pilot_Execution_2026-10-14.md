@@ -25,3 +25,27 @@ The baseline rollback bundles are the independently retrieved source-import v4, 
 ## Verification boundary
 
 At this prepared checkpoint, 410 Edge tests plus two new grant-scope tests pass; architecture, strict application TypeScript, application/Edge lint and production build pass locally. The preserved live candidate bundles undergo Deno checking. Full application and hosted final-head workflows are still pending. New source registrations, accepted documentary reviews and BEL materialization have not yet executed. No READY declaration is made by this execution contract.
+
+## Actual executed outcome
+
+Implementation head **`1dece3ccb409621858ae85b9336073820c2bf3a3`** passed GitHub Full Repository Verification **38570015830** and Architecture Guard **38570020615**. Locally, **2,352 application tests** and **412 Edge tests** passed, together with architecture, TypeScript, application/Edge lint, production build and whitespace checks. All four preserved-live candidate bundles passed Deno checking. The documentary function's existing type-only dependencies were supplied from the independently retrieved live canonical/grant bundles; existing history/runtime implementations were preserved.
+
+Source importer **v5 ACTIVE**, SHA `aa4d106e6db1d94abc293a67dd00e909fa24eba4ae15e74f6e404cfff8e29a75`; documentary reviewer **v10 ACTIVE**, SHA `07b691c052c70863f0f344f7c59af39125591a5e6bb8a9ad8a2bd80a3df78d22`. Both retain their existing custom signed-executor authentication and disabled gateway-JWT setting; canonical JWT remains enabled.
+
+Actual source-qualification workflow **38570438134 SUCCESS** registered the retained BEL original and admitted exactly **two fixed delegated documentary reviews**, independently read back from Development. Duplicate source registration and review submission reused the same IDs. Provider calls, canonical materialization and R2 uploads: zero.
+
+- `BUSINESS_DURABILITY`: review `d66deded-c38c-5c07-a054-6597b302f6f5`.
+- `OWNERSHIP_GOVERNANCE`: review `a3fabf47-dd0c-5339-a1c0-ade81c51c4ea`.
+- Original document: `2a84c944-86cc-557d-aaf6-07e1e88aedaf`, canonical SHA matches the retained BEL original.
+
+The preserved-live candidate adapter was executed locally against the **actual registered source/review/document/link rows**. Both reviews qualified FRESH with complete lineage. This is a local candidate result, not a live canonical FRESH result or saved selection. Actual live read-only workflow **38570933879 SUCCESS** verified zero writes/providers and showed the current v68 does not admit the new review kind; all seven current prospective statuses remain REVIEW_REQUIRED. Selected snapshots independently remain unchanged.
+
+### Automatic approval review restriction
+
+The canonical deployment was rejected by automatic approval review: “This deploys a new canonical materializer version that can write Development readiness snapshots and changes shared validation behavior; the recorded approval covered a narrowly scoped read-only G03 extension, not this write-capable deployment, and the large bundled replacement has meaningful blast radius.” The rejected operation was not executed indirectly. The actual live materializer remains v68. The BEL-only grant candidate has not been deployed or invoked.
+
+The concrete candidate preserves **46/47 existing canonical files byte-for-byte**, patches only the existing documentary adapter and adds three fixed policy/batch/guard files. The entrypoint, write RPC, grant consumption, financial formulas and BANK implementation are unchanged. A single scoped owner approval request covers this candidate, the tested BEL-only zero-provider grant route and validation-before-save. It is pending; no further source acquisition, ROA approval or credential transfer is required for this pilot.
+
+READY remains **0/7 wider G03**, **0/4 frozen G03**, frozen READY value **₹0**. No canonical blocker reduction is claimed before live validation and selected-snapshot readback. Older BEL selected blockers remain eight; current replay has ten, including two stale market requirements. Clearing the two documentary requirements alone would reduce the same-time replay to eight, rather than falsely reporting the older selected total as six.
+
+Unrelated financial qualification continued: two precise standalone issuer ROCE rows, FY2025–26 **35.92%** and FY2024–25 **39.22%**, were verified on original PDF page 152 with their explicit EBIT/capital-employed basis. They remain an unadmitted two-year series against a three-year requirement; rounded overview ratios and provider-calculated ROCE were not mixed.

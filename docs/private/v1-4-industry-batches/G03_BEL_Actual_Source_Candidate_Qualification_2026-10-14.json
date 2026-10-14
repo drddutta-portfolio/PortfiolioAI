@@ -1,0 +1,93 @@
+{
+  "mode": "LOCAL_CANDIDATE_WITH_ACTUAL_REGISTERED_SOURCE_RECORDS",
+  "canonicalDeployment": false,
+  "canonicalMaterialization": false,
+  "results": [
+    {
+      "requirementCode": "BUSINESS_DURABILITY",
+      "state": "FRESH",
+      "reason": "REVIEWED_DOCUMENTARY_SUPPORT_READY",
+      "observations": [],
+      "selectedReviewIds": [
+        "d66deded-c38c-5c07-a054-6597b302f6f5"
+      ],
+      "sourceRecordIds": [
+        "a0b3e336-9136-546e-ac03-edaf13ddd8dc"
+      ],
+      "researchDocumentIds": [
+        "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+      ],
+      "documentSourceIds": [
+        "d1059e3a-0584-517c-afcd-f15f594a20b5"
+      ],
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "retrievedAt": "2026-10-14T13:17:15.141+00:00",
+      "evidenceAsOfDate": "2026-03-31",
+      "freshThrough": "2027-03-31T00:00:00+00:00",
+      "lineage": {
+        "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+        "reviewIds": [
+          "d66deded-c38c-5c07-a054-6597b302f6f5"
+        ],
+        "sourceRecordIds": [
+          "a0b3e336-9136-546e-ac03-edaf13ddd8dc"
+        ],
+        "sourcePayloadHashes": [
+          "8f2fe329e145057be3c38fed6ba67511eb04a1c633a80e535eee45f5437b3e9c"
+        ],
+        "researchDocumentIds": [
+          "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+        ],
+        "documentSourceIds": [
+          "d1059e3a-0584-517c-afcd-f15f594a20b5"
+        ],
+        "contentHashes": [
+          "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453"
+        ]
+      }
+    },
+    {
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "state": "FRESH",
+      "reason": "REVIEWED_DOCUMENTARY_SUPPORT_READY",
+      "observations": [],
+      "selectedReviewIds": [
+        "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+      ],
+      "sourceRecordIds": [
+        "6a2f01d9-da63-5331-ac97-f97aa64e6b40"
+      ],
+      "researchDocumentIds": [
+        "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+      ],
+      "documentSourceIds": [
+        "d1059e3a-0584-517c-afcd-f15f594a20b5"
+      ],
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "retrievedAt": "2026-10-14T13:17:21.086+00:00",
+      "evidenceAsOfDate": "2026-03-31",
+      "freshThrough": "2027-03-31T00:00:00+00:00",
+      "lineage": {
+        "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+        "reviewIds": [
+          "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+        ],
+        "sourceRecordIds": [
+          "6a2f01d9-da63-5331-ac97-f97aa64e6b40"
+        ],
+        "sourcePayloadHashes": [
+          "165beb80d8724fb8728960ef045fea03839ed18e2b9f92eaea94849c93cb4021"
+        ],
+        "researchDocumentIds": [
+          "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+        ],
+        "documentSourceIds": [
+          "d1059e3a-0584-517c-afcd-f15f594a20b5"
+        ],
+        "contentHashes": [
+          "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453"
+        ]
+      }
+    }
+  ]
+}

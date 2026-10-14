@@ -1,5 +1,17 @@
 # G03 — executed qualification and remaining canonical gates
 
+## Latest successor checkpoint — actual BEL reviews admitted
+
+The earlier read-only deployment restriction below is resolved: materializer v68 is active and seven-stock signed read-only runs 38566313967 and 38570933879 succeeded. The current replay has ten mandatory blockers per stock, including newly stale market evidence; the older persisted census below remains unchanged.
+
+Actual source qualification run 38570438134 registered BEL's immutable original and admitted two fixed reviews, BUSINESS_DURABILITY and OWNERSHIP_GOVERNANCE. Source importer v5 and documentary reviewer v10 are deployed. Both reviews and their original binding were independently read back; adverse independent-director non-compliance findings remain explicit. Duplicate registration and review submissions reused their IDs. These are actual admissions, not yet persisted FRESH requirements.
+
+The exact implementation head `1dece3ccb409621858ae85b9336073820c2bf3a3` passed full repository workflow 38570015830 and Architecture Guard 38570020615; local 2,352 application/412 Edge tests and live candidate checks pass. The candidate canonical adapter qualifies both actual admitted reviews FRESH locally. Automatic approval review rejected its deployment because the prior shared-service approval was read-only; the bounded shared-adapter/BEL-only-grant/save approval is pending. No rejected deployment was bypassed, no grant issued, no selected evidence overwritten and no READY claimed.
+
+The authoritative [executed pilot record](G03_BEL_Documentary_Pilot_Execution_2026-10-14.md) and [stock status](G03_Stock_Execution_Status_2026-10-14.csv) distinguish actual review admission, local candidate qualification, live validation and saved readiness. All seven selected snapshots remain unchanged; 0/4 frozen READY, ₹0. No G04 activation or Banking/scheduler/Production/main changes occurred.
+
+The remaining sections preserve the earlier qualification baseline and research gates as historical context; their zero-admission/deployment statements describe that earlier checkpoint.
+
 ## Actual work completed
 
 All seven portfolio stocks have source-backed provisional research. Sixteen official annual-report PDFs were captured through a bounded read-only executor, including BEL/Astra's FY2025–26 BSE originals. The captured PDFs were independently integrity-checked in the retained-text job. Seven current-quarter NSE originals were separately fetched; 21 revenue/profit/EPS values matched their actual tables, with identity, period, standalone scope and precise units checked.

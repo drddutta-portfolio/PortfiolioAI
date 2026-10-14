@@ -1,0 +1,41 @@
+[
+  {
+    "stage": "ORIGINAL_REGISTERED",
+    "sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "duplicateRegistration": "IDEMPOTENT",
+    "code": "G03_ORIGINAL_REGISTERED_NOT_FINANCIALLY_ADMITTED",
+    "sourceId": "967961dc-6571-5567-a22d-bc3f5f9aeae9",
+    "documentId": "2a84c944-86cc-557d-aaf6-07e1e88aedaf",
+    "documentSourceId": "d1059e3a-0584-517c-afcd-f15f594a20b5",
+    "reused": false,
+    "providerApiCalls": 0,
+    "acceptedReviews": 0,
+    "canonicalMaterialization": false
+  },
+  {
+    "stage": "FIXED_DOCUMENT_REVIEW",
+    "requirementCode": "BUSINESS_DURABILITY",
+    "literalOriginalPassageVerified": true,
+    "duplicateReview": "IDEMPOTENT",
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+    "reviewId": "d66deded-c38c-5c07-a054-6597b302f6f5",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false
+  },
+  {
+    "stage": "FIXED_DOCUMENT_REVIEW",
+    "requirementCode": "OWNERSHIP_GOVERNANCE",
+    "literalOriginalPassageVerified": true,
+    "duplicateReview": "IDEMPOTENT",
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+    "reviewId": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "symbol": "BEL",
+  "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+  "rows": [
+    {
+      "metricCode": "ROCE_MANAGEMENT_ANNUAL",
+      "numericValue": "35.92",
+      "unit": "PERCENT",
+      "scope": "STANDALONE",
+      "periodType": "YEAR",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "pdfPage": 152,
+      "sourceSection": "Standalone notes, Schedule III financial ratios, row (j)",
+      "sourceBasis": "Issuer-reported EBIT / capital employed; no provider or consolidated mixing",
+      "supportingNumeratorINRLakh": "808176",
+      "supportingDenominatorINRLakh": "2249722",
+      "publishedAt": null,
+      "publicationPrecision": "UNKNOWN",
+      "factualAdmission": false
+    },
+    {
+      "metricCode": "ROCE_MANAGEMENT_ANNUAL",
+      "numericValue": "39.22",
+      "unit": "PERCENT",
+      "scope": "STANDALONE",
+      "periodType": "YEAR",
+      "periodStart": "2024-04-01",
+      "periodEnd": "2025-03-31",
+      "pdfPage": 152,
+      "sourceSection": "Standalone notes, Schedule III financial ratios, row (j)",
+      "sourceBasis": "Issuer-reported EBIT / capital employed; no provider or consolidated mixing",
+      "supportingNumeratorINRLakh": "709960",
+      "supportingDenominatorINRLakh": "1810176",
+      "publishedAt": null,
+      "publicationPrecision": "UNKNOWN",
+      "factualAdmission": false
+    }
+  ],
+  "requiredAnnualYears": 3,
+  "verifiedDirectRows": 2,
+  "minimumSeriesSatisfied": false,
+  "canonicalAdmission": false,
+  "notes": [
+    "Precise standalone Schedule III ratios are kept separate from rounded corporate-overview ROCE.",
+    "A third compatible annual source and source-bound factual review remain required.",
+    "Retrieval does not prove historical publication availability."
+  ]
+}
