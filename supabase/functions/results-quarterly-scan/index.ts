@@ -55,9 +55,9 @@ function extract(text: string): Candidate[] {
   // admitted without a later column-aware parser.
   const rows = text.split(/\r?\n/).map((s) => s.replace(/\s+/g," ").trim())
   const codes: readonly [RegExp,string][] = [
-    [/^(?:revenue from operations|income from operations)\s*[:=\-]\s*/, "OPERATING_REVENUE_QUARTER"],
-    [/^(?:net profit after tax|profit after tax)\s*[:=\-]\s*/, "NET_PROFIT_QUARTER"],
-    [/^diluted (?:earnings per share|eps)\s*[:=\-]\s*/, "EPS_DILUTED"],
+    [/^(?:revenue from operations|income from operations)\s*[:=-]\s*/, "OPERATING_REVENUE_QUARTER"],
+    [/^(?:net profit after tax|profit after tax)\s*[:=-]\s*/, "NET_PROFIT_QUARTER"],
+    [/^diluted (?:earnings per share|eps)\s*[:=-]\s*/, "EPS_DILUTED"],
   ]
   const unitMatch = /\b(?:in|amounts in|rs\.?\s*in|₹)\s+(crore|crores|lakh|lakhs)\b/i.exec(text)
   const moneyUnit = unitMatch?.[1].toLowerCase().startsWith("lakh") ? "LAKH" : unitMatch ? "CRORE" : null
@@ -173,7 +173,7 @@ async function checkStock(admin: Db, securityId: string, runId: string):Promise<
     if(already.error) throw already.error
     if(already.data.length) continue
     checked++
-    let source:{text:string;hash:string}|null=null
+    let source:{text:string;hash:string}|null
     try {source=await sourceText(url)}catch{continue}
     if(!source) continue
     const parsed=extract(source.text).filter((v)=>!known.has(v.end+":"+v.code))
@@ -221,7 +221,7 @@ async function step(admin: Db, portfolioId: string, runId: string) {
     const lock=await admin.from("data_ingestion_run_items").update({status:"ATTEMPTED",started_at:new Date().toISOString()}).eq("id",item.id).eq("status","PLANNED").select("id")
     if(lock.error) throw lock.error
     if(!lock.data.length) continue
-    let reason="SCAN_FAILED",added=0,checked=0,statusCode="FAILED"
+    let reason:string,added=0,checked=0,statusCode="FAILED"
     try{
       const result=await checkStock(admin,item.security_id,runId)
       added=result.added;checked=result.checked;reason=result.reason
