@@ -73,6 +73,29 @@ describe("Results live approved visual contract", () => {
     expect(q1Cell?.textContent).not.toContain("STRONG")
   })
 
+  it("integrates newly recovered bank NII, PAT, EPS and asset-quality values without issuing an investment grade", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
+    mock.load.mockResolvedValue([
+      { ...observation("NET_INTEREST_INCOME_QUARTER", "33533.95"), unit: "Cr", publishedAt: null },
+      { ...observation("NET_PROFIT_QUARTER", "19059.72"), unit: "Cr", publishedAt: null },
+      { ...observation("OPERATING_PROFIT_QUARTER", "28168.06"), unit: "Cr", publishedAt: null },
+      { ...observation("EPS_DILUTED", "12.35"), unit: "INR_PER_SHARE", publishedAt: null },
+      observation("GROSS_NPA_PERCENT", "1.17"),
+      observation("NET_NPA_PERCENT", "0.41"),
+    ])
+    render(<ResultsLivePage />)
+    expect(await screen.findByRole("heading", { name: "Key Metrics (Q1 FY27)" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Net Interest Income — Last 6 Quarters" })).toBeInTheDocument()
+    const card = screen.getByRole("heading", { name: "Key Metrics (Q1 FY27)" }).closest("section")
+    if (!card) throw new Error("Metrics card missing")
+    expect(within(card).getByText("₹33,533.95 Cr")).toBeInTheDocument()
+    expect(within(card).getByText("₹19,059.72 Cr")).toBeInTheDocument()
+    expect(within(card).getByText("₹12.35")).toBeInTheDocument()
+    expect(within(card).getByText("+1.17%")).toBeInTheDocument()
+    expect(within(card).getAllByText("Review pending").length).toBe(6)
+    expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
+  })
+
   it("preserves closed-history search and filters without stale analysis", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])
