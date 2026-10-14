@@ -22,6 +22,11 @@ const LABELS: Readonly<Record<string, string>> = {
   OPERATING_PROFIT_QUARTER: "Operating Profit",
   ADVANCES_GROWTH_YOY: "Advances Growth",
   DEPOSITS_GROWTH_YOY: "Deposits Growth",
+  NET_INTEREST_INCOME_QUARTER: "Net Interest Income",
+  NET_PROFIT_QUARTER: "Profit After Tax",
+  EPS_DILUTED: "Diluted EPS",
+  GROSS_NPA_PERCENT: "Gross NPA",
+  NET_NPA_PERCENT: "Net NPA",
 }
 const isBank = (industry: string | null) => /bank/i.test(industry ?? "")
 
@@ -55,13 +60,14 @@ function formattedValue(row: ResultsSourceObservation): string {
   if (row.unit.toUpperCase() === "PERCENT") return (n > 0 ? "+" : "") + value + "%"
   if (row.unit.toLowerCase() === "cr" || row.unit === "INR_CRORE") return "₹" + value + " Cr"
   if (row.unit === "INR") return "₹" + value
+  if (row.unit === "INR_PER_SHARE") return "₹" + value
   return value + " " + row.unit
 }
 
 function primaryObservation(rows: readonly ResultsSourceObservation[], bank: boolean) {
   const codes = bank
-    ? ["ADVANCES_GROWTH_YOY", "DEPOSITS_GROWTH_YOY"]
-    : ["OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER"]
+    ? ["NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "ADVANCES_GROWTH_YOY", "DEPOSITS_GROWTH_YOY"]
+    : ["OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER", "OPERATING_PROFIT_QUARTER"]
   for (const code of codes) {
     const found = rows.find((row) => row.code === code && row.selected)
       ?? rows.find((row) => row.code === code)
@@ -134,8 +140,9 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
   const index = periods.findIndex((p) => p.end === selectedPeriodEnd)
   const recent = (index < 0 ? periods.slice(0, 6) : periods.slice(index, index + 6)).slice().reverse()
   const bank = isBank(entry.position.industry)
-  const code = bank ? "ADVANCES_GROWTH_YOY" : "OPERATING_REVENUE_QUARTER"
-  const label = bank ? "Advances Growth YoY" : "Revenue"
+  const hasNii = bank && observations.some((row) => row.securityId === entry.position.securityId && row.code === "NET_INTEREST_INCOME_QUARTER")
+  const code = bank ? (hasNii ? "NET_INTEREST_INCOME_QUARTER" : "ADVANCES_GROWTH_YOY") : "OPERATING_REVENUE_QUARTER"
+  const label = bank ? (hasNii ? "Net Interest Income" : "Advances Growth YoY") : "Revenue"
   const series = recent.map((period) => {
     const rows = forQuarter(observations, entry.position.securityId, period.end).filter((r) => r.code === code)
     return rows.find((row) => row.selected) ?? rows[0] ?? null
@@ -144,7 +151,7 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
   const hasNegative = series.some((row) => row !== null && Number(row.value) < 0)
   return <section className="results-card ref-chart">
     <div className="results-card-heading"><h3>{label} — Last {recent.length} Quarters</h3></div>
-    <p className="ref-chart-unit">{bank ? "Reported percentage growth" : "₹ crore (where reported)"} <span>{series.some((r) => r && !r.selected) ? "· Review pending" : ""}</span></p>
+    <p className="ref-chart-unit">{bank && !hasNii ? "Reported percentage growth" : "₹ crore (where reported)"} <span>{series.some((r) => r && !r.selected) ? "· Review pending" : ""}</span></p>
     <div className={"ref-bars" + (hasNegative ? " signed" : "")} role="img" aria-label={label + " by quarter, unavailable dates left blank"}>
       {series.map((row, index) => <div className="ref-bar-item" key={recent[index]?.end ?? index}>
         <strong>{row ? formattedValue(row) : "—"}</strong>
