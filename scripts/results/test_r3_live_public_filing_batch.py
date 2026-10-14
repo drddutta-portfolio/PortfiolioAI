@@ -39,6 +39,12 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertEqual(v["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"311850.00")
         self.assertEqual(v["facts"]["NET_PROFIT_QUARTER"]["value"],"23196.00")
         self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"15.48")
+    def test_original_crores_unit_no_lakhs_conversion(self):
+        sample=fixture(unit="Crores").replace("3,11,85,000.00","3210.00")
+        value,reason=module.extract(sample,"RELIANCE","INE002A01018")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"3210.00")
+        self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["original_unit"],"INR_CRORE")
     def test_identity_must_match(self):
         v,reason=module.extract(fixture(isin="INE999999999"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
@@ -116,6 +122,22 @@ class ResultsAcquisitionTests(unittest.TestCase):
         v,reason=module.extract_bank(html,"BANDHANBNK","INE545U01014")
         self.assertIsNone(reason)
         self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
+    def test_bank_crores_unit_no_lakhs_conversion(self):
+        sample="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Crores</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+        <table><tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>500.00</td></tr>
+        <tr><td>Interest expenses</td><td>250.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>90.00</td></tr></table></body></html>"""
+        value,reason=module.extract_bank(sample,"BANDHANBNK","INE545U01014")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"250.00")
+        self.assertEqual(value["facts"]["NET_PROFIT_QUARTER"]["original_unit"],"INR_CRORE")
     def test_bank_npa_only_not_complete(self):
         rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
         self.assertEqual(module.completed_quarters(rows),set())

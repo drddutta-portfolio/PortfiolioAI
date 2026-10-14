@@ -99,7 +99,10 @@ def extract(html: str, symbol: str, isin: str):
     doc_isin=unique_field(tables,"isin")
     if doc_symbol!=symbol or doc_isin!=isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit=unique_field(tables,"level of rounding used in financial results")
-    if not unit or normalize(unit)!="lakhs": return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    unit_kind=normalize(unit) if unit else ""
+    if unit_kind not in ("lakhs","crores"): return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
+    original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     # Match one genuine Ind-AS financial statement, never the segment reporting
     # table; ambiguous and duplicated statements are not silently selected.
     statements=[]
@@ -134,9 +137,9 @@ def extract(html: str, symbol: str, isin: str):
             if abs(n)>Decimal("100000"):continue
             facts[metric]={"value":str(n),"unit":"INR_PER_SHARE","original_value":str(n),"original_unit":"INR_PER_SHARE"}
         else:
-            n/=Decimal(100) # source is INR lakh; canonical is INR crore
+            n/=scale # explicitly reported source unit to INR crore
             if abs(n)>Decimal("100000000"):continue
-            facts[metric]={"value":str(n),"unit":"INR_CRORE","original_value":values[0],"original_unit":"INR_LAKH"}
+            facts[metric]={"value":str(n),"unit":"INR_CRORE","original_value":values[0],"original_unit":original_unit}
     if not facts:return None,"NO_QUALIFIED_FINANCIAL_VALUES"
     return {"symbol":symbol,"isin":isin,"period_start":qstart,"period_end":qend,"scope":scope,"facts":facts},None
 
@@ -147,8 +150,11 @@ def extract_bank(html: str, symbol: str, isin: str):
     if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
         return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit=unique_field(tables,"level of rounding used in financial results")
-    if not unit or normalize(unit)!="lakhs":
+    unit_kind=normalize(unit) if unit else ""
+    if unit_kind not in ("lakhs","crores"):
         return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
+    scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
+    original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     report=unique_field(tables,"reporting type")
     if report and normalize(report)!="quarterly":
         return None,"NOT_QUARTERLY"
@@ -178,12 +184,12 @@ def extract_bank(html: str, symbol: str, isin: str):
         return (number(values[0]),values[0]) if values else (None,None)
     profit,profit_raw=issuer_number("net profit (loss) for the period")
     if profit is not None:
-        facts["NET_PROFIT_QUARTER"]={"value":str(profit/Decimal(100)),"unit":"INR_CRORE",
-          "original_value":profit_raw,"original_unit":"INR_LAKH"}
+        facts["NET_PROFIT_QUARTER"]={"value":str(profit/scale),"unit":"INR_CRORE",
+          "original_value":profit_raw,"original_unit":original_unit}
     ppop,ppop_raw=issuer_number("operating profit before provision and contingencies")
     if ppop is not None:
-        facts["OPERATING_PROFIT_QUARTER"]={"value":str(ppop/Decimal(100)),"unit":"INR_CRORE",
-          "original_value":ppop_raw,"original_unit":"INR_LAKH",
+        facts["OPERATING_PROFIT_QUARTER"]={"value":str(ppop/scale),"unit":"INR_CRORE",
+          "original_value":ppop_raw,"original_unit":original_unit,
           "metric_definition":"PRE_PROVISION_OPERATING_PROFIT"}
     eps,eps_raw=issuer_number("diluted earnings per share after extraordinary items")
     if eps is None:
@@ -221,12 +227,12 @@ def extract_bank(html: str, symbol: str, isin: str):
     earned,earned_raw=issuer_number("total interest earned")
     expense,expense_raw=issuer_number("interest expenses")
     if earned is not None and expense is not None:
-        nii=(earned-expense)/Decimal(100)
+        nii=(earned-expense)/scale
         facts["NET_INTEREST_INCOME_QUARTER"]={"value":str(nii),"unit":"INR_CRORE",
-          "original_value":None,"original_unit":"INR_LAKH",
+          "original_value":None,"original_unit":original_unit,
           "derivation":"TOTAL_INTEREST_EARNED_MINUS_INTEREST_EXPENSES",
-          "components":{"total_interest_earned_lakh":earned_raw,
-                        "interest_expenses_lakh":expense_raw}}
+          "components":{"total_interest_earned_original":earned_raw,
+                        "interest_expenses_original":expense_raw,"source_unit":original_unit}}
     if not facts:
         return None,"NO_QUALIFIED_BANK_FINANCIAL_VALUES"
     return {"symbol":symbol,"isin":isin,"period_start":qstart,
