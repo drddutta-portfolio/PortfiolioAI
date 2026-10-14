@@ -1,5 +1,5 @@
 """Register exact official tail originals and renew existing scoped history proofs."""
-import json,os,hashlib,urllib.request,urllib.parse,urllib.error,http.cookiejar
+import json,os,hashlib,base64,urllib.request,urllib.parse,urllib.error,http.cookiejar
 from pathlib import Path
 import boto3
 from botocore.config import Config
@@ -14,9 +14,10 @@ def main():
   key=PREFIX+p['hash']+'.'+p['extension']
   try:data=s3.get_object(Bucket=BUCKET,Key=key)['Body'].read()
   except s3.exceptions.NoSuchKey:
-   if p['extension']=='json':
-    with opener.open(urllib.request.Request('https://www.nseindia.com',headers={'User-Agent':'Mozilla/5.0'}),timeout=30) as r:r.read(1048576)
-   with opener.open(urllib.request.Request(p['url'],headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.nseindia.com/'}),timeout=40) as r:data=r.read(p['bytes']+1)
+   if p['extension']=='json' and os.environ.get('G02_RETAINED_CORPORATE_ORIGINAL'):
+    data=base64.b64decode(os.environ['G02_RETAINED_CORPORATE_ORIGINAL'],validate=True)
+   else:
+    with opener.open(urllib.request.Request(p['url'],headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.nseindia.com/'}),timeout=40) as r:data=r.read(p['bytes']+1)
    if len(data)!=p['bytes'] or hashlib.sha256(data).hexdigest()!=p['hash']:raise ValueError('OFFICIAL_ORIGINAL_CHANGED_REQUALIFICATION_REQUIRED')
    s3.put_object(Bucket=BUCKET,Key=key,Body=data,IfNoneMatch='*',ContentType='application/json' if p['extension']=='json' else 'text/csv')
   read=s3.get_object(Bucket=BUCKET,Key=key)['Body'].read()

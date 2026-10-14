@@ -1,7 +1,8 @@
+import {officialBenchmarkDeltaPoints} from './v14-official-benchmark-delta.ts'
 import {parseOfficialBenchmarkHistory,type OfficialIndexBasis} from "./v14-official-benchmark-history.ts"
 import type {HistoryRow} from "./p7-ic-input-validation.ts"
 
-export const V1_4_OFFICIAL_BENCHMARK_READER_VERSION="V1_4_OFFICIAL_BENCHMARK_R2_READER_V2_DELTA_APPEND" as const
+export const V1_4_OFFICIAL_BENCHMARK_READER_VERSION="V1_4_OFFICIAL_BENCHMARK_R2_READER_V3_BOUNDED_DELTA_APPEND" as const
 const DEV_READER_URL="https://portfolioai-v14-official-readback-dev.dr-d-dutta.workers.dev/object"
 const MAX_OBJECT_BYTES=1024*1024
 
@@ -66,28 +67,25 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
   if(String(d.benchmark_code??"")!==code||String(d.return_basis??"")!==basis)throw new Error("OFFICIAL_BENCHMARK_DELTA_IDENTITY_INVALID")
   if(d.readback_verified!==true||d.r2_bucket!=="portfolioai-history-dev"||typeof d.r2_key!=="string")throw new Error("OFFICIAL_BENCHMARK_DELTA_R2_VERIFICATION_MISSING")
   if(String(d.sha256??"")!==delta.payload_hash||!/^[a-f0-9]{64}$/u.test(delta.payload_hash))throw new Error("OFFICIAL_BENCHMARK_DELTA_HASH_INVALID")
-  const session=String(d.session??""),close=String(d.close??""),identity=String(d.official_identity??"")
-  if(!/^\d{4}-\d{2}-\d{2}$/u.test(session)||!/^\d+(?:\.\d+)?$/u.test(close)||!identity)throw new Error("OFFICIAL_BENCHMARK_DELTA_FACT_INVALID")
-  const last=rows.at(-1)?.session??""
-  if(session<=last)throw new Error("OFFICIAL_BENCHMARK_DELTA_NOT_APPEND_ONLY")
-  rows.push({session,close,officialIdentity:identity})
+  rows.push(...officialBenchmarkDeltaPoints(d,rows.at(-1)?.session??''))
   sourceRecordIds.push(delta.id)
  }
  if(rows.length<(input.minimum??252)||rows.length>(input.maximum??400))throw new Error("OFFICIAL_BENCHMARK_COMBINED_SESSION_COUNT_INVALID")
+ const deltaSessions=new Set(input.deltaRecord?officialBenchmarkDeltaPoints(input.deltaRecord.raw_payload,parsed.rows.at(-1)?.session??'').map(x=>x.session):[])
  const proof=historyProof({sourceRecordIds,freshnessThrough:rows.at(-1)!.session,returnBasis:basis,exchangeCalendarSourceRecordIds:input.exchangeCalendarSourceRecordIds??[]})
  return {
   rows:rows.map(row=>({
    period_start:row.session+"T00:00:00.000Z",
-   retrieved_at:row.session===String(input.deltaRecord?.raw_payload.session??"")&&input.deltaRecord?input.deltaRecord.retrieved_at:record.retrieved_at,
+   retrieved_at:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.retrieved_at:record.retrieved_at,
    close:row.close,
    adjusted_close:null,
    provenance:{
     source_authority:"NIFTY_OFFICIAL",
     official_identity:row.officialIdentity,
-    source_record_id:row.session===String(input.deltaRecord?.raw_payload.session??"")&&input.deltaRecord?input.deltaRecord.id:record.id,
-    payload_hash:row.session===String(input.deltaRecord?.raw_payload.session??"")&&input.deltaRecord?input.deltaRecord.payload_hash:record.payload_hash,
+    source_record_id:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.id:record.id,
+    payload_hash:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.payload_hash:record.payload_hash,
     r2_bucket:"portfolioai-history-dev",
-    r2_key:row.session===String(input.deltaRecord?.raw_payload.session??"")&&input.deltaRecord?input.deltaRecord.raw_payload.r2_key:raw.r2_key,
+    r2_key:deltaSessions.has(row.session)&&input.deltaRecord?input.deltaRecord.raw_payload.r2_key:raw.r2_key,
     return_basis:basis,
     ohlc_available:false,
     reader_version:V1_4_OFFICIAL_BENCHMARK_READER_VERSION,

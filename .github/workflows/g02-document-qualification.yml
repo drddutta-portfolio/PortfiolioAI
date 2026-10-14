@@ -5,6 +5,10 @@ on:
       renew_history:
         type: boolean
         default: false
+      retained_corporate_original:
+        type: string
+        default: ''
+        description: 'Base64 of the already captured pinned NSE corporate-action original; exact hash required'
   push:
     branches: [codex/g02-industry-evidence]
     paths:
@@ -40,6 +44,7 @@ jobs:
           CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          G02_RETAINED_CORPORATE_ORIGINAL: ${{ inputs.retained_corporate_original }}
         run: python scripts/v1-4/g02_history_renewal.py
       - uses: actions/upload-artifact@v4
         if: always()
