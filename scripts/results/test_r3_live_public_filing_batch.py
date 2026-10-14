@@ -34,6 +34,17 @@ class ResultsAcquisitionTests(unittest.TestCase):
         found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
         self.assertEqual(found,{"2026-03-31"})
         self.assertNotIn("2026-06-30",found)
+    def test_confirmed_historical_isin_mapping_for_new_cohort(self):
+        self.assertIsNotNone(module.historical_result_identity(
+            "BECTORFOOD","INE495P01020","INE495P01012","2025-09-30"))
+        self.assertIsNotNone(module.historical_result_identity(
+            "V2RETAIL","INE945H01021","INE945H01013","2025-12-31"))
+        self.assertIsNotNone(module.historical_result_identity(
+            "KOTAKBANK","INE237A01036","INE237A01028","2025-12-31"))
+        self.assertIsNone(module.historical_result_identity(
+            "KOTAKBANK","INE237A01036","INE237A01028","2026-03-31"))
+        self.assertIsNone(module.historical_result_identity(
+            "SHAILY","INE151G01028","INE151G10208","2025-09-30"))
     def test_quarter_and_exact_unit_conversion(self):
         v,reason=module.extract(fixture(),"RELIANCE","INE002A01018")
         self.assertIsNone(reason)

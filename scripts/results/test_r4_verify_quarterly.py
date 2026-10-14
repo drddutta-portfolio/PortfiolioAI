@@ -65,6 +65,18 @@ class R4Tests(unittest.TestCase):
        evidence="NSE change in ISIN notice 2026-07-17 / BSE DR-676/2026-2027"))
   self.assertIsNone(m.historical_original_eps_proof(p))
   self.assertEqual(m.historical_original_eps_proof({**p,"eps_as_originally_reported_before_split":False}),"HISTORICAL_ORIGINAL_EPS_UNPROVEN")
+ def test_issuer_supported_historical_isins_with_no_scope_relaxation(self):
+  cases=[
+   ("BECTORFOOD","INE495P01012","INE495P01020","2025-09-30","2025-12-12","5","MSE/LIST/18238/2025"),
+   ("V2RETAIL","INE945H01013","INE945H01021","2025-12-31","2026-03-25","10","BSE DR-847/2025-2026"),
+   ("KOTAKBANK","INE237A01028","INE237A01036","2025-12-31","2026-01-14","5","Kotak Mahindra Bank issuer split disclosure 2026-01-16")]
+  for sym,old,new,q,exdate,factor,reference in cases:
+   d=dict(symbol=sym,source_isin=old,isin=new,period_end=q,
+    eps_as_originally_reported_before_split=True,
+    historical_identity_link=dict(source_isin=old,current_isin=new,
+     ex_date=exdate,split_new_per_old=factor,evidence=reference))
+   self.assertIsNone(m.historical_original_eps_proof(d))
+   self.assertEqual(m.historical_original_eps_proof({**d,"source_isin":"forged"}),"HISTORICAL_IDENTITY_MISMATCH")
  def test_original_hash_and_source_match(self):
   src=dict(contract="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",period_end="2026-06-30",
      period_start="2026-04-01",consolidation_scope="CONSOLIDATED",

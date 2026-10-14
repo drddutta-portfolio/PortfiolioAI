@@ -5,6 +5,7 @@ on:
       - results-r4-source-verification-20261014
       - results-r4-exception-closure-20261014
       - results-r4-historical-share-basis-20261015
+      - results-r4-old-isin-reacquisition-20261015
     paths:
       - scripts/results/r4-verify-quarterly.py
       - scripts/results/test_r4_verify_quarterly.py
