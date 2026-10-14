@@ -77,7 +77,7 @@ class ResultsAcquisitionTests(unittest.TestCase):
     def test_unit_not_proven(self):
         v,reason=module.extract(fixture(unit="Millions"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
-        self.assertEqual(reason,"UNSUPPORTED_OR_UNKNOWN_UNIT")
+        self.assertTrue(reason.startswith("UNSUPPORTED_OR_UNKNOWN_UNIT:"), reason)
     def test_bank_original_filing_extract(self):
         html="""<html><body><table>
         <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
