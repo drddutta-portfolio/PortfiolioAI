@@ -36,12 +36,12 @@ def validate(b):
     for fragment in ("L72100HR1992PLC128382","INE591G01025","NSE Symbol","COFORGE",
                      "January 22, 2026","December 31, 2025"):
         if fragment not in cover:raise RuntimeError("ISSUER_COVER_MISMATCH:"+fragment)
-    t=d[4].get_text("text")
+    t=re.sub(r"\\s+"," ",d[4].get_text("text"))
     for fragment in ("Consolidated Financial Results","Rs. in Mn",
                      "Quarter ended","December 31,","2025",
                      "Revenue from operations","Profit for the period",
                      "Diluted","41,881","2,967","7.38"):
-        if fragment not in t:raise RuntimeError("ISSUER_TABLE_MISSING:"+fragment)
+        if fragment not in t:raise RuntimeError("ISSUER_TABLE_MISSING:"+fragment+" | text="+t[:450])
     if "FY 2026-27" in t:raise RuntimeError("PERIOD_SCOPE_MISMATCH")
     # Column 1 must have all three pinned source values. For this
     # specific audited issuer-hosted PDF (checksum above) the whole table
