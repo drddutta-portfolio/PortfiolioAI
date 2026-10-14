@@ -1,0 +1,31 @@
+name: G03 Read-only Official Source Acquisition
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths:
+      - .github/workflows/g03-official-source-acquisition.yml
+      - scripts/v1-4/g03_acquire_official_originals.py
+      - scripts/v1-4/test_g03_acquire_official_originals.py
+      - docs/private/v1-4-industry-batches/G03_Official_Source_Acquisition_Targets_2026-10-14.json
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/v1-4/test_g03_acquire_official_originals.py
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - run: python scripts/v1-4/g03_acquire_official_originals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-official-originals-not-admitted
+          path: g03-original-acquisition-result/
+          retention-days: 14
+          if-no-files-found: error

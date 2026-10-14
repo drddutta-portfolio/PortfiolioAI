@@ -1,0 +1,79 @@
+{
+  "group": "G03",
+  "source_registration": false,
+  "financial_admission": false,
+  "targets": [
+    {
+      "symbol": "MTARTECH",
+      "url": "https://mtar.in/wp-content/uploads/2026/09/Annual-Report-FY-2025-26.pdf"
+    },
+    {
+      "symbol": "MTARTECH",
+      "url": "https://mtar.in/wp-content/uploads/2025/09/Annual-Report-FY-2025-26-Aug-2025-11-Sept.pdf"
+    },
+    {
+      "symbol": "MTARTECH",
+      "url": "https://mtar.in/wp-content/uploads/2025/03/Annual-Report-FY-2024-Aug-17-2024.pdf"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2025-26.pdf"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2024-25.pdf"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "url": "https://www.datapatternsindia.com/investors/files/Annual-Report-2023-24.pdf"
+    },
+    {
+      "symbol": "ZENTEC",
+      "url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-33rd-Annual-Report-2025-26.pdf"
+    },
+    {
+      "symbol": "ZENTEC",
+      "url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-32nd-Annual-Report-2024-25.pdf"
+    },
+    {
+      "symbol": "ZENTEC",
+      "url": "https://www.zentechnologies.com/assets/uploads/files/zen-technologies-limited-31st-annual-report-2023-24.pdf"
+    },
+    {
+      "symbol": "GRSE",
+      "url": "https://www.grse.in/annual-reports/Annual Report FY 2025-26.pdf"
+    },
+    {
+      "symbol": "GRSE",
+      "url": "https://www.grse.in/annual-reports/Annual Report 2024-25.pdf"
+    },
+    {
+      "symbol": "GRSE",
+      "url": "https://www.grse.in/annual-reports/Annual_Report_2023_24_English.pdf"
+    },
+    {
+      "symbol": "BEL",
+      "url": "https://bel-india.in/wp-content/uploads/2025/08/Integrated-Annual-Report-2024-25-1.pdf"
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "url": "https://astramwp.com/wp-content/uploads/2025/08/Astra-Annual-Report-FY25.pdf"
+    },
+    {
+      "symbol": "HAL",
+      "url": "https://www.hal-india.co.in/backend/wp-content/uploads/2024/07/AR24English.pdf"
+    },
+    {
+      "symbol": "BEL",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/86dbcf2a-6282-46a0-af84-c3e8db627020.pdf"
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/006109cf-3709-427d-8b15-87513e040708.pdf"
+    },
+    {
+      "symbol": "BEL",
+      "url": "https://bel-india.in/wp-content/uploads/2024/08/Integrated-Annual-Report-2023-24-1.pdf"
+    }
+  ]
+}
