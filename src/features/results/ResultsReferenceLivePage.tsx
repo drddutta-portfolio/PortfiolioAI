@@ -5,6 +5,7 @@ import { financialClass, formatMoney, formatQuantity } from "../portfolio/format
 import type { PortfolioPosition } from "../portfolio/types"
 import { assessQuarterlyPerformance } from "./quarterlyPerformance"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
+import { displayQuarterEvidence } from "./quarterlyPresentation"
 import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -56,8 +57,16 @@ function makePeriods(): Period[] {
   return periods.reverse()
 }
 
-function forQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
+function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
   return rows.filter((row) => row.securityId === securityId && row.periodEnd === end)
+}
+function forQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
+  return displayQuarterEvidence(allForQuarter(rows, securityId, end))
+}
+function presentationStatus(status: string, rows: readonly ResultsSourceObservation[]) {
+  return rows.some((row) => row.selected) && status === "UNAVAILABLE"
+    ? "Source reconciled"
+    : statusName(status)
 }
 
 function formattedValue(row: ResultsSourceObservation): string {
@@ -108,13 +117,13 @@ function PreviewCard({ preview }: { readonly preview: Preview }) {
   return createPortal(
     <div className="ref-preview" role="tooltip" style={{ left: preview.left, top: preview.top }}>
       <strong>{entry.position.symbol} — {period.label}</strong>
-      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)}/>{observations.length ? observations.some((row) => row.selected) ? statusName(grade) : "Review pending" : "Not available"}</div>
+      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)}/>{observations.length ? observations.some((row) => row.selected) ? presentationStatus(grade, observations) : "Review pending" : "Not available"}</div>
       {displayed ? <dl>
         <div><dt>{LABELS[displayed.code] ?? displayed.code}</dt><dd>{formattedValue(displayed)}</dd></div>
         {observations.filter((row) => row.id !== displayed.id).slice(0, 2).map((row) =>
           <div key={row.id}><dt>{LABELS[row.code] ?? row.code}</dt><dd>{formattedValue(row)}</dd></div>)}
       </dl> : <p>No stored quarter-specific result is connected.</p>}
-      <small>{observations.some((row) => !row.selected) ? "Figures are stored observations, not verified results." : "Click to open the stock-quarter details."}</small>
+      <small>{observations.some((row) => !row.selected) ? "Unselected evidence remains under review." : "Source figures reconciled for current display. Publication timing and performance grading are separate."}</small>
     </div>,
     document.body,
   )
@@ -181,7 +190,7 @@ function MetricsCard({ period, rows }: { readonly period: Period; readonly rows:
       <table className="metrics-table">
         <thead><tr><th>Metric</th><th>Reported</th><th>QoQ</th><th>YoY</th></tr></thead>
         <tbody>{rows.length ? rows.map((r) => <tr key={r.id}>
-          <th>{LABELS[r.code] ?? r.code}<small>{r.selected ? "Verified selection" : "Review pending"}</small></th>
+          <th>{LABELS[r.code] ?? r.code}<small>{r.selected ? (r.publishedAt ? "Source reconciled" : "Source reconciled · publication unverified") : "Review pending"}</small></th>
           <td>{formattedValue(r)}</td><td>—</td><td>—</td>
         </tr>) : <tr><td colSpan={4} className="ref-no-data">No quarter-specific metrics in the connected database.</td></tr>}</tbody>
       </table>
@@ -198,6 +207,8 @@ function InsightCard({ entry, rows }: { readonly entry: Entry; readonly rows: re
     summary = outcome.status === "IMPROVING" ? "Selected banking activity indicators are improving."
       : outcome.status === "DETERIORATING" ? "Selected banking activity indicators are declining."
       : "Selected banking activity indicators are mixed."
+  } else if (selectedCount > 0) {
+    summary = selectedCount + " source-reconciled metric" + (selectedCount === 1 ? "" : "s") + " available. Comparative performance assessment is not yet qualified."
   } else if (rows.length > 0) {
     summary = rows.length + " stored quarterly observation" + (rows.length === 1 ? "" : "s") + " available. Verification is pending."
   }
@@ -217,7 +228,7 @@ function EvidenceDetails({ rows, period }: { readonly rows: readonly ResultsSour
   return <details className="ref-evidence">
     <summary>Source &amp; verification details <span>· {rows.filter((r) => !r.selected).length} review pending</span></summary>
     <div className="ref-evidence-body">
-      <p>Reporting period end: {period.end}. Observations are presented with their recorded units and basis, without silently approving sources.</p>
+      <p>Reporting period end: {period.end}. Source reconciliation uses retained, checksum-checked evidence; a missing publication timestamp remains unverified and does not establish point-in-time availability. Alternative accounting bases are preserved below.</p>
       {rows.length ? rows.map((r) => <p key={r.id}>
         <strong>{LABELS[r.code] ?? r.code}:</strong> {formattedValue(r)} · {r.selected ? "Selected" : "Review pending"}
         {" · "}Source: {r.source} · Scope: {r.scope ?? "Unknown"} · Published: {r.publishedAt ?? "Unknown"} · Retrieved: {r.retrievedAt}
@@ -326,6 +337,7 @@ export function ResultsLivePage() {
   const chosen = effectiveSelection ? filtered.find((e) => e.position.securityId === effectiveSelection.securityId) ?? null : null
   const period = effectiveSelection ? periods.find((p) => p.end === effectiveSelection.periodEnd) ?? null : null
   const detailRows = chosen && period ? forQuarter(observations, chosen.position.securityId, period.end) : []
+  const allDetailRows = chosen && period ? allForQuarter(observations, chosen.position.securityId, period.end) : []
   const grade = chosen ? resultStatus(detailRows, chosen.position.industry) : "UNAVAILABLE"
   const activeIndex = period ? periods.findIndex((p) => p.end === period.end) : -1
   const showPreview = (event: React.SyntheticEvent<HTMLButtonElement>, entry: Entry, p: Period, rows: readonly ResultsSourceObservation[]) => {
@@ -413,7 +425,7 @@ export function ResultsLivePage() {
       {chosen && period ? <div className="selected-analysis" ref={analysisRef}>
         <div className="selected-analysis-heading">
           <div><h2>{chosen.position.symbol} — {period.label}</h2><span className={"analysis-status " + (grade === "UNAVAILABLE" ? "ref-assessment-pending" : "result-" + grade.toLowerCase())}>
-            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)}/>{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : statusName(grade)}
+            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)}/>{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : presentationStatus(grade, detailRows)}
           </span></div>
           <div className="analysis-actions">
             <button type="button" disabled title="Verified original filing URL is not yet linked">NSE Filing ↗</button>
@@ -429,7 +441,7 @@ export function ResultsLivePage() {
           <MetricsCard period={period} rows={detailRows}/>
           <InsightCard entry={chosen} rows={detailRows}/>
         </div>
-        <EvidenceDetails rows={detailRows} period={period}/>
+        <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
       <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
     </section>

@@ -115,6 +115,19 @@ describe("Results live approved visual contract", () => {
     expect(screen.getByText(/1 of 1 with results/)).toBeInTheDocument()
   })
 
+  it("displays R4 source reconciliation without inventing a performance grade", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
+    mock.load.mockResolvedValue([
+      { ...observation("NET_INTEREST_INCOME_QUARTER", "33533.95", true), unit: "INR_CRORE", publishedAt: null },
+      { ...observation("NET_PROFIT_QUARTER", "19059.72", true), unit: "INR_CRORE", publishedAt: null },
+      { ...observation("EPS_DILUTED", "12.35", true), unit: "INR_PER_SHARE", publishedAt: null },
+    ])
+    render(<ResultsLivePage />)
+    expect(await screen.findByText(/Source reconciled \\u00b7 publication unverified/)).toBeInTheDocument()
+    expect(screen.getByText(/Source reconciled/)).toBeInTheDocument()
+    expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
+  })
+
   it("preserves closed-history search and filters without stale analysis", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])

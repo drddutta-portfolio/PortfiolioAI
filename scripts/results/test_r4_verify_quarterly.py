@@ -36,7 +36,7 @@ class R4Tests(unittest.TestCase):
      period_start="2026-04-01",consolidation_scope="CONSOLIDATED",
      issuer_filing_url="https://nsearchives.nseindia.com/corporate/ixbrl/x.html",
      original_sha256_unretained="a"*64,raw_nse_bytes_retained=False,facts={})
-  record=dict(raw_payload={**src,r2_key="key",r2_manifest_sha256="a"*64},
+  record=dict(raw_payload={**src,"r2_key":"key","r2_manifest_sha256":"a"*64},
        source_url=src["issuer_filing_url"],source_retrieved="2026-10-14")
   record["payload_hash"]=m.sha(m.canonical_bytes(record["raw_payload"]))
   self.assertIsNone(m.check_manifest(record,src))
