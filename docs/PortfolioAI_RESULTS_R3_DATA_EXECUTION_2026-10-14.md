@@ -24,3 +24,14 @@
 Portfolio-wide source acquisition is **not completed**. Current Trendlyne raw source captures are not safe to relabel as specific historical quarters. The Trendlyne MCP provider is not directly exposed to this chat, although historic captures and provider code exist. Original filing/period qualification and issuer/NSE/XBRL extractors must be scaled across the remaining 260 securities with rate/entitlement/retention safeguards, idempotent storage and independent source-value readbacks. R6 daily incremental collection/cron remains a later operational gate, and no scanning service was activated.
 
 **Release classification:** R3 presentation integrated and piloted with verifiable real facts. R3 DATA COMPLETION = **NOT PASS** until genuine per-company/quarter coverage is established, gaps are documented and owner-approved release minimums are measured. No Production/main changes or V1-4 banking research modifications.
+
+
+## October 14 follow-on: portfolio-scale four-quarter acquisition and preview
+
+**Accepted status: PARTIAL**, not a completed 231-stock four-quarter release. Separate:
+- Stock membership: 231 transaction-derived equities with at least one Results-related financial metric; 262 total equities including 31 outside this cohort.
+- Data coverage: 210/231 meet four-quarter issuer-source core metric triplets; 222/231 meet four-quarter operating metric set where NII/PAT/PPOP are allowed for banks, but historic diluted EPS remains missing.
+- 21 remaining: AUBANK, AXISBANK, BANDHANBNK, BANKBARODA, BECTORFOOD, COFORGE, E2E, FEDERALBNK, HBLENGINE, HDFCBANK, ICICIBANK, IDBI, IDFCFIRSTB, INDIANB, KARURVYSYA, KOTAKBANK, POCL, SBIN, SHAILY, V2RETAIL, VAML.
+- Source access: immutable compact R2 manifest plus Supabase `data_source_records` and `fundamental_observations`. Do not duplicate existing qualified records, infer a financial period from retrieval, or use historical ISIN bridge beyond verified pre-split lineage. Raw NSE bytes are not claimed retained.
+- UI: branch `results-r3-batch-scan-20261014`, PR #140, retains approved reference; data loading via `resultsSourceRepository.ts` and RLS-backed `fundamental_observations` with review-pending labels. Missing portfolio industry is not a blocker for displaying observed bank NII. The branch preview has a READY Vercel deployment but authenticating into the real UI remains outside independent verification in this run.
+- Checks: Results R1 Verification and Architecture Guard PASSED on `75faf993`; collector latest bank EPS/source-identity runs still require their final artifact/database readbacks. Source acquisition is distinct from investment-score readiness. No Development-to-Production promotion is authorized.

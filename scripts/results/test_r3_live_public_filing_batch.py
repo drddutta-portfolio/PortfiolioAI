@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""Standalone parse safety tests for the Results quarterly filing collector."""
+import importlib.util
+from pathlib import Path
+import unittest
+
+source=Path(__file__).with_name("r3-live-public-filing-batch.py")
+spec=importlib.util.spec_from_file_location("results_acquire",source)
+module=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakhs",scope="Consolidated"):
+    return f"""<html><body>
+    <table>
+      <tr><td>NSE Symbol</td><td>RELIANCE</td></tr>
+      <tr><td>ISIN</td><td>{isin}</td></tr>
+      <tr><td>Level of rounding used in financial results</td><td>{unit}</td></tr>
+      <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+    </table>
+    <table>
+      <tr><td>Date of start of reporting period</td><td>{qstart}</td><td>01-04-2026</td></tr>
+      <tr><td>Date of end of reporting period</td><td>{qend}</td><td>30-06-2026</td></tr>
+      <tr><td>Nature of report standalone or consolidated</td><td>{scope}</td><td>{scope}</td></tr>
+      <tr><td>Revenue from operations</td><td>3,11,85,000.00</td><td>3,11,85,000.00</td></tr>
+      <tr><td>Total profit (loss) for period</td><td>23,19,600.00</td><td>23,19,600.00</td></tr>
+      <tr><td>Diluted earnings (loss) per share from continuing and discontinued operations</td><td>15.48</td><td>15.48</td></tr>
+    </table>
+    <table><tr><td>Revenue from operations</td><td>3,40,25,700.00</td></tr>
+    <tr><td>Total Segment Revenue</td><td>3,76,61,400.00</td></tr></table>
+    </body></html>"""
+
+class ResultsAcquisitionTests(unittest.TestCase):
+    def test_quarter_and_exact_unit_conversion(self):
+        v,reason=module.extract(fixture(),"RELIANCE","INE002A01018")
+        self.assertIsNone(reason)
+        self.assertEqual(v["period_start"],"2026-04-01")
+        self.assertEqual(v["period_end"],"2026-06-30")
+        self.assertEqual(v["scope"],"CONSOLIDATED")
+        self.assertEqual(v["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"311850.00")
+        self.assertEqual(v["facts"]["NET_PROFIT_QUARTER"]["value"],"23196.00")
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"15.48")
+    def test_original_crores_unit_no_lakhs_conversion(self):
+        sample=fixture(unit="Crores").replace("3,11,85,000.00","3210.00")
+        value,reason=module.extract(sample,"RELIANCE","INE002A01018")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"3210.00")
+        self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["original_unit"],"INR_CRORE")
+    def test_identity_must_match(self):
+        v,reason=module.extract(fixture(isin="INE999999999"),"RELIANCE","INE002A01018")
+        self.assertIsNone(v)
+        self.assertEqual(reason,"IDENTITY_MISMATCH_OR_UNKNOWN")
+    def test_period_not_three_months(self):
+        v,reason=module.extract(fixture(qstart="01-04-2025"),"RELIANCE","INE002A01018")
+        self.assertIsNone(v)
+        self.assertEqual(reason,"PERIOD_NOT_THREE_MONTHS")
+    def test_e2e_verified_prior_isin_quarter(self):
+        html=fixture(qstart="01-10-2025",qend="31-12-2025",isin="INE255Z01019")
+        html=html.replace("<td>RELIANCE</td>","<td>E2E</td>")
+        v,reason=module.extract(html,"E2E","INE255Z01027")
+        self.assertIsNone(reason)
+        self.assertEqual(v["source_isin"],"INE255Z01019")
+        self.assertEqual(v["historical_identity_link"]["split_new_per_old"],"10")
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"15.48")
+    def test_pocl_verified_prior_isin_quarter(self):
+        html=fixture(qstart="01-10-2025",qend="31-12-2025",isin="INE063E01053")
+        html=html.replace("<td>RELIANCE</td>","<td>POCL</td>")
+        v,reason=module.extract(html,"POCL","INE063E01061")
+        self.assertIsNone(reason)
+        self.assertEqual(v["source_isin"],"INE063E01053")
+        self.assertEqual(v["historical_identity_link"]["split_new_per_old"],"2.5")
+    def test_identity_bridge_rejects_post_split_old_isin(self):
+        html=fixture(qstart="01-07-2026",qend="30-09-2026",isin="INE255Z01019")
+        html=html.replace("<td>RELIANCE</td>","<td>E2E</td>")
+        v,reason=module.extract(html,"E2E","INE255Z01027")
+        self.assertIsNone(v)
+        self.assertEqual(reason,"IDENTITY_MISMATCH_OR_UNKNOWN")
+    def test_unit_not_proven(self):
+        v,reason=module.extract(fixture(unit="Millions"),"RELIANCE","INE002A01018")
+        self.assertIsNone(v)
+        self.assertEqual(reason,"UNSUPPORTED_OR_UNKNOWN_UNIT")
+    def test_bank_original_filing_extract(self):
+        html="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+        <table>
+        <tr><td>Date of start of reporting period</td><td>01-10-2025</td><td>01-04-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>500,000.00</td><td>1,400,000.00</td></tr>
+        <tr><td>Interest expenses</td><td>275,000.00</td><td>800,000.00</td></tr>
+        <tr><td>Operating profit before provision and contingencies</td><td>135,000.00</td><td>300,000.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>50,000.00</td><td>120,000.00</td></tr>
+        <tr><td>Diluted earnings per share after extraordinary items</td><td>3.11</td><td>8.62</td></tr></table></body></html>"""
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_123_01012026_iXBRL_WEB.html"
+        value,reason=module.extract_source(html,"BANDHANBNK","INE545U01014",url)
+        self.assertIsNone(reason)
+        self.assertEqual(value["period_end"],"2025-12-31")
+        self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"2250.00")
+        self.assertEqual(value["facts"]["NET_PROFIT_QUARTER"]["value"],"500.00")
+        self.assertEqual(value["facts"]["OPERATING_PROFIT_QUARTER"]["value"],"1350.00")
+        self.assertEqual(value["facts"]["EPS_DILUTED"]["value"],"3.11")
+        self.assertEqual(value["scope"],"STANDALONE")
+    def test_banking_eps_footnote_and_decorated_label(self):
+        html="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr></table><table>
+        <tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>900,000.00</td></tr>
+        <tr><td>Interest expenses</td><td>600,000.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>45,000.00</td></tr>
+        <tr><td>Diluted earnings per share AFTER EXTRAORDINARY items (not annualised)</td><td>3.11*</td></tr>
+        </table></body></html>"""
+        v,reason=module.extract_bank(html,"BANDHANBNK","INE545U01014")
+        self.assertIsNone(reason)
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["original_value"],"3.11*")
+    def test_bank_eps_in_separate_analytical_table(self):
+        html="""<html><body>
+        <table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+        </table>
+        <table>
+        <tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>900,000.00</td></tr>
+        <tr><td>Interest expenses</td><td>600,000.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>45,000.00</td></tr>
+        </table>
+        <table>
+        <tr><td>Earnings per share after extraordinary items</td><td></td></tr>
+        <tr><td>Diluted earnings per share after extraordinary items</td><td>3.11</td></tr>
+        </table></body></html>"""
+        v,reason=module.extract_bank(html,"BANDHANBNK","INE545U01014")
+        self.assertIsNone(reason)
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
+    def test_bank_crores_unit_no_lakhs_conversion(self):
+        sample="""<html><body><table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Crores</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+        <table><tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>500.00</td></tr>
+        <tr><td>Interest expenses</td><td>250.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>90.00</td></tr></table></body></html>"""
+        value,reason=module.extract_bank(sample,"BANDHANBNK","INE545U01014")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"250.00")
+        self.assertEqual(value["facts"]["NET_PROFIT_QUARTER"]["original_unit"],"INR_CRORE")
+    def test_bank_eligibility_does_not_depend_on_foreign_npa(self):
+        rows=[("2025-09-30","STANDALONE","source-a","OPERATING_REVENUE_QUARTER"),
+              ("2025-09-30","STANDALONE","source-a","NET_PROFIT_QUARTER"),
+              ("2025-09-30","STANDALONE","source-a","EPS_DILUTED"),
+              ("2025-09-30","STANDALONE","source-b","GROSS_NPA_PERCENT")]
+        self.assertEqual(module.completed_quarters(rows,banking=False), {"2025-09-30"})
+        self.assertEqual(module.completed_quarters(rows,banking=True), set())
+    def test_bank_npa_only_not_complete(self):
+        rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
+        self.assertEqual(module.completed_quarters(rows),set())
+    def test_bank_formatted_date(self):
+        self.assertEqual(module.date_of("01-Apr-2025"),"2025-04-01")
+    def test_bank_allowed_listing(self):
+        payload={"data":[{"symbol":"BANDHANBNK","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_176500_21072026172514_iXBRL_WEB.html"}]}
+        self.assertEqual(len(module.listing_urls(payload,"BANDHANBNK")),1)
+
+    def test_listing_links_only_allow_trusted_source(self):
+        items={"data":[{"symbol":"RELIANCE","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_175608_17072026195004_iXBRL_WEB.html"},
+                       {"symbol":"SOMEBODY","ixbrl":"https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_444_fake.html"},
+                       {"symbol":"RELIANCE","ixbrl":"https://example.com/download.html"}]}
+        urls=module.listing_urls(items,"RELIANCE")
+        self.assertEqual(len(urls),1)
+
+if __name__=="__main__":unittest.main()

@@ -1,11 +1,12 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
 import type { PortfolioPosition, PortfolioViewModel } from "../portfolio/types"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import { ResultsLivePage } from "./ResultsLivePage"
 
-const mock = vi.hoisted(() => ({ load: vi.fn(), usePortfolio: vi.fn() }))
+const mock = vi.hoisted(() => ({ load: vi.fn(), usePortfolio: vi.fn(), status: vi.fn(), start: vi.fn(), step: vi.fn() }))
 vi.mock("./resultsSourceRepository", () => ({ loadResultsSourceInventory: mock.load }))
+vi.mock("./resultsScanRepository", () => ({ getResultsScanStatus: mock.status, startResultsScan: mock.start, stepResultsScan: mock.step }))
 vi.mock("../portfolio/usePortfolioView", () => ({ usePortfolioView: mock.usePortfolio }))
 
 function position(id: string, symbol: string, kind: "CURRENT" | "CLOSED", assetClass = "EQUITY"): PortfolioPosition {
@@ -17,7 +18,7 @@ function position(id: string, symbol: string, kind: "CURRENT" | "CLOSED", assetC
   } as PortfolioPosition
 }
 const view = {
-  portfolio: { currency: "INR" },
+  portfolio: { id: "p", currency: "INR" },
   openPositions: [position("a", "HDFCBANK", "CURRENT"), position("etf", "TESTETF", "CURRENT", "ETF")],
   closedPositions: [position("b", "INFY", "CLOSED"), position("a", "HDFCBANK", "CLOSED")],
 } as unknown as PortfolioViewModel
@@ -31,6 +32,7 @@ function observation(code: string, value: string, selected = false): ResultsSour
 }
 beforeAll(() => { Object.defineProperty(Element.prototype, "scrollIntoView", { value: vi.fn(), configurable: true }) })
 afterEach(() => { cleanup(); vi.clearAllMocks() })
+mock.status.mockResolvedValue({ lastScan: null, newResults: 0, run: null })
 
 describe("Results live approved visual contract", () => {
   it("retains the four-card approved R2 presentation with real holdings, not fixture data", async () => {
@@ -40,7 +42,7 @@ describe("Results live approved visual contract", () => {
     expect(await screen.findByText("2 stocks")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Results" })).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: /Annual Results/ })).toBeDisabled()
-    expect(screen.getByRole("button", { name: /Run Scan Now/ })).toBeDisabled()
+    expect(screen.getByRole("button", { name: /Run Scan Now/ })).toBeEnabled()
     expect(screen.getByText("HDFCBANK")).toBeInTheDocument()
     expect(screen.getByText("INFY")).toBeInTheDocument()
     expect(screen.queryByText("TESTETF")).not.toBeInTheDocument()
@@ -96,6 +98,23 @@ describe("Results live approved visual contract", () => {
     expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
   })
 
+  it("shows source-backed banking NII even when portfolio industry is unclassified", async () => {
+    const unclassified = { ...position("a", "HDFCBANK", "CURRENT"), industry: null }
+    const unclassifiedView = { ...view, openPositions: [unclassified], closedPositions: [] }
+    mock.usePortfolio.mockReturnValue({ portfolio: unclassifiedView, error: null, isLoading: false })
+    mock.load.mockResolvedValue([
+      { ...observation("NET_INTEREST_INCOME_QUARTER", "33533.95"), unit: "INR_CRORE" },
+      { ...observation("NET_PROFIT_QUARTER", "19059.72"), unit: "INR_CRORE" },
+      observation("GROSS_NPA_PERCENT", "1.17"),
+    ])
+    render(<ResultsLivePage />)
+    const row = await screen.findByText("HDFCBANK")
+    const q1 = row.closest("tr")?.querySelector('button[aria-label*="Q1 FY27"]')
+    expect(q1?.textContent).toContain("Net Interest Income")
+    expect(q1?.textContent).toContain("33,533.95")
+    expect(screen.getByText(/1 of 1 with results/)).toBeInTheDocument()
+  })
+
   it("preserves closed-history search and filters without stale analysis", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])
@@ -106,6 +125,25 @@ describe("Results live approved visual contract", () => {
     expect(screen.queryByText("HDFCBANK")).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Clear Filters" }))
     expect(screen.getByText("HDFCBANK")).toBeInTheDocument()
+  })
+
+  it("starts a real authenticated source scan and reloads observations after completion", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
+    mock.load.mockResolvedValue([])
+    const started = { lastScan: null, newResults: 0, run: {
+      id: "run-1", status: "RUNNING", requested_count: 2, processed: 0, pending: 2,
+      started_at: "2026-10-14T03:00:00Z", completed_at: null, accepted_count: 0, failed_count: 0,
+    }}
+    mock.start.mockResolvedValue(started)
+    mock.step.mockResolvedValue({ lastScan: "2026-10-14T03:01:00Z", newResults: 1, run: {
+      ...started.run, status: "PARTIAL", processed: 2, pending: 0,
+      completed_at: "2026-10-14T03:01:00Z", accepted_count: 1,
+    }})
+    render(<ResultsLivePage />)
+    fireEvent.click(await screen.findByRole("button", { name: /Run Scan Now/ }))
+    await waitFor(() => expect(mock.step).toHaveBeenCalledWith("p", "run-1"))
+    await waitFor(() => expect(mock.load).toHaveBeenCalledTimes(2))
+    expect(screen.getByText("1")).toBeInTheDocument()
   })
 
   it("shows a real quarter label without duplicate Q4 FY26 labels", async () => {

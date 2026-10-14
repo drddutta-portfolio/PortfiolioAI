@@ -1,0 +1,85 @@
+name: Results R3 Development Official Filings Collection
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_stocks:
+        description: "Development equities to process (bounded and resumable)."
+        type: choice
+        required: true
+        default: "262"
+        options: ["12", "40", "262"]
+  push:
+    branches:
+      - results-r3-batch-scan-20261014
+    paths:
+      - scripts/results/r3-live-public-filing-batch.py
+      - scripts/results/test_r3_live_public_filing_batch.py
+      - .github/workflows/results-r3-original-filings-acquisition.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: results-r3-original-filings-development
+  cancel-in-progress: false
+
+jobs:
+  quarterly-data:
+    name: acquire-and-readback-development-results
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      RESULTS_MAX_STOCKS: ${{ inputs.max_stocks || '262' }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fail closed on missing or wrong-environment credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET; do
+            if [ -z "${!name:-}" ]; then echo "MISSING_CONFIGURATION: $name"; exit 1; fi
+          done
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo 'NOT_DEVELOPMENT_DATABASE'; exit 1; }
+          [[ "$CLOUDFLARE_R2_BUCKET" == "portfolioai-history-dev" ]] || { echo 'NOT_DEVELOPMENT_R2_BUCKET'; exit 1; }
+      - name: Install pinned collector dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            'boto3==1.40.46' 'psycopg[binary]==3.2.10' \
+            'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Verify parser, units, identity and source URL policy
+        run: python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: Inspect public NSE banking EPS source format (no database writes)
+        continue-on-error: true
+        run: python scripts/results/r3-diagnose-bank-eps.py
+      - name: Run bounded NSE issuer-data acquisition to R2 then Supabase
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-r3
+          python scripts/results/r3-live-public-filing-batch.py > tmp/results-r3/collection.json
+          python -m json.tool tmp/results-r3/collection.json > /dev/null
+          python - <<'PY'
+          import json
+          p=json.load(open("tmp/results-r3/collection.json"))
+          print(json.dumps({k:p.get(k) for k in
+              ("universe_target","visited","with_documents","documents_parsed",
+               "observations_inserted","blocked")},sort_keys=True))
+          PY
+      - name: Publish non-secret acquisition readback
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-official-source-acquisition
+          path: tmp/results-r3/collection.json
+          if-no-files-found: warn
+          retention-days: 15
