@@ -69,7 +69,8 @@ def check_manifest(record,manifest):
     if manifest.get("consolidation_scope") not in ("STANDALONE","CONSOLIDATED"):return "SCOPE_NOT_PROVEN"
     u=urlparse(manifest.get("issuer_filing_url",""))
     if contract=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
-        approved={"COFORGE":("www.coforge.com","/hubfs/Outcome-of-Board-Meeting-Q3-FY2026.pdf")}
+        approved={"COFORGE":("www.coforge.com","/hubfs/Outcome-of-Board-Meeting-Q3-FY2026.pdf"),
+                  "SHAILY":("static.shaily.com","/y7GuSh95RsG5gOUUnd6i-covering-letter-reg-33-30092025-signed-pdf")}
         expected=approved.get(manifest.get("symbol"))
         if not expected or u.scheme!="https" or (u.hostname,u.path)!=expected or u.query or u.fragment:
             return "UNAPPROVED_ORIGINAL_ISSUER_PDF"

@@ -159,4 +159,108 @@ def main():
         "new_observations":inserted,"core_observations_readback":3,
         "publication_timestamp":"UNKNOWN","historical_pit":False}))
 
-if __name__=="__main__":main()
+def process_shaily():
+    """Pin and archive the issuer signed, audited-context Q2 FY26 statement."""
+    symbol="SHAILY"; isin="INE151G01028"; end="2025-09-30"; start="2025-07-01"
+    url="https://static.shaily.com/y7GuSh95RsG5gOUUnd6i-covering-letter-reg-33-30092025-signed-pdf"
+    expected_sha="2fa03ceac4214c84169cbc9a6f7e05cb5b933a637a84b5fcae006ac2025594e5"
+    response=requests.get(url,timeout=40,headers={"User-Agent":"Mozilla/5.0"})
+    response.raise_for_status()
+    b=response.content
+    if not b.startswith(b"%PDF") or sha(b)!=expected_sha:
+        raise RuntimeError("SHAILY_SOURCE_PDF_FINGERPRINT_CHANGED")
+    pdf=fitz.open(stream=b,filetype="pdf")
+    if len(pdf)!=12:raise RuntimeError("SHAILY_SOURCE_PAGE_COUNT_MISMATCH")
+    cover=pdf[0].get_text("text")
+    for x in ("L51900GJ1980PLC065554","SHAILY","September 30, 2025",
+              "Unaudited Standalone and Consolidated Financial Results"):
+        if x not in cover:raise RuntimeError("SHAILY_ISSUER_IDENTITY_MISSING:"+x)
+    financial=pdf[8].get_text("text")
+    for x in ("Statement of Unaudited Consolidated financial results",
+              "Revenue from operations","25,665.36","5,125.16","11.12"):
+        if x not in financial:
+            raise RuntimeError("SHAILY_ORIGINAL_CONSOLIDATED_QUARTER_MISSING:"+x)
+    if not any(x in financial.lower() for x in ("lakhs","lakh")):
+        raise RuntimeError("SHAILY_ORIGINAL_UNIT_UNVERIFIED")
+    expected={
+      "OPERATING_REVENUE_QUARTER":("256.6536","INR_CRORE","25,665.36","INR_LAKH"),
+      "NET_PROFIT_QUARTER":("51.2516","INR_CRORE","5,125.16","INR_LAKH"),
+      "EPS_DILUTED":("11.12","INR_PER_SHARE","11.12","INR_PER_SHARE")
+    }
+    facts={code:{"value":value,"unit":unit,"original_value":original,
+                 "original_unit":original_unit,"page_zero_index":8,
+                 "source_table":"Shaily Consolidated Q2 FY26; quarter ended September 30 2025"}
+           for code,(value,unit,original,original_unit) in expected.items()}
+    prefix=PREFIX+f"security_id={isin}/period_end={end}/"
+    original_key=prefix+"original_version="+expected_sha+"/issuer-original.pdf"
+    manifest={
+      "contract":CONTRACT,"symbol":symbol,"isin":isin,
+      "period_start":start,"period_end":end,"consolidation_scope":"CONSOLIDATED",
+      "issuer_filing_url":url,"reporting_currency":"INR",
+      "publication_timestamp":None,"original_sha256_retained":expected_sha,
+      "original_r2_key":original_key,"original_pdf_retained":True,
+      "facts":facts,"figures_review_pending":True,
+      "evidence":{
+        "issuer_cin":"L51900GJ1980PLC065554",
+        "official_exchange_symbol":"SHAILY",
+        "source_table_page_zero_index":8,
+        "source_pdf_sha256":expected_sha,
+        "identity_basis":"issuer signed BSE/NSE Reg33 filing; NSE ISIN INE151G01028 effective 2023-11-23",
+        "scope":"Consolidated","financial_unit":"INR_LAKH",
+        "raw_pdf_retention":"IMMUTABLE_R2"
+      }
+    }
+    data=compact(manifest); manifest_sha=sha(data)
+    key=prefix+"source_version="+manifest_sha+"/manifest.json"
+    s3=s3_client()
+    immutable_write(s3,original_key,b)
+    immutable_write(s3,key,data)
+    full={**manifest,"r2_key":key,"r2_manifest_sha256":manifest_sha}
+    raw=compact(full)
+    with psycopg.connect(os.environ["SUPABASE_DB_URL"],autocommit=False) as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id FROM public.securities WHERE symbol=%s AND isin=%s AND asset_class='EQUITY'",(symbol,isin))
+            x=cur.fetchone()
+            if not x:raise RuntimeError("SHAILY_CANONICAL_IDENTITY_MISSING")
+            security_id=x[0]
+            cur.execute("""INSERT INTO public.data_source_records
+                 (source_code,record_kind,external_record_id,source_url,payload_hash,raw_payload,terms_snapshot)
+                 VALUES(%s,%s,%s,%s,%s,%s::jsonb,%s::jsonb)
+                 ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING RETURNING id""",
+                 (SOURCE,KIND,symbol+":"+expected_sha,url,sha(raw),raw.decode(),
+                  '{"retention":"ORIGINAL_PDF_IMMUTABLE_R2","publication_precision":"UNKNOWN","results_review":"R4_CURRENT_DISPLAY"}'))
+            result=cur.fetchone()
+            if result: source_id=result[0]
+            else:
+                cur.execute("""SELECT id FROM public.data_source_records
+                     WHERE source_code=%s AND record_kind=%s AND external_record_id=%s AND payload_hash=%s""",
+                     (SOURCE,KIND,symbol+":"+expected_sha,sha(raw)))
+                got=cur.fetchone()
+                if not got:raise RuntimeError("SHAILY_SOURCE_NOT_READ_BACK")
+                source_id=got[0]
+            saved=0
+            for metric,(value,unit,_,_) in expected.items():
+                cur.execute("""INSERT INTO public.fundamental_observations
+                  (security_id,metric_code,source_record_id,source_code,numeric_value,
+                   currency,unit,period_start,period_end,period_type,consolidation_scope,
+                   retrieved_at,fresh_until,evidence_status)
+                  VALUES(%s,%s,%s,%s,%s,'INR',%s,%s,%s,'QUARTER','CONSOLIDATED',
+                    now(),now()+interval '120 days','AVAILABLE')
+                  ON CONFLICT(security_id,metric_code,source_code,period_end,
+                    period_type,consolidation_scope,source_record_id) DO NOTHING RETURNING id""",
+                  (security_id,metric,source_id,SOURCE,Decimal(value),unit,start,end))
+                if cur.fetchone():saved+=1
+            cur.execute("""SELECT count(*) FROM public.fundamental_observations
+                           WHERE source_record_id=%s AND metric_code=ANY(%s)
+                             AND evidence_status='AVAILABLE'""",(source_id,list(expected)))
+            if cur.fetchone()[0]!=3:raise RuntimeError("SHAILY_3_METRIC_READBACK_MISMATCH")
+        conn.commit()
+    print(json.dumps({"source":"SHAILY","period_end":end,
+        "original_pdf_sha256":expected_sha,"original_r2_key":original_key,
+        "manifest_r2_key":key,"source_record_id":str(source_id),
+        "new_observations":saved,"core_observations_readback":3,
+        "publication_precision":"UNKNOWN","historical_pit":False}))
+
+if __name__=="__main__":
+    main()
+    process_shaily()
