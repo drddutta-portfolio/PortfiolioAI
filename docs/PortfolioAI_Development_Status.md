@@ -1,3 +1,11 @@
+## G03 tested read-only canonical deployment blocked by automatic review — 14 October 2026
+
+Implementation head `30a0f26cabbf43203e9355682bd9c9072b143f10` passed GitHub Full Repository Verification 38544922954 and Architecture Guard 38544926963, as well as local 2,345 application / 405 Edge tests, type/lint/build and candidate-live-bundle Deno checking. The distinct seven-security G03 read-only scope is tested; G02 scope and existing financial/write paths are unchanged.
+
+Automatic approval review rejected its shared-materializer deployment twice, including after an exact comparison proving 43 existing files unchanged and only two read-branch entrypoint additions. The stated reason is that G03 authorization does not explicitly cover the shared-service blast radius affecting G02/BANK validation/writes. The rejection was not bypassed. The [concrete safety/rollback package](private/v1-4-industry-batches/G03_Read_Only_Deployment_Safety_Assessment_2026-10-14.md) is prepared for narrowly scoped owner approval. G03 live canonical replay, new accepted reviews and new materialization have not executed; no READY improvement is claimed.
+
+The [seven-stock research package](private/v1-4-industry-batches/G03_Provisional_Stock_Research_2026-10-14.md), 16 acquired annual originals and 21 original-matched current-quarter facts are available. Source qualification continues independently while deployment remains blocked. BANK, scheduler, Production/main and frozen cohort remain unchanged.
+
 ## G03 official-source acquisition and canonical validation preparation — 14 October 2026
 
 Actual acquisition run 38542800240 captured 16 official PDFs for all seven G03 portfolio members; two BEL issuer URLs failed but its FY2025–26 BSE original succeeded. Retained-original integrity/text run 38543437026 passed without new acquisition. Latest Zen original is 102,424,464 bytes and remains outside the existing 64 MiB canonical importer; the read-only research executor has a separate bounded 128 MiB transport limit and does not change importer admission policy.
