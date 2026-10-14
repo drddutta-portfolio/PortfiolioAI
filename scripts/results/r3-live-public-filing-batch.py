@@ -186,6 +186,24 @@ def extract_bank(html: str, symbol: str, isin: str):
           "original_value":ppop_raw,"original_unit":"INR_LAKH",
           "metric_definition":"PRE_PROVISION_OPERATING_PROFIT"}
     eps,eps_raw=issuer_number("diluted earnings per share after extraordinary items")
+    if eps is None:
+        # Issuers use differing cell decoration and occasional footnote marks.
+        # Accept only explicitly AFTER-extraordinary diluted EPS in the
+        # first QUARTER column; never use before-extraordinary or YTD EPS.
+        eps_candidates=[]
+        for cells in stmt:
+            for i,label in enumerate(cells[:-1]):
+                normalized=normalize(label).replace("\\u200b","")
+                if ("diluted" in normalized and "earnings per share" in normalized
+                    and "after extraordinary" in normalized):
+                    for raw_value in cells[i+1:]:
+                        normalized_value=re.sub(r"[\\s*†‡#]+$","",raw_value.strip())
+                        parsed=number(normalized_value)
+                        if parsed is not None:
+                            eps_candidates.append((parsed,raw_value))
+                            break
+        if len({val for val,raw in eps_candidates})==1:
+            eps,eps_raw=eps_candidates[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
         facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
           "original_value":eps_raw,"original_unit":"INR_PER_SHARE"}
@@ -404,8 +422,11 @@ def main():
                             res=session.get(url,timeout=22,headers={"Accept":"text/html"})
                             if res.status_code in (401,403,429):
                                 raise RuntimeError("FILING_ACCESS_DENIED_"+str(res.status_code))
+                            if res.status_code==404:
+                                entry["reason"]="FILING_NOT_FOUND"
+                                continue
                             res.raise_for_status()
-                            if len(res.content)>2_000_000:
+                            if len(res.content)>6_000_000:
                                 entry["reason"]="FILING_TOO_LARGE"
                                 continue
                             data,reason=extract_source(res.text,symbol,isin,url)
