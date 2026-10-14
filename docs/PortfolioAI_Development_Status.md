@@ -1,3 +1,17 @@
+## G02 actual market-blocker reduction — 14 October 2026
+
+**Persisted blocker reduction: 9 → 7 for each of CGPOWER, AVALON and TDPOWERSYS; 27 → 21 total.** All remain REVIEW_REQUIRED, 0/3 READY and ₹0 READY frozen value. Independent selected-snapshot readback at 03:07 UTC proves MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK FRESH for all three. Business durability and lineage remain FRESH. The evidence and snapshot/selection IDs are preserved in [actual canonical readback](private/v1-4-industry-batches/G02_Market_Blocker_Reduction_Readback_2026-10-14.json).
+
+Executed Development changes: append-only renewed stock proofs preserve prior split/corporate-action treatment; six exact official tail originals were hash-verified and registered; all five Capital Goods price-index tail sessions were joined to the immutable 276-session official base and independently read back as 281 compatible sessions. A successor benchmark proof supersedes the stale October 6 proof. The canonical relative-momentum path now requires compatible stock/benchmark validation instead of stock-only validation. Calendar/return-basis controls and current BANK runtime features were preserved in the live deployment overlay.
+
+Development canonical materializer v65 is ACTIVE (SHA `d0dfc887e04c4e8ca993b5beff2ae92917b59661de4dcee20a2f97dc4c6027e3`, gateway JWT remains enabled). G02 documentary/history admission v7 is ACTIVE (SHA `d47a78ac0aafae1402e6a958aa4a8a3a99bf533369ee5acf022b7a017331660a`, existing custom GitHub OIDC unchanged). Qualification run 38504413690 and prospective validation/materialization run 38504540268 passed; grant issuance is idempotent and replay is rejected. Zero additional paid provider calls, no migrations, no Banking scheduler changes and no Production/main changes.
+
+Seven remaining requirements per stock are financial/documentary: operating margin; revenue/order growth; ROCE/ROIC; CFO/FCF/working capital; debt/coverage; valuation; ownership/governance. The financial admission path still needs exact source-bound dates, scopes, definitions and complete composite evidence. Existing generic aliases do not prove an entire composite requirement; issuer management ROCE must not be silently relabelled provider ROCE or mixed across methods. Source acquisition and provisional research are available, but no financial blocker was cleared by the market repair.
+
+Verification on implementation: Deno checks passed for the deployed admission handler and preserved canonical overlay; 396 Edge tests passed locally, including six new renewal/delta regressions; Edge lint and whitespace passed. Architecture and full verification are tracked per exact successor head rather than inferred from old passes.
+
+---
+
 ## G02 current execution and provisional research — 14 October 2026
 
 **Operational acceptance: NOT COMPLETE; 0/3 selected READY, ₹0 READY frozen value.** Independent Development readback confirms the October 13 selected snapshots remain REVIEW_REQUIRED with nine blockers per stock (27 total). Business durability and snapshot lineage are FRESH for each stock. Prior October 7 start counts below are historical baselines.
