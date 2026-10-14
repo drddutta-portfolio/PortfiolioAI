@@ -34,7 +34,7 @@ WITH universe AS MATERIALIZED (
    (portfolio_id,source_code,operation,orchestration_type,trigger_source,status,
     completed_at,requested_count,cached_count,fetched_count,unchanged_count,failed_count,
     accepted_count,rejected_count,metadata)
- SELECT min(portfolio_id),'COMPANY_EXCHANGE_FILING','RESULTS_QUARTERLY_SCAN',
+ SELECT '6193a4aa-3235-4057-bddc-209fcf443fc2'::uuid,'COMPANY_EXCHANGE_FILING','RESULTS_QUARTERLY_SCAN',
     'BOUNDED_REFRESH','MANUAL','PARTIAL',now(),count(*),
     count(*) FILTER (WHERE has_old_results),0,
     count(*) FILTER (WHERE new_rows=0 AND has_old_results),0,
