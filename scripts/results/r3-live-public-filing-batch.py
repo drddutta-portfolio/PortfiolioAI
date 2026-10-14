@@ -123,16 +123,35 @@ def unique_field(tables, label: str) -> str | None:
     good=list({v.strip() for v in vals if v.strip()})
     return good[0] if len(good)==1 else None
 
+def source_filing_unit(soup, tables):
+    """Resolve an explicitly reported INR unit; never infer from magnitudes."""
+    declared=[]
+    for table in tables:
+        declared += field_values(table,"level of rounding used in financial results")
+    declared={normalize(x) for x in declared if x.strip()}
+    if len(declared)>1:return None,"CONFLICTING_DECLARED_FINANCIAL_UNITS"
+    if declared:
+        unit=next(iter(declared))
+        if unit not in ("lakhs","crores"):
+            return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+unit[:45]
+        return unit,None
+    text=soup.get_text(" ",strip=True)
+    heads=set(re.findall(
+        r"(?:amount|figures)\s+in\s*\(\s*(?:rs\.?\s*|rupees\s*|inr\s*|₹\s*)?(lakhs|crores)\s*\)",
+        text,re.I))
+    heads={h.lower() for h in heads}
+    if len(heads)==1:return next(iter(heads)),None
+    if len(heads)>1:return None,"CONFLICTING_EXPLICIT_AMOUNT_HEADINGS"
+    return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:None"
+
 def extract(html: str, symbol: str, isin: str):
     soup=BeautifulSoup(html,"html.parser")
     tables=list(html_rows(soup))
     doc_symbol=unique_field(tables,"nse symbol")
     doc_isin=unique_field(tables,"isin")
     if doc_symbol!=symbol or not doc_isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
-    unit=unique_field(tables,"level of rounding used in financial results")
-    unit_kind=normalize(unit) if unit else ""
-    if unit_kind not in ("lakhs","crores"):
-        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+str(unit)[:45]
+    unit_kind,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     # Match one genuine Ind-AS financial statement, never the segment reporting
@@ -188,10 +207,8 @@ def extract_bank(html: str, symbol: str, isin: str):
     tables=list(html_rows(soup))
     if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
         return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
-    unit=unique_field(tables,"level of rounding used in financial results")
-    unit_kind=normalize(unit) if unit else ""
-    if unit_kind not in ("lakhs","crores"):
-        return None,"UNSUPPORTED_OR_UNKNOWN_UNIT:"+str(unit)[:45]
+    unit_kind,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
     scale=Decimal(100) if unit_kind=="lakhs" else Decimal(1)
     original_unit="INR_LAKH" if unit_kind=="lakhs" else "INR_CRORE"
     report=unique_field(tables,"reporting type")

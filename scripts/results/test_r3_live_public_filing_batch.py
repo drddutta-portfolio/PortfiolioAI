@@ -45,6 +45,29 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertIsNone(reason)
         self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"3210.00")
         self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["original_unit"],"INR_CRORE")
+    def test_explicit_amount_heading_when_rounding_field_absent(self):
+        html=fixture().replace(
+            "<tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>",
+            "")
+        html=html.replace("<table>","<h3>Amount in (Lakhs)</h3><table>",1)
+        value,reason=module.extract(html,"RELIANCE","INE002A01018")
+        self.assertIsNone(reason)
+        self.assertEqual(value["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"311850.00")
+    def test_conflicting_explicit_amount_headings_rejected(self):
+        html=fixture().replace(
+            "<tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>",
+            "")
+        html=html.replace("<table>","<h3>Amount in (Lakhs)</h3><h3>Amount in (Crores)</h3><table>",1)
+        value,reason=module.extract(html,"RELIANCE","INE002A01018")
+        self.assertIsNone(value)
+        self.assertEqual(reason,"CONFLICTING_EXPLICIT_AMOUNT_HEADINGS")
+    def test_missing_rounding_and_headings_rejected(self):
+        html=fixture().replace(
+            "<tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>",
+            "")
+        value,reason=module.extract(html,"RELIANCE","INE002A01018")
+        self.assertIsNone(value)
+        self.assertEqual(reason,"UNSUPPORTED_OR_UNKNOWN_UNIT:None")
     def test_identity_must_match(self):
         v,reason=module.extract(fixture(isin="INE999999999"),"RELIANCE","INE002A01018")
         self.assertIsNone(v)
