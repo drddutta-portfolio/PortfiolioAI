@@ -5,6 +5,8 @@ import { financialClass, formatMoney, formatQuantity } from "../portfolio/format
 import type { PortfolioPosition } from "../portfolio/types"
 import { assessQuarterlyPerformance } from "./quarterlyPerformance"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
+import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
+import type { ResultsScanStatus } from "./resultsScanRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import "./ResultsPage.css"
 import "./ResultsReference.css"
@@ -223,6 +225,10 @@ export function ResultsLivePage() {
   const [observations, setObservations] = useState<readonly ResultsSourceObservation[]>([])
   const [loadingEvidence, setLoadingEvidence] = useState(true)
   const [evidenceError, setEvidenceError] = useState<string | null>(null)
+  const [scanStatus, setScanStatus] = useState<ResultsScanStatus | null>(null)
+  const [scanBusy, setScanBusy] = useState(false)
+  const [scanError, setScanError] = useState<string | null>(null)
+  const [evidenceRevision, setEvidenceRevision] = useState(0)
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<PositionFilter>("ALL")
   const [industry, setIndustry] = useState("ALL")
@@ -254,7 +260,39 @@ export function ResultsLivePage() {
       .catch((reason: unknown) => { if (active) { setObservations([]); setEvidenceError(reason instanceof Error ? reason.message : "Evidence cannot be loaded") } })
       .finally(() => { if (active) setLoadingEvidence(false) })
     return () => { active = false }
-  }, [portfolio, entries])
+  }, [portfolio, entries, evidenceRevision])
+
+  useEffect(() => {
+    if (!portfolio?.portfolio.id) return
+    let active = true
+    void getResultsScanStatus(portfolio.portfolio.id)
+      .then((value) => { if (active) setScanStatus(value) })
+      .catch((reason: unknown) => { if (active) setScanError(reason instanceof Error ? reason.message : "Scan service not available") })
+    return () => { active = false }
+  }, [portfolio?.portfolio.id])
+
+  const runScan = async () => {
+    if (!portfolio || scanBusy) return
+    setScanBusy(true)
+    setScanError(null)
+    try {
+      let progress = await startResultsScan(portfolio.portfolio.id)
+      setScanStatus(progress)
+      let previousProcessed = -1
+      for (let attempts = 0; attempts < 45 && progress.run?.status === "RUNNING" && progress.run.pending > 0; attempts++) {
+        if (progress.run.processed === previousProcessed) throw new Error("Scan stopped making progress. Try again after checking its status.")
+        previousProcessed = progress.run.processed
+        progress = await stepResultsScan(portfolio.portfolio.id, progress.run.id)
+        setScanStatus(progress)
+      }
+      if (progress.run?.status === "RUNNING") throw new Error("Scan has not finished. Use Run Scan Now to resume.")
+      setEvidenceRevision((value) => value + 1)
+    } catch (reason: unknown) {
+      setScanError(reason instanceof Error ? reason.message : "The results scan failed")
+    } finally {
+      setScanBusy(false)
+    }
+  }
 
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
   const filtered = useMemo(() => entries.filter((e) => {
@@ -317,10 +355,10 @@ export function ResultsLivePage() {
     <header className="results-page-header">
       <div><h1 id="results-title">Results</h1><p>Quarterly and annual company performance for all current and closed portfolio positions.</p></div>
       <section className="results-collection-status" aria-label="Results collection status">
-        <div><span>Last scan</span><strong>Not configured</strong><small>Daily scanner planned in R6</small></div>
-        <div><span>New results</span><strong>—</strong><small>Not tracked until first scan</small></div>
+        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? "Running…" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
+        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New stored metric observations</small></div>
         <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{entries.length} equities connected</small></div>
-        <button type="button" disabled title="The R6 acquisition scanner is not active">↻ Run Scan Now</button>
+        <button type="button" disabled={scanBusy || entries.length === 0} onClick={() => void runScan()} title={scanBusy ? "Processing quarterly data" : "Check existing and newly linked source data"}>{scanBusy ? "↻ Scanning…" : scanStatus?.run?.status === "RUNNING" ? "↻ Resume Scan" : "↻ Run Scan Now"}</button>
       </section>
     </header>
     <div className="results-tabs" role="tablist" aria-label="Results view">
@@ -338,6 +376,7 @@ export function ResultsLivePage() {
         <button type="button" disabled title="Newly reported detection requires an operational R6 scanner"><span className="ref-status-dot new"/>Newly Reported</button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
       </div>
+      {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
       <div className="results-matrix-shell" aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}>
         <table className="results-matrix">
@@ -384,7 +423,7 @@ export function ResultsLivePage() {
         </div>
         <EvidenceDetails rows={detailRows} period={period}/>
       </div> : null}
-      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; the daily scanner is not yet running.</footer>
+      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
     </section>
     {preview ? <PreviewCard preview={preview}/> : null}
   </section>
