@@ -30,6 +30,10 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_r4_requalification_ignores_unselected_observation_presence(self):
+        found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
+        self.assertEqual(found,{"2026-03-31"})
+        self.assertNotIn("2026-06-30",found)
     def test_quarter_and_exact_unit_conversion(self):
         v,reason=module.extract(fixture(),"RELIANCE","INE002A01018")
         self.assertIsNone(reason)

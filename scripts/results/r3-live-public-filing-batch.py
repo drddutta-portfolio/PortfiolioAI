@@ -440,6 +440,10 @@ def persist(conn,s3,parsed,url,original_sha):
     conn.commit()
     return saved
 
+def missing_r4_selected_quarters(rows):
+    """Only an existing R4 selection closes a requalification target period."""
+    return {str(row[0]) for row in rows if str(row[0]) in TARGET_QUARTERS}
+
 def completed_quarters(rows, banking=False):
     """Require complete same-source metrics and correct business-type contract."""
     by_filing = {}
@@ -484,6 +488,9 @@ def main():
             stocks=[x for x in stocks if x[0] in target]
             if {x[0] for x in stocks}!=target:
                 raise RuntimeError("TARGET_SECURITY_NOT_IN_QUALIFIED_COHORT")
+        requalify=os.getenv("RESULTS_R4_REQUALIFY","0")=="1"
+        if requalify and set(x[0] for x in stocks)!={"HCLTECH","HDFCBANK"}:
+            raise RuntimeError("REQUALIFICATION_NOT_TARGETED_LEGACY_PAIR")
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
@@ -506,6 +513,14 @@ def main():
                       AND metric_code=ANY(%s)""",
                     (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | {"GROSS_NPA_PERCENT"})))
                 completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                if requalify:
+                    cur.execute("""SELECT DISTINCT period_end
+                        FROM public.fundamental_observation_decisions
+                        WHERE security_id=%s AND period_type='QUARTER'
+                        AND selected_observation_id IS NOT NULL
+                        AND period_end=ANY(%s::date[])""",
+                        (security_id,list(TARGET_QUARTERS)))
+                    completed=missing_r4_selected_quarters(cur.fetchall())
             conn.rollback()
             if len(completed)==len(TARGET_QUARTERS):
                 entry["reason"]="FOUR_QUARTERS_ALREADY_COMPLETE"
