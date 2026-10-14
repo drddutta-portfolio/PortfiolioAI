@@ -118,40 +118,6 @@ def verify(db,s3,apply):
         with conn.cursor() as cur:
             cur.execute(SQL,(list(QUARTERS),list(UNITS)))
             observations=cur.fetchall()
-        # Read-only inspection of a legacy issuer manifest. The prior R3
-        # recovery format must not enter R4 merely because a source says
-        # "R2 verified"; inspect actual archived bytes independently.
-        with conn.cursor() as cur:
-            cur.execute("""SELECT raw_payload,source_url
-                FROM public.data_source_records WHERE source_code=%s
-                  AND record_kind='RESULTS_QUARTERLY_ISSUER_IXBRL_FACTS'
-                  AND raw_payload->>'security_symbol'='HCLTECH'
-                  AND raw_payload->>'reporting_period_end'='2026-06-30'
-                LIMIT 1""",("COMPANY_EXCHANGE_FILING",))
-            legacy=cur.fetchone()
-        if legacy:
-            try:
-                record=legacy["raw_payload"]
-                body=s3.get_object(Bucket=BUCKET,Key=record["r2_key"])["Body"].read()
-                candidate=json.loads(body)
-                print("R4_LEGACY_SOURCE_DIAGNOSTIC",json.dumps({
-                    "r2_hash_matches":sha(body)==record.get("r2_manifest_sha256"),
-                    "manifest_keys":sorted(candidate.keys()),
-                    "manifest_financials":candidate.get("facts"),
-                    "manifest_format":{k:candidate.get(k) for k in
-                        ("schema","method","scope","original_unit",
-                         "original_source_bytes_stored","source_bytes_retention")},
-                    "values":{k:candidate.get(k) for k in (
-                        "security_symbol","isin","source_kind","source_url",
-                        "reporting_period_start","reporting_period_end",
-                        "reporting_basis","original_financial_unit",
-                        "original_revenue_lakhs","original_total_profit_lakhs",
-                        "original_diluted_eps_inr","source_bytes_stored",
-                        "extraction_method")},
-                    "source_url_matches":record.get("source_url")==legacy["source_url"]
-                },sort_keys=True))
-            except Exception as error:
-                print("R4_LEGACY_SOURCE_DIAGNOSTIC",json.dumps({"error_type":type(error).__name__}))
         # Bound R2 reads without making any concurrent database writes. S3
         # clients support concurrent GET; each source is fetched at most once.
         by_id={str(r["source_record_id"]):r for r in observations}
