@@ -78,7 +78,7 @@ def check_manifest(record,manifest):
         if (not isinstance(original,str) or len(original)!=64
             or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
             or not original_key.endswith("/issuer-original.pdf")
-            or "/source_version="+manifest.get("source_version","")+"/" not in original_key):
+            or "/original_version="+original+"/" not in original_key):
             return "INVALID_RETAINED_ORIGINAL_REFERENCE"
         if manifest.get("original_pdf_retained") is not True:return "ORIGINAL_PDF_NOT_RETAINED"
     elif u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):
