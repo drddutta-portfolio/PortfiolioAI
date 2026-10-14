@@ -1,0 +1,4 @@
+symbol,security_id,research_execution_status,canonical_snapshot_status,remaining_financial_requirements,ready_value_contribution_paise,research_report
+AVALON,87132afb-e054-4ba2-adae-dc325637c001,PARTIAL_RESEARCH_AVAILABLE,REVIEW_REQUIRED,6,0,G02_Provisional_Stock_Research_2026-10-14.md
+CGPOWER,5643737c-3c55-472d-af20-59d3121d6b9c,PARTIAL_RESEARCH_AVAILABLE,REVIEW_REQUIRED,6,0,G02_Provisional_Stock_Research_2026-10-14.md
+TDPOWERSYS,7202b7b7-237c-439b-936d-c75bab806678,PARTIAL_RESEARCH_AVAILABLE,REVIEW_REQUIRED,6,0,G02_Provisional_Stock_Research_2026-10-14.md

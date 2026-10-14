@@ -1,3 +1,13 @@
+## Owner-directed G02 partial research handoff; G03 active — 14 October 2026
+
+The owner instructed: “So make these 3 stocks partially Ready and proceed to the next.” CGPOWER, AVALON and TDPOWERSYS are recorded as **PARTIAL_RESEARCH_AVAILABLE / FINANCIAL_CLOSURE_DEFERRED** in the execution workflow. The qualified research remains usable with its limitations; selected canonical status stays REVIEW_REQUIRED with six financial requirements each unresolved, 0/3 READY and ₹0 READY contribution. No new canonical readiness enum, unsupported FRESH state, completed score or release waiver was introduced.
+
+**Next active group: G03 Aerospace & Defence.** A Development read-only census reconciled all seven portfolio members. Frozen priority: MTARTECH, BEL, ASTRAMICRO and DATAPATTNS, total 8,860,120 paise (₹88,601.20). GRSE, HAL and ZENTEC remain wider group scope. The last selected October 7 frozen-member snapshots show 10/8/8/8 blockers respectively; these are old persisted states, not current authenticated replay. Current original-document identity, complete fiscal series, history freshness and exact Defence benchmark qualification remain to be executed before admission.
+
+Controlling handoff: [G02 partial research and G03 start](private/v1-4-industry-batches/G02_Partial_Research_Handoff_And_G03_Start_2026-10-14.md). The original cohort, values and G01–G81 order are unchanged. Three partial-research handoff events and four G03 census events are appended to the execution ledger. No provider calls, canonical writes, migrations, deployments, scheduler changes or Production/main changes occurred for this disposition and census.
+
+---
+
 ## G02 actual governance-blocker reduction — 14 October 2026
 
 **Independent persisted result: 7 → 6 blockers per stock, 21 → 18 total.** CGPOWER, AVALON and TDPOWERSYS remain REVIEW_REQUIRED, 0/3 READY and ₹0 READY frozen value. OWNERSHIP_GOVERNANCE is now FRESH alongside the two market requirements, business durability and lineage. [Actual selected-snapshot readback](private/v1-4-industry-batches/G02_Governance_Blocker_Reduction_Readback_2026-10-14.json) records the exact snapshot and selection IDs after authenticated validation/grant-scoped materialization run 38507225285.

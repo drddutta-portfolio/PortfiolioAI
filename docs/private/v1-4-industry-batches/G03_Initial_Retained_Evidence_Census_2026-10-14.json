@@ -1,0 +1,595 @@
+{
+  "group": "G03",
+  "industry": "Aerospace & Defence",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "readbackDate": "2026-10-14",
+  "execution": "READ_ONLY_DATABASE_CENSUS_NOT_AUTHENTICATED_CANONICAL_REPLAY",
+  "frozenSymbols": [
+    "MTARTECH",
+    "BEL",
+    "ASTRAMICRO",
+    "DATAPATTNS"
+  ],
+  "frozenValuePaise": 8860120,
+  "portfolioMembers": 7,
+  "frozenMembers": 4,
+  "selectedReady": 0,
+  "providerCalls": 0,
+  "dbWrites": 0,
+  "rows": [
+    {
+      "id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "symbol": "ASTRAMICRO",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 33,
+      "dated_fundamental_rows": 10,
+      "verified_documents": 0,
+      "stock_sessions": 277,
+      "latest_stock_session": "2026-10-07"
+    },
+    {
+      "id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "symbol": "BEL",
+      "snapshot_id": "f80ff300-3a87-4958-901c-586fd857cdf2",
+      "selection_id": "a2f52d6d-d72d-47dd-8738-ce54f7d1202a",
+      "selected_at": "2026-10-07 20:25:30.952979+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 21,
+      "dated_fundamental_rows": 8,
+      "verified_documents": 0,
+      "stock_sessions": 277,
+      "latest_stock_session": "2026-10-07"
+    },
+    {
+      "id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "symbol": "DATAPATTNS",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 14,
+      "dated_fundamental_rows": 5,
+      "verified_documents": 0,
+      "stock_sessions": 277,
+      "latest_stock_session": "2026-10-07"
+    },
+    {
+      "id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "symbol": "GRSE",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 0,
+      "dated_fundamental_rows": 0,
+      "verified_documents": 0,
+      "stock_sessions": 277,
+      "latest_stock_session": "2026-10-07"
+    },
+    {
+      "id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "symbol": "HAL",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 3,
+      "dated_fundamental_rows": 3,
+      "verified_documents": 0,
+      "stock_sessions": 277,
+      "latest_stock_session": "2026-10-07"
+    },
+    {
+      "id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "symbol": "MTARTECH",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 10,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 28,
+      "dated_fundamental_rows": 10,
+      "verified_documents": 0,
+      "stock_sessions": 276,
+      "latest_stock_session": "2026-10-06"
+    },
+    {
+      "id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "symbol": "ZENTEC",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 10,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "minimum_history": 252
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "minimum_history": 1
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "minimum_history": 252
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 4
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "minimum_history": 1
+        }
+      ],
+      "fundamental_rows": 0,
+      "dated_fundamental_rows": 0,
+      "verified_documents": 0,
+      "stock_sessions": 270,
+      "latest_stock_session": "2026-09-25"
+    }
+  ]
+}
