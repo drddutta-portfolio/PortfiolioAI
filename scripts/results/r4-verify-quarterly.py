@@ -67,20 +67,37 @@ def select_quarters(rows):
     for r in rows: groups[(r["security_id"],str(r["period_end"]))][r["consolidation_scope"]].append(r)
     chosen=[]; blocked=Counter();selected_quarters=defaultdict(set)
     for (security,period),scopes in groups.items():
-        scope="CONSOLIDATED" if "CONSOLIDATED" in scopes else "STANDALONE"
-        rs=scopes[scope]
-        versions=defaultdict(set)
-        for r in rs:versions[r["metric_code"]].add(Decimal(str(r["numeric_value"])))
-        if any(len(values)!=1 for values in versions.values()):
-            blocked["CONFLICTING_SAME_SCOPE_FILING_VALUES"]+=1;continue
-        by_record=defaultdict(list)
-        for r in rs:by_record[r["source_record_id"]].append(r)
-        core=BANK_REQUIRED if rs[0]["symbol"] in BANKS else OTHER_REQUIRED
-        complete=[v for v in by_record.values() if core.issubset({a["metric_code"] for a in v})]
-        if not complete:blocked["NO_COMPLETE_SINGLE_SOURCE"]+=1;continue
-        source=min(complete,key=lambda v:str(v[0]["source_record_id"]))
-        chosen.extend(source)
-        selected_quarters[security].add(period)
+        # A quarter must use ONE independently reconciled filing and ONE scope.
+        # Prefer a COMPLETE consolidated filing; where consolidated is only
+        # partial, a complete and conflict-free standalone issuer filing is
+        # eligible for current display, with its scope retained in each row.
+        # Never evade a conflicting consolidated revision by falling back.
+        admitted=False
+        conflict=False
+        for scope in ("CONSOLIDATED","STANDALONE"):
+            if scope not in scopes:continue
+            rs=scopes[scope]
+            versions=defaultdict(set)
+            for r in rs:versions[r["metric_code"]].add(Decimal(str(r["numeric_value"])))
+            if any(len(values)>1 for values in versions.values()):
+                blocked["CONFLICTING_SAME_SCOPE_FILING_VALUES"]+=1
+                conflict=True
+                break
+            by_record=defaultdict(list)
+            for r in rs:by_record[r["source_record_id"]].append(r)
+            core=BANK_REQUIRED if rs[0]["symbol"] in BANKS else OTHER_REQUIRED
+            complete=[v for v in by_record.values() if core.issubset({a["metric_code"] for a in v})]
+            if not complete:
+                continue
+            source=min(complete,key=lambda v:str(v[0]["source_record_id"]))
+            chosen.extend(source)
+            selected_quarters[security].add(period)
+            if scope=="STANDALONE" and "CONSOLIDATED" in scopes:
+                blocked["STANDALONE_COMPLETE_CONSOLIDATED_INCOMPLETE_ADMITTED"]+=1
+            admitted=True
+            break
+        if not admitted and not conflict:
+            blocked["NO_COMPLETE_SINGLE_SOURCE"]+=1
     return chosen,blocked,selected_quarters
 
 SQL="""SELECT f.id,f.security_id,s.symbol,s.isin,f.metric_code,f.numeric_value,f.unit,
