@@ -1,0 +1,37 @@
+{
+  "result": {
+    "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+    "dryRun": false,
+    "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+    "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+    "selectionRunId": "ed8af532-9615-44a4-8882-bf639817ba60",
+    "evaluationAsOf": "2026-10-14T20:24:28.997345+00:00",
+    "sourceCutoffAt": "2026-10-14T20:24:28.997345+00:00",
+    "offset": null,
+    "processed": 1,
+    "totalEquities": 239,
+    "nextOffset": null,
+    "selectionMode": "SECURITY_IDS",
+    "requestedSecurityIds": [
+      "fdec39e9-08a7-418d-ae96-9d8ce834d26c"
+    ],
+    "providerCalls": 0,
+    "totals": {
+      "REVIEW_REQUIRED": 1
+    },
+    "writeTotals": {
+      "snapshotsCreated": 1,
+      "snapshotsReused": 0,
+      "selectionsCreated": 1,
+      "selectionsReused": 0
+    },
+    "snapshotIds": [
+      "34ac0e53-50eb-44cf-b19b-7f69ae3b0abd"
+    ],
+    "selectionIds": [
+      "336d6f30-c5bf-4151-9e37-e354e9dc42bc"
+    ]
+  },
+  "duplicateGrantIssuance": "IDEMPOTENT",
+  "grantReplay": "REJECTED_ALREADY_USED"
+}

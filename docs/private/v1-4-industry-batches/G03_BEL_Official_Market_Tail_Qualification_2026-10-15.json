@@ -1,0 +1,125 @@
+{
+  "group": "G03",
+  "stock": "BEL",
+  "indexRows": [
+    {
+      "session": "2026-10-08",
+      "code": "NIFTY_INDIA_DEFENCE",
+      "officialIdentity": "Nifty India Defence",
+      "close": "8961.25",
+      "originalSha256": "c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512",
+      "originalBytes": 17939,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-08",
+      "code": "NIFTY_CAPITAL_GOODS",
+      "officialIdentity": "Nifty Capital Goods",
+      "close": "16137.42",
+      "originalSha256": "c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512",
+      "originalBytes": 17939,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-09",
+      "code": "NIFTY_INDIA_DEFENCE",
+      "officialIdentity": "Nifty India Defence",
+      "close": "9006.65",
+      "originalSha256": "7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01",
+      "originalBytes": 17585,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-09",
+      "code": "NIFTY_CAPITAL_GOODS",
+      "officialIdentity": "Nifty Capital Goods",
+      "close": "16195.87",
+      "originalSha256": "7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01",
+      "originalBytes": 17585,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-12",
+      "code": "NIFTY_INDIA_DEFENCE",
+      "officialIdentity": "Nifty India Defence",
+      "close": "9122.1",
+      "originalSha256": "e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621",
+      "originalBytes": 17552,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-12",
+      "code": "NIFTY_CAPITAL_GOODS",
+      "officialIdentity": "Nifty Capital Goods",
+      "close": "16398.32",
+      "originalSha256": "e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621",
+      "originalBytes": 17552,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-13",
+      "code": "NIFTY_INDIA_DEFENCE",
+      "officialIdentity": "Nifty India Defence",
+      "close": "9250.5",
+      "originalSha256": "875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696",
+      "originalBytes": 17563,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-13",
+      "code": "NIFTY_CAPITAL_GOODS",
+      "officialIdentity": "Nifty Capital Goods",
+      "close": "16504.52",
+      "originalSha256": "875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696",
+      "originalBytes": 17563,
+      "reusedRetainedOriginal": true,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-14",
+      "code": "NIFTY_INDIA_DEFENCE",
+      "officialIdentity": "Nifty India Defence",
+      "close": "9294.1",
+      "originalSha256": "75601d5a604849664a236b4ac789297c5c8ed77c3f7b869bde9a5c19f3202240",
+      "originalBytes": 17614,
+      "reusedRetainedOriginal": false,
+      "canonicalAdmission": false
+    },
+    {
+      "session": "2026-10-14",
+      "code": "NIFTY_CAPITAL_GOODS",
+      "officialIdentity": "Nifty Capital Goods",
+      "close": "16556.69",
+      "originalSha256": "75601d5a604849664a236b4ac789297c5c8ed77c3f7b869bde9a5c19f3202240",
+      "originalBytes": 17614,
+      "reusedRetainedOriginal": false,
+      "canonicalAdmission": false
+    }
+  ],
+  "corporateActionTail": {
+    "original_url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=08-10-2026&to_date=14-10-2026",
+    "bytes": 3523,
+    "sha256": "a58d84557fdb068ac2d6bb407e5a84443129416d6bc15f68977dce8e50921ee1",
+    "rows": 12,
+    "BEL_matches": [],
+    "providerCalls": 0,
+    "canonicalAdmission": false
+  },
+  "verifiedNSEOpenDecisionId": "8901d258-6be7-43ec-8d41-6265860542e4",
+  "through": "2026-10-14",
+  "stockAcquisition": "G03_BEL_SCOPED_PROVIDER_ROUTE_NOT_YET_ACTIVATED",
+  "providerCalls": 0,
+  "canonicalHistoryRenewal": false,
+  "notes": [
+    "Reused four previously verified original index CSVs; only October 14 CSV was newly fetched.",
+    "No NSE index close has been relabelled as an Angel One stock observation.",
+    "Stock OHLCV and renewed source/calendar/return-basis proof are still required before market FRESH."
+  ]
+}

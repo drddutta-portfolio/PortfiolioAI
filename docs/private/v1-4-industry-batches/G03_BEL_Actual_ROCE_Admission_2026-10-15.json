@@ -1,0 +1,97 @@
+{
+  "originals": [
+    {
+      "sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "created": false,
+      "originalBytesVerified": true,
+      "code": "G03_ORIGINAL_REGISTERED_NOT_FINANCIALLY_ADMITTED",
+      "sourceId": "967961dc-6571-5567-a22d-bc3f5f9aeae9",
+      "documentId": "2a84c944-86cc-557d-aaf6-07e1e88aedaf",
+      "documentSourceId": "d1059e3a-0584-517c-afcd-f15f594a20b5",
+      "reused": true,
+      "providerApiCalls": 0,
+      "acceptedReviews": 0,
+      "canonicalMaterialization": false
+    },
+    {
+      "sha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "created": true,
+      "originalBytesVerified": true,
+      "code": "G03_ORIGINAL_REGISTERED_NOT_FINANCIALLY_ADMITTED",
+      "sourceId": "1d8e79a4-1f88-5789-a44b-887f3bc7ed55",
+      "documentId": "475da4cc-4fc5-5970-aae2-052d109eea94",
+      "documentSourceId": "5f3fdb05-c5d5-5526-ac59-e2304cc03467",
+      "reused": false,
+      "providerApiCalls": 0,
+      "acceptedReviews": 0,
+      "canonicalMaterialization": false
+    }
+  ],
+  "verifiedCells": [
+    {
+      "reviewId": "29197ce8-3207-5206-a42d-c455cea1fa33",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 152,
+      "fiscalLabel": "2024-25",
+      "value": "39.22",
+      "ebit": "709960",
+      "capitalEmployed": "1810176",
+      "identityVerified": true,
+      "standaloneTableVerified": true
+    },
+    {
+      "reviewId": "7e65174e-354b-5a9d-a36f-b6a2992a88b8",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 152,
+      "fiscalLabel": "2025-26",
+      "value": "35.92",
+      "ebit": "808176",
+      "capitalEmployed": "2249722",
+      "identityVerified": true,
+      "standaloneTableVerified": true
+    },
+    {
+      "reviewId": "8829fb3c-877c-59bb-ab02-8208c8cd42bc",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 170,
+      "fiscalLabel": "2023-24",
+      "value": "36.44",
+      "ebit": "534158",
+      "capitalEmployed": "1466000",
+      "identityVerified": true,
+      "standaloneTableVerified": true
+    }
+  ],
+  "admission": {
+    "code": "G03_FIXED_ROCE_REVIEWS_ADMITTED_NOT_CANONICAL_READY",
+    "results": [
+      {
+        "reviewId": "8829fb3c-877c-59bb-ab02-8208c8cd42bc",
+        "sourceId": "af3e1a5e-34d7-5158-adbe-13d584cb7e25",
+        "periodEnd": "2024-03-31",
+        "value": "36.44",
+        "reused": false
+      },
+      {
+        "reviewId": "29197ce8-3207-5206-a42d-c455cea1fa33",
+        "sourceId": "3f520d07-f786-5306-a177-287f3f4d5f62",
+        "periodEnd": "2025-03-31",
+        "value": "39.22",
+        "reused": false
+      },
+      {
+        "reviewId": "7e65174e-354b-5a9d-a36f-b6a2992a88b8",
+        "sourceId": "19bce51f-582d-51ec-a73e-15e5a7f501de",
+        "periodEnd": "2026-03-31",
+        "value": "35.92",
+        "reused": false
+      }
+    ],
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "sourceAuthorityRegistered": true
+  },
+  "duplicateAdmission": "IDEMPOTENT",
+  "providerCalls": 0,
+  "canonicalMaterialization": false
+}

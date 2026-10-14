@@ -1,5 +1,32 @@
 # G03 BEL fixed issuer ROCE admission
 
+## Actual executed result — ROCE persisted FRESH
+
+Implementation **`f197549439cb5315bc5b2829e033e739eb71c346`** passed Full Repository Verification **38629937509** and Architecture Guard **38629942574**, including **2,357 application tests**, **417 Edge tests**, the three new Python extraction/preservation checks, architecture, TypeScript, application/Edge lint, production build and whitespace checks. Three preserved-live deployment candidates passed Deno checking.
+
+Development source importer **v6 ACTIVE**, SHA `903c2410599f3df431f7f6319d72c73a7d01792f09ede96483a746117eb79df8`; fixed reviewer **v11 ACTIVE**, SHA `957c763b29eed95bba3a17b082d5a944c442391e8e62774740daa641fd88bbb0`; canonical materializer **v70 ACTIVE**, SHA `0c240728d0fdfda1c3b124de2bbe851b31e8094be3863622e19e95a1a505d95a`. The canonical and importer files match the tested candidates. The reviewer deployment preserves all runtime files; Supabase omits five type-only dependency files from its readback bundle. Canonical JWT remains enabled and both existing importer/reviewer custom OIDC checks remain mandatory.
+
+Actual fixed qualification workflow **38630932251 SUCCESS** archived and byte-readback-verified one new MSEI original, reused the existing BSE original, registered the approved issuer-fact authority and admitted exactly three dated, standalone ROCE reviews. Repeated registration/admission reused the same identities without duplicate reviews. Publisher authority has acquisition disabled and only the fixed BEL/ROCE/original allowlist; original transport source records remain COMPANY_EXCHANGE_FILING.
+
+Actual canonical workflow **38631774679 SUCCESS** verified both documentary requirements and the three-year ROCE series FRESH before issuing/consuming the existing BEL-only zero-provider grant. It appended one successor snapshot and selection, proved duplicate issuance idempotent and rejected replay as P4_GRANT_ALREADY_USED.
+
+Independent selected-snapshot readback confirms **ROCE_OR_ROIC FRESH**, with exact reported FY2024–FY2026 values **36.44%, 39.22%, 35.92%**, standalone scope, three original-bound review/source identities and NULL publication dates. The older unqualified provider observation is still present, unchanged, with null reporting dates/UNKNOWN scope. Its exclusion is explicitly recorded in the new selected requirement's lineage. Prior documentary approvals remain selected FRESH and no duplicate approval was requested.
+
+- New selected snapshot: **`34ac0e53-50eb-44cf-b19b-7f69ae3b0abd`**.
+- Selection: **`336d6f30-c5bf-4151-9e37-e354e9dc42bc`**.
+- BEL persisted mandatory blockers: **8 → 7**.
+- Other six G03 selected snapshot IDs: unchanged.
+- G03 current prospective blockers: **68 → 67**; frozen-member prospective blockers **38 → 37**.
+- READY: **0/7 wider G03, 0/4 frozen; ₹0 frozen READY value**.
+
+Remaining BEL blockers: OPERATING_MARGIN_HISTORY, ORDER_BOOK_AND_EXECUTION_GROWTH, CFO_FCF_CONVERSION, NET_DEBT_AND_INTEREST_COVERAGE, VALUATION, MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK. Source review acceptance alone has not been counted as whole-stock READY.
+
+Evidence: [independent selected readback](G03_BEL_ROCE_FRESH_Independent_Readback_2026-10-15.json), [actual admission](G03_BEL_Actual_ROCE_Admission_2026-10-15.json), [actual materialization](G03_BEL_Actual_ROCE_Materialization_2026-10-15.json). No schema migration, provider expenditure, BANK/scheduler change, Production/main change or PR merge occurred. New immutable R2 originals: one. All earlier source records/reviews/selections remain preserved.
+
+The official market-tail qualification now covers ten exact index rows (Defence and Capital Goods across October 8/9/12/13/14), reusing four previously retained CSV originals. The official corporate-action tail contains no BEL event. This remains source qualification: a G03/BEL-scoped stock-history acquisition and renewed compatible history proofs are still required before either stale market requirement can become FRESH. The [exact market-tail record](G03_BEL_Official_Market_Tail_Qualification_2026-10-15.json) makes that boundary explicit.
+
+The prepared sections below are historical checkpoints and are superseded by this executed result.
+
 Owner continuation: **“Please proceed”**, following the qualified three-year BEL ROCE source series and completed documentary pilot. This continuation implements admission of those exact existing-contract facts; it introduces no ROCE formula, score, valuation methodology, ownership interpretation or other-stock permission.
 
 ## Qualified facts and binding

@@ -1,5 +1,15 @@
 # G03 — executed qualification and remaining canonical gates
 
+## Latest financial admission — BEL ROCE persisted FRESH, 15 October 2026
+
+BEL's exact three-year standalone issuer ROCE series is now admitted, validated and **persisted FRESH**, following controlled registration of the existing metric's missing ISSUER_ANNUAL_REPORT publisher role. Actual admission 38630932251 and canonical validation/save 38631774679 passed with zero provider calls, idempotent duplicate admission/grant issuance and rejected grant replay. Independent selected snapshot `34ac0e53-50eb-44cf-b19b-7f69ae3b0abd` contains the issuer values 36.44%, 39.22%, 35.92%, while the old undated provider candidate is preserved and explicitly excluded as non-comparable.
+
+BEL's selected blockers decreased **8 → 7**. Both prior documentary requirements remain FRESH; other six selected snapshots are unchanged. Current seven-stock prospective blockers decrease **68 → 67**, frozen-member prospective blockers **38 → 37**. **G03 remains 0/7 wider / 0/4 frozen READY, ₹0 frozen READY value.**
+
+Remaining BEL requirements: operating margins, four-period order/execution evidence, cash conversion, debt/interest coverage, valuation and two stale market-history requirements. Official Defence/Capital Goods index rows and the no-BEL-action corporate tail are source-qualified through October 14; stock OHLCV and renewed compatible proofs still require the bounded provider route. Source qualification has not been mistaken for market FRESH.
+
+Controlling records: [actual financial admission and readback](G03_BEL_ROCE_Admission_Execution_2026-10-15.md), [source-bound market-tail qualification](G03_BEL_Official_Market_Tail_Qualification_2026-10-15.json). The earlier checkpoints below are preserved as audit history and are superseded by this result.
+
 ## Latest approved execution — BEL documentary requirements persisted FRESH
 
 The scoped owner approval was received and executed. Canonical v69 and grant handler v6 are active, with actual deployment file/hash readback. Workflow 38600061668 passed seven-stock validation, BEL-only one-use grant/save, duplicate-issuance idempotence and replay rejection. Independent selected-snapshot readback proves BUSINESS_DURABILITY and OWNERSHIP_GOVERNANCE FRESH in BEL successor `e1170d5b-5173-453c-a599-ea48df83c7bf`; the other six selected snapshots are unchanged.
