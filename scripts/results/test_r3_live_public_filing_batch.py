@@ -93,6 +93,29 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertIsNone(reason)
         self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
         self.assertEqual(v["facts"]["EPS_DILUTED"]["original_value"],"3.11*")
+    def test_bank_eps_in_separate_analytical_table(self):
+        html="""<html><body>
+        <table>
+        <tr><td>NSE Symbol</td><td>BANDHANBNK</td></tr>
+        <tr><td>ISIN</td><td>INE545U01014</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+        </table>
+        <table>
+        <tr><td>Date of start of reporting period</td><td>01-10-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr>
+        <tr><td>Total interest earned</td><td>900,000.00</td></tr>
+        <tr><td>Interest expenses</td><td>600,000.00</td></tr>
+        <tr><td>Net profit (loss) for the period</td><td>45,000.00</td></tr>
+        </table>
+        <table>
+        <tr><td>Earnings per share after extraordinary items</td><td></td></tr>
+        <tr><td>Diluted earnings per share after extraordinary items</td><td>3.11</td></tr>
+        </table></body></html>"""
+        v,reason=module.extract_bank(html,"BANDHANBNK","INE545U01014")
+        self.assertIsNone(reason)
+        self.assertEqual(v["facts"]["EPS_DILUTED"]["value"],"3.11")
     def test_bank_npa_only_not_complete(self):
         rows=[("2026-06-30","STANDALONE","source-npa","GROSS_NPA_PERCENT")]
         self.assertEqual(module.completed_quarters(rows),set())

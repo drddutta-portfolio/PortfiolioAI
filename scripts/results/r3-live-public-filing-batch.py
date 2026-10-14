@@ -191,17 +191,28 @@ def extract_bank(html: str, symbol: str, isin: str):
         # Accept only explicitly AFTER-extraordinary diluted EPS in the
         # first QUARTER column; never use before-extraordinary or YTD EPS.
         eps_candidates=[]
-        for cells in stmt:
-            for i,label in enumerate(cells[:-1]):
-                normalized=normalize(label).replace("\\u200b","")
-                if ("diluted" in normalized and "earnings per share" in normalized
-                    and "after extraordinary" in normalized):
-                    for raw_value in cells[i+1:]:
-                        normalized_value=re.sub(r"[\\s*†‡#]+$","",raw_value.strip())
-                        parsed=number(normalized_value)
-                        if parsed is not None:
-                            eps_candidates.append((parsed,raw_value))
-                            break
+        # Some Banking iXBRL issuers put analytical ratios / EPS into a
+        # sibling HTML table. Stay inside the same identity-proven filing,
+        # check any table-local quarter dates, and reject ambiguous values.
+        for candidate_table in tables:
+            starts=field_values(candidate_table,"date of start of reporting period")
+            ends=field_values(candidate_table,"date of end of reporting period")
+            if starts and date_of(starts[0]) != qstart: continue
+            if ends and date_of(ends[0]) != qend: continue
+            labels={normalize(cell) for row in candidate_table for cell in row}
+            if not any("earnings per share after extraordinary items" in label for label in labels):
+                continue
+            for cells in candidate_table:
+                for i,label in enumerate(cells[:-1]):
+                    normalized=normalize(label).replace("\\u200b","")
+                    if ("diluted" in normalized and "earnings per share" in normalized
+                        and "after extraordinary" in normalized):
+                        for raw_value in cells[i+1:]:
+                            normalized_value=re.sub(r"[\\s*†‡#]+$","",raw_value.strip())
+                            parsed=number(normalized_value)
+                            if parsed is not None:
+                                eps_candidates.append((parsed,raw_value))
+                                break
         if len({val for val,raw in eps_candidates})==1:
             eps,eps_raw=eps_candidates[0]
     if eps is not None and abs(eps)<=Decimal("100000"):
