@@ -30,4 +30,6 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: python scripts/v1-4/test_g02_source_import.py
+      - run: python scripts/v1-4/test_g03_acquire_official_originals.py
+      - run: python scripts/v1-4/test_g03_compare_retained_issuer_facts.py
       - run: git diff --check

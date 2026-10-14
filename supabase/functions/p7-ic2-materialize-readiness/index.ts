@@ -1,4 +1,5 @@
 import {authorizeG02SignedValidation} from '../_shared/v14-g02-validation-authorization.ts'
+import {authorizeG03SignedValidation} from '../_shared/v14-g03-validation-authorization.ts'
 import { P7_IC_CANONICAL_REQUIREMENT_METRICS } from "../_shared/p7-ic-requirement-metrics.ts"
 import {createClient,type SupabaseClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 type Admin = SupabaseClient
@@ -431,7 +432,7 @@ Deno.serve(async request=>{
   if(dryRun){
    const authorization=request.headers.get("Authorization")??""
    if(!authorization.startsWith("Bearer "))return reply(401,{error:"An authenticated owner session is required."})
-   const delegated=await authorizeG02SignedValidation(request.headers.get("X-G02-Execution-Token")??"",body)
+   const delegated=await authorizeG02SignedValidation(request.headers.get("X-G02-Execution-Token")??"",body)??await authorizeG03SignedValidation(request.headers.get("X-G03-Execution-Token")??"",body)
    const user=delegated?null:await admin.auth.getUser(authorization.slice(7))
    const ownerId=delegated?.authorizingOwnerId??user?.data.user?.id
    if(!ownerId||(!delegated&&user?.error))return reply(401,{error:"Invalid owner session or signed G02 validation scope."})

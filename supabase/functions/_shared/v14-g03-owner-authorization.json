@@ -1,0 +1,19 @@
+{
+  "version": "G03_OWNER_AUTHORIZED_EXECUTION_V1",
+  "ownerInstruction": "Please complete G03 and make the stocks READY.",
+  "directiveSha256": "7e6c7a48003f90e2307283008d662956a94da8b5ef89af88e6df2bfde3f03bfb",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityIds": [
+    "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "92fbe654-b418-4f72-b63c-36c57aec095b"
+  ],
+  "signedValidationOnly": true,
+  "productionAllowed": false
+}

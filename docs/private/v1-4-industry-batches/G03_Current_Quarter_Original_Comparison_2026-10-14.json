@@ -1,0 +1,321 @@
+{
+  "group": "G03",
+  "requirement_admission": false,
+  "rows": [
+    {
+      "symbol": "ASTRAMICRO",
+      "source_id": "9f4ab810-f7e7-4318-93c8-2b6f0ad6f9c7",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_184557_10082026172209_iXBRL_WEB.html",
+      "retained_payload_hash": "0554ff8d37273544dd9ac3593fd70324a444cbe8ba544becba0990b4263244cb",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:18.507078+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_184557_10082026172209_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "2fae8d133c293d23976edd2f801146422a30a2cc494ea0b1a49471a8a2e981a1",
+      "byte_length": 50615,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "176.2054",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "17620.54",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "9.8225",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "982.25",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "1.02",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "1.02",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "BEL",
+      "source_id": "b2fa832c-7a3f-44dc-a34e-bf6aa763d4ae",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178591_27072026163726_iXBRL_WEB.html",
+      "retained_payload_hash": "402a9e06da262e7af87f436961f492971a83818bbf684d06e931ab003c282755",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:18.507995+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178591_27072026163726_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "0a6e7e2b1885131cde6c7bbdd13a61efc823bcc6fbd5f224edbcf1c5cb52aa30",
+      "byte_length": 38858,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "5533.06",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "553306.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "1048.33",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "104833.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "1.43",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "1.43",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "source_id": "26e39280-f22a-4696-b477-8382ad90977b",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_180854_30072026193400_iXBRL_WEB.html",
+      "retained_payload_hash": "03979389cb388ab667b6d65790ead0b0eb4acebabb9a48f2327b904bfd2efa06",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:18.508549+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_180854_30072026193400_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "4c09fca86668de85555c5699e88d2e3bc8c671a1364a4cb04cd684d8038f6d26",
+      "byte_length": 44859,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "116.03",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "11603.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "22.06",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "2206.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "3.94",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "3.94",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "GRSE",
+      "source_id": "7feccf5a-6f3a-4ed5-b519-711c323a71a3",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_179664_29072026140422_iXBRL_WEB.html",
+      "retained_payload_hash": "9918e5dcb90ddc05f39cd100a3b84dad35bb26c428ee82db6d795b46ab3d20de",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:18.509052+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_179664_29072026140422_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "cb4031e669038a1c6302153f6b77727de62e9bdd929cec735ea6692d70e626f4",
+      "byte_length": 39543,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "1814.6159",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "181461.59",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "172.8376",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "17283.76",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "15.09",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "15.09",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "HAL",
+      "source_id": "e4f5b12f-c14f-46df-be0a-aae407d1f2bb",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_185599_12082026141907_iXBRL_WEB.html",
+      "retained_payload_hash": "14ba88148d55dac2edef025b616d1f8af2a53c7eb41956829a19f4a15658f30b",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:19.085295+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_185599_12082026141907_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "8e025383f664e49c0a5e736b8a31428d96fec0fdc2a94744c9d3760cc66c31b1",
+      "byte_length": 41403,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "5515.28",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "551528.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "1580.61",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "158061.00",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "23.63",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "23.63",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "MTARTECH",
+      "source_id": "75fafc45-2d59-4f6f-934d-735afbd86af1",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_180031_29072026183918_iXBRL_WEB.html",
+      "retained_payload_hash": "b642c2f1a01269217951e3d9d2aeecd01ab7147908aac75eac0a86a1341a6732",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:19.094767+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_180031_29072026183918_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "d73535f9d4a04782c993785d4a5e673b8d1e250ca122d15163ba7460eeaab8b1",
+      "byte_length": 36596,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "360.721",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "36072.10",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "50.504",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "5050.40",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "16.42",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "16.42",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    },
+    {
+      "symbol": "ZENTEC",
+      "source_id": "15086f0e-b0ef-4c45-b9de-afd6488a62e1",
+      "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178305_25072026182706_iXBRL_WEB.html",
+      "retained_payload_hash": "91e1b12d56f78cf98217be9ad2d2dbf3df8afeed9886df6576764fadb85508e0",
+      "published_at": null,
+      "retrieved_at": "2026-10-14T09:33:19.151376+00:00",
+      "resolved_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178305_25072026182706_iXBRL_WEB.html",
+      "status": "ACQUIRED_NOT_ADMITTED",
+      "original_sha256": "c50a86484aba03c761a5541cc7cd91face5e22794319bc4f2aca470df2c2df28",
+      "byte_length": 41413,
+      "facts": [
+        {
+          "metric_code": "OPERATING_REVENUE_QUARTER",
+          "value": "102.9574",
+          "unit": "INR_CRORE",
+          "source_table_label": "Revenue from operations",
+          "original_value": "10295.74",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "NET_PROFIT_QUARTER",
+          "value": "29.2123",
+          "unit": "INR_CRORE",
+          "source_table_label": "Total profit (loss) for period",
+          "original_value": "2921.23",
+          "original_unit": "INR_LAKH",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        },
+        {
+          "metric_code": "EPS_DILUTED",
+          "value": "3.25",
+          "unit": "INR_PER_SHARE",
+          "source_table_label": "Diluted earnings (loss) per share from continuing and discontinued operations",
+          "original_value": "3.25",
+          "original_unit": "INR_PER_SHARE",
+          "comparison": "MATCHED_NOT_ADMITTED"
+        }
+      ],
+      "comparison_status": "MATCHED_NOT_CANONICALLY_ADMITTED",
+      "scope": "STANDALONE",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30"
+    }
+  ]
+}

@@ -1,3 +1,11 @@
+## G03 official-source acquisition and canonical validation preparation — 14 October 2026
+
+Actual acquisition run 38542800240 captured 16 official PDFs for all seven G03 portfolio members; two BEL issuer URLs failed but its FY2025–26 BSE original succeeded. Retained-original integrity/text run 38543437026 passed without new acquisition. Latest Zen original is 102,424,464 bytes and remains outside the existing 64 MiB canonical importer; the read-only research executor has a separate bounded 128 MiB transport limit and does not change importer admission policy.
+
+Twenty-one Q1 FY2026–27 revenue/profit/EPS observations matched seven newly fetched original NSE tables using exact Decimal comparisons, security/ISIN identity, explicit quarter dates, standalone scope and source units. This is research qualification, not an accepted numeric review or complete financial requirement. The retained ledger now reconciles 156 dated issuer observations across the seven stocks; its prior pending-review limitations remain.
+
+A distinct seven-security G03 signed read-only validation scope has been implemented for the existing canonical materializer. G02 permissions remain three-security scoped; G03 cannot review, spend, issue grants, materialize or write through this capability. Targeted authorization tests and final repository verification are pending at this checkpoint; no new deployment or G03 canonical replay is claimed yet. No migration, scheduler change, BANK change or Production/main action occurred.
+
 ## Owner-directed G02 partial research handoff; G03 active — 14 October 2026
 
 The owner instructed: “So make these 3 stocks partially Ready and proceed to the next.” CGPOWER, AVALON and TDPOWERSYS are recorded as **PARTIAL_RESEARCH_AVAILABLE / FINANCIAL_CLOSURE_DEFERRED** in the execution workflow. The qualified research remains usable with its limitations; selected canonical status stays REVIEW_REQUIRED with six financial requirements each unresolved, 0/3 READY and ₹0 READY contribution. No new canonical readiness enum, unsupported FRESH state, completed score or release waiver was introduced.

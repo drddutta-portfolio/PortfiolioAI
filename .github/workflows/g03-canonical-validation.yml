@@ -1,0 +1,26 @@
+name: G03 Signed Canonical Read-Only Validation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/v1-4/g03_canonical_validation.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-canonical-read-only-validation
+          path: g03-canonical-validation-result/
+          retention-days: 90
+          if-no-files-found: ignore
