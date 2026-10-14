@@ -91,20 +91,8 @@ def extract(html: str, symbol: str, isin: str):
     if doc_symbol!=symbol or doc_isin!=isin: return None,"IDENTITY_MISMATCH_OR_UNKNOWN"
     unit=unique_field(tables,"level of rounding used in financial results")
     if not unit or normalize(unit)!="lakhs": return None,"UNSUPPORTED_OR_UNKNOWN_UNIT"
-    start=unique_field(tables,"date of start of reporting period")
-    end=unique_field(tables,"date of end of reporting period")
-    qstart,qend=date_of(start or ""),date_of(end or "")
-    if not qstart or not qend or qend<"2025-03-31" or qend>date.today().isoformat():
-        return None,"PERIOD_NOT_PROVEN"
-    if (date.fromisoformat(qend)-date.fromisoformat(qstart)).days not in range(75,100):
-        return None,"PERIOD_NOT_THREE_MONTHS"
-    scope=unique_field(tables,"nature of report standalone or consolidated")
-    scope=scope.upper() if scope else None
-    if scope not in ("CONSOLIDATED","STANDALONE"):return None,"SCOPE_UNKNOWN"
-    report=unique_field(tables,"reporting type")
-    if report and normalize(report)!="quarterly":return None,"NOT_QUARTERLY"
     # Match one genuine Ind-AS financial statement, never the segment reporting
-    # table; ambiguous and duplicated labels are not silently selected.
+    # table; ambiguous and duplicated statements are not silently selected.
     statements=[]
     for table in tables:
         names={normalize(c) for row in table for c in row}
@@ -112,10 +100,25 @@ def extract(html: str, symbol: str, isin: str):
             statements.append(table)
     if len(statements)!=1: return None,"STATEMENT_TABLE_NOT_UNIQUE"
     stmt=statements[0]
+    # The first reporting column is the QUARTER, not the following YTD or
+    # comparative columns. March-quarter YTD and quarter starts differ.
+    start_values=field_values(stmt,"date of start of reporting period")
+    end_values=field_values(stmt,"date of end of reporting period")
+    qstart=date_of(start_values[0]) if start_values else None
+    qend=date_of(end_values[0]) if end_values else None
+    if not qstart or not qend or qend<"2025-03-31" or qend>date.today().isoformat():
+        return None,"PERIOD_NOT_PROVEN"
+    if (date.fromisoformat(qend)-date.fromisoformat(qstart)).days not in range(75,100):
+        return None,"PERIOD_NOT_THREE_MONTHS"
+    scope_values=field_values(stmt,"nature of report standalone or consolidated")
+    scope=scope_values[0].upper() if scope_values else None
+    if scope not in ("CONSOLIDATED","STANDALONE"):return None,"SCOPE_UNKNOWN"
+    report=unique_field(tables,"reporting type")
+    if report and normalize(report)!="quarterly":return None,"NOT_QUARTERLY"
     facts={}
     for label,metric in FIELDS.items():
         values=field_values(stmt,label)
-        if len(values)!=1: continue
+        if not values: continue
         n=number(values[0])
         if n is None: continue
         if metric=="EPS_DILUTED":
@@ -139,7 +142,7 @@ def listing_urls(payload, symbol):
     for item in records:
         if not isinstance(item,dict):continue
         if item.get("symbol",item.get("Symbol")) not in (symbol,None):continue
-        for attr in ("originalUrl","xbrlFile","xbrl","xbrlUrl","xmlFile","link","url"):
+        for attr in ("ixbrl","ixbrlUrl","originalUrl","xbrlFile","xbrl","xbrlUrl","xmlFile","link","url"):
             url=item.get(attr)
             if not isinstance(url,str) or not url.startswith("https://"):continue
             parsed=urlparse(url)
@@ -148,8 +151,9 @@ def listing_urls(payload, symbol):
     return list(dict.fromkeys(urls))
 
 def fetch_json(session, symbol):
-    params={"index":"equities","symbol":symbol,"from_date":"01-01-2025",
-            "to_date":date.today().strftime("%d-%m-%Y")}
+    params={"index":"equities","symbol":symbol,
+            "type":"Integrated Filing- Financials","page":1,"size":100,
+            "from_date":"01-01-2025","to_date":date.today().strftime("%d-%m-%Y")}
     url="https://www.nseindia.com/api/integrated-filing-results?"+urlencode(params)
     r=session.get(url,timeout=22,headers={"Accept":"application/json","Referer":"https://www.nseindia.com/companies-listing/corporate-integrated-filing"})
     if r.status_code in (401,403,429):raise RuntimeError("LISTING_ACCESS_DENIED_"+str(r.status_code))
@@ -206,11 +210,18 @@ def persist(conn,s3,parsed,url,original_sha):
              (source_code,record_kind,external_record_id,source_url,payload_hash,raw_payload,terms_snapshot)
           VALUES (%s,%s,%s,%s,%s,%s::jsonb,%s::jsonb)
           ON CONFLICT (source_code,record_kind,external_record_id,payload_hash)
-            DO UPDATE SET external_record_id=EXCLUDED.external_record_id
-          RETURNING id
+            DO NOTHING RETURNING id
         """,(SOURCE_CODE,KIND,parsed["symbol"]+":"+original_sha,url,h,raw,
               '{"retention":"COMPACT_FACTS_ONLY","original_nse_bytes_retained":false,"results_review":"PENDING"}'))
-        rec=cur.fetchone()[0]
+        new=cur.fetchone()
+        if new: rec=new[0]
+        else:
+            cur.execute("""SELECT id FROM public.data_source_records
+                WHERE source_code=%s AND record_kind=%s AND external_record_id=%s AND payload_hash=%s""",
+                (SOURCE_CODE,KIND,parsed["symbol"]+":"+original_sha,h))
+            prior=cur.fetchone()
+            if not prior:raise RuntimeError("SOURCE_INSERT_READBACK_MISSING")
+            rec=prior[0]
         saved=0
         for metric,fact in parsed["facts"].items():
             cur.execute("""
