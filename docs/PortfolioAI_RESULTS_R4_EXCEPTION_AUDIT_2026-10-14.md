@@ -1,3 +1,9 @@
+## Superseding checkpoint, 15 October 2026
+
+**The historical 14 October counts below are superseded.** Independent Development readback following historical-identity/issuer recovery: **219/231 companies** have four R4 source-selected core quarters, **12 companies / 13 quarters** remain unselected, **2,785 facts** across **911 company-quarters**, **1,912 R2 compact manifests** read back. See the current canonical [231-company closeout register](PortfolioAI_RESULTS_R4_231_CLOSEOUT_2026-10-15.md). E2E, POCL, BECTORFOOD, V2RETAIL and KOTAKBANK are now recovered, with original pre-split EPS properly labelled; they no longer belong to the outstanding exceptions. Full portfolio-wide R4 acceptance remains NOT PASS.
+
+---
+
 # Results R4 Exception Closeout — 2026-10-14
 
 **Verdict: NOT FULLY COMPLETE.** Safe Development R4 implementation and R2/source verification operational; 17 companies remain blocked, not R5 performance grading.
