@@ -24,11 +24,11 @@ describe("R3 existing-source reuse", () => {
         eq: () => chain,
         not: () => chain,
         order: () => chain,
-        range: async (start: number, end: number) => {
+        range: (start: number, end: number) => {
           if (table === "fundamental_observation_decisions") {
-            return { data: [{ selected_observation_id: "obs1" }], error: null }
+            return Promise.resolve({ data: [{ selected_observation_id: "obs1" }], error: null })
           }
-          return { data: observations.slice(start, end + 1), error: null }
+          return Promise.resolve({ data: observations.slice(start, end + 1), error: null })
         },
       }
       return chain
@@ -48,7 +48,7 @@ describe("R3 existing-source reuse", () => {
         eq: () => chain,
         not: () => chain,
         order: () => chain,
-        range: async () => ({ data: null, error: new Error("Read permission denied") }),
+        range: () => Promise.resolve({ data: null, error: new Error("Read permission denied") }),
       }
       return chain
     })
