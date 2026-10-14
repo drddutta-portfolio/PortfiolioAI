@@ -1,3 +1,17 @@
+## R4 latest issuer-primary and explicit correction recovery — 15 October 2026 (01:30 IST)
+
+**Portfolio-wide R4 acceptance remains NOT PASS: 223/231 companies have four source-selected quarters, with 8 companies / 9 quarterly slots unresolved.** Independently read back **2,797 source-selected facts and 916/924 selected stock-quarters**. All nine remaining gaps are the seven unresolved conflicting issuer-filed versions listed below and the two VAML pre-demerger quarters. The source verifier checked **1,915 immutable compact R2 manifests** and, separately, the retained original PDFs and NSE correction bytes; rejected data was not silently selected. Original publication precision is UNKNOWN for most historical filings. New verified evidence is appropriate for current display only (R5 grading and historical PIT remain separate).
+
+New source closures:
+- **COFORGE** quarter ending 2025-12-31 — original signed Consolidated issuer PDF, original retained R2 SHA-256 `ccb413ab9307be7f44abe592987e97d762a2204f95057110dc1f5d8cc0ce3247`. Revenue ₹4,188.10 Cr, PAT ₹296.70 Cr, diluted EPS ₹7.38; [verified job 38625936265](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38625936265).
+- **SHAILY** quarter ending 2025-09-30 — signed issuer Consolidated original PDF retained with SHA-256 `2fa03ceac4214c84169cbc9a6f7e05cb5b933a637a84b5fcae006ac2025594e5`. Revenue ₹256.6536 Cr, PAT ₹51.2516 Cr, diluted EPS ₹11.12.
+- **HBLENGINE** quarter ending 2025-09-30 — official HBL scanned Consolidated statement retained with SHA-256 `0983aeaa466d6c268652a412229508e23fd1ef3d70bbbe8f4ceed19f4a468ffe`. Revenue ₹1,222.90 Cr, period PAT ₹387.28 Cr and diluted EPS ₹13.96. The PAT is the statement's own after-tax period figure before separately stated associate/minority adjustments; do not conflate that with attributable net profit in R5 growth.
+- **EXIDEIND** quarter ending 2025-12-31 — existing corrected NSE original iXBRL source selected ONLY after reading the signed NSE issuer clarification dated 17-Feb-2026, original PDF SHA-256 `0f62c1e6611a4ff318e53c725c2e3e117283547b5ff6b5f0628cbf6eba10d435`. The issuer states that original Consolidated diluted EPS zero was a typographical error and correct figure is ₹2.29; Revenue ₹4,200.59 Cr and PAT ₹194.97 Cr match original and corrected versions. Source-version IDs and correction bytes are bound in fail-closed selector, with corrected decision notes. [Development verification 38628218143](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38628218143) passed.
+
+See `docs/PortfolioAI_RESULTS_R4_ORIGINAL_PDF_RECOVERY_2026-10-15.md` for the source contract, exact remaining exceptions and operational readback. **No Production/main or V1-4 research score changes.**
+
+---
+
 # PortfolioAI Results R4 — 231-equity completion attempt and verified exception register
 **Date**: 2026-10-15 IST. **Environment**: Development only, `PortfolioAI-Development`, Supabase `lrgpjimipfkyoqbpsqzz`, R2 `portfolioai-history-dev`.
 
