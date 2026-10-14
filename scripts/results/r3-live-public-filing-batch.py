@@ -33,6 +33,11 @@ FIELDS = {
     "total profit (loss) for period": "NET_PROFIT_QUARTER",
     "diluted earnings (loss) per share from continuing and discontinued operations": "EPS_DILUTED",
 }
+TARGET_QUARTERS = ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
+CORE_METRICS = frozenset(FIELDS.values())
+RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
+                  "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
+                  "GROSS_NPA_PERCENT", "NET_NPA_PERCENT")
 NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
 DATE = re.compile(r"^\d\d[-/.]\d\d[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
@@ -250,21 +255,42 @@ def persist(conn,s3,parsed,url,original_sha):
     conn.commit()
     return saved
 
+def completed_quarters(rows):
+    """Only a matching security, scope AND source version may complete a quarter.
+
+    Cross-filing mixtures cannot be used to manufacture financial completeness.
+    """
+    by_filing = {}
+    for period_end, scope, source_record_id, metric_code in rows:
+        if str(period_end) not in TARGET_QUARTERS or not scope or not source_record_id:
+            continue
+        by_filing.setdefault((str(period_end), scope, str(source_record_id)), set()).add(metric_code)
+    return {period for (period, _, _), metrics in by_filing.items()
+            if CORE_METRICS.issubset(metrics)}
+
+
 def main():
     db=required("SUPABASE_DB_URL")
     if PROJECT_REF not in db:raise RuntimeError("NON_DEVELOPMENT_DATABASE_FORBIDDEN")
     if required("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise RuntimeError("NON_DEVELOPMENT_R2_FORBIDDEN")
-    maxstocks=int(os.getenv("RESULTS_MAX_STOCKS","12"))
+    maxstocks=int(os.getenv("RESULTS_MAX_STOCKS","262"))
     if maxstocks<1 or maxstocks>262:raise RuntimeError("INVALID_STOCK_BUDGET")
     s3=r2_client()
     with psycopg.connect(db,autocommit=False) as conn:
         with conn.cursor() as cur:
-            cur.execute("""SELECT DISTINCT s.symbol,s.isin
+            # Restrict this owner-authorized catch-up to the 231 equities with
+            # existing date-qualified Results financial evidence. Never expand
+            # the cohort to the other 31 without a separate acquisition pass.
+            cur.execute("""SELECT DISTINCT s.symbol,s.isin,s.id
                 FROM public.transactions t JOIN public.securities s ON t.security_id=s.id
                 WHERE t.portfolio_id=%s AND s.asset_class='EQUITY' AND s.isin IS NOT NULL
-                ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,maxstocks))
+                  AND EXISTS (SELECT 1 FROM public.fundamental_observations f
+                      WHERE f.security_id=s.id AND f.period_type='QUARTER'
+                        AND f.period_end IS NOT NULL AND f.numeric_value IS NOT NULL
+                        AND f.metric_code=ANY(%s))
+                ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,list(RESULT_METRICS),maxstocks))
             stocks=cur.fetchall()
-        conn.rollback() # read-only selection must not hold open transaction
+        conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
         try:
@@ -272,43 +298,76 @@ def main():
             if seed.status_code in (401,403,429):raise RuntimeError("PUBLIC_SOURCE_ACCESS_DENIED_"+str(seed.status_code))
         except requests.RequestException as exc:
             raise RuntimeError("SOURCE_BOOTSTRAP_FAILED") from exc
-        log={"universe_target":len(stocks),"access_ok":True,"visited":0,"with_documents":0,"documents_parsed":0,
-             "observations_inserted":0,"blocked":[],"stock_outcomes":[]}
-        for symbol,isin in stocks:
+        log={"universe_target":len(stocks),"target_period_ends":list(TARGET_QUARTERS),
+             "access_ok":True,"visited":0,"already_complete":0,"with_documents":0,
+             "documents_parsed":0,"observations_inserted":0,"blocked":[],
+             "stock_outcomes":[]}
+        for symbol,isin,security_id in stocks:
             entry={"symbol":symbol,"qualified":0,"observations":0,"reason":None}
-            try:
-                listing=fetch_json(session,symbol)
-                urls=listing_urls(listing,symbol)
-                if not urls:
-                    entry["reason"]="NO_QUALIFIED_LISTING_URL"
-                else:
-                    log["with_documents"]+=1
-                    for url in urls[:8]:
-                        time.sleep(1.2)
-                        res=session.get(url,timeout=22,headers={"Accept":"text/html"})
-                        if res.status_code in (401,403,429):raise RuntimeError("FILING_ACCESS_DENIED_"+str(res.status_code))
-                        res.raise_for_status()
-                        if len(res.content)>2_000_000:raise RuntimeError("FILING_TOO_LARGE")
-                        data,reason=extract(res.text,symbol,isin)
-                        if not data:
-                            entry["reason"]=reason
-                            continue
-                        entry["qualified"]+=1
-                        log["documents_parsed"]+=1
-                        entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
-                    if not entry["qualified"] and not entry["reason"]:
-                        entry["reason"]="NO_PARSEABLE_DOCUMENTS"
-            except Exception as exc:
-                conn.rollback()
-                entry["reason"]=str(exc)[:100]
-                if "ACCESS_DENIED" in entry["reason"]:
-                    log["blocked"].append(entry["reason"])
-                    log["stock_outcomes"].append(entry)
-                    break  # do not evade anti-bot or 429 blocks
+            with conn.cursor() as cur:
+                cur.execute("""SELECT period_end,consolidation_scope,source_record_id,metric_code
+                    FROM public.fundamental_observations
+                    WHERE security_id=%s AND period_end=ANY(%s::date[])
+                      AND period_type='QUARTER' AND numeric_value IS NOT NULL
+                      AND metric_code=ANY(%s)""",
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS)))
+                completed=completed_quarters(cur.fetchall())
+            conn.rollback()
+            if len(completed)==len(TARGET_QUARTERS):
+                entry["reason"]="FOUR_QUARTERS_ALREADY_COMPLETE"
+                log["already_complete"]+=1
+            else:
+                try:
+                    listing=fetch_json(session,symbol)
+                    urls=listing_urls(listing,symbol)
+                    if not urls:
+                        entry["reason"]="NO_QUALIFIED_LISTING_URL"
+                    else:
+                        log["with_documents"]+=1
+                        # Older September/December filings may be beyond the
+                        # first eight links. Inspect the bounded issuer list,
+                        # never infer the reporting quarter from the URL.
+                        for url in urls[:40]:
+                            time.sleep(1.2)
+                            res=session.get(url,timeout=22,headers={"Accept":"text/html"})
+                            if res.status_code in (401,403,429):
+                                raise RuntimeError("FILING_ACCESS_DENIED_"+str(res.status_code))
+                            res.raise_for_status()
+                            if len(res.content)>2_000_000:
+                                entry["reason"]="FILING_TOO_LARGE"
+                                continue
+                            data,reason=extract(res.text,symbol,isin)
+                            if not data:
+                                entry["reason"]=reason
+                                continue
+                            if data["period_end"] not in TARGET_QUARTERS or data["period_end"] in completed:
+                                continue  # Preserve qualified quarters without duplicate writes.
+                            entry["qualified"]+=1
+                            log["documents_parsed"]+=1
+                            entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
+                            if CORE_METRICS.issubset(data["facts"]):
+                                completed.add(data["period_end"])
+                            if len(completed)==len(TARGET_QUARTERS):
+                                break
+                        if not entry["qualified"] and not entry["reason"]:
+                            entry["reason"]="NO_NEW_QUALIFIED_QUARTER"
+                except Exception as exc:
+                    conn.rollback()
+                    entry["reason"]=str(exc)[:100]
+                    if "ACCESS_DENIED" in entry["reason"]:
+                        log["blocked"].append(entry["reason"])
+                        entry["missing_quarters"]=sorted(set(TARGET_QUARTERS)-completed)
+                        log["stock_outcomes"].append(entry)
+                        break  # Respect source blocks/rate limits; never bypass.
+            entry["missing_quarters"]=sorted(set(TARGET_QUARTERS)-completed)
             log["visited"]+=1
             log["observations_inserted"]+=entry["observations"]
             log["stock_outcomes"].append(entry)
-            time.sleep(1.2)
+            if len(completed)!=len(TARGET_QUARTERS):
+                time.sleep(1.2)
+    log["all_four_quarters_complete"] = sum(not row["missing_quarters"] for row in log["stock_outcomes"])
+    log["incomplete_stocks"] = sum(bool(row["missing_quarters"]) for row in log["stock_outcomes"])
+    log["missing_stock_quarter_slots"] = sum(len(row["missing_quarters"]) for row in log["stock_outcomes"])
     print(json.dumps(log,indent=2,sort_keys=True))
     if log["blocked"]:return 2
     return 0
