@@ -1,3 +1,9 @@
+## G03 live read-only validation executed; BEL admission pilot prepared — 14 October 2026
+
+Canonical materializer v68 is ACTIVE with JWT enabled, SHA `c82f6226aea6abb95cbcc3f6c75bc31df35de966d3ea1d3ac73e9bc62a0663f3`. After the scoped owner continuation, actual G03 workflow 38566313967 passed: seven identities, zero provider calls/writes and no new snapshot or selection IDs. Current prospective results show ten blockers per stock; older selected snapshots remain distinct and include expired market evidence. The shared read-only deployment restriction recorded below is historical and is now resolved.
+
+The [BEL fixed documentary pilot](private/v1-4-industry-batches/G03_BEL_Documentary_Pilot_Execution_2026-10-14.md) prepares actual source registration, source-bound business/governance reviews and validation-before-grant-scoped canonical saving. It preserves adverse governance findings, numeric/financial contracts, owner identity, frozen membership and existing G02/BANK controls. Targeted tests, architecture, TypeScript, lint/build and live candidate checks are being executed; source/review admissions and canonical saving are not yet claimed.
+
 ## G03 actual immutable-original storage and historical-quarter acquisition — 14 October 2026
 
 Archive workflow **38548416928 SUCCESS** created and byte-readback-verified **16 immutable G03 originals** in Development R2, under `portfolioai-history/development/v1-4/g03/originals/`. This includes Zen’s complete 102 MB original; archive transport does not relax the unchanged 64 MiB canonical importer. No canonical source registration, accepted review or readiness promotion is implied. [Exact archive readback](private/v1-4-industry-batches/G03_Immutable_Original_Archive_Readback_2026-10-14.json).

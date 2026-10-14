@@ -1,5 +1,7 @@
 # G03 read-only canonical validation — deployment safety assessment
 
+Owner continuation authorization, 14 October 2026: after the concrete scoped deployment approval request and explanation of the shared-service restriction, the owner replied **“Proceed”**. Execution resumes with the same tested, read-only G03 extension only. This does not authorize changes to BANK/G02 financial evaluation or write controls. Fresh runtime readback confirms the unchanged v67 baseline before deployment.
+
 Owner request: “Please complete G03 and make the stocks READY.” This package is a necessary read-only validation capability, not permission to manufacture readiness or alter another industry's evidence.
 
 ## Automatic review rejection and subsequent evidence

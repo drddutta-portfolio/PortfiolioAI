@@ -37,6 +37,46 @@ def main():
     out = Path('g03-canonical-validation-result')
     out.mkdir(exist_ok=True)
     (out / 'sanitized-results.json').write_text(json.dumps(result, indent=2) + '\n')
+    if os.environ.get('G03_MATERIALIZE_BEL') == 'true':
+        pilot = json.loads((root / 'v14-g03-pilot-authorization.json').read_text())
+        bel = next(r for r in result['results'] if r['securityId'] == pilot['securityIds'][0])
+        if any(not any(i.get('requirement_code') == code and i.get('evidence_state') == 'FRESH'
+                       for i in bel['items']) for code in pilot['allowedRequirementCodes']):
+            raise ValueError('G03_BEL_DOCUMENTARY_REVIEWS_NOT_CANONICALLY_FRESH')
+        from g03_source_qualification import invoke
+        grant_body = {'action': 'ISSUE_G03_CANONICAL_ONLY_GRANT', 'authorizationHash': pilot['directiveSha256']}
+        grant = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
+        duplicate = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
+        if (grant.get('code') != 'G03_CANONICAL_ONLY_GRANT' or grant.get('providerCalls') != 0
+                or grant.get('scope') != 'SECURITY_IDS:' + pilot['securityIds'][0]
+                or duplicate.get('grantId') != grant.get('grantId') or duplicate.get('reused') is not True):
+            raise ValueError('G03_BEL_GRANT_SCOPE_OR_IDEMPOTENCE_INVALID')
+        write_body = {**body, 'action': 'P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS',
+                      'securityIds': pilot['securityIds'], 'targetingMode': 'P4_GRANT_SCOPED_SECURITY_IDS_V1',
+                      'grantId': grant['grantId']}
+        write_request = urllib.request.Request(audience, data=json.dumps(write_body).encode(), method='POST',
+                                               headers={'Authorization': 'Bearer ' + gateway,
+                                                        'Content-Type': 'application/json'})
+        with urllib.request.urlopen(write_request, timeout=180) as response:
+            materialized = json.load(response)
+        if (materialized.get('status') != 'IC3_CANONICAL_SNAPSHOTS_MATERIALIZED'
+                or materialized.get('processed') != 1 or materialized.get('providerCalls') != 0
+                or len(materialized.get('selectionIds', [])) != 1
+                or len(materialized.get('snapshotIds', [])) != 1):
+            raise ValueError('G03_BEL_MATERIALIZATION_CONTRACT_INVALID')
+        (out / 'sanitized-materialization.json').write_text(json.dumps({
+            'result': materialized, 'duplicateGrantIssuance': 'IDEMPOTENT'}, indent=2) + '\n')
+        try:
+            with urllib.request.urlopen(write_request, timeout=60):
+                raise ValueError('G03_GRANT_REPLAY_NOT_REJECTED')
+        except urllib.error.HTTPError as error:
+            detail = json.load(error)
+            if error.code != 401 or detail.get('code') != 'P4_GRANT_ALREADY_USED':
+                raise ValueError('G03_GRANT_REPLAY_CONTRACT_INVALID') from None
+        (out / 'sanitized-materialization.json').write_text(json.dumps({
+            'result': materialized, 'duplicateGrantIssuance': 'IDEMPOTENT',
+            'grantReplay': 'REJECTED_ALREADY_USED'}, indent=2) + '\n')
+        print(json.dumps({'materializedBEL': 1, 'providerCalls': 0, 'grantReplay': 'REJECTED_ALREADY_USED'}))
     print(json.dumps({'processed': result['processed'], 'totals': result['totals'],
                       'providerCalls': 0, 'writeTotals': result['writeTotals']}))
 

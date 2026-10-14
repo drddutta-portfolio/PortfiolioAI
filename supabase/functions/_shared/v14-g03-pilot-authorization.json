@@ -1,0 +1,20 @@
+{
+  "version": "G03_PINNED_BEL_DOCUMENTARY_PILOT_V1",
+  "ownerInstruction": "Please complete G03 and make the stocks READY.",
+  "directiveSha256": "7e6c7a48003f90e2307283008d662956a94da8b5ef89af88e6df2bfde3f03bfb",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityIds": [
+    "fdec39e9-08a7-418d-ae96-9d8ce834d26c"
+  ],
+  "signedValidationOnly": false,
+  "productionAllowed": false,
+  "allowedRequirementCodes": [
+    "BUSINESS_DURABILITY",
+    "OWNERSHIP_GOVERNANCE"
+  ],
+  "sourceImportDoesNotApproveFinancialEvidence": true,
+  "numericReviewAllowed": false,
+  "providerCallsAllowed": 0
+}
