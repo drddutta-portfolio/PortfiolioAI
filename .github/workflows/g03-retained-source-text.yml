@@ -1,0 +1,44 @@
+name: G03 Retained Official Source Text
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-retained-source-text.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: g03-official-originals-not-admitted
+          run-id: 38542800240
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: retained-originals
+      - name: Verify original bytes and preserve acquisition manifest
+        run: |
+          python - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          root = Path('retained-originals')
+          manifest = json.loads((root / 'manifest.json').read_text())
+          assert manifest['workflow_sha'] == '7aaf6870bec676b49e515f85c9f6465e9f614ad1'
+          assert manifest['database_writes'] == 0 and manifest['canonical_materialization'] is False
+          for row in manifest['rows']:
+              if row['status'] == 'ACQUIRED_NOT_ADMITTED':
+                  content = (root / row['artifact_pdf']).read_bytes()
+                  assert len(content) == row['byte_length']
+                  assert hashlib.sha256(content).hexdigest() == row['sha256']
+          print('Original byte integrity verified; no new acquisition or admission')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: g03-retained-original-text-and-manifest
+          path: |
+            retained-originals/*.txt
+            retained-originals/manifest.json
+          retention-days: 14
+          if-no-files-found: error
