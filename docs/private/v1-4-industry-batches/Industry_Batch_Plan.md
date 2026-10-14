@@ -2,6 +2,10 @@
 
 Prepared 8 October 2026 from repository HEAD `7116e375`. Planning only; no provider calls, evidence writes, methodology changes or activation.
 
+## G03 active canonical-readiness execution — 14 October 2026
+
+The latest owner instruction is to complete G03 and make its stocks genuinely READY. [Current G03 execution/gates](G03_Current_Execution_And_Remaining_Gates_2026-10-14.md) and [seven-stock source research](G03_Provisional_Stock_Research_2026-10-14.md) control this continuation. Source availability does not waive acceptance: 24 PDFs acquired, 16 annual originals immutably archived, 21 current-quarter facts original-matched, but no new G03 accepted requirement or READY selection. The tested read-only shared-validator deployment requires the explicit approval requested after automatic review rejection. G04 is not activated while the current G03 READY request remains active.
+
 ## Banking execution priority amendment — 12 October 2026
 
 The [reuse-first banking plan](Banking_V1_4_Reuse_First_Priority_Execution_Plan_2026-10-12.md) is the current detailed banking execution-priority amendment. First completion pool: HDFCBANK, FEDERALBNK, BANKBARODA, BANDHANBNK and SBIN; advance others when verified evidence justifies it. Active remediation covers twelve banks; KVB remains separate without removal from the original thirteen-bank pilot or frozen-111 cohort.

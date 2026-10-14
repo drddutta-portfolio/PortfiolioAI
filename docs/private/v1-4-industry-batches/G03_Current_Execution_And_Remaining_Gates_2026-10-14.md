@@ -10,6 +10,8 @@ While the controlled deployment remained blocked, **eight additional official qu
 
 The tested G03 signed-validation capability has its own exact seven-security scope and protected workflow. It cannot acquire providers, accept reviews, grant writes or materialize. Existing G02's scope remains unchanged. Candidate live-bundle checking preserves 43 existing files and changes only the read-only authorization entrypoint.
 
+Independent source-storage work also executed: **archive workflow 38548416928 PASS**, creating 16 immutable G03 original objects in Development R2 with full byte/hash/length readback. [Storage proof and exact keys](G03_Immutable_Original_Archive_Readback_2026-10-14.json). The full Zen original is retained without altering importer limits. This archive operation does not deploy the rejected shared service, register canonical source rows, accept financial reviews or write readiness selections.
+
 Verification on implementation `30a0f26c…`: 2,345 application tests, 405 Edge tests, six Python acquisition/comparison checks, architecture/type/lint/build and Deno candidate-live-bundle check PASS. Full Repository Verification 38544922954 and Architecture Guard 38544926963 both SUCCESS. Original acquisition 38542800240 and retained integrity 38543437026 SUCCESS. Subsequent workflow/documentation changes do not change the tested financial/authorization implementation.
 
 ## Live result remains unchanged
@@ -46,6 +48,6 @@ No successful deployment or G03 handler replay is claimed. The existing Developm
 
 ## Execution accounting and preservation
 
-Paid/provider API calls: **0** in this continuation. Public original-document requests were executed and are recorded separately. New accepted requirement reviews: **0**. Canonical snapshot/selection writes: **0**. R2 writes: **0**. Migrations: **0**. Successful Development deployments: **0**. BANK evidence/scheduler, Production/main and frozen cohort are unchanged.
+Paid/provider API calls: **0** in this continuation. Public original-document requests were executed and are recorded separately. New accepted requirement reviews: **0**. Canonical snapshot/selection writes: **0**. R2 writes: **16 new immutable original objects**, original-byte readback PASS. Migrations: **0**. Successful Development deployments: **0**. BANK evidence/scheduler, Production/main and frozen cohort are unchanged.
 
-Four source-research events were appended to the frozen execution ledger; its previous bytes and original 111 initialization rows were preserved. G03 remains active and **NOT PROVEN**. The next group has not been activated by this record, because the latest owner instruction requests G03 canonical READY rather than another partial handoff.
+Four source-research events and four subsequent immutable-archive events were appended to the frozen execution ledger; its previous bytes and original 111 initialization rows were preserved. G03 remains active and **NOT PROVEN**. The next group has not been activated by this record, because the latest owner instruction requests G03 canonical READY rather than another partial handoff.

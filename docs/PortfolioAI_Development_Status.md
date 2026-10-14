@@ -1,3 +1,13 @@
+## G03 actual immutable-original storage and historical-quarter acquisition — 14 October 2026
+
+Archive workflow **38548416928 SUCCESS** created and byte-readback-verified **16 immutable G03 originals** in Development R2, under `portfolioai-history/development/v1-4/g03/originals/`. This includes Zen’s complete 102 MB original; archive transport does not relax the unchanged 64 MiB canonical importer. No canonical source registration, accepted review or readiness promotion is implied. [Exact archive readback](private/v1-4-industry-batches/G03_Immutable_Original_Archive_Readback_2026-10-14.json).
+
+Eight additional issuer quarterly-result PDFs for MTARTECH/DATAPATTNS were acquired, with 21 OCR derivative pages extracted for scanned originals. Scope/columns/units and numeric verification remain pending; raw acquisition has not been counted as eight admitted growth quarters. The total new PDF inventory is 24, alongside seven original-matched current-quarter NSE HTML sources.
+
+All seven selected G03 snapshots still remain REVIEW_REQUIRED, 0/4 frozen READY and ₹0 READY value. The shared read-only validator deployment remains blocked by automatic approval review, with a concrete scoped owner approval pending. Existing Development materializer **v67 ACTIVE**, SHA `df7cdfd95707f95cb788ce3b9d00283eadc6dc24271cb8fd8c96e5d607755924`, JWT enabled, independently confirmed unchanged after rejected deployments. No rejected operation was bypassed.
+
+Original-source storage is actual progress, not full G03 acceptance. Paid provider calls, database writes, new reviews, migrations, successful deployments, BANK scheduler changes and Production/main changes in this continuation: zero. R2 writes: 16 new immutable original objects.
+
 ## G03 tested read-only canonical deployment blocked by automatic review — 14 October 2026
 
 Implementation head `30a0f26cabbf43203e9355682bd9c9072b143f10` passed GitHub Full Repository Verification 38544922954 and Architecture Guard 38544926963, as well as local 2,345 application / 405 Edge tests, type/lint/build and candidate-live-bundle Deno checking. The distinct seven-security G03 read-only scope is tested; G02 scope and existing financial/write paths are unchanged.
