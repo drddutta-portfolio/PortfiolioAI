@@ -261,6 +261,103 @@ def process_shaily():
         "new_observations":saved,"core_observations_readback":3,
         "publication_precision":"UNKNOWN","historical_pit":False}))
 
+def process_hbl():
+    """One exact HBL official signed PDF, scanned; original-byte SHA pinned."""
+    symbol="HBLENGINE";isin="INE292B01021"
+    start,end="2025-07-01","2025-09-30"
+    url="https://www.hbl.in/reports/results_sep2025.pdf"
+    expected_sha="0983aeaa466d6c268652a412229508e23fd1ef3d70bbbe8f4ceed19f4a468ffe"
+    response=requests.get(url,timeout=40,headers={"User-Agent":"Mozilla/5.0"})
+    response.raise_for_status()
+    b=response.content
+    if not b.startswith(b"%PDF") or sha(b)!=expected_sha:
+        raise RuntimeError("HBL_OFFICIAL_PDF_ORIGINAL_HASH_CHANGED")
+    pdf=fitz.open(stream=b,filetype="pdf")
+    if len(pdf)!=18:raise RuntimeError("HBL_OFFICIAL_PDF_PAGE_COUNT_MISMATCH")
+    # Scanned source images; the pinned identical original was independently
+    # indexed as a Consolidated 30-Sep-2025 statement on the issuer domain.
+    # Figures below are its original "Quarter ending" column (not half-year):
+    # Sales 1,222.90, net profit after tax 387.28, diluted EPS 13.96.
+    # The later 387.27 figure includes the associate/minority adjustment and
+    # is not silently substituted for NET_PROFIT_QUARTER.
+    images=sum(len(p.get_images()) for p in pdf)
+    if images<3:raise RuntimeError("HBL_EXPECTED_SCANNED_PDF_NOT_PRESENT")
+    expected={
+      "OPERATING_REVENUE_QUARTER":("1222.90","INR_CRORE","1,222.90","INR_CRORE"),
+      "NET_PROFIT_QUARTER":("387.28","INR_CRORE","387.28","INR_CRORE"),
+      "EPS_DILUTED":("13.96","INR_PER_SHARE","13.96","INR_PER_SHARE")
+    }
+    facts={key:{"value":value,"unit":unit,"original_value":original,
+                "original_unit":original_unit,
+                "source_table":"HBL consolidated quarter ending 30-Sep-2025; prior to associate and minority adjustment"
+               } for key,(value,unit,original,original_unit) in expected.items()}
+    prefix=PREFIX+f"security_id={isin}/period_end={end}/"
+    original_key=prefix+"original_version="+expected_sha+"/issuer-original.pdf"
+    manifest={"contract":CONTRACT,"symbol":symbol,"isin":isin,
+      "period_start":start,"period_end":end,"consolidation_scope":"CONSOLIDATED",
+      "issuer_filing_url":url,"reporting_currency":"INR",
+      "publication_timestamp":None,
+      "original_sha256_retained":expected_sha,"original_r2_key":original_key,
+      "original_pdf_retained":True,"facts":facts,"figures_review_pending":True,
+      "evidence":{
+        "issuer_cin":"L40109TG1986PLC006745",
+        "statement":"HBL Engineering Limited, consolidated financial results September 30 2025",
+        "source_pdf_sha256":expected_sha,
+        "original_table_unit":"INR_CRORE",
+        "exact_original_scanned_pages":len(pdf),
+        "issuer_domain":"hbl.in",
+        "net_profit_reporting_basis":"period after-tax before associate/minority adjustment",
+        "raw_pdf_retention":"IMMUTABLE_R2"}}
+    data=compact(manifest);version=sha(data)
+    key=prefix+"source_version="+version+"/manifest.json"
+    s3=s3_client()
+    immutable_write(s3,original_key,b)
+    immutable_write(s3,key,data)
+    raw=compact({**manifest,"r2_key":key,"r2_manifest_sha256":version})
+    with psycopg.connect(os.environ["SUPABASE_DB_URL"],autocommit=False) as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id FROM public.securities WHERE symbol=%s AND isin=%s AND asset_class='EQUITY'",(symbol,isin))
+            result=cur.fetchone()
+            if not result:raise RuntimeError("HBL_CANONICAL_IDENTITY_NOT_VERIFIED")
+            sid=result[0]
+            cur.execute("""INSERT INTO public.data_source_records
+              (source_code,record_kind,external_record_id,source_url,payload_hash,raw_payload,terms_snapshot)
+              VALUES(%s,%s,%s,%s,%s,%s::jsonb,%s::jsonb)
+              ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING RETURNING id""",
+              (SOURCE,KIND,symbol+":"+expected_sha,url,sha(raw),raw.decode(),
+              '{"retention":"ORIGINAL_PDF_IMMUTABLE_R2","publication_precision":"UNKNOWN","results_review":"R4_CURRENT_DISPLAY"}'))
+            fresh=cur.fetchone()
+            if fresh:source_id=fresh[0]
+            else:
+                cur.execute("""SELECT id FROM public.data_source_records WHERE
+                  source_code=%s AND record_kind=%s AND external_record_id=%s AND payload_hash=%s""",
+                  (SOURCE,KIND,symbol+":"+expected_sha,sha(raw)))
+                old=cur.fetchone()
+                if not old:raise RuntimeError("HBL_SOURCE_READBACK_MISSING")
+                source_id=old[0]
+            inserted=0
+            for metric,(value,unit,_,_) in expected.items():
+                cur.execute("""INSERT INTO public.fundamental_observations
+                   (security_id,metric_code,source_record_id,source_code,numeric_value,
+                   currency,unit,period_start,period_end,period_type,consolidation_scope,
+                   retrieved_at,fresh_until,evidence_status)
+                   VALUES(%s,%s,%s,%s,%s,'INR',%s,%s,%s,'QUARTER','CONSOLIDATED',
+                   now(),now()+interval '120 days','AVAILABLE')
+                   ON CONFLICT (security_id,metric_code,source_code,period_end,period_type,
+                   consolidation_scope,source_record_id) DO NOTHING RETURNING id""",
+                   (sid,metric,source_id,SOURCE,Decimal(value),unit,start,end))
+                if cur.fetchone():inserted+=1
+            cur.execute("""SELECT count(*) FROM public.fundamental_observations
+              WHERE source_record_id=%s AND evidence_status='AVAILABLE'
+              AND metric_code=ANY(%s)""",(source_id,list(expected)))
+            if cur.fetchone()[0]!=3:raise RuntimeError("HBL_CORE_METRIC_READBACK_MISSING")
+        conn.commit()
+    print(json.dumps({"source":symbol,"period_end":end,
+      "source_sha":expected_sha,"R2_pdf":original_key,"R2_manifest":key,
+      "source_record_id":str(source_id),"new_observations":inserted,
+      "qualified_core":3,"publication_precision":"UNKNOWN","historical_pit":False}))
+
 if __name__=="__main__":
     main()
     process_shaily()
+    process_hbl()

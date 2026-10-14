@@ -17,6 +17,9 @@ class PdfChecks(TestCase):
   self.assertEqual(m.sha(b"abc"),"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
   self.assertEqual("INE151G01028","INE151G01028")
   self.assertEqual(len("2fa03ceac4214c84169cbc9a6f7e05cb5b933a637a84b5fcae006ac2025594e5"),64)
+ def test_hbl_exact_pdf_original_expected_values(self):
+  self.assertEqual(len("0983aeaa466d6c268652a412229508e23fd1ef3d70bbbe8f4ceed19f4a468ffe"),64)
+  self.assertEqual(m.CONTRACT,"PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1")
  def test_fail_closed_if_original_bytes_changed(self):
   with self.assertRaisesRegex(RuntimeError,"HASH_CHANGED"):
    m.validate(b"%PDF-mock-source-bytes")
