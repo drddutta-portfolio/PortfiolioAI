@@ -1,0 +1,204 @@
+{
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "canonicalRun": 38507225285,
+  "documentQualificationRun": 38507081126,
+  "selectedReady": 0,
+  "totalBlocked": 18,
+  "rows": [
+    {
+      "symbol": "AVALON",
+      "snapshot_id": "2360ff41-ae90-473b-a18d-6426f16e2c45",
+      "selection_id": "61920aae-b49c-434d-bd3f-f43b785bcdd5",
+      "selected_at": "2026-10-14 03:38:01.949588+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blocker_count": 6,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "CFO_FCF_AND_WORKING_CAPITAL",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_BENCHMARK_HISTORY_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "CGPOWER",
+      "snapshot_id": "91fac979-0b4c-4b18-9379-7056d2374f46",
+      "selection_id": "cb3813ad-3e0a-49e3-8b47-820e86341d5a",
+      "selected_at": "2026-10-14 03:38:02.218901+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blocker_count": 6,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "CFO_FCF_AND_WORKING_CAPITAL",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_BENCHMARK_HISTORY_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "symbol": "TDPOWERSYS",
+      "snapshot_id": "ab8c0923-c897-4cab-a55b-4501f52d2bcc",
+      "selection_id": "099df669-0d4e-48bf-863a-51e62861feb7",
+      "selected_at": "2026-10-14 03:38:01.530245+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blocker_count": 6,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "CFO_FCF_AND_WORKING_CAPITAL",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY"
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY"
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_BENCHMARK_HISTORY_READY"
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL"
+        },
+        {
+          "code": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        }
+      ]
+    }
+  ]
+}

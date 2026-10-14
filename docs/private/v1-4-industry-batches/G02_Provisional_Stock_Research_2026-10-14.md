@@ -6,7 +6,7 @@ Research date: 14 October 2026, Asia/Kolkata. Scope: CGPOWER, AVALON and TDPOWER
 
 The three FY2025–26 original annual-report PDFs were independently SHA-256 checked again and 15 literal findings were extracted with PDF page locations. The [original-excerpt ledger](G02_Provisional_Research_Original_Excerpts_2026-10-14.json) supplies exact original URLs, hashes and source passages. Financial amounts below are issuer-reported observations; they have not been admitted as canonical numeric facts. No new ratios, target prices or missing values were calculated for this report. Publication timestamps remain unproven; current retrieval does not establish historical availability.
 
-All three currently selected canonical snapshots remain REVIEW_REQUIRED with seven blockers each after the 03:07 UTC canonical materialization. BUSINESS_DURABILITY, IC3_SNAPSHOT_LINEAGE, MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK are FRESH. FRESH business evidence means the documentary contract is supported; it does not assign a favourable durability score. The approved CAPITAL_EQUIPMENT_ELECTRICAL assignment remains unchanged. Business interpretation is company-specific: Avalon is an electronics manufacturing business, not an interchangeable transformer/generator peer.
+All three currently selected canonical snapshots remain REVIEW_REQUIRED with six blockers each after the 03:38 UTC canonical materialization. BUSINESS_DURABILITY, IC3_SNAPSHOT_LINEAGE, MOMENTUM_12M_RELATIVE, DRAWDOWN_VOLATILITY_RISK and OWNERSHIP_GOVERNANCE are FRESH. FRESH business evidence means the documentary contract is supported; it does not assign a favourable durability score. The approved CAPITAL_EQUIPMENT_ELECTRICAL assignment remains unchanged. Business interpretation is company-specific: Avalon is an electronics manufacturing business, not an interchangeable transformer/generator peer.
 
 ## CGPOWER
 
@@ -15,6 +15,8 @@ All three currently selected canonical snapshots remain REVIEW_REQUIRED with sev
 The standalone key-ratio table separately reports operating profit margin excluding other income of 13.64% for FY26 and 12.71% for FY25. Issuer terminal ROCE excluding exceptional items is 22.08% versus 33.34%; management explains that investment of QIP proceeds increased capital employed. Interest coverage is 85.77 versus 90.59. These are specific standalone definitions, not a consolidated margin series, average-capital ROCE or complete three-year leverage contract. The reported debt/equity figure is not proof that every consolidated debt obligation is zero.
 
 **Interpretation.** The available evidence supports a constructive preliminary view of power-equipment demand and order visibility. The capital-efficiency decline needs to be understood alongside newly raised capital and investment deployment, rather than being interpreted automatically as deterioration in the underlying franchise. Semiconductor expansion creates a distinct capital-allocation and execution exposure; proposed capacity is not realised production or profit.
+
+**Governance evidence:** the report discloses continuing CBI, SFIO and ED investigations concerning prior management. The qualified governance review retains this unresolved risk; it does not establish clean governance or absence of litigation.
 
 **What could change the opinion.** Order conversion, cash collection and capacity execution must support the reported growth. A strong backlog cannot compensate for weak cash conversion. Valuation has not been qualified, so the business assessment does not establish that the shares are attractively priced.
 
@@ -48,7 +50,7 @@ The standalone ROCE note defines its numerator as PAT plus depreciation/amortisa
 
 ## Canonical closure work still required
 
-For each stock the seven financial/documentary requirements remain: OPERATING_MARGIN_HISTORY, REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD, ROCE_OR_ROIC, CFO_FCF_AND_WORKING_CAPITAL, NET_DEBT_AND_INTEREST_COVERAGE, VALUATION, OWNERSHIP_GOVERNANCE. Required scope includes three annual years, eight growth quarters, four order periods and three cash/working-capital years. Literal source passages are inputs to this work, not replacements for those requirements.
+For each stock the six financial requirements remain: OPERATING_MARGIN_HISTORY, REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD, ROCE_OR_ROIC, CFO_FCF_AND_WORKING_CAPITAL, NET_DEBT_AND_INTEREST_COVERAGE, VALUATION. Required scope includes three annual years, eight growth quarters, four order periods and three cash/working-capital years. Literal source passages are inputs to this work, not replacements for those requirements.
 
 Both selected market requirements, MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK, are now persisted FRESH. Governed acquisition persisted all three stocks' prices through 13 October. Official calendar/corporate-action tail evidence and the complete five-session price-return benchmark tail were registered, proofs renewed append-only, and prospective validation/materialization independently read back. This clears two blockers per stock without clearing any financial requirement. See the [canonical reduction readback](G02_Market_Blocker_Reduction_Readback_2026-10-14.json).
 

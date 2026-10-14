@@ -1,3 +1,17 @@
+## G02 actual governance-blocker reduction — 14 October 2026
+
+**Independent persisted result: 7 → 6 blockers per stock, 21 → 18 total.** CGPOWER, AVALON and TDPOWERSYS remain REVIEW_REQUIRED, 0/3 READY and ₹0 READY frozen value. OWNERSHIP_GOVERNANCE is now FRESH alongside the two market requirements, business durability and lineage. [Actual selected-snapshot readback](private/v1-4-industry-batches/G02_Governance_Blocker_Reduction_Readback_2026-10-14.json) records the exact snapshot and selection IDs after authenticated validation/grant-scoped materialization run 38507225285.
+
+The frozen Industrials contract specifies reviewed governance evidence with one original-document identity; the generic planner incorrectly routed it to four-quarter shareholding validation. Profile-aware documentary routing repairs that mismatch while retaining existing Bank/Pharma ownership routes and true shareholding-series requirements. Three bounded source-backed documentary reviews were admitted without owner impersonation. CGPOWER's assessment explicitly preserves ongoing CBI/SFIO/ED investigations involving prior management as an unresolved risk; FRESH indicates qualified evidence, not clean governance or a favourable score.
+
+The document-source uniqueness constraint is preserved. Governance excerpts reference the existing verified original provider appearance; no new fake provider appearance, duplicate original document, constraint weakening or migration was used. Development canonical v67 and documentary admission v9 are active. Architecture Guard and Full Repository Verification passed on implementation head 5c8bc92f; 401 Edge tests passed locally, including routing, original association, integrity, tampering and expiry regressions. Documentary qualification run 38507081126 and canonical run 38507225285 passed.
+
+Two additional TD Power annual-report originals, FY2024 and FY2025, were acquired from its official investor archive, SHA-256 verified and reporting-year anchors confirmed. They are pinned in source-import v4, bringing the manifest to 30 originals. Registration workflow 38507975105 is separately tracked; acquisition/pinning alone does not imply canonical registration or financial admission.
+
+Remaining six financial requirements: operating-margin history; revenue/order growth; ROCE/ROIC; CFO/FCF/working capital; debt/interest coverage; valuation. Exact reporting dates, scope, unit and definition compatibility must be proved and complete component series admitted. No financial requirement was cleared by the governance repair. No new paid provider calls, migrations, Banking scheduler change, Production/main change, score activation or overall READY declaration.
+
+---
+
 ## G02 actual market-blocker reduction — 14 October 2026
 
 **Persisted blocker reduction: 9 → 7 for each of CGPOWER, AVALON and TDPOWERSYS; 27 → 21 total.** All remain REVIEW_REQUIRED, 0/3 READY and ₹0 READY frozen value. Independent selected-snapshot readback at 03:07 UTC proves MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK FRESH for all three. Business durability and lineage remain FRESH. The evidence and snapshot/selection IDs are preserved in [actual canonical readback](private/v1-4-industry-batches/G02_Market_Blocker_Reduction_Readback_2026-10-14.json).
