@@ -20,6 +20,11 @@ const METRICS = [
   "OPERATING_PROFIT_QUARTER",
   "ADVANCES_GROWTH_YOY",
   "DEPOSITS_GROWTH_YOY",
+  "NET_INTEREST_INCOME_QUARTER",
+  "NET_PROFIT_QUARTER",
+  "EPS_DILUTED",
+  "GROSS_NPA_PERCENT",
+  "NET_NPA_PERCENT",
 ] as const
 
 /** Only selected observations can be presented as qualified financial facts. */
