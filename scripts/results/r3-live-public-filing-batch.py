@@ -162,8 +162,20 @@ def fetch_json(session, symbol):
     return r.json()
 
 def r2_client():
-    acc=required("CLOUDFLARE_R2_ACCOUNT_ID")
-    return boto3.client("s3",endpoint_url=f"https://{acc}.r2.cloudflarestorage.com",
+    acc=required("CLOUDFLARE_R2_ACCOUNT_ID").strip()
+    # Existing repository secret may contain either an account hex ID or the
+    # complete R2 S3 endpoint. Never concatenate https:// onto a URL.
+    if re.fullmatch(r"[a-f0-9]{32}",acc):
+        endpoint=f"https://{acc}.r2.cloudflarestorage.com"
+    elif acc.startswith("https://"):
+        parsed=urlparse(acc)
+        host=parsed.hostname or ""
+        if not re.fullmatch(r"[a-f0-9]{32}\.r2\.cloudflarestorage\.com",host) or parsed.port or parsed.path not in ("","/") or parsed.query or parsed.fragment:
+            raise RuntimeError("UNRECOGNIZED_R2_ENDPOINT")
+        endpoint=acc.rstrip("/")
+    else:
+        raise RuntimeError("UNRECOGNIZED_R2_ACCOUNT_ID")
+    return boto3.client("s3",endpoint_url=endpoint,
         aws_access_key_id=required("CLOUDFLARE_R2_ACCESS_KEY_ID"),
         aws_secret_access_key=required("CLOUDFLARE_R2_SECRET_ACCESS_KEY"),
         region_name="auto")
