@@ -34,3 +34,8 @@ A green CI alone does not pass R4. The workflow must finish; its artifact must r
 ## 2026-10-14 R4 exception audit
 
 The source-validation follow-on PR #144 admits complete nonconflicting Standalone source records when consolidated is incomplete; it does not permit conflicts or cross-filing metric blending. The independent readback recorded **2,743 selections, 898 selected stock-quarters, 212 equities with all four and 19 equities incomplete**. Original publication timestamps remain UNKNOWN for most observations. Exact company/quarter failure ledger and requisite evidence: `docs/PortfolioAI_RESULTS_R4_EXCEPTION_AUDIT_2026-10-14.md`. Full acceptance is **NOT PASS**; R5 Strong/Mixed/Weak remains unimplemented.
+
+
+## Final follow-on verification — 2026-10-14 18:04 UTC
+
+Issuer-original Q1 FY27 NSE reacquisition plus test-backed packed after-extraordinary bank EPS extraction closed HCLTECH and HDFCBANK. Independent Development readback: 214/231 companies with four source-selected quarters; 900/924 company-quarters; 2,750 source selections; 17 companies and 24 stock-quarters remain unselected. R2 verified 1,902 archived compact manifests; no existing-decision conflicts. Source-reconciled current display is not original publication-time verification or investment R5 classification. Full portfolio-wide R4 acceptance **NOT PASS**. Details in `PortfolioAI_RESULTS_R4_EXCEPTION_AUDIT_2026-10-14.md`.

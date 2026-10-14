@@ -602,19 +602,6 @@ def main():
                                                          "nse_symbol":unique_field(tt,"nse symbol"),
                                                          "source_isin":unique_field(tt,"isin")})
                                 continue
-                            if (symbol=="HDFCBANK" and data["period_end"]=="2026-06-30"
-                                and "EPS_DILUTED" not in data["facts"]):
-                                eps_tables=[]
-                                soup_debug=BeautifulSoup(res.text,"html.parser")
-                                for tr in soup_debug.find_all("tr"):
-                                    values=[v.get_text(" ",strip=True) for v in
-                                            tr.find_all(["td","th"],recursive=False)]
-                                    if any("diluted" in normalize(v) for v in values):
-                                        eps_tables.append([v[:110] for v in values[:8]])
-                                entry["public_eps_table_diagnostic"]={
-                                    "filing_url":url,"rows":eps_tables[:8],
-                                    "first_eps_mention":soup_debug.get_text(" ",strip=True).lower().find("diluted earnings")
-                                }
                             if data["period_end"] not in TARGET_QUARTERS or data["period_end"] in completed:
                                 continue  # Preserve qualified quarters without duplicate writes.
                             entry["qualified"]+=1
