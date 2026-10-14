@@ -1,0 +1,39 @@
+name: Results R4 Development issuer original PDF recovery
+on:
+  push:
+    branches: [results-r4-original-issuer-pdf-20261015]
+    paths:
+      - scripts/results/r4-issuer-pdf-recovery.py
+      - scripts/results/test_r4_issuer_pdf_recovery.py
+      - .github/workflows/results-r4-issuer-pdf-recovery.yml
+permissions:
+  contents: read
+concurrency:
+  group: results-r4-pdf-dev-source-recovery
+  cancel-in-progress: false
+jobs:
+  issuer-source-qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Fail-closed Development guard
+        run: |
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+      - name: Install pinned issuer evidence tools
+        run: python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5' 'boto3==1.40.46' 'psycopg[binary]==3.2.10'
+      - name: Check PDF admission regression tests
+        run: python scripts/results/test_r4_issuer_pdf_recovery.py -v
+      - name: Archive exact issuer original, publish verified facts, read back
+        run: python scripts/results/r4-issuer-pdf-recovery.py
+      - name: Canonical R4 source selection and exception report
+        run: python scripts/results/r4-verify-quarterly.py --apply
