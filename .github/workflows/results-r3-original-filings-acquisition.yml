@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       max_stocks:
-        description: "Development pilot size. Set 262 only after a passing pilot."
+        description: "Development equities to process (bounded and resumable)."
         type: choice
         required: true
-        default: "12"
+        default: "262"
         options: ["12", "40", "262"]
   push:
     branches:
@@ -28,14 +28,14 @@ jobs:
   quarterly-data:
     name: acquire-and-readback-development-results
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 240
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
-      RESULTS_MAX_STOCKS: ${{ inputs.max_stocks || '12' }}
+      RESULTS_MAX_STOCKS: ${{ inputs.max_stocks || '262' }}
 
     steps:
       - uses: actions/checkout@v4
