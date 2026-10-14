@@ -57,7 +57,10 @@ def check_manifest(record,manifest):
     if not isinstance(raw,dict) or not isinstance(manifest,dict):return "MALFORMED_MANIFEST"
     if sha(canonical_bytes(raw))!=record["payload_hash"]:return "SOURCE_HASH_MISMATCH"
     if {k:v for k,v in raw.items() if k not in ("r2_key","r2_manifest_sha256")}!=manifest:return "SOURCE_MANIFEST_MISMATCH"
-    if manifest.get("contract")!="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":return "UNAPPROVED_CONTRACT"
+    contract=manifest.get("contract")
+    if contract not in ("PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",
+                         "PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1"):
+        return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
         days=(date.fromisoformat(manifest["period_end"])-date.fromisoformat(manifest["period_start"])).days
@@ -65,10 +68,29 @@ def check_manifest(record,manifest):
     except (KeyError,ValueError,TypeError):return "INVALID_QUARTER_DATES"
     if manifest.get("consolidation_scope") not in ("STANDALONE","CONSOLIDATED"):return "SCOPE_NOT_PROVEN"
     u=urlparse(manifest.get("issuer_filing_url",""))
-    if u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):return "UNQUALIFIED_ORIGIN"
+    if contract=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
+        approved={"COFORGE":("www.coforge.com","/hubfs/Outcome-of-Board-Meeting-Q3-FY2026.pdf"),
+                  "SHAILY":("static.shaily.com","/y7GuSh95RsG5gOUUnd6i-covering-letter-reg-33-30092025-signed-pdf"),
+                  "HBLENGINE":("www.hbl.in","/reports/results_sep2025.pdf")}
+        expected=approved.get(manifest.get("symbol"))
+        if not expected or u.scheme!="https" or (u.hostname,u.path)!=expected or u.query or u.fragment:
+            return "UNAPPROVED_ORIGINAL_ISSUER_PDF"
+        original=manifest.get("original_sha256_retained")
+        original_key=manifest.get("original_r2_key")
+        if (not isinstance(original,str) or len(original)!=64
+            or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
+            or not original_key.endswith("/issuer-original.pdf")
+            or "/original_version="+original+"/" not in original_key):
+            return "INVALID_RETAINED_ORIGINAL_REFERENCE"
+        if manifest.get("original_pdf_retained") is not True:return "ORIGINAL_PDF_NOT_RETAINED"
+    elif u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):
+        return "UNQUALIFIED_ORIGIN"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
-    if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
-    if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
+    if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
+        if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
+        if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
+    elif manifest.get("reporting_currency")!="INR":
+        return "PDF_CURRENCY_UNKNOWN"
     if not record["source_retrieved"]:return "SOURCE_RETRIEVAL_UNKNOWN"
     if not isinstance(manifest.get("facts"),dict):return "FACTS_NOT_OBJECT"
     historical_error=historical_original_eps_proof(manifest)
@@ -92,6 +114,41 @@ def check_fact(r,m):
             or fact.get("original_unit")!="INR_PER_SHARE"):
             return "HISTORICAL_EPS_ORIGINAL_VALUE_UNPROVEN"
     return None
+
+# Corrected issuer-filed financial results are admitted ONLY with an
+# immutable original NSE correction notice, source-version identity and
+# exact revised metrics. Never resolve conflicts by "latest filing" alone.
+EXIDE_CORRECTION_SHA="0f62c1e6611a4ff318e53c725c2e3e117283547b5ff6b5f0628cbf6eba10d435"
+EXIDE_OLD_SOURCE="383002e5-7e7c-4782-9906-5493eeae0fb1"
+EXIDE_REVISED_SOURCE="ace1b679-2cc7-46e9-854b-c117eb1ee37c"
+EXIDE_CORRECTION_KEY=(PREFIX+"security_id=INE302A01020/period_end=2025-12-31/"
+    "original_version="+EXIDE_CORRECTION_SHA+"/issuer-correction.pdf")
+def qualify_exide_correction(facts,s3):
+    relevant=[r for r in facts if r["symbol"]=="EXIDEIND"
+        and str(r["period_end"])=="2025-12-31"
+        and r["consolidation_scope"]=="CONSOLIDATED"
+        and str(r["source_record_id"]) in(EXIDE_OLD_SOURCE,EXIDE_REVISED_SOURCE)]
+    if len(relevant)!=6:
+        return facts,False
+    by_source=defaultdict(dict)
+    for r in relevant:
+        if r["isin"]!="INE302A01020":return facts,False
+        by_source[str(r["source_record_id"])][r["metric_code"]]=Decimal(str(r["numeric_value"]))
+    correct={"OPERATING_REVENUE_QUARTER":Decimal("4200.59"),
+             "NET_PROFIT_QUARTER":Decimal("194.97"),
+             "EPS_DILUTED":Decimal("2.29")}
+    original=dict(correct);original["EPS_DILUTED"]=Decimal("0")
+    if by_source.get(EXIDE_OLD_SOURCE)!=original or by_source.get(EXIDE_REVISED_SOURCE)!=correct:
+        return facts,False
+    try:
+        notice=s3.get_object(Bucket=BUCKET,Key=EXIDE_CORRECTION_KEY)["Body"].read()
+    except Exception:return facts,False
+    if not notice.startswith(b"%PDF") or sha(notice)!=EXIDE_CORRECTION_SHA:
+        return facts,False
+    return [r for r in facts if not (
+        r["symbol"]=="EXIDEIND" and str(r["period_end"])=="2025-12-31"
+        and r["consolidation_scope"]=="CONSOLIDATED"
+        and str(r["source_record_id"])==EXIDE_OLD_SOURCE)],True
 
 def select_quarters(rows):
     groups=defaultdict(lambda:defaultdict(list))
@@ -140,7 +197,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind='RESULTS_QUARTERLY_NSE_DISCOVERY_V1'
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -169,6 +226,15 @@ def verify(db,s3,apply):
                     code=response.get("Error",{}).get("Code","") if isinstance(response,dict) else ""
                     error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
             if not error:error=check_manifest(r,document)
+            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
+                try:
+                    original_bytes=s3.get_object(
+                        Bucket=BUCKET,Key=document["original_r2_key"])["Body"].read()
+                    if (not original_bytes.startswith(b"%PDF")
+                        or sha(original_bytes)!=document["original_sha256_retained"]):
+                        error="R2_RETAINED_ORIGINAL_PDF_HASH_MISMATCH"
+                except Exception:
+                    error="R2_RETAINED_ORIGINAL_PDF_UNAVAILABLE"
             return k,(document,error)
         with ThreadPoolExecutor(max_workers=12) as pool:
             for k,validated in pool.map(check_one,by_id.items()):
@@ -180,7 +246,9 @@ def verify(db,s3,apply):
             reason=check_fact(r,doc)
             if reason:invalid[reason]+=1;continue
             facts.append(r)
+        facts,exide_corrected=qualify_exide_correction(facts,s3)
         selections,blocked,quarters=select_quarters(facts);invalid.update(blocked)
+        if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -190,11 +258,14 @@ def verify(db,s3,apply):
                         "selected_observation_id":str(r["id"]),
                         "original_share_basis":bool(
                             r["metric_code"]=="EPS_DILUTED" and
-                            r["raw_payload"].get("historical_identity_link"))} for r in selections]
+                            r["raw_payload"].get("historical_identity_link")),
+                        "issuer_correction":bool(
+                            exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE)
+                        } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -220,7 +291,9 @@ def verify(db,s3,apply):
                         SELECT p.security_id,p.metric_code,p.period_end,'QUARTER',
                                p.consolidation_scope,p.selected_observation_id,
                                'EVIDENCE_PRIORITY',now(),NULL,
-                               CASE WHEN p.original_share_basis THEN
+                               CASE WHEN p.issuer_correction THEN
+                                 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.original_share_basis THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED; DO_NOT_COMPARE_EPS_ACROSS_SPLIT; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                ELSE 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY' END
                         FROM proposals p
