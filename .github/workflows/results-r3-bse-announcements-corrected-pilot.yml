@@ -1,0 +1,59 @@
+name: Results R3 BSE Historical Announcement Method Correction
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-bse-announcements-corrected-pilot.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned upstream BseIndiaApi without copying it
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'bse==3.3.3'
+      - name: Check historical announcement method with documented upstream parameter correction
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime
+          from bse import BSE
+          # Only two small historical date windows and one well-known BSE code.
+          # This tests the upstream PR #18 parameter capitalization, not an access-control workaround.
+          windows=[('2024-10-01','2024-11-30'),('2025-01-01','2025-02-28')]
+          with BSE(download_folder='/tmp') as bse:
+            for start,end in windows:
+              start_date=datetime.strptime(start,'%Y-%m-%d')
+              end_date=datetime.strptime(end,'%Y-%m-%d')
+              out={'symbol':'HDFCBANK','bse_scripcode':'500180','from':start,'to':end}
+              try:
+                x=bse.announcements(scripcode='500180',from_date=start_date,to_date=end_date)
+                out['upstream_original']={'status':'SUCCESS','count':len(x.get('Table',[]))}
+              except Exception as e:
+                out['upstream_original']={'status':'ERROR','type':type(e).__name__,'message':str(e)[:100]}
+              q={'pageno':1,'strCat':'-1','subcategory':'-1',
+                'strPrevDate':start_date.strftime('%Y%m%d'),'strToDate':end_date.strftime('%Y%m%d'),
+                'strSearch':'P','strScrip':'500180','strType':'C'}
+              try:
+                r=bse.session.get(bse.api_url+'/AnnSubCategoryGetData/w',params=q,timeout=15)
+                out['PR18_corrected_parameter']={'http_status':r.status_code}
+                if r.ok:
+                  v=r.json()
+                  rows=v.get('Table',[]) if isinstance(v,dict) else []
+                  matches=[row for row in rows if
+                    'financial result' in str(row.get('NEWSSUB','')).lower()
+                    or 'unaudited' in str(row.get('NEWSSUB','')).lower()
+                    or 'audited' in str(row.get('NEWSSUB','')).lower()]
+                  out['PR18_corrected_parameter'].update({'count_first_page':len(rows),
+                    'result_matches':len(matches),
+                    'sample':[{'title':x.get('NEWSSUB'),'date':x.get('NEWS_DT'),
+                      'attachment':x.get('ATTACHMENTNAME')} for x in matches[:3]]})
+              except Exception as e:
+                out['PR18_corrected_parameter']={'status':'ERROR','type':type(e).__name__,'message':str(e)[:100]}
+              print('BSE_HISTORICAL_TEST='+json.dumps(out,sort_keys=True),flush=True)
+          PY
