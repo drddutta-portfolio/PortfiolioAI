@@ -1,0 +1,48 @@
+name: Results R3 2024 Exchange Identity Diagnostic
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-2024-identity-diagnostic.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Reconcile old NSE catalog identity to issuer original 2024 XML
+        run: |
+          python - <<'PY'
+          import requests,xml.etree.ElementTree as ET,json
+          from urllib.parse import urlencode,urlparse
+          session=requests.Session()
+          session.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          base='https://www.nseindia.com/companies-listing/corporate-filings-financial-results'
+          session.get(base,timeout=25).raise_for_status()
+          for symbol in ('ASTRAL','BEL','HDFCBANK'):
+            params={'index':'equities','symbol':symbol,'period':'Quarterly','from_date':'01-10-2024','to_date':'01-03-2025'}
+            r=session.get('https://www.nseindia.com/api/corporates-financial-results?'+urlencode(params),timeout=25,
+               headers={'Accept':'application/json','Referer':base})
+            r.raise_for_status()
+            matches=[v for v in r.json() if isinstance(v,dict) and v.get('symbol')==symbol and
+              v.get('toDate') in ('30-Sep-2024','31-Dec-2024') and v.get('cumulative')=='Non-cumulative']
+            print('CATALOG',symbol,len(matches))
+            for v in matches[:3]:
+              uri=v.get('xbrl','')
+              if urlparse(uri).hostname!='nsearchives.nseindia.com':continue
+              x=session.get(uri,timeout=25)
+              x.raise_for_status()
+              root=ET.fromstring(x.content)
+              identities={}
+              for elem in root.iter():
+                key=elem.tag.rsplit('}',1)[-1]
+                if key in ('ISIN','Symbol','NSESymbol','ScripCode','identifier') and elem.text:
+                  identities.setdefault(key,set()).add(elem.text.strip())
+              print('ISSUER',symbol,v.get('toDate'),'catalog_isin',v.get('isin'),
+                'xml_ids',{k:sorted(vals)[:4] for k,vals in identities.items()},'xml_bytes',len(x.content))
+          PY
