@@ -1,0 +1,76 @@
+name: Results R3 BSE Source Feasibility (Read Only)
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-bse-source-feasibility.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: results-r3-bse-feasibility-development
+  cancel-in-progress: false
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only HTTP library
+        run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Probe three public BSE results snapshots and historical 2024 filing indices (metadata only)
+        run: |
+          python - <<'PY'
+          import requests,time,json
+          s=requests.Session()
+          s.headers.update({
+            'User-Agent':'PortfolioAI-Research/1.0 (+noncommercial source feasibility review)',
+            'Accept':'application/json,text/plain,*/*','Referer':'https://www.bseindia.com/',
+            'Origin':'https://www.bseindia.com'
+          })
+          base='https://api.bseindia.com/BseIndiaAPI/api'
+          out=[]
+          for symbol,code in [('ASTRAL','532830'),('BEL','500049'),('HDFCBANK','500180')]:
+            item={'symbol':symbol,'bse_scrip_code':code,'snapshot':{},'historical_announcements':{}}
+            try:
+              r=s.get(base+'/TabResults_PAR/w',params={'scripcode':code,'tabtype':'RESULTS'},timeout=16)
+              item['snapshot']['status']=r.status_code
+              if r.ok:
+                v=r.json()
+                if isinstance(v,str):v=json.loads(v)
+                if isinstance(v,dict):
+                  item['snapshot'].update({'keys':list(v)[:15], 'periods':[v.get('col'+str(i)) for i in [2,3,4]],
+                    'units':v.get('col1'),'fact_row_count':len(v.get('resultinCr',[]) or []),
+                    'filing_link_count':len(v.get('resultinS',[]) or [])})
+              else:
+                item['snapshot']['reason']='HTTP_UNAVAILABLE'
+            except (requests.RequestException,ValueError,TypeError) as e:
+              item['snapshot']={'reason':'EXCEPTION_'+type(e).__name__}
+            time.sleep(1.4)
+            try:
+              params={'pageno':1,'strCat':'-1','subcategory':'-1',
+                'strPrevDate':'20241001','strToDate':'20250301','strSearch':'P',
+                'strscrip':code,'strType':'C'}
+              r=s.get(base+'/AnnSubCategoryGetData/w',params=params,timeout=16)
+              item['historical_announcements']['status']=r.status_code
+              if r.ok:
+                v=r.json()
+                rows=v.get('Table',[]) if isinstance(v,dict) else []
+                counts=v.get('Table1',[]) if isinstance(v,dict) else []
+                matches=[x for x in rows if any(k in str(x.get('NEWSSUB','')).lower()
+                  for k in ('financial results','audited financial','unaudited financial','quarterly results'))]
+                item['historical_announcements'].update({'first_page_records':len(rows),
+                  'row_count':counts[0].get('ROWCNT') if counts else None,
+                  'result_announcement_matches_first_page':len(matches),
+                  'sample_metadata':[{'headline':str(x.get('NEWSSUB',''))[:105],
+                    'date':x.get('NEWS_DT'),'attachment_present':bool(x.get('ATTACHMENTNAME')),
+                    'quarter_id':x.get('QUARTER_ID')} for x in matches[:3]]})
+              else:item['historical_announcements']['reason']='HTTP_UNAVAILABLE'
+            except (requests.RequestException,ValueError,TypeError) as e:
+              item['historical_announcements']={'reason':'EXCEPTION_'+type(e).__name__}
+            out.append(item)
+            time.sleep(1.4)
+          print('BSE_SAMPLE_RESULTS='+json.dumps(out,sort_keys=True))
+          PY
