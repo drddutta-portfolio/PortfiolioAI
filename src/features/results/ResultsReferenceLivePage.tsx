@@ -55,6 +55,25 @@ function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: st
 function forQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
   return displayQuarterEvidence(allForQuarter(rows, securityId, end))
 }
+/** A quarter is R5-complete only with one selected original issuer filing
+ * containing the three mandatory bank/nonbank core metrics. */
+function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], entry: Entry): boolean {
+  const own = rows.filter(r => r.securityId === entry.position.securityId && r.selected &&
+    r.source === "COMPANY_EXCHANGE_FILING")
+  const bank = isBank(entry.position.industry) || hasBankMetrics(own)
+  const core = [bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
+    "NET_PROFIT_QUARTER", "EPS_DILUTED"]
+  return makePeriods().every(period => {
+    const quarter = own.filter(r => r.periodEnd === period.end && core.includes(r.code))
+    if (quarter.length !== 3 || new Set(quarter.map(r => r.code)).size !== 3) return false
+    if (quarter.some(r => !r.sourceRecordId || !r.scope ||
+      r.currency !== "INR" || (r.code === "EPS_DILUTED" ?
+        r.unit !== "INR_PER_SHARE" : r.unit !== "INR_CRORE"))) return false
+    return new Set(quarter.map(r => r.sourceRecordId)).size === 1 &&
+      new Set(quarter.map(r => r.scope)).size === 1
+  })
+}
+
 function presentationStatus(status: string, rows: readonly ResultsSourceObservation[]) {
   return rows.some((row) => row.selected) && status === "UNAVAILABLE"
     ? "Source reconciled"
@@ -211,12 +230,13 @@ function InsightCard({ entry, rows, allRows, periodEnd, calibrations }: { readon
   if (selectedCount > 0 && outcome.status !== "UNAVAILABLE") {
     summary = outcome.explanation
   } else if (selectedCount > 0) {
-    summary = selectedCount + " source-reconciled metric" + (selectedCount === 1 ? "" : "s") + " available. Comparative performance assessment is not yet qualified."
+    summary = outcome.explanation
   } else if (rows.length > 0) {
     summary = rows.length + " stored quarterly observation" + (rows.length === 1 ? "" : "s") + " available. Verification is pending."
   }
   return <section className="results-card ref-insight">
     <div className="results-card-heading"><h3><span className="ref-sparkle" aria-hidden="true">✦</span> AI Insight</h3><span className="ref-insight-tag">Evidence-based</span></div>
+    <p className="ref-grade-method">{outcome.basis === "INDUSTRY_PEER" ? "Method: Industry peer percentile" : outcome.basis === "COMPANY_TREND" ? "Method: Company trend · not peer-ranked" : "Method: Not rated · data or industry qualification unavailable"}</p>
     <div className="ref-insight-summary"><strong>{summary}</strong><span>{outcome.status === "UNAVAILABLE" ? "Thesis impact: Not assessed" : "QoQ-calibrated · Thesis not assessed"}</span></div>
     <ul>
       {explanations.map((phrase, index) => <li key={index}>{phrase}</li>)}
@@ -317,6 +337,19 @@ export function ResultsLivePage() {
   const sourceCompanyCount = new Set(observations.map((r) => r.securityId)).size
   const sourceQuarterCount = new Set(observations.map((r) => r.securityId + "|" + r.periodEnd)).size
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
+  const r5Coverage = useMemo(() => {
+    const eligible = entries.filter(e => hasFourQualifiedQuarters(observations, e))
+    const counts = { STRONG: 0, MIXED: 0, WEAK: 0, UNAVAILABLE: 0,
+      peer: 0, trajectory: 0 }
+    for (const entry of eligible) {
+      const grade = gradeQuarterR5(observations, entry.position.securityId, "2026-06-30",
+        entry.position.sector, entry.position.industry, industryCalibrations)
+      counts[grade.status] += 1
+      if (grade.basis === "INDUSTRY_PEER") counts.peer++
+      if (grade.basis === "COMPANY_TREND") counts.trajectory++
+    }
+    return { complete: eligible.length, counts }
+  }, [entries, observations, industryCalibrations])
   const filtered = useMemo(() => entries.filter((e) => {
     const p = e.position
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
@@ -396,6 +429,16 @@ export function ResultsLivePage() {
         <button type="button" disabled title="Newly reported detection requires an operational R6 scanner"><span className="ref-status-dot new"/>Newly Reported</button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
       </div>
+      <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
+        <strong>R5 · Jun 2026</strong>
+        <span>{loadingEvidence ? "Assessing selected source data…" :
+          r5Coverage.complete + " stocks with four qualified quarters"}</span>
+        <span className="ref-r5-strong">Strong {r5Coverage.counts.STRONG}</span>
+        <span className="ref-r5-mixed">Mixed {r5Coverage.counts.MIXED}</span>
+        <span className="ref-r5-weak">Weak {r5Coverage.counts.WEAK}</span>
+        <span>Not rated {r5Coverage.counts.UNAVAILABLE}</span>
+        <small>{r5Coverage.counts.peer} peer-ranked · {r5Coverage.counts.trajectory} own-trend · separate assessment methods</small>
+      </section>
       {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
       <div className="results-matrix-shell" aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}>
@@ -406,15 +449,18 @@ export function ResultsLivePage() {
             {visible.map((entry) => <tr key={entry.position.securityId}><th scope="row" className="stock-column">{entry.position.symbol}<small>{entry.position.industry ?? "Unclassified"} · {entry.kind === "CURRENT" ? "Current" : "Closed"}</small></th>{periods.map((p) => {
               const rows = forQuarter(observations, entry.position.securityId, p.end)
               const primary = primaryObservation(rows, isBank(entry.position.industry) || hasBankMetrics(rows))
-              const status = resultStatus(observations, entry, p.end, industryCalibrations)
+              const outcome = gradeQuarterR5(observations, entry.position.securityId, p.end,
+                entry.position.sector, entry.position.industry, industryCalibrations)
+              const status = outcome.status
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
-                type="button" aria-pressed={active} aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available")}
+                type="button" aria-pressed={active} title={outcome.explanation}
+                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
-                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span>
+                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{status === "UNAVAILABLE" ? "—" : statusName(status)}</small>
               </button></td>
             })}</tr>)}
             {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
