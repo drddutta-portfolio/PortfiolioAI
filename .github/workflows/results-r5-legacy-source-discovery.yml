@@ -73,3 +73,27 @@ jobs:
             result.append(outcome)
           print(json.dumps(result,indent=2))
           PY
+
+      - name: Inspect official original XML numeric contexts and units
+        shell: bash
+        run: |
+          python - <<'PY'
+          import requests,xml.etree.ElementTree as ET,json
+          url="https://nsearchives.nseindia.com/corporate/xbrl/INDAS_117297_1348248_16012025081520.xml"
+          r=requests.get(url,timeout=25)
+          if not r.ok or len(r.content)>5000000:raise SystemExit("ORIGINAL_NOT_READABLE")
+          root=ET.fromstring(r.content)
+          def local(tag):return tag.split("}")[-1]
+          tags=("RevenueFromOperations","ProfitLossForPeriod","DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+            "DateOfStartOfReportingPeriod","DateOfEndOfReportingPeriod","NameOfCompany",
+            "ISIN","NatureOfReportStandaloneConsolidated","LevelOfRoundingUsedInFinancialResults")
+          selected=[]
+          for x in root:
+            if local(x.tag) in tags:
+              selected.append({"tag":local(x.tag),"value":(x.text or "")[:75],"contextRef":x.attrib.get("contextRef"),"unitRef":x.attrib.get("unitRef"),"decimals":x.attrib.get("decimals")})
+          units=[]
+          for x in root:
+            if local(x.tag)=="unit":
+              units.append({"id":x.attrib.get("id"),"measures":[(e.text or "") for e in x.iter() if local(e.tag)=="measure"]})
+          print(json.dumps({"observations":selected[:24],"units":units[:10]},indent=2))
+          PY
