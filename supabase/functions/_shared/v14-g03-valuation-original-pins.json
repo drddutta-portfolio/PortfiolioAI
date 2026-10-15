@@ -25,9 +25,9 @@
     "extension": "xml",
     "document_type": "QUARTERLY_RESULT",
     "source_code": "COMPANY_EXCHANGE_FILING",
-    "title": "BEL_STANDALONE_31-MAR-2026",
-    "identity_fragment": "Bharat Electronics Limited | BEL | 500049 | INE263A01024",
-    "first_observed_at": "2026-10-15T14:35:00.000Z",
+    "title": "BEL_FY2026_NSE_STANDALONE_ORIGINAL_XBRL",
+    "identity_fragment": "Bharat Electronics Limited | BEL | 500049 | Standalone",
+    "first_observed_at": "2026-10-15T13:15:00.000Z",
     "published_at": null,
     "publication_precision": "UNKNOWN"
   },

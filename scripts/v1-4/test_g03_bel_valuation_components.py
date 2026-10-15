@@ -8,6 +8,12 @@ ROOT = Path('supabase/functions/_shared')
 
 
 class BelDatedValuationQualification(unittest.TestCase):
+    def test_reused_original_keeps_its_existing_canonical_pin_metadata(self):
+        old = {p['original_sha256']: p for name in ['v14-g03-debt-original-pins.json', 'v14-g03-original-pins.json'] for p in json.loads((ROOT / name).read_text())}
+        for pin in json.loads((ROOT / 'v14-g03-valuation-original-pins.json').read_text()):
+            if pin['original_sha256'] in old:
+                self.assertEqual(pin, old[pin['original_sha256']])
+
     def fixture(self):
         batch = json.loads((ROOT / 'v14-g03-valuation-review-batch.json').read_text())
         originals = {c['originalSha256']: (Path('scripts/v1-4/fixtures/g03-bel-valuations') / (c['originalSha256'] + '.json')).read_bytes() for c in batch['catalogs']}
