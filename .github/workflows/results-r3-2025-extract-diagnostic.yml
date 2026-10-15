@@ -42,6 +42,22 @@ jobs:
                 try:
                   root=ET.fromstring(xml.content)
                   print('XML_SHAPE',name,root.tag,'elements',len(root),'first_tags',[node.tag.rsplit('}',1)[-1] for node in list(root)[:12]])
+                  from pathlib import Path
+                  spec2=importlib.util.spec_from_file_location('legacy',os.path.join('scripts','results','r3-legacy-2025-xbrl.py'))
+                  legacy=importlib.util.module_from_spec(spec2);spec2.loader.exec_module(legacy)
+                  strings={}
+                  for e in root.iter():
+                    tag=e.tag.rsplit('}',1)[-1]
+                    if tag in ('ISIN','Symbol','NSESymbol') and e.text: strings.setdefault(tag,set()).add(e.text.strip())
+                  print('XML_IDENTITIES',name,{k:sorted(v)[:3] for k,v in strings.items()})
+                  end='2025-06-30' if entry.get('qe_Date')=='30-JUN-2025' else '2025-03-31'
+                  meta={'symbol':name,'isin':sorted(strings.get('ISIN',[]))[0] if len(strings.get('ISIN',[]))==1 else None,
+                    'fromDate':'01-Apr-2025' if end=='2025-06-30' else '01-Jan-2025',
+                    'toDate':'30-Jun-2025' if end=='2025-06-30' else '31-Mar-2025',
+                    'consolidated':entry.get('consolidated')}
+                  parsed,err=legacy.extract(xml.content,meta,name,meta.get('isin'))
+                  print('LEGACY_XML_PARSER',name,end,'scope',meta['consolidated'],
+                    sorted(parsed.get('facts',{})) if parsed else [],err)
                 except ET.ParseError as e: print('XML_UNPARSEABLE',name,str(e)[:100])
             for link in links[:3]:
               try:
