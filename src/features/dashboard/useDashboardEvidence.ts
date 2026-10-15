@@ -95,12 +95,13 @@ export function useDashboardNewsFeed(portfolioId: string | null, limit: number) 
 
   useEffect(() => {
     let active = true
-    if (!portfolioId) return () => { active = false }
-    void loadDashboardNewsFeed(portfolioId, limit)
+    const stablePortfolioId = portfolioId
+    if (!stablePortfolioId) return () => { active = false }
+    void loadDashboardNewsFeed(stablePortfolioId, limit)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
     const timer = window.setInterval(() => {
-      void loadDashboardNewsFeed(portfolioId, limit)
+      void loadDashboardNewsFeed(stablePortfolioId, limit)
         .then((data) => { if (active) setState({ key, data, error: null }) })
         .catch((reason: unknown) => { if (active) setState((previous) => ({
           key, data: previous?.key === key ? previous.data : [], error: displayError(reason),
