@@ -1,0 +1,43 @@
+name: Results R3 BSE HDFC Original Scope and EPS Proof
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-hdfc-financial-scope-proof.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install -r vendor/bseindiaapi/requirements.txt 'pymupdf==1.26.5'
+      - name: Independently inspect BSE HDFC 2024 standalone and consolidated finance tables
+        run: |
+          python - <<'PY'
+          import fitz,sys,json,re
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          sources=[('2024-09-30','c9b4cb4c-088b-4a88-a6b7-91087ba90d95.pdf'),
+                   ('2024-12-31','8e326f69-8061-4281-bc39-d8ac639479bd.pdf')]
+          needle=('standalone financial results','consolidated financial results','interest earned',
+                  'interest expended','net profit for the period','diluted eps',
+                  'earnings per share','quarter ended','net interest income','total income')
+          with PortfolioBSE() as b:
+            for period,file in sources:
+              raw,meta=b.retrieve_original_pdf(file)
+              doc=fitz.open(stream=raw,filetype='pdf')
+              for n,page in enumerate(doc):
+                txt=page.get_text('text',sort=True)
+                if 'FINANCIAL RESULTS FOR THE QUARTER' not in txt.upper() and 'INTEREST EARNED' not in txt.upper():continue
+                lines=[' '.join(s.split()) for s in txt.splitlines() if s.strip()]
+                relevant=[v[:240] for v in lines if any(t in v.lower() for t in needle)]
+                if relevant:
+                  print('HDFC_2024_ORIGINAL_TABLE='+json.dumps({
+                    'period':period,'page':n+1,'head':lines[:16],
+                    'metrics':relevant[:26],
+                    'pdf_sha256':meta['sha256']
+                  }),flush=True)
+          PY
