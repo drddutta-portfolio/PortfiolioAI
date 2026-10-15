@@ -390,6 +390,11 @@ def listing_urls(payload, symbol):
     for item in records:
         if not isinstance(item,dict):continue
         if item.get("symbol",item.get("Symbol")) not in (symbol,None):continue
+        # R5: official NSE catalog quarter dates prune irrelevant documents.
+        # They are discovery hints ONLY; period/scope still must be proven
+        # by the retrieved original filing before any admission.
+        if R5_HISTORY_MODE and str(item.get("qe_Date","")).upper() not in ("31-MAR-2025","30-JUN-2025"):
+            continue
         for attr in ("ixbrl","ixbrlUrl","originalUrl","xbrlFile","xbrl","xbrlUrl","xmlFile","link","url"):
             url=item.get(attr)
             if not isinstance(url,str) or not url.startswith("https://"):continue
