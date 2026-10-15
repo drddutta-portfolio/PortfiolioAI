@@ -38,7 +38,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check --no-cache-dir 'boto3==1.40.46' 'psycopg[binary]==3.2.10'
       - name: Source contract regressions
         run: |
-          python scripts/results/test_r4_verify_quarterly.py -v
+          env -u RESULTS_R5_COMPARISON_SELECTION -u RESULTS_R5_HISTORICAL_ACK python scripts/results/test_r4_verify_quarterly.py -v
           python -m py_compile scripts/results/r4-verify-quarterly.py
       - name: Validate R2 hashes and select 2025 original evidence
         run: |
