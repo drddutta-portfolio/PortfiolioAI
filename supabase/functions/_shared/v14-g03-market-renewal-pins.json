@@ -1,0 +1,104 @@
+{
+  "version": "G03_BEL_HISTORY_RENEWAL_V1",
+  "through": "2026-10-14",
+  "calendarDecisionId": "8901d258-6be7-43ec-8d41-6265860542e4",
+  "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "symbol": "BEL",
+  "isin": "INE263A01024",
+  "stockParent": "7ea9b34f-6d16-4c8f-95f3-7e2a23b22148",
+  "benchmarks": [
+    {
+      "code": "NIFTY_INDIA_DEFENCE",
+      "identity": "Nifty India Defence",
+      "base": "1b34c07c-6924-4c73-a769-e50b2b8c7f3e",
+      "parent": "113cff13-d14d-4e8b-9dc5-ba01c7443601"
+    },
+    {
+      "code": "NIFTY_CAPITAL_GOODS",
+      "identity": "Nifty Capital Goods",
+      "base": "8f25c5c4-f740-406a-853d-60f8ee0499c8",
+      "parent": "66344f11-c6bd-50b4-a3bf-3dd20d2c28d8"
+    }
+  ],
+  "sources": [
+    {
+      "hash": "fb867de164347563318faa077c2f1cf059a21d1a43fd42a136ec1bdf08128e98",
+      "bytes": 17703,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_07102026.csv",
+      "session": "2026-10-07",
+      "r2_key": "portfolioai-history/development/v1-4/g02/history-tail/fb867de164347563318faa077c2f1cf059a21d1a43fd42a136ec1bdf08128e98.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "9215.35",
+        "NIFTY_CAPITAL_GOODS": "16651.27"
+      }
+    },
+    {
+      "hash": "c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512",
+      "bytes": 17939,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_08102026.csv",
+      "session": "2026-10-08",
+      "r2_key": "portfolioai-history/development/v1-4/g02/history-tail/c3b14c2d31bc95afca4af696dc871430f6349797e0dedfded154aeabf35e3512.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "8961.25",
+        "NIFTY_CAPITAL_GOODS": "16137.42"
+      }
+    },
+    {
+      "hash": "7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01",
+      "bytes": 17585,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_09102026.csv",
+      "session": "2026-10-09",
+      "r2_key": "portfolioai-history/development/v1-4/g02/history-tail/7b2b7c2ea5385e66fe87376b61ccb3492f94f300e4daaca9a972dd96d3211b01.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "9006.65",
+        "NIFTY_CAPITAL_GOODS": "16195.87"
+      }
+    },
+    {
+      "hash": "e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621",
+      "bytes": 17552,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_12102026.csv",
+      "session": "2026-10-12",
+      "r2_key": "portfolioai-history/development/v1-4/g02/history-tail/e8e8f6ec16018d437c97aa302c17aae033d262b1a030101ecdf887d1be4ee621.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "9122.1",
+        "NIFTY_CAPITAL_GOODS": "16398.32"
+      }
+    },
+    {
+      "hash": "875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696",
+      "bytes": 17563,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_13102026.csv",
+      "session": "2026-10-13",
+      "r2_key": "portfolioai-history/development/v1-4/g02/history-tail/875c9cf4c4c23780de2047eae5cd28f5afc78a83750be13c699815d6c3aa8696.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "9250.5",
+        "NIFTY_CAPITAL_GOODS": "16504.52"
+      }
+    },
+    {
+      "hash": "75601d5a604849664a236b4ac789297c5c8ed77c3f7b869bde9a5c19f3202240",
+      "bytes": 17614,
+      "extension": "csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_14102026.csv",
+      "session": "2026-10-14",
+      "r2_key": "portfolioai-history/development/v1-4/g03/history-tail/75601d5a604849664a236b4ac789297c5c8ed77c3f7b869bde9a5c19f3202240.csv",
+      "closes": {
+        "NIFTY_INDIA_DEFENCE": "9294.1",
+        "NIFTY_CAPITAL_GOODS": "16556.69"
+      }
+    },
+    {
+      "hash": "a58d84557fdb068ac2d6bb407e5a84443129416d6bc15f68977dce8e50921ee1",
+      "bytes": 3523,
+      "extension": "json",
+      "url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=08-10-2026&to_date=14-10-2026",
+      "r2_key": "portfolioai-history/development/v1-4/g03/history-tail/a58d84557fdb068ac2d6bb407e5a84443129416d6bc15f68977dce8e50921ee1.json"
+    }
+  ]
+}

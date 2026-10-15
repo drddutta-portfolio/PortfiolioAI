@@ -1,0 +1,47 @@
+name: G03 Governed BEL-Only Market Tail
+on:
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-bel-market-history.yml]
+  workflow_dispatch:
+    inputs:
+      sessionDate:
+        description: Verified completed NSE OPEN session
+        required: true
+        default: '2026-10-14'
+      calendarDecisionId:
+        description: Retained authoritative NSE OPEN decision record
+        required: true
+        default: '8901d258-6be7-43ec-8d41-6265860542e4'
+permissions:
+  contents: read
+jobs:
+  acquire:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-22.04
+    environment: PortfolioAI-Development
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install boto3==1.35.99
+      - name: Single governed acquisition with zero provider retries
+        env:
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          G03_SESSION_DATE: ${{ inputs.sessionDate }}
+          G03_CALENDAR_DECISION_ID: ${{ inputs.calendarDecisionId }}
+        run: python scripts/v1-4/g03_bel_market_history.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-bel-governed-market-history
+          path: g03-bel-market-history-result/
+          retention-days: 90
+          if-no-files-found: ignore

@@ -1,3 +1,7 @@
+## BEL controlled market continuation prepared — 15 October 2026
+
+A separate BEL-only scope now extends the existing governed history controller: one history call, zero automatic retries, unchanged grant/lease/provider controls and no automatic canonical promotion. Exact retained NSE index/corporate-action originals support the proposed proof renewal; actual execution and canonical readback remain pending. BEL remains seven blockers, with ROCE and both documentary requirements FRESH. No migrations or scheduler/Production/main changes are proposed. [Bounded execution record](private/v1-4-industry-batches/G03_BEL_Market_Repair_Execution_2026-10-15.md).
+
 ## G03 BEL ROCE blocker cleared and persisted FRESH — 15 October 2026
 
 Actual fixed qualification run **38630932251 SUCCESS** admitted the three verified standalone issuer ROCE facts after original-byte/cell/identity verification and controlled issuer-authority registration. Repeated admission is idempotent. Canonical run **38631774679 SUCCESS** required ROCE and both documentary requirements FRESH before using the BEL-only zero-provider grant; one snapshot/selection was appended and grant replay was rejected.

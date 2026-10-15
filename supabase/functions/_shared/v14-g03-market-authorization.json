@@ -1,0 +1,16 @@
+{
+  "version": "G03_BEL_MARKET_TAIL_V1",
+  "ownerInstruction": "Pleae continue and clear all the blockss from BEL and report.",
+  "directiveSha256": "958068565890e91879b496c5bfc75da172d7cd325d0bb1f3e863efd36df28521",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityIds": [
+    "fdec39e9-08a7-418d-ae96-9d8ce834d26c"
+  ],
+  "executor": "GITHUB_ACTIONS_OIDC_NOT_OWNER_SESSION",
+  "sourceImportDoesNotApproveFinancialEvidence": true,
+  "productionAllowed": false,
+  "providerHistoryCallLimit": 1,
+  "automaticRetries": 0
+}
