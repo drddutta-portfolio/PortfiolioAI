@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js'
+import {Decimal} from 'decimal.js'
 import policy from './v14-g03-financial-authorization.json' with {type:'json'}
 export {policy as G03_FINANCIAL_POLICY}
 export const G03_CASH_KIND='DELEGATED_G03_APPROVED_CASH_COMPONENT_REVIEW'
