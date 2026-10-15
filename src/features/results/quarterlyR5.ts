@@ -144,8 +144,8 @@ export function explainQuarterlyComparisons(
         (amount.eq(0) ? "YoY" : "by " + amount.abs().toFixed(2) + "% YoY") + ".")
     }
   }
-  if (!comparisons.some(c => c.yoy !== null)) phrases.push("Prior-year qualified comparisons are not available; no YoY performance conclusion is drawn.")
   if (!phrases.length) phrases.push("No sufficiently qualified current-quarter core financial comparisons are available.")
+  if (!comparisons.some(c => c.yoy !== null)) phrases.push("Prior-year qualified comparisons are not available; no YoY performance conclusion is drawn.")
   phrases.push("Thesis impact: Not assessed. No investment recommendation or V1-4 research score is inferred.")
   return phrases
 }
