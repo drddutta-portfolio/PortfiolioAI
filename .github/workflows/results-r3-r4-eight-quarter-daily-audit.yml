@@ -1,0 +1,91 @@
+name: Results R3-R4 Eight-Quarter Daily Coverage Audit
+on:
+  schedule:
+    - cron: '30 1 * * *'
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-r4-eight-quarter-daily-audit.yml
+permissions:
+  contents: read
+concurrency:
+  group: results-eight-quarter-coverage-dev
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      PORTFOLIO_ID: "6193a4aa-3235-4057-bddc-209fcf443fc2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fail closed without Development database connection
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_DB_URL" || { echo "MISSING_DEV_DB_SECRET"; exit 1; }
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo "NOT_DEVELOPMENT_DB"; exit 1; }
+      - name: Install database readback adapter
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10'
+      - name: Reconcile all 262 portfolio identities, all eight periods, selected facts and unsupported slots
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-eight-quarter
+          python - <<'PY'
+          import json, os, datetime
+          import psycopg
+          dates=['2024-09-30','2024-12-31','2025-03-31','2025-06-30','2025-09-30','2025-12-31','2026-03-31','2026-06-30']
+          sql="""
+          WITH universe AS (
+            SELECT DISTINCT s.id,s.symbol FROM public.transactions t
+            JOIN public.securities s ON s.id=t.security_id
+            WHERE t.portfolio_id=%s AND s.asset_class='EQUITY'
+          ), dates AS (SELECT unnest(%s::date[]) period_end),
+          evidence AS (
+            SELECT f.security_id,f.period_end,count(*) obs_count
+            FROM public.fundamental_observations f JOIN universe u ON u.id=f.security_id
+            WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
+            GROUP BY 1,2
+          ), selected AS (
+            SELECT d.security_id,d.period_end,count(*) selected_count
+            FROM public.fundamental_observation_decisions d
+            JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+            JOIN universe u ON u.id=d.security_id
+            WHERE d.period_type='QUARTER' AND d.period_end=ANY(%s::date[])
+              AND f.security_id=d.security_id AND f.period_end=d.period_end
+            GROUP BY 1,2
+          )
+          SELECT dates.period_end::text, count(*) total,
+                 count(*) FILTER(WHERE e.obs_count>0) with_observations,
+                 count(*) FILTER(WHERE s.selected_count>0) with_selection,
+                 coalesce(sum(s.selected_count),0) selected_facts
+          FROM dates CROSS JOIN universe u
+          LEFT JOIN evidence e ON e.security_id=u.id AND e.period_end=dates.period_end
+          LEFT JOIN selected s ON s.security_id=u.id AND s.period_end=dates.period_end
+          GROUP BY dates.period_end ORDER BY dates.period_end
+          """
+          with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
+            with db.cursor() as cur:
+              cur.execute(sql,(os.environ['PORTFOLIO_ID'],dates,dates,dates))
+              rows=[dict(zip(['period_end','total','with_observations','with_selection','selected_facts'],r)) for r in cur.fetchall()]
+          assert len(rows)==8
+          assert all(row['total']>0 for row in rows)
+          result={'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             'scope':'Development-only, read-only audit; NOT an acquisition or daily scanner acceptance',
+             'stock_count':rows[0]['total'],'potential_company_quarter_slots':sum(r['total'] for r in rows),
+             'periods':rows,'source_mutations':0,'provider_fetches':0}
+          with open('tmp/results-eight-quarter/coverage.json','w') as file: json.dump(result,file,indent=2)
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Upload read-only daily coverage evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-eight-quarter-dev-coverage
+          path: tmp/results-eight-quarter/coverage.json
+          retention-days: 30
