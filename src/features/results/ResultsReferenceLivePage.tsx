@@ -222,26 +222,82 @@ function MetricsCard({ period, rows, allRows, securityId }: { readonly period: P
   </section>
 }
 
-function InsightCard({ entry, rows, allRows, periodEnd, calibrations }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly periodEnd: string; readonly calibrations: R5IndustryCalibrations }) {
+function InsightCard({ entry, rows, allRows, periodEnd, calibrations, expanded, onToggle }: {
+  readonly entry: Entry
+  readonly rows: readonly ResultsSourceObservation[]
+  readonly allRows: readonly ResultsSourceObservation[]
+  readonly periodEnd: string
+  readonly calibrations: R5IndustryCalibrations
+  readonly expanded: boolean
+  readonly onToggle: () => void
+}) {
   const outcome = gradeQuarterR5(allRows, entry.position.securityId, periodEnd, entry.position.sector, entry.position.industry, calibrations)
-  const explanations = explainQuarterlyComparisons(compareQuarterMetrics(allRows, entry.position.securityId, periodEnd), isBank(entry.position.industry) || hasBankMetrics(rows))
-  const selectedCount = rows.filter((r) => r.selected).length
-  let summary = "Quarterly operating data is not yet sufficient for a reliable performance assessment."
-  if (selectedCount > 0 && outcome.status !== "UNAVAILABLE") {
-    summary = outcome.explanation
-  } else if (selectedCount > 0) {
-    summary = outcome.explanation
-  } else if (rows.length > 0) {
-    summary = rows.length + " stored quarterly observation" + (rows.length === 1 ? "" : "s") + " available. Verification is pending."
-  }
-  return <section className="results-card ref-insight">
+  const comparisons = compareQuarterMetrics(allRows, entry.position.securityId, periodEnd)
+  const findings = explainQuarterlyComparisons(comparisons, isBank(entry.position.industry) || hasBankMetrics(rows))
+    .filter((phrase) => /^(Revenue|Net interest income|Profit after tax)/.test(phrase))
+  const selectedCount = rows.filter((row) => row.selected).length
+  const summary = findings.length ? findings.slice(0, 2).join(" ")
+    : selectedCount ? "Selected quarterly figures are available, but qualified growth comparisons cannot yet be established."
+    : rows.length ? "Stored quarterly observations await source verification."
+    : "Quarterly data is not yet sufficient for a reliable assessment."
+  return <section className="results-card ref-insight" aria-label="AI Insight summary">
     <div className="results-card-heading"><h3><span className="ref-sparkle" aria-hidden="true">✦</span> AI Insight</h3><span className="ref-insight-tag">Evidence-based</span></div>
-    <p className="ref-grade-method">{outcome.basis === "INDUSTRY_PEER" ? "Method: Industry peer percentile" : outcome.basis === "COMPANY_TREND" ? "Method: Company trend · not peer-ranked" : "Method: Not rated · data or industry qualification unavailable"}</p>
-    <div className="ref-insight-summary"><strong>{summary}</strong><span>{outcome.status === "UNAVAILABLE" ? "Thesis impact: Not assessed" : "QoQ-calibrated · Thesis not assessed"}</span></div>
-    <ul>
-      {explanations.map((phrase, index) => <li key={index}>{phrase}</li>)}
-      <li>No investment recommendation or V1-4 score is inferred.</li>
-    </ul>
+    <div className="ref-insight-statuses">
+      <div><span>Quarterly Results</span><strong className={"ref-insight-grade ref-insight-grade-" + outcome.status.toLowerCase()}>{statusName(outcome.status)}</strong></div>
+      <div><span>Investment Action</span><strong className="ref-insight-unassessed">Not assessed</strong></div>
+    </div>
+    <p className="ref-insight-text">{summary}</p>
+    <p className="ref-insight-disclaimer">Investment decision analysis is planned; no ADD, BUY, HOLD, WATCH or EXIT signal has been generated.</p>
+    <div className="ref-insight-actions">
+      <span>QoQ evidence · {outcome.basis === "INDUSTRY_PEER" ? "Industry calibrated" : outcome.basis === "COMPANY_TREND" ? "Company trend" : "Not rated"}</span>
+      <button type="button" aria-controls="ref-full-ai-analysis" aria-expanded={expanded} onClick={onToggle}>
+        {expanded ? "Hide Full Analysis" : "View Full Analysis"} <span aria-hidden="true">{expanded ? "↑" : "↗"}</span>
+      </button>
+    </div>
+  </section>
+}
+
+function FullAiAnalysis({ entry, period, rows, allRows, calibrations }: {
+  readonly entry: Entry
+  readonly period: Period
+  readonly rows: readonly ResultsSourceObservation[]
+  readonly allRows: readonly ResultsSourceObservation[]
+  readonly calibrations: R5IndustryCalibrations
+}) {
+  const outcome = gradeQuarterR5(allRows, entry.position.securityId, period.end, entry.position.sector, entry.position.industry, calibrations)
+  const statements = explainQuarterlyComparisons(
+    compareQuarterMetrics(allRows, entry.position.securityId, period.end),
+    isBank(entry.position.industry) || hasBankMetrics(rows),
+  ).filter((phrase) => !phrase.startsWith("Thesis impact:"))
+  const qualified = rows.filter((row) => row.selected)
+  return <section id="ref-full-ai-analysis" className="ref-full-ai-analysis" aria-label="Full AI Analysis">
+    <div className="ref-full-ai-heading">
+      <div><h3>Full AI Analysis — {entry.position.symbol} · {period.label}</h3>
+        <p>Financial evidence currently available; investment intelligence features will be added in AI-1 through AI-8.</p></div>
+      <span className="ref-ai-build-state">UI preview · No investment signal</span>
+    </div>
+    <div className="ref-full-ai-grid">
+      <section><h4>01 · Executive Summary</h4><p>{outcome.explanation}</p></section>
+      <section><h4>02 · Financial Performance</h4>
+        {statements.length ? <ul>{statements.map((line, index) => <li key={index}>{line}</li>)}</ul> : <p>Qualified quarterly comparisons are not yet available.</p>}</section>
+      <section><h4>03 · Historical Comparison</h4><p>Four-quarter trend analysis and historical earnings-quality interpretation are planned for AI-2. The current metrics panel remains the source for verified quarterly values.</p></section>
+      <section><h4>04 · Industry Comparison</h4>
+        <p>{outcome.basis === "INDUSTRY_PEER" ? "Exact-industry quarterly calibration using " + outcome.sampleSize + " qualified quarter pairs. This is a performance grade, not an investment rating."
+          : outcome.basis === "COMPANY_TREND" ? "Company-only directional trend. Exact-industry peer ranking is not available."
+          : "A qualified industry or company-trend comparison is not available."}</p></section>
+      <section><h4>05 · Valuation Analysis</h4><p>Not assessed. Valuation, prices, share basis and point-in-time financial denominators must be qualified before an investment action can be suggested.</p></section>
+      <section><h4>06 · Management Commentary</h4><p>Not connected yet. Original filings, earnings calls and management guidance will be cited with publication dates where available.</p></section>
+      <section><h4>07 · Risks &amp; Opportunities</h4><p>Not assessed. The planned engine will explain supported business risks, earnings quality, sector conditions and relevant portfolio exposure.</p></section>
+      <section className="ref-ai-investment-section"><h4>08 · Investment Recommendation</h4>
+        <strong>Not assessed — insufficient decision evidence</strong>
+        <p>Future actions: ADD / BUY / HOLD / WATCH / EXIT, with evidence, confidence and portfolio context. A quarterly grade alone never triggers an action.</p></section>
+    </div>
+    <details className="ref-ai-methodology">
+      <summary>Methodology &amp; evidence</summary>
+      <div><p>Quarterly methodology: {outcome.basis === "INDUSTRY_PEER" ? "exact-industry peer comparison" : outcome.basis === "COMPANY_TREND" ? "own-company trend, not peer-ranked" : "not rated"} · {outcome.scope} · {outcome.policyVersion}.</p>
+        <p>{qualified.length} selected observations in this quarter; {rows.length - qualified.length} observations pending review. Performance comparisons do not establish point-in-time investment valuation.</p>
+        <p>V1-4 readiness and research scores are unchanged. Missing or unpublished evidence is not treated as verified. Full source details remain in Source &amp; verification details below.</p></div>
+    </details>
   </section>
 }
 
@@ -276,6 +332,7 @@ export function ResultsLivePage() {
   const [selection, setSelection] = useState<Selection | null>(null)
   const [preview, setPreview] = useState<Preview | null>(null)
   const [collapsed, setCollapsed] = useState(false)
+  const [insightExpanded, setInsightExpanded] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
   const periods = useMemo(() => makePeriods(), [])
 
@@ -485,8 +542,9 @@ export function ResultsLivePage() {
           <PortfolioCard entry={chosen} currency={portfolio.portfolio.currency}/>
           <ChartCard entry={chosen} periods={periods} observations={observations} selectedPeriodEnd={period.end}/>
           <MetricsCard period={period} rows={detailRows} allRows={observations} securityId={chosen.position.securityId}/>
-          <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end} calibrations={industryCalibrations}/>
+          <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end} calibrations={industryCalibrations} expanded={insightExpanded} onToggle={() => setInsightExpanded((value) => !value)}/>
         </div>
+        {insightExpanded ? <FullAiAnalysis entry={chosen} period={period} rows={detailRows} allRows={observations} calibrations={industryCalibrations}/> : null}
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
       <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
