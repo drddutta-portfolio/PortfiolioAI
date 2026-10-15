@@ -91,3 +91,5 @@ jobs:
           path: tmp/results-r3-2025/*.json
           if-no-files-found: warn
           retention-days: 21
+
+# R3 acquisition pilot replay after 2025 compact-XBRL R4 contract qualification fix.
