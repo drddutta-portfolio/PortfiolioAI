@@ -43,7 +43,7 @@ class LegacyTests(unittest.TestCase):
   self.assertIsNone(x);self.assertEqual(e,"INVALID_2024_QUARTER")
  def test_unknown_currency(self):
   x,e=module.extract(xml(currency="iso4217:USD"),METADATA,"RELIANCE","INE002A01018")
-  self.assertIsNone(x);self.assertEqual(e,"NO_QUALIFIED_FINANCIAL_FACTS") if False else self.assertNotIn("OPERATING_REVENUE_QUARTER",x["facts"])
+  self.assertIsNone(e);self.assertNotIn("OPERATING_REVENUE_QUARTER",x["facts"])
  def test_context_dimension_not_accepted(self):
   x,e=module.extract(xml(dimensions=True),METADATA,"RELIANCE","INE002A01018")
   self.assertIsNone(x);self.assertEqual(e,"SOURCE_QUARTER_CONTEXT_MISSING")
