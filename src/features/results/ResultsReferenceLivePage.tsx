@@ -4,6 +4,7 @@ import { usePortfolioView } from "../portfolio/usePortfolioView"
 import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
 import { assessQuarterlyPerformance } from "./quarterlyPerformance"
+import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparisons } from "./quarterlyR5"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
 import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
@@ -183,7 +184,7 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
   </section>
 }
 
-function MetricsCard({ period, rows }: { readonly period: Period; readonly rows: readonly ResultsSourceObservation[] }) {
+function MetricsCard({ period, rows, allRows, securityId }: { readonly period: Period; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly securityId: string }) {
   return <section className="results-card ref-metrics">
     <div className="results-card-heading"><h3>Key Metrics ({period.label})</h3></div>
     <div className="metrics-table-wrap">
@@ -191,7 +192,7 @@ function MetricsCard({ period, rows }: { readonly period: Period; readonly rows:
         <thead><tr><th>Metric</th><th>Reported</th><th>QoQ</th><th>YoY</th></tr></thead>
         <tbody>{rows.length ? rows.map((r) => <tr key={r.id}>
           <th>{LABELS[r.code] ?? r.code}<small>{r.selected ? (r.publishedAt ? "Source reconciled" : "Source reconciled · publication unverified") : "Review pending"}</small></th>
-          <td>{formattedValue(r)}</td><td>—</td><td>—</td>
+          <td>{formattedValue(r)}</td><td>{compareQuarterMetric(allRows, securityId, period.end, r.code).qoq === null ? "—" : compareQuarterMetric(allRows, securityId, period.end, r.code).qoq + "%"}</td><td>{compareQuarterMetric(allRows, securityId, period.end, r.code).yoy === null ? "—" : compareQuarterMetric(allRows, securityId, period.end, r.code).yoy + "%"}</td>
         </tr>) : <tr><td colSpan={4} className="ref-no-data">No quarter-specific metrics in the connected database.</td></tr>}</tbody>
       </table>
     </div>
@@ -199,8 +200,9 @@ function MetricsCard({ period, rows }: { readonly period: Period; readonly rows:
   </section>
 }
 
-function InsightCard({ entry, rows }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[] }) {
+function InsightCard({ entry, rows, allRows, periodEnd }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly periodEnd: string }) {
   const outcome = assessQuarterlyPerformance(rows, entry.position.industry)
+  const explanations = explainQuarterlyComparisons(compareQuarterMetrics(allRows, entry.position.securityId, periodEnd), isBank(entry.position.industry) || hasBankMetrics(rows))
   const selectedCount = rows.filter((r) => r.selected).length
   let summary = "Quarterly operating data is not yet sufficient for a reliable performance assessment."
   if (selectedCount > 0 && outcome.status !== "INSUFFICIENT_DATA") {
@@ -216,9 +218,7 @@ function InsightCard({ entry, rows }: { readonly entry: Entry; readonly rows: re
     <div className="results-card-heading"><h3><span className="ref-sparkle" aria-hidden="true">✦</span> AI Insight</h3><span className="ref-insight-tag">Evidence-based</span></div>
     <div className="ref-insight-summary"><strong>{summary}</strong><span>{outcome.status === "INSUFFICIENT_DATA" ? "Thesis impact: Not assessed" : "Quarterly operating signal only"}</span></div>
     <ul>
-      {rows.length > 0 ? rows.slice(0, 3).map((r) =>
-        <li key={r.id}>{LABELS[r.code] ?? r.code}: {formattedValue(r)} {r.selected ? "(selected)" : "(review pending)"}</li>)
-        : <li>Check again when a quarter-specific financial report is available.</li>}
+      {explanations.map((phrase, index) => <li key={index}>{phrase}</li>)}
       <li>No investment recommendation or V1-4 score is inferred.</li>
     </ul>
   </section>
@@ -439,8 +439,8 @@ export function ResultsLivePage() {
         <div className="ref-analysis-grid">
           <PortfolioCard entry={chosen} currency={portfolio.portfolio.currency}/>
           <ChartCard entry={chosen} periods={periods} observations={observations} selectedPeriodEnd={period.end}/>
-          <MetricsCard period={period} rows={detailRows}/>
-          <InsightCard entry={chosen} rows={detailRows}/>
+          <MetricsCard period={period} rows={detailRows} allRows={observations} securityId={chosen.position.securityId}/>
+          <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end}/>
         </div>
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
