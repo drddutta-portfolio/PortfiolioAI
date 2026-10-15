@@ -77,4 +77,26 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     fireEvent.click(screen.getByRole("button",{name:"Clear Filters"}))
     await waitFor(()=>expect(screen.getByText("BANKTEST")).toBeInTheDocument())
   })
+  it("shows the R5 eligible-stock coverage and explicitly labels a sparse-peer bank as company trend", async () => {
+    mock.usePortfolio.mockReturnValue({portfolio,isLoading:false,error:null})
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    const quarters=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    mock.load.mockResolvedValue(quarters.flatMap((q,i)=>[
+      fact(q,"NET_INTEREST_INCOME_QUARTER",String(100+i*10)),
+      fact(q,"NET_PROFIT_QUARTER",String(20+i*5)),
+      { ...fact(q,"EPS_DILUTED",String(5+i)),unit:"INR_PER_SHARE" },
+    ]))
+    render(<ResultsLivePage />)
+    expect(await screen.findByText("1 stocks with four qualified quarters")).toBeInTheDocument()
+    const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
+    expect(within(coverage).getByText("Strong 1")).toBeInTheDocument()
+    expect(within(coverage).getByText(/0 peer-ranked · 1 own-trend/)).toBeInTheDocument()
+    const row=screen.getByText("BANKTEST").closest("tr")
+    const cell=row?.querySelector('button[aria-label*="Q1 FY27"]')
+    expect(cell).toHaveClass("ref-strong")
+    expect(cell?.getAttribute("aria-label")).toContain("COMPANY_TREND")
+    expect(screen.getByText(/Method: Company trend/)).toBeInTheDocument()
+    expect(screen.getAllByText("Strong").length).toBeGreaterThan(0)
+  })
+
 })
