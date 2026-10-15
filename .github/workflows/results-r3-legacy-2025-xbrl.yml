@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: results-r3-2025-legacy-originals-dev
+  group: results-r3-2025-three-issuer-proof-dev
   cancel-in-progress: false
 jobs:
   acquire:
