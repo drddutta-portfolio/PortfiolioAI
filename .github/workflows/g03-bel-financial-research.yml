@@ -4,7 +4,7 @@ on:
     inputs:
       research_kind:
         type: choice
-        options: [MARGIN, DEBT_VALUATION_DOCUMENTS, PARAMETER_CATALOG, PROFIT_PARAMETER_CATALOG, REVENUE_PARAMETER_CATALOG, EXACT_PROFIT_HISTORY, EXACT_REVENUE_HISTORY]
+        options: [MARGIN, DEBT_VALUATION_DOCUMENTS, PARAMETER_CATALOG, PROFIT_PARAMETER_CATALOG, REVENUE_PARAMETER_CATALOG, EXACT_PROFIT_HISTORY, EXACT_REVENUE_HISTORY, EXACT_PROFIT_Q5, EXACT_PROFIT_Q6]
         required: true
       parameters:
         description: JSON array of observed masked tokens for the exact-stock value action only

@@ -5,6 +5,8 @@ import policy from './v14-g03-financial-authorization.json' with {type:'json'}
 export const G03_BEL_RESEARCH_KIND='G03_BEL_APPROVED_FINANCIAL_RESEARCH_V1'
 const SOURCE='TRENDLYNE_MCP',BATCH='2026-10-15'
 const queries={
+ EXACT_PROFIT_Q5:'Single observed opqmq5 field for BEL, to disambiguate a contradictory provider display heading without relabelling the original response.',
+ EXACT_PROFIT_Q6:'Single observed opqmq6 field for BEL, to disambiguate a contradictory provider display heading without relabelling the original response.',
  PROFIT_PARAMETER_CATALOG:'Operating Profit Qtr; Operating Profit 1Q Ago; Operating Profit 2Q Ago; Operating Profit 3Q Ago; Operating Profit 4Q Ago; Operating Profit 5Q Ago; Operating Profit 6Q Ago; Operating Profit 7Q Ago.',
  REVENUE_PARAMETER_CATALOG:'Operating Revenue 1Qtr ago and latest reported quarterly result period end date, reporting basis standalone or consolidated.',
  EXACT_PROFIT_HISTORY:'Exact BEL quarterly operating profit fields resolved from retained provider parameter catalogs; no semantic stock search.',
@@ -40,7 +42,8 @@ async function exactParameters(db:SupabaseClient,body:Record<string,unknown>,kin
   if(c.error||c.data?.source_code!==SOURCE||c.data.record_kind!==G03_BEL_RESEARCH_KIND||c.data.raw_payload.security_id!==policy.securityId||!['PARAMETER_CATALOG','PROFIT_PARAMETER_CATALOG','REVENUE_PARAMETER_CATALOG'].includes(c.data.raw_payload.research_kind)||c.data.payload_hash!==await hashG02(c.data.raw_payload))throw Error('G03_RESEARCH_EXACT_PARAMETER_CATALOG_NOT_PROVEN')
   entries.push(...catalogRows(c.data.raw_payload.result))
  }
- const pattern=kind==='EXACT_PROFIT_HISTORY'?/^Operating Profit (?:Qtr|[1-7]Q(?:tr)? Ago)$/i:/^Operating Revenue (?:Qtr|[1-7]Q(?:tr)?s? ago)$/i
+ const pattern=kind.startsWith('EXACT_PROFIT_')?/^Operating Profit (?:Qtr|[1-7]Q(?:tr)? Ago)$/i:/^Operating Revenue (?:Qtr|[1-7]Q(?:tr)?s? ago)$/i
+ if(kind==='EXACT_PROFIT_Q5'&&(tokens.length!==1||tokens[0]!=='opqmq5')||kind==='EXACT_PROFIT_Q6'&&(tokens.length!==1||tokens[0]!=='opqmq6'))throw Error('G03_RESEARCH_SINGLE_OBSERVED_QUARTER_FIELD_REQUIRED')
  if(tokens.some(t=>!entries.some(e=>e.parameter===t&&pattern.test(e.helping_text.trim()))))throw Error('G03_RESEARCH_PARAMETER_NOT_IN_QUALIFIED_QUARTER_CATALOG')
  return {stock_codes:['BEL'],parameters:tokens as string[],catalog_source_ids:ids as string[]}
 }
