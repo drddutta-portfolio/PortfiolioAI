@@ -1,0 +1,40 @@
+name: Results R5-C and R5-D Acceptance
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-c-d-acceptance.yml
+      - src/features/results/quarterlyR5Classification.ts
+      - src/features/results/quarterlyR5Classification.test.ts
+      - src/features/results/ResultsReferenceLivePage.tsx
+      - src/features/results/ResultsReferenceLivePage.test.tsx
+      - src/features/results/ResultsReference.css
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c-d-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Architecture and TypeScript
+        run: |
+          npm run check:architecture
+          npm run typecheck
+      - name: Grading, 223-stock grid, original four-card UI and engine regression
+        run: npx vitest run src/features/results/quarterlyR5Classification.test.ts src/features/results/quarterlyR5.test.ts src/features/results/ResultsReferenceLivePage.test.tsx src/features/results/ResultsLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
+      - name: Changed component lint
+        run: npx eslint src/features/results/quarterlyR5Classification.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.tsx src/features/results/ResultsReferenceLivePage.test.tsx
+      - name: Compiled Development client
+        run: npm run build
+      - name: Check commit integrity
+        run: git diff --check HEAD^ HEAD
