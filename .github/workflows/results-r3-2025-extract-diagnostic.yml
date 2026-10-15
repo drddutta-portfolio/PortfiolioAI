@@ -43,6 +43,7 @@ jobs:
                   for row in rows:
                     if any('rounding' in str(c).lower() or 'in lakhs' in str(c).lower() or 'in crores' in str(c).lower() or 'in millions' in str(c).lower() for c in row):
                       snippets.append([str(c)[:100] for c in row[:5]])
+                print('BODY',name,'bytes',len(z.content),'type',z.headers.get('content-type'), 'start',z.text[:90].replace('\\n',' '))
                 print('UNIT_ROWS',name,json.dumps(snippets[:5]))
                 print('EXTRACT',name,parsed.get('period_end') if parsed else None,sorted(parsed.get('facts',{})) if parsed else [],reason)
               except Exception as e: print('ERROR',name,type(e).__name__,str(e)[:100])
