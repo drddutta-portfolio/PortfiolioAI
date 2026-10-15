@@ -1,0 +1,115 @@
+{
+  "before": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "selection_id": "da4bdc7e-c20a-477a-b2c4-7a6c29760f2a",
+      "snapshot_id": "0b15995b-9534-4d15-a82e-213b84e29ab8",
+      "selected_at": "2026-10-15 14:00:06.645735+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    }
+  ],
+  "after": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 10
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 10
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 8
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "selection_id": "2cea310c-095e-4070-a721-4d5dc2fc59cf",
+      "snapshot_id": "47664389-ea9c-4bce-aef2-a1f8183380b5",
+      "selected_at": "2026-10-15 20:34:48.805116+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "blockers": 1
+    }
+  ],
+  "otherSixUnchanged": true,
+  "executedRun": 38803021687,
+  "belPersistedMandatoryBlockers": 1,
+  "belReady": false
+}

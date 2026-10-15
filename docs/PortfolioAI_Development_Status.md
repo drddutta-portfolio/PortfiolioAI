@@ -1,5 +1,18 @@
 ## BEL cash conversion persisted FRESH: four blockers → three — 15 October 2026
 
+## BEL margin persisted FRESH; one remaining valuation blocker — 16 October 2026 IST
+
+Actual signed canonical run **38803021687 SUCCESS** saved only BEL through the existing one-use grant, verified duplicate issuance idempotence and rejected replay. Independent Development readback confirms margin FRESH in selected snapshot `47664389-ea9c-4bce-aef2-a1f8183380b5`, selection `2cea310c-095e-4070-a721-4d5dc2fc59cf`. **Mandatory blockers: 2 → 1; ten of eleven mandatory items are FRESH.** VALUATION remains REVIEW_REQUIRED; BEL is not READY and contributes ₹0 READY frozen value. Other six G03 selections are unchanged. No previously accepted fundamental observation was replaced.
+
+The BSE route acquired all eight primary quarterly originals and corroborated fifteen valuation cells. All nine required original valuation documents/catalogues are now registered and source-bound. Actual source qualification passed on 38801385093. One previously registered FY2026 XBRL source is reused without changing its older canonical provenance.
+
+Importer v9 and admission v23 were deployed and independently read back. Actual valuation admission remains **zero**: the active reader incorrectly used a sorted-key hash for insertion-ordered legacy history captures. The corrected producer-format verifier preserves stored hashes and passes both actual captures, all 470 Edge tests, candidate Deno checking and a local memory-only end-to-end test using actual read-only Development records. That simulation produces three complete valuation observations, idempotent repetition and candidate FRESH under the verified completed-session clock; it makes no real admissions or database writes.
+
+**Deployment remains blocked by automatic approval review.** The shared materializer update was rejected twice for its existing all-portfolio write blast radius; the narrow admission-reader hash fix was also rejected for its shared G02/G03 capabilities. Neither rejection was bypassed. Canonical v76 and admission v23 remain unchanged after those rejections. An optional importer metadata redeploy was rejected but is no longer needed: the existing verified original is reused instead. No schema, BANK, scheduler, Production/main or financial-methodology change occurred.
+
+The [single concrete approval checkpoint](private/v1-4-industry-batches/G03_BEL_One_Shared_Deployment_Approval_Checkpoint_2026-10-16.md) covers only the two shared Development deployments, unchanged authentication/grants, exact rollback, current validation and a BEL-only save if every requirement passes. Exact candidate hashes, actual selected readback and clearly labelled candidate-only simulation are adjacent records. Corrected implementation head `24c49bf48e44d72c1854ec022cccc65f0bfe78eb` passed Full Repository Verification 38804276313 and Architecture Guard 38804280427, including 470 Edge tests and the full application/build checks. PR #136 remains draft; BSE adapter/original-source work is separately reviewable in PR #149.
+
+
 ## BEL BSE corroboration and dated valuation implementation — 16 October 2026 IST
 
 The owner requested an actual test of the vendored BSE route. Read-only recovery 38797815242 verified all eight primary quarter originals, September 2024–June 2026, and local SHA readback corroborated 15 exact standalone valuation input cells against original NSE XBRL. Source adapter/report changes are isolated in [PR #149](https://github.com/drddutta-portfolio/PortfiolioAI/pull/149); no BSE dashboard OPM or current quote is substituted into the approved financial contract.
