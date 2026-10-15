@@ -38,7 +38,7 @@ function rejectUrl(raw: string): string | null {
 }
 function period(text: string): string | null {
   // The source text, not its URL or retrieval date, must name its quarter.
-  const m = /\b(?:quarter|three months)\s+ended\s+(?:on\s+)?(30[\/.\-\s](?:jun|june|06)[\/.\-\s]20\d\d|30[\/.\-\s](?:sep|september|09)[\/.\-\s]20\d\d|31[\/.\-\s](?:dec|december|12)[\/.\-\s]20\d\d|31[\/.\-\s](?:mar|march|03)[\/.\-\s]20\d\d)\b/i.exec(text)
+  const m = /\b(?:quarter|three months)\s+ended\s+(?:on\s+)?(30[/.-\s](?:jun|june|06)[/.-\s]20\d\d|30[/.-\s](?:sep|september|09)[/.-\s]20\d\d|31[/.-\s](?:dec|december|12)[/.-\s]20\d\d|31[/.-\s](?:mar|march|03)[/.-\s]20\d\d)\b/i.exec(text)
   if (!m) return null
   const v=m[1].toLowerCase(), y=/20\d\d/.exec(v)?.[0]
   const mon=/jun|june|06/.test(v)?"06":/sep|september|09/.test(v)?"09":/dec|december|12/.test(v)?"12":/mar|march|03/.test(v)?"03":null
@@ -55,9 +55,9 @@ function extract(text: string): Candidate[] {
   // admitted without a later column-aware parser.
   const rows = text.split(/\r?\n/).map((s) => s.replace(/\s+/g," ").trim())
   const codes: readonly [RegExp,string][] = [
-    [/^(?:revenue from operations|income from operations)\s*[:=\-]\s*/, "OPERATING_REVENUE_QUARTER"],
-    [/^(?:net profit after tax|profit after tax)\s*[:=\-]\s*/, "NET_PROFIT_QUARTER"],
-    [/^diluted (?:earnings per share|eps)\s*[:=\-]\s*/, "EPS_DILUTED"],
+    [/^(?:revenue from operations|income from operations)\s*[:=-]\s*/, "OPERATING_REVENUE_QUARTER"],
+    [/^(?:net profit after tax|profit after tax)\s*[:=-]\s*/, "NET_PROFIT_QUARTER"],
+    [/^diluted (?:earnings per share|eps)\s*[:=-]\s*/, "EPS_DILUTED"],
   ]
   const unitMatch = /\b(?:in|amounts in|rs\.?\s*in|₹)\s+(crore|crores|lakh|lakhs)\b/i.exec(text)
   const moneyUnit = unitMatch?.[1].toLowerCase().startsWith("lakh") ? "LAKH" : unitMatch ? "CRORE" : null
@@ -81,9 +81,9 @@ function extract(text: string): Candidate[] {
   return candidates
 }
 function asText(html: string): string {
-  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,"")
-    .replace(/<\/(?:tr|p|div|h\d|table|section)>/gi,"\n")
+  return html.replace(/<script\b[^>]*>[\s\S]*?</script>/gi,"")
+    .replace(/<style\b[^>]*>[\s\S]*?</style>/gi,"")
+    .replace(/</(?:tr|p|div|h\d|table|section)>/gi,"\n")
     .replace(/<[^>]*>/g," ").replace(/&nbsp;|&#160;/gi," ")
     .replace(/&amp;/gi,"&").replace(/&#8377;/g,"₹")
 }
@@ -173,8 +173,7 @@ async function checkStock(admin: Db, securityId: string, runId: string):Promise<
     if(already.error) throw already.error
     if(already.data.length) continue
     checked++
-    let source:{text:string;hash:string}|null=null
-    try {source=await sourceText(url)}catch{continue}
+    const source=await sourceText(url).catch(()=>null)
     if(!source) continue
     const parsed=extract(source.text).filter((v)=>!known.has(v.end+":"+v.code))
     if(!parsed.length) continue
@@ -221,7 +220,7 @@ async function step(admin: Db, portfolioId: string, runId: string) {
     const lock=await admin.from("data_ingestion_run_items").update({status:"ATTEMPTED",started_at:new Date().toISOString()}).eq("id",item.id).eq("status","PLANNED").select("id")
     if(lock.error) throw lock.error
     if(!lock.data.length) continue
-    let reason="SCAN_FAILED",added=0,checked=0,statusCode="FAILED"
+    let reason: string,added=0,checked=0,statusCode="FAILED"
     try{
       const result=await checkStock(admin,item.security_id,runId)
       added=result.added;checked=result.checked;reason=result.reason
