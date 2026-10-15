@@ -20,6 +20,7 @@ export type CanonicalFactKey =
   | "RESEARCH_DOCUMENTS"
   | "CASH_CONVERSION_EVIDENCE"
   | "DEBT_COVERAGE_EVIDENCE"
+  | "DATED_VALUATION_EVIDENCE"
   | "CURRENT_RESEARCH_EVIDENCE"
   | "DAILY_OHLCV"
   | "OFFICIAL_NEWS"
@@ -227,6 +228,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
     notes: "BEL requires both net-debt/operating EBITDA and operating EBIT/total finance costs for three matched annual periods. Numeric borrowing facts, leases, pledged cash and compatible operating definitions remain source-bound. Printed dashes, debt-free prose and debt-service ratios are inadmissible substitutions.",
+  }),
+  DATED_VALUATION_EVIDENCE: authority({
+    fact: "DATED_VALUATION_EVIDENCE",
+    label: "Source-bound dated valuation",
+    layer: "DERIVED",
+    canonicalAuthority: "PortfolioAI approved defence matched valuation-component contract",
+    canonicalSourceObject: "research_evidence_requirement_reviews + archived original publication, share and price evidence",
+    sharedAccessPath: "deriveG03Valuation() -> validateReviewedRequirementEvidence() -> canonical materializer",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "BEL joins P/E TTM, EV/operating EBITDA TTM and qualified annual FCF yield at each of three distinct dates. Exact issued shares, original availability, lease-inclusive debt and unpledged cash are mandatory. This is labelled evidence derivation, without score weights or BANK historical rules; the separate order/execution requirement must also pass.",
   }),
   FUNDAMENTAL_EVIDENCE: authority({
     fact: "FUNDAMENTAL_EVIDENCE",

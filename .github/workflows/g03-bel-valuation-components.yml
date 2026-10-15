@@ -1,0 +1,43 @@
+name: G03 BEL Approved Dated Valuation Qualification
+on:
+  workflow_dispatch:
+    inputs:
+      admit_valuation_components:
+        description: Admit only after original-cell qualification and verified deployment
+        type: boolean
+        default: false
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-bel-valuation-components.yml]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils
+      - run: pip install boto3==1.35.99
+      - name: Verify source publication, exact shares and three dated complete valuation joins
+        env:
+          G03_ADMIT_VALUATION_COMPONENTS: ${{ inputs.admit_valuation_components }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: python scripts/v1-4/g03_bel_valuation_components.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-bel-approved-dated-valuations
+          path: g03-bel-valuation-components-result/
+          retention-days: 90
+          if-no-files-found: ignore

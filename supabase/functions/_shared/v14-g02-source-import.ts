@@ -1,3 +1,4 @@
+import g03ValuationPins from './v14-g03-valuation-original-pins.json' with {type:'json'}
 import g03MarginPins from './v14-g03-margin-original-pins.json' with {type:'json'}
 import g03Pins from './v14-g03-original-pins.json' with {type:'json'}
 import g03Policy from './v14-g03-pilot-authorization.json' with {type:'json'}
@@ -16,6 +17,7 @@ export const G03_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03Policy,
 export const G03_ROCE_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03RocePolicy,pins:g03RocePins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_DEBT_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:{...g03FinancialPolicy,directiveSha256:g03FinancialPolicy.contractSha256,securityIds:[g03FinancialPolicy.securityId]},pins:g03DebtPins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_MARGIN_SOURCE_SCOPE:OriginalSourceScope={...G03_DEBT_SOURCE_SCOPE,pins:g03MarginPins}
+export const G03_VALUATION_SOURCE_SCOPE:OriginalSourceScope={...G03_DEBT_SOURCE_SCOPE,pins:g03ValuationPins}
 export {g02SourceExecutorQualified} from './v14-g02-executor-identity.ts'
 export const stableG02=(v:unknown):string=>Array.isArray(v)?'['+v.map(stableG02).join(',')+']':v!==null&&typeof v==='object'?'{'+Object.entries(v as Record<string,unknown>).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>JSON.stringify(k)+':'+stableG02(x)).join(',')+'}':JSON.stringify(v)??'null'
 export const hashG02=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(stableG02(v))))).map(x=>x.toString(16).padStart(2,'0')).join('')

@@ -1,0 +1,627 @@
+{
+  "version": "G03_BEL_DATED_VALUATION_COMPONENTS_V1",
+  "cells": [
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "tag": "ProfitLossForPeriod",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "10483300000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "14028300000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "11600000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1526000000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1673900000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "ProfitLossForPeriod",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "60484800000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "ProfitBeforeTax",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "80750400000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "FinanceCosts",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "67200000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "5239300000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "OtherIncome",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "5903900000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "tag": "ProfitLossForPeriod",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "9691300000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "12892400000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "14400000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1128800000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1636200000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE"
+    },
+    {
+      "originalSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "tag": "NumberOfFullyPaidUpEquityShares",
+      "context": "ShareholdingPattern_ContextI",
+      "unit": "shares",
+      "literalValue": "7309778829",
+      "instant": "2026-09-30",
+      "scope": "ISSUED_EQUITY_SHARES"
+    },
+    {
+      "originalSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "tag": "NumberOfSharesOnFullyDilutedBasisIncludingWarrantsESOPAndConvertibleSecurities",
+      "context": "ShareholdingPattern_ContextI",
+      "unit": "shares",
+      "literalValue": "7309778829",
+      "instant": "2026-09-30",
+      "scope": "ISSUED_EQUITY_SHARES"
+    },
+    {
+      "originalSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "tag": "NumberOfFullyPaidUpEquityShares",
+      "context": "ShareholdingPattern_ContextI",
+      "unit": "shares",
+      "literalValue": "7309778829",
+      "instant": "2026-06-30",
+      "scope": "ISSUED_EQUITY_SHARES"
+    },
+    {
+      "originalSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "tag": "NumberOfSharesOnFullyDilutedBasisIncludingWarrantsESOPAndConvertibleSecurities",
+      "context": "ShareholdingPattern_ContextI",
+      "unit": "shares",
+      "literalValue": "7309778829",
+      "instant": "2026-06-30",
+      "scope": "ISSUED_EQUITY_SHARES"
+    }
+  ],
+  "annualSharesNote": {
+    "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+    "pdfPage": 149,
+    "label": "Weighted average number of equity shares used in computing basic and diluted earnings",
+    "rowValues": [
+      "7,30,97,78,829",
+      "7,30,97,78,829"
+    ],
+    "rowFiscalYears": [
+      2026,
+      2025
+    ]
+  },
+  "availability": [
+    {
+      "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+      "catalogRow": {
+        "attFileSize": "0 Bytes",
+        "audited": "Un-Audited",
+        "broadcast_Date": "27-Jul-2026 16:37:26",
+        "cmName": "Bharat Electronics Limited",
+        "consolidated": "Standalone",
+        "creation_Date": "27-Jul-2026 16:37:27",
+        "diff": "00:00:01",
+        "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178591_27072026163726_iXBRL_WEB.html",
+        "ixbrlFileSize": "37.95 KB",
+        "pdf_attach": null,
+        "qe_Date": "30-JUN-2026",
+        "revised_Date": null,
+        "revision_Remark": null,
+        "seq_Id": "178591",
+        "smName": "Bharat Electronics Limited",
+        "symbol": "BEL",
+        "type": "Integrated Filing- Financials",
+        "type_Sub": "Original",
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1702067_27072026043726_WEB.xml",
+        "xbrlFileSize": "17.84 KB"
+      },
+      "publishedAt": "2026-07-27T16:37:27+05:30",
+      "availabilityPrecision": "EXACT",
+      "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    },
+    {
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+      "catalogRow": {
+        "attFileSize": "0 Bytes",
+        "audited": "Audited",
+        "broadcast_Date": "19-May-2026 16:39:14",
+        "cmName": "Bharat Electronics Limited",
+        "consolidated": "Standalone",
+        "creation_Date": "19-May-2026 16:39:16",
+        "diff": "00:00:02",
+        "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_158846_19052026163916_iXBRL_WEB.html",
+        "ixbrlFileSize": "97.39 KB",
+        "pdf_attach": "https://nsearchives.nseindia.com/corporate/null",
+        "qe_Date": "31-MAR-2026",
+        "revised_Date": null,
+        "revision_Remark": null,
+        "seq_Id": "158846",
+        "smName": "Bharat Electronics Limited",
+        "symbol": "BEL",
+        "type": "Integrated Filing- Financials",
+        "type_Sub": "Original",
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1669276_19052026043916_WEB.xml",
+        "xbrlFileSize": "98.15 KB"
+      },
+      "publishedAt": "2026-05-19T16:39:16+05:30",
+      "availabilityPrecision": "EXACT",
+      "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    },
+    {
+      "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+      "catalogRow": {
+        "attFileSize": "0 Bytes",
+        "audited": "Un-Audited",
+        "broadcast_Date": "28-Jul-2025 16:08:33",
+        "cmName": "Bharat Electronics Limited",
+        "consolidated": "Standalone",
+        "creation_Date": "28-Jul-2025 16:08:33",
+        "diff": "00:00:00",
+        "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_106192_28072025160833_iXBRL_WEB.html",
+        "ixbrlFileSize": "39.72 KB",
+        "pdf_attach": null,
+        "qe_Date": "30-JUN-2025",
+        "revised_Date": null,
+        "revision_Remark": null,
+        "seq_Id": "106192",
+        "smName": "Bharat Electronics Limited",
+        "symbol": "BEL",
+        "type": "Integrated Filing- Financials",
+        "type_Sub": "Original",
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1495131_28072025040833_WEB.xml",
+        "xbrlFileSize": "18.55 KB"
+      },
+      "publishedAt": "2025-07-28T16:08:33+05:30",
+      "availabilityPrecision": "EXACT",
+      "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    },
+    {
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "catalogKind": "NSE_ANNUAL_REPORT_DISSEMINATION",
+      "catalogRow": {
+        "an_dt": "05-Aug-2026 20:35:19",
+        "attFileSize": "15.45 MB",
+        "attchmntFile": "https://nsearchives.nseindia.com/corporate/BEL_05082026203450_Lettersigned.pdf",
+        "attchmntText": "Bharat Electronics Limited has informed the Exchange regarding Notice of 72nd Annual General Meeting to be held on August 28, 2026",
+        "bflag": null,
+        "csvName": null,
+        "desc": "Shareholders meeting",
+        "difference": "00:00:01",
+        "dt": "05082026203519",
+        "exchdisstime": "05-Aug-2026 20:35:20",
+        "fileSize": "15.45 MB",
+        "hasXbrl": true,
+        "old_new": null,
+        "orgid": null,
+        "seq_id": "106727442",
+        "smIndustry": "Electronics - Industrial",
+        "sm_isin": "INE263A01016",
+        "sm_name": "Bharat Electronics Limited",
+        "sort_date": "2026-08-05 20:35:19",
+        "symbol": "BEL"
+      },
+      "publishedAt": "2026-08-05T20:35:20+05:30",
+      "availabilityPrecision": "EXACT",
+      "identicalOfficialAttachmentSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "catalogSha256": "6e179452f2abcd26ab85335e37b276752539bafa148e512f0c11780409cd3d91",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    },
+    {
+      "originalSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "catalogKind": "NSE_SHAREHOLDING_ORIGINAL",
+      "catalogRow": {
+        "broadcastDate": "14-OCT-2026 13:59:47",
+        "cgTimeStamp": null,
+        "countString": null,
+        "date": "30-SEP-2026",
+        "desc": "NEW_1",
+        "employeeTrusts": "0",
+        "format": null,
+        "index": "-",
+        "industry": "-",
+        "isin": "INE263A01016",
+        "name": "Bharat Electronics Limited",
+        "newColumn": true,
+        "pr_and_prgrp": "51.14",
+        "promoterDematNotes": "",
+        "publicShareholdingNotes": "",
+        "public_val": "48.86",
+        "recordId": "214286",
+        "remarksWeb": "N",
+        "revisedData": "N",
+        "revisedDate": null,
+        "revisedRemark": null,
+        "revisedStatus": "-",
+        "revisionDate": null,
+        "revisionRemark": null,
+        "shareholdingPatternNotes": "",
+        "submissionDate": "14-OCT-2026",
+        "symbol": "BEL",
+        "systemDate": "14-OCT-2026 13:59:51",
+        "timeDifference": "00:00:04",
+        "typeOfSubmission": null,
+        "underlyingDrs": null,
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1737569_14102026015942_WEB.xml",
+        "xbrlFileSize": "138.31 KB"
+      },
+      "publishedAt": "2026-10-14T13:59:51+05:30",
+      "availabilityPrecision": "EXACT",
+      "catalogSha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    },
+    {
+      "originalSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "catalogKind": "NSE_SHAREHOLDING_ORIGINAL",
+      "catalogRow": {
+        "broadcastDate": "13-JUL-2026 16:50:55",
+        "cgTimeStamp": null,
+        "countString": null,
+        "date": "30-JUN-2026",
+        "desc": "NEW_1",
+        "employeeTrusts": "0",
+        "format": null,
+        "index": "-",
+        "industry": "-",
+        "isin": "INE263A01016",
+        "name": "Bharat Electronics Limited",
+        "newColumn": true,
+        "pr_and_prgrp": "51.14",
+        "promoterDematNotes": "",
+        "publicShareholdingNotes": "",
+        "public_val": "48.86",
+        "recordId": "210952",
+        "remarksWeb": "N",
+        "revisedData": "N",
+        "revisedDate": null,
+        "revisedRemark": null,
+        "revisedStatus": "-",
+        "revisionDate": null,
+        "revisionRemark": null,
+        "shareholdingPatternNotes": "",
+        "submissionDate": "13-JUL-2026",
+        "symbol": "BEL",
+        "systemDate": "13-JUL-2026 16:51:00",
+        "timeDifference": "00:00:05",
+        "typeOfSubmission": null,
+        "underlyingDrs": null,
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1691499_13072026045050_WEB.xml",
+        "xbrlFileSize": "141.48 KB"
+      },
+      "publishedAt": "2026-07-13T16:51:00+05:30",
+      "availabilityPrecision": "EXACT",
+      "catalogSha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+      "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP"
+    }
+  ],
+  "catalogs": [
+    {
+      "kind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+      "originalSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+      "originalUrl": "https://www.nseindia.com/api/integrated-filing-results?type=Integrated+Filing-+Financials&symbol=BEL&index=equities&from_date=01-05-2025&to_date=15-10-2026&page=1&size=50"
+    },
+    {
+      "kind": "NSE_ANNUAL_REPORT_DISSEMINATION",
+      "originalSha256": "6e179452f2abcd26ab85335e37b276752539bafa148e512f0c11780409cd3d91",
+      "originalUrl": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=BEL&from_date=01-07-2026&to_date=15-10-2026"
+    },
+    {
+      "kind": "NSE_SHAREHOLDING_ORIGINAL",
+      "originalSha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+      "originalUrl": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol=BEL&from_date=01-07-2026&to_date=15-10-2026"
+    }
+  ],
+  "shareFacts": [
+    {
+      "originalSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "asOfDate": "2026-09-30",
+      "shares": "7309778829",
+      "publishedAt": "2026-10-14T13:59:51+05:30"
+    },
+    {
+      "originalSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "asOfDate": "2026-06-30",
+      "shares": "7309778829",
+      "publishedAt": "2026-07-13T16:51:00+05:30"
+    }
+  ],
+  "retainedCaptures": [
+    {
+      "id": "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+      "record_kind": "V1_4_G03_HISTORY_TAIL_CAPTURE",
+      "source_code": "ANGEL_ONE",
+      "payload_hash": "f7de5310bccf822e81f691343df76af81d8625dcb4a272bd2b0bfc7a865ebaa2"
+    },
+    {
+      "id": "7b3221d4-1580-5474-a48b-98dc9730adb1",
+      "record_kind": "V1_4_HISTORY_CONTRACT_VALIDATION",
+      "source_code": "CONTROLLED_PUBLIC_WEB",
+      "payload_hash": "af396e153574ea6cfe47ef7cce047091b4ce83769c4162ff839e7c831efca442"
+    },
+    {
+      "id": "89305415-2cdd-439d-9582-2d4e772f73f0",
+      "record_kind": "V1_4_G03_HISTORY_TAIL_CAPTURE",
+      "source_code": "ANGEL_ONE",
+      "payload_hash": "fdbaff4ca1ca55b13a5f2b9880654e6536bb1a962aba5ec5b5bee3dd97695349"
+    }
+  ],
+  "acceptedCashReviewId": "bfb36725-d431-550b-8b75-179fe5459444",
+  "acceptedDebtReviewId": "9d13c947-de36-5438-adfb-d055bd5b57c7",
+  "requiredSeparateOrderContext": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+  "periods": [
+    {
+      "valuationDate": "2026-10-13",
+      "periodStart": "2026-10-13",
+      "periodEnd": "2026-10-13",
+      "sourceId": "faf13717-56cb-5fd0-a3ce-96803cdb9eb3",
+      "reviewId": "6f7b2475-1352-53e9-a227-b40f2e9c92c7",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "shareSourceSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "priceSourceId": "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+      "pricePeriodStart": "2026-10-12 18:30:00+00",
+      "components": {
+        "valuationDate": "2026-10-13",
+        "price": "380",
+        "shares": "7309778829",
+        "scope": "STANDALONE",
+        "currency": "INR",
+        "amountUnit": "INR_LAKH",
+        "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+        "financialTtmStart": "2025-07-01",
+        "financialTtmEnd": "2026-06-30",
+        "cashFlowStart": "2025-04-01",
+        "cashFlowEnd": "2026-03-31",
+        "annualPat": "604848",
+        "priorJunePat": "96913",
+        "currentJunePat": "104833",
+        "annualOperatingEbitda": "801530",
+        "priorJuneOperatingEbitda": "123994",
+        "currentJuneOperatingEbitda": "138920",
+        "grossDebt": "6546",
+        "verifiedUnpledgedCash": "0",
+        "annualCfo": "149434",
+        "annualCashCapex": "98312",
+        "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+        "shareAvailabilityAt": "2026-07-13T16:51:00+05:30"
+      },
+      "fragment": "BEL 2026-10-13 STANDALONE: PortfolioAI-derived PE TTM, EV/operating EBITDA TTM and FY2026 FCF yield, using exact 7309778829 issued shares and qualified ANGEL_ONE raw close INR 380. Financial availability is proven by original NSE dissemination records, never by current retrieval. Amounts, source periods, share lineage and all three calculations remain explicit."
+    },
+    {
+      "valuationDate": "2026-10-14",
+      "periodStart": "2026-10-14",
+      "periodEnd": "2026-10-14",
+      "sourceId": "fb337a1f-bc74-5655-a617-bbfb2721bc93",
+      "reviewId": "86807491-865f-5123-a12e-a1a0ba61627d",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "shareSourceSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "priceSourceId": "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+      "pricePeriodStart": "2026-10-13 18:30:00+00",
+      "components": {
+        "valuationDate": "2026-10-14",
+        "price": "382.35",
+        "shares": "7309778829",
+        "scope": "STANDALONE",
+        "currency": "INR",
+        "amountUnit": "INR_LAKH",
+        "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+        "financialTtmStart": "2025-07-01",
+        "financialTtmEnd": "2026-06-30",
+        "cashFlowStart": "2025-04-01",
+        "cashFlowEnd": "2026-03-31",
+        "annualPat": "604848",
+        "priorJunePat": "96913",
+        "currentJunePat": "104833",
+        "annualOperatingEbitda": "801530",
+        "priorJuneOperatingEbitda": "123994",
+        "currentJuneOperatingEbitda": "138920",
+        "grossDebt": "6546",
+        "verifiedUnpledgedCash": "0",
+        "annualCfo": "149434",
+        "annualCashCapex": "98312",
+        "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+        "shareAvailabilityAt": "2026-10-14T13:59:51+05:30"
+      },
+      "fragment": "BEL 2026-10-14 STANDALONE: PortfolioAI-derived PE TTM, EV/operating EBITDA TTM and FY2026 FCF yield, using exact 7309778829 issued shares and qualified ANGEL_ONE raw close INR 382.35. Financial availability is proven by original NSE dissemination records, never by current retrieval. Amounts, source periods, share lineage and all three calculations remain explicit."
+    },
+    {
+      "valuationDate": "2026-10-15",
+      "periodStart": "2026-10-15",
+      "periodEnd": "2026-10-15",
+      "sourceId": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+      "reviewId": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "shareSourceSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "priceSourceId": "89305415-2cdd-439d-9582-2d4e772f73f0",
+      "pricePeriodStart": "2026-10-14 18:30:00+00",
+      "components": {
+        "valuationDate": "2026-10-15",
+        "price": "380.4",
+        "shares": "7309778829",
+        "scope": "STANDALONE",
+        "currency": "INR",
+        "amountUnit": "INR_LAKH",
+        "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+        "financialTtmStart": "2025-07-01",
+        "financialTtmEnd": "2026-06-30",
+        "cashFlowStart": "2025-04-01",
+        "cashFlowEnd": "2026-03-31",
+        "annualPat": "604848",
+        "priorJunePat": "96913",
+        "currentJunePat": "104833",
+        "annualOperatingEbitda": "801530",
+        "priorJuneOperatingEbitda": "123994",
+        "currentJuneOperatingEbitda": "138920",
+        "grossDebt": "6546",
+        "verifiedUnpledgedCash": "0",
+        "annualCfo": "149434",
+        "annualCashCapex": "98312",
+        "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+        "shareAvailabilityAt": "2026-10-14T13:59:51+05:30"
+      },
+      "fragment": "BEL 2026-10-15 STANDALONE: PortfolioAI-derived PE TTM, EV/operating EBITDA TTM and FY2026 FCF yield, using exact 7309778829 issued shares and qualified ANGEL_ONE raw close INR 380.4. Financial availability is proven by original NSE dissemination records, never by current retrieval. Amounts, source periods, share lineage and all three calculations remain explicit."
+    }
+  ],
+  "registeredOriginals": [
+    {
+      "sha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+      "sourceId": "e6a4646d-cfde-54b9-a1e2-eb3182553036",
+      "documentId": "bb6bf1b6-baa2-5136-a504-ad8e0d0eaadf"
+    },
+    {
+      "sha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "sourceId": "9e49ff26-763f-5cbd-ad87-35de1d04b426",
+      "documentId": "3ed76cfb-b19e-530c-a304-e1149c5567ac"
+    },
+    {
+      "sha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+      "sourceId": "32cdf752-5b70-5cc4-aeb4-7728a7e8c272",
+      "documentId": "27d094da-b63e-5cb9-ae4a-0a1c6cda0a44"
+    },
+    {
+      "sha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "sourceId": "967961dc-6571-5567-a22d-bc3f5f9aeae9",
+      "documentId": "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+    },
+    {
+      "sha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+      "sourceId": "ab0a04ad-f193-50c6-aa76-dafac711f0e4",
+      "documentId": "6c01c965-c086-5ed6-ac80-5df97c229ee3"
+    },
+    {
+      "sha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+      "sourceId": "6c984bd7-f3d1-51fe-a6b8-5acbf08cf534",
+      "documentId": "57d17c30-228a-51e8-aa4a-c20492119866"
+    },
+    {
+      "sha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+      "sourceId": "852610df-6b08-5d99-a9b8-1cb3d5be1b1c",
+      "documentId": "507073b0-b1bd-580c-a4f9-4ee6e3a5a27d"
+    },
+    {
+      "sha256": "6e179452f2abcd26ab85335e37b276752539bafa148e512f0c11780409cd3d91",
+      "sourceId": "921b8aa0-b49a-5c32-a3ac-bdb3dc6870b2",
+      "documentId": "0d484e11-a1ba-5cb9-a598-15df3c7c3d77"
+    },
+    {
+      "sha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+      "sourceId": "c4f4c5be-ae25-5fc0-a17c-2b67bb2e552d",
+      "documentId": "c512e002-c47c-598b-aed1-9d5b826ae8c4"
+    }
+  ]
+}

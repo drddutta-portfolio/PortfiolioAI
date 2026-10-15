@@ -49,6 +49,8 @@ def main():
     if os.environ.get('G03_MATERIALIZE_BEL') == 'true':
         pilot = json.loads((root / 'v14-g03-pilot-authorization.json').read_text())
         bel = next(r for r in result['results'] if r['securityId'] == pilot['securityIds'][0])
+        if os.environ.get('G03_REQUIRE_BEL_READY') == 'true' and (bel.get('status') != 'READY' or any(i.get('required') and i.get('evidence_state') != 'FRESH' for i in bel['items'])):
+            raise ValueError('G03_BEL_ALL_REQUIRED_EVIDENCE_NOT_FRESH_NO_GRANT_OR_SAVE')
         if any(not any(i.get('requirement_code') == code and i.get('evidence_state') == 'FRESH'
                        for i in bel['items']) for code in pilot['allowedRequirementCodes']):
             raise ValueError('G03_BEL_DOCUMENTARY_REVIEWS_NOT_CANONICALLY_FRESH')

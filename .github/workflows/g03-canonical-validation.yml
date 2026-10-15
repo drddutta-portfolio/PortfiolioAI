@@ -2,6 +2,10 @@ name: G03 Signed Canonical Read-Only Validation
 on:
   workflow_dispatch:
     inputs:
+      require_bel_ready:
+        description: Require all BEL mandatory evidence FRESH and prospective READY before the BEL-only save
+        type: boolean
+        default: false
       require_bel_cash:
         description: Require the approved three-year BEL cash-component series before saving
         type: boolean
@@ -39,6 +43,7 @@ jobs:
           python-version: '3.11'
       - run: python scripts/v1-4/g03_canonical_validation.py
         env:
+          G03_REQUIRE_BEL_READY: ${{ inputs.require_bel_ready }}
           G03_MATERIALIZE_BEL: ${{ inputs.materialize_bel }}
           G03_REQUIRE_BEL_ORDERS: ${{ inputs.require_bel_orders }}
           G03_REQUIRE_BEL_CASH: ${{ inputs.require_bel_cash }}
