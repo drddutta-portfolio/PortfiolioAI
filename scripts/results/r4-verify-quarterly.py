@@ -66,7 +66,8 @@ def check_manifest(record,manifest):
     contract=manifest.get("contract")
     if contract not in ("PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1",
-                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"):
+                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1",
+                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
@@ -106,11 +107,20 @@ def check_manifest(record,manifest):
             or manifest.get("original_xbrl_retained") is not True
             or manifest.get("reporting_currency")!="INR"):
             return "INVALID_RETAINED_LEGACY_XBRL_REFERENCE"
+    if contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1":
+        if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
+            or not re.fullmatch(r"/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\\.xml",u.path,re.I)
+            or u.query or u.fragment
+            or not re.fullmatch(r"[a-f0-9]{64}",str(manifest.get("original_sha256_unretained","")))
+            or manifest.get("original_xbrl_retained") is not False
+            or manifest.get("raw_nse_bytes_retained") is not False
+            or manifest.get("reporting_currency")!="INR"):
+            return "UNQUALIFIED_2025_ORIGINAL_XBRL"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
     if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
         if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
         if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
-    elif contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+    elif contract in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1"):
         pass
     elif manifest.get("reporting_currency")!="INR":
         return "PDF_CURRENCY_UNKNOWN"
@@ -132,7 +142,7 @@ def check_fact(r,m):
     try:
         if Decimal(str(r["numeric_value"]))!=Decimal(str(fact["value"])):return "NUMERIC_MISMATCH"
     except (ValueError,InvalidOperation,KeyError,TypeError):return "INVALID_DECIMAL"
-    if m.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+    if m.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1"):
         original_fact=m["facts"][key]
         if not isinstance(original_fact,dict):return "LEGACY_FACT_MALFORMED"
         contexts=original_fact.get("context_ids",original_fact.get("component_context_ids"))
@@ -227,7 +237,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1')
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
