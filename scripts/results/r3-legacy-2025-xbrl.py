@@ -137,7 +137,9 @@ def extract(raw,metadata,symbol,isin):
   return {"value":str(amount),"unit":"INR_PER_SHARE" if eps else "INR_CRORE",
           "original_value":xs[0][2],"original_unit":"INR_PER_SHARE" if eps else "INR",
           "context_ids":sorted({x[1] for x in xs})}
- bank=symbol in _r3.BANK_TICKERS
+ original_path=urlparse(metadata.get("xbrl","")).path
+ bank=bool(re.fullmatch(r"/corporate/xbrl/INTEGRATED_FILING_BANKING_[A-Za-z0-9_]+\.xml",original_path,re.I))
+ if symbol in _r3.BANK_TICKERS and not bank:return None,"BANK_SOURCE_FORMAT_MISMATCH"
  facts={}
  for code,tags in (BANK_FIELDS if bank else FIELD_MAP).items():
   item=fact(tags,code)
