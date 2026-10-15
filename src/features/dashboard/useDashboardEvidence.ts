@@ -99,7 +99,6 @@ export function useDashboardNewsFeed(portfolioId: string | null, limit: number) 
     void loadDashboardNewsFeed(portfolioId, limit)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
-    return () => { active = false }
     const timer = window.setInterval(() => {
       void loadDashboardNewsFeed(portfolioId, limit)
         .then((data) => { if (active) setState({ key, data, error: null }) })
