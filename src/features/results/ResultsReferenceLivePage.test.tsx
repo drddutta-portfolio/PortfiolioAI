@@ -99,4 +99,31 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(screen.getAllByText("Strong").length).toBeGreaterThan(0)
   })
 
+  it("renders a full 223-security four-quarter cohort without truncating the grade census",async()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const positions=Array.from({length:223},(_,i)=>({
+      ...closed,securityId:"mock-"+i,symbol:"MOCK"+String(i).padStart(3,"0"),
+      sector:"Capital Goods",industry:"Industrial Products",assetClass:"EQUITY",
+    }))
+    mock.usePortfolio.mockReturnValue({
+      portfolio:{...portfolio,openPositions:positions,closedPositions:[]},
+      isLoading:false,error:null,
+    })
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.load.mockResolvedValue(positions.flatMap((stock,i)=>dates.flatMap((date,j)=>[
+      {...fact(date,"OPERATING_REVENUE_QUARTER",String(100+i+j*10)),securityId:stock.securityId,id:stock.securityId+date+"top",sourceRecordId:stock.securityId+date},
+      {...fact(date,"NET_PROFIT_QUARTER",String(20+i+j*3)),securityId:stock.securityId,id:stock.securityId+date+"profit",sourceRecordId:stock.securityId+date},
+      {...fact(date,"EPS_DILUTED",String(5+j)),securityId:stock.securityId,id:stock.securityId+date+"eps",sourceRecordId:stock.securityId+date,unit:"INR_PER_SHARE"},
+    ])))
+    render(<ResultsLivePage />)
+    expect(await screen.findByText("223 stocks with four qualified quarters")).toBeInTheDocument()
+    const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
+    expect(within(coverage).getByText(/223 peer-ranked · 0 own-trend/)).toBeInTheDocument()
+    expect(within(coverage).getByText("Not rated 0")).toBeInTheDocument()
+    expect(screen.getByText("223 stocks")).toBeInTheDocument()
+    // The approved matrix is virtualized; its cohort census is not the number of DOM rows.
+    expect(screen.getByText("MOCK000")).toBeInTheDocument()
+    expect(screen.queryByText("MOCK222")).not.toBeInTheDocument()
+  })
+
 })
