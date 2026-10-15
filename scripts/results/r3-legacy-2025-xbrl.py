@@ -185,18 +185,15 @@ def put_original_xml(s3,raw,key):
 
 def persist(db,s3,raw,record,parsed):
  period=parsed["period_end"];symbol=parsed["symbol"];original_sha=digest(raw)
- xmlkey=(ROOT+f"security_id={parsed['isin']}/period_end={period}/"
-         +f"original_version={original_sha}/original-xbrl.xml")
- put_original_xml(s3,raw,xmlkey)
  manifest={
   "contract":CONTRACT,"symbol":symbol,"isin":parsed["isin"],
   "period_start":parsed["period_start"],"period_end":period,
   "consolidation_scope":parsed["scope"],"issuer_filing_url":record["xbrl"],
-  "original_sha256_retained":original_sha,"original_xbrl_retained":True,
-  "original_r2_key":xmlkey,"reporting_currency":"INR",
+  "original_sha256_unretained":original_sha,"original_xbrl_retained":False,
+  "reporting_currency":"INR",
   "original_filing_isin":parsed["source_isin"],"catalog_broadcast_date":record.get("broadCastDate"),
   "original_publication_precision":"CATALOG_ONLY_UNVERIFIED",
-  "raw_nse_bytes_retained":True,"figures_review_pending":True,
+  "raw_nse_bytes_retained":False,"figures_review_pending":True,
   "facts":parsed["facts"]
  }
  if parsed["historical_identity_link"]:
@@ -221,7 +218,7 @@ def persist(db,s3,raw,record,parsed):
    ON CONFLICT (source_code,record_kind,external_record_id,payload_hash)
    DO NOTHING RETURNING id""",(SOURCE,KIND,symbol+":"+original_sha,record["xbrl"],h,
    canonical(payload).decode(),
-   '{"retention":"ORIGINAL_XBRL_IN_DEV_R2","source_qualification":"REVIEW_PENDING"}'))
+   '{"retention":"COMPACT_FACTS_ONLY","original_nse_bytes_retained":false,"source_qualification":"REVIEW_PENDING"}'))
   saved=cur.fetchone()
   if not saved:
    cur.execute("""SELECT id FROM public.data_source_records WHERE source_code=%s
