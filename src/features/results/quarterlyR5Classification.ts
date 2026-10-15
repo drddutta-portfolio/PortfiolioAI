@@ -79,8 +79,8 @@ export function gradeQuarterR5(
   const [lowTop,highTop,lowProfit,highProfit,n] = SECTOR_BOUNDS[group]
   const t=new Decimal(top.qoq),p=new Decimal(profit.qoq)
   const positiveProfit=new Decimal(profit.current.value).gt(0)
-  const strong = positiveProfit && t.gte(highTop!) && p.gte(highProfit!)
-  const weak = !positiveProfit || (t.lte(lowTop!) && p.lte(lowProfit!) && (t.isNegative() || p.isNegative()))
+  const strong = positiveProfit && t.gte(highTop) && p.gte(highProfit)
+  const weak = !positiveProfit || (t.lte(lowTop) && p.lte(lowProfit) && (t.isNegative() || p.isNegative()))
   const status: R5Grade = strong ? "STRONG" : weak ? "WEAK" : "MIXED"
   const explanation =
     "QoQ-only sector-calibrated operating signal (" + group + ", " + n +
@@ -90,5 +90,5 @@ export function gradeQuarterR5(
       "Core growth indicators are not jointly strong or weak under the calibrated thresholds.") +
     " No YoY conclusion, investment recommendation or V1-4 score is inferred."
   return { status, policyVersion: RESULTS_GRADING_VERSION, group,
-    scope:"QOQ_ONLY", explanation, supportingMetrics:[topCode,profitCode],sampleSize:n! }
+    scope:"QOQ_ONLY", explanation, supportingMetrics:[topCode,profitCode],sampleSize:n }
 }
