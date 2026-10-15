@@ -71,7 +71,8 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2024_COMPACT_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1",
                          "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1",
-                         "PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1"):
+                         "PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1",
+                         "PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
@@ -192,6 +193,38 @@ def check_manifest(record,manifest):
             or "STATEMENT OF CONSOLIDATED UNAUDITED FINANCIAL RESULTS FOR THE QUARTER" not in str(manifest.get("quarter_header","")).upper()
             or "MILLION" not in str(manifest.get("unit_header","")).upper()):
             return "BSE_ASTRAL_2024_ORIGINAL_CONTRACT_UNPROVEN"
+    if contract=="PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1":
+        approved={
+          "2024-09-30":("21f1f436-84a4-47a5-a999-9fe821844d19.pdf",
+            "e7635fd45c6cfe97020f09f3af616026b3321556646760b9d664a5d22c43f4f0","2024-11-12","2024-07-01","SEPTEMBER 30, 2024","30-SEP-24"),
+          "2024-12-31":("200ba514-3197-42f6-a99f-86416b93f2ca.pdf",
+            "428a23cd14a9c27574631c2d9a0384b69a353f0a10595d409a1df453dab8f615","2025-02-10","2024-10-01","DECEMBER 31, 2024","31-DEC-24")
+        }
+        expected=approved.get(manifest.get("period_end"))
+        if not expected:return "BSE_ASHOKA_PERIOD_NOT_APPROVED"
+        pdf,digest_expected,published,start,heading,col=expected
+        if (manifest.get("symbol")!="ASHOKA" or manifest.get("isin")!="INE442H01029"
+            or manifest.get("bse_scrip_code")!="533271" or manifest.get("period_start")!=start
+            or manifest.get("consolidation_scope")!="CONSOLIDATED"
+            or u.scheme!="https" or u.hostname!="www.bseindia.com"
+            or u.path!="/xml-data/corpfiling/AttachHis/"+pdf
+            or u.query or u.fragment
+            or manifest.get("original_sha256_unretained")!=digest_expected
+            or manifest.get("original_pdf_retained") is not False
+            or manifest.get("raw_bse_bytes_retained") is not False
+            or manifest.get("reporting_currency")!="INR"
+            or not str(manifest.get("publication_time_bse","")).startswith(published)
+            or manifest.get("publication_precision")!="DATE_TIME_FROM_BSE_ANNOUNCEMENT"
+            or manifest.get("original_first_quarter_column")!=0
+            or manifest.get("issuer_header")!="ASHOKA BUILDCON LIMITED"
+            or "L45200MH1993PLC071970" not in str(manifest.get("cin_header",""))
+            or heading not in str(manifest.get("quarter_header","")).upper()
+            or "UNAUDITED CONSOLIDATED FINANCIAL RESULTS FOR THE QUARTER" not in str(manifest.get("quarter_header","")).upper()
+            or col not in str(manifest.get("column_header","")).upper()
+            or "LAKHS" not in str(manifest.get("unit_header","")).upper()
+            or not isinstance(manifest.get("original_quarter_financial_page"),int)
+            or not 1<=manifest["original_quarter_financial_page"]<=35):
+            return "BSE_ASHOKA_2024_ISSUER_OR_QUARTER_NOT_PROVEN"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
     if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
         if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
@@ -301,6 +334,48 @@ def check_fact(r,m):
                 return "BSE_ASTRAL_2024_EPS_BASIS_UNPROVEN"
         except (InvalidOperation,ValueError,TypeError,KeyError):
             return "BSE_ASTRAL_2024_ROW_PARSING_INVALID"
+    if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1":
+        f=m["facts"][key]
+        if (f.get("extraction_page")!=m.get("original_quarter_financial_page")
+            or f.get("first_column_index")!=0
+            or not isinstance(f.get("extraction_line"),str)
+            or len(f["extraction_line"])>500):
+            return "BSE_ASHOKA_ORIGINAL_ROW_UNPROVEN"
+        regex={
+          "OPERATING_REVENUE_QUARTER":r"^I Revenue From Operations\s+(.+)$",
+          "NET_PROFIT_QUARTER":r"^XI Profit after tax \(IX-X\)\s+(.+)$",
+          "EPS_DILUTED":r"^Basic & Diluted\s+(.+)$"
+        }.get(key)
+        if not regex:return "BSE_ASHOKA_METRIC_UNAUTHORIZED"
+        try:
+            match=re.match(regex,f["extraction_line"],re.I)
+            if not match:return "BSE_ASHOKA_LABEL_MISMATCH"
+            parts=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\w)",match.group(1))
+            if len(parts)<5:return "BSE_ASHOKA_QUARTER_COLUMNS_NOT_PROVEN"
+            raw=Decimal(parts[0].replace(",",""))
+            if raw!=Decimal(str(f.get("original_value"))):
+                return "BSE_ASHOKA_ORIGINAL_VALUE_MISMATCH"
+            if key=="EPS_DILUTED":
+                second=f.get("eps_crosscheck_line")
+                if not isinstance(second,str) or not re.match(regex,second,re.I):
+                    return "BSE_ASHOKA_EPS_CONFIRMATION_MISSING"
+                n2=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\w)",re.match(regex,second,re.I).group(1))
+                if not n2 or Decimal(n2[0].replace(",",""))!=raw:
+                    return "BSE_ASHOKA_EPS_ROWS_CONFLICT"
+                if (f.get("original_unit")!="INR_PER_SHARE"
+                    or f.get("conversion")!="ORIGINAL_RUPEES_PER_SHARE"
+                    or f.get("share_basis")!="ORIGINALLY_PUBLISHED_NO_RETROSPECTIVE_ADJUSTMENT"):
+                    return "BSE_ASHOKA_EPS_ORIGINAL_BASIS_UNKNOWN"
+                converted=raw
+            else:
+                if (f.get("original_unit")!="INR_LAKH"
+                    or f.get("conversion")!="DIVIDE_LAKHS_BY_100"):
+                    return "BSE_ASHOKA_LAKHS_UNIT_INVALID"
+                converted=raw/Decimal(100)
+            if converted!=Decimal(str(f.get("value"))):
+                return "BSE_ASHOKA_CRORE_CONVERSION_MISMATCH"
+        except (ValueError,TypeError,InvalidOperation,KeyError,AttributeError):
+            return "BSE_ASHOKA_NUMERIC_ROW_FAILED"
     if key=="EPS_DILUTED" and m.get("historical_identity_link"):
         if (m.get("eps_as_originally_reported_before_split") is not True
             or fact.get("original_unit")!="INR_PER_SHARE"):
@@ -389,7 +464,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
