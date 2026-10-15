@@ -1,0 +1,100 @@
+name: Results R5 Development 2024 Original XBRL Recovery
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-legacy-2024-acquisition.yml]
+  workflow_dispatch:
+    inputs:
+      full_cohort:
+        description: "Process entire historical source cohort (otherwise bounded pilot)"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-legacy-xbrl-development
+  cancel-in-progress: false
+jobs:
+  acquire-qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 235
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R5_LEGACY_STOCK_LIMIT: "262"
+      RESULTS_R5_LEGACY_ACK: "2024_SEP_DEC_ORIGINAL_XBRL"
+      RESULTS_R5_LEGACY_SYMBOLS: ${{ inputs.full_cohort && '' || 'RELIANCE,INFY' }}
+      RESULTS_R5_LEGACY_DRY_RUN: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Enforce Development-only credentials and original sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY; do
+            test -n "${!name:-}" || { echo "MISSING_CONFIGURATION: $name"; exit 1; }
+          done
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+      - name: Install pinned collector dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            'boto3==1.40.46' 'psycopg[binary]==3.2.10' \
+            'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Test legacy original XBRL parser and canonical R4 verifier
+        run: |
+          python scripts/results/test_r5_legacy_2024_xbrl.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Recover retained original NSE 2024 financial XBRL and compact observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-r5-legacy
+          python scripts/results/r5-legacy-2024-xbrl.py > tmp/results-r5-legacy/acquisition.json
+          python -m json.tool tmp/results-r5-legacy/acquisition.json >/dev/null
+      - name: R4 original R2 hash and quarter selection with independent readback
+        env:
+          RESULTS_R5_LEGACY_SELECTION: "1"
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply
+          cp tmp/results-r4/readback.json tmp/results-r5-legacy/selection.json
+          python - <<'PY'
+          import json
+          x=json.load(open("tmp/results-r5-legacy/selection.json"))
+          assert x["conflicting_existing_decisions"]==0
+          print(json.dumps({"created":x["created_decisions"],"unchanged":x["unchanged_decisions"],
+           "source_observations":x["source_observations"],
+           "qualified":x["qualified_fact_rows"],
+           "exceptions":x["exceptions"]},sort_keys=True))
+          PY
+          python - <<'PY'
+          import os,psycopg,json
+          with psycopg.connect(os.environ["SUPABASE_DB_URL"]) as db:
+            with db.cursor() as c:
+              c.execute("""
+                SELECT f.period_end,count(*) AS selected_facts,count(DISTINCT f.security_id) AS companies
+                FROM public.fundamental_observation_decisions d
+                JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                WHERE d.period_type='QUARTER'
+                  AND f.period_end IN ('2024-09-30','2024-12-31')
+                GROUP BY f.period_end ORDER BY f.period_end
+              """)
+              print(json.dumps({"selection_readback":[
+                {"period":str(p),"facts":n,"companies":k} for p,n,k in c.fetchall()]},sort_keys=True))
+          PY
+      - name: Upload non-secret acquisition and verifier reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-legacy-2024-xbrl-readback
+          path: tmp/results-r5-legacy/*.json
+          if-no-files-found: warn
+          retention-days: 21
