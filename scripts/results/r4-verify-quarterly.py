@@ -69,7 +69,8 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2024_COMPACT_V1",
-                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1"):
+                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1",
+                         "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
@@ -127,6 +128,38 @@ def check_manifest(record,manifest):
             or manifest.get("raw_nse_bytes_retained") is not False
             or manifest.get("reporting_currency")!="INR"):
             return "UNQUALIFIED_2024_COMPACT_ORIGINAL"
+    if contract=="PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1":
+        approved={
+          "2024-09-30":("c9b4cb4c-088b-4a88-a6b7-91087ba90d95.pdf",
+             "ac876a6846f0866f5951ade7ebd323c4a6752e6dc9c4089d985185633b6023fc","2024-10-23","2024-07-01","30.09.2024"),
+          "2024-12-31":("8e326f69-8061-4281-bc39-d8ac639479bd.pdf",
+             "cc5517b18572a7094b553d73d25245b91f56109d687985bbf6c959364789bc3e","2025-01-28","2024-10-01","31.12.2024")
+        }
+        expected=approved.get(manifest.get("period_end"))
+        if not expected:return "BSE_2024_QUARTER_NOT_APPROVED"
+        pdf,original,date_published,period_start,period_dot=expected
+        if (manifest.get("symbol")!="HDFCBANK"
+            or manifest.get("issuer_cin")!="L65920MH1994PLC080618"
+            or manifest.get("bse_scrip_code")!="500180"
+            or manifest.get("period_start")!=period_start
+            or manifest.get("consolidation_scope")!="CONSOLIDATED"
+            or u.scheme!="https" or u.hostname!="www.bseindia.com"
+            or u.path!="/xml-data/corpfiling/AttachHis/"+pdf
+            or u.query or u.fragment
+            or manifest.get("original_sha256_unretained")!=original
+            or manifest.get("original_pdf_retained") is not False
+            or manifest.get("raw_bse_bytes_retained") is not False
+            or manifest.get("reporting_currency")!="INR"
+            or not str(manifest.get("publication_time_bse","")).startswith(date_published)
+            or manifest.get("publication_precision")!="DATE_TIME_FROM_BSE_ANNOUNCEMENT"
+            or manifest.get("issuer_original_reporting_scope_proven") is not True
+            or not re.fullmatch(r"(?i)UNAUDITED CONSOLIDATED FINANCIAL RESULTS FOR THE QUARTER.+",
+                                str(manifest.get("quarter_header","")))
+            or period_dot not in str(manifest.get("column_header",""))
+            or "CRORE" not in str(manifest.get("currency_header","")).upper()
+            or not isinstance(manifest.get("financial_page"),int)
+            or not 1<=manifest["financial_page"]<=24):
+            return "BSE_2024_ORIGINAL_SOURCE_CONTRACT_UNPROVEN"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
     if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
         if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
@@ -160,6 +193,48 @@ def check_fact(r,m):
         if (not isinstance(contexts,list) or not contexts
             or not all(isinstance(x,str) and len(x)<100 for x in contexts)):
             return "LEGACY_FINANCIAL_CONTEXT_NOT_PROVEN"
+    if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1":
+        f=m["facts"][key]
+        if (f.get("page")!=m.get("financial_page") or f.get("column_index")!=0
+            or f.get("original_unit")!=f.get("unit")):
+            return "BSE_2024_FACT_SOURCE_COLUMN_UNPROVEN"
+        def first_number(row):
+            if not isinstance(row,str) or len(row)>500:
+                raise ValueError("BSE_2024_ROW_INVALID")
+            nums=re.findall(r"(?<![0-9A-Za-z])(-?(?:\d{1,3}(?:,\d{2,3})+|\d+)\.\d{2})(?![0-9])",row)
+            if len(nums)<3:raise ValueError("BSE_2024_ROW_NOT_QUARTERLY")
+            return Decimal(nums[0].replace(",",""))
+        try:
+            if key=="NET_INTEREST_INCOME_QUARTER":
+                parts=f.get("component_lines")
+                if (f.get("formula")!="INTEREST_EARNED_MINUS_INTEREST_EXPENDED"
+                    or not isinstance(parts,list) or len(parts)!=2
+                    or parts[0].get("page")!=m.get("financial_page")
+                    or parts[1].get("page")!=m.get("financial_page")
+                    or not re.match(r"^1 Interest earned\b",parts[0].get("line",""),re.I)
+                    or not re.match(r"^4 Interest expended\b",parts[1].get("line",""),re.I)):
+                    return "BSE_2024_NII_COMPONENTS_INVALID"
+                actual=first_number(parts[0]["line"])-first_number(parts[1]["line"])
+                if str(first_number(parts[0]["line"]))!=parts[0].get("first_quarter_value"):
+                    return "BSE_2024_INTEREST_EARNED_ROW_MISMATCH"
+                if str(first_number(parts[1]["line"]))!=parts[1].get("first_quarter_value"):
+                    return "BSE_2024_INTEREST_EXPENDED_ROW_MISMATCH"
+            elif key=="NET_PROFIT_QUARTER":
+                if not re.match(r"^16 Net profit for the period\b",f.get("evidence_line",""),re.I):
+                    return "BSE_2024_PROFIT_ROW_INVALID"
+                actual=first_number(f["evidence_line"])
+            elif key=="EPS_DILUTED":
+                if not re.match(r"^[\(\{][bB][\)\}] Diluted EPS before",f.get("evidence_line",""),re.I):
+                    return "BSE_2024_DILUTED_EPS_ROW_INVALID"
+                if f.get("share_basis")!="AS_ORIGINALLY_PUBLISHED_NO_RETROSPECTIVE_ADJUSTMENT":
+                    return "BSE_2024_EPS_SHARE_BASIS_UNPROVEN"
+                actual=first_number(f["evidence_line"])
+            else:
+                return "BSE_2024_METRIC_NOT_AUTHORIZED"
+            if actual!=Decimal(str(f.get("value"))):
+                return "BSE_2024_PDF_ROW_VALUE_MISMATCH"
+        except (ValueError,TypeError,InvalidOperation,KeyError,AttributeError):
+            return "BSE_2024_PDF_ROW_VALIDATION_FAILED"
     if key=="EPS_DILUTED" and m.get("historical_identity_link"):
         if (m.get("eps_as_originally_reported_before_split") is not True
             or fact.get("original_unit")!="INR_PER_SHARE"):
@@ -248,7 +323,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1')
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
