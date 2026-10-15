@@ -1,0 +1,38 @@
+name: Results R5-E Evidence Insights Acceptance
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-e-acceptance.yml
+      - src/features/results/quarterlyR5InsightAcceptance.test.ts
+      - src/features/results/quarterlyR5.ts
+      - src/features/results/quarterlyR5Classification.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  e-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Architecture and TypeScript
+        run: |
+          npm run check:architecture
+          npm run typecheck
+      - name: Source-qualified insights and original comparison engine tests
+        run: npx vitest run src/features/results/quarterlyR5InsightAcceptance.test.ts src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.test.tsx
+      - name: Insight tests lint
+        run: npx eslint src/features/results/quarterlyR5InsightAcceptance.test.ts
+      - name: Client compilation
+        run: npm run build
+      - name: Commit whitespace
+        run: git diff --check HEAD^ HEAD
