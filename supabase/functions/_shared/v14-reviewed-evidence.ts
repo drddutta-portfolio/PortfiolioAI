@@ -122,7 +122,11 @@ export async function validateReviewedRequirementEvidence(input:{
  readonly sources:readonly ReviewedSourceRecord[]; readonly documents:readonly ReviewedResearchDocument[]; readonly documentSources:readonly ReviewedDocumentSource[]
  readonly definitions:readonly MetricDefinition[]; readonly evaluationAsOfMs:number; readonly sourceCutoffAtMs:number; readonly freshnessPolicy:string|null
 }):Promise<ReviewedEvidenceResult|null>{
- const {portfolioId,securityId,requirementCode,family,evaluationAsOfMs,sourceCutoffAtMs}=input
+ const {portfolioId,securityId,requirementCode,family:requestedFamily,evaluationAsOfMs,sourceCutoffAtMs}=input
+ // The established profile classifies conversion as LOCAL_DERIVATION. Only
+ // this owner-approved, source-bound BEL component contract uses numeric
+ // review validation internally; all other local derivations stay blocked.
+ const family=requestedFamily==='LOCAL_DERIVATION'&&portfolioId===G03_FINANCIAL_POLICY.portfolioId&&securityId===G03_FINANCIAL_POLICY.securityId&&requirementCode==='CFO_FCF_CONVERSION'?'NUMERIC_SERIES':requestedFamily
  if(!["NUMERIC_SERIES","OWNERSHIP_4Q","TEXT_EVIDENCE_REVIEW"].includes(family))return null
  const scoped=input.reviews.filter(r=>r.portfolio_id===portfolioId&&r.security_id===securityId&&r.requirement_code===requirementCode)
  if(!scoped.length)return null

@@ -32,5 +32,5 @@ export async function admitFixedG03Cash(db:SupabaseClient,body:Record<string,unk
   const read=await db.from('research_evidence_requirement_reviews').select('review_hash,reviewed_by,source_payload_hash').eq('id',b.reviewId).single();if(read.error||read.data.review_hash!==reviewHash||read.data.reviewed_by!==null||read.data.source_payload_hash!==sourceHash)throw Error('G03_CASH_REVIEW_READBACK_FAILED')
   results.push({reviewId:b.reviewId,sourceId:b.sourceId,periodEnd:b.periodEnd,derivation,reused:Boolean(prior.data)})
  }
- return {code:'G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY',results,providerCalls:0,canonicalMaterialization:false,metricRegistryWrites:0,originalWrites:0}
+ return {code:'G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY',results,providerCalls:0,providerApiCalls:0,canonicalMaterialization:false,metricRegistryWrites:0,originalWrites:0}
 }

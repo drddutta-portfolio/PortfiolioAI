@@ -3,6 +3,7 @@ import {deriveG03CashConversion,G03_FINANCIAL_POLICY as p,G03_CASH_KIND,G03_CASH
 import {G03_CASH_BATCH as batch,approvedG03CashReview,approvedG03CashSource} from './v14-g03-cash-review.ts'
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord} from './v14-reviewed-evidence.ts'
 import {hashG02} from './v14-g02-source-import.ts'
+import {planEvidenceRequirement} from './p7-ic-evidence-normalization.ts'
 import {g03FinancialExecutorQualified} from './v14-g03-executor-identity.ts'
 const at='2026-10-15T05:00:00+00:00'
 async function fixture(){
@@ -16,7 +17,7 @@ async function fixture(){
   reviews.push({id:b.reviewId,...payload,review_hash:await hashG02(payload)})
  }
  const hashes=[...new Set(batch.periods.map(x=>x.originalSha256))]
- return {portfolioId:p.portfolioId,portfolioOwnerId:p.ownerId,securityId:p.securityId,requirementCode:'CFO_FCF_CONVERSION',family:'NUMERIC_SERIES' as const,metricCodes:['CFO_FCF_CONVERSION'],minimum:3,reviews,sources,documents:hashes.map(h=>({id:h,security_id:p.securityId,reporting_period_start:null,reporting_period_end:null,reporting_period_type:null,published_at:null,canonical_content_hash:h,identity_status:'VERIFIED'})),documentSources:hashes.map(h=>({id:'link:'+h,research_document_id:h,source_record_id:'parent:'+h,source_code:p.sourceAuthority,content_hash:h,source_status:'VERIFIED',provider_document_id:null,source_url:'https://official.example/report.pdf',retrieved_at:at})),definitions:[],evaluationAsOfMs:Date.parse(at),sourceCutoffAtMs:Date.parse(at),freshnessPolicy:'SOURCE_APPROPRIATE_150_DAYS_UNLESS_LONG_LIVED'}
+ return {portfolioId:p.portfolioId,portfolioOwnerId:p.ownerId,securityId:p.securityId,requirementCode:'CFO_FCF_CONVERSION',family:planEvidenceRequirement('CFO_FCF_CONVERSION',3,'DEFENCE_AEROSPACE').deterministicCoverageRule,metricCodes:['CFO_FCF_CONVERSION'],minimum:3,reviews,sources,documents:hashes.map(h=>({id:h,security_id:p.securityId,reporting_period_start:null,reporting_period_end:null,reporting_period_type:null,published_at:null,canonical_content_hash:h,identity_status:'VERIFIED'})),documentSources:hashes.map(h=>({id:'link:'+h,research_document_id:h,source_record_id:'parent:'+h,source_code:p.sourceAuthority,content_hash:h,source_status:'VERIFIED',provider_document_id:null,source_url:'https://official.example/report.pdf',retrieved_at:at})),definitions:[],evaluationAsOfMs:Date.parse(at),sourceCutoffAtMs:Date.parse(at),freshnessPolicy:'SOURCE_APPROPRIATE_150_DAYS_UNLESS_LONG_LIVED'}
 }
 describe('approved BEL matched annual cash components in the canonical reviewer',()=>{
  it('derives the exact three-year conversion and preserves adverse FCF and original classification',()=>{
@@ -34,6 +35,7 @@ describe('approved BEL matched annual cash components in the canonical reviewer'
  })
  it('admits three matched periods without activating generic provider CFO or forging source publication',async()=>{
   const f=await fixture(),r=await validateReviewedRequirementEvidence(f)
+  expect(f.family).toBe('LOCAL_DERIVATION')
   expect(r).toMatchObject({state:'FRESH',reason:'APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY',lineage:{financialContract:p.version,providerCfoRegistryUnchanged:true,historicalPitAvailabilityNotClaimed:true}})
   expect(r?.observations.map(x=>[x.period_end,x.numeric_value,x.published_at])).toEqual([['2024-03-31','1.150853',null],['2025-03-31','0.086465',null],['2026-03-31','0.247060',null]])
   expect(reconcileCanonicalAndReviewed({canonicalRows:[],reviewed:r,definitions:[],minimum:3,evaluationAsOfMs:f.evaluationAsOfMs,sourceCutoffAtMs:f.sourceCutoffAtMs,family:f.family})).toMatchObject({authority:'REVIEW',validation:{state:'FRESH'}})
@@ -45,6 +47,8 @@ describe('approved BEL matched annual cash components in the canonical reviewer'
   expect(approvedG03CashReview(r,p.ownerId,'NUMERIC_SERIES')).toBe(true)
   for(const change of [{security_id:'foreign'},{portfolio_id:'foreign'},{reviewed_by:p.ownerId},{period_end:'2025-03-31'},{consolidation_scope:'CONSOLIDATED'},{unit:'INR_CRORE'},{metadata:{...r.metadata,financial_components:{...batch.periods[0].components,pat:'1'}}}])expect(approvedG03CashReview({...r,...change},p.ownerId,'NUMERIC_SERIES')).toBe(false)
   for(const change of [{source_code:'TRENDLYNE_MCP'},{raw_payload:{...s.raw_payload,original_sha256:'0'.repeat(64)}},{raw_payload:{...s.raw_payload,verified_source_cells:[]}},{raw_payload:{...s.raw_payload,publication_precision:'EXACT'}}])expect(approvedG03CashSource(r,{...s,...change})).toBe(false)
+  expect(await validateReviewedRequirementEvidence({...f,securityId:'foreign'})).toBeNull()
+  expect(await validateReviewedRequirementEvidence({...f,requirementCode:'OTHER_CONVERSION'})).toBeNull()
   expect(await validateReviewedRequirementEvidence({...f,portfolioOwnerId:'foreign'})).toMatchObject({state:'REVIEW_REQUIRED'})
   expect(await validateReviewedRequirementEvidence({...f,documents:f.documents.map(d=>({...d,canonical_content_hash:'a'.repeat(64)}))})).toMatchObject({state:'REVIEW_REQUIRED'})
   expect(await validateReviewedRequirementEvidence({...f,documentSources:f.documentSources.concat(f.documentSources)})).toMatchObject({state:'REVIEW_REQUIRED',reason:'DOCUMENT_SOURCE_ASSOCIATION_NOT_UNIQUE'})
