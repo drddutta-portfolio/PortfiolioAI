@@ -3,6 +3,8 @@ import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import { useDashboardNewsFeed } from "../features/dashboard/useDashboardEvidence"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import { loadNewsRefreshStatus, saveNewsRefreshHours, isNewsRefreshHours, type NewsRefreshStatus } from "../data/newsRefreshRepository"
+import { displayError } from "../lib/displayError"
 import "./DashboardNewsPreview.css"
 
 const DASHBOARD_NEWS_LIMIT = 50
@@ -42,7 +44,38 @@ function importanceClass(value: string) {
 export function DashboardNewsPreview() {
   const { portfolio } = usePortfolioView()
   const feed = useDashboardNewsFeed(portfolio?.portfolio.id ?? null, DASHBOARD_NEWS_LIMIT)
+  const portfolioId = portfolio?.portfolio.id ?? null
   const [target, setTarget] = useState<HTMLElement | null>(null)
+  const [newsStatus, setNewsStatus] = useState<NewsRefreshStatus | null>(null)
+  const [newsError, setNewsError] = useState<string | null>(null)
+  const [savingNews, setSavingNews] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    if (!portfolioId) return () => { active = false }
+    const refreshStatus = () => {
+      void loadNewsRefreshStatus(portfolioId).then((status) => {
+        if (active) { setNewsStatus(status); setNewsError(null) }
+      }).catch((error: unknown) => { if (active) setNewsError(displayError(error)) })
+    }
+    refreshStatus()
+    const timer = window.setInterval(refreshStatus, 5 * 60 * 1000)
+    return () => { active = false; window.clearInterval(timer) }
+  }, [portfolioId])
+
+  async function updateNewsFrequency(value: string) {
+    if (!portfolioId) return
+    const hours = Number(value)
+    if (!isNewsRefreshHours(hours)) return
+    setSavingNews(true)
+    setNewsError(null)
+    try {
+      await saveNewsRefreshHours(portfolioId, hours)
+      setNewsStatus(await loadNewsRefreshStatus(portfolioId))
+    } catch (error: unknown) {
+      setNewsError(displayError(error))
+    } finally { setSavingNews(false) }
+  }
 
   useEffect(() => {
     const findTarget = () => {
@@ -67,7 +100,23 @@ export function DashboardNewsPreview() {
           <h2>News intelligence</h2>
           <p>Latest official NSE announcements matched to your current holdings. Read-only; refreshed by the automated news pipeline.</p>
         </div>
-        <span className="dashboard-live-news-status"><i /> Live · NSE</span>
+        <div className="dashboard-news-controls">
+          <span className={`dashboard-live-news-status ${newsStatus?.health !== "CURRENT" ? "status-degraded" : ""}`}>
+            <i /> {newsStatus?.health === "CURRENT" ? "Scheduled · NSE" : "News refresh needs attention"}
+          </span>
+          <label className="dashboard-news-interval">Refresh every
+            <select aria-label="News refresh frequency" value={newsStatus?.intervalHours ?? 6}
+              disabled={!portfolioId || !newsStatus || savingNews}
+              onChange={(event) => { void updateNewsFrequency(event.target.value) }}>
+              <option value={1}>1 hour</option>
+              <option value={3}>3 hours</option>
+              <option value={6}>6 hours</option>
+              <option value={12}>12 hours</option>
+            </select>
+          </label>
+          <small>{newsStatus?.lastRunAt ? `Last scan: ${formatPublishedAt(newsStatus.lastRunAt)} · ${newsStatus.lastRunStatus}` : "No confirmed scheduled scan"}</small>
+          {newsError ? <small role="alert">Scheduler: {newsError}</small> : null}
+        </div>
       </div>
 
       {state === "LOADING" ? <div className="dashboard-live-news-empty">Loading latest portfolio announcements…</div> : null}
