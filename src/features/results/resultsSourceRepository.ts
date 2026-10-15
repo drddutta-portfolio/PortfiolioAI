@@ -10,6 +10,9 @@ export interface ResultsSourceObservation {
   readonly code: string
   readonly value: string
   readonly periodEnd: string
+  readonly periodStart?: string | null
+  readonly currency?: string | null
+  readonly sourceRecordId?: string | null
   readonly unit: string
   readonly scope: string | null
   readonly source: string
@@ -64,7 +67,7 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
     }
     for (let page = 0; page < MAX_PAGES_PER_BATCH; page++) {
       const { data, error } = await supabase.from("fundamental_observations")
-        .select("id,security_id,metric_code,numeric_value,unit,period_end,period_type,consolidation_scope,evidence_status,source_code,published_at,retrieved_at")
+        .select("id,security_id,metric_code,numeric_value,unit,currency,period_start,period_end,period_type,consolidation_scope,evidence_status,source_code,source_record_id,published_at,retrieved_at")
         .in("security_id", [...batch])
         .in("metric_code", [...METRICS])
         .eq("period_type", "QUARTER")
@@ -81,6 +84,9 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
           code: row.metric_code,
           value: String(row.numeric_value),
           periodEnd: row.period_end,
+          periodStart: row.period_start,
+          currency: row.currency,
+          sourceRecordId: row.source_record_id,
           unit: row.unit ?? "UNKNOWN",
           scope: row.consolidation_scope,
           source: row.source_code,
