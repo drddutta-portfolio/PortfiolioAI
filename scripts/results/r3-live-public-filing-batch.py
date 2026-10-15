@@ -33,7 +33,13 @@ FIELDS = {
     "total profit (loss) for period": "NET_PROFIT_QUARTER",
     "diluted earnings (loss) per share from continuing and discontinued operations": "EPS_DILUTED",
 }
-TARGET_QUARTERS = ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
+# R5 historical comparisons are a separate, explicit Development-only campaign.
+# Do not widen ordinary R3 acquisition or reinterpret unverified older rows.
+R5_HISTORY_MODE = os.getenv("RESULTS_R5_HISTORICAL_ACQUISITION", "0") == "1"
+TARGET_QUARTERS = (
+    ("2025-03-31", "2025-06-30") if R5_HISTORY_MODE
+    else ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
+)
 CORE_METRICS = frozenset(FIELDS.values())
 BANK_REQUIRED = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
 # Investment banking cohort is explicit so unrelated non-bank NPA observations
@@ -516,6 +522,8 @@ def main():
     db=required("SUPABASE_DB_URL")
     if PROJECT_REF not in db:raise RuntimeError("NON_DEVELOPMENT_DATABASE_FORBIDDEN")
     if required("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise RuntimeError("NON_DEVELOPMENT_R2_FORBIDDEN")
+    if R5_HISTORY_MODE and os.getenv("RESULTS_R5_HISTORICAL_ACK") != "2025_MAR_JUN_ONLY":
+        raise RuntimeError("R5_HISTORICAL_PERIOD_SCOPE_NOT_APPROVED")
     maxstocks=int(os.getenv("RESULTS_MAX_STOCKS","262"))
     if maxstocks<1 or maxstocks>262:raise RuntimeError("INVALID_STOCK_BUDGET")
     s3=r2_client()
