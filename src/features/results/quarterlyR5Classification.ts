@@ -8,7 +8,7 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * (sector, industry) pair. No sector-wide thresholds or adjacent-industry
  * substitutes are permitted.
  */
-export const RESULTS_GRADING_VERSION = "R5_INDUSTRY_QOQ_EMPIRICAL_20261015_V2"
+export const RESULTS_GRADING_VERSION = "R5_INDUSTRY_AND_COMPANY_TREND_20261015_V3"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 export interface ResultsQuarterGrade {
   readonly status: R5Grade
@@ -18,6 +18,8 @@ export interface ResultsQuarterGrade {
   readonly explanation: string
   readonly supportingMetrics: readonly string[]
   readonly sampleSize: number
+  /** Separates calibrated peer ranking from company-only directional evidence. */
+  readonly basis: "INDUSTRY_PEER" | "COMPANY_TREND" | "UNAVAILABLE"
 }
 export interface R5IndustryPeer {
   readonly securityId: string
@@ -61,7 +63,7 @@ function modelFor(sector: string | null, industry: string | null):
 
 const fail = (group: string, why: string): ResultsQuarterGrade => ({
   status: "UNAVAILABLE", policyVersion: RESULTS_GRADING_VERSION,
-  group, scope: "QOQ_ONLY", explanation: why, supportingMetrics: [], sampleSize: 0,
+  group, scope: "QOQ_ONLY", explanation: why, supportingMetrics: [], sampleSize: 0, basis: "UNAVAILABLE",
 })
 
 /** Guard *both* issuer filings in a two-quarter pair, not just the current one. */
@@ -155,6 +157,52 @@ export function buildIndustryR5Calibrations(
   return result
 }
 
+/** An explicit *unranked* directional fallback for industries with too few peers.
+ * It uses the issuer's own (at most 3) source-coherent quarterly comparisons,
+ * never converts company history into a purported industry percentile.  Strong
+ * and Weak are directional descriptions, not calibrated peer rankings.
+ * To prevent a single volatile quarter from driving the answer, require
+ * two independent valid sequential comparisons INCLUDING the current one.
+ */
+function gradeCompanyTrajectory(
+  observations: readonly ResultsSourceObservation[],
+  securityId: string,
+  end: string,
+  topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
+  group: string,
+): ResultsQuarterGrade {
+  if (!ENDS.includes(end as (typeof ENDS)[number])) {
+    return fail(group, "No qualified preceding quarter exists inside the approved four-quarter R5 window.")
+  }
+  const pairs = ENDS.filter(date => date <= end)
+    .map(date => comparable(observations, securityId, date, topCode))
+    .filter((pair): pair is NonNullable<typeof pair> => pair !== null)
+  const current = comparable(observations, securityId, end, topCode)
+  if (!current || pairs.length < 2) {
+    return fail(group, "No eligible industry peers and fewer than two source-coherent company quarter comparisons including the selected quarter.")
+  }
+  const up = pairs.filter(p => p.top.gt(0) && p.profit.gt(0)).length
+  const down = pairs.filter(p => p.top.lt(0) && p.profit.lt(0)).length
+  const latestUp = current.top.gt(0) && current.profit.gt(0)
+  const latestDown = current.top.lt(0) && current.profit.lt(0)
+  const strong = current.currentProfit.gt(0) && latestUp && up >= 2
+  const weak = current.currentProfit.lte(0) || (latestDown && down >= 2)
+  const status: R5Grade = strong ? "STRONG" : weak ? "WEAK" : "MIXED"
+  return {
+    status, policyVersion: RESULTS_GRADING_VERSION, group,
+    scope: "QOQ_ONLY", supportingMetrics: [topCode, "NET_PROFIT_QUARTER"],
+    sampleSize: pairs.length, basis: "COMPANY_TREND",
+    explanation: "Company-only quarterly trend using " + pairs.length +
+      " independently verified consecutive comparisons and the " +
+      (topCode === "NET_INTEREST_INCOME_QUARTER" ? "bank NII/PAT" : "operating Revenue/PAT") +
+      " contract. " +
+      (strong ? "At least two comparisons show joint improvement, including the latest quarter, with a profitable current quarter." :
+       weak ? "The latest loss or repeated joint contraction merits review." :
+       "The available company trend is neither consistently improving nor consistently weakening.") +
+      " This is NOT an industry percentile or investment recommendation; exact-industry peer grading remains unavailable.",
+  }
+}
+
 export function gradeQuarterR5(
   observations: readonly ResultsSourceObservation[],
   securityId: string,
@@ -167,11 +215,11 @@ export function gradeQuarterR5(
   const topCode = modelFor(sector, industry)
   if (!topCode) return fail(group, "Industry is unavailable or its financial-statement model is not supported.")
   const calibration = calibrations.get(groupKey(sector,industry))
-  if (!calibration || calibration.topCode !== topCode) {
-    return fail(group, "Insufficient distinct issuer and qualified quarter-pair observations for this exact industry (minimum four issuers and twelve pairs); no sector proxy used.")
-  }
   const pair = comparable(observations, securityId, end, topCode)
   if (!pair) return fail(group, "Comparable, same-filing Revenue/NII and PAT selections are missing or incompatible in either quarter.")
+  if (!calibration || calibration.topCode !== topCode) {
+    return gradeCompanyTrajectory(observations, securityId, end, topCode, group)
+  }
   const strong = pair.currentProfit.gt(0) &&
     pair.top.gte(calibration.p75Top) && pair.profit.gte(calibration.p75Profit)
   const weak = !pair.currentProfit.gt(0) ||
@@ -184,7 +232,7 @@ export function gradeQuarterR5(
   return {
     status, policyVersion: RESULTS_GRADING_VERSION, group,
     scope: "QOQ_ONLY", supportingMetrics: [topCode, "NET_PROFIT_QUARTER"],
-    sampleSize: calibration.sampleSize,
+    sampleSize: calibration.sampleSize, basis: "INDUSTRY_PEER",
     explanation: "QoQ-only, exact-industry empirical calibration (" +
       calibration.distinctIssuers + " issuers, " + calibration.sampleSize +
       " source-qualified quarter pairs). " + reason +
