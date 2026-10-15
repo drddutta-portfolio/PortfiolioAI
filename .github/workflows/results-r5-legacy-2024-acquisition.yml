@@ -29,7 +29,7 @@ jobs:
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R5_LEGACY_STOCK_LIMIT: "262"
       RESULTS_R5_LEGACY_ACK: "2024_SEP_DEC_ORIGINAL_XBRL"
-      RESULTS_R5_LEGACY_SYMBOLS: ${{ inputs.full_cohort && '' || 'RELIANCE,INFY' }}
+      RESULTS_R5_LEGACY_SYMBOLS: ${{ github.event_name == 'workflow_dispatch' && !inputs.full_cohort && 'RELIANCE,INFY' || '' }}
       RESULTS_R5_LEGACY_DRY_RUN: "0"
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +61,14 @@ jobs:
           mkdir -p tmp/results-r5-legacy
           python scripts/results/r5-legacy-2024-xbrl.py > tmp/results-r5-legacy/acquisition.json
           python -m json.tool tmp/results-r5-legacy/acquisition.json >/dev/null
+          python - <<'PY'
+          import json
+          data=json.load(open("tmp/results-r5-legacy/acquisition.json"))
+          if data.get("blocked"):
+              raise SystemExit("ORIGINAL_SOURCE_ACCESS_BLOCKED")
+          if data.get("qualified",0)==0 and data.get("observations_inserted",0)==0:
+              print("NO_NEW_QUALIFIED_ORIGINALS: inspect reuse/selected coverage; no false acceptance.")
+          PY
           python - <<'PY'
           import json
           x=json.load(open("tmp/results-r5-legacy/acquisition.json"))
