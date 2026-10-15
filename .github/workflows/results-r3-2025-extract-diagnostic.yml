@@ -36,6 +36,14 @@ jobs:
                 z=s.get(link,timeout=25)
                 if not z.ok: print('FETCH',name,z.status_code);continue
                 parsed,reason=m.extract_source(z.text,name,isin,link)
+                from bs4 import BeautifulSoup
+                soup=BeautifulSoup(z.text,'html.parser')
+                snippets=[]
+                for rows in m.html_rows(soup):
+                  for row in rows:
+                    if any('rounding' in str(c).lower() or 'in lakhs' in str(c).lower() or 'in crores' in str(c).lower() or 'in millions' in str(c).lower() for c in row):
+                      snippets.append([str(c)[:100] for c in row[:5]])
+                print('UNIT_ROWS',name,json.dumps(snippets[:5]))
                 print('EXTRACT',name,parsed.get('period_end') if parsed else None,sorted(parsed.get('facts',{})) if parsed else [],reason)
               except Exception as e: print('ERROR',name,type(e).__name__,str(e)[:100])
           PY
