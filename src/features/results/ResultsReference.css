@@ -452,3 +452,38 @@
   .ref-results .ref-analysis-grid .results-card { min-height: 0; }
   .ref-results .results-footnote { margin: .35rem; }
 }
+
+/* AI Insight UI-only upgrade: no inferred investment signal, no Results grid changes. */
+.ref-results .ref-insight-statuses { display:grid; grid-template-columns:1fr 1fr; gap:.4rem; margin:.45rem 0; }
+.ref-results .ref-insight-statuses > div { display:flex; flex-direction:column; gap:.3rem; padding:.48rem; background:#f7f9fd; border:1px solid #e8edf5; border-radius:.45rem; min-width:0; }
+.ref-results .ref-insight-statuses span { font-size:.6rem; color:#65748c; }
+.ref-results .ref-insight-statuses strong { font-size:.72rem; line-height:1.25; }
+.ref-results .ref-insight-grade-strong { color:#15764a; }
+.ref-results .ref-insight-grade-mixed { color:#99701d; }
+.ref-results .ref-insight-grade-weak { color:#bd3d48; }
+.ref-results .ref-insight-grade-unavailable,.ref-results .ref-insight-unassessed { color:#65748c; }
+.ref-results .ref-insight-text { margin:.48rem 0 .38rem; font-size:.69rem; color:#243956; line-height:1.47; }
+.ref-results .ref-insight-disclaimer { margin:0 0 .4rem; color:#71809b; font-size:.59rem; line-height:1.4; }
+.ref-results .ref-insight-actions { display:flex; flex-direction:column; align-items:flex-start; gap:.35rem; border-top:1px solid #e9eef5; padding-top:.45rem; }
+.ref-results .ref-insight-actions > span { color:#72809a; font-size:.59rem; }
+.ref-results .ref-insight-actions button { border:0; padding:0; background:none; color:#1769db; font-size:.72rem; cursor:pointer; font-weight:750; text-align:left; }
+.ref-results .ref-insight-actions button:hover { text-decoration:underline; }
+.ref-results .ref-full-ai-analysis { margin:.7rem 0 .45rem; padding:.95rem; border:1px solid #dce5f2; border-radius:.65rem; background:#fcfdff; }
+.ref-results .ref-full-ai-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.8rem; }
+.ref-results .ref-full-ai-heading h3 { margin:0 0 .25rem; font-size:1rem; color:#233450; }
+.ref-results .ref-full-ai-heading p { margin:0; font-size:.7rem; color:#71809a; }
+.ref-results .ref-ai-build-state { padding:.3rem .5rem; border:1px solid #d6e2f1; background:#f3f6fb; color:#52647c; border-radius:999px; white-space:nowrap; font-size:.61rem; }
+.ref-results .ref-full-ai-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+.ref-results .ref-full-ai-grid section { border:1px solid #e2e9f3; border-radius:.55rem; padding:.8rem; background:white; min-width:0; }
+.ref-results .ref-full-ai-grid h4 { margin:0 0 .45rem; font-size:.78rem; color:#263d5f; }
+.ref-results .ref-full-ai-grid p,.ref-results .ref-full-ai-grid li { font-size:.7rem; color:#596c86; line-height:1.6; }
+.ref-results .ref-full-ai-grid p { margin:0; }
+.ref-results .ref-full-ai-grid ul { margin:.1rem 0; padding-left:1.1rem; }
+.ref-results .ref-ai-investment-section strong { display:block; color:#566d89; font-size:.72rem; margin-bottom:.3rem; }
+.ref-results .ref-ai-methodology { margin-top:.7rem; border-top:1px solid #e2e9f3; padding-top:.65rem; }
+.ref-results .ref-ai-methodology summary { color:#2465bd; font-weight:700; cursor:pointer; font-size:.73rem; }
+.ref-results .ref-ai-methodology p { margin:.55rem 0 0; font-size:.69rem; color:#62728c; }
+@media(max-width:680px) {
+  .ref-results .ref-full-ai-grid { grid-template-columns:1fr; }
+  .ref-results .ref-full-ai-heading { flex-direction:column; }
+}
