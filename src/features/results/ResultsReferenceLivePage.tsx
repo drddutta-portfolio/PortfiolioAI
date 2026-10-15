@@ -38,24 +38,14 @@ const isBank = (industry: string | null) => /bank/i.test(industry ?? "")
 const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
   rows.some((row) => row.code === "NET_INTEREST_INCOME_QUARTER" || row.code === "GROSS_NPA_PERCENT" || row.code === "NET_NPA_PERCENT")
 
+// R5 approved four-quarter window. Never auto-advance to unqualified new quarter.
 function makePeriods(): Period[] {
-  const today = new Date()
-  const y = today.getUTCFullYear()
-  const m = today.getUTCMonth() + 1
-  const lastMonth = Math.floor((m - 1) / 3) * 3
-  const finalYear = lastMonth === 0 ? y - 1 : y
-  const finalMonth = lastMonth === 0 ? 12 : lastMonth
-  const periods: Period[] = []
-  for (let year = 2025; year <= finalYear; year++) {
-    for (const month of [3, 6, 9, 12]) {
-      if (year === finalYear && month > finalMonth) break
-      const quarter = month === 3 ? 4 : month === 6 ? 1 : month === 9 ? 2 : 3
-      const fy = month === 3 ? year : year + 1
-      const end = new Date(Date.UTC(year, month, 0)).toISOString().slice(0, 10)
-      periods.push({ end, label: "Q" + quarter + " FY" + String(fy).slice(-2) })
-    }
-  }
-  return periods.reverse()
+  return [
+    { end: "2026-06-30", label: "Q1 FY27" },
+    { end: "2026-03-31", label: "Q4 FY26" },
+    { end: "2025-12-31", label: "Q3 FY26" },
+    { end: "2025-09-30", label: "Q2 FY26" },
+  ]
 }
 
 function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
