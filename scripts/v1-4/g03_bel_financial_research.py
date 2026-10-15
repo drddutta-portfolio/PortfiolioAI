@@ -10,6 +10,9 @@ def main():
     body = {'action': 'ACQUIRE_G03_BEL_FINANCIAL_RESEARCH', 'authorizationHash': policy['contractSha256'],
             'portfolioId': policy['portfolioId'], 'securityId': policy['securityId'],
             'batchDate': '2026-10-15', 'researchKind': os.environ['G03_RESEARCH_KIND']}
+    if body['researchKind'].startswith('EXACT_'):
+        body['parameters'] = json.loads(os.environ['G03_RESEARCH_PARAMETERS'])
+        body['catalogSourceIds'] = json.loads(os.environ['G03_RESEARCH_CATALOG_IDS'])
     result = invoke('v14-g02-document-admission', body, grant_response=True)
     out = Path('g03-bel-financial-research-result')
     out.mkdir(exist_ok=True)

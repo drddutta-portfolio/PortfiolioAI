@@ -2,6 +2,7 @@ import {describe,it,expect,vi} from 'vitest'
 import {acquireG03BelFinancialResearch,g03BelResearchScope,G03_BEL_RESEARCH_KIND} from './v14-g03-financial-research-runtime.ts'
 import {g03FinancialResearchExecutorQualified} from './v14-g03-executor-identity.ts'
 import p from './v14-g03-financial-authorization.json'
+import {hashG02} from './v14-g02-source-import.ts'
 type Row=Record<string,unknown>
 const body={action:'ACQUIRE_G03_BEL_FINANCIAL_RESEARCH',authorizationHash:p.contractSha256,portfolioId:p.portfolioId,securityId:p.securityId,batchDate:'2026-10-15',researchKind:'MARGIN'}
 function setup(){
@@ -74,5 +75,14 @@ describe('BEL approved-scope research never admits provider claims automatically
   const f=setup(),r=await acquireG03BelFinancialResearch(f.db,{...body,researchKind:'PARAMETER_CATALOG'}, {},f.client)
   expect(f.client.call).toHaveBeenCalledWith('search_financial_parameters',{query:expect.any(String)});expect(f.client.getParameterValuesMultiStock).not.toHaveBeenCalled();expect(r).toMatchObject({providerApiCalls:1,acceptedReviews:0,canonicalMaterialization:false})
   expect(f.calls.find(c=>c.name==='record_provider_usage_event_v1')?.args.p_operation_class).toBe('SEARCH_FINANCIAL_PARAMETERS')
+ })
+ it('fetches only BEL and observed quarter tokens, refusing arbitrary fields and tampered or foreign catalogs before spending',async()=>{
+  const f=setup(),raw={security_id:p.securityId,research_kind:'PROFIT_PARAMETER_CATALOG',result:JSON.stringify({status:'success',data:[{parameter:'opq',helping_text:'Operating Profit Qtr'},{parameter:'opqm1',helping_text:'Operating Profit 1Q Ago'}]})}
+  const source={id:'catalog',source_code:'TRENDLYNE_MCP',record_kind:G03_BEL_RESEARCH_KIND,raw_payload:raw,payload_hash:await hashG02(raw)};f.rows.data_source_records.push(source)
+  const exact={...body,researchKind:'EXACT_PROFIT_HISTORY',parameters:['opq','opqm1'],catalogSourceIds:['catalog']}
+  expect(await acquireG03BelFinancialResearch(f.db,exact,{},f.client)).toMatchObject({providerApiCalls:1,acceptedReviews:0})
+  expect(f.client.call).toHaveBeenCalledWith('get_stock_parameter_values',{stock_codes:['BEL'],parameters:['opq','opqm1']});expect(f.client.getParameterValuesMultiStock).not.toHaveBeenCalled()
+  for(const changed of [{parameters:['pettm']},{parameters:['opq','opq']},{catalogSourceIds:['foreign']},{parameters:Array(11).fill('opq')}])await expect(acquireG03BelFinancialResearch(f.db,{...exact,...changed},{},f.client)).rejects.toThrow('G03_RESEARCH_')
+  source.raw_payload={...raw,security_id:'foreign'};await expect(acquireG03BelFinancialResearch(f.db,exact,{},f.client)).rejects.toThrow('CATALOG_NOT_PROVEN');expect(f.client.call).toHaveBeenCalledTimes(1)
  })
 })

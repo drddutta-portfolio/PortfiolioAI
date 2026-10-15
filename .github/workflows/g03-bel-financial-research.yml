@@ -4,8 +4,14 @@ on:
     inputs:
       research_kind:
         type: choice
-        options: [MARGIN, DEBT_VALUATION_DOCUMENTS, PARAMETER_CATALOG]
+        options: [MARGIN, DEBT_VALUATION_DOCUMENTS, PARAMETER_CATALOG, PROFIT_PARAMETER_CATALOG, REVENUE_PARAMETER_CATALOG, EXACT_PROFIT_HISTORY, EXACT_REVENUE_HISTORY]
         required: true
+      parameters:
+        description: JSON array of observed masked tokens for the exact-stock value action only
+        default: '[]'
+      catalog_source_ids:
+        description: JSON array of retained BEL parameter-catalog source IDs
+        default: '[]'
   push:
     branches: [codex/g02-industry-evidence]
     paths: [.github/workflows/g03-bel-financial-research.yml]
@@ -28,6 +34,8 @@ jobs:
       - name: Acquire one exact BEL research request; repeat must not call provider
         env:
           G03_RESEARCH_KIND: ${{ inputs.research_kind }}
+          G03_RESEARCH_PARAMETERS: ${{ inputs.parameters }}
+          G03_RESEARCH_CATALOG_IDS: ${{ inputs.catalog_source_ids }}
         run: python scripts/v1-4/g03_bel_financial_research.py
       - uses: actions/upload-artifact@v4
         if: always()
