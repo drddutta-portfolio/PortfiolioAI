@@ -330,10 +330,7 @@ export function ResultsLivePage() {
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
-    if (statuses.size > 0 && !periods.some((period) => {
-      const rows = forQuarter(observations, p.securityId, period.end)
-      return statuses.has(resultStatus(observations, e, period.end))
-    })) return false
+    if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end)))) return false
     return true
   }), [entries, query, filter, industry, statuses, observations, periods])
 
