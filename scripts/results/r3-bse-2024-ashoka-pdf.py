@@ -37,7 +37,7 @@ def sha(obj):return hashlib.sha256(obj).hexdigest()
 
 def first_number(row,metric):
     # All original amounts are stored in lakhs except INR/share EPS.
-    nums=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\w)",row)
+    nums=re.findall(r"(?<![\w,])(?:\d{1,3}(?:,\d{2})*,\d{3}|\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?![\d,])",row)
     if len(nums)<5:raise ValueError("ORIGINAL_MULTICOLUMN_UNPROVEN_"+metric)
     return Decimal(nums[0].replace(",",""))
 
@@ -98,6 +98,16 @@ def extract(raw,quarter):
           "cin_header":next(v for v in lines[:12] if CIN in v.upper()),
           "facts":facts})
     if len(found)!=1:raise ValueError("NO_SINGLE_ASHOKA_CONSOLIDATED_QUARTERLY_TABLE")
+    # Known issuer original first-quarter values; catches comma grouping regressions.
+    oracle={
+       "2024-09-30":{"OPERATING_REVENUE_QUARTER":"2488.931",
+                     "NET_PROFIT_QUARTER":"462.469","EPS_DILUTED":"16.28"},
+       "2024-12-31":{"OPERATING_REVENUE_QUARTER":"2387.888",
+                     "NET_PROFIT_QUARTER":"661.4923","EPS_DILUTED":"23.32"}
+    }
+    for metric,expected_value in oracle[quarter].items():
+        if Decimal(found[0]["facts"][metric]["value"])!=Decimal(expected_value):
+            raise ValueError("ASHOKA_FIRST_QUARTER_ORACLE_MISMATCH_"+metric)
     return found[0]
 
 def r2_client():
@@ -116,6 +126,8 @@ def persist(db,s3,quarter,source,parsed,publication):
     expected=TARGETS[quarter]
     document={
         "contract":CONTRACT,"symbol":SYMBOL,"isin":ISIN,"bse_scrip_code":CODE,
+        "parser_revision":"INDIAN_GROUPING_V2",
+        "supersedes_invalid_revision":"INDIAN_GROUPING_V1_FIRST_COMMA_GROUP_DROPPED",
         "period_start":expected["start"],"period_end":quarter,
         "consolidation_scope":"CONSOLIDATED",
         "issuer_filing_url":source["source_url"],
@@ -208,8 +220,24 @@ def main():
                 selected=cur.fetchone()[0]
             db.rollback()
             if selected==3:
-                info["status"]="EXISTING_QUALIFIED_REUSED"
-                results["quarters"].append(info);continue
+                with db.cursor() as cur:
+                    cur.execute("""SELECT d.metric_code,f.numeric_value::text,
+                           r.raw_payload->>'parser_revision'
+                         FROM public.fundamental_observation_decisions d
+                         JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                         JOIN public.data_source_records r ON r.id=f.source_record_id
+                         WHERE d.security_id=(SELECT id FROM public.securities WHERE symbol=%s AND isin=%s)
+                         AND d.period_end=%s AND d.period_type='QUARTER'
+                         AND d.selected_observation_id IS NOT NULL""",(SYMBOL,ISIN,quarter))
+                    prior={m:(Decimal(v),rev) for m,v,rev in cur.fetchall()}
+                expected_revenue=Decimal("2488.931") if quarter=="2024-09-30" else Decimal("2387.888")
+                if (prior.get("OPERATING_REVENUE_QUARTER")==
+                    (expected_revenue,"INDIAN_GROUPING_V2")
+                    and all(k in prior for k in
+                        ("NET_PROFIT_QUARTER","EPS_DILUTED"))):
+                    info["status"]="EXISTING_CORRECTED_SOURCE_REUSED"
+                    results["quarters"].append(info);db.rollback();continue
+            db.rollback()
             found=b.financial_announcements(CODE,date.fromisoformat(expected["from"]),
                   date.fromisoformat(expected["to"]),max_pages=3)
             matching=[a for a in found["results"] if

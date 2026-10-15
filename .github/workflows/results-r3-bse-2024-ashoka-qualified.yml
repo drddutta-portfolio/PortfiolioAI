@@ -38,6 +38,7 @@ jobs:
           python -m py_compile scripts/results/r3-bse-2024-ashoka-pdf.py scripts/results/r4-verify-quarterly.py
           python scripts/results/test_portfolio_bse.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
+          python scripts/results/test_r3_ashoka_indian_numbers.py -v
       - name: Validate original Ashoka consolidated quarterly figures without writing
         run: |
           set -euo pipefail
@@ -51,6 +52,12 @@ jobs:
           PY
       - name: Persist compact verified issuer-original financial facts
         run: python scripts/results/r3-bse-2024-ashoka-pdf.py --apply --output tmp/r3-bse-ashoka/acquisition.json
+      - name: Correct six Ashoka 2024 selections with independently source-qualified V2 observations
+        env:
+          RESULTS_R5_LEGACY_SELECTION: '1'
+          RESULTS_R5_LEGACY_ACK: '2024_SEP_DEC_ORIGINAL_XBRL'
+          RESULTS_R3_ASHOKA_CORRECTIVE_ACK: 'INDIAN_GROUPING_TWO_QUARTERS_V2'
+        run: python scripts/results/r3-bse-ashoka-2024-rebind.py
       - name: Apply historical R4 quarter source qualification
         env:
           RESULTS_R5_LEGACY_SELECTION: '1'
@@ -81,6 +88,20 @@ jobs:
               found=[{'period':p,'metrics':n,'codes':metrics} for p,n,metrics in cur.fetchall()]
               print('ASHOKA_2024_CANONICAL_READBACK='+json.dumps(found,sort_keys=True))
               assert len(found)==2 and all(row['metrics']>=3 for row in found)
+              cur.execute("""
+                SELECT d.period_end::text,f.numeric_value,r.raw_payload->>'parser_revision'
+                FROM public.fundamental_observation_decisions d
+                JOIN public.securities s ON s.id=d.security_id
+                JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                JOIN public.data_source_records r ON r.id=f.source_record_id
+                WHERE s.symbol='ASHOKA' AND d.metric_code='OPERATING_REVENUE_QUARTER'
+                  AND d.period_end IN ('2024-09-30','2024-12-31')
+                ORDER BY d.period_end
+              """)
+              actual=cur.fetchall()
+              assert [(p,str(v),revision) for p,v,revision in actual]==[
+                 ('2024-09-30','2488.931000000000000000','INDIAN_GROUPING_V2'),
+                 ('2024-12-31','2387.888000000000000000','INDIAN_GROUPING_V2')]
           PY
       - if: always()
         uses: actions/upload-artifact@v4

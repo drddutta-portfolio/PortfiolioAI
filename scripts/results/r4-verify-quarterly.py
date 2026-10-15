@@ -216,6 +216,8 @@ def check_manifest(record,manifest):
             or not str(manifest.get("publication_time_bse","")).startswith(published)
             or manifest.get("publication_precision")!="DATE_TIME_FROM_BSE_ANNOUNCEMENT"
             or manifest.get("original_first_quarter_column")!=0
+            or manifest.get("parser_revision")!="INDIAN_GROUPING_V2"
+            or manifest.get("supersedes_invalid_revision")!="INDIAN_GROUPING_V1_FIRST_COMMA_GROUP_DROPPED"
             or manifest.get("issuer_header")!="ASHOKA BUILDCON LIMITED"
             or "L45200MH1993PLC071970" not in str(manifest.get("cin_header",""))
             or heading not in str(manifest.get("quarter_header","")).upper()
@@ -350,7 +352,7 @@ def check_fact(r,m):
         try:
             match=re.match(regex,f["extraction_line"],re.I)
             if not match:return "BSE_ASHOKA_LABEL_MISMATCH"
-            parts=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\w)",match.group(1))
+            parts=re.findall(r"(?<![\w,])(?:\d{1,3}(?:,\d{2})*,\d{3}|\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?![\d,])",match.group(1))
             if len(parts)<5:return "BSE_ASHOKA_QUARTER_COLUMNS_NOT_PROVEN"
             raw=Decimal(parts[0].replace(",",""))
             if raw!=Decimal(str(f.get("original_value"))):
@@ -359,7 +361,7 @@ def check_fact(r,m):
                 second=f.get("eps_crosscheck_line")
                 if not isinstance(second,str) or not re.match(regex,second,re.I):
                     return "BSE_ASHOKA_EPS_CONFIRMATION_MISSING"
-                n2=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\w)",re.match(regex,second,re.I).group(1))
+                n2=re.findall(r"(?<![\w,])(?:\d{1,3}(?:,\d{2})*,\d{3}|\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?![\d,])",re.match(regex,second,re.I).group(1))
                 if not n2 or Decimal(n2[0].replace(",",""))!=raw:
                     return "BSE_ASHOKA_EPS_ROWS_CONFLICT"
                 if (f.get("original_unit")!="INR_PER_SHARE"
@@ -374,6 +376,12 @@ def check_fact(r,m):
                 converted=raw/Decimal(100)
             if converted!=Decimal(str(f.get("value"))):
                 return "BSE_ASHOKA_CRORE_CONVERSION_MISMATCH"
+            oracle={"2024-09-30":{"OPERATING_REVENUE_QUARTER":"2488.931",
+                                    "NET_PROFIT_QUARTER":"462.469","EPS_DILUTED":"16.28"},
+                    "2024-12-31":{"OPERATING_REVENUE_QUARTER":"2387.888",
+                                    "NET_PROFIT_QUARTER":"661.4923","EPS_DILUTED":"23.32"}}
+            if converted!=Decimal(oracle[m["period_end"]][key]):
+                return "BSE_ASHOKA_ORIGINAL_FIRST_QUARTER_ORACLE_MISMATCH"
         except (ValueError,TypeError,InvalidOperation,KeyError,AttributeError):
             return "BSE_ASHOKA_NUMERIC_ROW_FAILED"
     if key=="EPS_DILUTED" and m.get("historical_identity_link"):
