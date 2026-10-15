@@ -81,6 +81,7 @@ def extract(raw,metadata,symbol,isin):
   if local(node.tag)!="context":continue
   ctx=node.attrib.get("id")
   if not ctx or ctx in contexts: return None,"DUPLICATE_CONTEXT_ID"
+  if ctx!="OneD":continue # FourD is cumulative/YTD even where XML dates look quarterly
   if any(local(e.tag) in ("scenario","segment") for e in node.iter()):continue
   identities=[e for e in node.iter() if local(e.tag)=="identifier"]
   if len(identities)!=1 or (identities[0].text or "").strip()!=symbol:continue
@@ -149,7 +150,7 @@ def source_diagnostic(raw):
   name=local(node.tag)
   if any(term in name.lower() for term in ("revenuefromoperations","profitlossforperiod","dilutedearnings","profitlossfortheperiod","interestearned","interestexpenses")):
    example.append({"field":name,"context":node.attrib.get("contextRef"),"unit":node.attrib.get("unitRef"),
-                   "value_shape":(node.text or "").strip()[:3]+"...","has_number":bool(re.fullmatch(r"-?\\d+(?:\\.\\d+)?",(node.text or "").strip()))})
+                   "value_excerpt":(node.text or "").strip()[:36],"has_number":bool(re.fullmatch(r"-?\\d+(?:\\.\\d+)?",(node.text or "").strip()))})
  return {"units":units,"fields":example[:12]}
 
 def persist(db,s3,raw,record,parsed):
