@@ -1,0 +1,51 @@
+name: Results R3 BSE 2024 PDF Financial Text Extraction Proof
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-2024-pdf-extraction-proof.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install unvendored BseIndiaApi and PDF text reader
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'bse==3.3.3' 'pymupdf==1.26.5'
+      - name: Read real Sep Dec 2024 HDFC Bank financial statements from BSE originals, no persistence
+        run: |
+          python - <<'PY'
+          from bse import BSE
+          import fitz,io,hashlib,json,re
+          target=[
+           ('2024-09-30','c9b4cb4c-088b-4a88-a6b7-91087ba90d95.pdf'),
+           ('2024-12-31','8e326f69-8061-4281-bc39-d8ac639479bd.pdf')]
+          with BSE(download_folder='/tmp') as bse:
+            for quarter,name in target:
+              url='https://www.bseindia.com/xml-data/corpfiling/AttachHis/'+name
+              r=bse.session.get(url,timeout=25)
+              if not r.ok or not r.content.startswith(b'%PDF-') or len(r.content)>12_000_000:
+                print('BSE_PDF_EXTRACT='+json.dumps({'quarter':quarter,'status':'SOURCE_UNAVAILABLE','http':r.status_code}))
+                continue
+              doc=fitz.open(stream=r.content,filetype='pdf')
+              matches=[]
+              for p in range(min(len(doc),18)):
+                text=doc[p].get_text('text',sort=True)
+                for line in text.splitlines():
+                  line=' '.join(line.split())
+                  if any(token in line.lower() for token in (
+                       'total income', 'net profit', 'profit after tax','profit for the period',
+                       'interest earned','earnings per equity share','net interest income')):
+                    matches.append({'page':p+1,'line':line[:170]})
+                    if len(matches)>=14:break
+                if len(matches)>=14:break
+              print('BSE_PDF_EXTRACT='+json.dumps({
+                'quarter':quarter,'status':'PDF_RETRIEVED',
+                'pages':len(doc),'sha256':hashlib.sha256(r.content).hexdigest(),
+                'text_found':bool(matches),'financial_label_samples':matches
+              },sort_keys=True),flush=True)
+          PY
