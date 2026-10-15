@@ -50,11 +50,15 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     render(<ResultsLivePage />)
     expect(await screen.findByText("2 stocks")).toBeInTheDocument()
     expect(screen.getByRole("tab",{name:"Quarterly Results"})).toHaveAttribute("aria-selected","true")
+    expect(screen.getByRole("columnheader",{name:/Q1 FY27/})).toBeInTheDocument()
+    expect(screen.getByRole("columnheader",{name:"Q2 FY26"})).toBeInTheDocument()
+    expect(screen.queryByRole("columnheader",{name:/Q2 FY27/})).not.toBeInTheDocument()
+    expect(screen.queryByRole("columnheader",{name:"Q1 FY26"})).not.toBeInTheDocument()
     expect(screen.getByRole("tab",{name:/Annual Results/})).toBeDisabled()
     expect(screen.getByRole("button",{name:"Current Holdings"})).toBeInTheDocument()
     expect(screen.getByRole("button",{name:"Closed Positions"})).toBeInTheDocument()
     expect(screen.getByRole("button",{name:"Strong"})).toBeInTheDocument()
-    const headings=["Portfolio Position","Net Interest Income — Last 6 Quarters","Key Metrics (Q1 FY27)","AI Insight"]
+    const headings=["Portfolio Position","Net Interest Income — Last 4 Quarters","Key Metrics (Q1 FY27)","AI Insight"]
     for (const title of headings) expect(screen.getByRole("heading",{name:title})).toBeInTheDocument()
     const bankRow=screen.getByText("BANKTEST").closest("tr")
     expect(bankRow).not.toBeNull()
