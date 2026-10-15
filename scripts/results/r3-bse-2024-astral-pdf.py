@@ -46,14 +46,30 @@ def first_number(money,metric):
 def extract(raw,quarter):
     expected=TARGETS[quarter]
     doc=fitz.open(stream=raw,filetype="pdf")
-    # Original whole document must be linked to the issuer, not a newspaper ad.
+    # Some BSE originals begin with the issuer's independent auditor's report
+    # rather than a cover letter. For the two frozen official BSE originals,
+    # accept the auditor's explicit issuer and quarter ONLY with the approved
+    # exact byte hash; the canonical BSE code and ISIN are checked at retrieval.
     first=" ".join(doc[0].get_text("text",sort=True).upper().split())
-    issuer_proven=any("ASTRAL LIMITED" in " ".join(page.get_text("text",sort=True).upper().split())
-      for page in list(doc)[:min(16,len(doc))])
-    if ("532830" not in first or not issuer_proven
+    all_pages=[page.get_text("text",sort=True) for page in doc]
+    issuer_proven=any("ASTRAL LIMITED" in " ".join(text.upper().split())
+      for text in all_pages[:min(16,len(doc))])
+    direct_code="532830" in first
+    frozen_audited_original=(
+        quarter=="2024-12-31"
+        and sha(raw)==expected["sha"]
+        and any("REVIEW REPORT" in text.upper() and "ASTRAL LIMITED" in text.upper()
+                and expected["heading"] in " ".join(text.upper().split())
+                for text in all_pages[:min(6,len(doc))])
+        and any("STATEMENT OF CONSOLIDATED UNAUDITED FINANCIAL RESULTS"
+                in text.upper() and expected["heading"] in text.upper()
+                for text in all_pages)
+    )
+    if (not (direct_code or frozen_audited_original) or not issuer_proven
         or len(doc)<3 or len(doc)>40):
         raise ValueError(f"BSE_ISSUER_PROOF_FAILED_{quarter}:"
-          f"cover_code={'532830' in first},auditor_issuer={issuer_proven},pages={len(doc)}")
+          f"cover_code={direct_code},frozen_auditor_issuer={frozen_audited_original},"
+          f"auditor_issuer={issuer_proven},pages={len(doc)}")
     found=[]
     for n,page in enumerate(doc):
         lines=[" ".join(s.split()) for s in page.get_text("text",sort=True).splitlines() if s.strip()]
@@ -203,6 +219,11 @@ def main():
               and (a["published_at"] or "").startswith(expected["published"])
               and "FINANCIAL RESULT" in a["title"].upper()]
             if len(matching)!=1:raise RuntimeError("ISSUER_BSE_PUBLICATION_NOT_VERIFIED_"+quarter)
+            identity=b._bse.equityMetaInfo(CODE)
+            if (not isinstance(identity,dict) or identity.get("ISIN")!=ISIN
+                or str(identity.get("SecurityCode"))!=CODE
+                or identity.get("SecurityId")!=SYMBOL):
+                raise RuntimeError("CURRENT_BSE_ISSUER_SCRIP_ISIN_MISMATCH")
             raw,meta=b.retrieve_original_pdf(expected["filename"])
             if meta["sha256"]!=expected["sha"]:raise RuntimeError("ORIGINAL_SHA256_CHANGED")
             parsed=extract(raw,quarter)
