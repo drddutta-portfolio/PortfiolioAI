@@ -100,6 +100,14 @@ export function useDashboardNewsFeed(portfolioId: string | null, limit: number) 
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
     return () => { active = false }
+    const timer = window.setInterval(() => {
+      void loadDashboardNewsFeed(portfolioId, limit)
+        .then((data) => { if (active) setState({ key, data, error: null }) })
+        .catch((reason: unknown) => { if (active) setState((previous) => ({
+          key, data: previous?.key === key ? previous.data : [], error: displayError(reason),
+        })) })
+    }, 5 * 60 * 1000)
+    return () => { active = false; window.clearInterval(timer) }
   }, [key, limit, portfolioId])
 
   return {
