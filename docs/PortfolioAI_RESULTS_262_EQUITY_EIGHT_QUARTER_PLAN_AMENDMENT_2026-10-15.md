@@ -63,3 +63,25 @@ As of latest Development readback before this amendment: **262 equities total**,
 - Daily scan does not prove data exists merely because a stock was "checked".
 
 **Execution state of this document: APPROVED PLAN UPDATED; development/acquisition to satisfy the expanded plan is pending.**
+
+
+## Owner approval: daily incremental automation is part of R3/R4 completion (15 October 2026)
+The owner explicitly accepts completion of **daily incremental quarterly-result automation in parallel with revised R3 and R4**, rather than leaving automation as an indefinite separate future task. This approval updates the execution sequence and acceptance requirements; **it is not evidence that a scheduler or production scanner has already been activated**.
+
+### Approved execution
+1. **Single scheduler:** target **07:00 Asia/Kolkata daily** (01:30 UTC), using one appropriately authorized scheduler and a durable execution record; avoid duplicate cron invocations. Preserve the existing manual **Run Scan Now** entry point and enforce the same service-only policy.
+2. **Incremental, all 262:** each run reconciles all unique open/closed portfolio equities and their historic identities; discovers new or corrected quarterly filings, using existing Supabase selections, source hashes and R2 evidence before making a provider call. Track the eight-quarter comparison contract, and do not silently promote September 2026 into the approved four visible columns.
+3. **Evidence-safe persistence:** newly eligible/changed original filings go through R3 period/identity/metric acquisition and R4 original-source conflict checks. Save permitted large evidence to Cloudflare R2 with object hash/readback, and compact, canonically selected facts to Supabase; do not duplicate source rows or discard older filing versions. Do not archive NSE original bytes without verified rights.
+4. **Selective recomputation:** recalculate affected QoQ, source-qualified YoY, R5 grades and insights only when selected facts change. Never turn missing/zero/negative prior-year baselines into invented growth; never modify V1-4 investment scores.
+5. **Operational telemetry:** persist started/completed time, request and actual discovered/qualified/selected counts, source IDs/hashes, changed/unchanged/conflicting, provider calls, partial failures, retries, storage references, selected outputs and error details; show last successful run separately from partial/failed runs.
+6. **Fail-closed replay:** a lease and idempotency keys prevent concurrent scanner duplication; controlled retries and outage recovery must not misreport success or mutate protected selections.
+
+### Mandatory real-run acceptance before declaring automation PASS
+- **New genuine filing:** verify actual discovery, company/date/metric/source validation, R2 and Supabase independent readback, canonical selection and updated Results detail/analysis when applicable. Preserve no-change results for other issuers.
+- **Corrected filing:** prove correction detection and source version/revision lineage, safe conflict/quarantine policy, approved winner selection where justified, and changed-only recomputation. Keep the superseded filing available for audit; never treat merely later retrieval as proof of original publication.
+- **No-change run:** prove successful scan with **zero redundant provider fetches for already-qualified unchanged material**, zero duplicate facts/selection rows, no changed dashboard metrics and stable checksums.
+- **Failure/recovery:** verify partial or failed vendor/source/storage execution is visibly recorded and idempotent retry can recover without duplication or misclassifying completion.
+- **Scheduled trigger:** observe at least one real 07:00 IST scheduled invocation and independently reconcile actual run IDs and results; a configured cron expression alone is not acceptance. Manual Scan Now also needs a real run proof.
+- **Authentication/security:** only approved service-side jobs can write; quotas, source-retention permissions, Supabase storage budget and security checks pass. The Results UI design must remain exactly as approved.
+
+**Stage boundary:** R3 and R4 remain not fully PASS until required source completeness/exception checks are independently read back; operational scanner PASS is also required before describing the Results page as automatically maintained. R5-F/G are revalidated against the expanded 262-security/eight-quarter data contract. Never describe this planning approval as successful automation execution.
