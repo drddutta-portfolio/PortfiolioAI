@@ -58,6 +58,15 @@ export function gradeQuarterR5(
   const group = sector?.trim().toUpperCase() ?? "UNCLASSIFIED"
   const bank = group === "BANKING"
   if (!sector || !SECTOR_BOUNDS[group]) return fail(group, "No calibrated current-display sector rule; source data alone is not a performance grade.")
+  // A neighbouring-sector calibration may be used only where the reviewed
+  // industry actually matches its economic model; never grade unrelated
+  // renewable power from an oil/gas peer distribution.
+  if (group === "DEFENCE" && !/aerospace|defen[cs]e/i.test(industry ?? "")) {
+    return fail(group, "Defence peer calibration requires a verified aerospace/defence industry.")
+  }
+  if (group === "ENERGY" && !/^(?:gas|oil|refineries|petro-products)$/i.test(industry?.trim() ?? "")) {
+    return fail(group, "No calibrated operating thresholds for this energy subsector.")
+  }
   if (group === "FINANCIAL SERVICES" &&
       /(?:BANKING FINANCIAL|NBFC|INSURANCE|INVESTMENT|ASSET MANAGEMENT|HOUSING FINANCE)/i.test(industry ?? "")) {
     return fail(group, "Lending or insurance financial statements need a separately validated earnings contract.")
