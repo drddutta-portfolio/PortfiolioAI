@@ -5,13 +5,15 @@ import {G03_FINANCIAL_POLICY as p,G03_VALUATION_KIND,G03_VALUATION_SOURCE_KIND,G
 import {G03_VALUATION_BATCH as batch,stableValuation} from './v14-g03-valuation-review.ts'
 
 import {Decimal} from 'decimal.js'
+import {historyTailCaptureProducerHash} from './v14-history-tail-capture-integrity.ts'
 import {approvedG03CashReview,approvedG03CashSource} from './v14-g03-cash-review.ts'
 import {approvedG03DebtReview,approvedG03DebtSource} from './v14-g03-debt-review.ts'
 export async function verifyRetainedValuationInputs(db:SupabaseClient){
  const captures=new Map<string,Record<string,unknown>>()
  for(const pin of batch.retainedCaptures){
   const row=await db.from('data_source_records').select('source_code,record_kind,raw_payload,payload_hash').eq('id',pin.id).single()
-  if(row.error||!row.data||row.data.source_code!==pin.source_code||row.data.record_kind!==pin.record_kind||row.data.payload_hash!==pin.payload_hash||await hashG02(row.data.raw_payload)!==pin.payload_hash)throw Error('G03_VALUATION_RETAINED_CAPTURE_NOT_VERIFIED')
+  const producerHash=row.data?(pin.record_kind==='V1_4_G03_HISTORY_TAIL_CAPTURE'?await historyTailCaptureProducerHash(row.data.raw_payload):await hashG02(row.data.raw_payload)):null
+  if(row.error||!row.data||row.data.source_code!==pin.source_code||row.data.record_kind!==pin.record_kind||row.data.payload_hash!==pin.payload_hash||producerHash!==pin.payload_hash)throw Error('G03_VALUATION_RETAINED_CAPTURE_NOT_VERIFIED')
   captures.set(pin.id,row.data.raw_payload)
  }
  const proof=captures.get('7b3221d4-1580-5474-a48b-98dc9730adb1')!,contract=proof.proof as Record<string,unknown>,validation=proof.validation as Record<string,unknown>
