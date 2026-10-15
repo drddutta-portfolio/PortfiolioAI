@@ -17,7 +17,6 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
-      RESULTS_R5_COMPARISON_SELECTION: "1"
       RESULTS_R5_HISTORICAL_ACK: "2025_MAR_JUN_ONLY"
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +35,8 @@ jobs:
       - name: Unit and original hash contract preflight
         run: python scripts/results/test_r4_verify_quarterly.py -v
       - name: Admit only qualified March and June 2025 filing originals
+        env:
+          RESULTS_R5_COMPARISON_SELECTION: "1"
         run: |
           set -euo pipefail
           python scripts/results/r4-verify-quarterly.py --apply
