@@ -137,6 +137,21 @@ def extract(raw,metadata,symbol,isin):
          "period_end":end,"scope":scope,"facts":facts,
          "historical_identity_link":link},None
 
+def source_diagnostic(raw):
+ try:root=ET.fromstring(raw)
+ except ET.ParseError:return {"reason":"XML_INVALID"}
+ units={}
+ for node in root:
+  if local(node.tag)=="unit":
+   units[node.attrib.get("id")]=[e.text for e in node.iter() if local(e.tag)=="measure"]
+ example=[]
+ for node in root:
+  name=local(node.tag)
+  if any(term in name.lower() for term in ("revenuefromoperations","profitlossforperiod","dilutedearnings","profitlossfortheperiod","interestearned","interestexpenses")):
+   example.append({"field":name,"context":node.attrib.get("contextRef"),"unit":node.attrib.get("unitRef"),
+                   "value_shape":(node.text or "").strip()[:3]+"...","has_number":bool(re.fullmatch(r"-?\\d+(?:\\.\\d+)?",(node.text or "").strip()))})
+ return {"units":units,"fields":example[:12]}
+
 def persist(db,s3,raw,record,parsed):
  period=parsed["period_end"];symbol=parsed["symbol"];original_sha=digest(raw)
  xmlkey=(ROOT+f"security_id={parsed['isin']}/period_end={period}/"
@@ -252,7 +267,12 @@ def main():
      if not response.ok or len(response.content)>5_000_000:
       report["failures"]["ORIGINAL_UNAVAILABLE"]+=1;continue
      parsed,error=extract(response.content,item,symbol,isin)
-     if error:report["failures"][error]+=1;continue
+     if error:
+      report["failures"][error]+=1
+      if error=="NO_QUALIFIED_FINANCIAL_FACTS" and len(report.setdefault("source_format_diagnostics",[]))<3:
+       report["source_format_diagnostics"].append({"symbol":symbol,"period":period,
+         "details":source_diagnostic(response.content)})
+      continue
      if not dry:
       report["observations_inserted"]+=persist(db,s3,response.content,item,parsed)
      report["qualified"]+=1;report["periods"][period]+=1
