@@ -1,3 +1,24 @@
+# R5-C broadened four-quarter acceptance — updated 15 October 2026 (supersedes V2 census)
+
+**Version:** `R5_INDUSTRY_AND_COMPANY_TREND_20261015_V3`. **Scope:** the 223 securities with four source-selected issuer quarterly core financial trios, from the frozen 231-member original Results cohort. Development only, no production or V1-4 score changes.
+
+The R5-C engine has now assessed the full 223-member four-quarter cohort using two **explicitly different**, versioned decision bases:
+- **INDUSTRY_PEER:** independently selected issuer-specific Revenue/NII and PAT QoQ percentage pairs calibrated to the *exact reviewed industry*, >=4 issuers and >=12 qualified pair samples; neither missing peers nor another sector is substituted.
+- **COMPANY_TREND:** where peer calibration is genuinely sparse, compare the same issuer's source-coherent adjacent-quarter **financial level changes**. Minimum two individually qualified sequential quarter comparisons including the latest. A bank uses NII + PAT; operating companies use revenue + PAT. A PAT loss-to-profit comparison remains directionally valid even when a percentage growth denominator is nonpositive, but no invalid percentage is asserted. This is explicitly **not a peer ranking** in the grid, hover, summary or insight panel. Strong requires current profit positive and a latest joint improvement plus at least two jointly improving comparisons; Weak requires current PAT nonpositive or latest plus two total jointly deteriorating comparisons; otherwise Mixed.
+- **UNAVAILABLE / NOT RATED:** reviewed industry absent, no defensible industry financial contract, insufficient independently comparable quarter pairs, competing issuer data, or scope mismatch. This is a completed evidence evaluation, not a fabricated Weak or Mixed.
+
+**Independent read-only Development SQL candidate census, June 2026, 15 October:** `223 four-quarter-complete = 82 peer-gradeable + 123 trend-gradeable + 18 not-gradeable`. This expands the source-evidenced candidate grading population to **205/223 (91.9%)**, from the earlier V2 82/223 peer-only grading. Candidate counts are independently derived in SQL, not yet authenticated-browser counts; exact UI parity is separately verified during R5-G.
+
+**18 remaining, with explicit non-grade state:** ADANIPORTS, ASTERDM, BHARTIARTL, CARBORUNIV, CDSL, COFORGE, DRREDDY, E2E, ENGINERSIN, FEDERALBNK, HINDPETRO, IRB, IRMENERGY, JWL, KOTAKBANK, LODHA, TECHM, UTLSOLAR. Of these, 12 have no current reviewed sector/industry in Development's `current_security_enrichment_v1`; the other six have issuer/period/model eligibility constraints that must not be bypassed. All remain visible, and the UI explains why classification is unavailable.
+
+**UI integration:** approved four-quarter grid and existing four-card detail shell preserved. Added a compact Jun 2026 four-qualified-quarter cohort header showing Strong, Mixed, Weak, Not Rated and counts of peer-ranked vs own-trend decisions; each quarterly cell shows the grade, accessible explanation and provenance basis, and the insight card distinguishes peer percentile from company trend.
+
+**No data modification** was required: this is deterministic derivation from already-selected compact Supabase facts and reviewed classification metadata, with original large evidence preserved in Development R2. No new provider call, no score migration, no change to the V1-4 research authority.
+
+**Acceptance interpretation:** R5-C execution is complete for all 223 stock identities, with 205 *potential* Strong/Mixed/Weak outcomes and 18 **Not Rated** exceptions. It is **not** correct to say all 223 have a grade. Do not promote the feature to R5-G full authenticated dashboard/visual acceptance without verified browser readback. Earlier V2 figures and constraints below are historical only.
+
+---
+
 > **R5-C implementation closeout:** Industry-specific policy, deterministic peer calibration, UI wiring and regression tests implemented. Focused verification [run 38685589819](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38685589819) PASSED architecture, TypeScript, industry/quarter/UI tests, lint, production build and Git diff. An additional pre-existing four-vs-six-quarter R2 test suite has been corrected and is under verification. **Engineering state:** implemented and focused checks green; full 231-company authenticated UI census and pixel acceptance belong to R5-G. This does not imply 231/231 gradeable: the independently replicated June 2026 example supports only 83 candidate gradeable companies, with 148 safely Unavailable.\n\n# PortfolioAI Results R5-C — qualified industry operating signals
 
 **Implementation:** `src/features/results/quarterlyR5Classification.ts`  
