@@ -5,6 +5,8 @@ on:
     paths:
       - .github/workflows/results-r3-bse-2024-ashoka-qualified.yml
       - scripts/results/r3-bse-2024-ashoka-pdf.py
+      - scripts/results/r3-bse-ashoka-2024-rebind.py
+      - scripts/results/test_r3_ashoka_indian_numbers.py
 permissions:
   contents: read
 concurrency:
