@@ -52,7 +52,8 @@ def extract(raw,quarter):
       for page in list(doc)[:min(16,len(doc))])
     if ("532830" not in first or not issuer_proven
         or len(doc)<3 or len(doc)>40):
-        raise ValueError("BSE_ORIGINAL_SCRIP_AND_LEGAL_ISSUER_UNPROVEN")
+        raise ValueError(f"BSE_ISSUER_PROOF_FAILED_{quarter}:"
+          f"cover_code={'532830' in first},auditor_issuer={issuer_proven},pages={len(doc)}")
     found=[]
     for n,page in enumerate(doc):
         lines=[" ".join(s.split()) for s in page.get_text("text",sort=True).splitlines() if s.strip()]
