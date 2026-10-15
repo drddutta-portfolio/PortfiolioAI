@@ -52,7 +52,7 @@ jobs:
             try:
               params={'pageno':1,'strCat':'-1','subcategory':'-1',
                 'strPrevDate':'20241001','strToDate':'20250301','strSearch':'P',
-                'strscrip':code,'strType':'C'}
+                'strScrip':code,'strType':'C'}
               r=s.get(base+'/AnnSubCategoryGetData/w',params=params,timeout=16)
               item['historical_announcements']['status']=r.status_code
               if r.ok:
