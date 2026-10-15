@@ -1,0 +1,57 @@
+name: Results R3 BSE Diverse Original PDF Table Proof
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-original-table-expansion.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: results-r3-2024-bse-prioritized-filing-candidates
+          run-id: 38799404150
+          github-token: ${{ github.token }}
+          path: tmp/r3-bse-priority-reused
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check -r vendor/bseindiaapi/requirements.txt 'pymupdf==1.26.5'
+      - name: Inspect actual first-quarter financial rows only in issuer-original PDFs
+        run: |
+          python - <<'PY'
+          import json,re,sys,fitz
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          f=list(Path('tmp/r3-bse-priority-reused').rglob('priorities.json'))
+          assert len(f)==1
+          priorities=json.loads(f[0].read_text())
+          allow={'ASTRAL','APLAPOLLO','ARVINDFASN','ANGELONE','BEL','AXISBANK','BANKINDIA','AURIONPRO','ASHOKA'}
+          sample=[x for x in priorities if x['symbol'] in allow and x['matches']]
+          needle=re.compile(r'revenue from operations|total income|net profit|profit for the period|profit for (the )?year|diluted|interest earned|interest expended|earnings per share|consolidated financial results|standalone financial results|quarter ended|in crore|in lakh',re.I)
+          with PortfolioBSE() as b:
+            for item in sample:
+              docs=sorted(item['matches'],key=lambda v:(v['primary'], 'board meeting' not in v['title'].lower()),reverse=True)
+              result={'symbol':item['symbol'],'quarter':item['quarter'],'bse':item['code'],'sources':[]}
+              for att in docs[:1]:
+                out={'title':att['title'][:110]}
+                try:
+                  original,meta=b.retrieve_original_pdf(att['attachment'])
+                  doc=fitz.open(stream=original,filetype='pdf')
+                  pages=[]
+                  for pi in range(min(8,len(doc))):
+                    lines=[' '.join(v.split()) for v in doc[pi].get_text('text',sort=True).splitlines()]
+                    matches=[v[:210] for v in lines if needle.search(v)]
+                    if len(matches)>=3:
+                      pages.append({'page':pi+1,'head':lines[:8],'lines':matches[:15]})
+                    if len(pages)>=2:break
+                  out.update({'sha256':meta['sha256'],'pages':len(doc),'financial_pages':pages})
+                except Exception as exc:out['error']=type(exc).__name__+':'+str(exc)[:100]
+                result['sources'].append(out)
+              print('BSE_DIVERSE_ORIGINAL='+json.dumps(result,sort_keys=True),flush=True)
+          PY
