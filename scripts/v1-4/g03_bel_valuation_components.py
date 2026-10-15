@@ -206,7 +206,19 @@ def main():
               'qualifiedDates': [p['valuationDate'] for p in batch['periods']], 'officialAnnualAttachmentBytesIdentical': True,
               'financialAvailabilityNotRetrieval': True, 'providerCalls': 0, 'canonicalMaterialization': False}
     if os.environ.get('G03_ADMIT_VALUATION_COMPONENTS') == 'true':
+        # Reuse the already admitted cash/debt originals. The numeric handler
+        # independently verifies all nine actual source/document/link records
+        # before writing any valuation review. Re-registering these originals
+        # under a new discovery time would conflict with immutable provenance.
+        existing_pins = {p['original_sha256']: p for name in ['v14-g03-debt-original-pins.json', 'v14-g03-original-pins.json']
+                         for p in json.loads((ROOT / name).read_text())}
+        reused_originals = []
         for pin in pins:
+            if pin['original_sha256'] in existing_pins:
+                if pin != existing_pins[pin['original_sha256']]:
+                    raise ValueError('BEL_EXISTING_ORIGINAL_PROVENANCE_MISMATCH')
+                reused_originals.append(pin['original_sha256'])
+                continue
             key = PREFIX + pin['original_sha256'] + '.' + pin['extension']
             request = {'action': 'REGISTER_PINNED_G03_VALUATION_ORIGINAL', 'authorizationHash': policy['contractSha256'],
                        'originalHash': pin['original_sha256'], 'readUrl': s3.generate_presigned_url('get_object', Params={'Bucket': bucket, 'Key': key}, ExpiresIn=240)}
@@ -219,7 +231,7 @@ def main():
         expected = {p['reviewId'] for p in batch['periods']}
         if {r['reviewId'] for r in first.get('results', [])} != expected or not all(r.get('reused') is True for r in repeat['results']):
             raise ValueError('BEL_VALUATION_ADMISSION_NOT_IDEMPOTENT')
-        result.update(admission=first, duplicateAdmission='IDEMPOTENT')
+        result.update(admission=first, duplicateAdmission='IDEMPOTENT', existingCanonicalOriginalsReused=reused_originals)
     (out / 'sanitized-results.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps({'qualifiedOriginals': len(evidence), 'qualifiedDates': 3, 'admittedDates': len(result.get('admission', {}).get('results', [])), 'providerCalls': 0, 'canonicalMaterialization': False}))
 
