@@ -92,10 +92,26 @@ def check_manifest(record,manifest):
         if manifest.get("original_pdf_retained") is not True:return "ORIGINAL_PDF_NOT_RETAINED"
     elif u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):
         return "UNQUALIFIED_ORIGIN"
+    if contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+        if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
+            or not re.fullmatch(r"/corporate/xbrl/[A-Za-z0-9_.-]+\.xml",u.path)
+            or u.query or u.fragment):
+            return "UNQUALIFIED_LEGACY_ORIGINAL_XBRL"
+        original=manifest.get("original_sha256_retained")
+        original_key=manifest.get("original_r2_key")
+        if (not isinstance(original,str) or not re.fullmatch(r"[a-f0-9]{64}",original)
+            or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
+            or not original_key.endswith("/original-xbrl.xml")
+            or "/original_version="+original+"/" not in original_key
+            or manifest.get("original_xbrl_retained") is not True
+            or manifest.get("reporting_currency")!="INR"):
+            return "INVALID_RETAINED_LEGACY_XBRL_REFERENCE"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
     if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
         if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
         if manifest.get("raw_nse_bytes_retained") is not False:return "RAW_RETENTION_UNPROVEN"
+    elif contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+        pass
     elif manifest.get("reporting_currency")!="INR":
         return "PDF_CURRENCY_UNKNOWN"
     if not record["source_retrieved"]:return "SOURCE_RETRIEVAL_UNKNOWN"
@@ -116,6 +132,13 @@ def check_fact(r,m):
     try:
         if Decimal(str(r["numeric_value"]))!=Decimal(str(fact["value"])):return "NUMERIC_MISMATCH"
     except (ValueError,InvalidOperation,KeyError,TypeError):return "INVALID_DECIMAL"
+    if m.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+        original_fact=m["facts"][key]
+        if not isinstance(original_fact,dict):return "LEGACY_FACT_MALFORMED"
+        contexts=original_fact.get("context_ids",original_fact.get("component_context_ids"))
+        if (not isinstance(contexts,list) or not contexts
+            or not all(isinstance(x,str) and len(x)<100 for x in contexts)):
+            return "LEGACY_FINANCIAL_CONTEXT_NOT_PROVEN"
     if key=="EPS_DILUTED" and m.get("historical_identity_link"):
         if (m.get("eps_as_originally_reported_before_split") is not True
             or fact.get("original_unit")!="INR_PER_SHARE"):
@@ -242,6 +265,16 @@ def verify(db,s3,apply):
                         error="R2_RETAINED_ORIGINAL_PDF_HASH_MISMATCH"
                 except Exception:
                     error="R2_RETAINED_ORIGINAL_PDF_UNAVAILABLE"
+            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+                try:
+                    original_bytes=s3.get_object(
+                        Bucket=BUCKET,Key=document["original_r2_key"])["Body"].read()
+                    if (sha(original_bytes)!=document["original_sha256_retained"]
+                        or b"xbrl" not in original_bytes[:1000].lower()
+                        or b"<!DOCTYPE" in original_bytes.upper()):
+                        error="R2_RETAINED_ORIGINAL_XBRL_HASH_MISMATCH"
+                except Exception:
+                    error="R2_RETAINED_ORIGINAL_XBRL_UNAVAILABLE"
             return k,(document,error)
         with ThreadPoolExecutor(max_workers=12) as pool:
             for k,validated in pool.map(check_one,by_id.items()):
