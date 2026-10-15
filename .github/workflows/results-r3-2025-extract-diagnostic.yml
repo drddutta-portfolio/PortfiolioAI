@@ -50,6 +50,17 @@ jobs:
                     tag=e.tag.rsplit('}',1)[-1]
                     if tag in ('ISIN','Symbol','NSESymbol') and e.text: strings.setdefault(tag,set()).add(e.text.strip())
                   print('XML_IDENTITIES',name,{k:sorted(v)[:3] for k,v in strings.items()})
+                  if name=='CIPLA':
+                    ctx=[]
+                    for e in root:
+                      if e.tag.rsplit('}',1)[-1]!='context':continue
+                      fields={n.tag.rsplit('}',1)[-1]:(n.text or '')[:30] for n in e.iter() if n.tag.rsplit('}',1)[-1] in ('identifier','startDate','endDate','instant')}
+                      ctx.append({'id':e.attrib.get('id'),'fields':fields})
+                    print('XBRL_CONTEXTS',json.dumps(ctx[:14]))
+                    units=[{'id':e.attrib.get('id'),'measures':[n.text for n in e.iter() if n.tag.rsplit('}',1)[-1]=='measure']} for e in root if e.tag.rsplit('}',1)[-1]=='unit']
+                    print('XBRL_UNITS',json.dumps(units[:12]))
+                    financial=[{'name':e.tag.rsplit('}',1)[-1],'context':e.attrib.get('contextRef'),'unit':e.attrib.get('unitRef'),'value':(e.text or '')[:45]} for e in root if 'Revenue' in e.tag or 'ProfitLoss' in e.tag or 'DilutedEarnings' in e.tag]
+                    print('XBRL_FINANCIAL_TAGS',json.dumps(financial[:15]))
                   end='2025-06-30' if entry.get('qe_Date')=='30-JUN-2025' else '2025-03-31'
                   meta={'symbol':name,'isin':sorted(strings.get('ISIN',[]))[0] if len(strings.get('ISIN',[]))==1 else None,
                     'fromDate':'01-Apr-2025' if end=='2025-06-30' else '01-Jan-2025',
