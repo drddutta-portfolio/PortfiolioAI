@@ -51,6 +51,7 @@ jobs:
       - name: Optimized quarter-targeted issuer-original recovery for March and June 2025
         env:
           RESULTS_R5_HISTORICAL_ACQUISITION: "1"
+          RESULTS_TARGET_SYMBOLS: "CIPLA,HDFCBANK,INFY"
         shell: bash
         run: |
           set -euo pipefail
