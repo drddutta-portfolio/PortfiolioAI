@@ -324,9 +324,9 @@ export function ResultsLivePage() {
     return true
   }), [entries, query, filter, industry, statuses, observations, periods])
 
-  const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId)) ?? entries[0]
+  const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
   const newestObservation = suggestedEntry
-    ? observations.filter((r) => r.securityId === suggestedEntry.position.securityId)
+    ? observations.filter((r) => r.securityId === suggestedEntry.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))
         .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))[0]
     : null
   const effectiveSelection = collapsed || loadingEvidence ? null : selection ?? (suggestedEntry && periods[0]
