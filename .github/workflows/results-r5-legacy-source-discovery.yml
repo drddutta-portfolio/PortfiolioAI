@@ -1,0 +1,75 @@
+name: Results R5 Legacy NSE 2024 XBRL Discovery
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-legacy-source-discovery.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Public NSE legacy XBRL data format read-only preflight
+        shell: bash
+        run: |
+          python - <<'PY'
+          import requests, json, re, xml.etree.ElementTree as ET, time
+          from urllib.parse import urlencode, urlparse
+          s=requests.Session()
+          s.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)",
+            "Accept-Language":"en-IN,en;q=0.8"})
+          first=s.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=25)
+          if first.status_code in (401,403,429):
+            raise SystemExit("SOURCE_ACCESS_DENIED_"+str(first.status_code))
+          if not first.ok:raise SystemExit("SOURCE_BOOTSTRAP_FAILED")
+          result=[]
+          for symbol in ("RELIANCE","HDFCBANK"):
+            args={"index":"equities","symbol":symbol,"period":"Quarterly",
+              "from_date":"01-10-2024","to_date":"01-03-2025"}
+            u="https://www.nseindia.com/api/corporates-financial-results?"+urlencode(args)
+            response=s.get(u,timeout=25,headers={"Accept":"application/json","Referer":"https://www.nseindia.com/companies-listing/corporate-filings-financial-results"})
+            if response.status_code in (401,403,429):
+              raise SystemExit("SOURCE_ACCESS_DENIED_"+str(response.status_code))
+            response.raise_for_status()
+            if "json" not in response.headers.get("content-type",""):
+              raise SystemExit("SOURCE_JSON_UNAVAILABLE")
+            recs=response.json()
+            if not isinstance(recs,list):
+              raise SystemExit("SOURCE_FORMAT_UNKNOWN")
+            target=[r for r in recs if r.get("symbol")==symbol and str(r.get("period","")).lower()=="quarterly"
+              and r.get("toDate") in ("30-Sep-2024","31-Dec-2024")
+              and str(r.get("xbrl","")).startswith("https://nsearchives.nseindia.com/corporate/xbrl/")]
+            outcome={"symbol":symbol,"fetched":len(recs),"target":len(target),"formats":[]}
+            for item in target[:2]:
+              target_url=item["xbrl"]
+              p=urlparse(target_url)
+              if (p.scheme!="https" or p.hostname!="nsearchives.nseindia.com"
+                  or not re.fullmatch(r"/corporate/xbrl/[A-Za-z0-9_.-]+\.xml",p.path)):
+                continue
+              raw=s.get(target_url,timeout=25)
+              if raw.status_code in (401,403,429):
+                raise SystemExit("XBRL_ACCESS_DENIED_"+str(raw.status_code))
+              if not raw.ok or len(raw.content)>5000000:continue
+              root=ET.fromstring(raw.content)
+              tags={}
+              context_samples=[]
+              for node in root.iter():
+                name=node.tag.split("}")[-1]
+                if any(term in name.lower() for term in
+                  ("revenue","profitloss","diluted","unit","context","reportingperiod","interestearned")):
+                  tags[name]=tags.get(name,0)+1
+                  if name.lower()=="context" and len(context_samples)<2:
+                    context_samples.append(ET.tostring(node,encoding="unicode")[:450])
+              outcome["formats"].append({"period":item.get("toDate"),"scope":item.get("consolidated"),
+                "isb":item.get("isin"),"content_bytes":len(raw.content),
+                "root_tag":root.tag,"fields":list(tags.items())[:55],"context":context_samples})
+              time.sleep(1.2)
+            result.append(outcome)
+          print(json.dumps(result,indent=2))
+          PY
