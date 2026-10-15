@@ -27,7 +27,7 @@ function setup(){
   if(name==='reserve_provider_budget_v1')return {data:[{reserved:true,reservation_id:'reservation'}],error:null}
   return {data:true,error:null}
  }
- const client={getParameterValuesMultiStock:vi.fn(async()=>'{"company":"BEL","values":[]}'),getDocumentSearchResults:vi.fn(async()=>'{"documents":[]}')}
+ const client={getParameterValuesMultiStock:vi.fn(async()=>'{"company":"BEL","values":[]}'),getDocumentSearchResults:vi.fn(async()=>'{"documents":[]}'),call:vi.fn(async()=>'{"parameters":[]}')}
  return {rows,calls,failures,client,db:{from:(t:string)=>new Query(t),rpc} as unknown as Parameters<typeof acquireG03BelFinancialResearch>[0]}
 }
 describe('BEL approved-scope research never admits provider claims automatically',()=>{
@@ -69,5 +69,10 @@ describe('BEL approved-scope research never admits provider claims automatically
   const claims={repository:'drddutta-portfolio/PortfiolioAI',repository_id:'1357024254',ref:'refs/heads/codex/g02-industry-evidence',environment:'PortfolioAI-Development',sub:'repo:drddutta-portfolio@324877535/PortfiolioAI@1357024254:environment:PortfolioAI-Development',event_name:'workflow_dispatch',workflow_ref:'drddutta-portfolio/PortfiolioAI/.github/workflows/g03-bel-financial-research.yml@refs/heads/codex/g02-industry-evidence'}
   expect(g03FinancialResearchExecutorQualified(claims)).toBe(true)
   for(const change of [{event_name:'push'},{ref:'refs/heads/main'},{environment:'Production'},{workflow_ref:claims.workflow_ref.replace('financial-research','cash-components')}])expect(g03FinancialResearchExecutorQualified({...claims,...change})).toBe(false)
+ })
+ it('uses the observed exact parameter-search tool without changing either earlier capture or admitting facts',async()=>{
+  const f=setup(),r=await acquireG03BelFinancialResearch(f.db,{...body,researchKind:'PARAMETER_CATALOG'}, {},f.client)
+  expect(f.client.call).toHaveBeenCalledWith('search_financial_parameters',{query:expect.any(String)});expect(f.client.getParameterValuesMultiStock).not.toHaveBeenCalled();expect(r).toMatchObject({providerApiCalls:1,acceptedReviews:0,canonicalMaterialization:false})
+  expect(f.calls.find(c=>c.name==='record_provider_usage_event_v1')?.args.p_operation_class).toBe('SEARCH_FINANCIAL_PARAMETERS')
  })
 })

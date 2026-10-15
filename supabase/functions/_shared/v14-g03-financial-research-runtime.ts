@@ -5,6 +5,7 @@ import policy from './v14-g03-financial-authorization.json' with {type:'json'}
 export const G03_BEL_RESEARCH_KIND='G03_BEL_APPROVED_FINANCIAL_RESEARCH_V1'
 const SOURCE='TRENDLYNE_MCP',BATCH='2026-10-15'
 const queries={
+ PARAMETER_CATALOG:'Quarterly Operating Profit and Operating Revenue history, reporting quarter end date and standalone/consolidated reporting basis. Return exact masked parameter tokens and labels.',
  MARGIN:'Only Bharat Electronics Limited, NSE BEL, ISIN INE263A01024, Trendlyne stock 175. Return the actual quarterly standalone Operating Profit and Operating Revenue for each quarter ending Sep-2024, Dec-2024, Mar-2025, Jun-2025, Sep-2025, Dec-2025, Mar-2026 and Jun-2026. Include exact quarter-end dates, accounting scope and INR units, original parameter labels, latest reported quarter date, and the published definition of Operating Profit: whether depreciation, finance costs and other income are included/excluded. Parameters Operating Profit Qtr, Operating Profit 1Q Ago through Operating Profit 7Qtr Ago, Operating Rev. Qtr through Operating Rev. 7Q ago. Do not use forecasts, growth rates, annual values or another company. If standalone is unavailable explicitly identify the actual scope. Preserve missing fields as missing.',
  DEBT_VALUATION_DOCUMENTS:'Bharat Electronics Limited NSE BEL ISIN INE263A01024 only. Find original issuer/exchange documents for FY2024, FY2025 and FY2026 giving numeric interest-bearing borrowings including zero (not a printed dash), lease liabilities, unrestricted versus pledged/restricted cash, EBIT, EBITDA and total finance costs including lease interest. Also find original quarterly result/annual-report disclosures with authoritative original publication/filing timestamps and outstanding shares suitable for dated historical P/E, EV/EBITDA and FCF-yield qualification. Return original document URLs, exact financial period/scope, definition passages and source/publication dates, not forecasts or inferred zero debt. Research discovery only; do not assert our readiness.'
 } as const
@@ -14,7 +15,7 @@ export function g03BelResearchScope(body:Record<string,unknown>):ResearchKind{
  if(body.action!=='ACQUIRE_G03_BEL_FINANCIAL_RESEARCH'||body.authorizationHash!==policy.contractSha256||body.portfolioId!==policy.portfolioId||body.securityId!==policy.securityId||body.batchDate!==BATCH||!Object.hasOwn(queries,String(kind)))throw Error('G03_RESEARCH_EXACT_SCOPE_REQUIRED')
  return kind as ResearchKind
 }
-type Client=Pick<TrendlyneObservedMcpClient,'getParameterValuesMultiStock'|'getDocumentSearchResults'>
+type Client=Pick<TrendlyneObservedMcpClient,'getParameterValuesMultiStock'|'getDocumentSearchResults'|'call'>
 async function releaseResearchLease(db:SupabaseClient,operation:string,holder:string){
  const released=await db.rpc('release_data_ingestion_lease_v1',{p_source_code:SOURCE,p_operation:operation,p_lease_holder:holder,p_cooldown_seconds:0})
  if(released.error)throw Error('G03_RESEARCH_LEASE_RELEASE_FAILED')
@@ -50,8 +51,8 @@ export async function acquireG03BelFinancialResearch(db:SupabaseClient,body:Reco
    if(item.error)throw Error('G03_RESEARCH_ITEM_CREATE_FAILED');itemId=String(item.data.id)
    const started=new Date().toISOString();attempted=1
    let result:string|null=null
-   try{result=kind==='MARGIN'?await client.getParameterValuesMultiStock(queries[kind],'stock'):await client.getDocumentSearchResults(queries[kind]);providerSucceeded=true}catch{failure='G03_RESEARCH_PROVIDER_REQUEST_FAILED'}
-   const usage=await db.rpc('record_provider_usage_event_v1',{p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:itemId,p_security_id:policy.securityId,p_data_domain:operation,p_operation_class:kind==='MARGIN'?'GET_PARAMETER_VALUES_MULTI_STOCK':'GET_DOCUMENT_SEARCH_RESULTS',p_accounting_class:'PROVIDER_TOOL_ATTEMPT',p_estimated_internal_units:1,p_actual_internal_units:1,p_attempted_at:started,p_completed_at:new Date().toISOString(),p_outcome:providerSucceeded?'SUCCEEDED':'FAILED',p_safe_error_code:failure,p_retry_attempt:0,p_idempotency_key:runId+':1'})
+   try{result=kind==='PARAMETER_CATALOG'?await client.call('search_financial_parameters',{query:queries[kind]}):kind==='MARGIN'?await client.getParameterValuesMultiStock(queries[kind],'stock'):await client.getDocumentSearchResults(queries[kind]);providerSucceeded=true}catch{failure='G03_RESEARCH_PROVIDER_REQUEST_FAILED'}
+   const usage=await db.rpc('record_provider_usage_event_v1',{p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:itemId,p_security_id:policy.securityId,p_data_domain:operation,p_operation_class:kind==='PARAMETER_CATALOG'?'SEARCH_FINANCIAL_PARAMETERS':kind==='MARGIN'?'GET_PARAMETER_VALUES_MULTI_STOCK':'GET_DOCUMENT_SEARCH_RESULTS',p_accounting_class:'PROVIDER_TOOL_ATTEMPT',p_estimated_internal_units:1,p_actual_internal_units:1,p_attempted_at:started,p_completed_at:new Date().toISOString(),p_outcome:providerSucceeded?'SUCCEEDED':'FAILED',p_safe_error_code:failure,p_retry_attempt:0,p_idempotency_key:runId+':1'})
    if(usage.error)throw Error('G03_RESEARCH_USAGE_ACCOUNTING_FAILED');usageVerified=true
    if(result!==null){
     if(new TextEncoder().encode(result).byteLength>512*1024)throw Error('G03_RESEARCH_CAPTURE_TOO_LARGE')
