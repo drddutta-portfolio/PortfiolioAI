@@ -25,6 +25,8 @@ def main():
  if any(r.get('status')=='FAILED' for r in result.get('results',[])):raise ValueError('G03_HISTORY_PARTIAL_FAILURE_REVIEW_RESULTS_NO_RETRY')
  capture=next((r.get('sourceRecordId') for r in result.get('results',[]) if r.get('status')=='INGESTED_NOT_QUALIFIED'),None)
  if not capture:raise ValueError('G03_ACTUAL_PRICE_CAPTURE_REQUIRED')
+ if os.environ.get('G03_CAPTURE_ONLY')=='true':
+  print(json.dumps({'capturedForSeparateQualification':capture,'canonicalMaterialization':False}));return
  renew_history(token,capture)
 def renew_history(token,capture):
  import boto3

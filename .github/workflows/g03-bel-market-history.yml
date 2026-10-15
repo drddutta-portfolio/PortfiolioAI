@@ -5,6 +5,10 @@ on:
     paths: [.github/workflows/g03-bel-market-history.yml]
   workflow_dispatch:
     inputs:
+      captureOnly:
+        description: Acquire the bounded completed-session tail without invoking the older fixed renewal
+        type: boolean
+        default: false
       retainedCaptureId:
         description: Optional already acquired BEL capture; renew proofs only without provider activity
         required: false
@@ -40,6 +44,7 @@ jobs:
           CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
           G03_RETAINED_CAPTURE_ID: ${{ inputs.retainedCaptureId }}
+          G03_CAPTURE_ONLY: ${{ inputs.captureOnly }}
           G03_SESSION_DATE: ${{ inputs.sessionDate }}
           G03_CALENDAR_DECISION_ID: ${{ inputs.calendarDecisionId }}
         run: python scripts/v1-4/g03_bel_market_history.py
