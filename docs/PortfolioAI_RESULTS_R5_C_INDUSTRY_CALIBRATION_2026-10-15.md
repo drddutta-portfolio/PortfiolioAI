@@ -41,3 +41,9 @@ These counts are **independent SQL candidates**, not a claim that every source-e
 - Full Development TypeScript, lint, Results UI test and build must pass; CI red means R5-C not formally accepted even if a policy is committed.
 - Verify actual, authenticated 231-stock classification counts and reference screenshot separately before full R5 release PASS.
 - The sector-only `R5_QOQ_EMPIRICAL_20261015_V1` policy is **superseded**, not silently reused for unsupported industries.
+
+## June 2026 independent SQL grading census (candidate, before browser acceptance)
+
+A second read-only SQL calculation used the same selected original-filing Revenue/NII/PAT period pairs and exact industry lower/upper quantiles. For the **June 2026** report in the 231-company cohort, it reproduced **12 Strong, 55 Mixed and 16 Weak** grades — **83 potentially gradeable equities**. The other **148 / 231** are not forced into any status; their own-industry calibration or comparable financial pair is insufficient, so the UI must preserve **Unavailable**.
+
+This is an **independent SQL check, not a claim of 83 verified browser grades**. The frontend requires unique source-qualified quarter selections and can exclude additional records. September 2025 has no earlier sequential comparison within the approved four quarters. Later R5-G acceptance must reconcile actual frontend counts at a fixed source cutoff; no fabricated peer thresholds or sector substitution is allowed merely to increase 83.
