@@ -1,0 +1,90 @@
+name: Results R3 BseIndiaApi Package Live Proof (Read Only)
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-bse-library-direct-pilot.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: results-r3-bse-package-proof
+  cancel-in-progress: false
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official third-party package at pinned version without vendoring
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir 'bse==3.3.3'
+          python -m pip show bse
+      - name: Request live BSE equity snapshots and historical filing metadata with the actual BSE library
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bse-proof
+          python - <<'PY'
+          import json, traceback
+          from datetime import datetime
+          from bse import BSE
+          summary={'source':'BennyThadikaran/BseIndiaApi',
+                   'package':'bse==3.3.3','mode':'live read-only',
+                   'targets':[], 'successful_live_snapshots':0,
+                   'successful_historical_filing_indexes':0}
+          targets=[('HDFCBANK','500180'),('TCS','532540'),('BEL','500049')]
+          with BSE(download_folder='/tmp/bse-proof') as client:
+            for symbol,code in targets:
+              row={'symbol':symbol,'bse_scripcode':code}
+              try:
+                snap=client.resultsSnapshot(code)
+                result=snap.get('results_in_crores',{})
+                columns=result.get('fields',[])
+                data=result.get('data',[])
+                permitted={'Revenue','Net Profit','EPS','CAR %','OPM %'}
+                financial=[{'metric':r[0],'values':r[1:]} for r in data
+                           if r and r[0] in permitted][:5]
+                row['snapshot']={'status':'LIVE_SUCCESS','unit':snap.get('currency_unit'),
+                  'periods':snap.get('periods'),'financial_metrics':financial,
+                  'period_links':snap.get('period_links',[])[:1]}
+                if financial: summary['successful_live_snapshots']+=1
+              except Exception as e:
+                row['snapshot']={'status':'LIVE_ERROR','exception_type':type(e).__name__,
+                  'message':str(e)[:220]}
+              try:
+                anns=client.announcements(scripcode=code,page_no=1,
+                        from_date=datetime(2024,10,1),to_date=datetime(2025,3,1))
+                entries=anns.get('Table',[]) if isinstance(anns,dict) else []
+                possible=[v for v in entries if any(q in
+                       (str(v.get('NEWSSUB',''))+' '+str(v.get('HEADLINE',''))).lower()
+                         for q in ['financial results','quarterly results','unaudited','audited'])]
+                row['announcements_2024']={'status':'LIVE_SUCCESS',
+                  'total_first_page':len(entries),
+                  'result_related_first_page':len(possible),
+                  'examples':[{'title':str(x.get('NEWSSUB',''))[:110],
+                    'date':x.get('NEWS_DT'),'attachment':bool(x.get('ATTACHMENTNAME'))}
+                      for x in possible[:3]]}
+                summary['successful_historical_filing_indexes']+=1
+              except Exception as e:
+                row['announcements_2024']={'status':'LIVE_ERROR',
+                  'exception_type':type(e).__name__,'message':str(e)[:220]}
+              summary['targets'].append(row)
+              print('BSE_PILOT_RESULT='+json.dumps(row,sort_keys=True),flush=True)
+          path='/tmp/bse-proof/results.json'
+          with open(path,'w') as out:
+            json.dump(summary,out,indent=2,sort_keys=True)
+          print('BSE_PILOT_SUMMARY='+json.dumps(
+              {k:v for k,v in summary.items() if k!='targets'},sort_keys=True))
+          if not summary['successful_live_snapshots'] and not summary['successful_historical_filing_indexes']:
+            raise SystemExit('NO_LIVE_BSE_DATA_RETRIEVED_VIA_PACKAGE')
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bseindiaapi-pinned-library-live-proof
+          path: /tmp/bse-proof/results.json
+          if-no-files-found: warn
+          retention-days: 14
