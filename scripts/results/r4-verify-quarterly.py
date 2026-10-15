@@ -109,7 +109,7 @@ def check_manifest(record,manifest):
             return "INVALID_RETAINED_LEGACY_XBRL_REFERENCE"
     if contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1":
         if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
-            or not re.fullmatch(r"/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\\.xml",u.path,re.I)
+            or not re.fullmatch(r"/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\.xml",u.path,re.I)
             or u.query or u.fragment
             or not re.fullmatch(r"[a-f0-9]{64}",str(manifest.get("original_sha256_unretained","")))
             or manifest.get("original_xbrl_retained") is not False
