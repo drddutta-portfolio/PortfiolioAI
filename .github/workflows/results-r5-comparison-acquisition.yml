@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: results-r5-historical-sources-development
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   acquire-qualify:
@@ -48,7 +48,7 @@ jobs:
         run: |
           python scripts/results/test_r3_live_public_filing_batch.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
-      - name: Source-reuse-first issuer recovery for March and June 2025
+      - name: Optimized quarter-targeted issuer-original recovery for March and June 2025
         env:
           RESULTS_R5_HISTORICAL_ACQUISITION: "1"
         shell: bash
