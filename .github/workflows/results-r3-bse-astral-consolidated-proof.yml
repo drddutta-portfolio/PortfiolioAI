@@ -1,0 +1,38 @@
+name: Results R3 BSE Astral 2024 Consolidated Originals Proof
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-astral-consolidated-proof.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check -r vendor/bseindiaapi/requirements.txt 'pymupdf==1.26.5'
+      - name: Inspect original issuer Sep/Dec 2024 consolidated quarter-first table rows
+        run: |
+          python - <<'PY'
+          import fitz,re,json,sys
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          originals=[('2024-09-30','47d353d6-47d8-4cf9-a8b3-d5a034f1d511.pdf'),
+                     ('2024-12-31','59b5a333-4018-4040-be97-536c9a7c028c.pdf')]
+          words=re.compile(r'consolidated financial results|revenue from operations|net profit for the period|profit for the period|diluted|quarter ended|in million|in crore|30.09.2024|31.12.2024',re.I)
+          with PortfolioBSE() as b:
+            for period,attachment in originals:
+              raw,meta=b.retrieve_original_pdf(attachment)
+              pdf=fitz.open(stream=raw,filetype='pdf')
+              pages=[]
+              for i,page in enumerate(pdf):
+                lines=[' '.join(z.split()) for z in page.get_text('text',sort=True).splitlines() if z.strip()]
+                if not any('CONSOLIDATED' in z.upper() and 'FINANCIAL RESULTS' in z.upper() for z in lines[:25]):continue
+                matches=[z[:210] for z in lines if words.search(z)]
+                pages.append({'page':i+1,'head':lines[:22],'matching':matches[:28]})
+              print('ASTRAL_FULL_ORIGINAL='+json.dumps({'period':period,'sha':meta['sha256'],
+                'page_count':len(pdf),'consolidated_pages':pages},sort_keys=True),flush=True)
+          PY
