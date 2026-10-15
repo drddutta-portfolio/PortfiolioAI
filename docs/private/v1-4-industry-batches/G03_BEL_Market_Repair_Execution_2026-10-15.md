@@ -1,3 +1,13 @@
+## Executed and independently selected result
+
+Governed run **38676081296 SUCCESS** appended five BEL sessions through October 14 (282 total), with one Angel One history request, one authentication request, zero retries and budget reservation `f0a62feb-b0ba-41e5-81d3-329b1021346a` independently SETTLED: one consumed, zero failed/released. Source capture: `6d7c7e10-9c95-4a79-ae80-e1322a1c07ba`. Exact index/corporate-action originals were read back and three superseding compatible proofs were appended. Provider-free recovery run **38676466818 SUCCESS** reused that capture and all original/proof identities without another history acquisition.
+
+Read-only canonical **38676218718 SUCCESS** proved both market requirements FRESH. Authorized BEL-only save **38676299404 SUCCESS** appended snapshot `7341e8fc-002f-4d49-8266-2c61d4d09974`, selection `c81e258f-b7a4-41ce-aaec-d57165c97956`; independently selected readback confirms **7 → 5 blockers**, both market requirements persisted FRESH and existing ROCE/business/governance FRESH preserved. Duplicate grant issuance was idempotent; grant replay was rejected `P4_GRANT_ALREADY_USED`. BEL remains REVIEW_REQUIRED, ₹0 READY value.
+
+Development grant/history controller **v7 ACTIVE**, SHA-256 `5ca548780d346103d67eb35b3ac1a47a35aed43641e75e602dde064ca7b52e33`; all returned runtime files match the preserved-live candidate. Canonical v70 was unchanged for this market repair. Full Repository Verification **38675507870 SUCCESS** and Architecture Guard **38675504976 SUCCESS** validate runtime implementation `1eb098974dc9032f39a2121eaeb4d652a2952146`; executor-only successor `7c6c357c…` additionally supplies exact R2 path-style signing/provider-free recovery and actually passed both acquisition and recovery workflows. Local 424 Edge tests, architecture, TypeScript, Edge lint and candidate Deno checks passed.
+
+No migration, Banking/scheduler/Production/main changes or PR merge occurred. The remainder below records the original pre-execution contract, not a claim that execution is still pending.
+
 # BEL controlled market repair — 15 October 2026
 
 Starting independently selected snapshot: `34ac0e53-50eb-44cf-b19b-7f69ae3b0abd`; BEL remains REVIEW_REQUIRED with seven blockers. The ROCE, business durability and governance FRESH evidence is preserved.

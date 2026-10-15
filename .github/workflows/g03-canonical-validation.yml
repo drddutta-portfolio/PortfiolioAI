@@ -2,6 +2,10 @@ name: G03 Signed Canonical Read-Only Validation
 on:
   workflow_dispatch:
     inputs:
+      require_bel_orders:
+        description: Require the qualified four-period BEL issuer order/revenue context before saving
+        type: boolean
+        default: false
       materialize_bel:
         description: Save only BEL after both fixed documentary reviews validate FRESH
         type: boolean
@@ -32,6 +36,7 @@ jobs:
       - run: python scripts/v1-4/g03_canonical_validation.py
         env:
           G03_MATERIALIZE_BEL: ${{ inputs.materialize_bel }}
+          G03_REQUIRE_BEL_ORDERS: ${{ inputs.require_bel_orders }}
           G03_REQUIRE_BEL_ROCE: ${{ inputs.require_bel_roce }}
       - uses: actions/upload-artifact@v4
         if: always()

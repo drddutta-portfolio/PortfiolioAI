@@ -1,0 +1,22 @@
+{
+  "action": "V1_4_G03_HISTORY_TAIL",
+  "runId": "3fe4c4af-ec8a-4d2b-aaa2-ef9a340cf041",
+  "reservationId": "f0a62feb-b0ba-41e5-81d3-329b1021346a",
+  "transport": {
+    "authenticationRequests": 1,
+    "authenticationResponses": 1,
+    "historyRequests": 1
+  },
+  "results": [
+    {
+      "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "status": "INGESTED_NOT_QUALIFIED",
+      "sourceRecordId": "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+      "returnedCandles": 6,
+      "newRows": 5,
+      "historyEnd": "2026-10-14"
+    }
+  ],
+  "retryAttempts": 0,
+  "canonicalMaterialization": false
+}
