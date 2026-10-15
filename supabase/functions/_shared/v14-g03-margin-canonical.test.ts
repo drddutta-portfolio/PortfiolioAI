@@ -43,7 +43,7 @@ describe('BEL eight original-bound quarterly raw operating pairs',()=>{
  })
  it('excludes only the pinned undated UNKNOWN-scope TTM candidate, preserving changed or conflicting canonical observations',async()=>{
   const f=await fixture(),r=await validateReviewedRequirementEvidence(f)
-  const legacy={...r!.observations[0],id:'c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb',source_record_id:'cf472a75-1d5d-4045-b3c0-f7cc36f10d8d',metric_code:'OPM_TTM',numeric_value:'28.55',period_start:null,period_end:null,period_type:'TTM',consolidation_scope:'UNKNOWN'}
+  const legacy={...r!.observations[0],id:'c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb',source_record_id:'cf472a75-1d5d-4045-b3c0-f7cc36f10d8d',metric_code:'OPM_TTM',numeric_value:'28.550000000000000000',period_start:null,period_end:null,period_type:'TTM',consolidation_scope:'UNKNOWN'}
   const args={canonicalRows:[legacy],reviewed:r,definitions:[],minimum:8,evaluationAsOfMs:f.evaluationAsOfMs,sourceCutoffAtMs:f.sourceCutoffAtMs,family:f.family}
   expect(reconcileCanonicalAndReviewed(args)).toMatchObject({authority:'REVIEW',validation:{state:'FRESH'},reason:'APPROVED_MARGIN_PAIRS_SELECTED_UNDATED_TTM_RETAINED'})
   expect(reconcileCanonicalAndReviewed({...args,canonicalRows:[{...legacy,numeric_value:'29'}]})).toMatchObject({authority:'CANONICAL'})

@@ -15,5 +15,5 @@ export function approvedG03MarginSource(r:{id:string;source_record_id:string|nul
  * conflict with or replace eight explicitly dated quarterly raw pairs. Any
  * changed, additional or otherwise qualified canonical evidence stays blocked. */
 export function fixedG03UnqualifiedMarginCandidate(rows:readonly {id:string;source_record_id:string;metric_code:string;numeric_value:string|number|null;period_type:string|null;period_start:string|null;period_end:string|null;consolidation_scope:string|null}[]){
- return rows.length===1&&rows.every(r=>r.id==='c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb'&&r.source_record_id==='cf472a75-1d5d-4045-b3c0-f7cc36f10d8d'&&r.metric_code==='OPM_TTM'&&String(r.numeric_value)==='28.55'&&r.period_type==='TTM'&&r.period_start===null&&r.period_end===null&&r.consolidation_scope==='UNKNOWN')
+ return rows.length===1&&rows.every(r=>r.id==='c5c302f8-c8c5-4fd8-8cd9-7bf23f0eeddb'&&r.source_record_id==='cf472a75-1d5d-4045-b3c0-f7cc36f10d8d'&&r.metric_code==='OPM_TTM'&&/^28\.550*$/.test(String(r.numeric_value))&&r.period_type==='TTM'&&r.period_start===null&&r.period_end===null&&r.consolidation_scope==='UNKNOWN')
 }

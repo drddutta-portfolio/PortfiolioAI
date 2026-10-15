@@ -284,7 +284,7 @@ export async function validateReviewedRequirementEvidence(input:{
  }
  if(requirementCode==='OPERATING_MARGIN_HISTORY'&&support.some(r=>r.review_kind==='DELEGATED_G03_APPROVED_MARGIN_PAIR_REVIEW')){
    if(input.minimum!==8||support.length!==8||new Set(observations.map(x=>x.period_end)).size!==8||!consecutiveLatestQuarters(observations.map(x=>x.period_end!),8)||!G03_MARGIN_BATCH.periods.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','MARGIN_EIGHT_MATCHED_CONSECUTIVE_QUARTERS_REQUIRED',support.map(r=>r.id))
-   const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_MARGIN_PAIR_SERIES_READY')
+   const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_MARGIN_PAIR_SERIES_READY',sourceById)
    return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,calculationAuthority:'derivePharmaOperatingMarginPercent',componentSeries:support.map(r=>({reviewId:r.id,periodEnd:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),rawProviderRecords:G03_MARGIN_BATCH.providerRecords,captionDiscrepancy:G03_MARGIN_BATCH.periods.find(b=>b.captionDiscrepancy)?.captionDiscrepancy,scope:'CONSOLIDATED',historicalPitAvailabilityNotClaimed:true}}
  }
 
@@ -318,10 +318,10 @@ export async function validateReviewedRequirementEvidence(input:{
   retrievedAt:maxInstant(selected.map(x=>x.source.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.document.reporting_period_end??x.review.period_end).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,
   freshThrough:minInstant(selected.map(x=>x.review.fresh_through)),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),sourcePayloadHashes:uniq(selected.map(x=>x.source.payload_hash)),researchDocumentIds:uniq(selected.map(x=>x.document.id)),documentSourceIds:uniq(selected.map(x=>x.link.id)),contentHashes:uniq(selected.map(x=>x.document.canonical_content_hash!))}}
 }
-function resultFrom(selected:readonly InputObservation[],reviews:readonly RequirementReview[],documentSources:readonly ReviewedDocumentSource[],reason:string):ReviewedEvidenceResult{
+function resultFrom(selected:readonly InputObservation[],reviews:readonly RequirementReview[],documentSources:readonly ReviewedDocumentSource[],reason:string,sourceById?:ReadonlyMap<string,ReviewedSourceRecord>):ReviewedEvidenceResult{
  const reviewById=new Map(reviews.map(x=>[x.id,x])),used=selected.map(x=>reviewById.get(x.id)!).filter(Boolean)
  const docIds=uniq(used.map(x=>x.research_document_id).filter((x):x is string=>Boolean(x)))
- const links=documentSources.filter(x=>docIds.includes(x.research_document_id)&&selected.some(s=>s.source_record_id===x.source_record_id))
+ const links=documentSources.filter(x=>docIds.includes(x.research_document_id)&&selected.some(s=>s.source_record_id===x.source_record_id||sourceById?.get(s.source_record_id)?.raw_payload.original_source_record_id===x.source_record_id))
  return {state:"FRESH",reason,observations:selected,selectedReviewIds:selected.map(x=>x.id),sourceRecordIds:uniq(selected.map(x=>x.source_record_id)),
   researchDocumentIds:docIds,documentSourceIds:uniq(links.map(x=>x.id)),sourceCode:uniq(selected.map(x=>x.source_code)).length===1?selected[0]?.source_code??null:null,
   retrievedAt:maxInstant(selected.map(x=>x.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.period_end).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,
