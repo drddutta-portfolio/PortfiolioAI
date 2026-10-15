@@ -1,0 +1,34 @@
+name: G03 BEL BSE Read-Only Source Probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/bel-bse-source-probe]
+    paths: [.github/workflows/g03-bel-bse-source-probe.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check -r vendor/bseindiaapi/requirements.txt
+      - run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils
+      - name: Verify vendored source and adapter regression tests
+        run: |
+          python -m py_compile scripts/portfolio_bse.py scripts/results/g03-bel-bse-source-probe.py
+          python scripts/results/test_portfolio_bse.py -v
+      - name: Query BEL only and retain original evidence without admission
+        run: python scripts/results/g03-bel-bse-source-probe.py
+      - name: Retain original responses, filings and exact execution results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-source-probe
+          path: tmp/bel-bse-source-probe/
+          retention-days: 30
+          if-no-files-found: warn

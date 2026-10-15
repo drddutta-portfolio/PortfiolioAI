@@ -96,6 +96,40 @@ class PortfolioBSE:
             "period_links": payload.get("period_links", []),
         }
 
+    def market_context(self, scrip_code: str) -> dict[str, Any]:
+        """Original BSE quote/header context, not historical NSE valuations.
+
+        Preserve raw values and source timestamps. Caller must verify identity,
+        exchange, units and share basis; no EPS or share count is inferred here.
+        """
+        code = _scrip(scrip_code)
+        return {
+            "source_kind": "BSE_MARKET_CONTEXT_DISCOVERY",
+            "bse_scrip_code": code,
+            "qualification_status": "DISCOVERY_ONLY",
+            "quote": self._bse.quote(code),
+            "equity_metadata": self._bse.equityMetaInfo(code),
+        }
+
+    def action_discovery(self, scrip_code: str, start: date, end: date) -> dict[str, Any]:
+        """Bounded original action index; absence is not an issuance certificate."""
+        code = _scrip(scrip_code)
+        left, right = _calendar_date(start), _calendar_date(end)
+        if left > right or right - left > timedelta(days=100):
+            raise ValueError("INVALID_ACTION_RANGE")
+        return {
+            "source_kind": "BSE_ACTIONS_DISCOVERY",
+            "bse_scrip_code": code,
+            "qualification_status": "DISCOVERY_ONLY",
+            "start": left.isoformat(),
+            "end": right.isoformat(),
+            "raw_actions": self._bse.actions(
+                scripcode=code,
+                from_date=datetime.combine(left, datetime.min.time()),
+                to_date=datetime.combine(right, datetime.min.time()),
+            ),
+        }
+
     def result_calendar(self, scrip_code: str, start: date, end: date) -> dict[str, Any]:
         """Scheduled result dates are not reported historical financial facts."""
         code = _scrip(scrip_code)

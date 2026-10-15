@@ -10,7 +10,7 @@ That patch was live-verified against historical BSE issuer announcements in http
 No other upstream code changes were made.
 
 Treat this package as a backend source dependency; never import Python into React, publish user- or source-authentication tokens, or replace original issuer filing qualification with aggregate snapshots.
-Use \`scripts/bse_portfolioai.py\` as the *only* integration point for R3 and other workstreams. No automatic changes to production/main, bank V1-4 scoring or financial selection happen merely by installing it.
+Use \`scripts/portfolio_bse.py\` as the *only* integration point for R3 and other workstreams. No automatic changes to production/main, bank V1-4 scoring or financial selection happen merely by installing it.
 
 Update instructions:
 1. Review and pin a new upstream commit and its version/license.

@@ -75,6 +75,18 @@ class FakeBSE:
     def getScripCode(self, symbol):
         return "500180" if symbol == "HDFCBANK" else "BAD"
 
+    def quote(self, code):
+        self.calls.append(("quote", code))
+        return {"CurrentValue": None, "PreviousClose": "0"}
+
+    def equityMetaInfo(self, code):
+        self.calls.append(("metadata", code))
+        return {"ISIN": "INE263A01024", "ScripCode": code}
+
+    def actions(self, **kwargs):
+        self.calls.append(("actions", kwargs))
+        return [{"purpose": "Dividend", "scripcode": kwargs["scripcode"]}]
+
     def exit(self):
         self.closed = True
 
@@ -171,6 +183,27 @@ class PortfolioBseTests(unittest.TestCase):
         found = instance.get_scrip_candidate("HDFCBANK")
         self.assertEqual(found["bse_scrip_code"], "500180")
         self.assertEqual(found["identity_status"], "CANDIDATE_NOT_ISIN_VERIFIED")
+
+    def test_market_context_preserves_unknown_and_literal_zero_without_valuation(self):
+        instance, fake = adapter()
+        result = instance.market_context("500049")
+        self.assertEqual(result["qualification_status"], "DISCOVERY_ONLY")
+        self.assertIsNone(result["quote"]["CurrentValue"])
+        self.assertEqual(result["quote"]["PreviousClose"], "0")
+        self.assertEqual(fake.calls, [("quote", "500049"), ("metadata", "500049")])
+        with self.assertRaises(ValueError):
+            instance.market_context("BEL")
+
+    def test_action_bounds_and_literal_source_passthrough(self):
+        instance, fake = adapter()
+        result = instance.action_discovery("500049", date(2026, 7, 9), date(2026, 10, 16))
+        self.assertEqual(result["qualification_status"], "DISCOVERY_ONLY")
+        self.assertEqual(result["raw_actions"][0]["purpose"], "Dividend")
+        self.assertEqual(fake.calls[0][1]["scripcode"], "500049")
+        for left, right in [(date(2025, 1, 1), date(2026, 1, 1)), (date(2026, 10, 16), date(2026, 7, 9))]:
+            with self.assertRaises(ValueError):
+                instance.action_discovery("500049", left, right)
+        self.assertEqual(len(fake.calls), 1)
 
     def test_context_manager_closes_library(self):
         instance, fake = adapter()
