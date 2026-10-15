@@ -1,0 +1,108 @@
+{
+  "scope": "BEL ONLY",
+  "scripCode": "500049",
+  "isin": "INE263A01024",
+  "acquisitionRun": 38796801988,
+  "recoveryRun": 38797815242,
+  "originalCount": 8,
+  "sources": [
+    {
+      "periodEnd": "2024-09-30",
+      "attachment_name": "2c66684c-6ab1-4b53-a142-887e4f092ef0.pdf",
+      "bytes": 2347326,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "a0cf85d451ba3f0cffa9c74c7a21757cda273f9425c506d6750b2da8e330ac56",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/2c66684c-6ab1-4b53-a142-887e4f092ef0.pdf",
+      "bseFiledTimestampRaw": "2024-10-25T13:35:26.827",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2024-12-31",
+      "attachment_name": "43ff700d-23d5-4d4b-8f75-4b8d4ab903b8.pdf",
+      "bytes": 8055393,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "38065e01963687c9df8dee365ad7e16d51604674dab5100b96ed7b83e667213b",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/43ff700d-23d5-4d4b-8f75-4b8d4ab903b8.pdf",
+      "bseFiledTimestampRaw": "2025-01-30T13:57:55.383",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2025-03-31",
+      "attachment_name": "59da57a1-0a41-4a44-8cb6-3caf3e864f4e.pdf",
+      "bytes": 17831355,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "06f71af912e0f1d26579b739009f3f1ef95818085bd52a81ae1dfcf873aca23b",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/59da57a1-0a41-4a44-8cb6-3caf3e864f4e.pdf",
+      "bseFiledTimestampRaw": "2025-05-19T18:18:34.45",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2025-06-30",
+      "attachment_name": "069b66f3-72f0-4b6d-b905-1949920d05e8.pdf",
+      "bytes": 8345217,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "0bce9c1c04d2bdf41e62e11b1b04c792abebff90a4c1a4c607a0e41c062e9c73",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/069b66f3-72f0-4b6d-b905-1949920d05e8.pdf",
+      "bseFiledTimestampRaw": "2025-07-28T15:36:22.873",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2025-09-30",
+      "attachment_name": "fe1b8538-f118-418e-b787-169fc9cb2db2.pdf",
+      "bytes": 11595429,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "619a9cf0860d4e4ed5ec6ec9b96865ac0514c676c5e9edb05d397856414fe011",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/fe1b8538-f118-418e-b787-169fc9cb2db2.pdf",
+      "bseFiledTimestampRaw": "2025-10-31T12:59:47.343",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2025-12-31",
+      "attachment_name": "2332e322-6a43-4deb-830d-0b6ee4a19583.pdf",
+      "bytes": 8066711,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "6a047264acec4e127039c29e7aa1559045ead232a00c2e4c287998ef87c3561e",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/2332e322-6a43-4deb-830d-0b6ee4a19583.pdf",
+      "bseFiledTimestampRaw": "2026-01-28T14:04:50.58",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2026-03-31",
+      "attachment_name": "93578fb4-f833-4db6-bac1-f212b74dfc1b.pdf",
+      "bytes": 14914561,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "3ce4f00b6b89d825f05a2337f5238e947cd403a3865d493756768b4d0572c771",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/93578fb4-f833-4db6-bac1-f212b74dfc1b.pdf",
+      "bseFiledTimestampRaw": "2026-05-19T15:21:27.94",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    },
+    {
+      "periodEnd": "2026-06-30",
+      "attachment_name": "bf9053f4-04be-4770-8420-06f82ca79e74.pdf",
+      "bytes": 8233170,
+      "qualification_status": "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS",
+      "sha256": "7f575541145ab25aec449d799a5b712a90f9be610480d9400c4c4bb5434bb16f",
+      "source_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/bf9053f4-04be-4770-8420-06f82ca79e74.pdf",
+      "bseFiledTimestampRaw": "2026-07-27T16:10:10.98",
+      "timestampTimezoneQualified": false,
+      "identityVerified": true,
+      "financialAdmission": "NOT_PERFORMED"
+    }
+  ],
+  "databaseWrites": 0,
+  "canonicalAdmissions": 0
+}
