@@ -1,4 +1,4 @@
-# PortfolioAI Results R5-C — qualified industry operating signals
+> **R5-C implementation closeout:** Industry-specific policy, deterministic peer calibration, UI wiring and regression tests implemented. Focused verification [run 38685589819](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38685589819) PASSED architecture, TypeScript, industry/quarter/UI tests, lint, production build and Git diff. An additional pre-existing four-vs-six-quarter R2 test suite has been corrected and is under verification. **Engineering state:** implemented and focused checks green; full 231-company authenticated UI census and pixel acceptance belong to R5-G. This does not imply 231/231 gradeable: the independently replicated June 2026 example supports only 83 candidate gradeable companies, with 148 safely Unavailable.\n\n# PortfolioAI Results R5-C — qualified industry operating signals
 
 **Implementation:** `src/features/results/quarterlyR5Classification.ts`  
 **Version:** `R5_INDUSTRY_QOQ_EMPIRICAL_20261015_V2`  
