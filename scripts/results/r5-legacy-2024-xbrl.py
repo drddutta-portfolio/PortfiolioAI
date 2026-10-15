@@ -247,6 +247,13 @@ def main():
   db.rollback()
   if target:equities=[x for x in equities if x[0] in target]
   if target and set(x[0] for x in equities)!=target:raise RuntimeError("TARGET_NOT_IN_PORTFOLIO")
+  shard_count=int(os.getenv("RESULTS_R5_LEGACY_SHARD_COUNT","1"))
+  shard_index=int(os.getenv("RESULTS_R5_LEGACY_SHARD_INDEX","0"))
+  if not (1<=shard_count<=4 and 0<=shard_index<shard_count):
+   raise RuntimeError("LEGACY_SHARD_CONFIGURATION_INVALID")
+  # Stable ordered, disjoint portfolio identities: never fetch one issuer
+  # in multiple workers within the same acquisition. Replays are idempotent.
+  equities=[company for index,company in enumerate(equities) if index%shard_count==shard_index]
   s3=None if dry else _r3.r2_client()
   session=requests.Session()
   session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)",
@@ -254,7 +261,7 @@ def main():
   boot=session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30)
   if boot.status_code in (401,403,429):raise RuntimeError("SOURCE_ACCESS_DENIED_"+str(boot.status_code))
   boot.raise_for_status()
-  report={"mode":"DRY_RUN" if dry else "ACQUIRE","target_periods":sorted(PERIODS),
+  report={"mode":"DRY_RUN" if dry else "ACQUIRE","shard_index":shard_index,"shard_count":shard_count,"target_periods":sorted(PERIODS),
           "universe_size":len(equities),"checked":0,"qualified":0,"observations_inserted":0,
           "periods":defaultdict(int),"failures":defaultdict(int),"blocked":None}
   for symbol,isin,sid in equities:
