@@ -73,7 +73,7 @@ jobs:
           with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
             with db.cursor() as cur:
               cur.execute(sql,(os.environ['PORTFOLIO_ID'],dates,dates,dates))
-              rows=[dict(zip(['period_end','total','with_observations','with_selection','selected_facts'],r)) for r in cur.fetchall()]
+              rows=[dict(zip(['period_end','total','with_observations','with_selection','selected_facts'],[r[0],*[int(v) for v in r[1:]]])) for r in cur.fetchall()]
           assert len(rows)==8
           assert all(row['total']>0 for row in rows)
           result={'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
