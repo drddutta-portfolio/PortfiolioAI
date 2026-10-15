@@ -34,4 +34,5 @@ jobs:
       - run: python scripts/v1-4/test_g03_compare_retained_issuer_facts.py
       - run: python scripts/v1-4/test_g03_roce_qualification.py
       - run: python scripts/v1-4/test_g03_bel_order_history.py
+      - run: python scripts/v1-4/test_g03_bel_cash_components.py
       - run: git diff --check

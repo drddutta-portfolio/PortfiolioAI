@@ -18,6 +18,7 @@ export type CanonicalFactKey =
   | "FUNDAMENTAL_EVIDENCE"
   | "OWNERSHIP_EVIDENCE"
   | "RESEARCH_DOCUMENTS"
+  | "CASH_CONVERSION_EVIDENCE"
   | "CURRENT_RESEARCH_EVIDENCE"
   | "DAILY_OHLCV"
   | "OFFICIAL_NEWS"
@@ -203,6 +204,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
     notes: "Theme membership is owner-controlled and separate from primary role.",
+  }),
+  CASH_CONVERSION_EVIDENCE: authority({
+    fact: "CASH_CONVERSION_EVIDENCE",
+    label: "Source-bound cash conversion",
+    layer: "DERIVED",
+    canonicalAuthority: "PortfolioAI approved matched annual cash-component contract",
+    canonicalSourceObject: "research_evidence_requirement_reviews + original source cells",
+    sharedAccessPath: "deriveG03CashConversion() -> validateReviewedRequirementEvidence() -> canonical materializer",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "The approved BEL contract joins standalone CFO, PAT and cash capex per year. FCF and CFO/PAT remain labelled PortfolioAI derivations; original classifications, adverse cash flows and UNKNOWN publication are preserved. A CFO amount alone cannot qualify conversion. Provider CFO contracts remain unchanged.",
   }),
   FUNDAMENTAL_EVIDENCE: authority({
     fact: "FUNDAMENTAL_EVIDENCE",

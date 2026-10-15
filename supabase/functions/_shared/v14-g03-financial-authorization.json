@@ -1,0 +1,21 @@
+{
+  "version": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+  "ownerInstruction": "Approved",
+  "approvedDate": "2026-10-15",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "allowedRequirements": [
+    "OPERATING_MARGIN_HISTORY",
+    "CFO_FCF_CONVERSION",
+    "NET_DEBT_AND_INTEREST_COVERAGE",
+    "VALUATION"
+  ],
+  "contractDocument": "docs/private/v1-4-industry-batches/G03_BEL_Remaining_Financial_Contract_Checkpoint_2026-10-15.md",
+  "contractSha256": "d12ba4ef7b7554bc2dc0cb53d83b6609fe61cf2453c3b25eeae73b5b79d618bd",
+  "sourceAuthority": "COMPANY_EXCHANGE_FILING",
+  "providerCalls": 0,
+  "migrationsAllowed": false,
+  "productionAllowed": false
+}

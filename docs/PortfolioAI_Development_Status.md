@@ -1,3 +1,7 @@
+## BEL financial component contract approved — 15 October 2026
+
+The owner replied **Approved** to `G03_BEL_FINANCIAL_COMPONENTS_V1`: compatible eight-quarter operating margins, three-year cash conversion, three-year debt/coverage and three-date defence valuation. This authorizes source-bound component integration in the existing canonical path, not a READY declaration or a global provider CFO activation. Implementation and factual admission are in progress. The independently checked selected BEL snapshot still has **four blockers**; previously FRESH evidence is preserved. No schema migration is included.
+
 ## BEL three further blockers cleared and persisted: 7 → 4 — 15 October 2026
 
 Independent Development readback after canonical save **38678096680 SUCCESS** confirms selected BEL snapshot `c9d52ca3-9adc-4915-aa01-1c51959e4ce0`, selection `9758f882-ae0b-495a-98aa-3cc4e696214e`: **ORDER_BOOK_AND_EXECUTION_GROWTH, MOMENTUM_12M_RELATIVE and DRAWDOWN_VOLATILITY_RISK are now persisted FRESH**, together with previously FRESH ROCE, business durability and governance. BEL remains REVIEW_REQUIRED with **four** mandatory financial blockers: OPERATING_MARGIN_HISTORY, CFO_FCF_CONVERSION, NET_DEBT_AND_INTEREST_COVERAGE, VALUATION. Other six G03 selected snapshot identities are unchanged; no stock is READY and READY frozen value remains ₹0.

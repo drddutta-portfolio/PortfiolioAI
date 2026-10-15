@@ -918,3 +918,7 @@ The preserved Pharma parent-score adapter does not prove score binding to the
 selected subprofile and immutable evidence snapshot; R6 therefore cannot qualify
 such a parent score merely because the canonical primary now displays correctly.
 No scoring formulas, assignments, schema, RLS or provider execution change.
+
+### Approved BEL cash-conversion component admission (G03, 15 October 2026)
+
+The owner-approved `G03_BEL_FINANCIAL_COMPONENTS_V1` extends the existing review-ledger/canonical materializer path for BEL. `deriveG03CashConversion` is the single deterministic owner of matched annual standalone CFO/PAT and CFO less cash capex. Source amounts and reclassifications remain separately preserved in INR lakh; the derived INR-crore amounts and ratio carry original-cell lineage and explicit PortfolioAI attribution. The three-year requirement is an AND join of CFO, PAT and cash capex for each of three periods. Three unrelated metric observations cannot qualify it. Negative cash conversion remains adverse evidence; undefined denominators block admission. The reviewed issuer-component pathway does not activate the provisional generic provider CFO contract or imply point-in-time publication availability. Canonical selections continue through the existing scoped validation/grant/materialization controls.

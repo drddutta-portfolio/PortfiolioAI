@@ -1,3 +1,5 @@
+import {g03FinancialExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {admitFixedG03Cash} from '../_shared/v14-g03-cash-admission-runtime.ts'
 import {g03DocumentExecutorQualified,g03OrderExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {g03RoceExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {admitFixedG03Roce} from '../_shared/v14-g03-roce-admission-runtime.ts'
@@ -21,6 +23,10 @@ Deno.serve(async req=>{
  if(body?.action==='ADMIT_FIXED_G03_BEL_ROCE_BATCH'){
   if(!g03RoceExecutorQualified(claims))return reply(403,'G03_ROCE_EXECUTOR_SCOPE_INVALID')
   try{return reply(200,'G03_FIXED_ROCE_REVIEWS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Roce(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_ROCE_ADMISSION_FAILED')}
+ }
+ if(body?.action==='ADMIT_FIXED_G03_BEL_CASH_COMPONENTS'){
+  if(!g03FinancialExecutorQualified(claims))return reply(403,'G03_FINANCIAL_EXECUTOR_SCOPE_INVALID')
+  try{return reply(200,'G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Cash(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_CASH_ADMISSION_FAILED')}
  }
  const order=body?.action==='ADMIT_FIXED_G03_ORDER_HISTORY',g03=order||body?.action==='ADMIT_FIXED_G03_DOCUMENT',scope=g03?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE,sourcePolicy=order?G03_ORDER_POLICY:scope.policy,selectedBatch=order?G03_ORDER_REVIEW_BATCH:g03?G03_DOCUMENT_REVIEW_BATCH:batch,documentKind=g03?G03_DOCUMENT_KIND:G02_DOCUMENT_KIND,reviewKind=g03?G03_DOCUMENT_REVIEW_KIND:G02_DOCUMENT_REVIEW_KIND
  if(!(order?g03OrderExecutorQualified(claims):g03?g03DocumentExecutorQualified(claims):g02DocumentExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
