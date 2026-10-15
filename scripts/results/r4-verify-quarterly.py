@@ -2,7 +2,7 @@
 """Development-only R4. Verify R2 manifest bytes and select current-display
 facts that agree with the immutable filing. Does not establish issuer publication
 time, adjust historical share basis or change any investment research score."""
-import argparse, hashlib, json, os
+import argparse, hashlib, json, os, re
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
@@ -18,7 +18,10 @@ PREFIX="portfolioai-results/development/v1/quarterly/"
 # The base R4 gate retains its original four-quarter authority. R5 may
 # additionally select separately validated historical comparison facts only.
 R5_COMPARISON_MODE=os.getenv("RESULTS_R5_COMPARISON_SELECTION","0")=="1"
-QUARTERS=(("2025-03-31","2025-06-30") if R5_COMPARISON_MODE else ()) + ("2025-09-30","2025-12-31","2026-03-31","2026-06-30")
+R5_LEGACY_MODE=os.getenv("RESULTS_R5_LEGACY_SELECTION","0")=="1"
+QUARTERS=(("2024-09-30","2024-12-31") if R5_LEGACY_MODE else
+          ("2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31","2026-06-30")
+          if R5_COMPARISON_MODE else ("2025-09-30","2025-12-31","2026-03-31","2026-06-30"))
 BANKS=set("AUBANK AXISBANK BANDHANBNK BANKBARODA FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK SBIN".split())
 BANK_REQUIRED={"NET_INTEREST_INCOME_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"}
 OTHER_REQUIRED={"OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"}
@@ -62,7 +65,8 @@ def check_manifest(record,manifest):
     if {k:v for k,v in raw.items() if k not in ("r2_key","r2_manifest_sha256")}!=manifest:return "SOURCE_MANIFEST_MISMATCH"
     contract=manifest.get("contract")
     if contract not in ("PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1",
-                         "PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1"):
+                         "PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1",
+                         "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
@@ -200,7 +204,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1')
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -326,6 +330,10 @@ def verify(db,s3,apply):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
+    if R5_LEGACY_MODE and os.environ.get("RESULTS_R5_LEGACY_ACK")!="2024_SEP_DEC_ORIGINAL_XBRL":
+        raise SystemExit("R5_LEGACY_SELECTION_SCOPE_NOT_APPROVED")
+    if R5_LEGACY_MODE and R5_COMPARISON_MODE:
+        raise SystemExit("R5_COMPARISON_SCOPE_CONFLICT")
     if R5_COMPARISON_MODE and os.environ.get("RESULTS_R5_HISTORICAL_ACK")!="2025_MAR_JUN_ONLY":
         raise SystemExit("R5_HISTORICAL_SELECTION_SCOPE_NOT_APPROVED")
     db=os.environ.get("SUPABASE_DB_URL","")
