@@ -1,0 +1,67 @@
+name: Results R3 Seven Missing Identity Source Checks
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-missing-isin-discovery.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Check independent NSE quote and issuer original identity evidence without writes
+        run: |
+          python - <<'PY'
+          import requests,re,json,xml.etree.ElementTree as ET
+          from urllib.parse import urlencode,urlparse
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          home='https://www.nseindia.com/companies-listing/corporate-integrated-filing'
+          s.get(home,timeout=25).raise_for_status()
+          for symbol in ('ARVINDFASN','ASHOKA','AURIONPRO','AVANTIFEED','DDEVPLSTIK','SANSERA','VMART'):
+            outcome={'symbol':symbol,'quote':None,'xml':None,'matched':False,'reason':None}
+            try:
+              q=s.get('https://www.nseindia.com/api/quote-equity?'+urlencode({'symbol':symbol}),timeout=25,
+                headers={'Accept':'application/json','Referer':'https://www.nseindia.com/get-quotes/equity?symbol='+symbol})
+              if q.ok:
+                data=q.json()
+                info=data.get('info',{})
+                if info.get('symbol')==symbol and re.fullmatch(r'INE[A-Z0-9]{9}',str(info.get('isin',''))):
+                  outcome['quote']=info['isin']
+            except (requests.RequestException,ValueError): pass
+            try:
+              p={'index':'equities','symbol':symbol,'type':'Integrated Filing- Financials',
+                 'page':1,'size':100,'from_date':'01-01-2025','to_date':'15-10-2026'}
+              q=s.get('https://www.nseindia.com/api/integrated-filing-results?'+urlencode(p),
+                timeout=25,headers={'Accept':'application/json','Referer':home})
+              if q.ok:
+                v=q.json()
+                rows=v if isinstance(v,list) else v.get('data',v.get('records',[]))
+                if isinstance(rows,dict):rows=rows.get('data',[])
+                if isinstance(rows,list):
+                  for x in rows[:14]:
+                    if not isinstance(x,dict) or x.get('symbol')!=symbol:continue
+                    uri=x.get('xbrl','')
+                    if not isinstance(uri,str) or urlparse(uri).hostname!='nsearchives.nseindia.com':continue
+                    r=s.get(uri,timeout=25)
+                    if not r.ok or len(r.content)>5000000:continue
+                    try:root=ET.fromstring(r.content)
+                    except ET.ParseError:continue
+                    ids={}
+                    for node in root:
+                      k=node.tag.rsplit('}',1)[-1]
+                      if k in ('Symbol','ISIN') and node.text:ids.setdefault(k,set()).add(node.text.strip())
+                    if ids.get('Symbol')=={symbol} and len(ids.get('ISIN',set()))==1:
+                      outcome['xml']=next(iter(ids['ISIN']))
+                      break
+            except (requests.RequestException,ValueError): pass
+            outcome['matched']=bool(outcome['quote'] and outcome['quote']==outcome['xml'])
+            outcome['reason']='TWO_NSE_ORIGINAL_IDENTITIES_MATCH' if outcome['matched'] else 'UNVERIFIED_IDENTITY_REQUIRES_FURTHER_EVIDENCE'
+            print(json.dumps(outcome,sort_keys=True))
+          PY
