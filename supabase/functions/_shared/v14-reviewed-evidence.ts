@@ -1,4 +1,4 @@
-import {approvedG03ValuationReview,approvedG03ValuationSource,G03_VALUATION_BATCH,stableValuation} from './v14-g03-valuation-review.ts'
+import {approvedG03ValuationReview,approvedG03ValuationSource,fixedG03UnqualifiedValuationCandidate,G03_VALUATION_BATCH,stableValuation} from './v14-g03-valuation-review.ts'
 import {deriveG03Valuation,G03_VALUATION_FRESH_THROUGH,type ValuationComponents} from './v14-g03-valuation-components.ts'
 import {approvedG03MarginReview,approvedG03MarginSource,fixedG03UnqualifiedMarginCandidate,G03_MARGIN_BATCH} from './v14-g03-margin-review.ts'
 import {deriveG03Margin,G03_MARGIN_FRESH_THROUGH,type MarginComponents} from './v14-g03-margin-components.ts'
@@ -359,6 +359,7 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
  // valid/conflicting/modified candidates retain the existing fail-closed path.
  if(canonical.state==='REVIEW_REQUIRED'&&input.family==='NUMERIC_SERIES'&&r?.state==='FRESH'&&approvedG03RoceSeries(r.observations)&&fixedG03UnqualifiedRoceCandidate(input.canonicalRows))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:'G03_FIXED_ISSUER_ROCE_SERIES_READY',selected:r.observations},reviewed:r,reason:'G03_FIXED_ISSUER_SERIES_SELECTED_LEGACY_UNQUALIFIED_RETAINED'}
  if(canonical.state==='REVIEW_REQUIRED'&&input.family==='NUMERIC_SERIES'&&r?.state==='FRESH'&&r.reason==='APPROVED_SOURCE_BOUND_MARGIN_PAIR_SERIES_READY'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&fixedG03UnqualifiedMarginCandidate(input.canonicalRows))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:'APPROVED_MARGIN_PAIRS_SELECTED_UNDATED_TTM_RETAINED'}
+ if(canonical.state==='REVIEW_REQUIRED'&&input.family==='NUMERIC_SERIES'&&r?.state==='FRESH'&&r.reason==='APPROVED_SOURCE_BOUND_DATED_VALUATIONS_READY'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&fixedG03UnqualifiedValuationCandidate(input.canonicalRows))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:'APPROVED_DATED_VALUATIONS_SELECTED_UNDATED_PE_RETAINED'}
  if(canonical.state==="FRESH"){
    if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
      const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})

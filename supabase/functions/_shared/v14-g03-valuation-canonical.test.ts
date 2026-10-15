@@ -40,4 +40,13 @@ describe('BEL defence valuation requires three complete source-bound dated joins
   for(const change of [{raw_payload:{...s.raw_payload,availability_proofs:[]}},{raw_payload:{...s.raw_payload,retained_captures:[]}},{raw_payload:{...s.raw_payload,registered_originals:[]}},{raw_payload:{...s.raw_payload,share_source_sha256:'0'.repeat(64)}}])expect(approvedG03ValuationSource(r,{...s,...change})).toBe(false)
   expect(await validateReviewedRequirementEvidence({...f,evaluationAsOfMs:Date.parse('2026-10-16T00:00:00Z'),sourceCutoffAtMs:Date.parse('2026-10-16T00:00:00Z')})).toMatchObject({state:'STALE'})
  })
+ it('retains the exact unqualified undated P/E while selecting only the complete compatible reviewed AND series',async()=>{
+  const f=await fixture(),r=await validateReviewedRequirementEvidence(f)
+  const legacy={...r!.observations[0],id:'426c0693-713e-48fa-a32f-90552fc6fc5b',source_record_id:'fa44ae66-5226-4a52-9c6d-70179e9dc7ba',source_code:'TRENDLYNE_MCP',metric_code:'PE_TTM',numeric_value:'46.600000000000000000',period_start:null,period_end:null,period_type:'TTM',consolidation_scope:'UNKNOWN',unit:null}
+  const args={canonicalRows:[legacy],reviewed:r,definitions:[],minimum:3,evaluationAsOfMs:f.evaluationAsOfMs,sourceCutoffAtMs:f.sourceCutoffAtMs,family:f.family}
+  expect(reconcileCanonicalAndReviewed(args)).toMatchObject({authority:'REVIEW',validation:{state:'FRESH'},reason:'APPROVED_DATED_VALUATIONS_SELECTED_UNDATED_PE_RETAINED'})
+  for(const rows of [[{...legacy,numeric_value:'47'}],[legacy,{...legacy,id:'other'}],[{...legacy,consolidation_scope:'STANDALONE',period_end:'2026-10-15'}]])expect(reconcileCanonicalAndReviewed({...args,canonicalRows:rows}).validation.state).not.toBe('FRESH')
+  const stale=await validateReviewedRequirementEvidence({...f,evaluationAsOfMs:Date.parse('2026-10-16T00:00:00Z'),sourceCutoffAtMs:Date.parse('2026-10-16T00:00:00Z')})
+  expect(reconcileCanonicalAndReviewed({...args,reviewed:stale})).toMatchObject({authority:'CANONICAL'})
+ })
 })

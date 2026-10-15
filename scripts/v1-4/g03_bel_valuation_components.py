@@ -190,7 +190,7 @@ def main():
                 if note['label'] not in pages[note['pdfPage']-1] or '7,30,97,78,829   7,30,97,78,829' not in pages[note['pdfPage']-1]:
                     raise ValueError('BEL_ANNUAL_WEIGHTED_SHARE_COUNT_NOT_PROVEN')
                 cash_cells = [c for c in json.loads((ROOT / 'v14-g03-cash-review-batch.json').read_text())['cells'] if c['originalSha256'] == h]
-                qualify_cells(pages, cash_cells)
+                qualify_cells({(h, number + 1): text for number, text in enumerate(pages)}, cash_cells)
         evidence.append({'sha256': h, 'r2Key': key, 'r2Writes': int(created), 'originalBytesVerified': True, 'sourceCellsVerified': len(cells)})
         (out / 'sanitized-originals.json').write_text(json.dumps(evidence, indent=2) + '\n')
     verify_availability(batch, originals)
