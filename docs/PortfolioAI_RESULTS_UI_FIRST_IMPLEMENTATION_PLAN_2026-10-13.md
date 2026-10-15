@@ -1,3 +1,5 @@
+> **OWNER-APPROVED SCOPE AMENDMENT — 15 Oct 2026:** The final Results page still shows **FOUR** displayed quarters (Sep/Dec 2025; Mar/Jun 2026). R3/R4 acquisition and selection now cover **FOUR additional prior-year quarters** (Sep/Dec 2024; Mar/Jun 2025) across the full **262 open-and-closed portfolio equities**: 2,096 possible company-quarter slots, subject to issuer reporting applicability. The original broader UI timeline and older R1–R7 gating text below are historical design context; the controlling data/acceptance scope is [PortfolioAI_RESULTS_262_EQUITY_EIGHT_QUARTER_PLAN_AMENDMENT_2026-10-15.md](PortfolioAI_RESULTS_262_EQUITY_EIGHT_QUARTER_PLAN_AMENDMENT_2026-10-15.md). **Do not add historical quarters to the UI; keep all working layout and panels unchanged.** Existing earlier R5 stage passes must be remeasured against the expanded source coverage before full release acceptance.
+
 # PortfolioAI Results — UI-first implementation plan
 **Date:** 2026-10-13  
 **Status:** R1 AND R2 IMPLEMENTED / VERIFIED IN DEVELOPMENT; R3–R8 PLANNED / GATED
