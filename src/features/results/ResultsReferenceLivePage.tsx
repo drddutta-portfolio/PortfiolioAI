@@ -172,8 +172,8 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
     observations.filter((row) => row.securityId === entry.position.securityId),
   )
   const hasNii = bank && observations.some((row) => row.securityId === entry.position.securityId && row.code === "NET_INTEREST_INCOME_QUARTER")
-  const code = bank ? (hasNii ? "NET_INTEREST_INCOME_QUARTER" : "ADVANCES_GROWTH_YOY") : "OPERATING_REVENUE_QUARTER"
-  const label = bank ? (hasNii ? "Net Interest Income" : "Advances Growth YoY") : "Revenue"
+  const code = bank ? (hasNii ? "NET_INTEREST_INCOME_QUARTER" : "ADVANCES_GROWTH_YOY") : "NET_PROFIT_QUARTER"
+  const label = bank ? (hasNii ? "Net Interest Income" : "Advances Growth YoY") : "Profit After Tax"
   const series = recent.map((period) =>
     compareQuarterMetric(observations, entry.position.securityId, period.end, code).current,
   )
