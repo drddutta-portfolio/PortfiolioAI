@@ -1,0 +1,54 @@
+name: Results R3 BSE 2024 Missing Company Filing Index
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-bse-2024-gap-source-index.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: results-r3-bse-2024-missing-original-index-dev
+  cancel-in-progress: false
+jobs:
+  source-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Development database only
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+      - name: Install pinned vendored source packages
+        run: python -m pip install --disable-pip-version-check --no-cache-dir -r vendor/bseindiaapi/requirements.txt 'psycopg[binary]==3.2.10'
+      - name: Verify source reader and shared BSE adapter are valid
+        run: |
+          python -m py_compile scripts/results/r3-bse-2024-gap-source-index.py
+          python scripts/results/test_portfolio_bse.py -v
+      - name: Discover official original filings for all 2024 unresolved equities
+        run: |
+          set -euo pipefail
+          python scripts/results/r3-bse-2024-gap-source-index.py \
+            --limit 120 --max-pages 3 --output tmp/results-r3-bse-2024/source-index.json
+          python - <<'PY'
+          import json
+          x=json.load(open('tmp/results-r3-bse-2024/source-index.json'))
+          print(json.dumps({'total_target_equities':x['total_target_equities'],
+               'filing_candidates':x['filing_candidates'],'outcomes':x['outcomes'],'writes':x['writes']},sort_keys=True))
+          assert x['total_target_equities']>0 and x['writes']==0
+          PY
+      - name: Archive issuer-original source index without PDF redistribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-bse-2024-unresolved-source-index
+          path: tmp/results-r3-bse-2024/*.json
+          if-no-files-found: warn
+          retention-days: 30
