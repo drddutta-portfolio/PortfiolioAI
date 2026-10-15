@@ -155,4 +155,35 @@ describe("R5 exact-industry quarterly operating signal", () => {
     expect(graded(conflicting,"Chemicals","Agrochemicals").status).toBe("UNAVAILABLE")
   })
 
+  it("assesses a verified loss-to-profit turnaround by level signs without inventing PAT growth percentages",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const pats=[10,-5,2,5]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(pats[i])),
+    ])
+    const result=graded(rows,"Capital Goods","Heavy Electrical Equipment")
+    expect(result.basis).toBe("COMPANY_TREND")
+    expect(result.status).toBe("STRONG")
+    expect(result.explanation).toContain("level changes")
+  })
+  it("permits operating Fintech/energy company-level signal but never an unreviewed lending bank proxy",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(25+i*5)),
+    ])
+    for (const [sector,industry] of [
+      ["Financial Services","Financial Technology (Fintech)"],
+      ["Financial Services","Stockbroking & Allied"],
+      ["Energy","Power Generation"],
+    ]) {
+      const assessment=graded(rows,sector,industry)
+      expect(assessment.basis).toBe("COMPANY_TREND")
+      expect(assessment.status).toBe("STRONG")
+    }
+    expect(graded(rows,"Financial Services","NBFC").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Energy","Solar Mining").status).toBe("UNAVAILABLE")
+  })
+
 })
