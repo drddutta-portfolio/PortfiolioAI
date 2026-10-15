@@ -1,0 +1,41 @@
+name: Results R3 2025 Original Parser Diagnostic
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-2025-extract-diagnostic.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check --no-cache-dir 'boto3==1.40.46' 'psycopg[binary]==3.2.10' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Reproduce metadata-to-original qualification for three companies
+        run: |
+          python - <<'PY'
+          import importlib.util,os,requests,json
+          spec=importlib.util.spec_from_file_location('src',os.path.join('scripts','results','r3-live-public-filing-batch.py'))
+          m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          s.get('https://www.nseindia.com/companies-listing/corporate-integrated-filing',timeout=25)
+          m.R5_HISTORY_MODE=True
+          for name,isin in [('CIPLA','INE059A01026'),('INFY','INE009A01021'),('HDFCBANK','INE040A01034')]:
+            records=m.fetch_json(s,name)
+            links=m.listing_urls(records,name)
+            matches=records if isinstance(records,list) else records.get('data',[])
+            print('CATALOG',name,'items',len(matches),'valid_links',len(links))
+            for link in links[:3]:
+              try:
+                z=s.get(link,timeout=25)
+                if not z.ok: print('FETCH',name,z.status_code);continue
+                parsed,reason=m.extract_source(z.text,name,isin,link)
+                print('EXTRACT',name,parsed.get('period_end') if parsed else None,sorted(parsed.get('facts',{})) if parsed else [],reason)
+              except Exception as e: print('ERROR',name,type(e).__name__,str(e)[:100])
+          PY
