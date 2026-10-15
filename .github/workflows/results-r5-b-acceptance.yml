@@ -1,0 +1,37 @@
+name: Results R5-B Comparison Acceptance
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-b-acceptance.yml
+      - src/features/results/quarterlyR5.ts
+      - src/features/results/quarterlyR5.test.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  comparison-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Architecture isolation and source typecheck
+        run: |
+          npm run check:architecture
+          npm run typecheck
+      - name: Qualified quarterly calculation acceptance tests
+        run: npx vitest run src/features/results/quarterlyR5.test.ts
+      - name: Comparison module lint
+        run: npx eslint src/features/results/quarterlyR5.ts src/features/results/quarterlyR5.test.ts
+      - name: Production-build compilation only
+        run: npm run build
+      - name: Versioned commit integrity
+        run: git diff --check HEAD^ HEAD
