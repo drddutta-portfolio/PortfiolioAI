@@ -1,0 +1,59 @@
+name: Results R3 BSE 2024 Source Candidate Triage
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-2024-candidate-priority.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: results-r3-bse-2024-unresolved-source-index
+          run-id: 38798738361
+          github-token: ${{ github.token }}
+          path: tmp/r3-bse-reused
+      - name: Reuse original BSE index, report primary filing candidates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from collections import Counter
+          files=list(Path('tmp/r3-bse-reused').rglob('source-index.json'))
+          assert len(files)==1
+          obj=json.loads(files[0].read_text())
+          classes=Counter()
+          items=[]
+          for s in obj['targets']:
+            for q in s['sources']:
+              matches=[]
+              for doc in q.get('original_candidates',[]):
+                title=doc['title'].lower()
+                if 'financial result' not in title and 'quarterly result' not in title: continue
+                if any(k in title for k in ('newspaper','press release','intimation of','meeting intimation')):continue
+                primary=('machine' in title or ('standalone' in title and 'consolidated' in title))
+                matches.append({'primary':primary,'title':doc['title'],
+                   'attachment':doc['attachment'],'published_at':doc['published_at']})
+              classes['primary' if any(v['primary'] for v in matches) else 'secondary_or_missing']+=1
+              items.append({'symbol':s['symbol'],'isin':s['canonical_isin'],
+                  'code':s.get('bse_scrip_code'),'quarter':q['quarter'],'matches':matches})
+          print('R3_2024_BSE_TRIAGE='+json.dumps({'targets':len(obj['targets']),
+            'quarter_slots':len(items),'statuses':dict(classes),'filing_candidates':obj['filing_candidates']},sort_keys=True))
+          for item in items[:35]:
+            print('R3_2024_BSE_SAMPLE='+json.dumps({'symbol':item['symbol'],
+              'quarter':item['quarter'],'matches':item['matches'][:2]},sort_keys=True))
+          Path('tmp/r3-bse-triage').mkdir(parents=True,exist_ok=True)
+          Path('tmp/r3-bse-triage/priorities.json').write_text(json.dumps(items,indent=2))
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-2024-bse-prioritized-filing-candidates
+          path: tmp/r3-bse-triage/*.json
+          retention-days: 20
+          if-no-files-found: warn
