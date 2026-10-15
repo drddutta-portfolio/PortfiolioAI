@@ -48,9 +48,11 @@ def extract(raw,quarter):
     doc=fitz.open(stream=raw,filetype="pdf")
     # Original whole document must be linked to the issuer, not a newspaper ad.
     first=" ".join(doc[0].get_text("text",sort=True).upper().split())
-    if ("ASTRAL" not in first or "532830" not in first
+    issuer_proven=any("ASTRAL LIMITED" in " ".join(page.get_text("text",sort=True).upper().split())
+      for page in list(doc)[:min(16,len(doc))])
+    if ("532830" not in first or not issuer_proven
         or len(doc)<3 or len(doc)>40):
-        raise ValueError("BSE_ORIGINAL_ISSUER_COVER_UNPROVEN")
+        raise ValueError("BSE_ORIGINAL_SCRIP_AND_LEGAL_ISSUER_UNPROVEN")
     found=[]
     for n,page in enumerate(doc):
         lines=[" ".join(s.split()) for s in page.get_text("text",sort=True).splitlines() if s.strip()]
