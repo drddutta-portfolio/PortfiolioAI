@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: results-r3-2025-three-issuer-proof-dev
+  group: results-r3-2025-full-originals-dev
   cancel-in-progress: false
 jobs:
   acquire:
@@ -21,7 +21,6 @@ jobs:
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R3_2025_STOCK_LIMIT: "262"
-      RESULTS_R3_2025_SYMBOLS: "CIPLA,INFY,HDFCBANK"
       RESULTS_R3_2025_LEGACY_ACK: "2025_MAR_JUN_ORIGINAL_XBRL"
       RESULTS_R3_2025_DRY_RUN: "0"
     steps:
