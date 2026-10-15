@@ -1,0 +1,38 @@
+name: G03 BEL Bounded Financial Research
+on:
+  workflow_dispatch:
+    inputs:
+      research_kind:
+        type: choice
+        options: [MARGIN, DEBT_VALUATION_DOCUMENTS]
+        required: true
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-bel-financial-research.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: PortfolioAI-Development
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Acquire one exact BEL research request; repeat must not call provider
+        env:
+          G03_RESEARCH_KIND: ${{ inputs.research_kind }}
+        run: python scripts/v1-4/g03_bel_financial_research.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g03-bel-financial-research
+          path: g03-bel-financial-research-result/
+          retention-days: 90
+          if-no-files-found: ignore
