@@ -6,7 +6,7 @@ type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,validateV14SelectedOwnership,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
-import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows,parseHistoryContractProof,type HistoryContractProof} from "../_shared/v14-history-readiness.ts"
+import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows,parseHistoryContractProof,type HistoryContractProof,type CurrentSessionDecision} from "../_shared/v14-history-readiness.ts"
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
@@ -341,7 +341,7 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
  })
 }
 
-async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;historyProofs:Map<string,HistoryContractProof>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
+async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;historyProofs:Map<string,HistoryContractProof>;currentSessionDecision?:CurrentSessionDecision|null;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
  const {code,family,minimum,freshness,benchmarks,portfolioId,portfolioOwnerId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,documentSources,history,benchmarkByCode,historyProofs,evaluationAsOfMs,sourceCutoffAtMs}=input
  if(family==="BENCHMARK_HISTORY"||code==="MOMENTUM_12M_RELATIVE"){
    const required=executableV14BenchmarkCodes(benchmarks)
@@ -389,7 +389,7 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
  })
  const metricCodes=canonicalMetricCodes[code]??[code]
  const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
- const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness})
+ const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness,valuationHistoryContext:code==='VALUATION'&&history?{rows:history.rows,proof:historyProofs.get('SECURITY:'+securityId)??null,currentSessionDecision:input.currentSessionDecision??null}:undefined})
  const reconciliation=reconcileCanonicalAndReviewed({canonicalRows:candidates,reviewed,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs,family})
  if(reconciliation.validation.state==="FRESH"){
    const selected=reconciliation.validation.selected

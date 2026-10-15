@@ -4,7 +4,12 @@ import {G03_VALUATION_BATCH as batch,approvedG03ValuationReview,approvedG03Valua
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord} from './v14-reviewed-evidence.ts'
 import {hashG02} from './v14-g02-source-import.ts'
 import {planEvidenceRequirement} from './p7-ic-evidence-normalization.ts'
+import type {G03ValuationHistoryContext} from './v14-g03-valuation-session.ts'
 const at='2026-10-15T15:00:00+00:00'
+function currentHistory():G03ValuationHistoryContext{
+ const rows=Array.from({length:252},(_,i)=>{const day=new Date(Date.parse('2026-10-15T00:00:00Z')-(251-i)*86400000).toISOString().slice(0,10),b=batch.periods.find(p=>p.valuationDate===day);return {period_start:b?.pricePeriodStart??day+'T00:00:00+05:30',retrieved_at:at,close:b?.components.price??'100',provenance:{source_record_id:b?.priceSourceId??'older'}}})
+ return {rows,proof:{version:'V1_4_HISTORY_CONTRACT_V1',sourceAuthority:'ANGEL_ONE',exchangeCalendarState:'VERIFIED',exchangeCalendarSourceRecordIds:['calendar'],corporateActionState:'COMPLETE',corporateActionSourceRecordIds:['actions'],unresolvedCorporateActionCount:0,returnBasis:'PRICE_RETURN_RAW_CLOSE',freshnessThrough:'2026-10-15T23:59:59+05:30',lineageSourceRecordIds:['prices'],dailySessionState:'LATEST_COMPLETED_SESSION_POST_CLOSE',dailySessionProofRecordIds:['decision']},currentSessionDecision:{sessionDate:'2026-10-16',decision:'UNKNOWN',recordId:'',reason:'PRE_OPEN_LATEST_COMPLETED_SESSION_VERIFIED',preOpenCalendar:{latestCompletedSession:'2026-10-15',sourceRecordIds:['base','baseline','refresh'],verifiedAt:'2026-10-15T20:00:00Z',validBefore:'2026-10-16T09:00:00+05:30'}}}
+}
 async function fixture(){
  const sources:ReviewedSourceRecord[]=[],reviews:RequirementReview[]=[]
  for(const b of batch.periods){
@@ -48,5 +53,14 @@ describe('BEL defence valuation requires three complete source-bound dated joins
   for(const rows of [[{...legacy,numeric_value:'47'}],[legacy,{...legacy,id:'other'}],[{...legacy,consolidation_scope:'STANDALONE',period_end:'2026-10-15'}]])expect(reconcileCanonicalAndReviewed({...args,canonicalRows:rows}).validation.state).not.toBe('FRESH')
   const stale=await validateReviewedRequirementEvidence({...f,evaluationAsOfMs:Date.parse('2026-10-16T00:00:00Z'),sourceCutoffAtMs:Date.parse('2026-10-16T00:00:00Z')})
   expect(reconcileCanonicalAndReviewed({...args,reviewed:stale})).toMatchObject({authority:'CANONICAL'})
+ })
+ it('revalidates unchanged last-completed-session prices with the existing authoritative pre-open clock, without rewriting sources',async()=>{
+  const f=await fixture(),now=Date.parse('2026-10-15T20:00:00Z'),valuationHistoryContext=currentHistory(),before=JSON.stringify(f.reviews)
+  const input={...f,evaluationAsOfMs:now,sourceCutoffAtMs:now,valuationHistoryContext}
+  expect(await validateReviewedRequirementEvidence(input)).toMatchObject({state:'FRESH',freshThrough:'2026-10-16T03:30:00.000Z',lineage:{recordedSourceFreshThrough:'2026-10-15T23:59:59+05:30',currentSessionValidation:{latestSession:'2026-10-15',marketValidationAuthority:'validateStockHistoryReadiness',sourceExpiryUnchanged:true}}})
+  expect(JSON.stringify(f.reviews)).toBe(before)
+  const nowExpired=Date.parse('2026-10-16T03:30:00Z')
+  expect(await validateReviewedRequirementEvidence({...input,evaluationAsOfMs:nowExpired,sourceCutoffAtMs:nowExpired})).toMatchObject({state:'STALE'})
+  for(const context of [undefined,{...valuationHistoryContext,rows:valuationHistoryContext.rows.slice(1)},{...valuationHistoryContext,proof:null},{...valuationHistoryContext,proof:{...valuationHistoryContext.proof!,returnBasis:'PRICE_RETURN_CORPORATE_ACTION_ADJUSTED' as const}},{...valuationHistoryContext,rows:valuationHistoryContext.rows.map((r,i)=>i===251?{...r,close:'999'}:r)}])expect(await validateReviewedRequirementEvidence({...input,valuationHistoryContext:context})).toMatchObject({state:'STALE'})
  })
 })

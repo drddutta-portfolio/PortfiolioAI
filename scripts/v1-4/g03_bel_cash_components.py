@@ -9,7 +9,7 @@ ROOT=Path('supabase/functions/_shared')
 def normalize(text):
  return re.sub(r'\s+',' ',text.replace('\u00ad','')).strip()
 
-def qualify_cells(pages,cells):
+def qualify_source_cells(pages,cells):
  for cell in cells:
   page=normalize(pages[(cell['originalSha256'],cell['pdfPage'])])
   label=normalize(cell['label'])
@@ -22,6 +22,10 @@ def qualify_cells(pages,cells):
   index=cell['rowFiscalYears'].index(cell['fiscalYear'])
   if cell['rowValues'][index]!=cell['literalValue'] or cell['exactValue']!=cell['literalValue'].replace(',','').replace('(','-').replace(')',''):raise ValueError('CASH_PERIOD_VALUE_BINDING_INVALID')
   if cell['scope']!='STANDALONE' or cell['unit']!='INR_LAKH':raise ValueError('CASH_SCOPE_UNIT_NOT_APPROVED')
+ return cells
+
+def qualify_cells(pages,cells):
+ qualify_source_cells(pages,cells)
  # Original FY25 and regrouped FY25 CFO+CFI agree. The source-derived FY24
  # normalization removes the same named non-operating P&L components; it is not
  # an issuer restatement or a claim about individual cash receipt dates.

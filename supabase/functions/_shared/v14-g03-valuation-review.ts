@@ -20,6 +20,6 @@ export function approvedG03ValuationSource(r:{id:string;source_record_id:string|
  * PE + EV/EBITDA + FCF-yield AND join. Exclude only this exact audited legacy
  * candidate after the complete reviewed series validates; preserve other,
  * modified, valid or conflicting canonical facts for normal reconciliation. */
-export function fixedG03UnqualifiedValuationCandidate(rows:readonly {id:string;source_record_id:string|null;metric_code:string;numeric_value:string|null;period_start:string|null;period_end:string|null;period_type:string|null;consolidation_scope:string|null;unit:string|null;source_code:string}[]){
+export function fixedG03UnqualifiedValuationCandidate(rows:readonly {id:string;source_record_id:string|null;metric_code:string;numeric_value:string|number|null;period_start:string|null;period_end:string|null;period_type:string|null;consolidation_scope:string|null;unit:string|null;source_code:string}[]){
  return rows.length===1&&rows.every(r=>r.id==='426c0693-713e-48fa-a32f-90552fc6fc5b'&&r.source_record_id==='fa44ae66-5226-4a52-9c6d-70179e9dc7ba'&&r.metric_code==='PE_TTM'&&/^46\.60*$/.test(String(r.numeric_value))&&r.period_start===null&&r.period_end===null&&r.period_type==='TTM'&&r.consolidation_scope==='UNKNOWN'&&r.unit===null&&r.source_code==='TRENDLYNE_MCP')
 }

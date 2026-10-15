@@ -1,5 +1,6 @@
 import {approvedG03ValuationReview,approvedG03ValuationSource,fixedG03UnqualifiedValuationCandidate,G03_VALUATION_BATCH,stableValuation} from './v14-g03-valuation-review.ts'
 import {deriveG03Valuation,G03_VALUATION_FRESH_THROUGH,type ValuationComponents} from './v14-g03-valuation-components.ts'
+import {qualifyG03ValuationCurrentSession,type G03ValuationHistoryContext} from './v14-g03-valuation-session.ts'
 import {approvedG03MarginReview,approvedG03MarginSource,fixedG03UnqualifiedMarginCandidate,G03_MARGIN_BATCH} from './v14-g03-margin-review.ts'
 import {deriveG03Margin,G03_MARGIN_FRESH_THROUGH,type MarginComponents} from './v14-g03-margin-components.ts'
 import {approvedG03CashReview,approvedG03CashSource,G03_CASH_BATCH,stableCash} from './v14-g03-cash-review.ts'
@@ -127,6 +128,7 @@ export async function validateReviewedRequirementEvidence(input:{
  readonly family:ReviewEvidenceFamily; readonly metricCodes:readonly string[]; readonly minimum:number; readonly reviews:readonly RequirementReview[]
  readonly sources:readonly ReviewedSourceRecord[]; readonly documents:readonly ReviewedResearchDocument[]; readonly documentSources:readonly ReviewedDocumentSource[]
  readonly definitions:readonly MetricDefinition[]; readonly evaluationAsOfMs:number; readonly sourceCutoffAtMs:number; readonly freshnessPolicy:string|null
+ readonly valuationHistoryContext?:G03ValuationHistoryContext
 }):Promise<ReviewedEvidenceResult|null>{
  const {portfolioId,securityId,requirementCode,family:requestedFamily,evaluationAsOfMs,sourceCutoffAtMs}=input
  // The established profile classifies conversion as LOCAL_DERIVATION. Only
@@ -186,7 +188,7 @@ export async function validateReviewedRequirementEvidence(input:{
      if(!binding.ok)return fail('REVIEW_REQUIRED',binding.reason,[r.id])
      if(document?.canonical_content_hash!==source.raw_payload.original_sha256||r.published_at!==null||source.published_at!==null||document?.published_at!==null)return fail('REVIEW_REQUIRED','DATED_VALUATION_ORIGINAL_OR_PUBLICATION_INVALID',[r.id])
      if(!r.fresh_through||time(r.fresh_through)>Date.parse(G03_VALUATION_FRESH_THROUGH))return fail('REVIEW_REQUIRED','DATED_VALUATION_FRESHNESS_INVALID',[r.id])
-     if(time(r.fresh_through)<evaluationAsOfMs)return fail('STALE','DATED_VALUATION_SOURCE_STALE',[r.id])
+     if(time(r.fresh_through)<evaluationAsOfMs&&!qualifyG03ValuationCurrentSession(input.valuationHistoryContext,evaluationAsOfMs,sourceCutoffAtMs))return fail('STALE','DATED_VALUATION_SOURCE_STALE',[r.id])
      const derived=deriveG03Valuation(r.metadata.financial_components as unknown as ValuationComponents)
      if(!derived||stableValuation(r.metadata.derivation)!==stableValuation(derived)||Date.parse(derived.valuationDate+'T15:30:00+05:30')>evaluationAsOfMs)return fail('REVIEW_REQUIRED','DATED_VALUATION_DERIVATION_OR_ASOF_INVALID',[r.id])
      observations.push({id:r.id,metric_code:'VALUATION',numeric_value:derived.peTtm,text_value:null,boolean_value:null,date_value:derived.valuationDate,unit:'COMPOSITE_VALUATION',currency:null,consolidation_scope:r.consolidation_scope,period_start:r.period_start,period_end:r.period_end,period_type:r.period_type,retrieved_at:source.retrieved_at,fresh_until:r.fresh_through,published_at:null,evidence_status:'AVAILABLE',source_code:source.source_code,source_record_id:source.id})
@@ -306,7 +308,9 @@ export async function validateReviewedRequirementEvidence(input:{
  if(requirementCode==='VALUATION'&&support.some(r=>r.review_kind==='DELEGATED_G03_APPROVED_DATED_VALUATION_REVIEW')){
    if(input.minimum!==3||support.length!==3||new Set(observations.map(x=>x.date_value)).size!==3||!G03_VALUATION_BATCH.periods.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','VALUATION_THREE_DISTINCT_COMPLETE_DATED_AND_JOINS_REQUIRED',support.map(r=>r.id))
    const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_DATED_VALUATIONS_READY',sourceById)
-   return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,calculationAuthority:'deriveG03Valuation',componentSeries:support.map(r=>({reviewId:r.id,valuationDate:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),availabilityProofs:G03_VALUATION_BATCH.availability,retainedCaptures:G03_VALUATION_BATCH.retainedCaptures,requiredSeparateOrderContext:G03_VALUATION_BATCH.requiredSeparateOrderContext,allThreeMetricsPerDate:true,financialPitAvailabilityQualified:true,bankHistoricalContractNotApplied:true}}
+   const currentSession=qualifyG03ValuationCurrentSession(input.valuationHistoryContext,evaluationAsOfMs,sourceCutoffAtMs)
+   const effectiveFreshThrough=result.freshThrough&&time(result.freshThrough)<evaluationAsOfMs&&currentSession?currentSession.freshThrough:result.freshThrough
+   return {...result,freshThrough:effectiveFreshThrough,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,calculationAuthority:'deriveG03Valuation',componentSeries:support.map(r=>({reviewId:r.id,valuationDate:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),availabilityProofs:G03_VALUATION_BATCH.availability,retainedCaptures:G03_VALUATION_BATCH.retainedCaptures,requiredSeparateOrderContext:G03_VALUATION_BATCH.requiredSeparateOrderContext,allThreeMetricsPerDate:true,financialPitAvailabilityQualified:true,bankHistoricalContractNotApplied:true,recordedSourceFreshThrough:result.freshThrough,currentSessionValidation:currentSession}}
  }
 
  if(family==="NUMERIC_SERIES"){
