@@ -64,7 +64,8 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(bankRow).not.toBeNull()
     const q1=bankRow?.querySelector('button[aria-label*="Q1 FY27"]')
     expect(q1?.textContent).toContain("NII +10.00% QoQ")
-    expect(q1).toHaveClass("ref-strong")
+    // A single bank lacks four independently qualified industry peers; never invent a Strong grade.
+    expect(q1).toHaveClass("ref-unavailable")
     const table=screen.getByRole("heading",{name:"Key Metrics (Q1 FY27)"}).closest("section")
     if(!table) throw new Error("Missing result metrics card")
     expect(within(table).getAllByText("10.00%").length).toBeGreaterThan(0)
