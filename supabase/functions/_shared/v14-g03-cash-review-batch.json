@@ -501,7 +501,7 @@
       },
       "sourceId": "c4e5db08-c412-59b7-a578-52b23332effd",
       "reviewId": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
-      "fragment": "BEL L32309KA1954GOI000787 FY2024 standalone cash-flow components; source amounts INR lakh; PortfolioAI-derived FCF and CFO/PAT; FY2026 operating/investing classification; historical publication UNKNOWN."
+      "fragment": "Net Cash from / (used in) Operating Activities 48,041 4,64,801"
     },
     {
       "fiscalYear": 2025,
@@ -522,7 +522,7 @@
       },
       "sourceId": "c68f9112-c7e0-585c-bf59-ae75652111c5",
       "reviewId": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
-      "fragment": "BEL L32309KA1954GOI000787 FY2025 standalone cash-flow components; source amounts INR lakh; PortfolioAI-derived FCF and CFO/PAT; FY2026 operating/investing classification; historical publication UNKNOWN."
+      "fragment": "Net Cash from / (used in) Operating Activities 1,49,434 45,725"
     },
     {
       "fiscalYear": 2026,
@@ -543,7 +543,7 @@
       },
       "sourceId": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
       "reviewId": "bfb36725-d431-550b-8b75-179fe5459444",
-      "fragment": "BEL L32309KA1954GOI000787 FY2026 standalone cash-flow components; source amounts INR lakh; PortfolioAI-derived FCF and CFO/PAT; FY2026 operating/investing classification; historical publication UNKNOWN."
+      "fragment": "Net Cash from / (used in) Operating Activities 1,49,434 45,725"
     }
   ]
 }
