@@ -1,5 +1,5 @@
-import {g03SourceExecutorQualified,g03RoceExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
-import {G02_SOURCE_SCOPE,G03_SOURCE_SCOPE,G03_ROCE_SOURCE_SCOPE} from '../_shared/v14-g02-source-import.ts'
+import {g03SourceExecutorQualified,g03RoceExecutorQualified,g03DebtExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {G02_SOURCE_SCOPE,G03_SOURCE_SCOPE,G03_ROCE_SOURCE_SCOPE,G03_DEBT_SOURCE_SCOPE} from '../_shared/v14-g02-source-import.ts'
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
 import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
 import {G02_OWNER_POLICY as policy,g02SourceExecutorQualified,g02ReadUrlAllowed,verifyG02Original,prepareG02Source,hashG02,g02StableId,g02SourcePin,G02_R2_BUCKET,g02R2Key,readG02Original} from '../_shared/v14-g02-source-import.ts'
@@ -12,10 +12,10 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const verified=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=verified.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
- const roce=body?.action==='REGISTER_PINNED_G03_ROCE_ORIGINAL',scope=roce?G03_ROCE_SOURCE_SCOPE:body?.action==='REGISTER_PINNED_G03_ORIGINAL'?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE
- if(!(roce?g03RoceExecutorQualified(claims):scope.group==='G03'?g03SourceExecutorQualified(claims):g02SourceExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
+ const debt=body?.action==='REGISTER_PINNED_G03_DEBT_ORIGINAL',roce=body?.action==='REGISTER_PINNED_G03_ROCE_ORIGINAL',scope=debt?G03_DEBT_SOURCE_SCOPE:roce?G03_ROCE_SOURCE_SCOPE:body?.action==='REGISTER_PINNED_G03_ORIGINAL'?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE
+ if(!(debt?g03DebtExecutorQualified(claims):roce?g03RoceExecutorQualified(claims):scope.group==='G03'?g03SourceExecutorQualified(claims):g02SourceExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
  const sourcePolicy=scope.policy
- if(body?.action!==(roce?'REGISTER_PINNED_G03_ROCE_ORIGINAL':'REGISTER_PINNED_'+scope.group+'_ORIGINAL')||body.authorizationHash!==sourcePolicy.directiveSha256||typeof body.originalHash!=='string'||typeof body.readUrl!=='string'||!g02ReadUrlAllowed(body.originalHash,body.readUrl,scope))return reply(400,'EXACT_G02_SOURCE_AND_AUTHORIZATION_REQUIRED')
+ if(body?.action!==(debt?'REGISTER_PINNED_G03_DEBT_ORIGINAL':roce?'REGISTER_PINNED_G03_ROCE_ORIGINAL':'REGISTER_PINNED_'+scope.group+'_ORIGINAL')||body.authorizationHash!==sourcePolicy.directiveSha256||typeof body.originalHash!=='string'||typeof body.readUrl!=='string'||!g02ReadUrlAllowed(body.originalHash,body.readUrl,scope))return reply(400,'EXACT_G02_SOURCE_AND_AUTHORIZATION_REQUIRED')
  const db=createClient(url,key,{auth:{persistSession:false}})
  try{
   const pin=g02SourcePin(body.originalHash,scope),owner=await db.from('portfolios').select('user_id').eq('id',sourcePolicy.portfolioId).single(),security=await db.from('securities').select('id,symbol').eq('id',pin.security_id).single(),authority=await db.from('data_sources').select('is_active').eq('code',pin.source_code).single()

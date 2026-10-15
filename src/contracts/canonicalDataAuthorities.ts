@@ -19,6 +19,7 @@ export type CanonicalFactKey =
   | "OWNERSHIP_EVIDENCE"
   | "RESEARCH_DOCUMENTS"
   | "CASH_CONVERSION_EVIDENCE"
+  | "DEBT_COVERAGE_EVIDENCE"
   | "CURRENT_RESEARCH_EVIDENCE"
   | "DAILY_OHLCV"
   | "OFFICIAL_NEWS"
@@ -215,6 +216,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
     notes: "The approved BEL contract joins standalone CFO, PAT and cash capex per year. FCF and CFO/PAT remain labelled PortfolioAI derivations; original classifications, adverse cash flows and UNKNOWN publication are preserved. A CFO amount alone cannot qualify conversion. Provider CFO contracts remain unchanged.",
+  }),
+  DEBT_COVERAGE_EVIDENCE: authority({
+    fact: "DEBT_COVERAGE_EVIDENCE",
+    label: "Source-bound debt and coverage",
+    layer: "DERIVED",
+    canonicalAuthority: "PortfolioAI approved matched annual debt-component contract",
+    canonicalSourceObject: "research_evidence_requirement_reviews + original issuer and exchange cells",
+    sharedAccessPath: "deriveG03DebtCoverage() -> validateReviewedRequirementEvidence() -> canonical materializer",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "BEL requires both net-debt/operating EBITDA and operating EBIT/total finance costs for three matched annual periods. Numeric borrowing facts, leases, pledged cash and compatible operating definitions remain source-bound. Printed dashes, debt-free prose and debt-service ratios are inadmissible substitutions.",
   }),
   FUNDAMENTAL_EVIDENCE: authority({
     fact: "FUNDAMENTAL_EVIDENCE",

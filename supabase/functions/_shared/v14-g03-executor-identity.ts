@@ -1,4 +1,5 @@
 import {g02ExecutorIdentityQualified} from './v14-g02-executor-identity.ts'
+export function g03DebtExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.event_name==='workflow_dispatch'&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-bel-debt-components.yml@refs/heads/codex/g02-industry-evidence'}
 export function g03FinancialResearchExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.event_name==='workflow_dispatch'&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-bel-financial-research.yml@refs/heads/codex/g02-industry-evidence'}
 export function g03SourceExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-source-qualification.yml@refs/heads/codex/g02-industry-evidence'}
 export const g03DocumentExecutorQualified=g03SourceExecutorQualified

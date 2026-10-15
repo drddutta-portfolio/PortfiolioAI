@@ -1,4 +1,6 @@
 import {approvedG03CashReview,approvedG03CashSource,G03_CASH_BATCH,stableCash} from './v14-g03-cash-review.ts'
+import {approvedG03DebtReview,approvedG03DebtSource,G03_DEBT_BATCH,stableDebt} from './v14-g03-debt-review.ts'
+import {deriveG03DebtCoverage,type DebtComponents} from './v14-g03-debt-components.ts'
 import {deriveG03CashConversion,type CashComponents,G03_FINANCIAL_POLICY} from './v14-g03-cash-components.ts'
 import {approvedG03DocumentReview,approvedG03DocumentSource} from './v14-g03-document-review.ts'
 import {approvedG03RoceReview,approvedG03RoceSource,approvedG03RoceSeries,fixedG03UnqualifiedRoceCandidate,G03_ROCE_POLICY} from './v14-g03-roce-review.ts'
@@ -100,7 +102,7 @@ function validateDocumentBinding(review:RequirementReview,document:ReviewedResea
  if(!document)return {ok:false as const,reason:"DOCUMENTARY_REVIEW_REQUIRES_DOCUMENT",documentSource:null}
  if(document.security_id!==review.security_id||document.identity_status!=="VERIFIED"||!document.canonical_content_hash||!HASH.test(document.canonical_content_hash))
   return {ok:false as const,reason:"DOCUMENT_CONTENT_IDENTITY_NOT_VERIFIED",documentSource:null}
- const associationId=(approvedG02DocumentSource(review,source)&&review.requirement_code==="OWNERSHIP_GOVERNANCE"||approvedG03DocumentSource(review,source)||approvedG03RoceSource(review,source)||approvedG03CashSource(review,source))?str(source.raw_payload.original_source_record_id):source.id
+ const associationId=(approvedG02DocumentSource(review,source)&&review.requirement_code==="OWNERSHIP_GOVERNANCE"||approvedG03DocumentSource(review,source)||approvedG03RoceSource(review,source)||approvedG03CashSource(review,source)||approvedG03DebtSource(review,source))?str(source.raw_payload.original_source_record_id):source.id
  if(!associationId)return {ok:false as const,reason:"DOCUMENT_ORIGINAL_ASSOCIATION_MISSING",documentSource:null}
  const links=documentSources.filter(x=>x.research_document_id===document.id&&x.source_record_id===associationId&&x.source_status==="VERIFIED")
  if(links.length!==1)return {ok:false as const,reason:"DOCUMENT_SOURCE_ASSOCIATION_NOT_UNIQUE",documentSource:null}
@@ -153,7 +155,8 @@ export async function validateReviewedRequirementEvidence(input:{
    const delegatedG03=approvedG03DocumentReview(r,input.portfolioOwnerId,family)
    const delegatedRoce=approvedG03RoceReview(r,input.portfolioOwnerId,family)
    const delegatedCash=approvedG03CashReview(r,input.portfolioOwnerId,family)
-   const delegated=approvedG02DocumentReview(r,input.portfolioOwnerId,family)||delegatedG03||delegatedRoce||delegatedCash
+   const delegatedDebt=approvedG03DebtReview(r,input.portfolioOwnerId,family)
+   const delegated=approvedG02DocumentReview(r,input.portfolioOwnerId,family)||delegatedG03||delegatedRoce||delegatedCash||delegatedDebt
    if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind)&&!delegated)return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
    if(r.reviewed_by!==input.portfolioOwnerId&&!delegated)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
    if(!HASH.test(r.review_hash)||await sha256(stable(reviewHashPayload(r)))!==r.review_hash)return fail("REVIEW_REQUIRED","REVIEW_INTEGRITY_HASH_INVALID",[r.id])
@@ -163,7 +166,7 @@ export async function validateReviewedRequirementEvidence(input:{
    const source=r.source_record_id?sourceById.get(r.source_record_id)??null:null
    if(!source||!r.source_payload_hash||r.source_payload_hash!==source.payload_hash||!HASH.test(source.payload_hash))
     return fail("REVIEW_REQUIRED","REVIEW_SOURCE_HASH_OR_RECORD_INVALID",[r.id])
-   if(delegated&&!(delegatedCash?approvedG03CashSource(r,source):delegatedRoce?approvedG03RoceSource(r,source):delegatedG03?approvedG03DocumentSource(r,source):approvedG02DocumentSource(r,source)))return fail("REVIEW_REQUIRED","G02_DOCUMENT_SOURCE_NOT_QUALIFIED",[r.id])
+   if(delegated&&!(delegatedDebt?approvedG03DebtSource(r,source):delegatedCash?approvedG03CashSource(r,source):delegatedRoce?approvedG03RoceSource(r,source):delegatedG03?approvedG03DocumentSource(r,source):approvedG02DocumentSource(r,source)))return fail("REVIEW_REQUIRED","G02_DOCUMENT_SOURCE_NOT_QUALIFIED",[r.id])
    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
@@ -171,6 +174,18 @@ export async function validateReviewedRequirementEvidence(input:{
    if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>evaluationAsOfMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_EVALUATION",[r.id])
    if(source.published_at!==null&&r.published_at!==source.published_at)return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_MISMATCH",[r.id])
    if(r.fresh_through&&!Number.isFinite(time(r.fresh_through)))return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_INVALID",[r.id])
+   if(delegatedDebt){
+     if(await sha256(stable(source.raw_payload))!==source.payload_hash)return fail('REVIEW_REQUIRED','DEBT_COMPONENT_SOURCE_INTEGRITY_INVALID',[r.id])
+     const document=r.research_document_id?documentById.get(r.research_document_id)??null:null,binding=validateDocumentBinding(r,document,source,input.documentSources)
+     if(!binding.ok)return fail('REVIEW_REQUIRED',binding.reason,[r.id])
+     if(document?.canonical_content_hash!==source.raw_payload.original_sha256||r.published_at!==null||source.published_at!==null||document?.published_at!==null)return fail('REVIEW_REQUIRED','DEBT_COMPONENT_ORIGINAL_OR_PUBLICATION_INVALID',[r.id])
+     if(!r.fresh_through||time(r.fresh_through)>Date.parse('2027-03-31T00:00:00Z'))return fail('REVIEW_REQUIRED','DEBT_COMPONENT_FRESHNESS_INVALID',[r.id])
+     if(time(r.fresh_through)<evaluationAsOfMs)return fail('STALE','DEBT_COMPONENT_SOURCE_STALE',[r.id])
+     const derived=deriveG03DebtCoverage(r.metadata.financial_components as unknown as DebtComponents)
+     if(!derived||stableDebt(r.metadata.derivation)!==stableDebt(derived))return fail('REVIEW_REQUIRED','DEBT_COMPONENT_DERIVATION_INVALID',[r.id])
+     observations.push({id:r.id,metric_code:'NET_DEBT_AND_INTEREST_COVERAGE',numeric_value:derived.interestCoverage,text_value:null,boolean_value:null,date_value:null,unit:'RATIO',currency:null,consolidation_scope:r.consolidation_scope,period_start:r.period_start,period_end:r.period_end,period_type:r.period_type,retrieved_at:source.retrieved_at,fresh_until:r.fresh_through,published_at:null,evidence_status:'AVAILABLE',source_code:source.source_code,source_record_id:source.id})
+     support.push(r);continue
+   }
    if(delegatedCash){
      // Component admission is an AND join, never three alternative metric aliases.
      // Every immutable source, review and original association is checked before
@@ -247,6 +262,11 @@ export async function validateReviewedRequirementEvidence(input:{
    const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY')
    return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,componentSeries:support.map(r=>({reviewId:r.id,periodEnd:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),providerCfoRegistryUnchanged:true,originalComparativesPreserved:true,historicalPitAvailabilityNotClaimed:true}}
  }
+ if(requirementCode==='NET_DEBT_AND_INTEREST_COVERAGE'&&support.some(r=>r.review_kind==='DELEGATED_G03_APPROVED_DEBT_COMPONENT_REVIEW')){
+   if(input.minimum!==3||support.length!==3||new Set(observations.map(x=>x.period_end)).size!==3||!G03_DEBT_BATCH.periods.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','DEBT_COMPONENT_THREE_MATCHED_PERIODS_REQUIRED',support.map(r=>r.id))
+   const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_DEBT_COMPONENT_SERIES_READY')
+   return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,componentSeries:support.map(r=>({reviewId:r.id,periodEnd:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),includesLeaseDebtAndInterest:true,pledgedCashExcluded:true,historicalPitAvailabilityNotClaimed:true}}
+ }
  if(family==="NUMERIC_SERIES"){
    const v=validateObservationSeries({rows:observations,definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
    if(v.state!=="FRESH")return {...fail(v.state,v.reason,support.map(x=>x.id)),observations,sourceRecordIds:uniq(observations.map(x=>x.source_record_id)),
@@ -305,7 +325,7 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
  }
  // Composite observations are validated by their approved AND-component
  // contract above; they are not raw metric aliases or registry observations.
- if(!input.canonicalRows.length&&r?.state==='FRESH'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&r.reason==='APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY')return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:'APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL'}
+ if(!input.canonicalRows.length&&r?.state==='FRESH'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&['APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY','APPROVED_SOURCE_BOUND_DEBT_COMPONENT_SERIES_READY'].includes(r.reason))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:r.reason==='APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY'?'APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL':'APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL'}
  if((canonical.state==="INSUFFICIENT"||canonical.state==="STALE")&&r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
    const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})
    if(combined.state==="FRESH")return {authority:"COMBINED" as const,validation:combined,reviewed:r,reason:"REVIEW_SUPPLEMENTS_CANONICAL_SERIES"}

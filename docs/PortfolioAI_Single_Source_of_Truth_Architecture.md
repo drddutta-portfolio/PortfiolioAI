@@ -452,3 +452,7 @@ The preserved Pharma parent-score adapter does not prove score binding to the
 selected subprofile and immutable evidence snapshot; R6 therefore cannot qualify
 such a parent score merely because the canonical primary now displays correctly.
 No scoring formulas, assignments, schema, RLS or provider execution change.
+
+### Approved BEL debt and coverage component authority
+
+`deriveG03DebtCoverage()` is the deterministic owner of the already approved BEL matched annual debt/coverage contract. The existing reviewed-evidence adapter and canonical materializer consume its labelled derived ratios. Three annual AND joins require numeric issuer/exchange borrowing facts, balance-sheet leases, verified unpledged cash, directly reported operating EBITDA, depreciation and total finance costs including lease interest. The original P&L corroborates the operating EBITDA definition; ROCE total-income EBIT is not substituted. Pledged cash is preserved and excluded from the unpledged residual. No raw metric alias, UI formula, global provider-registry promotion or guessed zero completes this composite. Original report classifications, unknown publication and legacy XBRL context defects remain explicit.

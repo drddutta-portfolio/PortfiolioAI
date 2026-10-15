@@ -1,0 +1,551 @@
+{
+  "cells": [
+    {
+      "id": "2024-BorrowingsNoncurrent",
+      "format": "XBRL",
+      "originalSha256": "061e246f3f20424a45917fedb6dbea3e4ce9ebbd1c5970049fc894cc32e2fb49",
+      "tag": "BorrowingsNoncurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0.00",
+      "fiscalYear": 2024,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2024-BorrowingsCurrent",
+      "format": "XBRL",
+      "originalSha256": "061e246f3f20424a45917fedb6dbea3e4ce9ebbd1c5970049fc894cc32e2fb49",
+      "tag": "BorrowingsCurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0.00",
+      "fiscalYear": 2024,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2024-CashAndCashEquivalents",
+      "format": "XBRL",
+      "originalSha256": "061e246f3f20424a45917fedb6dbea3e4ce9ebbd1c5970049fc894cc32e2fb49",
+      "tag": "CashAndCashEquivalents",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "11490000000.00",
+      "fiscalYear": 2024,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-BorrowingsNoncurrent",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "BorrowingsNoncurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-BorrowingsCurrent",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "BorrowingsCurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-CashAndCashEquivalents",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "CashAndCashEquivalents",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "6816800000",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-ProfitBeforeTax",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "ProfitBeforeTax",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "70899900000",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-FinanceCosts",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "FinanceCosts",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "96100000",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-DepreciationDepletionAndAmortisationExpense",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "4355800000",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2025-OtherIncome",
+      "format": "XBRL",
+      "originalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "tag": "OtherIncome",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "7675900000",
+      "fiscalYear": 2025,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-BorrowingsNoncurrent",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "BorrowingsNoncurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-BorrowingsCurrent",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "BorrowingsCurrent",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "0",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-CashAndCashEquivalents",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "CashAndCashEquivalents",
+      "context": "OneI",
+      "unit": "INR",
+      "literalValue": "18269300000",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-ProfitBeforeTax",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "ProfitBeforeTax",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "80750400000",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-FinanceCosts",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "FinanceCosts",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "67200000",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-DepreciationDepletionAndAmortisationExpense",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "5239300000",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "2026-OtherIncome",
+      "format": "XBRL",
+      "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "tag": "OtherIncome",
+      "context": "FourD",
+      "unit": "INR",
+      "literalValue": "5903900000",
+      "fiscalYear": 2026,
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-db47a73b-94-0",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 94,
+      "label": "Earnings before Interest, Tax,",
+      "rowValues": [
+        "6,76,759",
+        "4,99,817"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-c9bd3de3-79-0",
+      "format": "PDF",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 79,
+      "label": "Earnings before Interest, Tax,",
+      "rowValues": [
+        "8,01,530",
+        "6,76,759"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-db47a73b-141-0",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 141,
+      "label": "(ia) Lease liabilities",
+      "rowValues": [
+        "254",
+        "226"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-db47a73b-141-1",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 141,
+      "label": "(ia) Lease liabilities",
+      "rowValues": [
+        "5,869",
+        "6,025"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 1,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-c9bd3de3-123-0",
+      "format": "PDF",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 123,
+      "label": "(ia) Lease liabilities",
+      "rowValues": [
+        "303",
+        "254"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-c9bd3de3-123-1",
+      "format": "PDF",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 123,
+      "label": "(ia) Lease liabilities",
+      "rowValues": [
+        "6,243",
+        "5,869"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "occurrence": 1,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-db47a73b-175-0",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 175,
+      "label": "(iii) Cash & Cash Equivalents",
+      "rowValues": [
+        "68,167",
+        "1,14,899"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-c9bd3de3-157-0",
+      "format": "PDF",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 157,
+      "label": "(iii) Cash & Cash Equivalents",
+      "rowValues": [
+        "1,82,693",
+        "68,167"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-db47a73b-166-0",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 166,
+      "label": "Interest expense on lease liability",
+      "rowValues": [
+        "416",
+        "421"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-c9bd3de3-148-0",
+      "format": "PDF",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 148,
+      "label": "-Interest expense on lease liability",
+      "rowValues": [
+        "425",
+        "416"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-FY24-Other",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Other income",
+      "rowValues": [
+        "76,759",
+        "75,584"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "note": "24",
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-FY24-Finance",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Finance costs",
+      "rowValues": [
+        "961",
+        "702"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "note": "27",
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-FY24-Depreciation",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Depreciation and amortisation expense",
+      "rowValues": [
+        "43,558",
+        "41,243"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "note": "28",
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-FY24-Profit",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Profit before tax (V - VI)",
+      "rowValues": [
+        "7,08,999",
+        "5,33,456"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "note": null,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "PDF-CASH-ON-HAND",
+      "format": "PDF",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 156,
+      "label": "Cash on hand",
+      "rowValues": [
+        "1",
+        "1"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "occurrence": 0,
+      "unit": "INR_LAKH",
+      "scope": "STANDALONE"
+    }
+  ],
+  "periods": [
+    {
+      "fiscalYear": 2024,
+      "periodStart": "2023-04-01",
+      "periodEnd": "2024-03-31",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "xmlOriginalSha256": "061e246f3f20424a45917fedb6dbea3e4ce9ebbd1c5970049fc894cc32e2fb49",
+      "components": {
+        "fiscalYear": 2024,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "ebitdaBasis": "ISSUER_REPORTED_OPERATING_EBITDA_EXCLUDING_OTHER_INCOME",
+        "borrowingCurrent": "0",
+        "borrowingNoncurrent": "0",
+        "leaseCurrent": "226",
+        "leaseNoncurrent": "6025",
+        "cashEquivalents": "114900",
+        "pledgedCashEquivalents": "114899",
+        "issuerOperatingEbitda": "499817",
+        "depreciation": "41243",
+        "financeCosts": "702",
+        "leaseInterest": "421",
+        "profitBeforeTax": "533456",
+        "otherIncome": "75584"
+      },
+      "sourceId": "e6531477-28cb-51d1-a888-2cf2f758d60e",
+      "reviewId": "0b3d644c-d55d-54b4-a112-afa71971f304",
+      "fragment": "BEL standalone FY2024 source-bound debt components; numeric borrowing facts from original NSE XBRL, balance-sheet lease liabilities, issuer operating EBITDA and cash pledged as security. Unpledged cash is the exact total-minus-pledged residual; it is not a default zero. EBIT is issuer operating EBITDA less depreciation; total finance costs include lease interest. PortfolioAI-derived ratios, not issuer-quoted ratios."
+    },
+    {
+      "fiscalYear": 2025,
+      "periodStart": "2024-04-01",
+      "periodEnd": "2025-03-31",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "xmlOriginalSha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+      "components": {
+        "fiscalYear": 2025,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "ebitdaBasis": "ISSUER_REPORTED_OPERATING_EBITDA_EXCLUDING_OTHER_INCOME",
+        "borrowingCurrent": "0",
+        "borrowingNoncurrent": "0",
+        "leaseCurrent": "254",
+        "leaseNoncurrent": "5869",
+        "cashEquivalents": "68168",
+        "pledgedCashEquivalents": "68167",
+        "issuerOperatingEbitda": "676759",
+        "depreciation": "43558",
+        "financeCosts": "961",
+        "leaseInterest": "416",
+        "profitBeforeTax": "708999",
+        "otherIncome": "76759"
+      },
+      "sourceId": "df3686ba-a2de-55f9-a223-d2a2af4e3a93",
+      "reviewId": "94a52b6f-4909-5c5b-a061-53e2ca119285",
+      "fragment": "BEL standalone FY2025 source-bound debt components; numeric borrowing facts from original NSE XBRL, balance-sheet lease liabilities, issuer operating EBITDA and cash pledged as security. Unpledged cash is the exact total-minus-pledged residual; it is not a default zero. EBIT is issuer operating EBITDA less depreciation; total finance costs include lease interest. PortfolioAI-derived ratios, not issuer-quoted ratios."
+    },
+    {
+      "fiscalYear": 2026,
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "xmlOriginalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+      "components": {
+        "fiscalYear": 2026,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "ebitdaBasis": "ISSUER_REPORTED_OPERATING_EBITDA_EXCLUDING_OTHER_INCOME",
+        "borrowingCurrent": "0",
+        "borrowingNoncurrent": "0",
+        "leaseCurrent": "303",
+        "leaseNoncurrent": "6243",
+        "cashEquivalents": "182693",
+        "pledgedCashEquivalents": "182693",
+        "issuerOperatingEbitda": "801530",
+        "depreciation": "52393",
+        "financeCosts": "672",
+        "leaseInterest": "425",
+        "profitBeforeTax": "807504",
+        "otherIncome": "59039"
+      },
+      "sourceId": "9ca3ac8c-c293-5b94-a3a3-f027da3921aa",
+      "reviewId": "9d13c947-de36-5438-adfb-d055bd5b57c7",
+      "fragment": "BEL standalone FY2026 source-bound debt components; numeric borrowing facts from original NSE XBRL, balance-sheet lease liabilities, issuer operating EBITDA and cash pledged as security. Unpledged cash is the exact total-minus-pledged residual; it is not a default zero. EBIT is issuer operating EBITDA less depreciation; total finance costs include lease interest. PortfolioAI-derived ratios, not issuer-quoted ratios."
+    }
+  ]
+}

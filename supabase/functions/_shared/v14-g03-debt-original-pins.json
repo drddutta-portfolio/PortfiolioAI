@@ -1,0 +1,50 @@
+[
+  {
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "symbol": "BEL",
+    "original_url": "https://nsearchives.nseindia.com/corporate/xbrl/INDAS_106453_1130718_20052024062523.xml",
+    "resolved_url": "https://nsearchives.nseindia.com/corporate/xbrl/INDAS_106453_1130718_20052024062523.xml",
+    "original_sha256": "061e246f3f20424a45917fedb6dbea3e4ce9ebbd1c5970049fc894cc32e2fb49",
+    "original_bytes": 51445,
+    "extension": "xml",
+    "document_type": "FINANCIAL_RESULTS",
+    "source_code": "COMPANY_EXCHANGE_FILING",
+    "title": "BEL_FY2024_NSE_STANDALONE_ORIGINAL_XBRL",
+    "identity_fragment": "Bharat Electronics Limited | BEL | 500049 | Standalone",
+    "first_observed_at": "2026-10-15T13:15:00.000Z",
+    "published_at": null,
+    "publication_precision": "UNKNOWN"
+  },
+  {
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "symbol": "BEL",
+    "original_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1443316_19052025064630_WEB.xml",
+    "resolved_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1443316_19052025064630_WEB.xml",
+    "original_sha256": "633c8a7c1beb3939bc356d0a2dc8e1242a85df05da6c1c6cd34f6da52c720c41",
+    "original_bytes": 80299,
+    "extension": "xml",
+    "document_type": "FINANCIAL_RESULTS",
+    "source_code": "COMPANY_EXCHANGE_FILING",
+    "title": "BEL_FY2025_NSE_STANDALONE_ORIGINAL_XBRL",
+    "identity_fragment": "Bharat Electronics Limited | BEL | 500049 | Standalone",
+    "first_observed_at": "2026-10-15T13:15:00.000Z",
+    "published_at": null,
+    "publication_precision": "UNKNOWN"
+  },
+  {
+    "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "symbol": "BEL",
+    "original_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1669276_19052026043916_WEB.xml",
+    "resolved_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1669276_19052026043916_WEB.xml",
+    "original_sha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+    "original_bytes": 100506,
+    "extension": "xml",
+    "document_type": "FINANCIAL_RESULTS",
+    "source_code": "COMPANY_EXCHANGE_FILING",
+    "title": "BEL_FY2026_NSE_STANDALONE_ORIGINAL_XBRL",
+    "identity_fragment": "Bharat Electronics Limited | BEL | 500049 | Standalone",
+    "first_observed_at": "2026-10-15T13:15:00.000Z",
+    "published_at": null,
+    "publication_precision": "UNKNOWN"
+  }
+]

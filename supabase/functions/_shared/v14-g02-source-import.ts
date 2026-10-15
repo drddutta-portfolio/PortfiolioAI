@@ -2,6 +2,8 @@ import g03Pins from './v14-g03-original-pins.json' with {type:'json'}
 import g03Policy from './v14-g03-pilot-authorization.json' with {type:'json'}
 import g03RocePins from './v14-g03-roce-original-pins.json' with {type:'json'}
 import g03RocePolicy from './v14-g03-roce-authorization.json' with {type:'json'}
+import g03DebtPins from './v14-g03-debt-original-pins.json' with {type:'json'}
+import g03FinancialPolicy from './v14-g03-financial-authorization.json' with {type:'json'}
 import pins from './v14-g02-original-pins.json' with {type:'json'}
 import policy from './v14-g02-owner-authorization.json' with {type:'json'}
 export {pins as G02_ORIGINAL_PINS,policy as G02_OWNER_POLICY}
@@ -11,6 +13,7 @@ export interface OriginalSourceScope{readonly group:'G02'|'G03';readonly policy:
 export const G02_SOURCE_SCOPE:OriginalSourceScope={group:'G02',policy,pins,originalKind:G02_ORIGINAL_KIND}
 export const G03_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03Policy,pins:g03Pins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_ROCE_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03RocePolicy,pins:g03RocePins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
+export const G03_DEBT_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:{...g03FinancialPolicy,directiveSha256:g03FinancialPolicy.contractSha256,securityIds:[g03FinancialPolicy.securityId]},pins:g03DebtPins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export {g02SourceExecutorQualified} from './v14-g02-executor-identity.ts'
 export const stableG02=(v:unknown):string=>Array.isArray(v)?'['+v.map(stableG02).join(',')+']':v!==null&&typeof v==='object'?'{'+Object.entries(v as Record<string,unknown>).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>JSON.stringify(k)+':'+stableG02(x)).join(',')+'}':JSON.stringify(v)??'null'
 export const hashG02=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(stableG02(v))))).map(x=>x.toString(16).padStart(2,'0')).join('')

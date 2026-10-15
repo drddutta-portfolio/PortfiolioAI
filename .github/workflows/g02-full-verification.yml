@@ -30,7 +30,7 @@ jobs:
         with:
           deno-version: v2.9.6
       - name: Type-check approved financial admission in the Edge runtime
-        run: deno check --no-lock --config supabase/functions/v14-g02-document-admission/deno.json supabase/functions/_shared/v14-g03-cash-admission-runtime.ts supabase/functions/_shared/v14-g03-financial-research-runtime.ts
+        run: deno check --no-lock --config supabase/functions/v14-g02-document-admission/deno.json supabase/functions/_shared/v14-g03-cash-admission-runtime.ts supabase/functions/_shared/v14-g03-debt-admission-runtime.ts supabase/functions/_shared/v14-g03-financial-research-runtime.ts
       - run: npm run test:edge
       - run: npm test
       - run: npm run build
@@ -40,4 +40,5 @@ jobs:
       - run: python scripts/v1-4/test_g03_roce_qualification.py
       - run: python scripts/v1-4/test_g03_bel_order_history.py
       - run: python scripts/v1-4/test_g03_bel_cash_components.py
+      - run: python scripts/v1-4/test_g03_bel_debt_components.py
       - run: git diff --check
