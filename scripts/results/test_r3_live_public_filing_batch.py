@@ -292,4 +292,18 @@ class ResultsAcquisitionTests(unittest.TestCase):
         urls=module.listing_urls(items,"RELIANCE")
         self.assertEqual(len(urls),1)
 
+    def test_r5_history_catalog_prunes_noncomparison_quarters_without_admitting_values(self):
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_111_30042025222801_iXBRL_WEB.html"
+        entries={"data":[{"symbol":"RELIANCE","qe_Date":"31-MAR-2025","ixbrl":url},
+                         {"symbol":"RELIANCE","qe_Date":"30-JUN-2026","ixbrl":url.replace("111","222")},
+                         {"symbol":"RELIANCE","qe_Date":"30-JUN-2025","ixbrl":url.replace("111","333")}]}
+        prior=module.R5_HISTORY_MODE
+        try:
+            module.R5_HISTORY_MODE=True
+            self.assertEqual(len(module.listing_urls(entries,"RELIANCE")),2)
+            module.R5_HISTORY_MODE=False
+            self.assertEqual(len(module.listing_urls(entries,"RELIANCE")),3)
+        finally:
+            module.R5_HISTORY_MODE=prior
+
 if __name__=="__main__":unittest.main()
