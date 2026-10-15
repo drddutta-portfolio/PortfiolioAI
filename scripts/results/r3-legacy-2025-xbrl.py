@@ -287,6 +287,17 @@ def main():
        AND period_end=ANY(%s::date[]) AND selected_observation_id IS NOT NULL
      GROUP BY period_end HAVING COUNT(DISTINCT metric_code)>=3""",(sid,list(PERIODS)))
     complete={str(x[0]) for x in cur.fetchall()}
+    cur.execute("""SELECT f.period_end,f.consolidation_scope,f.source_record_id,f.metric_code
+      FROM public.fundamental_observations f
+      JOIN public.data_source_records r ON r.id=f.source_record_id
+      WHERE f.security_id=%s AND f.period_type='QUARTER'
+        AND f.period_end=ANY(%s::date[]) AND f.evidence_status='AVAILABLE'
+        AND r.record_kind=%s""",(sid,list(PERIODS),KIND))
+    recorded=defaultdict(set)
+    for end,scope,record_id,code in cur.fetchall():
+      if scope and record_id:recorded[(str(end),scope,str(record_id))].add(code)
+    required=set(_r3.BANK_REQUIRED if symbol in _r3.BANK_TICKERS else _r3.CORE_METRICS)
+    complete.update(end for (end,scope,record_id),codes in recorded.items() if required.issubset(codes))
    db.rollback()
    if complete==set(PERIODS):continue
    try:
