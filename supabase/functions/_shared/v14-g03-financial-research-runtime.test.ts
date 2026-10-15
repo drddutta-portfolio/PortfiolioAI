@@ -21,7 +21,7 @@ function setup(){
   }
   then(resolve:(v:unknown)=>unknown){return Promise.resolve(this.result()).then(resolve)}async single(){return this.result()}async maybeSingle(){return this.result()}
  }
- const rpc=async(name:string,args:Row)=>{calls.push({name,args});if(failures.has(name))return {data:null,error:{code:'FAILED'}}
+ const rpc=async(name:string,args:Row)=>{calls.push({name,args});if(args.p_operation&&!/^[A-Z0-9_]+$/.test(String(args.p_operation)))return {data:null,error:{code:'23514'}};if(failures.has(name))return {data:null,error:{code:'FAILED'}}
   if(name==='acquire_data_ingestion_lease_v1'){if(locked)return {data:[{acquired:false}],error:null};locked=true;return {data:[{acquired:true}],error:null}}
   if(name==='release_data_ingestion_lease_v1')locked=false
   if(name==='reserve_provider_budget_v1')return {data:[{reserved:true,reservation_id:'reservation'}],error:null}
@@ -38,6 +38,7 @@ describe('BEL approved-scope research never admits provider claims automatically
   expect(f.rows.data_source_records[0]).toMatchObject({record_kind:G03_BEL_RESEARCH_KIND,published_at:null,raw_payload:{security_id:p.securityId,canonical_promotion:false}})
   expect(f.calls.find(c=>c.name==='settle_provider_budget_v1')?.args).toMatchObject({p_consumed_units:1,p_failed_units:0,p_released_units:0})
   expect(f.rows.data_ingestion_runs[0]).toMatchObject({status:'SUCCEEDED',accepted_count:0,attempted_call_count:1})
+  expect(f.rows.data_ingestion_runs[0].operation).toMatch(/^[A-Z0-9_]+$/)
  })
  it('serializes concurrent requests and does not spend when the lease or provider budget is unavailable',async()=>{
   const f=setup(),out=await Promise.allSettled([acquireG03BelFinancialResearch(f.db,body,{},f.client),acquireG03BelFinancialResearch(f.db,body,{},f.client)])

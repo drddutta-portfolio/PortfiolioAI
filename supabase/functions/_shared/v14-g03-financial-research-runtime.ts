@@ -20,7 +20,7 @@ async function releaseResearchLease(db:SupabaseClient,operation:string,holder:st
  if(released.error)throw Error('G03_RESEARCH_LEASE_RELEASE_FAILED')
 }
 export async function acquireG03BelFinancialResearch(db:SupabaseClient,body:Record<string,unknown>,claims:Record<string,unknown>,client:Client){
- const kind=g03BelResearchScope(body),operation=G03_BEL_RESEARCH_KIND+':'+kind,holder=crypto.randomUUID()
+ const kind=g03BelResearchScope(body),operation=G03_BEL_RESEARCH_KIND+'_'+kind,holder=crypto.randomUUID()
  const owner=await db.from('portfolios').select('user_id').eq('id',policy.portfolioId).single()
  const source=await db.from('data_sources').select('is_active,entitlement_verified,retention_rights_verified').eq('code',SOURCE).single()
  const control=await db.from('provider_ingestion_controls').select('ingestion_enabled,policy_version').eq('source_code',SOURCE).single()
@@ -28,7 +28,7 @@ export async function acquireG03BelFinancialResearch(db:SupabaseClient,body:Reco
  const holding=await db.from('current_holdings').select('security_id').eq('portfolio_id',policy.portfolioId).eq('security_id',policy.securityId).gt('current_quantity',0).maybeSingle()
  if(owner.error||owner.data?.user_id!==policy.ownerId||!holding.data||holding.error||identity.error||String(identity.data?.provider_instrument_id)!=='175')throw Error('G03_RESEARCH_HELD_OWNER_IDENTITY_NOT_VERIFIED')
  if(source.error||!source.data?.is_active||!source.data.entitlement_verified||!source.data.retention_rights_verified||control.error||!control.data?.ingestion_enabled)throw Error('G03_RESEARCH_PROVIDER_CONTROLS_NOT_VERIFIED')
- const leaseOperation=operation+':'+BATCH,lease=await db.rpc('acquire_data_ingestion_lease_v1',{p_source_code:SOURCE,p_operation:leaseOperation,p_lease_holder:holder,p_lease_seconds:300})
+ const leaseOperation=operation+'_'+BATCH.replaceAll('-',''),lease=await db.rpc('acquire_data_ingestion_lease_v1',{p_source_code:SOURCE,p_operation:leaseOperation,p_lease_holder:holder,p_lease_seconds:300})
  if(lease.error||lease.data?.[0]?.acquired!==true)throw Error('G03_RESEARCH_LEASE_BUSY_OR_UNAVAILABLE')
  try{
   const prior=await db.from('data_ingestion_runs').select('id,status,metadata').eq('source_code',SOURCE).eq('operation',operation).eq('metadata->>batch_date',BATCH).limit(1).maybeSingle()
