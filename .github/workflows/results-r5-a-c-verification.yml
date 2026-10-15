@@ -8,6 +8,7 @@ on:
       - src/features/results/quarterlyR5Classification.test.ts
       - src/features/results/ResultsReferenceLivePage.tsx
       - src/features/results/ResultsReferenceLivePage.test.tsx
+      - src/features/results/ResultsLivePage.test.tsx
       - src/contracts/canonicalDataAuthorities.test.ts
   workflow_dispatch:
 permissions:
@@ -31,7 +32,7 @@ jobs:
           npm run typecheck
       - name: Focused Results R5-A/C and approved reference UI regression
         run: |
-          npx vitest run src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
+          npx vitest run src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.test.tsx src/features/results/ResultsLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
       - name: Focused source, engine and presentation lint
         run: |
           npx eslint src/features/results/quarterlyR5.ts src/features/results/quarterlyR5Classification.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.tsx src/features/results/ResultsReferenceLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
