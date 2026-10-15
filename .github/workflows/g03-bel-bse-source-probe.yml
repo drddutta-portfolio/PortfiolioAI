@@ -1,6 +1,11 @@
 name: G03 BEL BSE Read-Only Source Probe
 on:
   workflow_dispatch:
+    inputs:
+      inspect_existing:
+        description: Inspect completed run 38796801988 artifacts without any BSE requests
+        type: boolean
+        default: false
   push:
     branches: [codex/bel-bse-source-probe]
     paths: [.github/workflows/g03-bel-bse-source-probe.yml]
@@ -8,7 +13,7 @@ permissions:
   contents: read
 jobs:
   probe:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && !inputs.inspect_existing
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,3 +37,50 @@ jobs:
           path: tmp/bel-bse-source-probe/
           retention-days: 30
           if-no-files-found: warn
+
+  inspect:
+    if: github.event_name == 'workflow_dispatch' && inputs.inspect_existing
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 38796801988
+          name: bel-bse-original-source-probe
+          path: tmp/retained-bel-bse
+      - name: Inspect retained evidence without refetching upstream data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,shutil
+          src=Path('tmp/retained-bel-bse');out=Path('tmp/bel-bse-report');out.mkdir(parents=True,exist_ok=True)
+          r=json.loads((src/'report.json').read_text());shutil.copyfile(src/'report.json',out/'report.json')
+          shutil.copytree(src/'http',out/'http')
+          bins=[Path('tmp/bel-bse-originals-a'),Path('tmp/bel-bse-originals-b')];sizes=[0,0]
+          for b in bins:b.mkdir(parents=True,exist_ok=True)
+          for f in sorted((src/'originals').glob('*.pdf'),key=lambda x:x.stat().st_size,reverse=True):
+            h=hashlib.sha256(f.read_bytes()).hexdigest();assert h==f.stem
+            i=min(range(2),key=lambda k:sizes[k]);shutil.copyfile(f,bins[i]/f.name);sizes[i]+=f.stat().st_size
+            text=f.with_suffix('.txt');shutil.copyfile(text,out/text.name)
+          assert max(sizes)<28*1024*1024
+          print(json.dumps({'summary':r.get('summary'),'originalGroupBytes':sizes,'newUpstreamCalls':0,'pdfs':[{'quarter':p['requestedPeriodEnd'],'sha256':p.get('sha256'),'bytes':p.get('bytes'),'error':p.get('error'),'issuerNameSeen':p.get('issuerNameSeen'),'cinSeen':p.get('cinSeen'),'filingDate':p.get('filing',{}).get('published_at'),'title':p.get('filing',{}).get('title')} for p in r['pdfs']],'snapshots':{k:{'status':v['status'],'error':v.get('error')} for k,v in r['snapshots'].items()}},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bel-bse-source-report-and-text
+          path: tmp/bel-bse-report/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bel-bse-originals-a
+          path: tmp/bel-bse-originals-a/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bel-bse-originals-b
+          path: tmp/bel-bse-originals-b/
+          retention-days: 30
