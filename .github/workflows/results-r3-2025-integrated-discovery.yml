@@ -40,10 +40,11 @@ jobs:
             if not isinstance(rows,list):
               print('UNKNOWN_ITEMS',symbol,type(rows).__name__);continue
             out=[]
-            for x in rows[:8]:
+            for x in rows[-8:]:
               if not isinstance(x,dict):continue
               out.append({'keys':sorted(x.keys())[:32],
                 'date_fields':{k:str(v)[:45] for k,v in x.items() if 'date' in k.lower() or k in ('symbol','Symbol','quarter')},
-                'source_link_key_present':any(k in x for k in ('ixbrl','ixbrlUrl','originalUrl','xbrlFile','xbrl','xbrlUrl','xmlFile','link','url'))})
+                'source_link_key_present':any(k in x for k in ('ixbrl','ixbrlUrl','originalUrl','xbrlFile','xbrl','xbrlUrl','xmlFile','link','url')),
+                'source_links':{k:str(x.get(k))[:140] for k in ('ixbrl','xbrl') if x.get(k)}})
             print('CATALOG',symbol,json.dumps({'count':len(rows),'records':out},sort_keys=True))
           PY
