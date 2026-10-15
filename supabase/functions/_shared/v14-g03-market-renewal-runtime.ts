@@ -7,6 +7,7 @@ import {G03_MARKET_RENEWAL_PINS as pins,readBelMarketOriginal,belCompletedSessio
 import policy from './v14-g03-market-authorization.json' with {type:'json'}
 type Payload=Record<string,unknown>&{proof:Record<string,unknown>;validation:Record<string,unknown>}
 function parentQualified(raw:Payload,authority:string,target:string){const p=raw.proof;if(raw.target_id!==target||p?.sourceAuthority!==authority||p.returnBasis!=='PRICE_RETURN_RAW_CLOSE'||p.corporateActionState!=='COMPLETE'||p.exchangeCalendarState!=='VERIFIED'||p.unresolvedCorporateActionCount!==0||!['lineageSourceRecordIds','corporateActionSourceRecordIds','exchangeCalendarSourceRecordIds'].every(k=>Array.isArray(p[k])&&(p[k] as unknown[]).length>0))throw Error('G03_ACCEPTED_PARENT_HISTORY_REQUIRED')}
+export {parentQualified as assertG03AcceptedHistoryParent}
 export async function renewBelMarketHistory(db:SupabaseClient,body:Record<string,unknown>){
  if(body.authorizationHash!==policy.directiveSha256||!Array.isArray(body.readUrls)||body.readUrls.length!==pins.sources.length||typeof body.captureId!=='string')throw Error('EXACT_G03_BEL_HISTORY_RENEWAL_REQUIRED')
  const owner=await db.from('portfolios').select('user_id').eq('id',policy.portfolioId).single();if(owner.error||owner.data.user_id!==policy.ownerId)throw Error('G03_HISTORY_OWNER_INVALID')

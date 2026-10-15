@@ -1,0 +1,44 @@
+{
+  "version": "G03_BEL_COMPLETED_SESSION_APPEND_V1",
+  "from": "2026-10-14",
+  "through": "2026-10-15",
+  "calendarDecisionId": "7c6e0272-5d37-48b3-a15e-3c3bad659aa1",
+  "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "symbol": "BEL",
+  "isin": "INE263A01024",
+  "stockParent": "34aff802-b0e5-5d6c-aedc-f3783f8645f1",
+  "benchmarks": [
+    {
+      "code": "NIFTY_INDIA_DEFENCE",
+      "identity": "Nifty India Defence",
+      "base": "1b34c07c-6924-4c73-a769-e50b2b8c7f3e",
+      "parent": "f3137627-f0bd-5a3d-adfa-d23234d2371d",
+      "delta": "b59078bb-68e8-5f22-a882-1edf13b639b6"
+    },
+    {
+      "code": "NIFTY_CAPITAL_GOODS",
+      "identity": "Nifty Capital Goods",
+      "base": "8f25c5c4-f740-406a-853d-60f8ee0499c8",
+      "parent": "e2c01a02-ff80-5af4-a713-d271e2979b5b",
+      "delta": "138d8c42-84e5-592b-ac09-9d6e10ea270f"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_15102026.csv",
+      "hash": "82c9a89b00bb5743b4154ac62c466579d2799ce3f7492e57553cb9c2dfc659ff",
+      "bytes": 17153,
+      "extension": "csv",
+      "fixture": "ind_close_all_15102026.csv",
+      "r2_key": "portfolioai-history/development/v1-4/g03/history-tail/82c9a89b00bb5743b4154ac62c466579d2799ce3f7492e57553cb9c2dfc659ff.csv"
+    },
+    {
+      "url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=15-10-2026&to_date=15-10-2026",
+      "hash": "1c6de9d095236ee2b7d08ac650ce44fa21d3f30a2fd02efd2807c09af41221dd",
+      "bytes": 908,
+      "extension": "json",
+      "fixture": "corporate-actions-15.json",
+      "r2_key": "portfolioai-history/development/v1-4/g03/history-tail/1c6de9d095236ee2b7d08ac650ce44fa21d3f30a2fd02efd2807c09af41221dd.json"
+    }
+  ]
+}

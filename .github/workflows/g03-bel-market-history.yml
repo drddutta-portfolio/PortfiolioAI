@@ -5,6 +5,10 @@ on:
     paths: [.github/workflows/g03-bel-market-history.yml]
   workflow_dispatch:
     inputs:
+      appendCompletedSession:
+        description: Qualify the pinned October 15 append using a retained capture, without provider activity
+        type: boolean
+        default: false
       captureOnly:
         description: Acquire the bounded completed-session tail without invoking the older fixed renewal
         type: boolean
@@ -45,6 +49,7 @@ jobs:
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
           G03_RETAINED_CAPTURE_ID: ${{ inputs.retainedCaptureId }}
           G03_CAPTURE_ONLY: ${{ inputs.captureOnly }}
+          G03_APPEND_COMPLETED_SESSION: ${{ inputs.appendCompletedSession }}
           G03_SESSION_DATE: ${{ inputs.sessionDate }}
           G03_CALENDAR_DECISION_ID: ${{ inputs.calendarDecisionId }}
         run: python scripts/v1-4/g03_bel_market_history.py

@@ -1,4 +1,5 @@
 import {renewBelMarketHistory} from '../_shared/v14-g03-market-renewal-runtime.ts'
+import {appendBelCompletedSession} from '../_shared/v14-g03-market-append-runtime.ts'
 import g03MarketPolicy from '../_shared/v14-g03-market-authorization.json' with {type:'json'}
 import {g03HistoryExecutorQualified} from '../_shared/v14-g03-market-scope.ts'
 import g03Policy from '../_shared/v14-g03-pilot-authorization.json' with {type:'json'}
@@ -18,6 +19,7 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
+ if(body?.action==='APPEND_FIXED_G03_BEL_COMPLETED_SESSION'){if(!g03HistoryExecutorQualified(claims))return reply(403,'G03_HISTORY_EXECUTOR_REQUIRED');try{return new Response(JSON.stringify(await appendBelCompletedSession(createClient(url,key,{auth:{persistSession:false}}),body)),{headers:{'content-type':'application/json','cache-control':'no-store'}})}catch(e){return reply(409,e instanceof Error?e.message:'G03_HISTORY_APPEND_FAILED')}}
  if(body?.action==='V1_4_G02_HISTORY_TAIL'){if(!g02HistoryExecutorQualified(claims))return reply(403,'G02_HISTORY_EXECUTOR_REQUIRED');return handleG02MarketHistory(new Request(req.url,{method:'POST',headers:req.headers,body:JSON.stringify(body)}))}
  if(body?.action==='RENEW_FIXED_G03_BEL_HISTORY'){if(!g03HistoryExecutorQualified(claims))return reply(403,'G03_HISTORY_EXECUTOR_REQUIRED');try{return new Response(JSON.stringify(await renewBelMarketHistory(createClient(url,key,{auth:{persistSession:false}}),body)),{headers:{'content-type':'application/json','cache-control':'no-store'}})}catch(e){return reply(409,e instanceof Error?e.message:'G03_HISTORY_RENEWAL_FAILED')}}
  if(body?.action==='V1_4_G03_HISTORY_TAIL'){if(!g03HistoryExecutorQualified(claims))return reply(403,'G03_HISTORY_EXECUTOR_REQUIRED');return handleG02MarketHistory(new Request(req.url,{method:'POST',headers:req.headers,body:JSON.stringify(body)}),'G03')}

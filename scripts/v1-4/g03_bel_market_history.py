@@ -8,6 +8,8 @@ def main():
  with urllib.request.urlopen(oidc,timeout=30) as r:token=json.load(r)['value']
  if os.environ.get('G03_RETAINED_CAPTURE_ID'):
   Path('g03-bel-market-history-result').mkdir(exist_ok=True)
+  if os.environ.get('G03_APPEND_COMPLETED_SESSION')=='true':
+   append_completed_session(token,os.environ['G03_RETAINED_CAPTURE_ID']);return
   renew_history(token,os.environ['G03_RETAINED_CAPTURE_ID']);return
  grant_req=urllib.request.Request(grant_url,data=json.dumps({'action':'ISSUE_G03_HISTORY_TAIL_GRANT','authorizationHash':policy['directiveSha256'],'sessionDate':os.environ['G03_SESSION_DATE']}).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
  with urllib.request.urlopen(grant_req,timeout=60) as r:grant=json.load(r)
@@ -28,6 +30,27 @@ def main():
  if os.environ.get('G03_CAPTURE_ONLY')=='true':
   print(json.dumps({'capturedForSeparateQualification':capture,'canonicalMaterialization':False}));return
  renew_history(token,capture)
+def append_completed_session(token,capture):
+ import boto3
+ from botocore.config import Config
+ if os.environ['CLOUDFLARE_R2_BUCKET']!='portfolioai-history-dev':raise ValueError('DEVELOPMENT_R2_REQUIRED')
+ root=Path('supabase/functions/_shared');pins=json.loads((root/'v14-g03-market-append-pins.json').read_text());policy=json.loads((root/'v14-g03-market-authorization.json').read_text())
+ s3=boto3.client('s3',endpoint_url='https://ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com',region_name='auto',aws_access_key_id=os.environ['CLOUDFLARE_R2_ACCESS_KEY_ID'],aws_secret_access_key=os.environ['CLOUDFLARE_R2_SECRET_ACCESS_KEY'],config=Config(signature_version='s3v4',s3={'addressing_style':'path'},retries={'total_max_attempts':1}));urls=[]
+ for p in pins['sources']:
+  try:data=s3.get_object(Bucket='portfolioai-history-dev',Key=p['r2_key'])['Body'].read()
+  except s3.exceptions.NoSuchKey:
+   data=(Path('scripts/v1-4/fixtures/g03-market-tail')/p['fixture']).read_bytes()
+   if len(data)!=p['bytes'] or hashlib.sha256(data).hexdigest()!=p['hash']:raise ValueError('G03_APPEND_ORIGINAL_MISMATCH')
+   s3.put_object(Bucket='portfolioai-history-dev',Key=p['r2_key'],Body=data,IfNoneMatch='*',ContentType='application/json' if p['extension']=='json' else 'text/csv')
+  check=s3.get_object(Bucket='portfolioai-history-dev',Key=p['r2_key'])['Body'].read()
+  if len(check)!=p['bytes'] or hashlib.sha256(check).hexdigest()!=p['hash']:raise ValueError('G03_APPEND_R2_READBACK_MISMATCH')
+  urls.append(s3.generate_presigned_url('get_object',Params={'Bucket':'portfolioai-history-dev','Key':p['r2_key']},ExpiresIn=300))
+ request=urllib.request.Request(BASE+'v14-g02-execution-grant',data=json.dumps({'action':'APPEND_FIXED_G03_BEL_COMPLETED_SESSION','authorizationHash':policy['directiveSha256'],'through':pins['through'],'captureId':capture,'readUrls':urls}).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
+ try:
+  with urllib.request.urlopen(request,timeout=180) as response:result=json.load(response)
+ except urllib.error.HTTPError as error:result={'httpStatus':error.code,**json.load(error)}
+ (Path('g03-bel-market-history-result')/'history-append.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+ if result.get('code')!='G03_BEL_COMPLETED_SESSION_APPENDED_NOT_READY' or result.get('providerApiCalls')!=0:raise ValueError('G03_APPEND_FAILED_NO_PROVIDER_RETRY')
 def renew_history(token,capture):
  import boto3
  from botocore.config import Config
