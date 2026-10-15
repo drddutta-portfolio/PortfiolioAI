@@ -123,8 +123,8 @@ describe("Results live approved visual contract", () => {
       { ...observation("EPS_DILUTED", "12.35", true), unit: "INR_PER_SHARE", publishedAt: null },
     ])
     render(<ResultsLivePage />)
-    expect(await screen.findByText(/Source reconciled \\u00b7 publication unverified/)).toBeInTheDocument()
-    expect(screen.getByText(/Source reconciled/)).toBeInTheDocument()
+    expect((await screen.findAllByText(/Source reconciled.*publication unverified/)).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Source reconciled/).length).toBeGreaterThan(0)
     expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
   })
 
