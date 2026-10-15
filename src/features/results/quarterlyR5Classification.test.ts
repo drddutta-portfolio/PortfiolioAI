@@ -138,7 +138,7 @@ describe("R5 exact-industry quarterly operating signal", () => {
     const weak=graded(make([160,140,120,100],[50,40,30,20]),"Industrial","Civil Construction")
     expect(weak.status).toBe("WEAK")
     expect(weak.basis).toBe("COMPANY_TREND")
-    const mixed=graded(make([100,130,120,140],[20,25,21,24]),"Industrial","Civil Construction")
+    const mixed=graded(make([100,130,120,140],[20,25,21,20]),"Industrial","Civil Construction")
     expect(mixed.status).toBe("MIXED")
   })
   it("does not grade unreviewed industries, lenders or competing original sources through fallback",()=>{
