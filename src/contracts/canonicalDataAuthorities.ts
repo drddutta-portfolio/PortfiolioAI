@@ -22,6 +22,7 @@ export type CanonicalFactKey =
   | "CURRENT_RESEARCH_EVIDENCE"
   | "DAILY_OHLCV"
   | "OFFICIAL_NEWS"
+  | "NEWS_REFRESH_SCHEDULE"
   | "DETERMINISTIC_SCORE"
   | "RECOMMENDATION"
   | "POSITION_SIZING_ASSESSMENT"
@@ -270,6 +271,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
     notes: "Weekly/monthly series and indicators derive from this canonical daily history.",
+  }),
+  NEWS_REFRESH_SCHEDULE: authority({
+    fact: "NEWS_REFRESH_SCHEDULE",
+    label: "Portfolio news refresh cadence",
+    layer: "OWNER_SETTING",
+    canonicalAuthority: "Portfolio-owned news scheduling preference and NSE pipeline run evidence",
+    canonicalSourceObject: "portfolio_news_refresh_settings + data_ingestion_runs",
+    sharedAccessPath: "loadNewsRefreshStatus() / saveNewsRefreshHours() -> DashboardNewsPreview",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Only the hourly server dispatcher fetches NSE; the browser reads cached news and stores an approved owner preference.",
   }),
   OFFICIAL_NEWS: authority({
     fact: "OFFICIAL_NEWS",
