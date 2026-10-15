@@ -64,6 +64,10 @@ def main():
                 i.get('requirement_code') == 'CFO_FCF_CONVERSION' and i.get('evidence_state') == 'FRESH'
                 for i in bel['items']):
             raise ValueError('G03_BEL_CASH_COMPONENTS_NOT_CANONICALLY_FRESH')
+        if os.environ.get('G03_REQUIRE_BEL_CASH') == 'true' and any(not any(
+                i.get('requirement_code') == code and i.get('evidence_state') == 'FRESH'
+                for i in bel['items']) for code in ['MOMENTUM_12M_RELATIVE', 'DRAWDOWN_VOLATILITY_RISK']):
+            raise ValueError('G03_BEL_CURRENT_MARKET_PROOF_NOT_FRESH_NO_SAVE')
         from g03_source_qualification import invoke
         grant_body = {'action': 'ISSUE_G03_CANONICAL_ONLY_GRANT', 'authorizationHash': pilot['directiveSha256']}
         grant = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
