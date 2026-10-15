@@ -2,7 +2,9 @@ name: Results R3 BSE Astral 2024 Original Quarter Admission
 on:
   push:
     branches: [PortfolioAI-Development]
-    paths: [.github/workflows/results-r3-bse-2024-astral-qualified.yml]
+    paths:
+      - .github/workflows/results-r3-bse-2024-astral-qualified.yml
+      - scripts/results/r3-bse-2024-astral-pdf.py
 permissions:
   contents: read
 concurrency:
