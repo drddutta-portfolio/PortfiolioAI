@@ -1,3 +1,5 @@
+import {g03MarginExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {admitFixedG03Margin} from '../_shared/v14-g03-margin-admission-runtime.ts'
 import {g03SessionStatusExecutorQualified,g03FinancialResearchExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {acquireG03BelFinancialResearch} from '../_shared/v14-g03-financial-research-runtime.ts'
 import {g03DebtExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
@@ -26,6 +28,10 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
+ if(body?.action==='ADMIT_FIXED_G03_BEL_MARGIN_PAIRS'){
+  if(!g03MarginExecutorQualified(claims))return reply(403,'G03_MARGIN_EXECUTOR_SCOPE_INVALID')
+  try{return reply(200,'G03_MARGIN_PAIRS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Margin(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_MARGIN_ADMISSION_FAILED')}
+ }
  if(body?.action==='ADMIT_FIXED_G03_BEL_DEBT_COMPONENTS'){
   if(!g03DebtExecutorQualified(claims))return reply(403,'G03_DEBT_EXECUTOR_SCOPE_INVALID')
   try{return reply(200,'G03_DEBT_COMPONENTS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Debt(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_DEBT_ADMISSION_FAILED')}

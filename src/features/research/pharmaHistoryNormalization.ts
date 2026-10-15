@@ -1,4 +1,4 @@
-import Decimal from "decimal.js"
+import {Decimal} from "decimal.js"
 
 export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V3" as const
 

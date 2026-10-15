@@ -1,0 +1,799 @@
+{
+  "providerRecords": [
+    {
+      "id": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+      "payloadHash": "588aa7919352271e3bfa472a92ae7ab7306668b897e4554075f787afa67298f0",
+      "kind": "PROFIT_PARAMETER_CATALOG",
+      "request": null
+    },
+    {
+      "id": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+      "payloadHash": "4de43f0cc77d4a31327cd83ca4e71a25b054d6cbabe608e0879269c8dfcb6f44",
+      "kind": "REVENUE_PARAMETER_CATALOG",
+      "request": null
+    },
+    {
+      "id": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+      "payloadHash": "474392e802a41ac35a3c8a7d4a3c7776702db18a5c8543a42da363704076ac0b",
+      "kind": "EXACT_PROFIT_HISTORY",
+      "request": {
+        "parameters": [
+          "opq",
+          "opqmq1",
+          "opqmq2",
+          "opqmq3",
+          "opqmy1",
+          "opqmq5",
+          "opqmq6",
+          "opqmq7"
+        ],
+        "stock_codes": [
+          "BEL"
+        ],
+        "catalog_source_ids": [
+          "666abacd-81d2-4adb-8d0e-27ec249c5050"
+        ]
+      }
+    },
+    {
+      "id": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+      "payloadHash": "4e59a8c36faa549b25c4a384b76a7cde0b80f508b67819e076a8c81772660fb3",
+      "kind": "EXACT_REVENUE_HISTORY",
+      "request": {
+        "parameters": [
+          "srq",
+          "srqmq1",
+          "srqmq2",
+          "srqmq3",
+          "srqmy1",
+          "srqmq5",
+          "srqmq6",
+          "srqmq7"
+        ],
+        "stock_codes": [
+          "BEL"
+        ],
+        "catalog_source_ids": [
+          "d1d3a747-3784-4e73-b4f2-e9db90678aa9"
+        ]
+      }
+    },
+    {
+      "id": "56274f77-1f41-4e67-a241-3f38fd59a60f",
+      "payloadHash": "3f99aa28f74d8d330f578822e73e86a13aa773475f6e19c07d5a7e8b79d3161c",
+      "kind": "EXACT_PROFIT_Q5",
+      "request": {
+        "parameters": [
+          "opqmq5"
+        ],
+        "stock_codes": [
+          "BEL"
+        ],
+        "catalog_source_ids": [
+          "666abacd-81d2-4adb-8d0e-27ec249c5050"
+        ]
+      }
+    },
+    {
+      "id": "88c49294-041f-4593-b678-0ad84e1f3f83",
+      "payloadHash": "68e8647ed9be88a98963925154a2642195e69e4db3180ce935cbff27f446a563",
+      "kind": "EXACT_PROFIT_Q6",
+      "request": {
+        "parameters": [
+          "opqmq6"
+        ],
+        "stock_codes": [
+          "BEL"
+        ],
+        "catalog_source_ids": [
+          "666abacd-81d2-4adb-8d0e-27ec249c5050"
+        ]
+      }
+    }
+  ],
+  "cells": [
+    {
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "46049000000.00",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "14452000000.00",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1577600000.00",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "13200000.00",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1111900000.00",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "57706900000.00",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "17436200000.00",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1863800000.00",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "13200000.00",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1109300000.00",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "91495900000",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "28672600000",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1946400000",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "58600000",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1375800000",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "44397400000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "12793600000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1633200000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "14400000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1207900000",
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "57920900000",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "17279500000",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1539200000",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "16500000",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1264900000",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "71538500000",
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "21283100000",
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1385400000",
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "20300000",
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1354400000",
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "102244300000",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "29173400000",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1102500000",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "16100000",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1729500000",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "tag": "RevenueFromOperations",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "55469800000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "tag": "ProfitBeforeTax",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "13962500000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "tag": "OtherIncome",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1695600000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "tag": "FinanceCosts",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "11600000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "CONSOLIDATED"
+    },
+    {
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "tag": "DepreciationDepletionAndAmortisationExpense",
+      "context": "OneD",
+      "unit": "INR",
+      "literalValue": "1605500000",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "scope": "CONSOLIDATED"
+    }
+  ],
+  "periods": [
+    {
+      "periodStart": "2024-07-01",
+      "periodEnd": "2024-09-30",
+      "originalSha256": "3ad22bc1fe5d31e4ef181314b9e308407213b4e6d514702cfe98cd6c07a37d3e",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opqmq7",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 7Qtr Ago",
+        "value": "1399.95",
+        "fragment": "Operating Profit 7Qtr Ago\nBEL:1399.95",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq7",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 7Q ago",
+        "value": "4604.90",
+        "fragment": "Operating Rev. 7Q ago\nBEL:4604.90",
+        "singleFieldRequired": false
+      },
+      "sourceId": "d95a586d-a3e3-5819-a105-7304729ed307",
+      "reviewId": "76d65113-4776-532f-a216-bc8ea028bdfc",
+      "fragment": "BEL 2024-07-01 to 2024-09-30 CONSOLIDATED INR_CRORE: exact masked opqmq7 operating profit 1399.95; exact masked srqmq7 operating revenue 4604.90. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2024-07-01",
+        "periodEnd": "2024-09-30",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "1399.95",
+        "revenue": "4604.90"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2024-10-01",
+      "periodEnd": "2024-12-31",
+      "originalSha256": "fb52e71036c8c6d60463220d4f2fa8548f49a28f4490e6c0b76398be01869bb1",
+      "profitField": {
+        "sourceId": "88c49294-041f-4593-b678-0ad84e1f3f83",
+        "parameterToken": "opqmq6",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 6Qtr Ago",
+        "value": "1669.49",
+        "fragment": "Operating Profit 6Qtr Ago\nBEL:1669.49",
+        "singleFieldRequired": true
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq6",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 6Q ago",
+        "value": "5770.69",
+        "fragment": "Operating Rev. 6Q ago\nBEL:5770.69",
+        "singleFieldRequired": false
+      },
+      "sourceId": "6bf362ad-73dd-5035-acff-349302c3e1d2",
+      "reviewId": "06418658-d2f4-51b1-abc5-3b790f759ea2",
+      "fragment": "BEL 2024-10-01 to 2024-12-31 CONSOLIDATED INR_CRORE: exact masked opqmq6 operating profit 1669.49; exact masked srqmq6 operating revenue 5770.69. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2024-10-01",
+        "periodEnd": "2024-12-31",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "1669.49",
+        "revenue": "5770.69"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-03-31",
+      "originalSha256": "a29187f5f27fea77e9d14180938bcd23b0fe2a585e6edd463e4e0227dc458dca",
+      "profitField": {
+        "sourceId": "56274f77-1f41-4e67-a241-3f38fd59a60f",
+        "parameterToken": "opqmq5",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 6Qtr Ago",
+        "value": "2816.06",
+        "fragment": "Operating Profit 6Qtr Ago\nBEL:2816.06",
+        "singleFieldRequired": true
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq5",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 5Q ago",
+        "value": "9149.59",
+        "fragment": "Operating Rev. 5Q ago\nBEL:9149.59",
+        "singleFieldRequired": false
+      },
+      "sourceId": "cf0965ab-5e49-51e7-ae97-0e40fc617a18",
+      "reviewId": "daf3af93-8164-5f93-a310-39f843ea533a",
+      "fragment": "BEL 2025-01-01 to 2025-03-31 CONSOLIDATED INR_CRORE: exact masked opqmq5 operating profit 2816.06; exact masked srqmq5 operating revenue 9149.59. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2025-01-01",
+        "periodEnd": "2025-03-31",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "2816.06",
+        "revenue": "9149.59"
+      },
+      "captionDiscrepancy": {
+        "catalogLabel": "Operating Profit 5Qtr Ago",
+        "rawDisplayLabel": "Operating Profit 6Qtr Ago",
+        "resolution": "SOLE_REQUESTED_MASK_opqmq5_AND_MATCHED_ORIGINAL_ISSUER_QUARTER",
+        "rawCaptionPreserved": true
+      }
+    },
+    {
+      "periodStart": "2025-04-01",
+      "periodEnd": "2025-06-30",
+      "originalSha256": "b58058357fb3081192b8ab09636142847efcb0893e6bcb12d83e2fe3130af2d3",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opqmy1",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 4Q Ago",
+        "value": "1238.27",
+        "fragment": "Operating Profit 4Q Ago\nBEL:1238.27",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmy1",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 4Q ago",
+        "value": "4439.74",
+        "fragment": "Operating Rev. 4Q ago\nBEL:4439.74",
+        "singleFieldRequired": false
+      },
+      "sourceId": "b24389b9-5927-507d-ab5a-15d360534606",
+      "reviewId": "a6a07755-95de-58ff-a79c-3c2992bd5197",
+      "fragment": "BEL 2025-04-01 to 2025-06-30 CONSOLIDATED INR_CRORE: exact masked opqmy1 operating profit 1238.27; exact masked srqmy1 operating revenue 4439.74. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2025-04-01",
+        "periodEnd": "2025-06-30",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "1238.27",
+        "revenue": "4439.74"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "originalSha256": "bb280a4bd9aba7a3ec1fecf4fc94aa37c6a97397c8f7a852921b430680aeef8d",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opqmq3",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 3Q Ago",
+        "value": "1702.17",
+        "fragment": "Operating Profit 3Q Ago\nBEL:1702.17",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq3",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 3Q ago",
+        "value": "5792.09",
+        "fragment": "Operating Rev. 3Q ago\nBEL:5792.09",
+        "singleFieldRequired": false
+      },
+      "sourceId": "0f5c5f6c-5109-56da-ab20-898f13f38166",
+      "reviewId": "307693ce-5c9c-597c-a59a-57786b3fffa4",
+      "fragment": "BEL 2025-07-01 to 2025-09-30 CONSOLIDATED INR_CRORE: exact masked opqmq3 operating profit 1702.17; exact masked srqmq3 operating revenue 5792.09. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2025-07-01",
+        "periodEnd": "2025-09-30",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "1702.17",
+        "revenue": "5792.09"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2025-10-01",
+      "periodEnd": "2025-12-31",
+      "originalSha256": "1182051829d8c9040571a1161f89c520050be9d5fac33d29a2e59727eb4cad44",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opqmq2",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 2Q Ago",
+        "value": "2127.24",
+        "fragment": "Operating Profit 2Q Ago\nBEL:2127.24",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq2",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. 2Q ago",
+        "value": "7153.85",
+        "fragment": "Operating Rev. 2Q ago\nBEL:7153.85",
+        "singleFieldRequired": false
+      },
+      "sourceId": "f4844f70-4005-5f2c-ae78-5039e2f6a69a",
+      "reviewId": "df4b10a7-bae2-5a9a-aa46-371c7d5e07a8",
+      "fragment": "BEL 2025-10-01 to 2025-12-31 CONSOLIDATED INR_CRORE: exact masked opqmq2 operating profit 2127.24; exact masked srqmq2 operating revenue 7153.85. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2025-10-01",
+        "periodEnd": "2025-12-31",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "2127.24",
+        "revenue": "7153.85"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "originalSha256": "d3592bd09b978c7cb171e76cce29f039d85bfe19bdbb0e1f60154981c3a672a1",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opqmq1",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit 1Q Ago",
+        "value": "2981.65",
+        "fragment": "Operating Profit 1Q Ago\nBEL:2981.65",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srqmq1",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev.1Q Ago",
+        "value": "10224.43",
+        "fragment": "Operating Rev.1Q Ago\nBEL:10224.43",
+        "singleFieldRequired": false
+      },
+      "sourceId": "aa5cf009-ec45-5c6f-a45b-78930f212784",
+      "reviewId": "6463aaba-25b3-5ff3-ae99-ff580dda8024",
+      "fragment": "BEL 2026-01-01 to 2026-03-31 CONSOLIDATED INR_CRORE: exact masked opqmq1 operating profit 2981.65; exact masked srqmq1 operating revenue 10224.43. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2026-01-01",
+        "periodEnd": "2026-03-31",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "2981.65",
+        "revenue": "10224.43"
+      },
+      "captionDiscrepancy": null
+    },
+    {
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "originalSha256": "a74ef1626ebd64e4bc0e241f80236801a347b3075ee2edcfd3327baf8d550354",
+      "profitField": {
+        "sourceId": "739c394c-0ca2-471b-b318-cdcb68541ad0",
+        "parameterToken": "opq",
+        "catalogSourceId": "666abacd-81d2-4adb-8d0e-27ec249c5050",
+        "displayLabel": "Operating Profit Qtr",
+        "value": "1388.40",
+        "fragment": "Operating Profit Qtr\nBEL:1388.40",
+        "singleFieldRequired": false
+      },
+      "revenueField": {
+        "sourceId": "a2220fa2-1dde-4f1b-9ae5-c9eb80ee1aa3",
+        "parameterToken": "srq",
+        "catalogSourceId": "d1d3a747-3784-4e73-b4f2-e9db90678aa9",
+        "displayLabel": "Operating Rev. Qtr",
+        "value": "5546.98",
+        "fragment": "Operating Rev. Qtr\nBEL:5546.98",
+        "singleFieldRequired": false
+      },
+      "sourceId": "33bc927d-4df1-544c-a8ed-fa7f527a4110",
+      "reviewId": "9c4c9e20-643e-54a9-a096-9a7cf43dbb5f",
+      "fragment": "BEL 2026-04-01 to 2026-06-30 CONSOLIDATED INR_CRORE: exact masked opq operating profit 1388.40; exact masked srq operating revenue 5546.98. Both columns corroborated to the same original NSE financial period and scope. Operating margin is PortfolioAI-derived using the established Decimal margin owner, not an issuer-reported percentage.",
+      "components": {
+        "periodStart": "2026-04-01",
+        "periodEnd": "2026-06-30",
+        "scope": "CONSOLIDATED",
+        "unit": "INR_CRORE",
+        "currency": "INR",
+        "profitDefinition": "TRENDLYNE_OPERATING_PROFIT_QUARTER_R4H_RAW_HISTORY_V1",
+        "profit": "1388.40",
+        "revenue": "5546.98"
+      },
+      "captionDiscrepancy": null
+    }
+  ]
+}
