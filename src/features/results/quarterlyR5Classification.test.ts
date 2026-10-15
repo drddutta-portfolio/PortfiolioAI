@@ -101,4 +101,58 @@ describe("R5 exact-industry quarterly operating signal", () => {
     const badRows=rows.filter(r=>r.securityId!=="issuer3")
     expect(buildIndustryR5Calibrations(badRows,peers).has(group)).toBe(false)
   })
+  it("grades a sparse-industry company on a separately labelled verified trajectory, not a fake peer rank",()=>{
+    const quarters=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=quarters.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(20+i*5)),
+    ])
+    const result=graded(rows,"Waste Managment","Water Supply & Management")
+    expect(result.status).toBe("STRONG")
+    expect(result.basis).toBe("COMPANY_TREND")
+    expect(result.sampleSize).toBe(3)
+    expect(result.explanation).toContain("NOT an industry percentile")
+    const peerResult=graded(rows,"Waste Managment","Water Supply & Management",
+      policy("Waste Managment","Water Supply & Management"))
+    expect(peerResult.basis).toBe("INDUSTRY_PEER")
+  })
+  it("cannot produce an own-trend grade with one comparison or no valid latest pair",()=>{
+    const onePair=history("OPERATING_REVENUE_QUARTER","110","100","25","20")
+    expect(graded(onePair,"Chemicals","Agrochemicals").status).toBe("UNAVAILABLE")
+    const quarters=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=quarters.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(20+i*5)),
+    ])
+    const bad=rows.map(r=>r.periodEnd==="2026-03-31" && r.code==="NET_PROFIT_QUARTER"
+      ? {...r,sourceRecordId:"unrelated"} : r)
+    expect(graded(bad,"Chemicals","Agrochemicals").status).toBe("UNAVAILABLE")
+    expect(gradeQuarterR5(rows,"s1","2025-09-30","Chemicals","Agrochemicals",new Map()).status).toBe("UNAVAILABLE")
+  })
+  it("marks sustained own-company contraction weak and alternating momentum mixed",()=>{
+    const quarter=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const make=(tops: number[],profits:number[])=>quarter.flatMap((q,i)=>[
+      fact(q,"OPERATING_REVENUE_QUARTER",String(tops[i])),
+      fact(q,"NET_PROFIT_QUARTER",String(profits[i])),
+    ])
+    const weak=graded(make([160,140,120,100],[50,40,30,20]),"Industrial","Civil Construction")
+    expect(weak.status).toBe("WEAK")
+    expect(weak.basis).toBe("COMPANY_TREND")
+    const mixed=graded(make([100,130,120,140],[20,25,21,24]),"Industrial","Civil Construction")
+    expect(mixed.status).toBe("MIXED")
+  })
+  it("does not grade unreviewed industries, lenders or competing original sources through fallback",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(20+i*5)),
+    ])
+    expect(graded(rows,null,null).status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","NBFC").status).toBe("UNAVAILABLE")
+    const conflicting=rows.map(r=>r.periodEnd==="2025-12-31" && r.code==="NET_PROFIT_QUARTER"
+      ? {...r,sourceRecordId:"another-issuer-original"} : r)
+    // Second and third comparisons break; one remaining latest quarter pair is insufficient.
+    expect(graded(conflicting,"Chemicals","Agrochemicals").status).toBe("UNAVAILABLE")
+  })
+
 })
