@@ -26,8 +26,6 @@ jobs:
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
       RESULTS_MAX_STOCKS: "262"
-      RESULTS_R5_HISTORICAL_ACQUISITION: "1"
-      RESULTS_R5_COMPARISON_SELECTION: "1"
       RESULTS_R5_HISTORICAL_ACK: "2025_MAR_JUN_ONLY"
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +49,8 @@ jobs:
           python scripts/results/test_r3_live_public_filing_batch.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
       - name: Source-reuse-first issuer recovery for March and June 2025
+        env:
+          RESULTS_R5_HISTORICAL_ACQUISITION: "1"
         shell: bash
         run: |
           set -euo pipefail
@@ -64,6 +64,8 @@ jobs:
           print(json.dumps({k:r.get(k) for k in ("universe_target","visited","observations_inserted","documents_parsed","blocked")},sort_keys=True))
           PY
       - name: R2 hash verification and canonical current-display source selection
+        env:
+          RESULTS_R5_COMPARISON_SELECTION: "1"
         shell: bash
         run: |
           set -euo pipefail
