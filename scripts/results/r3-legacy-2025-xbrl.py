@@ -81,7 +81,13 @@ def extract(raw,metadata,symbol,isin):
  start=dateval(metadata.get("fromDate"));end=dateval(metadata.get("toDate"))
  if end not in PERIODS or start!=PERIODS[end]:return None,"INVALID_2025_QUARTER"
  if metadata.get("symbol")!=symbol:return None,"CATALOG_SYMBOL_MISMATCH"
- reported_isin=metadata.get("isin")
+ def unique_identity(field):
+  matches={(e.text or "").strip() for e in root if local(e.tag)==field and e.text}
+  return next(iter(matches)) if len(matches)==1 else None
+ if unique_identity("Symbol")!=symbol:return None,"ISSUER_XML_SYMBOL_MISMATCH"
+ reported_isin=unique_identity("ISIN")
+ context_identifier=unique_identity("ScripCode")
+ if not reported_isin or not context_identifier:return None,"ISSUER_XML_ISIN_OR_SCRIPCODE_UNPROVEN"
  link=_r3.historical_result_identity(symbol,isin,reported_isin,end) if reported_isin!=isin else None
  if reported_isin!=isin and not link:return None,"UNKNOWN_HISTORICAL_ISIN"
  v=metadata.get("consolidated")
@@ -96,7 +102,7 @@ def extract(raw,metadata,symbol,isin):
   if ctx!="OneD":continue # FourD is cumulative/YTD even where XML dates look quarterly
   if any(local(e.tag) in ("scenario","segment") for e in node.iter()):continue
   identities=[e for e in node.iter() if local(e.tag)=="identifier"]
-  if len(identities)!=1 or (identities[0].text or "").strip()!=symbol:continue
+  if len(identities)!=1 or (identities[0].text or "").strip() not in (symbol,context_identifier):continue
   starts=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="startDate"]
   ends=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="endDate"]
   if starts==[start] and ends==[end]:contexts[ctx]=node
@@ -270,7 +276,7 @@ def main():
   session=requests.Session()
   session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)",
      "Accept-Language":"en-IN,en;q=0.8"})
-  boot=session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30)
+  boot=session.get("https://www.nseindia.com/companies-listing/corporate-integrated-filing",timeout=30)
   if boot.status_code in (401,403,429):raise RuntimeError("SOURCE_ACCESS_DENIED_"+str(boot.status_code))
   boot.raise_for_status()
   report={"mode":"DRY_RUN" if dry else "ACQUIRE","shard_index":shard_index,"shard_count":shard_count,"target_periods":sorted(PERIODS),
