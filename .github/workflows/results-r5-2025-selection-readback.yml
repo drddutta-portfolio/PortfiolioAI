@@ -1,0 +1,69 @@
+name: Results R5 Development 2025 Source-Qualified Readback
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-2025-selection-readback.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R5_COMPARISON_SELECTION: "1"
+      RESULTS_R5_HISTORICAL_ACK: "2025_MAR_JUN_ONLY"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Restrict original-source verifier to Development
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+          [[ "$RESULTS_R5_HISTORICAL_ACK" == 2025_MAR_JUN_ONLY ]] || exit 1
+      - name: Install verified R4 verifier deps
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+      - name: Unit and original hash contract preflight
+        run: python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Admit only qualified March and June 2025 filing originals
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply
+          python - <<'PY'
+          import json
+          x=json.load(open("tmp/results-r4/readback.json"))
+          assert x["conflicting_existing_decisions"] == 0
+          print(json.dumps({k:x[k] for k in ("selected_candidate_facts","selected_equities","selected_stock_quarters","created_decisions","unchanged_decisions","r2_sources_checked","exceptions")},sort_keys=True))
+          PY
+      - name: Read back selected financial observations independently
+        run: |
+          python - <<'PY'
+          import os,psycopg,json
+          with psycopg.connect(os.environ["SUPABASE_DB_URL"]) as db:
+            with db.cursor() as cur:
+              cur.execute("""
+                SELECT f.period_end,count(DISTINCT f.security_id) companies,count(*) selected_facts
+                FROM public.fundamental_observation_decisions d JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                WHERE d.period_type='QUARTER' AND f.period_end IN ('2025-03-31','2025-06-30')
+                GROUP BY f.period_end ORDER BY f.period_end
+              """)
+              print(json.dumps([{"quarter":str(q),"companies":n,"facts":f} for q,n,f in cur.fetchall()],sort_keys=True))
+          PY
+      - name: Preserve verified source selection report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-r5-2025-historical-selections
+          path: tmp/results-r4/readback.json
+          if-no-files-found: warn
+          retention-days: 20
