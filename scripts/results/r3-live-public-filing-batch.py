@@ -534,17 +534,13 @@ def main():
     s3=r2_client()
     with psycopg.connect(db,autocommit=False) as conn:
         with conn.cursor() as cur:
-            # Restrict this owner-authorized catch-up to the 231 equities with
-            # existing date-qualified Results financial evidence. Never expand
-            # the cohort to the other 31 without a separate acquisition pass.
+            # Revised owner approval: include all 262 open and closed equity
+            # identities, not only the earlier 231 source-covered issuers.
+            # Existing source selections are still reused and cannot be overwritten.
             cur.execute("""SELECT DISTINCT s.symbol,s.isin,s.id
                 FROM public.transactions t JOIN public.securities s ON t.security_id=s.id
                 WHERE t.portfolio_id=%s AND s.asset_class='EQUITY' AND s.isin IS NOT NULL
-                  AND EXISTS (SELECT 1 FROM public.fundamental_observations f
-                      WHERE f.security_id=s.id AND f.period_type='QUARTER'
-                        AND f.period_end IS NOT NULL AND f.numeric_value IS NOT NULL
-                        AND f.metric_code=ANY(%s))
-                ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,list(RESULT_METRICS),maxstocks))
+                ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,maxstocks))
             stocks=cur.fetchall()
         # Narrow optional Development backfill; never expand the set or
         # silently process unrelated securities when a caller requests a
