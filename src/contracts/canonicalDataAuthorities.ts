@@ -16,6 +16,7 @@ export type CanonicalFactKey =
   | "PORTFOLIO_ROLE"
   | "THEMES"
   | "FUNDAMENTAL_EVIDENCE"
+  | "RESULTS_QUARTERLY_PERFORMANCE"
   | "OWNERSHIP_EVIDENCE"
   | "RESEARCH_DOCUMENTS"
   | "CURRENT_RESEARCH_EVIDENCE"
@@ -214,6 +215,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
     notes: "Historical conflicts do not become zero or disappear; canonical selection/readiness remains explicit.",
+  }),
+  RESULTS_QUARTERLY_PERFORMANCE: authority({
+    fact: "RESULTS_QUARTERLY_PERFORMANCE",
+    label: "Current-display quarterly financial performance",
+    layer: "SCORED",
+    canonicalAuthority: "PortfolioAI Results R5 quarter comparison and empirical-sector grading engine",
+    canonicalSourceObject: "fundamental_observations selected through fundamental_observation_decisions; R5 calibrated comparison contract",
+    sharedAccessPath: "loadResultsSourceInventory() -> compareQuarterMetrics() / gradeQuarterR5() -> ResultsLivePage",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Selected issuer evidence alone does not imply comparability. Versioned sector QoQ operating grades never modify V1-4 research scores, recommendations or original publication time; historical PIT is not inferred.",
   }),
   OWNERSHIP_EVIDENCE: authority({
     fact: "OWNERSHIP_EVIDENCE",
