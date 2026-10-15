@@ -480,7 +480,12 @@ Deno.serve(async request => {
   if (action === "SCHEDULED_RUN") {
     const schedulerToken = Deno.env.get("NEWS_PIPELINE_SCHEDULER_TOKEN")
     const supplied = request.headers.get("x-portfolioai-scheduler-token")
-    if (!schedulerToken || !supplied || supplied !== schedulerToken) return reply(401, { error: "Scheduler authentication failed." })
+    let verified = Boolean(schedulerToken && supplied && supplied === schedulerToken)
+    if (!verified && supplied) {
+      const check = await admin.rpc("verify_news_pipeline_scheduler_token_v1", { p_token: supplied })
+      verified = !check.error && check.data === true
+    }
+    if (!verified) return reply(401, { error: "Scheduler authentication failed." })
   } else {
     const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
     const auth = await user.auth.getUser()
