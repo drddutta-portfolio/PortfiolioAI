@@ -56,6 +56,39 @@ jobs:
                 GROUP BY f.period_end ORDER BY f.period_end""")
               print(json.dumps({"selected_facts":[{"period":str(d),"companies":n,"facts":f} for d,n,f in cur.fetchall()]},sort_keys=True))
           PY
+      - name: Report explicit remaining 2024 historical quarter gaps
+        run: |
+          python - <<'PY'
+          import json,os,psycopg
+          portfolio="6193a4aa-3235-4057-bddc-209fcf443fc2"
+          with psycopg.connect(os.environ["SUPABASE_DB_URL"]) as db:
+            with db.cursor() as c:
+              c.execute("""
+                WITH universe AS (
+                  SELECT DISTINCT s.id, s.symbol FROM public.transactions t
+                  JOIN public.securities s ON s.id=t.security_id
+                  WHERE t.portfolio_id=%s AND s.asset_class='EQUITY'
+                ), quarters AS (
+                  SELECT unnest(ARRAY['2024-09-30','2024-12-31']::date[]) AS quarter
+                ), selected AS (
+                  SELECT security_id, period_end
+                  FROM public.fundamental_observation_decisions
+                  WHERE period_type='QUARTER' AND selected_observation_id IS NOT NULL
+                    AND period_end IN ('2024-09-30','2024-12-31')
+                  GROUP BY security_id, period_end
+                  HAVING COUNT(DISTINCT metric_code)>=3
+                )
+                SELECT q.quarter, COUNT(*) AS required,
+                  COUNT(s.period_end) AS qualified_quarters,
+                  COUNT(*)-COUNT(s.period_end) AS gaps
+                FROM universe u CROSS JOIN quarters q
+                LEFT JOIN selected s ON s.security_id=u.id AND s.period_end=q.quarter
+                GROUP BY q.quarter ORDER BY q.quarter
+              """,(portfolio,))
+              rows=[{"quarter":str(q),"universe":n,"selected":k,"missing":m} for q,n,k,m in c.fetchall()]
+          print("R5_A_2024_SELECTED_COVERAGE="+json.dumps(rows,sort_keys=True))
+          # This is a census, not a completion assertion. Missing sources remain unavailable.
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
