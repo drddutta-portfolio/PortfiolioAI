@@ -2,6 +2,10 @@ name: G03 BEL BSE Read-Only Source Probe
 on:
   workflow_dispatch:
     inputs:
+      recover_originals:
+        description: Reuse run 38796801988 metadata and fetch only remaining primary originals with bounded size opt-in
+        type: boolean
+        default: false
       inspect_existing:
         description: Inspect completed run 38796801988 artifacts without any BSE requests
         type: boolean
@@ -13,7 +17,7 @@ permissions:
   contents: read
 jobs:
   probe:
-    if: github.event_name == 'workflow_dispatch' && !inputs.inspect_existing
+    if: github.event_name == 'workflow_dispatch' && !inputs.inspect_existing && !inputs.recover_originals
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -84,3 +88,89 @@ jobs:
           name: bel-bse-originals-b
           path: tmp/bel-bse-originals-b/
           retention-days: 30
+
+  recover:
+    if: github.event_name == 'workflow_dispatch' && inputs.recover_originals
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check -r vendor/bseindiaapi/requirements.txt
+      - run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils
+      - run: python scripts/results/test_portfolio_bse.py -v
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 38796801988
+          name: bel-bse-original-source-probe
+          path: tmp/retained-bel-bse
+      - name: Reuse retained discovery and obtain exact missing primary originals
+        run: python scripts/results/g03-bel-bse-original-recovery.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-recovery-report-and-text
+          path: tmp/bel-bse-recovered/report/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2024-09-30
+          path: tmp/bel-bse-recovered/originals/2024-09-30.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2024-12-31
+          path: tmp/bel-bse-recovered/originals/2024-12-31.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2025-03-31
+          path: tmp/bel-bse-recovered/originals/2025-03-31.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2025-06-30
+          path: tmp/bel-bse-recovered/originals/2025-06-30.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2025-09-30
+          path: tmp/bel-bse-recovered/originals/2025-09-30.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2025-12-31
+          path: tmp/bel-bse-recovered/originals/2025-12-31.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2026-03-31
+          path: tmp/bel-bse-recovered/originals/2026-03-31.pdf
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bel-bse-original-2026-06-30
+          path: tmp/bel-bse-recovered/originals/2026-06-30.pdf
+          retention-days: 30
+          if-no-files-found: warn

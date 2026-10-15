@@ -31,6 +31,7 @@ _BSE_PDF_BASE = "https://www.bseindia.com/xml-data/corpfiling"
 _RESULT_HINTS = (
     "financial result", "quarterly result", "unaudited", "audited financial",
     "results for the quarter", "results for the period", "financial statement",
+    "board meeting outcome", "outcome of board meeting",
 )
 
 
@@ -205,6 +206,9 @@ class PortfolioBSE:
                 selected.append({
                     "bse_scrip_code": code,
                     "title": title[:480],
+                    "headline": extra[:6000],
+                    "category": row.get("CATEGORYNAME"),
+                    "subcategory": row.get("SUBCATNAME"),
                     "published_at": row.get("NEWS_DT"),
                     "submission_at": row.get("News_submission_dt"),
                     "news_id": row.get("NEWSID"),
@@ -242,11 +246,13 @@ class PortfolioBSE:
 
         No persistence or interpretation; caller is responsible for strict
         period, issuer/ISIN, units, scope, revision and field qualification.
-        Only BSE AttachHis/AttachLive paths can be used.
+        Only BSE AttachHis/AttachLive paths can be used. The default remains
+        12 MB; a caller may explicitly opt in to at most 32 MB for a named
+        issuer filing. This never changes any financial admission rule.
         """
         if not isinstance(attachment_name, str) or not _PDF_NAME.fullmatch(attachment_name):
             raise ValueError("INVALID_BSE_ATTACHMENT_NAME")
-        if not isinstance(max_bytes, int) or not 1024 <= max_bytes <= 12_000_000:
+        if not isinstance(max_bytes, int) or not 1024 <= max_bytes <= 32_000_000:
             raise ValueError("INVALID_PDF_SIZE_LIMIT")
         for folder in ("AttachHis", "AttachLive"):
             url = f"{_BSE_PDF_BASE}/{folder}/{attachment_name}"

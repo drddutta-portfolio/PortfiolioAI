@@ -184,6 +184,24 @@ class PortfolioBseTests(unittest.TestCase):
         self.assertEqual(found["bse_scrip_code"], "500180")
         self.assertEqual(found["identity_status"], "CANDIDATE_NOT_ISIN_VERIFIED")
 
+    def test_generic_board_outcome_is_preserved_for_original_document_review(self):
+        instance, fake = adapter()
+        fake.announcements = lambda **kwargs: {"Table1": [{"ROWCNT": 1}], "Table": [{
+            "SCRIP_CD": 500180, "NEWSSUB": "Board Meeting Outcome for Outcome Of Board Meeting",
+            "HEADLINE": "Outcome of Board Meeting held on 19.05.2026.",
+            "SUBCATNAME": "Outcome of Board Meeting", "ATTACHMENTNAME": PDF}]}
+        r = instance.financial_announcements("500180", date(2026,5,1), date(2026,5,31))
+        self.assertEqual(len(r["results"]), 1)
+        self.assertIn("19.05.2026", r["results"][0]["headline"])
+        self.assertEqual(r["results"][0]["qualification_status"], "DISCOVERY_ONLY")
+
+    def test_larger_original_requires_explicit_bounded_opt_in(self):
+        instance, fake = adapter()
+        _, meta = instance.retrieve_original_pdf(PDF, max_bytes=32_000_000)
+        self.assertEqual(meta["qualification_status"], "ORIGINAL_BYTES_UNQUALIFIED_FINANCIAL_FACTS")
+        with self.assertRaises(ValueError):
+            instance.retrieve_original_pdf(PDF, max_bytes=32_000_001)
+
     def test_market_context_preserves_unknown_and_literal_zero_without_valuation(self):
         instance, fake = adapter()
         result = instance.market_context("500049")
