@@ -45,10 +45,20 @@ def main():
     spec=importlib.util.spec_from_file_location("r4_ashoka_corrective",path)
     mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
     require(mod.QUARTERS==("2024-09-30","2024-12-31"),"R4_SCOPE_MISMATCH")
-    account=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"]
-    require(len(account)==32 and all(x in "0123456789abcdef" for x in account.lower()),
-            "R2_ACCOUNT_FORMAT_INVALID")
-    s3=boto3.client("s3",endpoint_url="https://"+account+".r2.cloudflarestorage.com",
+    account=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip()
+    from urllib.parse import urlparse
+    import re
+    if re.fullmatch(r"[a-f0-9]{32}",account):
+        endpoint="https://"+account+".r2.cloudflarestorage.com"
+    elif account.startswith("https://"):
+        u=urlparse(account)
+        require(bool(re.fullmatch(r"[a-f0-9]{32}\.r2\.cloudflarestorage\.com",u.hostname or ""))
+                and not u.port and u.path in ("","/") and not u.query and not u.fragment,
+                "INVALID_R2_ENDPOINT")
+        endpoint=account.rstrip("/")
+    else:
+        raise RuntimeError("R2_ACCOUNT_FORMAT_INVALID")
+    s3=boto3.client("s3",endpoint_url=endpoint,
        aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
        aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
        region_name="auto",config=Config(retries={"max_attempts":2,"mode":"standard"}))
