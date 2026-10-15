@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest"
-import { gradeQuarterR5, RESULTS_GRADING_VERSION } from "./quarterlyR5Classification"
+import {
+  buildIndustryR5Calibrations, gradeQuarterR5, RESULTS_GRADING_VERSION,
+  type R5IndustryCalibrations,
+} from "./quarterlyR5Classification"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 
 function fact(end:string, code:string, value:string, scope="CONSOLIDATED"):ResultsSourceObservation {
   const [year,month] = end.split("-").map(Number)
-  return { id:end+code, securityId:"s1", code, value, unit:code==="EPS_DILUTED"?"INR_PER_SHARE":"INR_CRORE",
+  return { id:end+code, securityId:"s1", code, value,
+    unit:code==="EPS_DILUTED"?"INR_PER_SHARE":"INR_CRORE",
     periodEnd:end, periodStart:new Date(Date.UTC(year!,month!-3,1)).toISOString().slice(0,10),
     currency:"INR",scope,source:"COMPANY_EXCHANGE_FILING",
     sourceRecordId:end+"-issuer",publishedAt:null,retrievedAt:"2026-10-15T00:00:00Z",selected:true }
@@ -17,33 +21,84 @@ function history(topCode:string, currentTop:string, oldTop:string, currentPat:st
     fact("2026-03-31","NET_PROFIT_QUARTER",oldPat),
   ]
 }
-describe("R5 calibrated current-display quarterly operating signals", () => {
-  it("returns Strong when IT sales and PAT exceed calibrated upper-quartile growth",()=>{
+function policy(sector: string, industry: string, bank=false): R5IndustryCalibrations {
+  const key = sector.toUpperCase() + "::" + industry.toUpperCase()
+  return new Map([[key,{
+    group:key.replace("::"," / "), topCode: bank ? "NET_INTEREST_INCOME_QUARTER" as const : "OPERATING_REVENUE_QUARTER" as const,
+    sampleSize:36, distinctIssuers:12, p25Top:"-5.0",p75Top:"12.0",
+    p25Profit:"-20.0",p75Profit:"20.0",
+  }]])
+}
+function graded(
+  rows:readonly ResultsSourceObservation[], sector:string|null,
+  industry:string|null, calibrated?:R5IndustryCalibrations,
+) {
+  return gradeQuarterR5(rows,"s1","2026-06-30",sector,industry,calibrated??new Map())
+}
+describe("R5 exact-industry quarterly operating signal", () => {
+  it("returns Strong only when IT revenue and PAT meet calibrated exact-industry bounds",()=>{
     const rows=history("OPERATING_REVENUE_QUARTER","114","100","125","100")
-    const a=gradeQuarterR5(rows,"s1","2026-06-30","Information Technology","Computers - Software & Consulting")
+    const a=graded(rows,"Information Technology","Computers - Software & Consulting",
+      policy("Information Technology","Computers - Software & Consulting"))
     expect(a.status).toBe("STRONG")
     expect(a.policyVersion).toBe(RESULTS_GRADING_VERSION)
+    expect(a.group).toContain("COMPUTERS - SOFTWARE & CONSULTING")
+    expect(graded(rows,"Information Technology","IT Software Products",
+      policy("Information Technology","Computers - Software & Consulting")).status).toBe("UNAVAILABLE")
   })
-  it("scores banks on NII and PAT rather than industrial revenue",()=>{
+  it("scores real banks on NII and PAT rather than revenue and declines nonbank lender contracts",()=>{
     const rows=history("NET_INTEREST_INCOME_QUARTER","110","100","125","100")
-    expect(gradeQuarterR5(rows,"s1","2026-06-30","Banking","Private Sector Bank").status).toBe("STRONG")
-    expect(gradeQuarterR5(rows,"s1","2026-06-30","Pharma","Pharmaceuticals").status).toBe("UNAVAILABLE")
+    const bankPolicy = policy("Banking","Private Sector Bank",true)
+    expect(graded(rows,"Banking","Private Sector Bank",bankPolicy).status).toBe("MIXED")
+    expect(graded(rows,"Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals")).status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","NBFC",bankPolicy).status).toBe("UNAVAILABLE")
   })
-  it("requires a known calibrated sector and matching original selected sources",()=>{
+  it("requires a reviewed industry, never substitutes sector-based calibration",()=>{
     const rows=history("OPERATING_REVENUE_QUARTER","130","100","145","100")
-    expect(gradeQuarterR5(rows,"s1","2026-06-30",null,null).status).toBe("UNAVAILABLE")
-    expect(gradeQuarterR5(rows,"s1","2026-06-30","Pharma","Pharmaceuticals").status).toBe("STRONG")
-    expect(gradeQuarterR5([...rows.slice(0,2), {...rows[2]!,sourceRecordId:"a-different-issuer"}, rows[3]!],"s1","2026-06-30","Pharma","Pharmaceuticals").status).toBe("UNAVAILABLE")
+    expect(graded(rows,null,null).status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Pharma","Pharmaceuticals").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals")).status).toBe("STRONG")
+    expect(graded(rows,"Pharma","Packaged Foods",policy("Pharma","Pharmaceuticals")).status).toBe("UNAVAILABLE")
   })
-  it("labels material profit weakness without suggesting an investment sale",()=>{
+  it("rejects source incoherence in CURRENT and PREVIOUS quarterly evidence",()=>{
+    const rows=history("OPERATING_REVENUE_QUARTER","130","100","145","100")
+    const bounds=policy("Pharma","Pharmaceuticals")
+    expect(graded([...rows.slice(0,2), {...rows[2]!,sourceRecordId:"different-current-filing"}, rows[3]!],
+      "Pharma","Pharmaceuticals",bounds).status).toBe("UNAVAILABLE")
+    expect(graded([...rows.slice(0,3), {...rows[3]!,sourceRecordId:"different-previous-filing"}],
+      "Pharma","Pharmaceuticals",bounds).status).toBe("UNAVAILABLE")
+  })
+  it("assigns Weak for qualified material losses without implying sale advice",()=>{
     const rows=history("OPERATING_REVENUE_QUARTER","75","100","-3","100")
-    const a=gradeQuarterR5(rows,"s1","2026-06-30","Information Technology","Software")
+    const a=graded(rows,"Information Technology","Computers - Software & Consulting",
+      policy("Information Technology","Computers - Software & Consulting"))
     expect(a.status).toBe("WEAK")
     expect(a.explanation).toContain("No YoY conclusion")
+    expect(a.explanation).not.toContain("sell")
   })
-  it("declines bank grade from unselected or unrelated activity data",()=>{
+  it("rejects unselected prerequisite facts, despite valid peer thresholds",()=>{
     const rows=history("NET_INTEREST_INCOME_QUARTER","110","100","125","100")
-    const a=gradeQuarterR5(rows.map((x,i)=>i===3?{...x,selected:false}:x),"s1","2026-06-30","Banking","Banks")
+    const a=graded(rows.map((x,i)=>i===3?{...x,selected:false}:x),
+      "Banking","Private Sector Bank",policy("Banking","Private Sector Bank",true))
     expect(a.status).toBe("UNAVAILABLE")
+  })
+  it("calibrates only the same industry using >=4 independent issuers and >=12 qualified pairs",()=>{
+    const peers=[0,1,2,3].map(i=>({
+      securityId:"issuer"+i, sector:"Information Technology",industry:"Computers - Software & Consulting",
+    }))
+    const quarters=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=peers.flatMap((peer,i)=>quarters.flatMap((q,j)=>[
+      {...fact(q,"OPERATING_REVENUE_QUARTER",String(100+i*3+j*10)),securityId:peer.securityId,id:peer.securityId+q+"rev",sourceRecordId:peer.securityId+q},
+      {...fact(q,"NET_PROFIT_QUARTER",String(50+i*2+j*5)),securityId:peer.securityId,id:peer.securityId+q+"pat",sourceRecordId:peer.securityId+q},
+    ]))
+    const group="INFORMATION TECHNOLOGY::COMPUTERS - SOFTWARE & CONSULTING"
+    const full=buildIndustryR5Calibrations(rows,peers)
+    expect(full.get(group)?.sampleSize).toBe(12)
+    expect(full.get(group)?.distinctIssuers).toBe(4)
+    const sparse=buildIndustryR5Calibrations(rows,peers.slice(0,3))
+    expect(sparse.has(group)).toBe(false)
+    expect(full.has("INFORMATION TECHNOLOGY::IT SOFTWARE PRODUCTS")).toBe(false)
+    const badRows=rows.filter(r=>r.securityId!=="issuer3")
+    expect(buildIndustryR5Calibrations(badRows,peers).has(group)).toBe(false)
   })
 })
