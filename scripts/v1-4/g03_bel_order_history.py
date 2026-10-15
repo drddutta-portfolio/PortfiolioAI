@@ -36,6 +36,9 @@ def main():
   if pin['identity_fragment'] not in text:raise ValueError('G03_ORDER_ORIGINAL_IDENTITY_MISSING')
   (out/'issuer-page-47-bbox.html').write_text(page);(out/'issuer-page-35.txt').write_text(inflow)
   cells=qualify_order_chart(page,inflow,batch)
+ (out/'qualified-chart-cells.json').write_text(json.dumps({'originalSha256':pin['original_sha256'],'originalBytes':pin['original_bytes'],'qualifiedHistoricalPeriods':cells,'publicationPrecision':'UNKNOWN','sourceReportPeriodEnd':policy['sourceReportPeriodEnd'],'providerCalls':0,'canonicalMaterialization':False},indent=2)+'\n')
+ if os.environ.get('G03_ADMIT_ORDER_HISTORY')!='true':
+  print(json.dumps({'qualifiedHistoricalPeriods':len(cells),'acceptedReviews':0,'qualificationOnly':True}));return
  results=[]
  for b,cell in zip(batch,cells):
   body={'action':'ADMIT_FIXED_G03_ORDER_HISTORY','authorizationHash':policy['directiveSha256'],'securityId':b['securityId'],'requirementCode':b['requirementCode'],'reportingPeriodEnd':b['reportingPeriodEnd'],'originalHash':b['originalHash'],'normalizedFragment':b['fragment'],'extractionMethod':'POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES','verifiedOrderCells':cell}
