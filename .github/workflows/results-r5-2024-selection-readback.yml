@@ -1,0 +1,65 @@
+name: Results R5 Development 2024 Interim Selection Readback
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-2024-selection-readback.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R5_LEGACY_ACK: "2024_SEP_DEC_ORIGINAL_XBRL"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Development guard
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+      - run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+      - run: python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Admit only R2-qualified Sep/Dec 2024 original-source facts
+        env:
+          RESULTS_R5_LEGACY_SELECTION: "1"
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply
+          python - <<'PY'
+          import json
+          x=json.load(open("tmp/results-r4/readback.json"))
+          assert x["conflicting_existing_decisions"]==0
+          print(json.dumps({k:x[k] for k in ("selected_equities","selected_stock_quarters","created_decisions","unchanged_decisions","source_observations","qualified_fact_rows","exceptions")},sort_keys=True))
+          PY
+      - name: Independent selected observation readback
+        run: |
+          python - <<'PY'
+          import os,psycopg,json
+          with psycopg.connect(os.environ["SUPABASE_DB_URL"]) as db:
+            with db.cursor() as cur:
+              cur.execute("""
+                SELECT f.period_end,count(DISTINCT f.security_id),count(*)
+                FROM public.fundamental_observation_decisions d
+                JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                WHERE d.period_type='QUARTER' AND f.period_end IN ('2024-09-30','2024-12-31')
+                GROUP BY f.period_end ORDER BY f.period_end""")
+              print(json.dumps({"selected_facts":[{"period":str(d),"companies":n,"facts":f} for d,n,f in cur.fetchall()]},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r5-2024-interim-original-qualified-readback
+          path: tmp/results-r4/readback.json
+          if-no-files-found: warn
+          retention-days: 15
