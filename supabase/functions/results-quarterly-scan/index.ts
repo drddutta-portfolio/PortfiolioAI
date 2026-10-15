@@ -81,9 +81,9 @@ function extract(text: string): Candidate[] {
   return candidates
 }
 function asText(html: string): string {
-  return html.replace(/<script\b[^>]*>[\s\S]*?</script>/gi,"")
-    .replace(/<style\b[^>]*>[\s\S]*?</style>/gi,"")
-    .replace(/</(?:tr|p|div|h\d|table|section)>/gi,"\n")
+  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,"")
+    .replace(/<\/(?:tr|p|div|h\d|table|section)>/gi,"\n")
     .replace(/<[^>]*>/g," ").replace(/&nbsp;|&#160;/gi," ")
     .replace(/&amp;/gi,"&").replace(/&#8377;/g,"₹")
 }
