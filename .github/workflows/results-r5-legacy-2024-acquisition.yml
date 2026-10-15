@@ -58,6 +58,12 @@ jobs:
           mkdir -p tmp/results-r5-legacy
           python scripts/results/r5-legacy-2024-xbrl.py > tmp/results-r5-legacy/acquisition.json
           python -m json.tool tmp/results-r5-legacy/acquisition.json >/dev/null
+          python - <<'PY'
+          import json
+          x=json.load(open("tmp/results-r5-legacy/acquisition.json"))
+          print(json.dumps({k:x.get(k) for k in
+           ("mode","universe_size","checked","qualified","observations_inserted","periods","failures","blocked")},sort_keys=True))
+          PY
       - name: R4 original R2 hash and quarter selection with independent readback
         env:
           RESULTS_R5_LEGACY_SELECTION: "1"
