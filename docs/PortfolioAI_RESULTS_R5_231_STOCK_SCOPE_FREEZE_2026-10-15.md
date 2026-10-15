@@ -1,3 +1,5 @@
+> **Historical scope notice (15 Oct 2026):** This 231-stock restriction has been replaced for final Results delivery by the owner's 262-equity, eight-quarter data plan. The dashboard still displays four quarters; four older periods are needed for YoY comparisons. See `PortfolioAI_RESULTS_262_EQUITY_EIGHT_QUARTER_PLAN_AMENDMENT_2026-10-15.md`. The earlier figures below remain preserved as historical acceptance evidence.
+
 # PortfolioAI Results R5 — owner-approved 231-stock scope freeze
 **Decision date:** 2026-10-15 (IST)  
 **Branch/environment:** `PortfolioAI-Development`, Development Supabase `lrgpjimipfkyoqbpsqzz`, Development Cloudflare R2 `portfolioai-history-dev`  
