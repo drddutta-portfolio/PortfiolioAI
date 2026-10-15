@@ -76,7 +76,7 @@ function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], ent
 
 function presentationStatus(status: string, rows: readonly ResultsSourceObservation[]) {
   return rows.some((row) => row.selected) && status === "UNAVAILABLE"
-    ? "Source reconciled"
+    ? "Not Rated · source reconciled"
     : statusName(status)
 }
 
@@ -121,7 +121,7 @@ function statusName(status: string) {
   if (status === "STRONG") return "Strong"
   if (status === "WEAK") return "Weak"
   if (status === "MIXED") return "Mixed"
-  return "Insufficient data"
+  return "Not Rated"
 }
 
 function StatusDot({ status, pending = false }: { readonly status: string; readonly pending?: boolean }) {
@@ -460,7 +460,7 @@ export function ResultsLivePage() {
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
-                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{status === "UNAVAILABLE" ? "—" : statusName(status)}</small>
+                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{statusName(status)}</small>
               </button></td>
             })}</tr>)}
             {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
