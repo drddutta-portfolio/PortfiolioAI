@@ -149,6 +149,40 @@
 .ref-status-dot.mixed, .ref-status-dot.review { background: #ffb724; }
 .ref-status-dot.unavailable { background: #adb7c5; }
 .ref-status-dot.new { background: #146fec; }
+/* R5 classification disclosure: retains the reference grid and four cards. */
+.ref-results .ref-r5-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .85rem;
+  margin: 0 .7rem .6rem;
+  padding: .4rem .7rem;
+  background: #f8faff;
+  border: 1px solid #e6edf6;
+  border-radius: .45rem;
+  font-size: .69rem;
+  color: #697a96;
+}
+.ref-results .ref-r5-summary strong { color: #253c62; }
+.ref-results .ref-r5-summary small { margin-left: auto; font-size: .61rem; }
+.ref-results .ref-r5-strong { color: #148a48; font-weight: 750; }
+.ref-results .ref-r5-mixed { color: #a47612; font-weight: 750; }
+.ref-results .ref-r5-weak { color: #c73742; font-weight: 750; }
+.ref-results .ref-grade-mark {
+  font-size: .56rem;
+  font-weight: 750;
+  color: #667690;
+  white-space: nowrap;
+}
+.ref-results .ref-cell.ref-strong .ref-grade-mark { color: #148a48; }
+.ref-results .ref-cell.ref-mixed .ref-grade-mark { color: #94710e; }
+.ref-results .ref-cell.ref-weak .ref-grade-mark { color: #bd3340; }
+.ref-results .ref-grade-method {
+  margin: 0 0 .4rem;
+  font-size: .62rem;
+  color: #607594;
+  font-weight: 700;
+}
 .ref-results .results-matrix-shell {
   max-height: 19rem;
   overflow: auto;
