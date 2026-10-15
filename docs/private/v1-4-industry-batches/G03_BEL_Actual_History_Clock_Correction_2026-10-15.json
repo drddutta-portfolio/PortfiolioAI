@@ -1,0 +1,26 @@
+{
+  "code": "G03_BEL_HISTORY_RENEWED_NOT_READY",
+  "proofIds": {
+    "NIFTY_INDIA_DEFENCE": "f3137627-f0bd-5a3d-adfa-d23234d2371d",
+    "NIFTY_CAPITAL_GOODS": "e2c01a02-ff80-5af4-a713-d271e2979b5b",
+    "BEL": "34aff802-b0e5-5d6c-aedc-f3783f8645f1"
+  },
+  "deltaIds": {
+    "NIFTY_INDIA_DEFENCE": "b59078bb-68e8-5f22-a882-1edf13b639b6",
+    "NIFTY_CAPITAL_GOODS": "138d8c42-84e5-592b-ac09-9d6e10ea270f"
+  },
+  "sourceIds": [
+    "0f050351-d4a4-5559-a791-2972258c8f95",
+    "c9bfeca5-8f5d-5f9b-a0d7-e47d290303e5",
+    "10f8301b-3456-5b52-a343-e45c5d662dba",
+    "83d4a1e6-bfa8-5035-a28f-9a810b3c4a5d",
+    "bba7a7aa-0cf5-59b3-af2e-db83ba6ce356",
+    "8a348f48-eea7-5b84-a82e-9a920c5fe7fd",
+    "bf44a7ed-15e4-5af4-ae95-52f82a32ebba"
+  ],
+  "stockSessions": 282,
+  "through": "2026-10-14",
+  "providerApiCalls": 0,
+  "acceptedReviews": 0,
+  "canonicalMaterialization": false
+}

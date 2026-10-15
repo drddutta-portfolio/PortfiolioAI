@@ -1,0 +1,27 @@
+{
+  "projectId": "lrgpjimipfkyoqbpsqzz",
+  "observedAt": "2026-10-15T08:54:52.829Z",
+  "functions": [
+    {
+      "slug": "p7-ic2-materialize-readiness",
+      "version": 73,
+      "status": "ACTIVE",
+      "sha": "66b2b58195d384eba86c870692908310969fb892a1f66dcc6bfd18ed55108b2b",
+      "verifyJwt": true
+    },
+    {
+      "slug": "v14-g02-document-admission",
+      "version": 15,
+      "status": "ACTIVE",
+      "sha": "482c30432df01fb7e558f3661dae0302a4a361cf4304db97c730deafa996f895",
+      "verifyJwt": false
+    },
+    {
+      "slug": "v14-g02-execution-grant",
+      "version": 8,
+      "status": "ACTIVE",
+      "sha": "69001d7a4dcfa9c82bf9f42c84e7df93a5457a085ff885c09727a9ba459ff1ff",
+      "verifyJwt": false
+    }
+  ]
+}

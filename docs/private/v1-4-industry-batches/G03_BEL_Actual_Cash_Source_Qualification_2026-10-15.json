@@ -1,0 +1,500 @@
+{
+  "originals": [
+    {
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "bytes": 16199415,
+      "identityVerified": true
+    },
+    {
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "bytes": 15543216,
+      "identityVerified": true
+    }
+  ],
+  "verifiedCells": [
+    {
+      "id": "CFO-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Net Cash from / (used in) Operating Activities",
+      "rowValues": [
+        "1,49,434",
+        "45,725"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "1,49,434",
+      "exactValue": "149434",
+      "role": "CFO",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFO-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Net Cash from / (used in) Operating Activities",
+      "rowValues": [
+        "1,49,434",
+        "45,725"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "45,725",
+      "exactValue": "45725",
+      "role": "CFO",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CASH_CAPEX-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Purchase of property, plant & equipment and other intangible assets",
+      "rowValues": [
+        "(98,312)",
+        "(1,00,407)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(98,312)",
+      "exactValue": "-98312",
+      "role": "CASH_CAPEX",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CASH_CAPEX-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Purchase of property, plant & equipment and other intangible assets",
+      "rowValues": [
+        "(98,312)",
+        "(1,00,407)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(1,00,407)",
+      "exactValue": "-100407",
+      "role": "CASH_CAPEX",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "PAT-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 124,
+      "label": "Profit for the year (VII - VIII)",
+      "rowValues": [
+        "6,04,848",
+        "5,28,825"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "6,04,848",
+      "exactValue": "604848",
+      "role": "PAT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "PAT-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 124,
+      "label": "Profit for the year (VII - VIII)",
+      "rowValues": [
+        "6,04,848",
+        "5,28,825"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "5,28,825",
+      "exactValue": "528825",
+      "role": "PAT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFO-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Net Cash from / (used in) Operating Activities",
+      "rowValues": [
+        "48,041",
+        "4,64,801"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "48,041",
+      "exactValue": "48041",
+      "role": "CFO",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFO-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Net Cash from / (used in) Operating Activities",
+      "rowValues": [
+        "48,041",
+        "4,64,801"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "4,64,801",
+      "exactValue": "464801",
+      "role": "CFO",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CASH_CAPEX-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Purchase of property, plant and equipment and other intangible assets",
+      "rowValues": [
+        "(1,00,407)",
+        "(64,714)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(1,00,407)",
+      "exactValue": "-100407",
+      "role": "CASH_CAPEX",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CASH_CAPEX-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Purchase of property, plant and equipment and other intangible assets",
+      "rowValues": [
+        "(1,00,407)",
+        "(64,714)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(64,714)",
+      "exactValue": "-64714",
+      "role": "CASH_CAPEX",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "PAT-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Profit for the year (VII - VIII)",
+      "rowValues": [
+        "5,28,825",
+        "4,02,000"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "5,28,825",
+      "exactValue": "528825",
+      "role": "PAT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "PAT-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 142,
+      "label": "Profit for the year (VII - VIII)",
+      "rowValues": [
+        "5,28,825",
+        "4,02,000"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "4,02,000",
+      "exactValue": "402000",
+      "role": "PAT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "RENTAL_RECLASS-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "label": "Rental income - Investment property",
+      "rowValues": [
+        "263",
+        "219"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "263",
+      "exactValue": "263",
+      "role": "RENTAL_RECLASS",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "RENTAL_RECLASS-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "label": "Rental income - Investment property",
+      "rowValues": [
+        "263",
+        "219"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "219",
+      "exactValue": "219",
+      "role": "RENTAL_RECLASS",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "MF_RECLASS-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "label": "Gain / (loss) on mutual funds",
+      "rowValues": [
+        "2,053",
+        "1,939"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "2,053",
+      "exactValue": "2053",
+      "role": "MF_RECLASS",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "MF_RECLASS-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "label": "Gain / (loss) on mutual funds",
+      "rowValues": [
+        "2,053",
+        "1,939"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "1,939",
+      "exactValue": "1939",
+      "role": "MF_RECLASS",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFI-2025-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Net Cash from / (used in) Investing Activities",
+      "rowValues": [
+        "74,841",
+        "(5,88,885)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "74,841",
+      "exactValue": "74841",
+      "role": "CFI",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFI-2024-db47a73b",
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 143,
+      "label": "Net Cash from / (used in) Investing Activities",
+      "rowValues": [
+        "74,841",
+        "(5,88,885)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(5,88,885)",
+      "exactValue": "-588885",
+      "role": "CFI",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFI-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Net Cash from / (used in) Investing Activities",
+      "rowValues": [
+        "1,74,739",
+        "77,157"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "1,74,739",
+      "exactValue": "174739",
+      "role": "CFI",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "CFI-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Net Cash from / (used in) Investing Activities",
+      "rowValues": [
+        "1,74,739",
+        "77,157"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "77,157",
+      "exactValue": "77157",
+      "role": "CFI",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "RENTAL_ADJUSTMENT-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Rental income received from Investment Property",
+      "rowValues": [
+        "(281)",
+        "(263)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(281)",
+      "exactValue": "-281",
+      "role": "RENTAL_ADJUSTMENT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "RENTAL_ADJUSTMENT-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Rental income received from Investment Property",
+      "rowValues": [
+        "(281)",
+        "(263)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(263)",
+      "exactValue": "-263",
+      "role": "RENTAL_ADJUSTMENT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "MF_ADJUSTMENT-2026-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Gain / loss on mutual funds",
+      "rowValues": [
+        "(1,935)",
+        "(2,053)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(1,935)",
+      "exactValue": "-1935",
+      "role": "MF_ADJUSTMENT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    },
+    {
+      "id": "MF_ADJUSTMENT-2025-c9bd3de3",
+      "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+      "pdfPage": 125,
+      "label": "Gain / loss on mutual funds",
+      "rowValues": [
+        "(1,935)",
+        "(2,053)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(2,053)",
+      "exactValue": "-2053",
+      "role": "MF_ADJUSTMENT",
+      "scope": "STANDALONE",
+      "unit": "INR_LAKH"
+    }
+  ],
+  "publicationPrecision": "UNKNOWN",
+  "fiscal2024Normalization": "PortfolioAI-derived exclusion of rental-income and mutual-fund-gain P&L components on FY2026 classification; not issuer restatement; no historical publication claim",
+  "providerCalls": 0,
+  "r2Writes": 0
+}

@@ -1,3 +1,9 @@
+## Latest executed update — BEL four blockers reduced to three
+
+Independent Development readback after run **38708158722** confirms `CFO_FCF_CONVERSION` persisted **FRESH**, with existing ROCE, order/execution, durability, governance and both market-history requirements preserved at the 14:17 IST evaluation. Selected snapshot `be479b64-95c7-4ad1-8349-724d9d7bc729`. BEL remains REVIEW_REQUIRED on **OPERATING_MARGIN_HISTORY, NET_DEBT_AND_INTEREST_COVERAGE and VALUATION**. Other six G03 selections are unchanged. G03 remains 0/7 wider and 0/4 frozen READY, ₹0 READY value. The financial contract is approved; the previous proposed-checkpoint language below describes the earlier state.
+
+[Actual cash/source/clock correction and remaining evidence](G03_BEL_Approved_Cash_Component_Execution_2026-10-15.md) · [Independent readback](G03_BEL_Cash_FRESH_Independent_Readback_2026-10-15.json).
+
 # BEL V1-4 — executed blocker-clearance report
 
 **15 October 2026 · Development only · PR #136**

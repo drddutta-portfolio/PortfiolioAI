@@ -1,0 +1,22 @@
+{
+  "code": "G03_CURRENT_OPEN_SESSION_QUALIFIED",
+  "recordId": "62b76939-9730-5f99-a4eb-3d2916ba4e61",
+  "proof": {
+    "sessionDate": "2026-10-15",
+    "latestCompletedSession": "2026-10-14",
+    "sourceRecordIds": [
+      "62b76939-9730-5f99-a4eb-3d2916ba4e61",
+      "6389c2dd-bf96-5da0-ac57-d03bafa4d9ce",
+      "d3a39583-b851-4a5a-99b6-dcc412c4ad26",
+      "8e9e7299-7dfc-46fc-b6bd-4d04e23aedbc",
+      "7a6fc52a-0066-43a6-a1c5-621c54c5f2e6"
+    ],
+    "verifiedAt": "2026-10-15T08:47:24.005+00:00",
+    "observedAt": "2026-10-15T08:46:00.000Z",
+    "validBefore": "2026-10-15T08:51:00.000Z"
+  },
+  "reused": false,
+  "publicSourceRequests": 1,
+  "providerApiCalls": 0,
+  "canonicalMaterialization": false
+}

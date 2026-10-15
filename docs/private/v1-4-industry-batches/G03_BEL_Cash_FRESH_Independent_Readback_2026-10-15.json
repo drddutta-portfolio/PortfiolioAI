@@ -1,0 +1,1041 @@
+{
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "observedAt": "2026-10-15T08:48:38.139Z",
+  "rows": [
+    {
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "symbol": "ASTRAMICRO",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+      "execution_grant_id": "8a22ba7d-536f-40c6-ade5-532ea41c35d5",
+      "evaluation_as_of": "2026-10-07 23:59:59+00",
+      "source_cutoff_at": "2026-10-07 23:59:59+00",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 1618.31
+              }
+            ]
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "d4dbcf9d-bc0e-4acc-8f45-d9b2c34e9f66",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "be479b64-95c7-4ad1-8349-724d9d7bc729",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "symbol": "BEL",
+      "selection_id": "c53c753c-3af3-41dd-b001-d20e51257adf",
+      "selection_run_id": "462ef06f-c5ff-44b7-8bb7-569271017590",
+      "execution_grant_id": "65093659-ad99-414b-a9e4-ba964096d1da",
+      "evaluation_as_of": "2026-10-15 08:47:24.965256+00",
+      "source_cutoff_at": "2026-10-15 08:47:24.965256+00",
+      "selected_at": "2026-10-15 08:47:36.111195+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+          "selected_evidence_id": "d66deded-c38c-5c07-a054-6597b302f6f5"
+        },
+        {
+          "required": true,
+          "reason_code": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+          "evidence_state": "FRESH",
+          "normalized_value": {
+            "series": [
+              {
+                "id": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2024-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2023-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:21.555+00:00",
+                "boolean_value": null,
+                "numeric_value": "1.150853",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "c4e5db08-c412-59b7-a578-52b23332effd",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2025-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2024-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:23.685+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.086465",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "c68f9112-c7e0-585c-bf59-ae75652111c5",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "bfb36725-d431-550b-8b75-179fe5459444",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2026-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2025-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:25.396+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.247060",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+                "consolidation_scope": "STANDALONE"
+              }
+            ],
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                "bfb36725-d431-550b-8b75-179fe5459444"
+              ],
+              "componentSeries": [
+                {
+                  "reviewId": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                  "periodEnd": "2024-03-31",
+                  "components": {
+                    "pat": "402000",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2024,
+                    "cfoOriginal": "464801",
+                    "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "219",
+                    "cashCapexOutflow": "-64714",
+                    "excludedMutualFundGain": "1939"
+                  },
+                  "derivation": {
+                    "cfoPat": "1.150853",
+                    "derived": true,
+                    "cfoCrore": "4626.43",
+                    "fcfCrore": "3979.29",
+                    "patCrore": "4020.00",
+                    "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+                    "cashCapexCrore": "647.14",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                  "periodEnd": "2025-03-31",
+                  "components": {
+                    "pat": "528825",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2025,
+                    "cfoOriginal": "45725",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-100407",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.086465",
+                    "derived": true,
+                    "cfoCrore": "457.25",
+                    "fcfCrore": "-546.82",
+                    "patCrore": "5288.25",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "1004.07",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "bfb36725-d431-550b-8b75-179fe5459444",
+                  "periodEnd": "2026-03-31",
+                  "components": {
+                    "pat": "604848",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2026,
+                    "cfoOriginal": "149434",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-98312",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.247060",
+                    "derived": true,
+                    "cfoCrore": "1494.34",
+                    "fcfCrore": "511.22",
+                    "patCrore": "6048.48",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "983.12",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                }
+              ],
+              "sourceRecordIds": [
+                "c4e5db08-c412-59b7-a578-52b23332effd",
+                "c68f9112-c7e0-585c-bf59-ae75652111c5",
+                "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10"
+              ],
+              "documentSourceIds": [],
+              "financialContract": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+              "researchDocumentIds": [
+                "475da4cc-4fc5-5970-aae2-052d109eea94",
+                "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+              ],
+              "sourcePayloadHashes": [
+                "ca7e34640f47f8773f00057c376ad7f674b9ae00cfec1f07a7bed7fb1b998bc9",
+                "ee35054e08a8c999f3beb94e78efbb2d70dcdbf8ba46f8e04164a7933c9cd7ed",
+                "d281e6827070da4fe892ab2e1f59e1c56fef6b1dafa153fd1918d6dd540454b7"
+              ],
+              "financialContractSha256": "d12ba4ef7b7554bc2dc0cb53d83b6609fe61cf2453c3b25eeae73b5b79d618bd",
+              "providerCfoRegistryUnchanged": true,
+              "originalComparativesPreserved": true,
+              "historicalPitAvailabilityNotClaimed": true
+            },
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1"
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+          "selected_evidence_id": "bfb36725-d431-550b-8b75-179fe5459444"
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_BENCHMARK_HISTORY_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": "8a348f48-eea7-5b84-a82e-9a920c5fe7fd",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "b55ae585-9921-550a-a49a-8dd977003321",
+          "selected_evidence_id": "90f400e7-5f9c-5ace-a8f7-0d7f6806db4c"
+        },
+        {
+          "required": true,
+          "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+          "selected_evidence_id": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+        },
+        {
+          "required": true,
+          "reason_code": "G03_FIXED_ISSUER_SERIES_SELECTED_LEGACY_UNQUALIFIED_RETAINED",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": "19bce51f-582d-51ec-a73e-15e5a7f501de",
+          "selected_evidence_id": "7e65174e-354b-5a9d-a36f-b6a2992a88b8"
+        },
+        {
+          "required": true,
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": "5e8631a6-0b6b-4543-babf-e8e5bdcaf11d",
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "symbol": "DATAPATTNS",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+      "execution_grant_id": "927b8fb6-101e-443c-a1a3-6ca321be3018",
+      "evaluation_as_of": "2026-10-07 23:59:59+00",
+      "source_cutoff_at": "2026-10-07 23:59:59+00",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 189.17
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 564.91
+              }
+            ]
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "7376edd0-76fd-4398-9e06-7d0e99298b0e",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "symbol": "GRSE",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+      "execution_grant_id": "fa3e7394-2f68-4cd4-a369-76a34452f2cb",
+      "evaluation_as_of": "2026-10-07 23:59:59+00",
+      "source_cutoff_at": "2026-10-07 23:59:59+00",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "FC Est. 1Y fwd Free Cash Flow Growth Ann. %",
+                "numericValue": -1196.71
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": -119.98
+              },
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -1958.69
+              }
+            ]
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "f9797580-2502-40bf-9d5c-7742c26c95ea",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "symbol": "HAL",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+      "execution_grant_id": "fa3e7394-2f68-4cd4-a369-76a34452f2cb",
+      "evaluation_as_of": "2026-10-07 23:59:59+00",
+      "source_cutoff_at": "2026-10-07 23:59:59+00",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -20.06
+              }
+            ]
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "19a90aff-a61e-4f98-8196-7e31235ebc1a",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "symbol": "MTARTECH",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "selection_run_id": "59f828ac-2442-47fe-83d3-cd320eb16973",
+      "execution_grant_id": "f0dbaa5b-9fed-4310-9247-0763872f0b83",
+      "evaluation_as_of": "2026-10-07 03:59:59+00",
+      "source_cutoff_at": "2026-10-07 03:59:59+00",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 94.47
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 2558.34
+              }
+            ]
+          },
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "evidence_state": "STALE",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "HISTORY_LATEST_SESSION_STALE",
+          "evidence_state": "STALE",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": "409f2a1f-baa3-4a05-8994-12747f7c4e97",
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REPORTING_PERIOD_INVALID",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence_id": null
+        }
+      ]
+    },
+    {
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "symbol": "ZENTEC",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "selection_run_id": "4d6ef6d6-ca7c-4fbc-8362-827edcfc6075",
+      "execution_grant_id": "52fab7ad-34ee-40dd-b9fb-6b05815aac98",
+      "evaluation_as_of": "2026-10-05 19:25:54.019754+00",
+      "source_cutoff_at": "2026-10-05 19:25:54.019754+00",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "items": [
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "BUSINESS_DURABILITY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "IC3_LINEAGE_READY",
+          "evidence_state": "FRESH",
+          "normalized_value": null,
+          "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+          "evidence_state": "REVIEW_REQUIRED",
+          "normalized_value": null,
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "ROCE_OR_ROIC",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        },
+        {
+          "required": true,
+          "reason_code": "REQUIRED_EVIDENCE_MISSING",
+          "evidence_state": "MISSING",
+          "normalized_value": null,
+          "requirement_code": "VALUATION",
+          "raw_source_record_id": null,
+          "selected_evidence_id": null
+        }
+      ]
+    }
+  ]
+}

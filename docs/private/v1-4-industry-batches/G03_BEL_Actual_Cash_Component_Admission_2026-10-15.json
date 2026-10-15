@@ -1,0 +1,130 @@
+{
+  "first": {
+    "code": "G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY",
+    "results": [
+      {
+        "reviewId": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+        "sourceId": "c4e5db08-c412-59b7-a578-52b23332effd",
+        "periodEnd": "2024-03-31",
+        "derivation": {
+          "cfoCrore": "4626.43",
+          "patCrore": "4020.00",
+          "cashCapexCrore": "647.14",
+          "fcfCrore": "3979.29",
+          "cfoPat": "1.150853",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      },
+      {
+        "reviewId": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+        "sourceId": "c68f9112-c7e0-585c-bf59-ae75652111c5",
+        "periodEnd": "2025-03-31",
+        "derivation": {
+          "cfoCrore": "457.25",
+          "patCrore": "5288.25",
+          "cashCapexCrore": "1004.07",
+          "fcfCrore": "-546.82",
+          "cfoPat": "0.086465",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "ISSUER_REPORTED",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      },
+      {
+        "reviewId": "bfb36725-d431-550b-8b75-179fe5459444",
+        "sourceId": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+        "periodEnd": "2026-03-31",
+        "derivation": {
+          "cfoCrore": "1494.34",
+          "patCrore": "6048.48",
+          "cashCapexCrore": "983.12",
+          "fcfCrore": "511.22",
+          "cfoPat": "0.247060",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "ISSUER_REPORTED",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      }
+    ],
+    "providerCalls": 0,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "metricRegistryWrites": 0,
+    "originalWrites": 0
+  },
+  "repeat": {
+    "code": "G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY",
+    "results": [
+      {
+        "reviewId": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+        "sourceId": "c4e5db08-c412-59b7-a578-52b23332effd",
+        "periodEnd": "2024-03-31",
+        "derivation": {
+          "cfoCrore": "4626.43",
+          "patCrore": "4020.00",
+          "cashCapexCrore": "647.14",
+          "fcfCrore": "3979.29",
+          "cfoPat": "1.150853",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      },
+      {
+        "reviewId": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+        "sourceId": "c68f9112-c7e0-585c-bf59-ae75652111c5",
+        "periodEnd": "2025-03-31",
+        "derivation": {
+          "cfoCrore": "457.25",
+          "patCrore": "5288.25",
+          "cashCapexCrore": "1004.07",
+          "fcfCrore": "-546.82",
+          "cfoPat": "0.086465",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "ISSUER_REPORTED",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      },
+      {
+        "reviewId": "bfb36725-d431-550b-8b75-179fe5459444",
+        "sourceId": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+        "periodEnd": "2026-03-31",
+        "derivation": {
+          "cfoCrore": "1494.34",
+          "patCrore": "6048.48",
+          "cashCapexCrore": "983.12",
+          "fcfCrore": "511.22",
+          "cfoPat": "0.247060",
+          "calculationAuthority": "deriveG03CashConversion",
+          "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+          "adjustmentKind": "ISSUER_REPORTED",
+          "issuerReportedRestatement": false,
+          "derived": true
+        },
+        "reused": true
+      }
+    ],
+    "providerCalls": 0,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "metricRegistryWrites": 0,
+    "originalWrites": 0
+  }
+}
