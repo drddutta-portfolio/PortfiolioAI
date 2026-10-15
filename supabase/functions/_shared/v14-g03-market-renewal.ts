@@ -23,3 +23,10 @@ export async function readBelMarketOriginal(index:number,url:string){
  const r=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('G03_MARKET_ORIGINAL_READ_FAILED')
  await verifyBelMarketOriginal(index,await readG02Original(r,p.bytes));return p
 }
+
+/** NSE completed-session end is an IST date, never UTC midnight of the next IST day.
+ * This corrects the timestamp representation; no grace interval is extended. */
+export function belCompletedSessionFreshness(sessionDate:string){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(sessionDate)||new Date(sessionDate+'T00:00:00Z').toISOString().slice(0,10)!==sessionDate)throw Error('G03_COMPLETED_SESSION_DATE_INVALID')
+ return sessionDate+'T23:59:59+05:30'
+}

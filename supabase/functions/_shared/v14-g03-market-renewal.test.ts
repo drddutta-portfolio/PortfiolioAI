@@ -1,9 +1,10 @@
 import {describe,it,expect,vi} from 'vitest'
 import {readFileSync} from 'node:fs'
-import {G03_MARKET_RENEWAL_PINS as pins,verifyBelMarketOriginal,readBelMarketOriginal} from './v14-g03-market-renewal'
+import {G03_MARKET_RENEWAL_PINS as pins,verifyBelMarketOriginal,readBelMarketOriginal,belCompletedSessionFreshness} from './v14-g03-market-renewal'
 import {renewBelMarketHistory} from './v14-g03-market-renewal-runtime'
 const fixture=(name:string)=>new Uint8Array(readFileSync('scripts/v1-4/fixtures/g03-market-tail/'+name))
 describe('BEL official market tail qualification',()=>{
+ it('keeps the completed-session proof on the NSE session date in IST without extending freshness',()=>{const t=belCompletedSessionFreshness('2026-10-14');expect(t).toBe('2026-10-14T23:59:59+05:30');expect(new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata'}).format(new Date(t))).toBe('2026-10-14');expect(Date.parse(t)).toBeLessThan(Date.parse('2026-10-14T23:59:59Z'));expect(()=>belCompletedSessionFreshness('2026-02-30')).toThrow('DATE_INVALID')})
  it('verifies exact original bytes and both exact benchmark identities/cells',async()=>{const p=await verifyBelMarketOriginal(5,fixture('ind_close_all_14102026.csv'));expect(p.hash).toBe(pins.sources[5].hash);expect(p.closes).toEqual({NIFTY_INDIA_DEFENCE:'9294.1',NIFTY_CAPITAL_GOODS:'16556.69'})})
  it('checks BEL symbol and ISIN against the complete pinned action window',async()=>{expect((await verifyBelMarketOriginal(6,fixture('corporate-actions-08-14.json'))).hash).toBe(pins.sources[6].hash)})
  it('rejects altered, truncated and unpinned original bodies',async()=>{const b=fixture('ind_close_all_14102026.csv');b[100]^=1;await expect(verifyBelMarketOriginal(5,b)).rejects.toThrow('HASH_INVALID');await expect(verifyBelMarketOriginal(5,b.slice(1))).rejects.toThrow('LENGTH_INVALID');await expect(verifyBelMarketOriginal(20,b)).rejects.toThrow('LENGTH_INVALID')})
