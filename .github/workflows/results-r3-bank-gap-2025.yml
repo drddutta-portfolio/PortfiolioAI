@@ -1,0 +1,93 @@
+name: Results R3 2025 Additional Bank Filing Recovery
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r3-bank-gap-2025.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: results-r3-banking-2025-development
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R3_2025_STOCK_LIMIT: "262"
+      RESULTS_R3_2025_SYMBOLS: "BANKINDIA,CANBK,RBLBANK,UNIONBANK"
+      RESULTS_R3_2025_LEGACY_ACK: "2025_MAR_JUN_ORIGINAL_XBRL"
+      RESULTS_R3_2025_DRY_RUN: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Enforce Development-only account and bucket
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+          for key in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY; do test -n "${!key:-}" || exit 1; done
+      - name: Install pinned collector
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'boto3==1.40.46' 'psycopg[binary]==3.2.10' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Banking parser and R4 selection regressions
+        run: |
+          python -m py_compile scripts/results/r3-legacy-2025-xbrl.py
+          python scripts/results/test_r5_legacy_2024_xbrl.py -v
+          env -u RESULTS_R5_COMPARISON_SELECTION python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Acquire qualified banking source facts for March and June 2025
+        run: |
+          mkdir -p tmp/r3-2025-bank
+          python scripts/results/r3-legacy-2025-xbrl.py > tmp/r3-2025-bank/acquisition.json
+          python - <<'PY'
+          import json
+          x=json.load(open('tmp/r3-2025-bank/acquisition.json'))
+          print(json.dumps({k:x.get(k) for k in ('checked','qualified','observations_inserted','periods','failures','blocked')},sort_keys=True))
+          assert x['blocked'] is None
+          PY
+      - name: Reconcile all source facts through canonical selector
+        env:
+          RESULTS_R5_COMPARISON_SELECTION: "1"
+          RESULTS_R5_HISTORICAL_ACK: "2025_MAR_JUN_ONLY"
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply
+          cp tmp/results-r4/readback.json tmp/r3-2025-bank/selection.json
+          python - <<'PY'
+          import json
+          x=json.load(open('tmp/r3-2025-bank/selection.json'))
+          print(json.dumps({k:x.get(k) for k in ('created_decisions','unchanged_decisions','conflicting_existing_decisions','exceptions')},sort_keys=True))
+          assert x['conflicting_existing_decisions']==0
+          PY
+      - name: Independent four-bank historical readback
+        run: |
+          python - <<'PY'
+          import json,os,psycopg
+          with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
+            with db.cursor() as c:
+              c.execute("""
+                SELECT s.symbol,d.period_end::text,count(DISTINCT d.metric_code)
+                FROM public.fundamental_observation_decisions d
+                JOIN public.securities s ON s.id=d.security_id
+                WHERE s.symbol IN ('BANKINDIA','CANBK','RBLBANK','UNIONBANK')
+                  AND d.period_end IN ('2025-03-31','2025-06-30')
+                  AND d.selected_observation_id IS NOT NULL
+                GROUP BY 1,2 ORDER BY 1,2
+              """)
+              print(json.dumps([{'symbol':a,'quarter':b,'selected_metrics':v} for a,b,v in c.fetchall()]))
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-2025-original-banking-gap-readback
+          path: tmp/r3-2025-bank/*.json
+          if-no-files-found: warn
+          retention-days: 21
