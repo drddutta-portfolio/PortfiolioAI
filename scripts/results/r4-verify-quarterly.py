@@ -90,7 +90,7 @@ def check_manifest(record,manifest):
             or "/original_version="+original+"/" not in original_key):
             return "INVALID_RETAINED_ORIGINAL_REFERENCE"
         if manifest.get("original_pdf_retained") is not True:return "ORIGINAL_PDF_NOT_RETAINED"
-    elif u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/"):
+    elif contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1" and (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com" or not u.path.startswith("/corporate/ixbrl/")):
         return "UNQUALIFIED_ORIGIN"
     if contract=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
         if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
