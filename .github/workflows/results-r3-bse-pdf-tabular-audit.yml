@@ -1,0 +1,55 @@
+name: Results R3 BSE PDF Quarterly Table Audit
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-pdf-tabular-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check --no-cache-dir -r vendor/bseindiaapi/requirements.txt 'pymupdf==1.26.5'
+      - name: Inspect original PDF quarter headers, accounting scopes, revenue/net income/EPS lines
+        run: |
+          python - <<'PY'
+          import json,sys,re,fitz
+          from datetime import date
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          targets=[('ASTRAL','532830'),('BEL','500049'),('HDFCBANK','500180')]
+          windows=[('2024-09-30',date(2024,10,1),date(2024,11,30)),('2024-12-31',date(2025,1,1),date(2025,2,28))]
+          pat=re.compile(r'revenue|total income|interest earned|interest expended|profit for the period|profit after tax|net profit|earnings per.*share|diluted|period ended|sep(?:tember)?|dec(?:ember)?',re.I)
+          with PortfolioBSE() as b:
+            for symbol,code in targets:
+              for period,start,end in windows:
+                x=b.financial_announcements(code,start,end,max_pages=3)
+                matches=[a for a in x['results'] if a['attachment_name']]
+                def rank(a):
+                  t=a['title'].lower()
+                  return (('machine' in t)*10+('financial results' in t)*5+('unaudited' in t)*2+('board meeting' not in t))
+                matches.sort(key=rank,reverse=True)
+                result={'symbol':symbol,'quarter':period,'discovered':len(matches),'documents':[]}
+                for a in matches[:2]:
+                  item={'title':a['title'][:130],'submitted':a['published_at']}
+                  try:
+                    raw,m=b.retrieve_original_pdf(a['attachment_name'])
+                    d=fitz.open(stream=raw,filetype='pdf')
+                    pages=[]
+                    for i in range(min(12,len(d))):
+                      t=d[i].get_text('text',sort=True)
+                      lines=[re.sub(r'\s+',' ',s).strip() for s in t.splitlines()]
+                      hit=[s[:220] for s in lines if pat.search(s)][:22]
+                      if hit:
+                        pages.append({'page':i+1,'head':lines[:12],'relevant':hit})
+                      if len(pages)>=3:break
+                    item.update({'pdf_sha256':m['sha256'],'pages':len(d),'table_evidence':pages})
+                  except Exception as e:item['error']=type(e).__name__+':'+str(e)[:140]
+                  result['documents'].append(item)
+                print('BSE_2024_PDF_TABLE_AUDIT='+json.dumps(result,sort_keys=True),flush=True)
+          PY
