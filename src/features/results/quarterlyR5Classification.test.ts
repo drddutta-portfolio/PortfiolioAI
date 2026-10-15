@@ -177,7 +177,7 @@ describe("R5 exact-industry quarterly operating signal", () => {
       ["Financial Services","Financial Technology (Fintech)"],
       ["Financial Services","Stockbroking & Allied"],
       ["Energy","Power Generation"],
-    ]) {
+    ] as const) {
       const assessment=graded(rows,sector,industry)
       expect(assessment.basis).toBe("COMPANY_TREND")
       expect(assessment.status).toBe("STRONG")
