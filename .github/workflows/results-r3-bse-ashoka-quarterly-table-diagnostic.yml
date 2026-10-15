@@ -1,0 +1,56 @@
+name: Results R3 BSE ASHOKA 2024 Table Reconciliation
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-bse-ashoka-quarterly-table-diagnostic.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check -r vendor/bseindiaapi/requirements.txt 'pymupdf==1.26.5'
+      - name: Reconcile original ASHOKA standalone/cons financial table identity and period columns
+        run: |
+          python - <<'PY'
+          import fitz,sys,json,re
+          from datetime import date
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          expected={
+             '2024-09-30':('2024-10-01','2024-11-30','e7635fd45c6cfe97020f09f3af616026b3321556646760b9d664a5d22c43f4f0'),
+             '2024-12-31':('2025-01-01','2025-02-28','428a23cd14a9c27574631c2d9a0384b69a353f0a10595d409a1df453dab8f615')}
+          with PortfolioBSE() as b:
+            meta=b._bse.equityMetaInfo('533271')
+            print('ASHOKA_SECURITY='+json.dumps({k:meta.get(k) for k in ('SecurityId','SecurityCode','ISIN')},sort_keys=True))
+            for q,(start,end,sha) in expected.items():
+              x=b.financial_announcements('533271',date.fromisoformat(start),date.fromisoformat(end),max_pages=4)
+              found=False
+              for a in x['results']:
+                name=a.get('attachment_name')
+                if not name or not a['title']:continue
+                try:
+                  raw,e=b.retrieve_original_pdf(name)
+                except Exception: continue
+                if e['sha256']!=sha:continue
+                d=fitz.open(stream=raw,filetype='pdf')
+                pages=[]
+                for i,p in enumerate(d):
+                  text=p.get_text('text',sort=True)
+                  if 'ASHOKA BUILDCON LIMITED' not in text.upper():continue
+                  if q[:4] not in text:continue
+                  lines=[' '.join(v.split()) for v in text.splitlines() if v.strip()]
+                  if not any('FINANCIAL RESULTS FOR THE QUARTER' in ln.upper() for ln in lines[:18]):continue
+                  keywords=('Revenue from Operations','Profit','Total Income','Basic & Diluted','Earnings','Expenses','Quarter Ended','Consolidated','Standalone')
+                  rows=[(i,ln[:200]) for i,ln in enumerate(lines) if any(k.lower() in ln.lower() for k in keywords)]
+                  pages.append({'page':i+1,'header':lines[:24], 'rows':rows[:52]})
+                print('ASHOKA_ORIGINAL_TABLE='+json.dumps({'period':q,'title':a['title'],'file':name,
+                     'publication':a['published_at'],'sha256':sha,'pages':pages},sort_keys=True),flush=True)
+                found=True
+                break
+              if not found:raise SystemExit('ASHOKA_EXACT_ORIGINAL_NOT_FOUND_'+q)
+          PY
