@@ -25,8 +25,8 @@ SOURCE="COMPANY_EXCHANGE_FILING"
 CONTRACT="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1"
 PERIODS={"2025-03-31":"2025-01-01","2025-06-30":"2025-04-01"}
 DOMAIN="https://nsearchives.nseindia.com"
-XBRL_PATH=re.compile(r"^/corporate/xbrl/[A-Za-z0-9_.-]+\.xml$")
-NSE_API="https://www.nseindia.com/api/corporates-financial-results"
+XBRL_PATH=re.compile(r"^/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\.xml$",re.I)
+NSE_API="https://www.nseindia.com/api/integrated-filing-results"
 XBRLI="http://www.xbrl.org/2003/instance"
 FIELD_MAP={
  "OPERATING_REVENUE_QUARTER":("RevenueFromOperations",),
@@ -47,17 +47,29 @@ def origin(raw):
  p=urlparse(raw)
  return p.scheme=="https" and p.hostname=="nsearchives.nseindia.com" and not p.query and not p.fragment and bool(XBRL_PATH.fullmatch(p.path))
 def list_filings(session,symbol):
- u=NSE_API+"?"+urlencode({"index":"equities","symbol":symbol,"period":"Quarterly",
-                        "from_date":"01-01-2025","to_date":"01-10-2025"})
- response=session.get(u,timeout=30,headers={"Accept":"application/json","Referer":"https://www.nseindia.com/companies-listing/corporate-filings-financial-results"})
+ u=NSE_API+"?"+urlencode({"index":"equities","symbol":symbol,
+  "type":"Integrated Filing- Financials","page":1,"size":100,
+  "from_date":"01-01-2025","to_date":"15-10-2026"})
+ response=session.get(u,timeout=30,headers={"Accept":"application/json",
+   "Referer":"https://www.nseindia.com/companies-listing/corporate-integrated-filing"})
  if response.status_code in (401,403,429):raise RuntimeError("SOURCE_ACCESS_DENIED_"+str(response.status_code))
  response.raise_for_status()
  if "json" not in response.headers.get("content-type","").lower():raise RuntimeError("SOURCE_NOT_JSON")
  data=response.json()
- if not isinstance(data,list):raise RuntimeError("SOURCE_SCHEMA_UNKNOWN")
- return [v for v in data if isinstance(v,dict) and v.get("symbol")==symbol
-         and v.get("period")=="Quarterly" and v.get("toDate") in ("31-Mar-2025","30-Jun-2025")
-         and v.get("cumulative")=="Non-cumulative" and origin(v.get("xbrl",""))]
+ rows=data if isinstance(data,list) else data.get("data",data.get("records",[]))
+ if isinstance(rows,dict):rows=rows.get("data",[])
+ if not isinstance(rows,list):raise RuntimeError("SOURCE_SCHEMA_UNKNOWN")
+ out=[]
+ for item in rows:
+  if not isinstance(item,dict) or item.get("symbol")!=symbol:continue
+  end=str(item.get("qe_Date","")).upper()
+  if end not in ("31-MAR-2025","30-JUN-2025") or not origin(item.get("xbrl","")):continue
+  scope=item.get("consolidated")
+  if scope not in ("Consolidated","Standalone"):continue
+  out.append({**item,"toDate":"31-Mar-2025" if end=="31-MAR-2025" else "30-Jun-2025",
+   "fromDate":"01-Jan-2025" if end=="31-MAR-2025" else "01-Apr-2025",
+   "consolidated":"Non-Consolidated" if scope=="Standalone" else scope})
+ return out
 
 def extract(raw,metadata,symbol,isin):
  """Fail closed on unknown XBRL contexts, scope, currency and ambiguity."""
