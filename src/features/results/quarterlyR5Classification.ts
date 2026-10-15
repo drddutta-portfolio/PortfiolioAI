@@ -53,11 +53,19 @@ function modelFor(sector: string | null, industry: string | null):
   const s = normalized(sector), i = normalized(industry)
   if (!s || !i || s === "UNCLASSIFIED" || i === "UNCLASSIFIED") return null
   if (s === "BANKING") return bankIndustry(i) ? "NET_INTEREST_INCOME_QUARTER" : null
-  if (s === "FINANCIAL SERVICES" || s === "FINANCE" ||
-      /BANK|NBFC|INSUR|LENDING|HOUSING FINANCE|ASSET MANAGEMENT|BROKER|INVESTMENT|DEPOSITOR/.test(i)) return null
+  // Cash-operating financial platforms can use their OWN revenue/PAT trends,
+  // never a bank NII contract or cross-industry peer percentile.
+  if (s === "FINANCIAL SERVICES") {
+    return /^(FINANCIAL TECHNOLOGY \(FINTECH\)|INTERNET SOFTWARE & SERVICES|DEPOSITORIES, CLEARING HOUSES AND OTHER INTERMEDIARIES|STOCKBROKING & ALLIED|FINTECH \/ INSURANCE BROKERAGE & PLATFORM)$/.test(i)
+      ? "OPERATING_REVENUE_QUARTER" : null
+  }
+  if (s === "FINANCE" ||
+      /BANK|NBFC|LENDING|HOUSING FINANCE|ASSET MANAGEMENT|INVESTMENT/.test(i)) return null
   // A sector label must not override explicitly contradictory industry evidence.
   if (s === "DEFENCE" && !/AEROSPACE|DEFEN[CS]E/.test(i)) return null
-  if (s === "ENERGY" && !/^(?:GAS|OIL|REFINERIES|PETRO-PRODUCTS)$/.test(i)) return null
+  // Renewable power generation is eligible for an OWN-company Revenue/PAT
+  // directional contract; it is never compared to oil/gas issuer percentiles.
+  if (s === "ENERGY" && !/^(?:GAS|OIL|REFINERIES|PETRO-PRODUCTS|POWER GENERATION)$/.test(i)) return null
   return "OPERATING_REVENUE_QUARTER"
 }
 
@@ -157,6 +165,40 @@ export function buildIndustryR5Calibrations(
   return result
 }
 
+/** Directional verification can compare an issuer's PAT loss-to-profit turn
+ * even when a QoQ percentage is mathematically undefined due to <=0 PAT
+ * baseline. Every quarter still must contain one matching original, identity,
+ * scope, unit and period; no percentage is inferred from negative baselines.
+ */
+function directionalComparison(
+  rows: readonly ResultsSourceObservation[],
+  securityId: string,
+  end: string,
+  topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
+): { top: Decimal; profit: Decimal; currentProfit: Decimal } | null {
+  const previous = ({
+    "2025-12-31": "2025-09-30",
+    "2026-03-31": "2025-12-31",
+    "2026-06-30": "2026-03-31",
+  } as Record<string, string>)[end]
+  if (!previous) return null
+  const read = (date: string, code: string) => compareQuarterMetric(rows, securityId, date, code).current
+  const top = read(end,topCode), profit = read(end,"NET_PROFIT_QUARTER")
+  const beforeTop = read(previous,topCode), beforeProfit = read(previous,"NET_PROFIT_QUARTER")
+  if (!top || !profit || !beforeTop || !beforeProfit) return null
+  const matching = (a: ResultsSourceObservation, b: ResultsSourceObservation) =>
+    Boolean(a.sourceRecordId && a.sourceRecordId === b.sourceRecordId && a.scope === b.scope)
+  if (!matching(top,profit) || !matching(beforeTop,beforeProfit) ||
+      top.scope !== beforeTop.scope || profit.scope !== beforeProfit.scope) return null
+  try {
+    const nTop=new Decimal(top.value), pTop=new Decimal(beforeTop.value)
+    const nPat=new Decimal(profit.value), pPat=new Decimal(beforeProfit.value)
+    if (!nTop.gt(0) || pTop.lt(0)) return null
+    // The levels have identical units; only the sign of their difference is used.
+    return { top:nTop.minus(pTop), profit:nPat.minus(pPat), currentProfit:nPat }
+  } catch { return null }
+}
+
 /** An explicit *unranked* directional fallback for industries with too few peers.
  * It uses the issuer's own (at most 3) source-coherent quarterly comparisons,
  * never converts company history into a purported industry percentile.  Strong
@@ -175,9 +217,9 @@ function gradeCompanyTrajectory(
     return fail(group, "No qualified preceding quarter exists inside the approved four-quarter R5 window.")
   }
   const pairs = ENDS.filter(date => date <= end)
-    .map(date => comparable(observations, securityId, date, topCode))
+    .map(date => directionalComparison(observations, securityId, date, topCode))
     .filter((pair): pair is NonNullable<typeof pair> => pair !== null)
-  const current = comparable(observations, securityId, end, topCode)
+  const current = directionalComparison(observations, securityId, end, topCode)
   if (!current || pairs.length < 2) {
     return fail(group, "No eligible industry peers and fewer than two source-coherent company quarter comparisons including the selected quarter.")
   }
@@ -193,7 +235,7 @@ function gradeCompanyTrajectory(
     scope: "QOQ_ONLY", supportingMetrics: [topCode, "NET_PROFIT_QUARTER"],
     sampleSize: pairs.length, basis: "COMPANY_TREND",
     explanation: "Company-only quarterly trend using " + pairs.length +
-      " independently verified consecutive comparisons and the " +
+      " source-coherent adjacent-quarter level changes and the " +
       (topCode === "NET_INTEREST_INCOME_QUARTER" ? "bank NII/PAT" : "operating Revenue/PAT") +
       " contract. " +
       (strong ? "At least two comparisons show joint improvement, including the latest quarter, with a profitable current quarter." :
@@ -215,11 +257,11 @@ export function gradeQuarterR5(
   const topCode = modelFor(sector, industry)
   if (!topCode) return fail(group, "Industry is unavailable or its financial-statement model is not supported.")
   const calibration = calibrations.get(groupKey(sector,industry))
-  const pair = comparable(observations, securityId, end, topCode)
-  if (!pair) return fail(group, "Comparable, same-filing Revenue/NII and PAT selections are missing or incompatible in either quarter.")
   if (!calibration || calibration.topCode !== topCode) {
     return gradeCompanyTrajectory(observations, securityId, end, topCode, group)
   }
+  const pair = comparable(observations, securityId, end, topCode)
+  if (!pair) return fail(group, "Comparable, same-filing Revenue/NII and PAT percentage comparisons are missing or incompatible in either quarter.")
   const strong = pair.currentProfit.gt(0) &&
     pair.top.gte(calibration.p75Top) && pair.profit.gte(calibration.p75Profit)
   const weak = !pair.currentProfit.gt(0) ||
