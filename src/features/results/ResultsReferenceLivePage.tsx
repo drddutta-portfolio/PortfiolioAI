@@ -3,7 +3,8 @@ import { createPortal } from "react-dom"
 import { usePortfolioView } from "../portfolio/usePortfolioView"
 import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
-import { gradeQuarterR5 } from "./quarterlyR5Classification"
+import { buildIndustryR5Calibrations, gradeQuarterR5 } from "./quarterlyR5Classification"
+import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
 import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparisons } from "./quarterlyR5"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
@@ -82,8 +83,8 @@ function primaryObservation(rows: readonly ResultsSourceObservation[], bank: boo
   return rows[0] ?? null
 }
 
-function resultStatus(allRows: readonly ResultsSourceObservation[], entry: Entry, end: string) {
-  return gradeQuarterR5(allRows, entry.position.securityId, end, entry.position.sector, entry.position.industry).status
+function resultStatus(allRows: readonly ResultsSourceObservation[], entry: Entry, end: string, calibrations: R5IndustryCalibrations) {
+  return gradeQuarterR5(allRows, entry.position.securityId, end, entry.position.sector, entry.position.industry, calibrations).status
 }
 function quarterCellLabel(allRows: readonly ResultsSourceObservation[], entry: Entry, period: Period, primary: ResultsSourceObservation | null) {
   if (!primary) return "—"
@@ -108,9 +109,9 @@ function StatusDot({ status, pending = false }: { readonly status: string; reado
   return <i className={"ref-status-dot " + (pending ? "review" : status.toLowerCase())} aria-hidden="true" />
 }
 
-function PreviewCard({ preview }: { readonly preview: Preview }) {
+function PreviewCard({ preview, calibrations }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations }) {
   const { entry, period, observations } = preview
-  const grade = resultStatus(preview.history, entry, period.end)
+  const grade = resultStatus(preview.history, entry, period.end, calibrations)
   const topCode = (isBank(entry.position.industry) || hasBankMetrics(observations)) ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
   const mainComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, topCode)
   const patComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, "NET_PROFIT_QUARTER")
@@ -202,8 +203,8 @@ function MetricsCard({ period, rows, allRows, securityId }: { readonly period: P
   </section>
 }
 
-function InsightCard({ entry, rows, allRows, periodEnd }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly periodEnd: string }) {
-  const outcome = gradeQuarterR5(allRows, entry.position.securityId, periodEnd, entry.position.sector, entry.position.industry)
+function InsightCard({ entry, rows, allRows, periodEnd, calibrations }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly periodEnd: string; readonly calibrations: R5IndustryCalibrations }) {
+  const outcome = gradeQuarterR5(allRows, entry.position.securityId, periodEnd, entry.position.sector, entry.position.industry, calibrations)
   const explanations = explainQuarterlyComparisons(compareQuarterMetrics(allRows, entry.position.securityId, periodEnd), isBank(entry.position.industry) || hasBankMetrics(rows))
   const selectedCount = rows.filter((r) => r.selected).length
   let summary = "Quarterly operating data is not yet sufficient for a reliable performance assessment."
@@ -312,6 +313,7 @@ export function ResultsLivePage() {
     }
   }
 
+  const industryCalibrations = useMemo(() => buildIndustryR5Calibrations(observations, entries.map((e) => ({securityId:e.position.securityId, sector:e.position.sector, industry:e.position.industry}))), [observations, entries])
   const sourceCompanyCount = new Set(observations.map((r) => r.securityId)).size
   const sourceQuarterCount = new Set(observations.map((r) => r.securityId + "|" + r.periodEnd)).size
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
@@ -320,9 +322,9 @@ export function ResultsLivePage() {
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
-    if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end)))) return false
+    if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end, industryCalibrations)))) return false
     return true
-  }), [entries, query, filter, industry, statuses, observations, periods])
+  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations])
 
   const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
   const newestObservation = suggestedEntry
@@ -336,7 +338,7 @@ export function ResultsLivePage() {
   const period = effectiveSelection ? periods.find((p) => p.end === effectiveSelection.periodEnd) ?? null : null
   const detailRows = chosen && period ? forQuarter(observations, chosen.position.securityId, period.end) : []
   const allDetailRows = chosen && period ? allForQuarter(observations, chosen.position.securityId, period.end) : []
-  const grade = chosen && period ? resultStatus(observations, chosen, period.end) : "UNAVAILABLE"
+  const grade = chosen && period ? resultStatus(observations, chosen, period.end, industryCalibrations) : "UNAVAILABLE"
   const activeIndex = period ? periods.findIndex((p) => p.end === period.end) : -1
   const showPreview = (event: React.SyntheticEvent<HTMLButtonElement>, entry: Entry, p: Period, rows: readonly ResultsSourceObservation[]) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -404,7 +406,7 @@ export function ResultsLivePage() {
             {visible.map((entry) => <tr key={entry.position.securityId}><th scope="row" className="stock-column">{entry.position.symbol}<small>{entry.position.industry ?? "Unclassified"} · {entry.kind === "CURRENT" ? "Current" : "Closed"}</small></th>{periods.map((p) => {
               const rows = forQuarter(observations, entry.position.securityId, p.end)
               const primary = primaryObservation(rows, isBank(entry.position.industry) || hasBankMetrics(rows))
-              const status = resultStatus(observations, entry, p.end)
+              const status = resultStatus(observations, entry, p.end, industryCalibrations)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
@@ -437,12 +439,12 @@ export function ResultsLivePage() {
           <PortfolioCard entry={chosen} currency={portfolio.portfolio.currency}/>
           <ChartCard entry={chosen} periods={periods} observations={observations} selectedPeriodEnd={period.end}/>
           <MetricsCard period={period} rows={detailRows} allRows={observations} securityId={chosen.position.securityId}/>
-          <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end}/>
+          <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end} calibrations={industryCalibrations}/>
         </div>
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
       <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
     </section>
-    {preview ? <PreviewCard preview={preview}/> : null}
+    {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations}/> : null}
   </section>
 }
