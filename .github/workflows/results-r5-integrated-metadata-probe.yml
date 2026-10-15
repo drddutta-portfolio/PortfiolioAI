@@ -1,0 +1,48 @@
+name: Results R5 Integrated Filing Metadata Probe
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-integrated-metadata-probe.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Probe 2025 source listing keys without downloading filings
+        run: |
+          python - <<'PY'
+          import json,requests
+          from urllib.parse import urlencode
+          s=requests.Session()
+          s.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
+          homepage="https://www.nseindia.com/companies-listing/corporate-integrated-filing"
+          rr=s.get(homepage,timeout=25)
+          if rr.status_code in (401,403,429):raise SystemExit("SOURCE_BLOCK_"+str(rr.status_code))
+          rr.raise_for_status()
+          results=[]
+          for symbol in ("INFY","RELIANCE"):
+            params={"index":"equities","symbol":symbol,"type":"Integrated Filing- Financials","page":1,
+                    "size":100,"from_date":"01-01-2025","to_date":"15-10-2026"}
+            r=s.get("https://www.nseindia.com/api/integrated-filing-results?"+urlencode(params),
+              timeout=30,headers={"Accept":"application/json","Referer":homepage})
+            if r.status_code in (401,403,429):raise SystemExit("LIST_BLOCK_"+str(r.status_code))
+            r.raise_for_status()
+            records=r.json()
+            if isinstance(records,dict):records=records.get("data",records.get("records",records))
+            if isinstance(records,dict):records=records.get("data",[])
+            if not isinstance(records,list):raise SystemExit("UNEXPECTED_METADATA_SHAPE")
+            safe=[]
+            for rec in records[:12]:
+              if not isinstance(rec,dict):continue
+              safe.append({k:str(v)[:80] for k,v in rec.items()
+                 if k.lower() not in ("url","ixbrl","link","xbrlurl","xbrl","ixbrlurl","xmllink","xmlfile","originalurl")})
+            results.append({"symbol":symbol,"records":len(records),"sample":safe[:6]})
+          print(json.dumps(results,sort_keys=True))
+          PY
