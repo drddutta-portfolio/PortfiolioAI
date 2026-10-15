@@ -31,6 +31,18 @@ jobs:
             links=m.listing_urls(records,name)
             matches=records if isinstance(records,list) else records.get('data',[])
             print('CATALOG',name,'items',len(matches),'valid_links',len(links))
+            import xml.etree.ElementTree as ET
+            old_records=[a for a in matches if isinstance(a,dict) and str(a.get('qe_Date','')).upper() in ('31-MAR-2025','30-JUN-2025')]
+            for entry in old_records[:2]:
+              url=entry.get('xbrl')
+              if not isinstance(url,str) or not url.startswith('https://nsearchives.nseindia.com/corporate/xbrl/'): continue
+              xml=s.get(url,timeout=25)
+              print('XML_FETCH',name,entry.get('qe_Date'),xml.status_code,len(xml.content),xml.headers.get('content-type'))
+              if xml.ok:
+                try:
+                  root=ET.fromstring(xml.content)
+                  print('XML_SHAPE',name,root.tag,'elements',len(root),'first_tags',[node.tag.rsplit('}',1)[-1] for node in list(root)[:12]])
+                except ET.ParseError as e: print('XML_UNPARSEABLE',name,str(e)[:100])
             for link in links[:3]:
               try:
                 z=s.get(link,timeout=25)
