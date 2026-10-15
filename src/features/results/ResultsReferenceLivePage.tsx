@@ -3,7 +3,7 @@ import { createPortal } from "react-dom"
 import { usePortfolioView } from "../portfolio/usePortfolioView"
 import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
-import { assessQuarterlyPerformance } from "./quarterlyPerformance"
+import { gradeQuarterR5 } from "./quarterlyR5Classification"
 import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparisons } from "./quarterlyR5"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
@@ -18,7 +18,7 @@ interface Entry { readonly position: PortfolioPosition; readonly kind: "CURRENT"
 type PositionFilter = "ALL" | "CURRENT" | "CLOSED"
 type StatusFilter = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 interface Selection { readonly securityId: string; readonly periodEnd: string }
-interface Preview { readonly entry: Entry; readonly period: Period; readonly observations: readonly ResultsSourceObservation[]; readonly left: number; readonly top: number }
+interface Preview { readonly entry: Entry; readonly period: Period; readonly observations: readonly ResultsSourceObservation[]; readonly history: readonly ResultsSourceObservation[]; readonly left: number; readonly top: number }
 
 const number = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 })
 const LABELS: Readonly<Record<string, string>> = {
@@ -92,12 +92,19 @@ function primaryObservation(rows: readonly ResultsSourceObservation[], bank: boo
   return rows[0] ?? null
 }
 
-function resultStatus(rows: readonly ResultsSourceObservation[], industry: string | null) {
-  const outcome = assessQuarterlyPerformance(rows, industry).status
-  if (outcome === "IMPROVING") return "STRONG"
-  if (outcome === "DETERIORATING") return "WEAK"
-  if (outcome === "MIXED") return "MIXED"
-  return "UNAVAILABLE"
+function resultStatus(allRows: readonly ResultsSourceObservation[], entry: Entry, end: string) {
+  return gradeQuarterR5(allRows, entry.position.securityId, end, entry.position.sector, entry.position.industry).status
+}
+function quarterCellLabel(allRows: readonly ResultsSourceObservation[], entry: Entry, period: Period, primary: ResultsSourceObservation | null) {
+  if (!primary) return "—"
+  const bank=isBank(entry.position.industry) || hasBankMetrics(allRows.filter(row => row.securityId === entry.position.securityId && row.periodEnd === period.end))
+  const code=bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
+  const comp=compareQuarterMetric(allRows, entry.position.securityId, period.end, code)
+  if (comp.current && (comp.yoy !== null || comp.qoq !== null)) {
+    const pct=comp.yoy ?? comp.qoq!
+    return (bank ? "NII " : "Rev ") + (Number(pct)>0?"+":"") + pct+"% "+(comp.yoy!==null?"YoY":"QoQ")
+  }
+  return (LABELS[primary.code] ?? "Metric") + " " + formattedValue(primary)
 }
 
 function statusName(status: string) {
@@ -113,7 +120,10 @@ function StatusDot({ status, pending = false }: { readonly status: string; reado
 
 function PreviewCard({ preview }: { readonly preview: Preview }) {
   const { entry, period, observations } = preview
-  const grade = resultStatus(observations, entry.position.industry)
+  const grade = resultStatus(preview.history, entry, period.end)
+  const topCode = (isBank(entry.position.industry) || hasBankMetrics(observations)) ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
+  const mainComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, topCode)
+  const patComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, "NET_PROFIT_QUARTER")
   const displayed = primaryObservation(observations, isBank(entry.position.industry) || hasBankMetrics(observations))
   return createPortal(
     <div className="ref-preview" role="tooltip" style={{ left: preview.left, top: preview.top }}>
@@ -124,6 +134,9 @@ function PreviewCard({ preview }: { readonly preview: Preview }) {
         {observations.filter((row) => row.id !== displayed.id).slice(0, 2).map((row) =>
           <div key={row.id}><dt>{LABELS[row.code] ?? row.code}</dt><dd>{formattedValue(row)}</dd></div>)}
       </dl> : <p>No stored quarter-specific result is connected.</p>}
+      {mainComparison.qoq !== null && <small>{LABELS[topCode]} QoQ: {mainComparison.qoq}%</small>}
+      {mainComparison.yoy !== null && <small>{LABELS[topCode]} YoY: {mainComparison.yoy}%</small>}
+      {patComparison.yoy !== null && <small>PAT YoY: {patComparison.yoy}%</small>}
       <small>{observations.some((row) => !row.selected) ? "Unselected evidence remains under review." : observations.some((row) => row.originalShareBasis) ? "Reported pre-split EPS is not adjusted. Do not compare EPS across a share split." : "Source figures reconciled for current display. Publication timing and performance grading are separate."}</small>
     </div>,
     document.body,
@@ -161,10 +174,9 @@ function ChartCard({ entry, periods, observations, selectedPeriodEnd }: {
   const hasNii = bank && observations.some((row) => row.securityId === entry.position.securityId && row.code === "NET_INTEREST_INCOME_QUARTER")
   const code = bank ? (hasNii ? "NET_INTEREST_INCOME_QUARTER" : "ADVANCES_GROWTH_YOY") : "OPERATING_REVENUE_QUARTER"
   const label = bank ? (hasNii ? "Net Interest Income" : "Advances Growth YoY") : "Revenue"
-  const series = recent.map((period) => {
-    const rows = forQuarter(observations, entry.position.securityId, period.end).filter((r) => r.code === code)
-    return rows.find((row) => row.selected) ?? rows[0] ?? null
-  })
+  const series = recent.map((period) =>
+    compareQuarterMetric(observations, entry.position.securityId, period.end, code).current,
+  )
   const max = Math.max(1, ...series.map((row) => row ? Math.abs(Number(row.value)) : 0))
   const hasNegative = series.some((row) => row !== null && Number(row.value) < 0)
   return <section className="results-card ref-chart">
@@ -201,14 +213,12 @@ function MetricsCard({ period, rows, allRows, securityId }: { readonly period: P
 }
 
 function InsightCard({ entry, rows, allRows, periodEnd }: { readonly entry: Entry; readonly rows: readonly ResultsSourceObservation[]; readonly allRows: readonly ResultsSourceObservation[]; readonly periodEnd: string }) {
-  const outcome = assessQuarterlyPerformance(rows, entry.position.industry)
+  const outcome = gradeQuarterR5(allRows, entry.position.securityId, periodEnd, entry.position.sector, entry.position.industry)
   const explanations = explainQuarterlyComparisons(compareQuarterMetrics(allRows, entry.position.securityId, periodEnd), isBank(entry.position.industry) || hasBankMetrics(rows))
   const selectedCount = rows.filter((r) => r.selected).length
   let summary = "Quarterly operating data is not yet sufficient for a reliable performance assessment."
-  if (selectedCount > 0 && outcome.status !== "INSUFFICIENT_DATA") {
-    summary = outcome.status === "IMPROVING" ? "Selected banking activity indicators are improving."
-      : outcome.status === "DETERIORATING" ? "Selected banking activity indicators are declining."
-      : "Selected banking activity indicators are mixed."
+  if (selectedCount > 0 && outcome.status !== "UNAVAILABLE") {
+    summary = outcome.explanation
   } else if (selectedCount > 0) {
     summary = selectedCount + " source-reconciled metric" + (selectedCount === 1 ? "" : "s") + " available. Comparative performance assessment is not yet qualified."
   } else if (rows.length > 0) {
@@ -216,7 +226,7 @@ function InsightCard({ entry, rows, allRows, periodEnd }: { readonly entry: Entr
   }
   return <section className="results-card ref-insight">
     <div className="results-card-heading"><h3><span className="ref-sparkle" aria-hidden="true">✦</span> AI Insight</h3><span className="ref-insight-tag">Evidence-based</span></div>
-    <div className="ref-insight-summary"><strong>{summary}</strong><span>{outcome.status === "INSUFFICIENT_DATA" ? "Thesis impact: Not assessed" : "Quarterly operating signal only"}</span></div>
+    <div className="ref-insight-summary"><strong>{summary}</strong><span>{outcome.status === "UNAVAILABLE" ? "Thesis impact: Not assessed" : "QoQ-calibrated · Thesis not assessed"}</span></div>
     <ul>
       {explanations.map((phrase, index) => <li key={index}>{phrase}</li>)}
       <li>No investment recommendation or V1-4 score is inferred.</li>
@@ -322,7 +332,7 @@ export function ResultsLivePage() {
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
     if (statuses.size > 0 && !periods.some((period) => {
       const rows = forQuarter(observations, p.securityId, period.end)
-      return statuses.has(resultStatus(rows, p.industry))
+      return statuses.has(resultStatus(observations, e, period.end))
     })) return false
     return true
   }), [entries, query, filter, industry, statuses, observations, periods])
@@ -339,13 +349,13 @@ export function ResultsLivePage() {
   const period = effectiveSelection ? periods.find((p) => p.end === effectiveSelection.periodEnd) ?? null : null
   const detailRows = chosen && period ? forQuarter(observations, chosen.position.securityId, period.end) : []
   const allDetailRows = chosen && period ? allForQuarter(observations, chosen.position.securityId, period.end) : []
-  const grade = chosen ? resultStatus(detailRows, chosen.position.industry) : "UNAVAILABLE"
+  const grade = chosen && period ? resultStatus(observations, chosen, period.end) : "UNAVAILABLE"
   const activeIndex = period ? periods.findIndex((p) => p.end === period.end) : -1
   const showPreview = (event: React.SyntheticEvent<HTMLButtonElement>, entry: Entry, p: Period, rows: readonly ResultsSourceObservation[]) => {
     const rect = event.currentTarget.getBoundingClientRect()
     const left = Math.min(Math.max(14, rect.left + 10), Math.max(14, window.innerWidth - 298))
     const top = Math.max(14, Math.min(rect.bottom + 8, window.innerHeight - 220))
-    setPreview({ entry, period: p, observations: rows, left, top })
+    setPreview({ entry, period: p, observations: rows, history: observations, left, top })
   }
   const selectCell = (entry: Entry, p: Period) => {
     setSelection({ securityId: entry.position.securityId, periodEnd: p.end })
@@ -407,15 +417,15 @@ export function ResultsLivePage() {
             {visible.map((entry) => <tr key={entry.position.securityId}><th scope="row" className="stock-column">{entry.position.symbol}<small>{entry.position.industry ?? "Unclassified"} · {entry.kind === "CURRENT" ? "Current" : "Closed"}</small></th>{periods.map((p) => {
               const rows = forQuarter(observations, entry.position.securityId, p.end)
               const primary = primaryObservation(rows, isBank(entry.position.industry) || hasBankMetrics(rows))
-              const status = resultStatus(rows, entry.position.industry)
+              const status = resultStatus(observations, entry, p.end)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
-                type="button" aria-pressed={active} aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? formattedValue(primary) + (pending ? ", review pending" : "") : "not available")}
+                type="button" aria-pressed={active} aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available")}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
-                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : primary ? (LABELS[primary.code] ?? "Metric") + " " + formattedValue(primary) : "—"}</span>
+                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span>
               </button></td>
             })}</tr>)}
             {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
