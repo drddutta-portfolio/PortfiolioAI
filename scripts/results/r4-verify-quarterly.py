@@ -70,7 +70,8 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2024_COMPACT_V1",
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1",
-                         "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1"):
+                         "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1",
+                         "PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     try:
@@ -160,6 +161,37 @@ def check_manifest(record,manifest):
             or not isinstance(manifest.get("financial_page"),int)
             or not 1<=manifest["financial_page"]<=24):
             return "BSE_2024_ORIGINAL_SOURCE_CONTRACT_UNPROVEN"
+    if contract=="PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1":
+        approved={
+          "2024-09-30":("47d353d6-47d8-4cf9-a8b3-d5a034f1d511.pdf",
+            "6548984534d912f3146120ecaa9135eefc5fd74705829c285931838f755f7d40","2024-11-07","2024-07-01","SEPTEMBER 30, 2024"),
+          "2024-12-31":("59b5a333-4018-4040-be97-536c9a7c028c.pdf",
+            "d83fac906899303f6b96a365563b41344fb29c15776c42f9e502628f61f0ede2","2025-01-30","2024-10-01","DECEMBER 31, 2024")
+        }
+        expected=approved.get(manifest.get("period_end"))
+        if not expected:return "BSE_ASTRAL_PERIOD_NOT_APPROVED"
+        pdf,digest_expected,pub_date,pstart,title_quarter=expected
+        if (manifest.get("symbol")!="ASTRAL"
+            or manifest.get("bse_scrip_code")!="532830"
+            or manifest.get("isin")!="INE006I01046"
+            or manifest.get("period_start")!=pstart
+            or manifest.get("consolidation_scope")!="CONSOLIDATED"
+            or u.scheme!="https" or u.hostname!="www.bseindia.com"
+            or u.path!="/xml-data/corpfiling/AttachHis/"+pdf
+            or u.query or u.fragment
+            or manifest.get("original_sha256_unretained")!=digest_expected
+            or manifest.get("original_pdf_retained") is not False
+            or manifest.get("raw_bse_bytes_retained") is not False
+            or manifest.get("reporting_currency")!="INR"
+            or not str(manifest.get("publication_time_bse","")).startswith(pub_date)
+            or manifest.get("publication_precision")!="DATE_TIME_FROM_BSE_ANNOUNCEMENT"
+            or manifest.get("original_first_quarter_column")!=0
+            or not isinstance(manifest.get("original_quarter_financial_page"),int)
+            or not 1<=manifest["original_quarter_financial_page"]<=40
+            or title_quarter not in str(manifest.get("quarter_header","")).upper()
+            or "STATEMENT OF CONSOLIDATED UNAUDITED FINANCIAL RESULTS FOR THE QUARTER" not in str(manifest.get("quarter_header","")).upper()
+            or "MILLION" not in str(manifest.get("unit_header","")).upper()):
+            return "BSE_ASTRAL_2024_ORIGINAL_CONTRACT_UNPROVEN"
     if record["source_url"]!=manifest["issuer_filing_url"]:return "ORIGIN_MISMATCH"
     if contract=="PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1":
         if not isinstance(manifest.get("original_sha256_unretained"),str) or len(manifest["original_sha256_unretained"])!=64:return "ORIGINAL_HASH_MISSING"
@@ -235,6 +267,40 @@ def check_fact(r,m):
                 return "BSE_2024_PDF_ROW_VALUE_MISMATCH"
         except (ValueError,TypeError,InvalidOperation,KeyError,AttributeError):
             return "BSE_2024_PDF_ROW_VALIDATION_FAILED"
+    if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1":
+        f=m["facts"][key]
+        if (f.get("extraction_page")!=m.get("original_quarter_financial_page")
+            or f.get("first_column_index")!=0
+            or not isinstance(f.get("extraction_line"),str)
+            or len(f["extraction_line"])>380):
+            return "BSE_ASTRAL_2024_TABLE_ROW_UNPROVEN"
+        original_unit="INR_PER_SHARE" if key=="EPS_DILUTED" else "INR_MILLION"
+        expected_conversion=("ORIGINAL_RUPEES_PER_SHARE" if key=="EPS_DILUTED"
+            else "DIVIDE_MILLION_BY_10")
+        if f.get("original_unit")!=original_unit or f.get("conversion")!=expected_conversion:
+            return "BSE_ASTRAL_2024_QUARTER_UNIT_MISMATCH"
+        regex={
+          "OPERATING_REVENUE_QUARTER":r"^1 Revenue from Operations\s+(.+)$",
+          "NET_PROFIT_QUARTER":r"^9 Net Profit for the period/year\s+\(7-8\)\s+(.+)$",
+          "EPS_DILUTED":r"^- Diluted \(In Rs\.\)\s+(.+)$"
+        }.get(key)
+        if not regex:return "BSE_ASTRAL_2024_METRIC_UNAUTHORIZED"
+        try:
+            mval=re.match(regex,f["extraction_line"],re.I)
+            if not mval:return "BSE_ASTRAL_2024_FINANCIAL_LABEL_MISMATCH"
+            nums=re.findall(r"(?<!\w)(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?(?!\w)",mval.group(1))
+            if len(nums)<4:return "BSE_ASTRAL_2024_QUARTER_COLUMNS_UNPROVEN"
+            original=Decimal(nums[0].replace(",",""))
+            if original!=Decimal(str(f.get("original_value"))):
+                return "BSE_ASTRAL_2024_ORIGINAL_VALUE_MISMATCH"
+            computed=original if key=="EPS_DILUTED" else original/Decimal(10)
+            if computed!=Decimal(str(f.get("value"))):
+                return "BSE_ASTRAL_2024_CRORE_CONVERSION_MISMATCH"
+            if (key=="EPS_DILUTED"
+                and f.get("share_basis")!="ORIGINALLY_PUBLISHED_NO_RETROSPECTIVE_ADJUSTMENT"):
+                return "BSE_ASTRAL_2024_EPS_BASIS_UNPROVEN"
+        except (InvalidOperation,ValueError,TypeError,KeyError):
+            return "BSE_ASTRAL_2024_ROW_PARSING_INVALID"
     if key=="EPS_DILUTED" and m.get("historical_identity_link"):
         if (m.get("eps_as_originally_reported_before_split") is not True
             or fact.get("original_unit")!="INR_PER_SHARE"):
@@ -323,7 +389,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
