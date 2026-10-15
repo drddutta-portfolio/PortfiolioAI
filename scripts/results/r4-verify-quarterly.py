@@ -15,7 +15,10 @@ from psycopg.rows import dict_row
 REF="lrgpjimipfkyoqbpsqzz"
 BUCKET="portfolioai-history-dev"
 PREFIX="portfolioai-results/development/v1/quarterly/"
-QUARTERS=("2025-09-30","2025-12-31","2026-03-31","2026-06-30")
+# The base R4 gate retains its original four-quarter authority. R5 may
+# additionally select separately validated historical comparison facts only.
+R5_COMPARISON_MODE=os.getenv("RESULTS_R5_COMPARISON_SELECTION","0")=="1"
+QUARTERS=(("2025-03-31","2025-06-30") if R5_COMPARISON_MODE else ()) + ("2025-09-30","2025-12-31","2026-03-31","2026-06-30")
 BANKS=set("AUBANK AXISBANK BANDHANBNK BANKBARODA FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK SBIN".split())
 BANK_REQUIRED={"NET_INTEREST_INCOME_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"}
 OTHER_REQUIRED={"OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"}
@@ -323,6 +326,8 @@ def verify(db,s3,apply):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
+    if R5_COMPARISON_MODE and os.environ.get("RESULTS_R5_HISTORICAL_ACK")!="2025_MAR_JUN_ONLY":
+        raise SystemExit("R5_HISTORICAL_SELECTION_SCOPE_NOT_APPROVED")
     db=os.environ.get("SUPABASE_DB_URL","")
     if REF not in db:raise SystemExit("NOT_DEVELOPMENT_DATABASE")
     if os.environ.get("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise SystemExit("NOT_DEVELOPMENT_BUCKET")
