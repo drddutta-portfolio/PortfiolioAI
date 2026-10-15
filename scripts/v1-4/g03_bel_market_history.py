@@ -6,6 +6,9 @@ def main():
  root=Path('supabase/functions/_shared');policy=json.loads((root/'v14-g03-market-authorization.json').read_text());grant_url=BASE+'v14-g02-execution-grant'
  oidc=urllib.request.Request(os.environ['ACTIONS_ID_TOKEN_REQUEST_URL']+'&audience='+urllib.parse.quote(grant_url,safe=''),headers={'Authorization':'Bearer '+os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']})
  with urllib.request.urlopen(oidc,timeout=30) as r:token=json.load(r)['value']
+ if os.environ.get('G03_RETAINED_CAPTURE_ID'):
+  Path('g03-bel-market-history-result').mkdir(exist_ok=True)
+  renew_history(token,os.environ['G03_RETAINED_CAPTURE_ID']);return
  grant_req=urllib.request.Request(grant_url,data=json.dumps({'action':'ISSUE_G03_HISTORY_TAIL_GRANT','authorizationHash':policy['directiveSha256'],'sessionDate':os.environ['G03_SESSION_DATE']}).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
  with urllib.request.urlopen(grant_req,timeout=60) as r:grant=json.load(r)
  if grant.get('code')!='G03_HISTORY_TAIL_GRANT':raise ValueError('G03_HISTORY_GRANT_CONTRACT_INVALID')
@@ -28,7 +31,7 @@ def renew_history(token,capture):
  from botocore.config import Config
  if os.environ['CLOUDFLARE_R2_BUCKET']!='portfolioai-history-dev':raise ValueError('DEVELOPMENT_R2_REQUIRED')
  root=Path('supabase/functions/_shared');pins=json.loads((root/'v14-g03-market-renewal-pins.json').read_text());policy=json.loads((root/'v14-g03-market-authorization.json').read_text())
- s3=boto3.client('s3',endpoint_url='https://ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com',region_name='auto',aws_access_key_id=os.environ['CLOUDFLARE_R2_ACCESS_KEY_ID'],aws_secret_access_key=os.environ['CLOUDFLARE_R2_SECRET_ACCESS_KEY'],config=Config(signature_version='s3v4',retries={'total_max_attempts':1}));urls=[]
+ s3=boto3.client('s3',endpoint_url='https://ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com',region_name='auto',aws_access_key_id=os.environ['CLOUDFLARE_R2_ACCESS_KEY_ID'],aws_secret_access_key=os.environ['CLOUDFLARE_R2_SECRET_ACCESS_KEY'],config=Config(signature_version='s3v4',s3={'addressing_style':'path'},retries={'total_max_attempts':1}));urls=[]
  for p in pins['sources']:
   try:data=s3.get_object(Bucket='portfolioai-history-dev',Key=p['r2_key'])['Body'].read()
   except s3.exceptions.NoSuchKey:
