@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://www.msei.in/SX-Content/Listing/Annual-Reports/2024/BEL-2024.pdf",
+    "sha256": "e1c4888523177bf81e522a7db28e5d70b1c869210d794a73643bcfdeff50fcec",
+    "bytes": 13138795,
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/e1c4888523177bf81e522a7db28e5d70b1c869210d794a73643bcfdeff50fcec.pdf",
+    "readbackSha256Verified": true,
+    "r2Writes": 1,
+    "canonicalAdmission": false
+  },
+  {
+    "url": "https://nsearchives.nseindia.com/corporate/BEL_01042023134933_NSEsigned.pdf",
+    "sha256": "96f81b94fe3f6bc0d57a8997bb5495d89ec23731192815b9650c1f9864190ab8",
+    "bytes": 471203,
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/96f81b94fe3f6bc0d57a8997bb5495d89ec23731192815b9650c1f9864190ab8.pdf",
+    "readbackSha256Verified": true,
+    "r2Writes": 1,
+    "canonicalAdmission": false
+  },
+  {
+    "url": "https://nsearchives.nseindia.com/corporate/BEL_31102025130019_Q2_2025-26_Signed.pdf",
+    "sha256": "619a9cf0860d4e4ed5ec6ec9b96865ac0514c676c5e9edb05d397856414fe011",
+    "bytes": 11595429,
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/619a9cf0860d4e4ed5ec6ec9b96865ac0514c676c5e9edb05d397856414fe011.pdf",
+    "readbackSha256Verified": true,
+    "r2Writes": 1,
+    "canonicalAdmission": false
+  },
+  {
+    "url": "https://nsearchives.nseindia.com/corporate/BEL_30012025144112_NSE_INTEGRATED_SIGNED.pdf",
+    "sha256": "4e92e7c1442d2184984c9cc8f80c723e1aac67614e6cf75370a9ec2c97859a5a",
+    "bytes": 7312887,
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/4e92e7c1442d2184984c9cc8f80c723e1aac67614e6cf75370a9ec2c97859a5a.pdf",
+    "readbackSha256Verified": true,
+    "r2Writes": 1,
+    "canonicalAdmission": false
+  }
+]

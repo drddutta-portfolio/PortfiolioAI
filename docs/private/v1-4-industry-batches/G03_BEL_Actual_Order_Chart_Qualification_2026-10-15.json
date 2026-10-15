@@ -1,0 +1,50 @@
+{
+  "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+  "originalBytes": 16199415,
+  "qualifiedHistoricalPeriods": [
+    {
+      "turnover_crore": "17333",
+      "turnover_fiscal_label": "2022-23",
+      "order_book_crore": "60690",
+      "order_book_as_of": "2023-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    {
+      "turnover_crore": "19820",
+      "turnover_fiscal_label": "2023-24",
+      "order_book_crore": "75934",
+      "order_book_as_of": "2024-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    {
+      "turnover_crore": "23024",
+      "turnover_fiscal_label": "2024-25",
+      "order_book_crore": "71650",
+      "order_book_as_of": "2025-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    {
+      "turnover_crore": "26680",
+      "turnover_fiscal_label": "2025-26",
+      "order_book_crore": "73882",
+      "order_book_as_of": "2026-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    }
+  ],
+  "publicationPrecision": "UNKNOWN",
+  "sourceReportPeriodEnd": "2026-03-31",
+  "providerCalls": 0,
+  "canonicalMaterialization": false
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "url": "https://nsearchives.nseindia.com/corporate/BEL_31102025130019_Q2_2025-26_Signed.pdf",
+    "sha256": "619a9cf0860d4e4ed5ec6ec9b96865ac0514c676c5e9edb05d397856414fe011",
+    "bytes": 11595429,
+    "extractedTextCharacters": 62361,
+    "canonicalAdmission": false,
+    "publicationPrecision": "UNQUALIFIED",
+    "note": "NSE original acquired; scope, exact period cells and publication metadata require independent qualification. Filename timestamp alone is not accepted as publication proof.",
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/619a9cf0860d4e4ed5ec6ec9b96865ac0514c676c5e9edb05d397856414fe011.pdf",
+    "immutableOriginalReadbackVerified": true,
+    "archiveRunId": 38678638206
+  },
+  {
+    "url": "https://nsearchives.nseindia.com/corporate/BEL_30012025144112_NSE_INTEGRATED_SIGNED.pdf",
+    "sha256": "4e92e7c1442d2184984c9cc8f80c723e1aac67614e6cf75370a9ec2c97859a5a",
+    "bytes": 7312887,
+    "extractedTextCharacters": 36140,
+    "canonicalAdmission": false,
+    "publicationPrecision": "UNQUALIFIED",
+    "note": "NSE original acquired; scope, exact period cells and publication metadata require independent qualification. Filename timestamp alone is not accepted as publication proof.",
+    "r2Bucket": "portfolioai-history-dev",
+    "r2Key": "portfolioai-history/development/v1-4/g03/originals/4e92e7c1442d2184984c9cc8f80c723e1aac67614e6cf75370a9ec2c97859a5a.pdf",
+    "immutableOriginalReadbackVerified": true,
+    "archiveRunId": 38678638206
+  }
+]

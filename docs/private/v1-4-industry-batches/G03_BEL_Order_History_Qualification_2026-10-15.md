@@ -1,3 +1,15 @@
+## Executed result
+
+Actual original qualification **38677305983 SUCCESS** verified the retained 16,199,415-byte original, physical PDF page 47 chart cells and page 35 order-intake passage. Actual fixed admission **38677863256 SUCCESS** admitted four period-specific delegated reviews and proved each repeated admission idempotent. No original reacquisition, R2 PUT or provider call was made in these workflows.
+
+Canonical read-only **38677986878 SUCCESS** returned ORDER_BOOK_AND_EXECUTION_GROWTH FRESH. Guarded BEL-only save **38678096680 SUCCESS** then appended selected snapshot `c9d52ca3-9adc-4915-aa01-1c51959e4ce0`, selection `9758f882-ae0b-495a-98aa-3cc4e696214e`, grant `5ca6f78f-5c5a-4cb9-a444-9b2da6f27de5`. Independent Development readback confirms **5 → 4 blockers**, preserving every previously FRESH BEL requirement and the other six G03 selected snapshot identities. Duplicate grant issuance was idempotent; grant replay was rejected P4_GRANT_ALREADY_USED.
+
+Reviewer **v12 ACTIVE**, SHA `00bd428ecbd1e74652c08188ab9e231a83a9b0fe83d62d7493a9d20b222bcf6c`; canonical **v71 ACTIVE**, SHA `16f5d62b9a3cb623212d08ea035864c18626d2e8f0435a0764300c75c26eb9a5`. Live runtime files were independently compared with the preserved candidates; unchanged BANK/G02/G03 code was retained. No schema migration or Production/main/scheduler change occurred.
+
+Runtime implementation **392206fa7fcc0f53a968428ad6ee7a8b26f8dc99** passed Full Repository Verification **38677241807** and Architecture Guard **38677239106**, including **2,370 application tests**, **430 Edge tests**, three order-extraction tests, TypeScript, both lints, architecture/build/whitespace. Both preserved-live deployment candidates passed Deno checks. Executor-only successor b9dc26e7 adds qualification-only execution and passed actual qualification/admission/canonical workflows; no different runtime is being described as tested.
+
+BEL remains REVIEW_REQUIRED with OPERATING_MARGIN_HISTORY, CFO_FCF_CONVERSION, NET_DEBT_AND_INTEREST_COVERAGE and VALUATION blocked. G03 remains 0/7 wider and 0/4 frozen READY, ₹0 READY value. The original contract follows for provenance.
+
 # BEL four-period order/execution context — 15 October 2026
 
 This is a bounded implementation of the existing DEFENCE_AEROSPACE `ORDER_BOOK_AND_EXECUTION_GROWTH` four-period documentary requirement. It does not change the separate eight-observation operating-margin requirement or add a financial scoring formula.

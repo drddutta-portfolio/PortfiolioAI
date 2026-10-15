@@ -1,0 +1,86 @@
+[
+  {
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "cd10e722-bd57-5e6b-aa26-40442ea765f8",
+    "reviewId": "051c7aee-bdfc-5241-a291-361ed13f4829",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "periodEnd": "2023-03-31",
+    "verifiedOrderCells": {
+      "turnover_crore": "17333",
+      "turnover_fiscal_label": "2022-23",
+      "order_book_crore": "60690",
+      "order_book_as_of": "2023-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    "duplicateAdmission": "IDEMPOTENT"
+  },
+  {
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "1091e29e-9063-5a49-ad8f-a2017e634e4a",
+    "reviewId": "70b92d88-b57a-5921-a4c7-772a36cdcbd4",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "periodEnd": "2024-03-31",
+    "verifiedOrderCells": {
+      "turnover_crore": "19820",
+      "turnover_fiscal_label": "2023-24",
+      "order_book_crore": "75934",
+      "order_book_as_of": "2024-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    "duplicateAdmission": "IDEMPOTENT"
+  },
+  {
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "0a6ebf1c-e1ed-51c3-a7d7-b27dfece118b",
+    "reviewId": "9eeb3e3b-ca7d-5816-a077-6ba216f837f0",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "periodEnd": "2025-03-31",
+    "verifiedOrderCells": {
+      "turnover_crore": "23024",
+      "turnover_fiscal_label": "2024-25",
+      "order_book_crore": "71650",
+      "order_book_as_of": "2025-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    "duplicateAdmission": "IDEMPOTENT"
+  },
+  {
+    "code": "G03_DOCUMENT_REVIEW_ADMITTED_NOT_CANONICAL_READY",
+    "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+    "sourceId": "b55ae585-9921-550a-a49a-8dd977003321",
+    "reviewId": "90f400e7-5f9c-5ace-a8f7-0d7f6806db4c",
+    "reused": false,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false,
+    "periodEnd": "2026-03-31",
+    "verifiedOrderCells": {
+      "turnover_crore": "26680",
+      "turnover_fiscal_label": "2025-26",
+      "order_book_crore": "73882",
+      "order_book_as_of": "2026-04-01",
+      "latest_order_inflow_crore": "30045",
+      "pdf_page": 47,
+      "latest_order_inflow_pdf_page": 35,
+      "source_report_period_end": "2026-03-31"
+    },
+    "duplicateAdmission": "IDEMPOTENT"
+  }
+]

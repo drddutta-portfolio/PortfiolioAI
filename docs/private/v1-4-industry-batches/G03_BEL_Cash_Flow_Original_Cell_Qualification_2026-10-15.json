@@ -159,5 +159,41 @@
     "doesNotAutomaticallyNormalizeFY2024": true,
     "canonicalAdmission": false,
     "explanation": "The later comparative explicitly removes investment-property rental income and mutual-fund gain from operating adjustments and adds both to investing receipts. Their sum explains the complete CFO difference and opposite investing difference; this is explicit source-component reconciliation, not a retrieval-time tie break."
-  }
+  },
+  "classificationComponentFacts": [
+    {
+      "metric": "investment_property_rental_income",
+      "reportFiscalYear": 2025,
+      "fiscalYears": [
+        2025,
+        2024
+      ],
+      "valuesINRLakh": [
+        "263",
+        "219"
+      ],
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "sourceFragment": "received and /or amount retained by customer is with intention of protecting either parties to the contract.                  Rental income - Investment property                                                                              263                219",
+      "scope": "STANDALONE",
+      "canonicalAdmission": false
+    },
+    {
+      "metric": "mutual_fund_gain",
+      "reportFiscalYear": 2025,
+      "fiscalYears": [
+        2025,
+        2024
+      ],
+      "valuesINRLakh": [
+        "2053",
+        "1939"
+      ],
+      "originalSha256": "db47a73b477737b5c5241d6c62bfba08446a734fb8b59972b6a6577e0fe7867d",
+      "pdfPage": 165,
+      "sourceFragment": "The amount of revenue recognised in respect of the same is determined based on the methodology specified in the               Gain / (loss) on mutual funds                                                                                   2,053             1,939",
+      "scope": "STANDALONE",
+      "canonicalAdmission": false
+    }
+  ]
 }
