@@ -153,11 +153,23 @@ def source_diagnostic(raw):
                    "value_excerpt":(node.text or "").strip()[:36],"has_number":bool(re.fullmatch(r"-?\\d+(?:\\.\\d+)?",(node.text or "").strip()))})
  return {"units":units,"fields":example[:12]}
 
+def put_original_xml(s3,raw,key):
+ try:
+  old=s3.get_object(Bucket=BUCKET,Key=key)["Body"].read()
+  if digest(old)!=digest(raw):raise RuntimeError("IMMUTABLE_ORIGINAL_XBRL_CONFLICT")
+  return
+ except Exception as exc:
+  code=getattr(exc,"response",{}).get("Error",{}).get("Code","")
+  if code not in ("NoSuchKey","404","NotFound"):raise
+ s3.put_object(Bucket=BUCKET,Key=key,Body=raw,ContentType="application/xml",IfNoneMatch="*")
+ reread=s3.get_object(Bucket=BUCKET,Key=key)["Body"].read()
+ if digest(reread)!=digest(raw):raise RuntimeError("ORIGINAL_XBRL_R2_READBACK_MISMATCH")
+
 def persist(db,s3,raw,record,parsed):
  period=parsed["period_end"];symbol=parsed["symbol"];original_sha=digest(raw)
  xmlkey=(ROOT+f"security_id={parsed['isin']}/period_end={period}/"
          +f"original_version={original_sha}/original-xbrl.xml")
- _r3.put_immutable(s3,raw,xmlkey)
+ put_original_xml(s3,raw,xmlkey)
  manifest={
   "contract":CONTRACT,"symbol":symbol,"isin":parsed["isin"],
   "period_start":parsed["period_start"],"period_end":period,
