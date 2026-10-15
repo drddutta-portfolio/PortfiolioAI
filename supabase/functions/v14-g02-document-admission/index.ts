@@ -1,3 +1,5 @@
+import {g03SessionStatusExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {refreshG03CurrentSessionStatus} from '../_shared/v14-g03-session-status-runtime.ts'
 import {g03FinancialExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {admitFixedG03Cash} from '../_shared/v14-g03-cash-admission-runtime.ts'
 import {g03DocumentExecutorQualified,g03OrderExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
@@ -23,6 +25,10 @@ Deno.serve(async req=>{
  if(body?.action==='ADMIT_FIXED_G03_BEL_ROCE_BATCH'){
   if(!g03RoceExecutorQualified(claims))return reply(403,'G03_ROCE_EXECUTOR_SCOPE_INVALID')
   try{return reply(200,'G03_FIXED_ROCE_REVIEWS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Roce(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_ROCE_ADMISSION_FAILED')}
+ }
+ if(body?.action==='QUALIFY_G03_BEL_CURRENT_SESSION'){
+  if(!g03SessionStatusExecutorQualified(claims))return reply(403,'G03_SESSION_STATUS_EXECUTOR_SCOPE_INVALID')
+  try{return reply(200,'G03_CURRENT_SESSION_RESULT',await refreshG03CurrentSessionStatus(createClient(url,key,{auth:{persistSession:false}}),body,undefined,undefined,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_CURRENT_SESSION_QUALIFICATION_FAILED')}
  }
  if(body?.action==='ADMIT_FIXED_G03_BEL_CASH_COMPONENTS'){
   if(!g03FinancialExecutorQualified(claims))return reply(403,'G03_FINANCIAL_EXECUTOR_SCOPE_INVALID')

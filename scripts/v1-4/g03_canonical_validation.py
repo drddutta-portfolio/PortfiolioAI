@@ -13,6 +13,13 @@ from g02_canonical_validation import validate_result
 def main():
     root = Path('supabase/functions/_shared')
     policy = json.loads((root / 'v14-g03-owner-authorization.json').read_text())
+    session_evidence = None
+    if os.environ.get('G03_REQUIRE_BEL_CASH') == 'true':
+        from g03_source_qualification import invoke
+        financial = json.loads((root / 'v14-g03-financial-authorization.json').read_text())
+        session_evidence = invoke('v14-g02-document-admission', {
+            'action': 'QUALIFY_G03_BEL_CURRENT_SESSION', 'authorizationHash': financial['contractSha256'],
+            'portfolioId': financial['portfolioId'], 'securityId': financial['securityId']})
     audience = 'https://' + policy['developmentProject'] + '.supabase.co/functions/v1/p7-ic2-materialize-readiness'
     oidc = urllib.request.Request(os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] + '&audience=' +
                                  urllib.parse.quote(audience, safe=''), headers={
@@ -36,6 +43,8 @@ def main():
     validate_result(result, policy['securityIds'])
     out = Path('g03-canonical-validation-result')
     out.mkdir(exist_ok=True)
+    if session_evidence is not None:
+        (out / 'sanitized-current-session-evidence.json').write_text(json.dumps(session_evidence, indent=2) + '\n')
     (out / 'sanitized-results.json').write_text(json.dumps(result, indent=2) + '\n')
     if os.environ.get('G03_MATERIALIZE_BEL') == 'true':
         pilot = json.loads((root / 'v14-g03-pilot-authorization.json').read_text())
