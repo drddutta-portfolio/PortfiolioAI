@@ -1,0 +1,49 @@
+name: Results R3 March June 2025 Integrated Catalog Diagnostic
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-2025-integrated-discovery.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Inspect public original integrated filing metadata without downloading original files
+        run: |
+          python - <<'PY'
+          import requests,json
+          from urllib.parse import urlencode
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          page='https://www.nseindia.com/companies-listing/corporate-integrated-filing'
+          boot=s.get(page,timeout=25)
+          print('BOOTSTRAP',boot.status_code)
+          if not boot.ok: raise SystemExit('ORIGINAL_SOURCE_ACCESS_NOT_AVAILABLE')
+          for symbol in ['CIPLA','INFY','HDFCBANK']:
+            params={'index':'equities','symbol':symbol,'type':'Integrated Filing- Financials',
+              'page':1,'size':100,'from_date':'01-01-2025','to_date':'15-10-2026'}
+            r=s.get('https://www.nseindia.com/api/integrated-filing-results?'+urlencode(params),
+              timeout=30,headers={'Accept':'application/json','Referer':page})
+            print('RESPONSE',symbol,r.status_code,r.headers.get('content-type','')[:50])
+            if not r.ok: continue
+            try: data=r.json()
+            except ValueError: continue
+            rows=data if isinstance(data,list) else data.get('data',data.get('records',[]))
+            if isinstance(rows,dict): rows=rows.get('data',[])
+            if not isinstance(rows,list):
+              print('UNKNOWN_ITEMS',symbol,type(rows).__name__);continue
+            out=[]
+            for x in rows[:8]:
+              if not isinstance(x,dict):continue
+              out.append({'keys':sorted(x.keys())[:32],
+                'date_fields':{k:str(v)[:45] for k,v in x.items() if 'date' in k.lower() or k in ('symbol','Symbol','quarter')},
+                'source_link_key_present':any(k in x for k in ('ixbrl','ixbrlUrl','originalUrl','xbrlFile','xbrl','xbrlUrl','xmlFile','link','url'))})
+            print('CATALOG',symbol,json.dumps({'count':len(rows),'records':out},sort_keys=True))
+          PY
