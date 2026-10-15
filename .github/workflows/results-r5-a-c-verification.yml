@@ -1,0 +1,39 @@
+name: Results R5-A and R5-C Focused Verification
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-a-c-verification.yml
+      - src/features/results/quarterlyR5Classification.ts
+      - src/features/results/quarterlyR5Classification.test.ts
+      - src/features/results/ResultsReferenceLivePage.tsx
+      - src/features/results/ResultsReferenceLivePage.test.tsx
+      - src/contracts/canonicalDataAuthorities.test.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Architecture and type contracts
+        run: |
+          npm run check:architecture
+          npm run typecheck
+      - name: Focused Results R5-A/C and approved reference UI regression
+        run: |
+          npx vitest run src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
+      - name: Focused source, engine and presentation lint
+        run: |
+          npx eslint src/features/results/quarterlyR5.ts src/features/results/quarterlyR5Classification.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/ResultsReferenceLivePage.tsx src/features/results/ResultsReferenceLivePage.test.tsx src/contracts/canonicalDataAuthorities.test.ts
+      - name: Production-build contract
+        run: npm run build
+      - name: Exact commit diff check
+        run: git diff --check HEAD^ HEAD
