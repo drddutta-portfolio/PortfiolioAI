@@ -1,0 +1,64 @@
+name: Results R3 Seven ISIN Dual-Filing Evidence
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r3-seven-isin-two-filings.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check 'requests==2.32.5'
+      - name: Verify independent issuer ISIN and NSE symbol from separate-quarter original XML
+        run: |
+          python - <<'PY'
+          import requests,json,re,xml.etree.ElementTree as ET,hashlib
+          from urllib.parse import urlencode,urlparse
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          home='https://www.nseindia.com/companies-listing/corporate-integrated-filing'
+          s.get(home,timeout=25).raise_for_status()
+          names=('ARVINDFASN','ASHOKA','AURIONPRO','AVANTIFEED','DDEVPLSTIK','SANSERA','VMART')
+          for symbol in names:
+            p={'index':'equities','symbol':symbol,'type':'Integrated Filing- Financials','page':1,'size':100,
+               'from_date':'01-01-2025','to_date':'15-10-2026'}
+            q=s.get('https://www.nseindia.com/api/integrated-filing-results?'+urlencode(p),
+               headers={'Accept':'application/json','Referer':home},timeout=30)
+            q.raise_for_status()
+            data=q.json()
+            rows=data if isinstance(data,list) else data.get('data',data.get('records',[]))
+            if isinstance(rows,dict):rows=rows.get('data',[])
+            if not isinstance(rows,list):raise SystemExit('SOURCE_SCHEMA_UNKNOWN')
+            distinct={}
+            for v in rows[:30]:
+              if not isinstance(v,dict) or v.get('symbol')!=symbol:continue
+              quarter=str(v.get('qe_Date','')).upper()
+              if quarter not in ('30-JUN-2026','31-MAR-2026','31-DEC-2025','30-SEP-2025','30-JUN-2025'):continue
+              if quarter in distinct:continue
+              url=v.get('xbrl')
+              if not isinstance(url,str) or urlparse(url).hostname!='nsearchives.nseindia.com' or not urlparse(url).path.startswith('/corporate/xbrl/'):continue
+              r=s.get(url,timeout=25)
+              if not r.ok or len(r.content)>5000000:continue
+              try:root=ET.fromstring(r.content)
+              except ET.ParseError:continue
+              found={}
+              for elem in root:
+                n=elem.tag.rsplit('}',1)[-1]
+                if n in ('Symbol','ISIN','NameOfTheCompany') and elem.text:found.setdefault(n,set()).add(elem.text.strip())
+              if found.get('Symbol')!={symbol} or len(found.get('ISIN',set()))!=1:continue
+              isin=next(iter(found['ISIN']))
+              if not re.fullmatch('INE[A-Z0-9]{9}',isin):continue
+              distinct[quarter]={'isin':isin,'sha256':hashlib.sha256(r.content).hexdigest(),
+                'url':url,'published':v.get('broadcast_Date'),'issuer_name':sorted(found.get('NameOfTheCompany',[]))[:1]}
+              if len(distinct)>=2:break
+            available=set(x['isin'] for x in distinct.values())
+            accepted=len(distinct)>=2 and len(available)==1
+            print(json.dumps({'symbol':symbol,'accepted':accepted,'isin':next(iter(available)) if accepted else None,
+              'filings':distinct,'reason':'TWO_SEPARATE_QUARTER_ORIGINALS_MATCH' if accepted else 'IDENTITY_EVIDENCE_INSUFFICIENT'},sort_keys=True))
+          PY
