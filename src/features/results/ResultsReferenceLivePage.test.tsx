@@ -1,0 +1,75 @@
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
+import type { PortfolioPosition, PortfolioViewModel } from "../portfolio/types"
+import type { ResultsSourceObservation } from "./resultsSourceRepository"
+import { ResultsLivePage } from "./ResultsLivePage"
+
+const mock = vi.hoisted(() => ({ load: vi.fn(), usePortfolio: vi.fn(), status: vi.fn(), start: vi.fn(), step: vi.fn() }))
+vi.mock("./resultsSourceRepository", () => ({ loadResultsSourceInventory: mock.load }))
+vi.mock("./resultsScanRepository", () => ({ getResultsScanStatus: mock.status, startResultsScan: mock.start, stepResultsScan: mock.step }))
+vi.mock("../portfolio/usePortfolioView", () => ({ usePortfolioView: mock.usePortfolio }))
+
+const bank = {
+  securityId:"bank", symbol:"BANKTEST", company:"Bank Example",
+  sector:"Banking",industry:"Banks",assetClass:"EQUITY",
+  quantity:"10",averageCost:"50",currentPrice:"70",currentValue:"700",
+  unrealisedPnl:"200",realisedPnl:null,
+} as PortfolioPosition
+const closed = {
+  ...bank,securityId:"closed",symbol:"CLOSEDTEST", company:"Closed Example",
+  sector:"Information Technology",industry:"IT Services",
+  quantity:"0",realisedPnl:"100",currentValue:null,
+} as PortfolioPosition
+const portfolio = {
+  portfolio:{id:"portfolio",currency:"INR"},
+  openPositions:[bank],closedPositions:[closed],
+} as unknown as PortfolioViewModel
+function fact(end: string, code: string, value: string):ResultsSourceObservation {
+  const [year, month] = end.split("-").map(Number)
+  return { id:end+code,securityId:"bank",code,value,periodEnd:end,
+    periodStart:new Date(Date.UTC(year!,month!-3,1)).toISOString().slice(0,10),
+    currency:"INR",sourceRecordId:end+"-issuer",unit:"INR_CRORE",
+    scope:"CONSOLIDATED",source:"COMPANY_EXCHANGE_FILING",
+    retrievedAt:"2026-10-15T00:00:00Z",publishedAt:null,selected:true }
+}
+beforeAll(() => {
+  Object.defineProperty(Element.prototype,"scrollIntoView",{value:vi.fn(),configurable:true})
+})
+afterEach(() => { cleanup(); vi.clearAllMocks() })
+
+describe("Results R5 approved visual shell with qualified evidence", () => {
+  it("keeps filters, four analysis panels and real open/closed equities while showing calibrated quarter growth", async () => {
+    mock.usePortfolio.mockReturnValue({portfolio,isLoading:false,error:null})
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.load.mockResolvedValue([
+      fact("2026-06-30","NET_INTEREST_INCOME_QUARTER","110"),
+      fact("2026-03-31","NET_INTEREST_INCOME_QUARTER","100"),
+      fact("2026-06-30","NET_PROFIT_QUARTER","125"),
+      fact("2026-03-31","NET_PROFIT_QUARTER","100"),
+    ])
+    render(<ResultsLivePage />)
+    expect(await screen.findByText("2 stocks")).toBeInTheDocument()
+    expect(screen.getByRole("tab",{name:"Quarterly Results"})).toHaveAttribute("aria-selected","true")
+    expect(screen.getByRole("tab",{name:/Annual Results/})).toBeDisabled()
+    expect(screen.getByRole("button",{name:"Current Holdings"})).toBeInTheDocument()
+    expect(screen.getByRole("button",{name:"Closed Positions"})).toBeInTheDocument()
+    expect(screen.getByRole("button",{name:"Strong"})).toBeInTheDocument()
+    const headings=["Portfolio Position","Net Interest Income — Last 6 Quarters","Key Metrics (Q1 FY27)","AI Insight"]
+    for (const title of headings) expect(screen.getByRole("heading",{name:title})).toBeInTheDocument()
+    const bankRow=screen.getByText("BANKTEST").closest("tr")
+    expect(bankRow).not.toBeNull()
+    const q1=bankRow?.querySelector('button[aria-label*="Q1 FY27"]')
+    expect(q1?.textContent).toContain("NII +10.00% QoQ")
+    expect(q1).toHaveClass("ref-strong")
+    const table=screen.getByRole("heading",{name:"Key Metrics (Q1 FY27)"}).closest("section")
+    if(!table) throw new Error("Missing result metrics card")
+    expect(within(table).getAllByText("10.00%").length).toBeGreaterThan(0)
+    expect(within(table).getAllByText("—").length).toBeGreaterThan(0)
+    expect(screen.getByText("CLOSEDTEST")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button",{name:"Closed Positions"}))
+    expect(screen.queryByText("BANKTEST")).not.toBeInTheDocument()
+    expect(screen.getByText("CLOSEDTEST")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button",{name:"Clear Filters"}))
+    await waitFor(()=>expect(screen.getByText("BANKTEST")).toBeInTheDocument())
+  })
+})
