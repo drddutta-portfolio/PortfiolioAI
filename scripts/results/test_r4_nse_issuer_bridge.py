@@ -14,6 +14,8 @@ class IssuerBridgeTest(unittest.TestCase):
         self.assertIsNone(proof.xml_reported_isin)
         self.assertEqual(META["isin"],"OLD_RETAINED_ISIN")
         self.assertIn("COMPARABILITY_UNPROVEN",proof.share_basis)
+        self.assertNotIn("historical_symbol",proof.payload())
+        self.assertNotIn("issuer_rename_evidence_sha256",proof.payload())
     def test_integrated_stock_master_name_preserves_original_catalog(self):
         metadata={k:v for k,v in META.items() if k!="companyName"}
         metadata.update(smName="Acme Industries Limited",cmName="Earlier Legal Name",qe_Date="31-Mar-2025",seq_Id="123")
