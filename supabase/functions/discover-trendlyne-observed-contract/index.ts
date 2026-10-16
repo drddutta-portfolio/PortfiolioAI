@@ -210,7 +210,7 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json() as RequestBody
-    if ((body as any).r3Action === "R3_TRENDLYNE_GAP_CAPTURE") {
+    if ((body as RequestBody & { r3Action?: string }).r3Action === "R3_TRENDLYNE_GAP_CAPTURE") {
       const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
       return await runR3TrendlyneCapture(admin, mcpUrl, body as Record<string, unknown>, request)
     }
