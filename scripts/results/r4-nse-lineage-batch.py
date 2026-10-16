@@ -1,5 +1,5 @@
 """Development historical original-XBRL recovery with explicit exchange issuer lineage."""
-import argparse,importlib.util,json,os,hashlib
+import argparse,importlib.util,json,os,hashlib,re
 from collections import Counter
 from datetime import datetime,timezone
 from decimal import Decimal
@@ -15,6 +15,8 @@ batch=load("batch","r4-bse-historical-batch.py")
 legacy=load("legacy","r5-legacy-2024-xbrl.py")
 integrated=load("integrated","r3-legacy-2025-xbrl.py")
 legacy.PERIODS={p:values[0] for p,values in batch.WINDOWS.items()}
+# R4-local discovery only; ordinary/deferred R3 acquisition is unchanged.
+integrated.XBRL_PATH=re.compile(r"^/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS|GI)_[A-Za-z0-9_]+\.xml$",re.I)
 CONTRACT="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"
 KIND="RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1"
 
@@ -120,7 +122,7 @@ def main():
                     year,provider=pair
                     if not any(p.startswith(year) for p in missing):return {"status":"NO_TARGET_PERIODS"}
                     day=datetime.now(timezone.utc).date().isoformat()
-                    catalog_key=batch.PREFIX+f"nse-catalog-v1/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
+                    catalog_key=batch.PREFIX+f"nse-catalog-v2/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
                     records=get_json(client,catalog_key)
                     if records is None:
                         records=provider.list_filings(session,symbol)
