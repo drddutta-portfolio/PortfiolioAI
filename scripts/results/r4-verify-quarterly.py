@@ -87,12 +87,20 @@ def check_manifest(record,manifest):
     # Narrow 2024 catalog ISIN omission; source NSE symbol is independently
     # tied to exactly this issued security in official NSE circular CML/61473.
     if manifest.get("independent_isin_evidence"):
-        if not (manifest.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"
+        exact_axis=(manifest.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"
             and manifest.get("symbol")=="AXISBANK"
             and manifest.get("isin")=="INE238A01034"
             and manifest.get("original_filing_isin")=="INE238A01034"
             and manifest.get("period_end") in ("2024-09-30","2024-12-31")
-            and manifest.get("independent_isin_evidence")=="NSE_CML61473_2024_AXISBANK_INE238A01034"):
+            and manifest.get("independent_isin_evidence")=="NSE_CML61473_2024_AXISBANK_INE238A01034")
+        exact_cams=(manifest.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"
+            and manifest.get("symbol")=="CAMS"
+            and manifest.get("isin")=="INE596I01020"
+            and manifest.get("original_filing_isin")=="INE596I01012"
+            and manifest.get("period_end") in ("2024-09-30","2024-12-31")
+            and manifest.get("independent_isin_evidence")=="NCL_CMPT71607_CAMS_2024_PRE_SPLIT_ISIN"
+            and manifest.get("eps_as_originally_reported_before_split") is True)
+        if not (exact_axis or exact_cams):
             return "LEGACY_HISTORICAL_ISIN_CIRCULAR_UNPROVEN"
     try:
         days=(date.fromisoformat(manifest["period_end"])-date.fromisoformat(manifest["period_start"])).days
