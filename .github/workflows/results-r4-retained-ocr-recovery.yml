@@ -1,0 +1,134 @@
+name: Results R4 Development Retained Original OCR Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r4-retained-ocr-recovery.yml
+permissions:
+  contents: read
+concurrency:
+  group: results-r4-retained-ocr-recovery-development
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    permissions:
+      contents: read
+      actions: read
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
+      TESSDATA_PREFIX: /usr/share/tesseract-ocr/5/tessdata
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Verify exact Development isolation
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+          test -n "$CLOUDFLARE_R2_ACCOUNT_ID"
+      - name: Install pinned original-filing dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Verify code and deterministic regression suites
+        run: |
+          python -m py_compile scripts/results/r4-bse-historical-batch.py scripts/results/r4-verify-quarterly.py scripts/results/r4-eight-quarter-readback.py
+          python scripts/results/test_r4_pdf_geometry.py -v
+          python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/test_portfolio_bse.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+          python scripts/results/test_r4_eight_quarter_readback.py -v
+      - name: Install controlled OCR engine for image-only originals
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+          tesseract --version
+          python scripts/results/test_r4_ocr_geometry.py -v
+      - name: Wait for complete immutable BSE source inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 30); do
+            state=$(gh api repos/drddutta-portfolio/PortfiolioAI/actions/runs/38948207691 --jq '.status')
+            if [ "$state" = completed ]; then break; fi
+            sleep 20
+          done
+          test "$state" = completed
+      - name: Read retained original references from all completed source shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: r4-bse-original-shard-*
+          run-id: 38948207691
+          github-token: ${{ github.token }}
+          path: tmp/results-r4/retained-source-inventory
+      - name: Recover all assigned unresolved quarters from retained originals
+        run: python scripts/results/r4-ocr-retained-batch.py --shard ${{ matrix.shard }} --reports tmp/results-r4/retained-source-inventory
+      - name: Retain per-company originals and rejection diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-ocr-original-shard-${{ matrix.shard }}
+          path: tmp/results-r4/ocr-shard-${{ matrix.shard }}.json
+          if-no-files-found: warn
+          retention-days: 21
+  verify:
+    needs: recover
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Verify Development-only target
+        run: |
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+      - name: Install pinned verifier
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+      - name: Independent R2 source integrity and protected selections
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-verify-quarterly.py --apply
+      - name: Exact 262 x eight-quarter readback
+        if: always()
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r4/bse-after-readback.json
+          python - <<'PY'
+          import json
+          a=json.load(open('tmp/results-r4/bse-after-readback.json'))
+          print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
+          PY
+      - name: Retain acceptance and exceptions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-ocr-independent-readback
+          path: |
+            tmp/results-r4/readback.json
+            tmp/results-r4/eight-quarter-readback.json
+            tmp/results-r4/bse-after-readback.json
+          if-no-files-found: warn
+          retention-days: 21
