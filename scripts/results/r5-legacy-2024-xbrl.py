@@ -74,7 +74,8 @@ def extract(raw,metadata,symbol,isin):
  # Legacy NSE catalog sometimes omits ISIN entirely; that is not proof of
  # another security. Allow exactly the original AXISBANK share identity proven
  # by NSE CML/61473 (March 2024); all other companies remain fail-closed.
- if not reported_isin and symbol=="AXISBANK" and isin=="INE238A01034":
+ if (reported_isin is None or str(reported_isin).strip().upper() in
+     ("","NA","N/A","NONE","NOT AVAILABLE","-","NOTLISTED")) and symbol=="AXISBANK" and isin=="INE238A01034":
   embedded={((node.text or "").strip().upper()) for node in root.iter()
             if local(node.tag).lower() in ("isin","isinnumber","isincode")
             and (node.text or "").strip()}
