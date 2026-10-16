@@ -75,3 +75,13 @@ Runtime verification: read-only BSE resultsSnapshot request from the Development
 Previously unfinished Results quarterly scan now has terminal PARTIAL status, completed 2026-10-16T04:04:08.936Z: 262/262 items processed, 14 not qualified, zero newly accepted observations. Finishing a visit is not equal to acquiring new financial quarters.
 
 **R3 remains NOT COMPLETE.** Require 262/262 genuine selected four-quarter original-filing readback (or an explicit owner-approved contract change). Preserve conflicts/unavailable quarters honestly.
+
+## October 16 independent Cloudflare R2 source-inventory audit
+
+Directly listed original object keys in `portfolioai-history-dev` under `portfolioai-results/development/v1/quarterly/security_id=<ISIN>/` for **all 20 zero-qualified-core companies**. Results: **0 R2 objects with period_end in the four required 2025-09, 2025-12, 2026-03, 2026-06 dates** for every one of those 20. There are some older R2 records for 360ONE (March 2025), ABCAPITAL/JIOFIN/LTF/MFSL/MUTHOOTFIN/PNBHOUSING/UTIAMC (September/December 2024), HDFCAMC and NAM-INDIA (September/December 2024, March 2025); no objects at all for several others. Direct Cloudflare list calls succeeded. Supabase data_source_records independently corroborate no required-period original source records for these companies; TDPOWERSYS has only four BSE review-only, non-original summary observations.
+
+This rules out "just replaying R2" as a solution for those 20. Actual original financial documents must be acquired and their source identity, quarter, units, scope, EPS and publication eligibility independently verified, without making up values or selecting conflicting numbers.
+
+Last measured complete quarterly cohort remains **233/262**, leaving 29 companies and 91 quarter slots. Code deploy status and successful cache scans are not evidence of source acquisition. Original conflicts among seven single-quarter companies also remain unadmitted; financial denominators must not be auto-inferred.
+
+**No R3 PASS claimed.** The owner requested clearing all blockers; without successful authorized original acquisition and qualification, the fail-closed result stays incomplete. Work is isolated to Development.
