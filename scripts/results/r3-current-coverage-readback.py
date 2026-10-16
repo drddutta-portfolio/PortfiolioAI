@@ -25,7 +25,9 @@ BANKS = frozenset(
 )
 BANK_CORE = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
 OTHER_CORE = frozenset(("OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
-METRICS = sorted(BANK_CORE | OTHER_CORE)
+INSURERS = frozenset(("STARHEALTH",))
+INSURANCE_CORE = frozenset(("NET_PREMIUM_EARNED_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
+METRICS = sorted(BANK_CORE | OTHER_CORE | INSURANCE_CORE)
 
 
 def readback(db_url: str) -> dict:
@@ -69,7 +71,7 @@ def readback(db_url: str) -> dict:
     etfs = sorted(symbol for _, symbol, cls in all_members if cls == "ETF")
     for (sid, end, _scope, _source), metrics in selected.items():
         symbol = equity.get(sid)
-        if symbol and (BANK_CORE if symbol in BANKS else OTHER_CORE).issubset(metrics):
+        if symbol and (INSURANCE_CORE if symbol in INSURERS else BANK_CORE if symbol in BANKS else OTHER_CORE).issubset(metrics):
             complete[sid].add(end)
     details = []
     for sid, symbol in sorted(equity.items(), key=lambda row: row[1]):
