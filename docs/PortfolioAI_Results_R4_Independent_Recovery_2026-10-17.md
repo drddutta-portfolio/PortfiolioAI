@@ -50,3 +50,13 @@ Detailed source/issuer recovery traces and original documents remain in private 
 Validation run 38973235964 passed 62 targeted tests, architecture, TypeScript, application lint, Edge lint, production build and whitespace checks. Local changed Python modules also compile. The broader repository workflow still has nine pre-existing Results UI/registry test failures (2,344 other tests pass); these have not been hidden or altered.
 
 Scope: PortfolioAI-Development, Development Supabase and Development R2 only. No UI, main/Production, schema, migrations, RLS, holdings/accounting formulas or investment-action behavior changed. Original facts remain immutable; accepted protected decisions are preserved. R4 is not complete, and unresolved source conflicts/identity/quarter/scope cases remain explicit.
+
+
+### Final follow-up readback — 2026-10-17, 03:49 IST
+
+Run 38974576073 completed all eight acquisition shards and independent verification successfully. One further company-quarter passed source qualification; the two retained candidate source trios were not both counted as new quarters. Final verified coverage is **1,996 / 2,096 (95.2%)**, with **82 historical R4 gaps** and **18 unchanged deferred R3 gaps**: QUALIFIED 1,996; MISSING 89; CONFLICT 10; REVIEW_REQUIRED 1. Total recovered against this repair's 119-gap baseline: **37 company-quarters**. Exact cohort inventory independently agrees on 82 historical gaps across 35 issuers.
+
+The verifier checked 3,957 private original-source records, qualified 11,905 fact rows, created three decisions and preserved 6,038 existing decisions; conflicting existing decisions: zero. All 262 equities have selected data and 218 have all eight quarters selected. Existing source-exception categories remain explicit. Unsupported/non-PDF official rename authority responses remain rejected, rather than forcing the remaining old-symbol records through. The fixed UI remains unchanged. R4 remains PARTIAL.
+
+Verification: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38974576073
+Code validation: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38973235964
