@@ -12,6 +12,11 @@ concurrency:
   cancel-in-progress: false
 jobs:
   history:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -20,7 +25,8 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
-      RESULTS_R4_TRENDLYNE_MODE: PARAMETERS
+      RESULTS_R4_TRENDLYNE_MODE: HISTORICAL
+      RESULTS_R4_TRENDLYNE_SHARD: ${{ matrix.shard }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -50,6 +56,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r4-trendlyne-historical-contract
+          name: r4-trendlyne-historical-contract-${{ matrix.shard }}
           path: tmp/results-r4/trendlyne/
           retention-days: 7
