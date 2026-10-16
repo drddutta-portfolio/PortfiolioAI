@@ -343,27 +343,44 @@ export function ResultsLivePage() {
   const [statuses, setStatuses] = useState<Set<StatusFilter>>(new Set())
   const [scrollTop, setScrollTop] = useState(0)
   const [onlyNew, setOnlyNew] = useState(false)
-  const [gridScrollWidth, setGridScrollWidth] = useState(0)
+  const [maxHorizontalScroll, setMaxHorizontalScroll] = useState(0)
+  const [horizontalOffset, setHorizontalOffset] = useState(0)
   const [selection, setSelection] = useState<Selection | null>(null)
   const [preview, setPreview] = useState<Preview | null>(null)
   const [collapsed, setCollapsed] = useState(false)
   const [insightExpanded, setInsightExpanded] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
-  const bottomScrollRef = useRef<HTMLDivElement>(null)
   const periods = useMemo(() => makePeriods(), [])
 
   useEffect(() => {
     const grid = gridRef.current
     if (!grid) return
-    const measure = () => setGridScrollWidth(grid.scrollWidth)
+    const measure = () => {
+      const max = Math.max(0, grid.scrollWidth - grid.clientWidth)
+      setMaxHorizontalScroll(max)
+      if (grid.scrollLeft > max) grid.scrollLeft = max
+      setHorizontalOffset(grid.scrollLeft)
+    }
     measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(grid)
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null
+    observer?.observe(grid)
     const table = grid.querySelector("table")
-    if (table) observer.observe(table)
-    return () => observer.disconnect()
+    if (table) observer?.observe(table)
+    window.addEventListener("resize", measure)
+    return () => {
+      observer?.disconnect()
+      window.removeEventListener("resize", measure)
+    }
   }, [periods.length, evidenceRevision])
+
+  const scrollQuartersTo = (requested: number) => {
+    const grid = gridRef.current
+    if (!grid) return
+    const next = Math.min(maxHorizontalScroll, Math.max(0, requested))
+    grid.scrollLeft = next
+    setHorizontalOffset(next)
+  }
 
   const entries = useMemo((): Entry[] => {
     if (!portfolio) return []
@@ -528,8 +545,8 @@ export function ResultsLivePage() {
       </section>
       {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
-      <div className="results-matrix-shell" ref={gridRef} aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => { setScrollTop(e.currentTarget.scrollTop); if (bottomScrollRef.current) bottomScrollRef.current.scrollLeft = e.currentTarget.scrollLeft }}>
-        <table className="results-matrix">
+      <div className="results-matrix-shell" ref={gridRef} aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => { setScrollTop(e.currentTarget.scrollTop); setHorizontalOffset(e.currentTarget.scrollLeft) }}>
+        <table className="results-matrix" style={{ minWidth: `${14.4 + periods.length * 16.5}rem` }}>
           <thead><tr><th className="stock-column"><span>{filtered.length} stocks</span>Stock</th>{periods.map((p, i) => <th key={p.end}>{p.label}{i === 0 ? <small>(Rolling reports) ↓</small> : null}</th>)}</tr></thead>
           <tbody>
             {start > 0 ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: start * rowHeight }} /></tr> : null}
@@ -554,7 +571,13 @@ export function ResultsLivePage() {
           </tbody>
         </table>
       </div>
-      <div className="results-bottom-scroll" ref={bottomScrollRef} role="scrollbar" aria-label="Scroll all quarterly results horizontally" aria-orientation="horizontal" tabIndex={0} onScroll={(e) => { if (gridRef.current) gridRef.current.scrollLeft = e.currentTarget.scrollLeft }}><div style={{ width: gridScrollWidth || "80rem", height: 1 }}/></div>
+      <nav className="results-quarter-navigator" aria-label="Quarterly results horizontal navigation">
+        <button type="button" aria-label="Scroll towards latest quarters" onClick={() => scrollQuartersTo(horizontalOffset - (gridRef.current?.clientWidth ?? 400) * .7)} disabled={horizontalOffset <= 0}>‹</button>
+        <span className="results-quarter-nav-label">Latest</span>
+        <input type="range" min={0} max={Math.max(1, maxHorizontalScroll)} step={1} value={Math.min(horizontalOffset, Math.max(1, maxHorizontalScroll))} disabled={maxHorizontalScroll <= 0} aria-label="Scroll quarterly results horizontally" aria-valuetext={maxHorizontalScroll > 0 ? `${Math.round(horizontalOffset / maxHorizontalScroll * 100)}% toward older quarters` : "All quarters visible"} onChange={(e) => scrollQuartersTo(Number(e.currentTarget.value))}/>
+        <span className="results-quarter-nav-label">Older</span>
+        <button type="button" aria-label="Scroll towards older quarters" onClick={() => scrollQuartersTo(horizontalOffset + (gridRef.current?.clientWidth ?? 400) * .7)} disabled={maxHorizontalScroll <= 0 || horizontalOffset >= maxHorizontalScroll}>›</button>
+      </nav>
       {filtered.length === 0 ? <div className="results-empty">No matching securities for the current filters.</div> : null}
       {chosen && period ? <div className="selected-analysis" ref={analysisRef}>
         <div className="selected-analysis-heading">
