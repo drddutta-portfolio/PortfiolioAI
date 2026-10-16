@@ -26,3 +26,5 @@ jobs:
 # Aggregate context categories only: no context identifiers, issuer details or amounts are exported.
 
 # Compare anonymous identity/date categories for remaining context failures.
+
+# Reproduce the standard collector session; access-denied responses remain failures.
