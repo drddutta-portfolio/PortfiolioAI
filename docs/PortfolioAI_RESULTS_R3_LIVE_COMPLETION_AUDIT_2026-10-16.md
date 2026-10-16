@@ -118,3 +118,20 @@ The 13 remaining exceptions in the locked four quarter scope, as of this readbac
 - Two missing Sep/Dec 2025: AVANTIFEED, VAML.
 - Four missing Sep/Dec 2025 & Mar/Jun 2026: STARHEALTH (insurer-specific general-insurance financial statement format, not ordinary revenue/PAT/EPS).
 All original issuer revision conflicts and publication uncertainty must remain explicit; older or other-scope/other-quarter records are not substitutions. Neither UI nor final acceptance may claim 262/262 before the gate passes. Production/main unchanged.
+
+## Continued R3 closure work — Development, 16 October 2026
+
+Status from current selected-evidence SQL readback: **249 / 262**, with 13 incompletely qualified equities. No further 262/262 claim. This is the same protected 249 accepted cohort as the previous readback. The remaining fixed-window period gaps are ten one-quarter cases (360ONE, BDL, COROMANDEL, DATAPATTNS, ICICIAMC, JIOFIN, MGL, WELSPUNLIV, YATRA, ZAGGLE), two two-quarter cases (AVANTIFEED, VAML), and four-quarter insurer STARHEALTH: total **18 missing company-quarter slots**.
+
+New source work on Development (no main/Production):
+- GI original-source support in the R3 collector: exact official NSE General Insurance iXBRL identity / statement scope / first 3-month date, net premium earned (NOT gross premiums or ordinary corporate operating revenue), PAT and diluted EPS. Rejects non-GI issuer and ambiguous accounting statements; refuses YTD substitution.
+- `NET_PREMIUM_EARNED_QUARTER` metric definition added to Development Supabase, marked insurer/results-only with no V1-4 scoring impact. R4 source admission, source inventory and UI coverage contract extended for STARHEALTH specifically; existing noninsurance metrics and bank contracts left intact.
+- Separate `.github/workflows/results-r3-starhealth-gi-recovery.yml` targeted original GI acquisition, qualified selection and independent whole-portfolio readback; tests include positive same-filing GI contract and negative gross-premium relabel.
+- Original NSE integrated catalog source collection now uses maximum four bounded 100-item pages to search older Sep/Dec 2025 originals without repeating the same source. `.github/workflows/results-r3-targeted-remaining-12.yml` narrows acquisition to the 12 non-insurer exceptions; R4 verifier remains fail-closed on inconsistent source versions.
+- Current database readback still has no `NET_PREMIUM_EARNED_QUARTER` observations, and neither workflow can be asserted successfully executed without its authenticated GitHub Actions run artifact. A committed action definition does not equal a successful backfill.
+
+Eligibility distinction: ICICIAMC first traded on 19 Dec 2025 (Prudential issuer press release), so its Sep-2025 financial quarter, if admitted, needs documented prelisting prospectus/issuer original and the correct historical share basis; do not fabricate NSE listed-company financial filing. VAML began operation as separated listed-entity after Vedanta scheme's 1 May 2026 effective date; its Sep/Dec 2025 history needs authentic predecessor/recast legal-entity evidence, and may be genuinely noncomparable. These are not normal unstructured-filing failures.
+
+Original-source conflicts are not waived: BDL PAT ~0.0002 Cr; COROMANDEL first-generation and later original figures 100x apart on same date; AVANTIFEED original consolidated EPS differs; DATAPATTNS March EPS zero vs 24.71; MGL, WELSPUNLIV, YATRA, ZAGGLE reported-value differences. A later upload timestamp alone does not supply a verified correction. Existing 249 selections must not be replaced to artificially improve coverage.
+
+Deployment blocker newly observed: latest relevant GitHub commit statuses point to Vercel build-rate limit (`upgradeToPro=build-rate-limit`), rather than a READY updated Results UI deployment. Do not claim the new insurer UI changes are live. Existing UI may still display previous coverage. Check Vercel only after the account's build-rate restriction clears; no Production deployment.
