@@ -89,6 +89,112 @@ async function completeRunItem(
   if (result.error) throw new Error("RUN_ITEM_ACCOUNTING_FAILED")
 }
 
+
+const R3_GAPS: Record<string,string[]> = {
+ "360ONE":["2025-09-30"],"BDL":["2025-09-30"],"COROMANDEL":["2026-03-31"],
+ "DATAPATTNS":["2026-03-31"],"ICICIAMC":["2025-09-30"],"JIOFIN":["2025-09-30"],
+ "MGL":["2026-03-31"],"WELSPUNLIV":["2025-12-31"],"YATRA":["2026-03-31"],
+ "ZAGGLE":["2026-03-31"],"AVANTIFEED":["2025-09-30","2025-12-31"],
+ "VAML":["2025-09-30","2025-12-31"],
+ "STARHEALTH":["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+}
+async function runR3TrendlyneCapture(
+  admin: Admin, mcpUrl:string, body: Record<string,unknown>,
+  request:Request
+):Promise<Response>{
+ const token=request.headers.get("x-results-r3-internal-token")??""
+ if(!token)return reply(401,{code:"R3_INTERNAL_TOKEN_REQUIRED"})
+ const check=await admin.rpc("verify_results_r3_trendlyne_token_v1",{p_token:token})
+ if(check.error||check.data!==true)return reply(401,{code:"R3_INTERNAL_TOKEN_INVALID"})
+ const symbol=body.symbol
+ const documentMode=body.tool==="documents"
+ if(typeof symbol!=="string"||!(symbol in R3_GAPS))return reply(400,{code:"OUTSIDE_R3_13_COMPANY_COHORT"})
+ const tool=documentMode?"get_document_search_results":"get_parameter_values_multi_stock"
+ const portfolioId="6193a4aa-3235-4057-bddc-209fcf443fc2"
+ const sec=await admin.from("securities").select("id,asset_class").eq("symbol",symbol).single()
+ if(sec.error||sec.data?.asset_class!=="EQUITY")return reply(400,{code:"SECURITY_NOT_VERIFIED"})
+ const membership=await admin.from("transactions").select("security_id").eq("portfolio_id",portfolioId)
+  .eq("security_id",sec.data.id).is("superseded_at",null).limit(1)
+ if(membership.error||!membership.data?.length)return reply(403,{code:"NOT_PORTFOLIO_SECURITY"})
+ const [src,ctrl]=await Promise.all([
+  admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code",SOURCE_CODE).single(),
+  admin.from("provider_ingestion_controls").select("ingestion_enabled,policy_version").eq("source_code",SOURCE_CODE).single()
+ ])
+ if(src.error||!src.data?.is_active||!src.data?.entitlement_verified||!src.data?.retention_rights_verified||ctrl.error||!ctrl.data?.ingestion_enabled)
+  return reply(409,{code:"R3_PROVIDER_CONTROLS_NOT_ELIGIBLE"})
+ const domain="RESULTS_R3_TRENDLYNE_GAP_EVIDENCE"
+ const run=await admin.from("data_ingestion_runs").insert({
+  source_code:SOURCE_CODE,portfolio_id:portfolioId,operation:domain,
+  orchestration_type:"R3_REVIEW_CAPTURE_ONLY",trigger_source:"OWNER",status:"RUNNING",
+  requested_count:1,estimated_call_count:1,reserved_call_count:1,attempted_call_count:0,
+  policy_version:ctrl.data.policy_version,metadata:{symbol,tool,quarters:R3_GAPS[symbol],canonical_writes:0}
+ }).select("id").single()
+ if(run.error)return reply(503,{code:"R3_RUN_CREATE_FAILED"})
+ const runId=run.data.id as string
+ const item=await admin.from("data_ingestion_run_items").insert({ingestion_run_id:runId,
+  security_id:sec.data.id,data_domain:domain,status:"PLANNED",
+  metadata:{symbol,quarters:R3_GAPS[symbol],tool}}).select("id").single()
+ if(item.error)return reply(503,{code:"R3_RUN_ITEM_CREATE_FAILED",runId})
+ const res=await admin.rpc("reserve_provider_budget_v1",{p_source_code:SOURCE_CODE,
+  p_ingestion_run_id:runId,p_reservation_key:runId+":R3:"+tool,p_estimated_units:1,p_reservation_seconds:300})
+ const grant=res.data?.[0]
+ if(res.error||!grant?.reserved||!grant?.reservation_id){
+  await admin.from("data_ingestion_runs").update({status:"FAILED",completed_at:new Date().toISOString(),
+    error_summary:grant?.reason_code??"BUDGET_NOT_GRANTED",reserved_call_count:0,skipped_count:1}).eq("id",runId)
+  return reply(429,{code:"BUDGET_NOT_GRANTED",reason:grant?.reason_code??"UNKNOWN",providerCalls:0,runId})
+ }
+ const started=new Date().toISOString()
+ let failed=false,stored=false,safeCode:string|null=null,providerLength=0
+ try{
+  const dates=R3_GAPS[symbol].join(", ")
+  const query=documentMode?
+   symbol+" issuer quarterly financial results original filing NSE BSE quarter ended "+dates+" EPS revenue profit evidence":
+   symbol+" financial results for exact historical quarters ended "+dates+" with quarterly Revenue PAT Diluted EPS and reporting periods"
+  const client=new TrendlyneObservedMcpClient(mcpUrl)
+  const output=documentMode?await client.getDocumentSearchResults(query):await client.getParameterValuesMultiStock(query,"stock")
+  providerLength=output.length
+  if(output.length>110000)throw new Error("R3_CAPTURE_TOO_LARGE")
+  const manifest={mode:domain,symbol,security_id:sec.data.id,
+   missing_quarters:R3_GAPS[symbol],provider_tool:tool,
+   data:output,acquired_at:new Date().toISOString(),review_only:true,
+   original_issuer_proven:false,selected_quarters:0,canonical_research_writes:0}
+  const raw=JSON.stringify(manifest)
+  const record=await admin.from("data_source_records").insert({
+   source_code:SOURCE_CODE,ingestion_run_id:runId,record_kind:"RESULTS_R3_TRENDLYNE_GAP_CAPTURE_V1",
+   external_record_id:symbol+":"+tool+":"+runId,payload_hash:await sha256Hex(raw),
+   raw_payload:manifest,terms_snapshot:{provider_tool:tool,review_only:true,source_unverified:true}
+  })
+  if(record.error)throw new Error("R3_EVIDENCE_INSERT_FAILED")
+  stored=true
+ }catch(err){failed=true;safeCode=(err instanceof Error?err.message:"PROVIDER_ERROR").replace(/[^A-Z0-9_]/gi,"_").slice(0,90)}
+ const usage=await admin.rpc("record_provider_usage_event_v1",{
+   p_source_code:SOURCE_CODE,p_ingestion_run_id:runId,p_run_item_id:item.data.id,
+   p_security_id:sec.data.id,p_data_domain:domain,p_operation_class:tool.toUpperCase(),
+   p_accounting_class:"PROVIDER_TOOL_ATTEMPT",p_estimated_internal_units:1,p_actual_internal_units:1,
+   p_attempted_at:started,p_completed_at:new Date().toISOString(),
+   p_outcome:failed?"FAILED":"SUCCEEDED",p_safe_error_code:safeCode,
+   p_retry_attempt:0,p_idempotency_key:runId+":"+tool
+ })
+ const settle=await admin.rpc("settle_provider_budget_v1",{p_reservation_id:grant.reservation_id,
+   p_consumed_units:failed?0:1,p_failed_units:failed?1:0,p_released_units:0})
+ const bad=Boolean(usage.error||settle.error)
+ await admin.from("data_ingestion_run_items").update({
+   status:failed||bad?"FAILED":"ACCEPTED",safe_reason_code:safeCode,
+   attempted_call_count:1,accepted_record_count:stored?1:0,
+   completed_at:new Date().toISOString(),
+   metadata:{review_only:true,source_selection_writes:0}
+ }).eq("id",item.data.id)
+ await admin.from("data_ingestion_runs").update({status:failed||bad?"FAILED":"SUCCEEDED",
+  completed_at:new Date().toISOString(),attempted_call_count:1,accepted_count:stored?1:0,
+  fetched_count:stored?1:0,failed_count:failed?1:0,
+  error_summary:bad?"BUDGET_OR_USAGE_ACCOUNTING_FAILED":safeCode,
+  metadata:{symbol,tool,providerCalls:1,review_capture:stored,accepted_quarters:0,
+   canonical_writes:0,source_selection_writes:0}}).eq("id",runId)
+ return reply(bad?503:200,{symbol,tool,runId,providerCalls:1,
+  reviewCapture:stored,providerLength,safeCode,accountingOk:!bad,
+  qualifiedQuarterSelections:0})
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
@@ -104,6 +210,10 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json() as RequestBody
+    if ((body as any).r3Action === "R3_TRENDLYNE_GAP_CAPTURE") {
+      const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
+      return await runR3TrendlyneCapture(admin, mcpUrl, body as Record<string, unknown>, request)
+    }
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") {
       return reply(400, { error: "portfolioId and securityId are required." })
     }
