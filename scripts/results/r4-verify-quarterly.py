@@ -40,7 +40,8 @@ APPROVED_SPLIT_ISINS={
 "POCL":("INE063E01053","INE063E01061","2026-07-21","2.5","NSE change in ISIN notice 2026-07-17"),
 "BECTORFOOD":("INE495P01012","INE495P01020","2025-12-12","5","MSE/LIST/18238/2025"),
 "V2RETAIL":("INE945H01013","INE945H01021","2026-03-25","10","BSE DR-847/2025-2026"),
-"KOTAKBANK":("INE237A01028","INE237A01036","2026-01-14","5","Kotak Mahindra Bank issuer split disclosure 2026-01-16")}
+"KOTAKBANK":("INE237A01028","INE237A01036","2026-01-14","5","Kotak Mahindra Bank issuer split disclosure 2026-01-16"),
+"ANGELONE":("INE732I01013","INE732I01021","2026-02-26","10","BSE DR-829/2025-2026")}
 def historical_original_eps_proof(m):
     link=m.get("historical_identity_link")
     if not link:return None
