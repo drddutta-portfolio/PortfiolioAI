@@ -7,6 +7,7 @@ from pathlib import Path
 import psycopg,requests
 from r4_nse_issuer_bridge import bridge_from_sources
 from r4_recovery_queue import attempt_all
+from r4_issuer_rename import RULES,verify_rename_pdf
 
 def load(name,file):
     spec=importlib.util.spec_from_file_location(name,Path(__file__).with_name(file))
@@ -26,7 +27,24 @@ def get_json(client,key):
         if getattr(error,"response",{}).get("Error",{}).get("Code") in ("404","NoSuchKey","NotFound"):return None
         raise
 
-def persist(db,client,sid,raw,metadata,parsed,proof,header,listing):
+def load_rename_authority(client,session,symbol):
+    rule=RULES.get(symbol)
+    if not rule:return None,None
+    key=batch.PREFIX+"issuer-rename-authorities-v1/symbol="+symbol+"/authority.json"
+    reference=get_json(client,key)
+    if reference:
+        raw=client.get_object(Bucket=batch.BUCKET,Key=reference["r2_key"])["Body"].read()
+        if batch.sha(raw)!=reference["sha256"]:raise ValueError("RENAME_AUTHORITY_HASH_MISMATCH")
+    else:
+        response=session.get(rule["url"],timeout=35);response.raise_for_status();raw=response.content
+        parsed=verify_rename_pdf(raw,symbol,rule["url"])
+        original_key=batch.PREFIX+"evidence/original_version="+parsed.sha256+"/issuer-rename.pdf"
+        batch.immutable_put(client,original_key,raw)
+        reference={"source_url":rule["url"],"r2_key":original_key,"sha256":parsed.sha256}
+        batch.immutable_put(client,key,batch.canonical(reference))
+    return verify_rename_pdf(raw,symbol,reference["source_url"]),reference
+
+def persist(db,client,sid,raw,metadata,parsed,proof,header,listing,rename_reference=None):
     period=parsed["period_end"];isin=proof.canonical_isin;symbol=proof.symbol
     xmlsha=batch.sha(raw)
     with db.cursor() as cur:
@@ -44,6 +62,7 @@ def persist(db,client,sid,raw,metadata,parsed,proof,header,listing):
     identity={"contract":proof.contract,"issuer_bridge":proof.payload(),"bse_header":header,
         "bse_listing":listing,"nse_catalog_record":metadata,"nse_original_sha256":xmlsha,
         "retrieved_at":datetime.now(timezone.utc).isoformat(),"historical_isin_not_inferred":True}
+    if rename_reference:identity["issuer_rename_authority"]=rename_reference
     identity_bytes=batch.canonical(identity);identity_sha=batch.sha(identity_bytes)
     identity_key=batch.PREFIX+"evidence/source_version="+identity_sha+"/exchange-issuer-identity.json"
     batch.immutable_put(client,identity_key,identity_bytes)
@@ -120,6 +139,10 @@ def main():
                 matches=[x for x in listing if str(x.get("SCRIP_CD"))==code and x.get("ISIN_NUMBER")==isin]
                 if len(matches)!=1:raise ValueError("EXACT_BSE_LISTING_IDENTITY_UNPROVEN")
                 listing=matches[0]
+                rename=None;rename_reference=None
+                if symbol in RULES and any(p<RULES[symbol]["effective_date"] for p in missing):
+                    try:rename,rename_reference=load_rename_authority(client,session,symbol)
+                    except Exception as error:counts["rename_authority_error_"+type(error).__name__]+=1
                 def collect_year(pair):
                     year,provider=pair
                     if not any(p.startswith(year) for p in missing):return {"status":"NO_TARGET_PERIODS"}
@@ -149,7 +172,8 @@ def main():
                         digest=batch.sha(raw);original_key=batch.PREFIX+"evidence/original_version="+digest+"/original-xbrl.xml"
                         batch.immutable_put(client,original_key,raw)
                         batch.immutable_put(client,cachekey,batch.canonical({"source_url":original,"sha256":digest,"original_r2_key":original_key}))
-                        proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
+                        applicable_rename=rename if rename and period<rename.effective_date else None
+                        proof=bridge_from_sources(raw,item,symbol,isin,header,listing,applicable_rename)
                         # This record is a derived parser input, never the source catalog.
                         normalized={**item,"fromDate":datetime.fromisoformat(batch.WINDOWS[period][0]).strftime("%d-%b-%Y"),
                                     "toDate":datetime.fromisoformat(period).strftime("%d-%b-%Y")}
@@ -159,7 +183,7 @@ def main():
                         required={revenue,"NET_PROFIT_QUARTER","EPS_DILUTED"}
                         if not required.issubset(parsed["facts"]):raise ValueError("NO_COMPLETE_EXACT_QUARTER_CORE_TRIO")
                         parsed["facts"]={k:parsed["facts"][k] for k in sorted(required)}
-                        new=persist(db,client,sid,raw,item,parsed,proof,header,listing)
+                        new=persist(db,client,sid,raw,item,parsed,proof,header,listing,rename_reference if applicable_rename else None)
                         counts["facts_inserted"]+=new;counts["quarter_source_candidates"]+=1
                         result={"period":period,"scope":parsed["scope"],"status":"SOURCE_WRITTEN_PENDING_R4_SELECTION",
                             "source_url":original,"facts_inserted":new}
