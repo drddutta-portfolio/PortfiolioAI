@@ -81,6 +81,17 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
     if observations:
         return {"status": "REVIEW_REQUIRED", "reason": "ORIGINAL_QUARTER_NOT_SELECTED_OR_INCOMPLETE",
                 "source_candidate_count": len({r["source_record_id"] for r in observations if r["source_record_id"]})}
+    if symbol == "VAML":
+        return {"status": "MISSING",
+                "reason": "PRE_DEMERGER_ISSUER_QUARTER_OR_PRO_FORMA_BASIS_UNPROVEN",
+                "not_applicable": "UNPROVEN",
+                "historical_issuer_event": {
+                    "type": "VEDANTA_RESULTING_COMPANY_DEMERGER",
+                    "effective_date": "2026-05-01",
+                    "original_issuer_release": "https://vedantaaluminium.com/media/press-releases/list/vedanta-fixes-1st-may-as-record-date-for-demerger-announces-share-allotment-details/",
+                    "treatment": "PENDING_SEPARATE_ORIGINAL_OR_RECAST_FINANCIAL_EVIDENCE",
+                    "pro_forma_not_inferred": True
+                }}
     return {"status": "MISSING", "reason": "NO_ORIGINAL_SOURCE_QUARTER",
             "not_applicable": "UNPROVEN"}
 
