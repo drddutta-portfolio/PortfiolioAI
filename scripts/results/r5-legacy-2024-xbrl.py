@@ -59,7 +59,7 @@ def list_filings(session,symbol):
          and v.get("period")=="Quarterly" and v.get("toDate") in ("30-Sep-2024","31-Dec-2024")
          and v.get("cumulative")=="Non-cumulative" and origin(v.get("xbrl",""))]
 
-def extract(raw,metadata,symbol,isin):
+def extract(raw,metadata,symbol,isin,issuer_bridge=None):
  """Fail closed on unknown XBRL contexts, scope, currency and ambiguity."""
  if b"<!DOCTYPE" in raw.upper() or b"<!ENTITY" in raw.upper() or len(raw)>5_000_000:
   return None,"INVALID_XML_BYTES"
@@ -69,7 +69,15 @@ def extract(raw,metadata,symbol,isin):
  start=dateval(metadata.get("fromDate"));end=dateval(metadata.get("toDate"))
  if end not in PERIODS or start!=PERIODS[end]:return None,"INVALID_2024_QUARTER"
  if metadata.get("symbol")!=symbol:return None,"CATALOG_SYMBOL_MISMATCH"
- reported_isin=metadata.get("isin")
+ original_catalog_isin=metadata.get("isin")
+ reported_isin=original_catalog_isin
+ if issuer_bridge is not None:
+  from r4_nse_issuer_bridge import IssuerBridge
+  if (not isinstance(issuer_bridge,IssuerBridge) or issuer_bridge.symbol!=symbol
+      or issuer_bridge.canonical_isin!=isin):return None,"UNVERIFIED_EXCHANGE_ISSUER_BRIDGE"
+  # Explicitly normalized issuer link only. The original catalog value stays in
+  # the proof; it is never represented as a newly verified historical share ISIN.
+  reported_isin=isin
  independent_isin_evidence=None
  # Legacy NSE catalog sometimes omits ISIN entirely; that is not proof of
  # another security. Allow exactly the original AXISBANK share identity proven
@@ -134,7 +142,9 @@ def extract(raw,metadata,symbol,isin):
   if ctx!="OneD":continue # FourD is cumulative/YTD even where XML dates look quarterly
   if any(local(e.tag) in ("scenario","segment") for e in node.iter()):continue
   identities=[e for e in node.iter() if local(e.tag)=="identifier"]
-  if len(identities)!=1 or (identities[0].text or "").strip()!=symbol:continue
+  allowed_identifiers={symbol}
+  if issuer_bridge is not None:allowed_identifiers.add(issuer_bridge.bse_scrip_code)
+  if len(identities)!=1 or (identities[0].text or "").strip() not in allowed_identifiers:continue
   starts=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="startDate"]
   ends=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="endDate"]
   if starts==[start] and ends==[end]:contexts[ctx]=node
@@ -187,7 +197,9 @@ def extract(raw,metadata,symbol,isin):
  return {"symbol":symbol,"isin":isin,"source_isin":reported_isin,"period_start":start,
          "period_end":end,"scope":scope,"facts":facts,
          "historical_identity_link":link,
-         "independent_isin_evidence":independent_isin_evidence},None
+         "independent_isin_evidence":independent_isin_evidence,
+         "issuer_bridge":issuer_bridge.payload() if issuer_bridge is not None else None,
+         "original_catalog_isin":original_catalog_isin},None
 
 def source_diagnostic(raw):
  try:root=ET.fromstring(raw)
@@ -217,6 +229,7 @@ def put_original_xml(s3,raw,key):
  if digest(reread)!=digest(raw):raise RuntimeError("ORIGINAL_XBRL_R2_READBACK_MISMATCH")
 
 def persist(db,s3,raw,record,parsed):
+ if parsed.get("issuer_bridge"):raise RuntimeError("BRIDGED_ORIGINAL_REQUIRES_R4_EXCHANGE_LINEAGE_CONTRACT")
  period=parsed["period_end"];symbol=parsed["symbol"];original_sha=digest(raw)
  xmlkey=(ROOT+f"security_id={parsed['isin']}/period_end={period}/"
          +f"original_version={original_sha}/original-xbrl.xml")
@@ -372,3 +385,4 @@ if __name__=="__main__":
  except Exception as exc:
   print(json.dumps({"status":"BLOCKED","error":str(exc)[:160]}),file=sys.stderr)
   sys.exit(3)
+
