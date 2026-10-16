@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Fresh authenticated historical MCP discovery; immutable review evidence only."""
-import hashlib,json,os,urllib.request,sys
+import hashlib,json,os,urllib.request,urllib.error,sys
 from pathlib import Path
 import psycopg
+from r4_recovery_queue import task_id,attempt_all
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import importlib.util
 spec=importlib.util.spec_from_file_location("batch",Path(__file__).with_name("r4-bse-historical-batch.py"))
@@ -123,13 +124,31 @@ def main():
                            "Exclude unrelated companies, annual and cumulative period figures.")
                     planned.append((str(sid),symbol,period,"get_document_search_results",{"query":query}))
             shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
-            selected=[(i,p) for i,p in enumerate(planned) if i%shards==shard]
+            identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]
+            selected=sorted((key,p) for key,p in identified if int(key,16)%shards==shard)
             if len(selected)>40:raise RuntimeError("PROVIDER_PER_RUN_BOUND_EXCEEDED")
             print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":blocked,"parameter_labels":{p:parameters[p] for p in wanted}}),flush=True)
-            for index,(sid,symbol,period,tool,args) in selected:
-                result=call("historical-"+str(index),tool,args,sid)
+            outcomes=[]
+            def process(task):
+                key,(sid,symbol,period,tool,args)=task
+                result=call("historical-"+key[:48],tool,args,sid)
                 print("R4_TRENDLYNE_EVIDENCE",json.dumps({"symbol":symbol,"period":period,"tool":tool,"result":str(result)[:18000],
                     "relative_parameter_dates_not_inferred":True,"canonical_promotion_performed":False}),flush=True)
+                return {"status":"CAPTURED_REVIEW_ONLY"}
+            def failed(task,error):
+                db.rollback()
+                return {"status":"RETRY_REQUIRED","reason":type(error).__name__,
+                    "http_status":getattr(error,"code",None)}
+            def checkpoint(task,result):
+                key,(_,symbol,period,tool,_)=task
+                outcomes.append({"task_id":key,"symbol":symbol,"period":period,"tool":tool,**result})
+                (dest/"requests-report.json").write_text(json.dumps({"shard":shard,"identity_blocked":blocked,
+                    "planned":len(selected),"outcomes":outcomes},sort_keys=True))
+                print("R4_TRENDLYNE_REQUEST_STATUS",json.dumps(outcomes[-1]),flush=True)
+            attempt_all(selected,process,failed,checkpoint)
+            failures=sum(r["status"]=="RETRY_REQUIRED" for r in outcomes)
+            print("R4_TRENDLYNE_BATCH_COMPLETE",json.dumps({"planned":len(selected),"attempted":len(outcomes),"failed":failures}),flush=True)
+            if failures:raise RuntimeError("R4_TRENDLYNE_PARTIAL_BATCH_SEE_REQUESTS_REPORT")
             return
         with db.cursor() as cur:
             cur.execute("""SELECT s.id::text,s.symbol,s.isin,i.provider_instrument_id
