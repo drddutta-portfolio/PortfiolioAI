@@ -1,0 +1,64 @@
+name: R4 Development BEL Original PDF Source Admission
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r4-bse-bel-2024-pinned.yml
+      - scripts/results/r4-bse-bel-2024-pinned.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_BSE_BEL_PIN_ACK: BEL_SEP2024_VISUAL_ORIGINAL_PROOF
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Verify Development isolation
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
+      - name: Install pinned issuer original dependencies
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6' 'requests==2.32.5' 'mthrottle==0.0.2'
+      - name: Verify source parser and byte-pinned original
+        run: |
+          python -m py_compile scripts/results/r4-bse-bel-2024-pinned.py scripts/results/r4-bse-historical-batch.py
+          python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/r4-bse-bel-2024-pinned.py
+      - name: Independent source hash verification and protected selection
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-verify-quarterly.py --apply
+      - name: Independently read back all eight quarterly slots
+        if: always()
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r4/after-bel.json
+          python - <<'PY'
+          import json
+          a=json.load(open('tmp/results-r4/after-bel.json'))
+          print(json.dumps({'status':a['status'],'status_counts':a['status_counts'],
+            'historical':{p:a['by_period'][p] for p in ('2024-09-30','2024-12-31','2025-03-31','2025-06-30')}},sort_keys=True))
+          PY
+      - name: Preserve source validation and readback
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r4-bse-bel-original-verified
+          path: |
+            tmp/results-r4/readback.json
+            tmp/results-r4/after-bel.json
+            tmp/results-r4/eight-quarter-readback.json
+          retention-days: 21
+          if-no-files-found: warn
