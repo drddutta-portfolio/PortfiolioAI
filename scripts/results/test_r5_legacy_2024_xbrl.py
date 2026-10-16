@@ -84,6 +84,20 @@ class LegacyTests(unittest.TestCase):
   self.assertIsNone(other)
   self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
 
+ def test_td_power_2024_split_identity_requires_official_old_isin(self):
+  orig=xml().replace(b"RELIANCE",b"TDPOWERSYS")
+  meta={**METADATA,"symbol":"TDPOWERSYS"}
+  meta.pop("isin")
+  parsed,error=module.extract(orig,meta,"TDPOWERSYS","INE419M01035")
+  self.assertIsNone(error)
+  self.assertEqual(parsed["source_isin"],"INE419M01027")
+  self.assertEqual(parsed["historical_identity_link"]["split_new_per_old"],"2")
+  self.assertEqual(parsed["independent_isin_evidence"],"NSE_CML75855_TDPOWERSYS_2024_PRE_SPLIT_ISIN")
+  forged=orig.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
+  parsed,error=module.extract(forged,meta,"TDPOWERSYS","INE419M01035")
+  self.assertIsNone(parsed)
+  self.assertEqual(error,"SOURCE_EMBEDDED_ISIN_MISMATCH")
+
  def test_source_embedded_isin_must_not_disagree_with_nse_circular(self):
   issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
   issuer_xml=issuer_xml.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
