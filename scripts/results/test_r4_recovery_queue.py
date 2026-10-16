@@ -1,0 +1,108 @@
+import importlib.util
+from pathlib import Path
+import unittest
+
+from r4_recovery_queue import SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed
+
+spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("r4-recovery-monitor.py"))
+monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
+
+class RecoveryTest(unittest.TestCase):
+    def test_bad_filing_does_not_skip_other_filings(self):
+        visited=[];saved=[]
+        def process(item):
+            visited.append(item)
+            if item=="bad":raise OSError("404")
+            return "ok"
+        attempt_all(["bad","good","later-quarter"],process,
+                    lambda item,error:"retry",lambda item,result:saved.append((item,result)))
+        self.assertEqual(visited,["bad","good","later-quarter"])
+        self.assertEqual(saved,[("bad","retry"),("good","ok"),("later-quarter","ok")])
+
+    def test_checkpoint_failure_is_not_swallowed(self):
+        with self.assertRaises(OSError):
+            attempt_all([1,2],lambda item:True,lambda item,error:False,
+                        lambda item,result:(_ for _ in ()).throw(OSError("checkpoint failed")))
+
+    def test_request_assignment_survives_removing_other_company(self):
+        first=task_id("a","documents","2024-09-30",{"q":"A"})
+        second=task_id("b","documents","2024-09-30",{"q":"B"})
+        before={key:int(key,16)%16 for key in [first,second]}
+        self.assertEqual(before[second],int(second,16)%16)
+        self.assertEqual(task_id("b","documents","2024-09-30",{"b":2,"a":1}),
+                         task_id("b","documents","2024-09-30",{"a":1,"b":2}))
+        self.assertNotEqual(second,task_id("b","documents","2024-12-31",{"q":"B"}))
+
+    def test_no_progress_rotates_to_every_source(self):
+        state={};runs={s:[] for s in SOURCES}
+        selected=[]
+        for _ in SOURCES:
+            source=next_source(100,state,runs);selected.append(source);dispatched(state,source,100)
+        self.assertEqual(tuple(selected),SOURCES)
+        self.assertIsNone(next_source(101,state,runs))
+        self.assertEqual(next_source(21700,state,runs),SOURCES[0])
+
+    def test_provider_has_daily_cooldown(self):
+        state={};dispatched(state,SOURCES[-1],100)
+        runs={SOURCES[-1]:[]}
+        self.assertIsNone(next_source(86500-1,state,runs))
+        self.assertEqual(next_source(86500,state,runs),SOURCES[-1])
+
+    def test_no_overlap_with_active_workflow(self):
+        self.assertIsNone(next_source(100,{}, {SOURCES[0]:[{"status":"queued"}]}))
+
+    def test_failed_dispatch_does_not_block_other_source(self):
+        state={};dispatch_failed(state,SOURCES[0],100)
+        self.assertEqual(next_source(100,state,{s:[] for s in SOURCES}),SOURCES[1])
+
+    def report(self,count=119):
+        return {"equities":262,"total_slots":2096,"status_counts":{"QUALIFIED":1959},
+                "unresolved":[{"period_end":"2024-09-30"}]*count+[{"period_end":"2025-09-30"}]*18}
+
+    def test_monitor_moves_past_failed_dispatch_in_same_tick(self):
+        called=[]
+        def request(path,payload=None):
+            if payload is None:return {"workflow_runs":[]}
+            called.append(path)
+            if SOURCES[0] in path:raise OSError("503")
+        point=monitor.check_once(self.report(),{},100,request)
+        self.assertEqual(point["historical_remaining"],119)
+        self.assertEqual(point["dispatched_source"],SOURCES[1])
+        self.assertEqual(len(called),2)
+
+    def test_monitor_remains_alive_when_all_sources_wait(self):
+        state={}
+        for source in SOURCES:dispatched(state,source,100)
+        point=monitor.check_once(self.report(),state,101,lambda path:{"workflow_runs":[]})
+        self.assertEqual(point["state"],"WAITING_FOR_SOURCE_RETRY_WINDOW")
+
+    def test_one_uninspectable_source_does_not_block_others(self):
+        def request(path,payload=None):
+            if SOURCES[0] in path:raise OSError("503")
+            if payload is None:return {"workflow_runs":[]}
+        point=monitor.check_once(self.report(),{},100,request)
+        self.assertEqual(point["dispatched_source"],SOURCES[1])
+
+    def test_provider_dispatch_stays_paused_until_auth_deployment(self):
+        state={}
+        for source in SOURCES[:-1]:dispatched(state,source,100)
+        point=monitor.check_once(self.report(),state,101,lambda path:{"workflow_runs":[]},allow_trendlyne=False)
+        self.assertEqual(point["state"],"WAITING_FOR_SOURCE_RETRY_WINDOW")
+        self.assertEqual(point["trendlyne_dispatch"],"PAUSED_PENDING_APPROVED_WORKFLOW_AUTH_DEPLOYMENT")
+
+    def test_monitor_waits_for_collector(self):
+        def request(path,payload=None):
+            self.assertIsNone(payload)
+            return {"workflow_runs":[{"id":1,"status":"in_progress"}]} if SOURCES[0] in path else {"workflow_runs":[]}
+        self.assertEqual(monitor.check_once(self.report(),{},100,request)["state"],"COLLECTORS_RUNNING")
+
+    def test_historical_completion_does_not_require_deferred_r3(self):
+        point=monitor.check_once(self.report(0),{},100,lambda *args:self.fail("unexpected dispatch"))
+        self.assertEqual(point["state"],"HISTORICAL_COMPLETE_R3_STILL_SEPARATE")
+
+    def test_incomplete_cohort_cannot_claim_completion(self):
+        report=self.report(0);report["equities"]=261
+        with self.assertRaisesRegex(RuntimeError,"EXACT_COHORT"):
+            monitor.check_once(report,{},100)
+
+if __name__=="__main__":unittest.main()
