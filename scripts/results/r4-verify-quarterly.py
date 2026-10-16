@@ -179,6 +179,20 @@ def check_manifest(record,manifest):
         original=manifest.get("original_sha256_retained")
         original_key=manifest.get("original_r2_key")
         period=manifest.get("period_end")
+        if manifest.get("parser_revision")=="PDF_OCR_DOUBLE_RENDER_V1":
+            proof=manifest.get("ocr_independent_checks")
+            try:
+                fields=("value","unit","original_unit","original_value","column_period","page","column_index")
+                values={k:{field:f[field] for field in fields} for k,f in manifest["facts"].items()}
+                valid=(isinstance(proof,dict) and proof.get("contract")=="DOUBLE_RENDER_AND_PBT_MINUS_TAX_OCR_V1"
+                    and proof.get("render_dpi")==[300,450] and proof.get("original_sha256")==original
+                    and proof.get("facts_sha256")==sha(canonical_bytes(values))
+                    and proof.get("page")==manifest.get("financial_page")
+                    and proof.get("arithmetic_validation",{}).get("contract")=="PBT_MINUS_TAX_EQUALS_PAT"
+                    and isinstance(manifest.get("ocr_proof_r2_key"),str)
+                    and manifest["ocr_proof_r2_key"].startswith(PREFIX+"ocr-replay-v1/original_version="+original+"/"))
+            except (KeyError,TypeError):valid=False
+            if not valid:return "DOUBLE_OCR_SOURCE_PROOF_UNPROVEN"
         if (period not in ("2024-09-30","2024-12-31","2025-03-31","2025-06-30")
             or u.scheme!="https" or u.hostname!="www.bseindia.com"
             or not re.fullmatch(url_path,u.path,re.I) or u.query or u.fragment
