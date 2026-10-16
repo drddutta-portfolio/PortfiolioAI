@@ -95,7 +95,8 @@ def historical_result_identity(symbol: str, current_isin: str, source_isin: str,
 NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
 DATE = re.compile(r"^\d\d[-/.](?:\d\d|[A-Za-z]{3,9})[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
-ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\.html$",re.I)
+# NBFC is its own NSE iXBRL format, separate from standard Ind-AS and banking.
+ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS)_[A-Za-z0-9_]+\.html$",re.I)
 
 def sha(raw: bytes) -> str: return hashlib.sha256(raw).hexdigest()
 
@@ -374,9 +375,82 @@ def extract_bank(html: str, symbol: str, isin: str):
         result["historical_identity_link"]=link
     return result,None
 
+def extract_nbfc(html: str, symbol: str, isin: str):
+    """Admit only a genuine single-quarter NSE NBFC financial statement.
+
+    NBFC filings use "Total Revenue From Operations" and "Diluted earnings
+    per share" rather than ordinary Ind-AS labels. Do not calculate EPS,
+    confuse quarterly with YTD, or read segment revenues as company revenue.
+    """
+    soup=BeautifulSoup(html,"html.parser")
+    tables=list(html_rows(soup))
+    if unique_field(tables,"nse symbol")!=symbol:
+        return None,"NBFC_SYMBOL_MISMATCH"
+    doc_isin=unique_field(tables,"isin")
+    if not doc_isin:
+        return None,"NBFC_ISIN_UNPROVEN"
+    unit,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
+    if unit not in ("lakhs","crores"):
+        return None,"NBFC_UNSUPPORTED_UNIT"
+    scale=Decimal(100) if unit=="lakhs" else Decimal(1)
+    original_unit="INR_LAKH" if unit=="lakhs" else "INR_CRORE"
+    report=unique_field(tables,"reporting type")
+    if report and normalize(report)!="quarterly":
+        return None,"NOT_QUARTERLY"
+    statements=[]
+    for table in tables:
+        labels={normalize(c) for row in table for c in row}
+        if {"total revenue from operations","total profit (loss) for period",
+            "diluted earnings per share"}.issubset(labels):
+            statements.append(table)
+    if len(statements)!=1:
+        return None,"NBFC_STATEMENT_NOT_UNIQUE"
+    stmt=statements[0]
+    starts=field_values(stmt,"date of start of reporting period")
+    ends=field_values(stmt,"date of end of reporting period")
+    qstart=date_of(starts[0]) if starts else None
+    qend=date_of(ends[0]) if ends else None
+    if not qstart or qend not in TARGET_QUARTERS or (date.fromisoformat(qend)-date.fromisoformat(qstart)).days not in range(75,100):
+        return None,"NBFC_SINGLE_QUARTER_UNPROVEN"
+    scopes=field_values(stmt,"nature of report standalone or consolidated")
+    scope=scopes[0].upper() if scopes else None
+    if scope not in ("STANDALONE","CONSOLIDATED"):
+        return None,"NBFC_SCOPE_UNPROVEN"
+    identity=historical_result_identity(symbol,isin,doc_isin,qend) if doc_isin!=isin else None
+    if doc_isin!=isin and not identity:
+        return None,"NBFC_ISIN_MISMATCH"
+    facts={}
+    for label,key in (("total revenue from operations","OPERATING_REVENUE_QUARTER"),
+                      ("total profit (loss) for period","NET_PROFIT_QUARTER"),
+                      ("diluted earnings per share","EPS_DILUTED")):
+        values=field_values(stmt,label)
+        if not values:continue
+        raw=values[0]
+        val=number(raw)
+        if val is None:continue
+        if key=="EPS_DILUTED":
+            if abs(val)>Decimal("100000"):continue
+            facts[key]={"value":str(val),"unit":"INR_PER_SHARE",
+                        "original_value":raw,"original_unit":"INR_PER_SHARE"}
+        else:
+            if abs(val/scale)>Decimal("100000000"):continue
+            facts[key]={"value":str(val/scale),"unit":"INR_CRORE",
+                        "original_value":raw,"original_unit":original_unit}
+    if set(facts)!=CORE_METRICS:
+        return None,"NBFC_INCOMPLETE_OR_AMBIGUOUS_QUARTER"
+    result={"symbol":symbol,"isin":isin,"period_start":qstart,"period_end":qend,
+            "scope":scope,"facts":facts}
+    if identity:
+        result["source_isin"]=doc_isin
+        result["historical_identity_link"]=identity
+    return result,None
+
 def extract_source(html: str, symbol: str, isin: str, source_url: str):
-    if re.search(r"/INTEGRATED_FILING_BANKING_[A-Za-z0-9_]+\.html$",
-                 urlparse(source_url).path,re.I):
+    path=urlparse(source_url).path
+    if re.search(r"/INTEGRATED_FILING_NBFC_INDAS_[A-Za-z0-9_]+\.html$",path,re.I):
+        return extract_nbfc(html,symbol,isin)
+    if re.search(r"/INTEGRATED_FILING_BANKING_[A-Za-z0-9_]+\.html$",path,re.I):
         return extract_bank(html,symbol,isin)
     return extract(html,symbol,isin)
 
