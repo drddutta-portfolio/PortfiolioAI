@@ -630,7 +630,8 @@ def main():
             # Existing source selections are still reused and cannot be overwritten.
             cur.execute("""SELECT DISTINCT s.symbol,s.isin,s.id
                 FROM public.transactions t JOIN public.securities s ON t.security_id=s.id
-                WHERE t.portfolio_id=%s AND s.asset_class='EQUITY' AND s.isin IS NOT NULL
+                WHERE t.portfolio_id=%s AND t.superseded_at IS NULL
+                  AND s.asset_class='EQUITY' AND s.isin IS NOT NULL
                 ORDER BY s.symbol LIMIT %s""",(PORTFOLIO_ID,maxstocks))
             stocks=cur.fetchall()
         # Narrow optional Development backfill; never expand the set or
@@ -677,6 +678,10 @@ def main():
                       ON f.id=d.selected_observation_id
                     WHERE f.security_id=%s AND f.period_end=ANY(%s::date[])
                       AND f.period_type='QUARTER' AND f.numeric_value IS NOT NULL
+                      AND f.source_code='COMPANY_EXCHANGE_FILING'
+                      AND f.evidence_status='AVAILABLE' AND f.currency='INR'
+                      AND ((f.metric_code='EPS_DILUTED' AND f.unit='INR_PER_SHARE')
+                          OR (f.metric_code<>'EPS_DILUTED' AND f.unit='INR_CRORE'))
                       AND f.metric_code=ANY(%s)""",
                     (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
                 completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
@@ -687,6 +692,10 @@ def main():
                     FROM public.fundamental_observations
                     WHERE security_id=%s AND period_end=ANY(%s::date[])
                       AND period_type='QUARTER' AND numeric_value IS NOT NULL
+                      AND source_code='COMPANY_EXCHANGE_FILING'
+                      AND evidence_status='AVAILABLE' AND currency='INR'
+                      AND ((metric_code='EPS_DILUTED' AND unit='INR_PER_SHARE')
+                          OR (metric_code<>'EPS_DILUTED' AND unit='INR_CRORE'))
                       AND metric_code=ANY(%s)""",
                     (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
                 already_sourced=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
