@@ -78,6 +78,20 @@ class LegacyTests(unittest.TestCase):
   self.assertNotIn("NET_PREMIUM_EARNED_QUARTER",module.extract(raw.replace(b"PremiumEarned",b"GrossPremiumsWritten"),metadata,"STARHEALTH","INE575P01011",proof)[0]["facts"])
   self.assertNotIn("EPS_DILUTED",module.extract(raw.replace(b"EPSAfterExtraordinary",b"EPSBeforeExtraordinary"),metadata,"STARHEALTH","INE575P01011",proof)[0]["facts"])
 
+ def test_official_rename_replays_the_original_historical_context(self):
+  from r4_issuer_rename import RULES,verify_rename_pdf
+  from test_r4_issuer_rename import authority
+  from r4_nse_issuer_bridge import bridge_from_sources,verify_original_facts
+  evidence=verify_rename_pdf(authority(),"ETERNAL",RULES["ETERNAL"]["url"])
+  raw=xml().replace(b"RELIANCE",b"ZOMATO").replace(b"</xbrli:xbrl>",b'<ind:Symbol>ZOMATO</ind:Symbol><ind:ScripCode>543320</ind:ScripCode></xbrli:xbrl>')
+  metadata={**METADATA,"symbol":"ETERNAL","isin":"INE758T01015","companyName":"Eternal Limited","xbrl":"https://nsearchives.nseindia.com/corporate/xbrl/INDAS_123.xml"}
+  proof=bridge_from_sources(raw,metadata,"ETERNAL","INE758T01015",{"SecurityCode":"543320","ISIN":"INE758T01015"},{"SCRIP_CD":"543320","ISIN_NUMBER":"INE758T01015","Issuer_Name":"Eternal Limited"},evidence)
+  out,error=module.extract(raw,metadata,"ETERNAL","INE758T01015",proof)
+  self.assertIsNone(error)
+  self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"10")
+  self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"7.5")
+  verify_original_facts(raw,out,proof)
+
  def test_boolean_or_dict_cannot_bypass_historical_identity(self):
   out,error=module.extract(xml(),METADATA,"RELIANCE","INE002A01018",{"verified":True})
   self.assertIsNone(out)
