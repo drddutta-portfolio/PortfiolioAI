@@ -74,6 +74,9 @@ class EightQuarterReadbackTests(unittest.TestCase):
         result=m.classify("VAML",[],[])
         self.assertEqual(result["status"],"MISSING")
         self.assertEqual(result["not_applicable"],"UNPROVEN")
+        self.assertEqual(result["reason"],"PRE_DEMERGER_ISSUER_QUARTER_OR_PRO_FORMA_BASIS_UNPROVEN")
+        self.assertEqual(result["historical_issuer_event"]["effective_date"],"2026-05-01")
+        self.assertTrue(result["historical_issuer_event"]["pro_forma_not_inferred"])
 
     def test_original_split_share_basis_blocks_implicit_yoy(self):
         rows=[row(x) for x in m.required_for("RELIANCE")]
