@@ -36,7 +36,14 @@ class LegacyTests(unittest.TestCase):
   self.assertEqual(x["facts"]["NET_PROFIT_QUARTER"]["value"],"10")
   self.assertEqual(x["facts"]["EPS_DILUTED"]["value"],"7.5")
  def test_missing_2024_catalog_isin_needs_exact_nse_circular(self):
-  issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
+  issuer_xml=(xml().replace(b"RELIANCE",b"AXISBANK")
+    .replace(b"ProfitLossForPeriod",b"ProfitLossForThePeriod")
+    .replace(b"DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+             b"DilutedEarningsPerShareAfterExtraordinaryItems"))
+  issuer_xml=issuer_xml.replace(b"</xbrli:xbrl>",
+    b'<ind:InterestEarned contextRef="OneD" unitRef="INR">2500000000</ind:InterestEarned>'
+    b'<ind:InterestExpended contextRef="OneD" unitRef="INR">1000000000</ind:InterestExpended>'
+    b'</xbrli:xbrl>')
   metadata={**METADATA,"symbol":"AXISBANK"}
   metadata.pop("isin")
   out,err=module.extract(issuer_xml,metadata,"AXISBANK","INE238A01034")
