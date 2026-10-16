@@ -46,3 +46,17 @@ Potential available YoY baseline pair count (both original source-selected metri
 - No UI redesign, extra result columns, Production/main writes, or artificial completion counts.
 
 This record freezes the actual latest measured state and stage transition. Subsequent jobs must append their observed run IDs, invalid manifest reasons, selection conflicts, new decisions and post-run database source readback before closing R4.
+
+## Independently verified live R4 run — 16 October 2026, 07:52 UTC
+
+**GitHub Actions:** [R4 eight-quarter source qualification, run 38869795361](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38869795361), conclusion **SUCCESS**. [Source-verification and exact exception artifact](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38869795361/artifacts/12033305886) was retained (artifact ID `12033305886`).
+
+**Regressions:** 10 existing source-validator tests passed; 9 new eight-quarter classification tests passed. Dev DB/R2 credentials/environment guards passed. Immutable R2 verification and independent 262×8 readback passed mechanically. The partial-data result is *not* a full R4 financial-coverage PASS.
+
+**Verifier:** `target_quarter_count=8`, 10,828 candidate source-observation rows, 3,594 compact R2 source manifests read/checked, 10,819 qualified fact rows, 5,459 candidate selections across 1,802 stock-quarters, 261 companies with at least one selected candidate, and **136/262 with all eight quarters**. **0 inserted selections, 5,459 existing selections unchanged and 0 conflicting protected selection decisions**. The 8-quarter selector observed 10 same-scope issuer conflicts; isolated/source-related exceptions include 2 no-complete-single-source and 6 BSE original-issuer-quarter contract rejections. Original publication timestamp remained generally UNKNOWN. No R3 acquisition was resumed.
+
+**Independent readback** produced `status=PARTIAL`, `262 equities`, `2096 slots`, `1802 QUALIFIED`, `10 CONFLICT`, `3 REVIEW_REQUIRED`, `281 MISSING`, and `249/262` with four displayed-quarter trios. `potential_yoy_pairs_not_final_comparability=749` after explicit split-share-basis guard; this is a preliminary mathematical source-pair count only, **not authorization to publish YoY changes**. More provenance and share-basis checks are still required to assert comparable growth.
+
+**Engineering status:** R4 original-source validator, 262×8 exception readback and CI are operating and independently tested on Development. R4 financial qualification remains **PARTIAL** due to 294 unresolved slots. Owner's instruction to defer R3 remains respected. There were **zero new financial observation selections and zero external provider calls** in this R4 run, and no Production/main changes.
+
+Any later R4 completion must classify/verify missing histories and genuine non-applicability, not silently treat a passed workflow as 2,096 fully qualified company-quarters. R5 grades are separate.
