@@ -17,9 +17,13 @@ BUCKET="portfolioai-history-dev"
 PREFIX="portfolioai-results/development/v1/quarterly/"
 # The base R4 gate retains its original four-quarter authority. R5 may
 # additionally select separately validated historical comparison facts only.
+R4_EIGHT_QUARTER_MODE=os.getenv("RESULTS_R4_EIGHT_QUARTER_SELECTION","0")=="1"
 R5_COMPARISON_MODE=os.getenv("RESULTS_R5_COMPARISON_SELECTION","0")=="1"
 R5_LEGACY_MODE=os.getenv("RESULTS_R5_LEGACY_SELECTION","0")=="1"
-QUARTERS=(("2024-09-30","2024-12-31") if R5_LEGACY_MODE else
+QUARTERS=(("2024-09-30","2024-12-31","2025-03-31","2025-06-30",
+            "2025-09-30","2025-12-31","2026-03-31","2026-06-30")
+          if R4_EIGHT_QUARTER_MODE else
+          ("2024-09-30","2024-12-31") if R5_LEGACY_MODE else
           ("2025-03-31","2025-06-30") if R5_COMPARISON_MODE
           else ("2025-09-30","2025-12-31","2026-03-31","2026-06-30"))
 BANKS=set("AUBANK AXISBANK BANDHANBNK BANKBARODA BANKINDIA CANBK FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK RBLBANK SBIN UNIONBANK".split())
@@ -600,7 +604,9 @@ def verify(db,s3,apply):
             "qualified_fact_rows":len(facts),"selected_candidate_facts":len(selections),
             "selected_stock_quarters":sum(map(len,quarters.values())),
             "selected_equities":len(quarters),
-            "four_quarters_selected_equities":sum(len(x)==4 for x in quarters.values()),
+            "four_quarters_selected_equities":sum(len(x)==4 for x in quarters.values()) if len(QUARTERS)==4 else None,
+            "target_quarter_count":len(QUARTERS),
+            "target_quarters_selected_equities":sum(len(x)==len(QUARTERS) for x in quarters.values()),
             "created_decisions":inserted if not protected else 0,
             "unchanged_decisions":unchanged,"conflicting_existing_decisions":protected,
             "exceptions":dict(sorted(invalid.items())),
@@ -612,6 +618,8 @@ def verify(db,s3,apply):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
+    if R4_EIGHT_QUARTER_MODE and (R5_LEGACY_MODE or R5_COMPARISON_MODE):
+        raise SystemExit("R4_EIGHT_QUARTER_SCOPE_CONFLICT")
     if R5_LEGACY_MODE and os.environ.get("RESULTS_R5_LEGACY_ACK")!="2024_SEP_DEC_ORIGINAL_XBRL":
         raise SystemExit("R5_LEGACY_SELECTION_SCOPE_NOT_APPROVED")
     if R5_LEGACY_MODE and R5_COMPARISON_MODE:
