@@ -1,0 +1,79 @@
+name: Results R3 Development Targeted Split-Identity Recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - .github/workflows/results-r3-targeted-split-recovery.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: results-r3-targeted-split-recovery-dev
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      RESULTS_MAX_STOCKS: "262"
+      RESULTS_TARGET_SYMBOLS: "ANGELONE,TDPOWERSYS"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate Development database and bucket only
+        shell: bash
+        run: |
+          set -euo pipefail
+          for var in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET; do
+            [[ -n "${!var:-}" ]] || { echo "MISSING_CONFIGURATION:$var"; exit 1; }
+          done
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo NOT_DEVELOPMENT_DB; exit 1; }
+          [[ "$CLOUDFLARE_R2_BUCKET" == "portfolioai-history-dev" ]] || { echo NOT_DEVELOPMENT_BUCKET; exit 1; }
+      - name: Install pinned original-acquisition dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir 'boto3==1.40.46' 'psycopg[binary]==3.2.10' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Test identity, source parser and split rules
+        run: python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: Retrieve only separately verified public NSE originals
+        shell: bash
+        run: |
+          mkdir -p tmp/results-r3
+          python scripts/results/r3-live-public-filing-batch.py > tmp/results-r3/split-recovery.json
+          python -m json.tool tmp/results-r3/split-recovery.json >/dev/null
+      - name: Verify immutable source manifests and refuse conflicts
+        if: ${{ !cancelled() }}
+        run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Validate entire unsuperseded Development 262-equity cohort
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p tmp/results-r3
+          python scripts/results/r3-current-coverage-readback.py > tmp/results-r3/coverage-after-split-recovery.json
+          python - <<'PY'
+          import json
+          o=json.load(open("tmp/results-r3/coverage-after-split-recovery.json"))
+          print({key:o[key] for key in ("equities","complete_equities","incomplete_equities","result")})
+          PY
+      - name: Upload bounded non-secret readbacks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-targeted-split-readback
+          path: |
+            tmp/results-r3/split-recovery.json
+            tmp/results-r3/coverage-after-split-recovery.json
+            tmp/results-r4/readback.json
+          retention-days: 15
+          if-no-files-found: warn
