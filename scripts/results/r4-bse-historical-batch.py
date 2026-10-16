@@ -128,7 +128,7 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         lines=[" ".join(x.split()) for x in text.splitlines() if x.strip()]
         geometry=geometry_rows(pdf[page_no])
         financial_lines=lines+geometry
-        if len(lines)<8:
+        if len(lines)<6:
             diagnostics["TEXT_TOO_SHORT"]+=1
             continue
         title=" ".join(lines[:65]).upper()
