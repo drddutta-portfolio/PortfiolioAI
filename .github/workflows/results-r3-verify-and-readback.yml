@@ -1,0 +1,68 @@
+name: Results R3 Development Source Verification and Coverage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - .github/workflows/results-r3-verify-and-readback.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: results-r3-verification-development
+  cancel-in-progress: false
+
+jobs:
+  select-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Development-only credentials and environment guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET; do
+            [[ -n "${!name:-}" ]] || { echo "MISSING_CONFIGURATION: $name"; exit 1; }
+          done
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo "NOT_DEVELOPMENT_DATABASE"; exit 1; }
+          [[ "$CLOUDFLARE_R2_BUCKET" == "portfolioai-history-dev" ]] || { echo "NOT_DEVELOPMENT_R2"; exit 1; }
+      - name: Install verification-only pinned dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'boto3==1.40.46' 'psycopg[binary]==3.2.10'
+      - name: Run immutable R2 original-source verifier and atomic selections
+        run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Independently read back protected 262-equity cohort
+        if: always()
+        run: |
+          mkdir -p tmp/results-r3
+          python scripts/results/r3-current-coverage-readback.py > tmp/results-r3/latest-coverage.json
+          python - <<'PY'
+          import json
+          x=json.load(open("tmp/results-r3/latest-coverage.json"))
+          print(json.dumps({k:x[k] for k in ("equities","etfs_excluded","complete_equities","incomplete_equities","result")},sort_keys=True))
+          PY
+      - name: Fail closed until 262 issuers have four qualified periods
+        if: ${{ !cancelled() }}
+        run: python scripts/results/r3-current-coverage-readback.py --strict
+      - name: Publish bounded non-secret verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r3-development-verification
+          path: |
+            tmp/results-r4/readback.json
+            tmp/results-r3/latest-coverage.json
+          if-no-files-found: warn
+          retention-days: 15
