@@ -1,0 +1,48 @@
+name: Results R4 Original Replay and Parser Correction
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-original-replay.yml]
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Verify parser financial semantics
+        run: |
+          python scripts/results/test_r4_pdf_geometry.py -v
+          python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+          python scripts/results/test_r4_eight_quarter_readback.py -v
+      - name: Replay new originals and correct only the audited row-reference defect
+        run: python scripts/results/r4-replay-bse-corrections.py
+      - name: Independently source-verify and read back
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-verify-quarterly.py --apply
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r4/after-correction.json
+          python - <<'PY'
+          import json
+          p=json.load(open('tmp/results-r4/after-correction.json'))
+          print('R4_CORRECTION_READBACK',p['status_counts'],p['by_period'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r4-original-replay-correction
+          path: tmp/results-r4/
+          retention-days: 7
