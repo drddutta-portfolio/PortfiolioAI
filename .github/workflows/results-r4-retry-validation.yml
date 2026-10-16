@@ -44,3 +44,4 @@ jobs:
           python -m py_compile scripts/results/r4-recovery-monitor.py scripts/results/r4-nse-lineage-batch.py scripts/results/r4-bse-historical-batch.py scripts/results/r4-ocr-retained-batch.py scripts/results/r4-trendlyne-history.py
       - name: Whitespace integrity
         run: git diff HEAD^ HEAD --check
+# Includes isolated native OCR timeout and continuation regressions.
