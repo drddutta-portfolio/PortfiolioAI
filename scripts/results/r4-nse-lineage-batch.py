@@ -110,7 +110,9 @@ def main():
             def checkpoint():
                 output=Path(f"tmp/results-r4/nse-lineage-shard-{args.shard}.json")
                 output.parent.mkdir(parents=True,exist_ok=True)
-                output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
+                trace=batch.canonical({"counts":dict(counts),"details":details})
+                batch.immutable_put(client,batch.PREFIX+"private-recovery-traces/sha256="+batch.sha(trace)+"/trace.json",trace)
+                output.write_text(json.dumps({"counts":dict(counts),"companies_processed":len(details)},sort_keys=True))
             try:
                 code=bse.get_scrip_candidate(symbol)["bse_scrip_code"]
                 header=bse._bse.equityMetaInfo(code)
@@ -160,7 +162,7 @@ def main():
                         new=persist(db,client,sid,raw,item,parsed,proof,header,listing)
                         counts["facts_inserted"]+=new;counts["quarter_source_candidates"]+=1
                         result={"period":period,"scope":parsed["scope"],"status":"SOURCE_WRITTEN_PENDING_R4_SELECTION",
-                            "source_url":original,"facts_inserted":new,"values":{k:f["value"] for k,f in parsed["facts"].items()}}
+                            "source_url":original,"facts_inserted":new}
                         return result
                     attempt_all(records,collect_filing,filing_error,save_result)
                     seen={x.get("period") for x in entry["results"]}
@@ -194,7 +196,7 @@ def main():
                     entry["results"].append({"period":period,"stage":"ISSUER_OR_COMPANY",
                         "status":"RETRY_REQUIRED","reason":entry["error"]})
             checkpoint()
-            print("R4_NSE_LINEAGE_PROGRESS",json.dumps({"symbol":symbol,"counts":dict(counts),"results":entry["results"],"error":entry.get("error")}),flush=True)
+            print("R4_NSE_LINEAGE_PROGRESS",json.dumps({"companies_processed":len(details),"counts":dict(counts)}),flush=True)
     print("R4_NSE_LINEAGE_FINAL",json.dumps({"shard":args.shard,"companies":len(details),"counts":dict(counts)}),flush=True)
 
 if __name__=="__main__":main()
