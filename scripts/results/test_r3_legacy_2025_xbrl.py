@@ -43,6 +43,18 @@ class Legacy2025Tests(unittest.TestCase):
         self.assertIsNone(p)
         self.assertEqual(err,"ISSUER_XML_SYMBOL_MISMATCH")
 
+    def test_cams_official_five_for_one_2025_isin_split_source_bridge(self):
+        data,reason=m.extract(xml(isin="INE596I01012"),META,"CAMS","INE596I01020")
+        self.assertIsNone(reason)
+        self.assertEqual(data["source_isin"],"INE596I01012")
+        self.assertEqual(data["historical_identity_link"]["split_new_per_old"],"5")
+        self.assertIn("NCL/CMPT/71607",data["historical_identity_link"]["evidence"])
+        self.assertEqual(data["facts"]["EPS_DILUTED"]["value"],"5.25")
+        self.assertEqual(data["facts"]["EPS_DILUTED"]["original_value"],"5.25")
+        data,reason=m.extract(xml(isin="INE999A01011"),META,"CAMS","INE596I01020")
+        self.assertIsNone(data)
+        self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
+
     def test_only_exact_single_quarter_context(self):
         p,err=m.extract(xml(start="2025-01-01"),META,"CAMS","INE596I01020")
         self.assertIsNone(p)
