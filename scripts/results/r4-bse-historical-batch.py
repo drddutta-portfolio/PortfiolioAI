@@ -319,6 +319,27 @@ def immutable_put(client,key,raw):
     if sha(check)!=sha(raw):
         raise RuntimeError("R2_POST_WRITE_HASH_MISMATCH")
 
+def retained_original(bse,client,filename):
+    """Reuse immutable original bytes even when a previous parser rejected them."""
+    index_key=PREFIX+"bse-source-cache/"+filename+".json"
+    if client:
+        try:
+            origin=json.loads(client.get_object(Bucket=BUCKET,Key=index_key)["Body"].read())
+            raw=client.get_object(Bucket=BUCKET,Key=origin["original_r2_key"])["Body"].read()
+            if sha(raw)!=origin["sha256"] or origin.get("attachment_name")!=filename:
+                raise RuntimeError("CACHED_ORIGINAL_HASH_OR_IDENTITY_MISMATCH")
+            return raw,origin,True
+        except Exception as error:
+            code=getattr(error,"response",{}).get("Error",{}).get("Code")
+            if code not in ("404","NoSuchKey","NotFound"):raise
+    raw,origin=bse.retrieve_original_pdf(filename)
+    if client:
+        key=PREFIX+"evidence/original_version="+sha(raw)+"/issuer-original.pdf"
+        immutable_put(client,key,raw)
+        origin={**origin,"original_r2_key":key}
+        immutable_put(client,index_key,canonical(origin))
+    return raw,origin,False
+
 def persist(db,client,row,period,source,raw,parsed,publication):
     symbol,isin,sid,name,code=row
     original_sha=sha(raw)
@@ -455,6 +476,7 @@ def main():
                                 date.fromisoformat(start),date.fromisoformat(end),max_pages=5)
                             approved=[]
                             rejects=Counter()
+                            entry["sources"]=[]
                             priority=lambda src: (
                                 1 if re.search(r"newspaper|press release|presentation|advertisement|media release",str(src.get("title","")),re.I) else 0,
                                 0 if re.search(r"(?:unaudited|audited)\s+(?:standalone|consolidated)|financial results|board meeting outcome",str(src.get("title","")),re.I) else 1
@@ -466,13 +488,18 @@ def main():
                                 try:
                                     filename=src["attachment_name"]
                                     if filename not in pdf_cache:
-                                        pdf_cache[filename]=bse.retrieve_original_pdf(filename)
-                                        counts["original_pdfs_retrieved"]+=1
+                                        raw,origin,reused=retained_original(bse,client,filename)
+                                        pdf_cache[filename]=(raw,origin)
+                                        counts["original_pdfs_reused" if reused else "original_pdfs_retrieved"]+=1
                                     raw,origin=pdf_cache[filename]
+                                    entry["sources"].append({"attachment_name":filename,
+                                        "sha256":sha(raw),"original_r2_key":origin.get("original_r2_key")})
                                     parsed=extract(raw,symbol,legal_name,period)
+                                    if origin.get("original_r2_key"):
+                                        parsed["original_r2_key"]=origin["original_r2_key"]
                                     approved.append((src,raw,origin,parsed))
                                 except (ValueError,fitz.FileDataError,RuntimeError) as e:
-                                    rejects[str(e)[:85]]+=1
+                                    rejects[str(e)[:300]]+=1
                             entry["candidates"]=len(discovery["results"])
                             entry["candidate_limit_reached"]=len(ordered)>args.max_pdfs_per_quarter
                             entry["rejection_counts"]=dict(rejects)
