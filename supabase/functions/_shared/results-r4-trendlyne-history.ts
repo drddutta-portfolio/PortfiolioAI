@@ -89,7 +89,7 @@ export async function handleR4History(req:Request){
   let claims:Record<string,unknown>
   try{claims=await workflowIdentity(req)}catch{return reply(401,{error:"WORKFLOW_AUTH_FAILED"})}
   const body=await req.json().catch(()=>null) as {tool?:string;args?:Record<string,unknown>;securityId?:string;requestId?:string}|null
-  const allowed=["LIST_TOOLS","search_parameters","get_parameter_values_multi_stock","get_document_search_results","get_parameter_values"]
+  const allowed=["LIST_TOOLS","search_parameters","get_parameter_values_multi_stock","get_document_search_results","get_parameter_values","search_financial_parameters","get_stock_parameter_values"]
   if(!body||!body.tool||!allowed.includes(body.tool)||!body.requestId||!/^[a-zA-Z0-9_-]{1,80}$/.test(body.requestId)
      ||JSON.stringify(body.args??{}).length>5000)return reply(400,{error:"INVALID_REQUEST"})
   const url=Deno.env.get("SUPABASE_URL"),service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),endpoint=Deno.env.get("TRENDLYNE_MCP_URL")
@@ -99,7 +99,7 @@ export async function handleR4History(req:Request){
     const s=await db.from("security_identity_observations").select("id").eq("security_id",body.securityId)
       .eq("source_code",SOURCE).eq("evidence_status","MATCHED").limit(1)
     if(s.error||!s.data?.length)return reply(409,{error:"EXACT_PROVIDER_IDENTITY_REQUIRED"})
-  }else if(body.tool!=="LIST_TOOLS"&&body.tool!=="search_parameters")return reply(400,{error:"SECURITY_REQUIRED"})
+  }else if(body.tool!=="LIST_TOOLS"&&body.tool!=="search_parameters"&&body.tool!=="search_financial_parameters")return reply(400,{error:"SECURITY_REQUIRED"})
   const control=await db.from("provider_ingestion_controls").select("*").eq("source_code",SOURCE).single()
   const source=await db.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code",SOURCE).single()
   if(control.error||source.error||!control.data.ingestion_enabled||control.data.actual_provider_quota_status!=="VERIFIED"
