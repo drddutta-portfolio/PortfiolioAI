@@ -5,6 +5,8 @@ on:
     branches: [PortfolioAI-Development]
     paths:
       - .github/workflows/results-r4-bse-original-batch.yml
+      - scripts/results/r4-bse-historical-batch.py
+      - scripts/results/test_r4_bse_historical_batch.py
 permissions:
   contents: read
 concurrency:
@@ -50,7 +52,7 @@ jobs:
       - name: Acquire verified issuer originals for historical gaps
         run: |
           mkdir -p tmp/results-r4
-          python scripts/results/r4-bse-historical-batch.py --apply --shard-count 4 --shard-index ${{ matrix.shard }} --max-companies 80 --max-pdfs-per-quarter 3 --output tmp/results-r4/bse-original-shard-${{ matrix.shard }}.json
+          python scripts/results/r4-bse-historical-batch.py --apply --shard-count 4 --shard-index ${{ matrix.shard }} --max-companies 80 --max-pdfs-per-quarter 5 --output tmp/results-r4/bse-original-shard-${{ matrix.shard }}.json
       - name: Retain per-company originals and rejection diagnostics
         if: always()
         uses: actions/upload-artifact@v4
