@@ -674,8 +674,16 @@ def verify(db,s3,apply):
                     if (catalog_scope!=document["consolidation_scope"] or
                         datetime.strptime(metadata["toDate"],"%d-%b-%Y").date().isoformat()!=document["period_end"]):
                         raise ValueError("CATALOG_SCOPE_OR_PERIOD_MISMATCH")
+                    rename=None
+                    if proof.get("issuer_rename_authority"):
+                        from r4_issuer_rename import verify_rename_pdf
+                        authority=proof["issuer_rename_authority"]
+                        authority_bytes=s3.get_object(Bucket=BUCKET,Key=authority["r2_key"])["Body"].read()
+                        if sha(authority_bytes)!=authority["sha256"]:
+                            raise ValueError("RENAME_AUTHORITY_HASH_MISMATCH")
+                        rename=verify_rename_pdf(authority_bytes,document["symbol"],authority["source_url"])
                     bridge=bridge_from_sources(original_bytes,metadata,document["symbol"],document["isin"],
-                                               proof["bse_header"],proof["bse_listing"])
+                                               proof["bse_header"],proof["bse_listing"],rename)
                     if bridge.payload()!=document["issuer_bridge"]:
                         raise ValueError("IDENTITY_REPLAY_MISMATCH")
                     verify_original_facts(original_bytes,document,bridge)
