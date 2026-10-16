@@ -100,3 +100,31 @@ Live [R4 AXISBANK 2024 issuer identity pilot run 38880464871](https://github.com
 - Repository-wide CI previously showed 9 failing tests across Results historical visual assertions and canonical authority registry (2,344 tests passed). The earlier `lint:edge` unexpected-any compiler issue was repaired. These UI tests are separate acceptance gates, and must not be silently described as PASS or fixed by redesigning the approved UI.
 
 **Current completion statement:** R4 verifier engineering and original-source selection are operating and producing real historical qualification, but **full R4 source-data acceptance remains PARTIAL**, with 283 exceptions at the latest accepted SQL readback. No fake data, no overridden existing selected observations, no Production/main changes; V1-4 scores untouched.
+
+## Latest completed R4 historical recovery / verified final snapshot — 16 October 2026, 09:34 UTC
+
+**The owner asked for full R4 completion; this is the latest verified partial completion, not a falsely asserted 262×8 PASS.**
+
+[Official NSE 2024 full-cohort original-source recovery — run 38880157368](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38880157368): terminal GitHub Actions **SUCCESS**; source acquisition processed all 262 equities and reported `checked=262`, `qualified=33` original 2024 issuer/scoped filing candidates, `observations_inserted=97`, `periods:2024-09=15,2024-12=18`; fail-closed extractor diagnostics `UNKNOWN_HISTORICAL_ISIN=281` and `SOURCE_QUARTER_CONTEXT_MISSING=15`. R4 original-source validator independently hash-verified R2 and committed **6 new decisions** in its final pass with **0 prior-selection conflicts** (1,014 unchanged in its legacy two-period mode), source test R2 `1952` eligible facts. A concurrent R4 8-quarter selector also admitted evidence from the fresh original sources, with all prior selections protected.
+
+**Latest independent live database readback after both completed source selection runs:**
+
+| Quarter end | Selected/qualified stock-quarter metric trios | Not qualified |
+|---|---:|---:|
+| Sep 2024 | **168/262** | 94 |
+| Dec 2024 | **172/262** | 90 |
+| Mar 2025 | **220/262** | 42 |
+| Jun 2025 | **229/262** | 33 |
+| Sep 2025 | **255/262** | 7 |
+| Dec 2025 | **258/262** | 4 |
+| Mar 2026 | **256/262** | 6 |
+| Jun 2026 | **261/262** | 1 |
+| **TOTAL** | **1,819 / 2,096** | **277** |
+
+**Actual source-qualified coverage gain in this R4 execution: +17 company-quarter slots** over the original 1,802/2,096. **142 of 262 companies have all eight quarters qualified** (up from 136), while **249/262 still have four displayed quarters qualified**; this user-approved R3 deficiency remains deferred. 2024 historical original EPS for splits is retained on the as-filed share basis and must not be considered cross-split comparable without documented normalization.
+
+The long-listed 12-company original-source recovery run and narrowly evidenced AXISBANK pilot **did not produce a verified additional AXISBANK quarter**: historical source identity remained uncertain (four AXISBANK `UNKNOWN_HISTORICAL_ISIN` rejects). Although exact NSE/CML/61473 corroborates AXISBANK's 2024 historical security, the available NSE catalog identity conflicted or was unproven. Rather than discarding the safety gate, the code preserved the reject. Additional issuer-specific independent corporate-action/source identity proof is required for the 281 old-ISIN failures; 15 other original files lack a proven standalone OneD single-quarter context.
+
+**R4 technical validation vs acceptance:** New R4 eight-quarter verifier/readback and source safeguards passed their own regression suites and immutable Cloudflare R2 checked-source workflow. The 8-quarter YoY candidate scope was tightened to 723 pairs at the earlier 1,802-source snapshot; **do not reuse this count as an after-recovery final figure without recomputation**. Overall `R1-R4 repository verification` remains not fully green: the latest observed full-suite job had 9 failing tests in Results UI/approved-heading assertions and canonical metric registry expectations (2,344 passed), separate from source-selection tests. No R4 complete/PASS assertion while 277 source/identity conflicts or unsupported histories remain.
+
+**Boundary:** R3 source acquisition workflows were switched to manual-only to honor the owner's pause. R4 historical original-source work and protected selections were performed solely on `PortfolioAI-Development` / Dev Supabase / Dev R2. No Production/main, no V1-4 valuation/research/score authority modifications. R4 engineering and evidence safety are operational; **financial completeness remains partial**.
