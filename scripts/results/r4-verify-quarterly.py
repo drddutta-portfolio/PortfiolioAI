@@ -81,7 +81,8 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1",
                          "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1",
                          "PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1",
-                         "PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1"):
+                         "PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1",
+                         "PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     # Narrow 2024 catalog ISIN omission; source NSE symbol is independently
@@ -171,6 +172,33 @@ def check_manifest(record,manifest):
             or manifest.get("raw_nse_bytes_retained") is not False
             or manifest.get("reporting_currency")!="INR"):
             return "UNQUALIFIED_2024_COMPACT_ORIGINAL"
+    if contract=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1":
+        # Generalized original-source contract: never trust a ticker lookup alone,
+        # a metric snapshot, or a Trendlyne search snippet as a BSE issuer filing.
+        url_path=r"/xml-data/corpfiling/(?:AttachHis|AttachLive)/[0-9a-f-]{36}\.pdf"
+        original=manifest.get("original_sha256_retained")
+        original_key=manifest.get("original_r2_key")
+        period=manifest.get("period_end")
+        if (period not in ("2024-09-30","2024-12-31","2025-03-31","2025-06-30")
+            or u.scheme!="https" or u.hostname!="www.bseindia.com"
+            or not re.fullmatch(url_path,u.path,re.I) or u.query or u.fragment
+            or not re.fullmatch(r"[0-9]{6}",str(manifest.get("bse_scrip_code","")))
+            or not isinstance(manifest.get("issuer_name"),str)
+            or len([x for x in re.findall(r"[A-Z]{3,}",manifest["issuer_name"].upper())
+                    if x not in {"LTD","LIMITED","INDIA","THE","COMPANY","PRIVATE"}])<2
+            or manifest.get("source_identity_proof")!="CANONICAL_BSE_SCRIP_ISIN_AND_CONTIGUOUS_ISSUER_NAME"
+            or not re.fullmatch(r"[0-9a-f]{64}",str(original or ""))
+            or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
+            or "/original_version="+original+"/issuer-original.pdf" not in original_key
+            or manifest.get("original_pdf_retained") is not True
+            or manifest.get("reporting_currency")!="INR"
+            or manifest.get("first_column_period")!=period
+            or manifest.get("original_unit") not in ("INR_LAKH","INR_CRORE","INR_MILLION")
+            or manifest.get("historical_eps_reporting_basis")!="AS_FILED_NOT_RETROSPECTIVELY_ADJUSTED"
+            or manifest.get("historical_share_adjustment_authorized") is not False
+            or not isinstance(manifest.get("financial_page"),int)
+            or not 1<=manifest["financial_page"]<=40):
+            return "BSE_BATCH_SOURCE_OR_ISSUER_CONTRACT_UNPROVEN"
     if contract=="PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1":
         approved={
           "2024-09-30":("c9b4cb4c-088b-4a88-a6b7-91087ba90d95.pdf",
@@ -301,6 +329,27 @@ def check_fact(r,m):
         if (not isinstance(contexts,list) or not contexts
             or not all(isinstance(x,str) and len(x)<100 for x in contexts)):
             return "LEGACY_FINANCIAL_CONTEXT_NOT_PROVEN"
+    if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1":
+        f=m["facts"][key]
+        if (f.get("page")!=m.get("financial_page") or f.get("column_index")!=0
+            or f.get("original_unit") not in ("INR_LAKH","INR_CRORE","INR_MILLION","INR_PER_SHARE")
+            or not isinstance(f.get("evidence_line"),str)
+            or not 5<len(f["evidence_line"])<=800):
+            return "BSE_BATCH_FACT_CONTEXT_UNKNOWN"
+        if key=="EPS_DILUTED":
+            if f.get("original_unit")!="INR_PER_SHARE":return "BSE_BATCH_EPS_UNIT_UNPROVEN"
+        elif f.get("original_unit")!=m.get("original_unit"):
+            return "BSE_BATCH_MONETARY_UNIT_MISMATCH"
+        if key not in ("OPERATING_REVENUE_QUARTER","NET_INTEREST_INCOME_QUARTER",
+                       "NET_PREMIUM_EARNED_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"):
+            return "BSE_BATCH_METRIC_UNAUTHORIZED"
+        # Independent exact unit consistency; no arbitrary 100x correction.
+        # The R2-pinned source original is checked independently below.
+        try:
+            val=Decimal(str(f["value"]))
+            if not val.is_finite():return "BSE_BATCH_VALUE_NONFINITE"
+        except (KeyError,InvalidOperation,ValueError,TypeError):
+            return "BSE_BATCH_VALUE_NOT_DECIMAL"
     if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1":
         f=m["facts"][key]
         if (f.get("page")!=m.get("financial_page") or f.get("column_index")!=0
@@ -513,7 +562,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -542,7 +591,7 @@ def verify(db,s3,apply):
                     code=response.get("Error",{}).get("Code","") if isinstance(response,dict) else ""
                     error="R2_OBJECT_UNAVAILABLE_"+type(exc).__name__+("_"+str(code) if code else "")
             if not error:error=check_manifest(r,document)
-            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1":
+            if not error and document.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_ISSUER_PDF_V1","PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"):
                 try:
                     original_bytes=s3.get_object(
                         Bucket=BUCKET,Key=document["original_r2_key"])["Body"].read()
@@ -584,14 +633,15 @@ def verify(db,s3,apply):
                         "selected_observation_id":str(r["id"]),
                         "original_share_basis":bool(
                             r["metric_code"]=="EPS_DILUTED" and
-                            r["raw_payload"].get("historical_identity_link")),
+                            (r["raw_payload"].get("historical_identity_link") or r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1")),
+                        "general_bse_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"),
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE)
                         } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -619,6 +669,8 @@ def verify(db,s3,apply):
                                'EVIDENCE_PRIORITY',now(),NULL,
                                CASE WHEN p.issuer_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.general_bse_eps THEN
+                                 'RESULTS_R4_BSE_ORIGINAL_PDF_R2_SOURCE_RECONCILED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_RETROSPECTIVE_SPLIT_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_V1_4_AUTHORITY'
                                WHEN p.original_share_basis THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED; DO_NOT_COMPARE_EPS_ACROSS_SPLIT; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                ELSE 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY' END
