@@ -42,6 +42,8 @@ TARGET_QUARTERS = (
 )
 CORE_METRICS = frozenset(FIELDS.values())
 BANK_REQUIRED = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
+INSURANCE_REQUIRED = frozenset(("NET_PREMIUM_EARNED_QUARTER", "NET_PROFIT_QUARTER", "EPS_DILUTED"))
+INSURERS = frozenset(("STARHEALTH",))
 # Investment banking cohort is explicit so unrelated non-bank NPA observations
 # never reclassify a company into the Banking financial statement contract.
 BANK_TICKERS = frozenset((
@@ -50,7 +52,7 @@ BANK_TICKERS = frozenset((
     "KARURVYSYA", "KOTAKBANK", "SBIN", "UNIONBANK",
     "BANKINDIA", "CANBK", "RBLBANK",
 ))
-RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
+RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PREMIUM_EARNED_QUARTER", "NET_PROFIT_QUARTER",
                   "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
                   "GROSS_NPA_PERCENT", "NET_NPA_PERCENT")
 
@@ -106,7 +108,7 @@ NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
 DATE = re.compile(r"^\d\d[-/.](?:\d\d|[A-Za-z]{3,9})[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
 # NBFC is its own NSE iXBRL format, separate from standard Ind-AS and banking.
-ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS)_[A-Za-z0-9_]+\.html$",re.I)
+ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/(?:INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS)|GI)_[A-Za-z0-9_]+\.html$",re.I)
 
 def sha(raw: bytes) -> str: return hashlib.sha256(raw).hexdigest()
 
@@ -456,7 +458,67 @@ def extract_nbfc(html: str, symbol: str, isin: str):
         result["historical_identity_link"]=identity
     return result,None
 
+def extract_insurance(html: str, symbol: str, isin: str):
+    """Use only NSE's GENERAL INSURANCE original, never equate GWP with revenue."""
+    if symbol not in INSURERS:return None,"UNAPPROVED_INSURER"
+    soup=BeautifulSoup(html,"html.parser")
+    tables=list(html_rows(soup))
+    if unique_field(tables,"nse symbol")!=symbol or unique_field(tables,"isin")!=isin:
+        return None,"INSURANCE_IDENTITY_UNPROVEN"
+    unit,reason=source_filing_unit(soup,tables)
+    if reason:return None,reason
+    if unit not in ("lakhs","crores"):return None,"INSURANCE_UNITS_UNPROVEN"
+    scale=Decimal(100) if unit=="lakhs" else Decimal(1)
+    original_unit="INR_LAKH" if unit=="lakhs" else "INR_CRORE"
+    report=unique_field(tables,"reporting type")
+    if report and normalize(report)!="quarterly":return None,"NOT_QUARTERLY"
+    def eps_label(x):
+        x=normalize(x)
+        return "eps after extraordinary items" in x and ("diluted" in x or "diluated" in x)
+    matches=[]
+    for table in tables:
+        names={normalize(c) for row in table for c in row}
+        if ("premium earned (net)" in names and "profit / (loss) after tax" in names
+            and any(eps_label(n) for n in names)):
+            matches.append(table)
+    if len(matches)!=1:return None,"INSURANCE_STATEMENT_NOT_UNIQUE"
+    stmt=matches[0]
+    starts=field_values(stmt,"date of start of reporting period")
+    ends=field_values(stmt,"date of end of reporting period")
+    qstart=date_of(starts[0]) if starts else None
+    qend=date_of(ends[0]) if ends else None
+    if not qstart or qend not in TARGET_QUARTERS or not 75<=(date.fromisoformat(qend)-date.fromisoformat(qstart)).days<=100:
+        return None,"INSURANCE_QUARTER_UNPROVEN"
+    scopes=field_values(stmt,"nature of report standalone or consolidated")
+    scope=scopes[0].upper() if scopes else unique_field(tables,"nature of report standalone or consolidated")
+    if scope not in ("STANDALONE","CONSOLIDATED"):return None,"INSURANCE_SCOPE_UNPROVEN"
+    facts={}
+    for label,key in (("premium earned (net)","NET_PREMIUM_EARNED_QUARTER"),
+                      ("profit / (loss) after tax","NET_PROFIT_QUARTER")):
+        values=field_values(stmt,label)
+        val=number(values[0]) if values else None
+        if val is None:return None,"INSURANCE_CORE_VALUE_NOT_PROVEN_"+key
+        facts[key]={"value":str(val/scale),"unit":"INR_CRORE",
+                    "original_value":values[0],"original_unit":original_unit}
+    possible=[]
+    for cells in stmt:
+        for idx,cell in enumerate(cells[:-1]):
+            if not eps_label(cell):continue
+            for raw in cells[idx+1:]:
+                val=number(raw)
+                if val is not None:
+                    possible.append((val,raw))
+                    break
+    if len({p[0] for p in possible})!=1:return None,"INSURANCE_DILUTED_EPS_UNPROVEN"
+    eps,original=possible[0]
+    facts["EPS_DILUTED"]={"value":str(eps),"unit":"INR_PER_SHARE",
+                          "original_value":original,"original_unit":"INR_PER_SHARE"}
+    return {"symbol":symbol,"isin":isin,"period_start":qstart,
+            "period_end":qend,"scope":scope,"facts":facts},None
+
 def extract_source(html: str, symbol: str, isin: str, source_url: str):
+    if re.search(r"/GI_[A-Za-z0-9_]+\.html$",urlparse(source_url).path,re.I):
+        return extract_insurance(html,symbol,isin)
     path=urlparse(source_url).path
     if re.search(r"/INTEGRATED_FILING_NBFC_INDAS_[A-Za-z0-9_]+\.html$",path,re.I):
         return extract_nbfc(html,symbol,isin)
@@ -616,10 +678,10 @@ def missing_r4_selected_quarters(rows):
     """Only an existing R4 selection closes a requalification target period."""
     return {str(row[0]) for row in rows if str(row[0]) in TARGET_QUARTERS}
 
-def completed_quarters(rows, banking=False):
+def completed_quarters(rows, banking=False, insurance=False):
     """Require complete same-source metrics and correct business-type contract."""
     by_filing = {}
-    required = BANK_REQUIRED if banking else CORE_METRICS
+    required = INSURANCE_REQUIRED if insurance else BANK_REQUIRED if banking else CORE_METRICS
     for period_end, scope, source_record_id, metric_code in rows:
         if str(period_end) not in TARGET_QUARTERS or not scope or not source_record_id:
             continue
@@ -697,8 +759,8 @@ def main():
                       AND ((f.metric_code='EPS_DILUTED' AND f.unit='INR_PER_SHARE')
                           OR (f.metric_code<>'EPS_DILUTED' AND f.unit='INR_CRORE'))
                       AND f.metric_code=ANY(%s)""",
-                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
-                completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | INSURANCE_REQUIRED)))
+                completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS, insurance=symbol in INSURERS)
                 # Qualified but unselected original observations must be
                 # reconciled by the R4 source verifier, not repulled as if new.
                 cur.execute("""SELECT period_end,consolidation_scope,
@@ -711,8 +773,8 @@ def main():
                       AND ((metric_code='EPS_DILUTED' AND unit='INR_PER_SHARE')
                           OR (metric_code<>'EPS_DILUTED' AND unit='INR_CRORE'))
                       AND metric_code=ANY(%s)""",
-                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
-                already_sourced=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | INSURANCE_REQUIRED)))
+                already_sourced=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS, insurance=symbol in INSURERS)
                 pending_review=already_sourced-completed
                 if requalify:
                     cur.execute("""SELECT DISTINCT period_end
@@ -793,7 +855,7 @@ def main():
                             entry["qualified"]+=1
                             log["documents_parsed"]+=1
                             entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
-                            if (BANK_REQUIRED if symbol in BANK_TICKERS else CORE_METRICS).issubset(data["facts"]):
+                            if (INSURANCE_REQUIRED if symbol in INSURERS else BANK_REQUIRED if symbol in BANK_TICKERS else CORE_METRICS).issubset(data["facts"]):
                                 acquired.add(data["period_end"])
                             # A capture is pending R4 selection, not already complete.
                             if len(completed | pending_review | acquired)==len(TARGET_QUARTERS):
