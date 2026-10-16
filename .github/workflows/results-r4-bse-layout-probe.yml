@@ -1,0 +1,49 @@
+name: R4 BSE Original PDF Layout Diagnostic
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bse-layout-probe.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install PDF source reader
+        run: python -m pip install --disable-pip-version-check 'requests==2.32.5' 'pymupdf==1.26.6'
+      - name: Download and diagnose published original BEL fiscal quarter
+        run: |
+          mkdir -p tmp/results-r4
+          python - <<'PY'
+          import requests,hashlib,fitz,json,collections
+          url='https://www.bseindia.com/xml-data/corpfiling/AttachHis/2c66684c-6ab1-4b53-a142-887e4f092ef0.pdf'
+          session=requests.Session()
+          session.headers.update({'User-Agent':'Mozilla/5.0','Referer':'https://www.bseindia.com/'})
+          r=session.get(url,timeout=35)
+          r.raise_for_status()
+          b=r.content
+          digest=hashlib.sha256(b).hexdigest()
+          assert b.startswith(b'%PDF') and digest=='a0cf85d451ba3f0cffa9c74c7a21757cda273f9425c506d6750b2da8e330ac56'
+          open('tmp/results-r4/BEL-2024-09-original.pdf','wb').write(b)
+          doc=fitz.open(stream=b,filetype='pdf')
+          for i,p in enumerate(doc):
+              t=p.get_text('text',sort=True)
+              print('BEL_PAGE',i+1,'TEXT_START',json.dumps(t[:1300],ensure_ascii=True))
+              if any(x in t.lower() for x in ('revenue from operations','earnings per share','profit for the period')):
+                  print('BEL_FINANCIAL_PAGE',i+1,'LINES',json.dumps(t.splitlines()[:100],ensure_ascii=True))
+                  print('BEL_WORD_SAMPLE',json.dumps(p.get_text('words',sort=True)[:65],ensure_ascii=True))
+                  for tab in p.find_tables().tables[:2]:
+                      print('BEL_TABLE_GRID',json.dumps(tab.extract()[:8],ensure_ascii=True))
+          PY
+      - name: Preserve original identified sample PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-bse-bel-original-pdf-layout
+          path: tmp/results-r4/BEL-2024-09-original.pdf
+          if-no-files-found: warn
+          retention-days: 3
