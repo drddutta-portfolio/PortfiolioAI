@@ -424,3 +424,8 @@ verify_jwt = false
 [functions.p8-b2-materialize-historical-universe]
 verify_jwt = false
 
+
+# This function authenticates user sessions internally and verifies GitHub OIDC
+# signatures for the exact Development historical-recovery workflow route.
+[functions.discover-trendlyne-capabilities]
+verify_jwt = false
