@@ -85,3 +85,22 @@ This rules out "just replaying R2" as a solution for those 20. Actual original f
 Last measured complete quarterly cohort remains **233/262**, leaving 29 companies and 91 quarter slots. Code deploy status and successful cache scans are not evidence of source acquisition. Original conflicts among seven single-quarter companies also remain unadmitted; financial denominators must not be auto-inferred.
 
 **No R3 PASS claimed.** The owner requested clearing all blockers; without successful authorized original acquisition and qualification, the fail-closed result stays incomplete. Work is isolated to Development.
+
+## R3 NBFC original-source recovery and verified readback — 16 October 2026
+
+**Independent readback: 247/262 equities** have all four locked 2025-09/2025-12/2026-03/2026-06 original-source selected financial triplets. **15 equities unresolved**. At start of recovery, same gate counted 233/262 (29 missing). Thus 14 more completed equities are verified in Development, without loosening R4 requirements.
+
+**Source acquisition and selection:** at least 67 new primary official NSE iXBRL `RESULTS_QUARTERLY_NSE_DISCOVERY_V1` source-record entries were observed after 2026-10-16 04:45Z; immutable source manifests were written under `portfolioai-results/development/v1/quarterly/` in Dev R2. Separate R4 source-verification/selection generated new `fundamental_observation_decisions` with `decided_at` around 04:54–04:57Z. Only R4-selected four-quarter companies are counted. The initial code could not ingest NBFC-IndAS originals. Commit a7d885a added the strict NBFC source format and single-quarter revenue, PAT, diluted EPS parser; d524423 adds regression tests. Commit 5be0b54 adds independent original NSE archive seed hints and catalog fallback with permission-respecting access handling, and 56c906f excludes unqualified secondary-source observations and superseded member rows from reuse eligibility.
+
+**Safeguarded Dev verifier:** commit 3591a2e introduced `.github/workflows/results-r3-verify-and-readback.yml`: Development-only R2 hash and original-filing verification, conflict-protecting atomic source selection and strict 262/262 cohort readback.
+
+**Historical split identity fixes:** ANGELONE `INE732I01013` to `INE732I01021`, 10:1 split effective 2026-02-26 (BSE DR-829/2025-2026); TDPOWERSYS `INE419M01027` to `INE419M01035`, 2:1 split effective 2026-08-24 (official NSE/CML/75855 dated 2026-08-20 and BSE DR-700/2026-2027). Both are explicit pre-split source-identity links with originally reported EPS retained and no adjusted historical EPS fabricated. Applied to both original-source collector and R4 verifier and tested. Official NSE TDPOWERSYS original URLs discovered for Dec-2025 and Jun-2026 and added as explicit seed hints (04ea6b0).
+
+**Remaining 15:**
+- 3/4 each, missing one: 360ONE (2025-09), BDL (2025-09), COROMANDEL (2026-03), DATAPATTNS (2026-03), ICICIAMC (2025-09), JIOFIN (2025-09), MGL (2026-03), WELSPUNLIV (2025-12), YATRA (2026-03), ZAGGLE (2026-03).
+- 2/4 each, missing two: ANGELONE (2025-09 & 2025-12), AVANTIFEED (2025-09 & 2025-12), VAML (2025-09 & 2025-12).
+- 0/4: STARHEALTH and TDPOWERSYS as of the latest selected readback.
+
+Prior conflicting originals in seven gaps must not be force-selected. STARHEALTH is a general insurer with a different exchange original statement and premium/PAT metrics; using ordinary operating revenue and diluted EPS requires separately evidenced, industry-appropriate metric admission and cannot be assumed. TDPOWERSYS original ISIN mismatch is now narrowly bridged, but its new source selection has not yet been independently verified.
+
+**Status: R3 still INCOMPLETE** despite substantial progress. UI requires refresh after final source readback and must not be claimed 262/262 until all companies satisfy genuine R4 selection. No Production/main/V1-4 canonical research changes.
