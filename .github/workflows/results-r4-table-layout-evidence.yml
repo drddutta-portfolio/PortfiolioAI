@@ -1,0 +1,45 @@
+name: Results R4 Rejected Financial Table Layout Evidence
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-table-layout-evidence.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Inspect actual rejected issuer table geometry
+        run: |
+          python - <<'PY'
+          import sys,fitz,json,re
+          from datetime import date
+          sys.path.insert(0,'scripts')
+          from portfolio_bse import PortfolioBSE
+          with PortfolioBSE() as bse:
+            for symbol in ['AUROPHARMA','APLAPOLLO','AXISBANK','CCL']:
+              code=bse.get_scrip_candidate(symbol)['bse_scrip_code']
+              sources=bse.financial_announcements(code,date(2024,10,1),date(2024,11,30),max_pages=5)['results']
+              seen=set()
+              for src in sources:
+                filename=src.get('attachment_name')
+                if not filename or filename in seen:continue
+                seen.add(filename)
+                try:
+                  raw,origin=bse.retrieve_original_pdf(filename)
+                  doc=fitz.open(stream=raw,filetype='pdf')
+                  print('SOURCE',symbol,origin,json.dumps(src))
+                  for i,p in enumerate(doc):
+                    text=p.get_text('text',sort=True)
+                    if not re.search('revenue from operations|interest earned',text,re.I):continue
+                    print('PAGE_TEXT',symbol,i+1,json.dumps(text[:15000]))
+                    tables=p.find_tables()
+                    for tab in tables.tables[:3]:print('TABLE_GRID',symbol,i+1,json.dumps(tab.extract()))
+                    print('WORDS',symbol,i+1,json.dumps(p.get_text('words',sort=True)[:280]))
+                except Exception as e:print('SOURCE_ERROR',symbol,type(e).__name__,str(e)[:100])
+          PY
