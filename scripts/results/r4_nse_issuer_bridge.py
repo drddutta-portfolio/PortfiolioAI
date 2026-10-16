@@ -18,6 +18,19 @@ def legal_key(name):
     text=re.sub(r"\b(?:LTD|LIMITED)\b","",text)
     return "".join(re.findall(r"[A-Z0-9]+",text))
 
+def catalog_issuer_name(metadata):
+    # Legacy financial-results uses companyName; integrated-filing uses the
+    # stock-master legal name smName. cmName can retain the historical name.
+    integrated="qe_Date" in metadata and "seq_Id" in metadata
+    field="smName" if integrated else "companyName"
+    name=metadata.get(field)
+    if not isinstance(name,str) or not legal_key(name):
+        raise ValueError("EXACT_CATALOG_LEGAL_ISSUER_NAME_UNPROVEN")
+    other=metadata.get("companyName" if integrated else "smName")
+    if isinstance(other,str) and legal_key(other) and legal_key(other)!=legal_key(name):
+        raise ValueError("CONFLICTING_CATALOG_SCHEMA_IDENTITY_FIELDS")
+    return name.strip()
+
 @dataclass(frozen=True)
 class IssuerBridge:
     symbol:str
@@ -51,7 +64,7 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing):
     if str(bse_listing.get("SCRIP_CD"))!=code or bse_listing.get("ISIN_NUMBER")!=isin:
         raise ValueError("BSE_LISTING_CANONICAL_IDENTITY_MISMATCH")
     legal=bse_listing.get("Issuer_Name")
-    named=metadata.get("companyName")
+    named=catalog_issuer_name(metadata)
     if not legal_key(legal) or legal_key(legal)!=legal_key(named):
         raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")
     return IssuerBridge(symbol,isin,code,legal,named,metadata.get("isin"),unique("ISIN"))
