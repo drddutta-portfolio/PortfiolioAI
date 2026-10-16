@@ -54,7 +54,7 @@ jobs:
           set -euo pipefail
           mkdir -p tmp/results-r3
           python scripts/results/r3-live-public-filing-batch.py > tmp/results-r3/starhealth-source.json
-          python -m json.tool tmp/results-r3/starhealth-source.json > /dev/null
+          python -m json.tool tmp/results-r3/starhealth-source.json
       - name: Verify source versions and safely select qualified insurer facts
         if: ${{ !cancelled() }}
         run: python scripts/results/r4-verify-quarterly.py --apply
