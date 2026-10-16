@@ -54,6 +54,44 @@ def sha(raw):
 def name_tokens(s):
     return [t for t in re.findall(r"[A-Z]+", s.upper()) if t not in STOP and len(t) >= 3]
 
+def verified_issuer(bse, scrip, isin):
+    """Resolve the legal name from an exact BSE code/ISIN listing, not a ticker."""
+    rows=bse._bse.listSecurities(scripcode=scrip,group="")
+    if not isinstance(rows,list):
+        raise ValueError("BSE_LISTING_SCHEMA_UNKNOWN")
+    matches=[r for r in rows if isinstance(r,dict)
+             and str(r.get("SCRIP_CD"))==scrip and r.get("ISIN_NUMBER")==isin]
+    if len(matches)!=1:
+        raise ValueError("BSE_LISTING_IDENTITY_NOT_UNIQUE")
+    name=matches[0].get("Issuer_Name")
+    if not isinstance(name,str) or len(name_tokens(name))<2:
+        raise ValueError("BSE_VERIFIED_LEGAL_NAME_MISSING")
+    return name
+
+def first_quarter_header(lines, period):
+    """Require a real multi-date header; a date in the title is insufficient.
+
+    This contract admits the first quarter column only. Nonfirst historical
+    columns and annual/cumulative-only layouts remain explicit parser rejects.
+    """
+    pattern=re.compile(r"\b\d{2}[./-]\d{2}[./-](?:20\d{2}|\d{2})\b|"
+                       r"\b\d{1,2}[- ](?:JAN(?:UARY)?|FEB(?:RUARY)?|MAR(?:CH)?|APR(?:IL)?|MAY|JUN(?:E)?|JUL(?:Y)?|AUG(?:UST)?|SEP(?:TEMBER)?|OCT(?:OBER)?|NOV(?:EMBER)?|DEC(?:EMBER)?)[- ,]+20\d{2}\b|"
+                       r"\b(?:JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER) \d{1,2},? 20\d{2}\b",re.I)
+    for i,line in enumerate(lines):
+        dates=list(pattern.finditer(line.upper()))
+        if len(dates)<3:
+            continue
+        context=" ".join(lines[max(0,i-3):i+1]).upper()
+        if not re.search(r"(?:QUARTERS?\s+ENDED|THREE\s+MONTHS?\s+ENDED)",context):
+            continue
+        # A cumulative heading to the left must never be called a quarter.
+        before=line[:dates[0].start()].upper()
+        if re.search(r"(?:YEAR|NINE|SIX|HALF).*ENDED",before):
+            continue
+        if dates[0].group() in date_forms(period):
+            return line
+    raise ValueError("FIRST_QUARTER_COLUMN_UNPROVEN")
+
 def issuer_identity(name, cover):
     a=name_tokens(name)
     b=name_tokens(cover[:3500])
@@ -99,12 +137,13 @@ def geometry_rows(page):
 def financial_row(lines, labels, metric):
     found=[]
     for i,line in enumerate(lines):
-        stripped=re.sub(r"^\s*(?:\(?\d{1,2}\)?[.)-]?|[IVX]{1,5}[.)-]?)\s*", "",line).strip()
+        stripped=re.sub(r"^\s*(?:\(?\d{1,2}\)?[.)-]?|[IVX]{1,5}[.)-]?|\([a-z]\))\s*", "",line).strip()
         if not any(re.match(p,stripped,re.I) for p in labels):
             continue
         # Same-text-row only: no unsafe transfer from adjacent statement rows.
         suffix=re.sub(r"^.*?(?:(?:operations)|(?:period)|(?:tax)|(?:diluted)|(?:expended)|(?:earned))\b",
                       "",stripped,flags=re.I)
+        suffix=re.sub(r"\(\s*\d{1,2}\s*[-+−]\s*\d{1,2}\s*\)","",suffix)
         values=numeric_cells(suffix)
         if len(values)>=3 and len(values)<=9:
             found.append((line,values))
@@ -170,7 +209,11 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         if "QUARTER ENDED" not in all_head and "QUARTERS ENDED" not in all_head:
             diagnostics["QUARTER_COLUMN_HEADER_MISSING"]+=1
             continue
-        first_header=all_head.split("QUARTER ENDED",1)[-1][:240]
+        try:
+            first_header=first_quarter_header(geometry+lines,period)
+        except ValueError as error:
+            diagnostics[str(error)]+=1
+            continue
         # Older columns must not be mistaken for the requested single quarter.
         if not any(x in first_header for x in date_forms(period)):
             diagnostics["PERIOD_NOT_IN_QUARTER_COLUMNS"]+=1
@@ -180,44 +223,48 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         if not any(x in first_header[:180] for x in date_forms(period)):
             diagnostics["FIRST_QUARTER_COLUMN_UNPROVEN"]+=1
             continue
-        bank=symbol in BANKS
-        insurer=symbol in INSURERS
-        if insurer:
-            revenue_row,revenue_values=financial_row(financial_lines,
-                [r"^(?:net\s+)?premium(?:s)?\s+earned\b"],"PREMIUM")
-            revenue_code="NET_PREMIUM_EARNED_QUARTER"
-        elif bank:
-            earned_line,earned=financial_row(financial_lines,[r"^interest\s+earned\b"],"INTEREST_EARNED")
-            spent_line,spent=financial_row(financial_lines,[r"^interest\s+expended\b"],"INTEREST_EXPENDED")
-            revenue_row=earned_line+" || "+spent_line
-            revenue_values=[earned[0]-spent[0]]
-            revenue_code="NET_INTEREST_INCOME_QUARTER"
-        else:
-            revenue_row,revenue_values=financial_row(lines,
-                [r"^(?:revenue|income)\s+from\s+operations\b"],"REVENUE")
-            revenue_code="OPERATING_REVENUE_QUARTER"
-        profit_row,profit=financial_row(financial_lines,
-            [r"^(?:net\s+)?profit\s*(?:/|\()\s*loss.*\b(?:period|tax)\b",
-             r"^(?:net\s+)?profit\s+(?:after\s+tax|for\s+the\s+period)\b",
-             r"^profit\s+after\s+tax\b"],"PROFIT")
-        eps_row,eps=financial_row(financial_lines,
-            [r"^(?:\(?2\)?\s*)?diluted\s*(?:earnings\s+per\s+share|eps|\(rs)",
-             r"^earnings\s+per\s+share\s*\(?diluted\)?"],"DILUTED_EPS")
-        vals={
-            revenue_code: (revenue_values[0]/divisor,"INR_CRORE",original_unit,revenue_row),
-            "NET_PROFIT_QUARTER":(profit[0]/divisor,"INR_CRORE",original_unit,profit_row),
-            "EPS_DILUTED":(eps[0],"INR_PER_SHARE","INR_PER_SHARE",eps_row)
-        }
-        if any(not x[0].is_finite() for x in vals.values()):
-            raise ValueError("NON_FINITE_FINANCIAL_FACT")
-        facts={code:{"value":str(val),"unit":unit,"original_unit":orig,
-                     "evidence_line":line[:800],"page":page_no+1,"column_index":0}
-               for code,(val,unit,orig,line) in vals.items()}
-        if bank:
-            facts[revenue_code]["component_values"]=[str(earned[0]),str(spent[0])]
-        outcomes.append({"scope":scope,"page":page_no+1,"unit":original_unit,
-                         "first_column_period":period,"facts":facts,
-                         "issuer_name":issuer,"identity_match":"CONTIGUOUS_LEGAL_NAME"})
+        try:
+            bank=symbol in BANKS
+            insurer=symbol in INSURERS
+            if insurer:
+                revenue_row,revenue_values=financial_row(financial_lines,
+                    [r"^(?:net\s+)?premium(?:s)?\s+earned\b"],"PREMIUM")
+                revenue_code="NET_PREMIUM_EARNED_QUARTER"
+            elif bank:
+                earned_line,earned=financial_row(financial_lines,[r"^interest\s+earned\b"],"INTEREST_EARNED")
+                spent_line,spent=financial_row(financial_lines,[r"^interest\s+expended\b"],"INTEREST_EXPENDED")
+                revenue_row=earned_line+" || "+spent_line
+                revenue_values=[earned[0]-spent[0]]
+                revenue_code="NET_INTEREST_INCOME_QUARTER"
+            else:
+                revenue_row,revenue_values=financial_row(financial_lines,
+                    [r"^(?:revenue|income)\s+from\s+operations\b"],"REVENUE")
+                revenue_code="OPERATING_REVENUE_QUARTER"
+            profit_row,profit=financial_row(financial_lines,
+                [r"^(?:net\s+)?profit\s*(?:/|\()\s*loss.*\b(?:period|tax)\b",
+                 r"^(?:net\s+)?profit\s+(?:after\s+tax|for\s+the\s+period)\b",
+                 r"^profit\s+after\s+tax\b"],"PROFIT")
+            eps_row,eps=financial_row(financial_lines,
+                [r"^(?:\(?2\)?\s*)?diluted\s*(?:earnings\s+per\s+share|eps|\(rs)",
+                 r"^earnings\s+per\s+share\s*\(?diluted\)?", r"^diluted\b"],"DILUTED_EPS")
+            vals={
+                revenue_code: (revenue_values[0]/divisor,"INR_CRORE",original_unit,revenue_row),
+                "NET_PROFIT_QUARTER":(profit[0]/divisor,"INR_CRORE",original_unit,profit_row),
+                "EPS_DILUTED":(eps[0],"INR_PER_SHARE","INR_PER_SHARE",eps_row)
+            }
+            if any(not x[0].is_finite() for x in vals.values()):
+                raise ValueError("NON_FINITE_FINANCIAL_FACT")
+            facts={code:{"value":str(val),"unit":unit,"original_unit":orig,
+                         "evidence_line":line[:800],"page":page_no+1,"column_index":0}
+                   for code,(val,unit,orig,line) in vals.items()}
+            if bank:
+                facts[revenue_code]["component_values"]=[str(earned[0]),str(spent[0])]
+            outcomes.append({"scope":scope,"page":page_no+1,"unit":original_unit,
+                             "first_column_period":period,"facts":facts,
+                             "issuer_name":issuer,"identity_match":"CONTIGUOUS_LEGAL_NAME"})
+        except ValueError as error:
+            diagnostics[str(error)]+=1
+            continue
     if not outcomes:
         reason=";".join(k+":"+str(v) for k,v in diagnostics.most_common(4))
         raise ValueError("NO_SINGLE_QUARTER_TRIO:"+reason)
@@ -353,7 +400,7 @@ def main():
     parser.add_argument("--symbols",default="")
     parser.add_argument("--output",default="tmp/results-r4/bse-batch.json")
     args=parser.parse_args()
-    if not 1<=args.max_companies<=262 or not 1<=args.shard_count<=8 or not 0<=args.shard_index<args.shard_count or not 1<=args.max_pdfs_per_quarter<=5:
+    if not 1<=args.max_companies<=262 or not 1<=args.shard_count<=8 or not 0<=args.shard_index<args.shard_count or not 1<=args.max_pdfs_per_quarter<=50:
         raise SystemExit("UNBOUNDED_BATCH_REFUSED")
     url=os.getenv("SUPABASE_DB_URL","")
     if REF not in url or os.getenv("CLOUDFLARE_R2_BUCKET")!=BUCKET:
@@ -369,6 +416,7 @@ def main():
         client=r2_client() if args.apply else None
         counts=Counter()
         outcomes=[]
+        pdf_cache={}
         with PortfolioBSE() as bse:
             for symbol,isin,sid,name,periods in universe:
                 company={"symbol":symbol,"unresolved_periods":periods,"results":[]}
@@ -377,6 +425,7 @@ def main():
                     meta=bse._bse.equityMetaInfo(scrip)
                     if not isinstance(meta,dict) or meta.get("ISIN")!=isin or str(meta.get("SecurityCode"))!=scrip:
                         raise ValueError("BSE_CANONICAL_IDENTITY_MISMATCH")
+                    legal_name=verified_issuer(bse,scrip,isin)
                     for period in periods:
                         start,end=WINDOWS[period][1:]
                         entry={"period":period}
@@ -394,12 +443,17 @@ def main():
                                 if attempt>=args.max_pdfs_per_quarter:break
                                 if not src.get("attachment_name"):continue
                                 try:
-                                    raw,origin=bse.retrieve_original_pdf(src["attachment_name"])
-                                    parsed=extract(raw,symbol,name,period)
+                                    filename=src["attachment_name"]
+                                    if filename not in pdf_cache:
+                                        pdf_cache[filename]=bse.retrieve_original_pdf(filename)
+                                        counts["original_pdfs_retrieved"]+=1
+                                    raw,origin=pdf_cache[filename]
+                                    parsed=extract(raw,symbol,legal_name,period)
                                     approved.append((src,raw,origin,parsed))
                                 except (ValueError,fitz.FileDataError,RuntimeError) as e:
                                     rejects[str(e)[:85]]+=1
                             entry["candidates"]=len(discovery["results"])
+                            entry["candidate_limit_reached"]=len(ordered)>args.max_pdfs_per_quarter
                             entry["rejection_counts"]=dict(rejects)
                             if not approved:
                                 entry["status"]="NO_UNAMBIGUOUS_ORIGINAL_TRIO"
@@ -419,7 +473,7 @@ def main():
                                         metric_values={k:v["value"] for k,v in parsed["facts"].items()})
                                     if args.apply:
                                         entry["facts_inserted"]=persist(db,client,
-                                           (symbol,isin,sid,name,scrip),period,origin,raw,parsed,
+                                           (symbol,isin,sid,legal_name,scrip),period,origin,raw,parsed,
                                            src.get("published_at"))
                                         counts["facts_inserted"]+=entry["facts_inserted"]
                             counts[entry["status"]]+=1
@@ -433,6 +487,10 @@ def main():
                     company["error"]=str(e)[:140]
                     counts["ISSUER_LOOKUP_FAILED"]+=1
                 outcomes.append(company)
+                checkpoint=Path(args.output)
+                checkpoint.parent.mkdir(parents=True,exist_ok=True)
+                checkpoint.write_text(json.dumps({"in_progress":True,
+                    "counts":dict(counts),"companies":outcomes},default=str),encoding="utf-8")
                 print("R4_BSE_BATCH_PROGRESS="+json.dumps({"symbol":symbol,"counts":dict(counts)}),flush=True)
                 time.sleep(.3)
     result={"mode":"APPLY" if args.apply else "DRY_RUN","shard_index":args.shard_index,
@@ -444,3 +502,4 @@ def main():
 
 if __name__=="__main__":
     main()
+
