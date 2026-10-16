@@ -6,9 +6,9 @@ on:
         description: Bounded five-hour controller cycle
         default: "0"
         type: string
-      last_remaining:
-        description: Last gap count dispatched for recovery
-        default: "2097"
+      recovery_state:
+        description: Persisted source cooldowns across controller cycles
+        default: "{}"
         type: string
   push:
     branches: [PortfolioAI-Development]
@@ -28,7 +28,7 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       GH_TOKEN: ${{ github.token }}
       MONITOR_CYCLE: ${{ inputs.cycle || '0' }}
-      LAST_DISPATCH_REMAINING: ${{ inputs.last_remaining || '2097' }}
+      RECOVERY_STATE: ${{ inputs.recovery_state || '{}' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,9 +37,11 @@ jobs:
         with: {python-version: "3.12"}
       - name: Install pinned read-only audit dependency
         run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
-      - name: Validate controller syntax
-        run: python -m py_compile scripts/results/r4-recovery-monitor.py
-      - name: Check every ten minutes and resume eligible cached recovery
+      - name: Validate controller and source-rotation regressions
+        run: |
+          python -m py_compile scripts/results/r4-recovery-monitor.py scripts/results/r4_recovery_queue.py
+          python scripts/results/test_r4_recovery_queue.py -v
+      - name: Check every ten minutes and rotate independent recovery sources
         run: python scripts/results/r4-recovery-monitor.py
       - name: Preserve monitoring checkpoints
         if: always()
