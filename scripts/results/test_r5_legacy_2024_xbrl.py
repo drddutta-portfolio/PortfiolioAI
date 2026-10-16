@@ -44,6 +44,13 @@ class LegacyTests(unittest.TestCase):
   self.assertEqual(out["original_catalog_isin"],"RETAINED_CATALOG_ISIN")
   self.assertEqual(metadata["isin"],"RETAINED_CATALOG_ISIN")
   self.assertIsNone(out["historical_identity_link"])
+  from r4_nse_issuer_bridge import verify_original_facts
+  verify_original_facts(raw,out,proof)
+  from copy import deepcopy
+  wrong=deepcopy(out);wrong["facts"]["EPS_DILUTED"]["value"]="75"
+  with self.assertRaises(ValueError):verify_original_facts(raw,wrong,proof)
+  wrong=deepcopy(out);wrong["period_start"]="2024-04-01"
+  with self.assertRaises(ValueError):verify_original_facts(raw,wrong,proof)
 
  def test_boolean_or_dict_cannot_bypass_historical_identity(self):
   out,error=module.extract(xml(),METADATA,"RELIANCE","INE002A01018",{"verified":True})
