@@ -43,6 +43,8 @@ jobs:
       - name: Verify code and deterministic regression suites
         run: |
           python -m py_compile scripts/results/r4-bse-historical-batch.py scripts/results/r4-verify-quarterly.py scripts/results/r4-eight-quarter-readback.py
+          python scripts/results/test_r4_recovery_queue.py -v
+          python scripts/results/test_r4_nse_failure_isolation.py -v
           python scripts/results/test_r4_pdf_geometry.py -v
           python scripts/results/test_r4_bse_historical_batch.py -v
           python scripts/results/test_portfolio_bse.py -v
