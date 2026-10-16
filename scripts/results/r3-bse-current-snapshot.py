@@ -108,8 +108,8 @@ def store(db,sid,symbol,isin,scrip,fact):
             source_id=cur.fetchone()[0]
         cur.execute("""INSERT INTO public.fundamental_observations
             (security_id,metric_code,source_record_id,source_code,numeric_value,
-             unit,currency,period_type,period_end,consolidation_scope,evidence_status,retrieved_at)
-            VALUES (%s,%s,%s,%s,%s,'INR_CRORE','INR','QUARTER',%s,'UNKNOWN','AVAILABLE',now())
+             unit,currency,period_type,period_end,consolidation_scope,evidence_status,retrieved_at,fresh_until)
+            VALUES (%s,%s,%s,%s,%s,'INR_CRORE','INR','QUARTER',%s,'UNKNOWN','AVAILABLE',now(),now() + interval '1 day')
             ON CONFLICT (security_id,metric_code,source_code,period_end,period_type,consolidation_scope,source_record_id)
             DO NOTHING RETURNING id""",
             (sid,fact["metric_code"],source_id,SOURCE,fact["value"],fact["period_end"]))
