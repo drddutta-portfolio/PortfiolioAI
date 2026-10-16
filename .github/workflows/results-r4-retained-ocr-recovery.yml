@@ -9,7 +9,7 @@ permissions:
   contents: read
 concurrency:
   group: results-r4-retained-ocr-recovery-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   recover:
     runs-on: ubuntu-latest
