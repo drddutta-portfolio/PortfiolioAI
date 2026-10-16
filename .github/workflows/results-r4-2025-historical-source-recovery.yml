@@ -1,0 +1,73 @@
+name: Results R4 Development 2025 March June Original-Filing Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-2025-historical-source-recovery.yml]
+permissions:
+  contents: read
+concurrency:
+  group: results-r4-2025-nse-original-dev
+  cancel-in-progress: false
+jobs:
+  acquire-and-qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R3_2025_LEGACY_ACK: "2025_MAR_JUN_ORIGINAL_XBRL"
+      RESULTS_R3_2025_DRY_RUN: "0"
+      RESULTS_R3_2025_STOCK_LIMIT: "262"
+      RESULTS_R3_2025_SYMBOLS: "AVANTIFEED,CAMS,CEMPRO,CGPOWER,COFORGE,GMBREW,KRN,LT,MANKIND,SANSERA,SYRMA,ZYDUSWELL"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Enforce Development credentials and R4 historical-only scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo WRONG_DEV_DB; exit 1; }
+          [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || { echo WRONG_DEV_R2; exit 1; }
+          for k in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY; do test -n "${!k:-}"; done
+      - name: Install pinned official XBRL and archive dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+      - name: Run 2025 original source and R4 selection tests
+        shell: bash
+        run: |
+          python scripts/results/test_r3_legacy_2025_xbrl.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+          python scripts/results/test_r4_eight_quarter_readback.py -v
+      - name: Recover original NSE quarter-ended March June 2025 files only
+        shell: bash
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r3-legacy-2025-xbrl.py | tee tmp/results-r4/2025-original-recovery.json
+      - name: Verify immutable R2 sources without touching R3 current-quarter originals
+        env:
+          RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+        run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Read back 262 x 8 qualified source trios
+        if: always()
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r4/2025-after-recovery.json
+          python - <<'PY'
+          import json
+          r=json.load(open("tmp/results-r4/2025-after-recovery.json"))
+          print({k:r[k] for k in ("equities","total_slots","status_counts","status")})
+          PY
+      - name: Retain quarterly source diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r4-2025-historical-source-recovery
+          path: |
+            tmp/results-r4/2025-original-recovery.json
+            tmp/results-r4/2025-after-recovery.json
+          if-no-files-found: warn
+          retention-days: 21
