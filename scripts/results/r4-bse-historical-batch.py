@@ -122,28 +122,34 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
     if not 1<=len(pdf)<=100:
         raise ValueError("PDF_PAGE_COUNT_INVALID")
     outcomes=[]
+    diagnostics=Counter()
     for page_no in range(min(len(pdf),40)):
         text=pdf[page_no].get_text("text",sort=True)
         lines=[" ".join(x.split()) for x in text.splitlines() if x.strip()]
         geometry=geometry_rows(pdf[page_no])
         financial_lines=lines+geometry
         if len(lines)<8:
+            diagnostics["TEXT_TOO_SHORT"]+=1
             continue
         title=" ".join(lines[:65]).upper()
         if not ("FINANCIAL RESULTS" in title and "QUARTER" in title):
+            diagnostics["NOT_A_FINANCIAL_TABLE_PAGE"]+=1
             continue
         if not any(form in title for form in date_forms(period)):
+            diagnostics["QUARTER_DATE_NOT_DETECTED"]+=1
             continue
         # Explicit scope and unit must be on this actual financial-statement page.
         if re.search(r"\bCONSOLIDATED\b",title) and re.search(r"\bSTANDALONE\b",title):
             # Combined statement announcements may carry two independent tables.
             # Never choose a consolidated heading on a standalone table.
+            diagnostics["MIXED_SCOPE_HEADING"]+=1
             continue
         if re.search(r"\bCONSOLIDATED\b",title):
             scope="CONSOLIDATED"
         elif re.search(r"\bSTANDALONE\b",title):
             scope="STANDALONE"
         else:
+            diagnostics["SCOPE_NOT_DETECTED"]+=1
             continue
         if re.search(r"\bLAKHS?\b",title):
             original_unit, divisor = "INR_LAKH", Decimal(100)
@@ -152,22 +158,27 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         elif re.search(r"\bCRORES?\b",title):
             original_unit, divisor = "INR_CRORE", Decimal(1)
         else:
+            diagnostics["UNIT_NOT_DETECTED"]+=1
             continue
         # Prove legal issuer from the document, not the BSE scrip lookup alone.
         cover=" ".join(pdf[i].get_text("text",sort=True)[:3500]
                        for i in range(min(page_no+1,3))).upper()
         if not issuer_identity(issuer,cover+" "+title):
+            diagnostics["ISSUER_LEGAL_NAME_NOT_CONFIRMED"]+=1
             continue
         all_head=" ".join(lines[:90]).upper()
         if "QUARTER ENDED" not in all_head and "QUARTERS ENDED" not in all_head:
+            diagnostics["QUARTER_COLUMN_HEADER_MISSING"]+=1
             continue
         first_header=all_head.split("QUARTER ENDED",1)[-1][:240]
         # Older columns must not be mistaken for the requested single quarter.
         if not any(x in first_header for x in date_forms(period)):
+            diagnostics["PERIOD_NOT_IN_QUARTER_COLUMNS"]+=1
             continue
         # A recognizable date is necessary but not sufficient for table column order.
         # Require it among the first 120 chars after the QUARTER ENDED heading.
         if not any(x in first_header[:180] for x in date_forms(period)):
+            diagnostics["FIRST_QUARTER_COLUMN_UNPROVEN"]+=1
             continue
         bank=symbol in BANKS
         insurer=symbol in INSURERS
@@ -208,7 +219,8 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
                          "first_column_period":period,"facts":facts,
                          "issuer_name":issuer,"identity_match":"CONTIGUOUS_LEGAL_NAME"})
     if not outcomes:
-        raise ValueError("NO_SINGLE_QUARTER_ISSUER_SCOPE_TRIO")
+        reason=";".join(k+":"+str(v) for k,v in diagnostics.most_common(4))
+        raise ValueError("NO_SINGLE_QUARTER_TRIO:"+reason)
     scopes={o["scope"] for o in outcomes}
     preferred="CONSOLIDATED" if "CONSOLIDATED" in scopes else "STANDALONE"
     options=[o for o in outcomes if o["scope"]==preferred]
