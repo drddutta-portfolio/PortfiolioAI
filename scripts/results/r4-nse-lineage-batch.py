@@ -26,6 +26,16 @@ def get_json(client,key):
 def persist(db,client,sid,raw,metadata,parsed,proof,header,listing):
     period=parsed["period_end"];isin=proof.canonical_isin;symbol=proof.symbol
     xmlsha=batch.sha(raw)
+    with db.cursor() as cur:
+        cur.execute("""SELECT r.id FROM data_source_records r
+          WHERE r.source_code='COMPANY_EXCHANGE_FILING' AND r.record_kind=%s
+            AND r.external_record_id=%s AND r.raw_payload->>'isin'=%s
+            AND r.raw_payload->>'consolidation_scope'=%s AND r.raw_payload->'facts'=%s::jsonb
+            AND (SELECT count(*) FROM fundamental_observations o WHERE o.source_record_id=r.id)=3
+          LIMIT 1""",(KIND,symbol+":"+xmlsha,isin,parsed["scope"],json.dumps(parsed["facts"])))
+        existing=cur.fetchone()
+    if existing:
+        db.rollback();return 0
     original_key=batch.PREFIX+"evidence/original_version="+xmlsha+"/original-xbrl.xml"
     batch.immutable_put(client,original_key,raw)
     identity={"contract":proof.contract,"issuer_bridge":proof.payload(),"bse_header":header,
@@ -127,7 +137,8 @@ def main():
                         try:
                             proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
                             # This record is a derived parser input, never the source catalog.
-                            normalized={**item,"fromDate":batch.WINDOWS[period][0],"toDate":period}
+                            normalized={**item,"fromDate":datetime.fromisoformat(batch.WINDOWS[period][0]).strftime("%d-%b-%Y"),
+                                        "toDate":datetime.fromisoformat(period).strftime("%d-%b-%Y")}
                             parsed,error=legacy.extract(raw,normalized,symbol,isin,proof)
                             if error:raise ValueError(error)
                             revenue="NET_INTEREST_INCOME_QUARTER" if symbol in batch.BANKS else "NET_PREMIUM_EARNED_QUARTER" if symbol in batch.INSURERS else "OPERATING_REVENUE_QUARTER"
