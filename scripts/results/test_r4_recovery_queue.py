@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import re
 
 from r4_recovery_queue import SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed
 
@@ -8,6 +9,14 @@ spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_workflow_output_references_have_a_defining_step(self):
+        root=Path(__file__).resolve().parents[2]/".github"/"workflows"
+        for path in root.glob("results-r4-*.yml"):
+            content=path.read_text()
+            identifiers=set(re.findall(r"^\s+id:\s+([\w-]+)\s*$",content,re.M))
+            references=set(re.findall(r"steps\.([\w-]+)\.outputs\.",content))
+            self.assertTrue(references.issubset(identifiers),(str(path),references-identifiers))
+
     def test_bad_filing_does_not_skip_other_filings(self):
         visited=[];saved=[]
         def process(item):
