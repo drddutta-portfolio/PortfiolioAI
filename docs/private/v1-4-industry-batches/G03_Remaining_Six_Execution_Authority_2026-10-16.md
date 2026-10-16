@@ -1,0 +1,7 @@
+# G03 remaining-stock execution authority — 16 October 2026
+
+Owner instruction: “Proceed and Continue the remaining G03”. This continues the already approved G03 Defence/Aerospace methodology and acquisition authority in Development. It does not copy BEL financial facts, alter business-model assignments, lower histories, create scores or declare readiness without canonical validation.
+
+The remaining fixed population is ASTRAMICRO, DATAPATTNS, MTARTECH, HAL, GRSE and ZENTEC. BEL's accepted evidence and selected snapshot remain preserved. Reuse retained originals first; acquire only identified official gaps. The documentary continuation registers exact pinned official original bytes and source-bound business/governance findings under delegated attribution, never a fabricated owner session. Adverse findings stay visible. Its admission path cannot write numeric observations, assign scores, call paid providers or materialize snapshots.
+
+A separate canonical-only one-use grant is limited to an explicitly requested security from these six, zero provider calls, five-minute expiry, normal ownership checks and atomic P4 consumption. Prospective validation precedes any save. Partial qualified improvements must remain non-READY if any mandatory item fails. READY requires every required item FRESH, with independent selected-snapshot readback. No schema migration, new schedule, Production/main change or PR merge is authorized by this implementation.

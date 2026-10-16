@@ -2,6 +2,14 @@ name: G03 Signed Canonical Read-Only Validation
 on:
   workflow_dispatch:
     inputs:
+      materialize_remaining_documents:
+        description: Save only the six remaining G03 stocks after their exact documentary reviews validate FRESH
+        type: boolean
+        default: false
+      remaining_require_ready:
+        description: Require every mandatory item FRESH before saving a remaining stock
+        type: boolean
+        default: false
       require_bel_ready:
         description: Require all BEL mandatory evidence FRESH and prospective READY before the BEL-only save
         type: boolean
@@ -43,6 +51,8 @@ jobs:
           python-version: '3.11'
       - run: python scripts/v1-4/g03_canonical_validation.py
         env:
+          G03_MATERIALIZE_REMAINING_DOCUMENTS: ${{ inputs.materialize_remaining_documents }}
+          G03_REMAINING_REQUIRE_READY: ${{ inputs.remaining_require_ready }}
           G03_REQUIRE_BEL_READY: ${{ inputs.require_bel_ready }}
           G03_MATERIALIZE_BEL: ${{ inputs.materialize_bel }}
           G03_REQUIRE_BEL_ORDERS: ${{ inputs.require_bel_orders }}

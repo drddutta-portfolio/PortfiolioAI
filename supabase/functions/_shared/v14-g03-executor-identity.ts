@@ -13,3 +13,5 @@ export function g03SessionStatusExecutorQualified(claims:Record<string,unknown>)
 export function g03MarginExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.event_name==='workflow_dispatch'&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-bel-margin-components.yml@refs/heads/codex/g02-industry-evidence'}
 
 export function g03ValuationExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.event_name==='workflow_dispatch'&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-bel-valuation-components.yml@refs/heads/codex/g02-industry-evidence'}
+
+export function g03RemainingExecutorQualified(claims:Record<string,unknown>){return g02ExecutorIdentityQualified(claims)&&claims.event_name==='workflow_dispatch'&&claims.workflow_ref==='drddutta-portfolio/PortfiolioAI/.github/workflows/g03-remaining-document-qualification.yml@refs/heads/codex/g02-industry-evidence'}

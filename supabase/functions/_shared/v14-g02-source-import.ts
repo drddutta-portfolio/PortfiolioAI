@@ -1,3 +1,5 @@
+import remainingPins from './v14-g03-remaining-original-pins.json' with {type:'json'}
+import remainingPolicy from './v14-g03-remaining-authorization.json' with {type:'json'}
 import g03ValuationPins from './v14-g03-valuation-original-pins.json' with {type:'json'}
 import g03MarginPins from './v14-g03-margin-original-pins.json' with {type:'json'}
 import g03Pins from './v14-g03-original-pins.json' with {type:'json'}
@@ -14,6 +16,7 @@ export const G02_R2_BUCKET='portfolioai-history-dev'
 export interface OriginalSourceScope{readonly group:'G02'|'G03';readonly policy:{readonly developmentProject:string;readonly portfolioId:string;readonly ownerId:string;readonly directiveSha256:string;readonly securityIds:readonly string[]};readonly pins:readonly (typeof pins)[number][];readonly originalKind:string}
 export const G02_SOURCE_SCOPE:OriginalSourceScope={group:'G02',policy,pins,originalKind:G02_ORIGINAL_KIND}
 export const G03_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03Policy,pins:g03Pins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
+export const G03_REMAINING_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:remainingPolicy,pins:remainingPins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_ROCE_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:g03RocePolicy,pins:g03RocePins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_DEBT_SOURCE_SCOPE:OriginalSourceScope={group:'G03',policy:{...g03FinancialPolicy,directiveSha256:g03FinancialPolicy.contractSha256,securityIds:[g03FinancialPolicy.securityId]},pins:g03DebtPins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
 export const G03_MARGIN_SOURCE_SCOPE:OriginalSourceScope={...G03_DEBT_SOURCE_SCOPE,pins:g03MarginPins}

@@ -1,0 +1,32 @@
+{
+  "version": "G03_REMAINING_SIX_DOCUMENTARY_CONTINUATION_V1",
+  "ownerInstruction": "Proceed and Continue the remaining G03",
+  "directiveSha256": "82f953d54aafa9b96bcf909d824fe5a15c96398e125d67e2adf5aa12d9aa3700",
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "securityIds": [
+    "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "92fbe654-b418-4f72-b63c-36c57aec095b"
+  ],
+  "symbols": {
+    "ASTRAMICRO": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "DATAPATTNS": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "MTARTECH": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "HAL": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "GRSE": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "ZENTEC": "92fbe654-b418-4f72-b63c-36c57aec095b"
+  },
+  "productionAllowed": false,
+  "allowedRequirementCodes": [
+    "BUSINESS_DURABILITY",
+    "OWNERSHIP_GOVERNANCE"
+  ],
+  "sourceImportDoesNotApproveFinancialEvidence": true,
+  "numericReviewAllowed": false,
+  "providerCallsAllowed": 0
+}
