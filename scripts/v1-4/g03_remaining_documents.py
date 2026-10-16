@@ -127,7 +127,7 @@ def main():
                    'securityId': b['securityId'], 'requirementCode': b['requirementCode'],
                    'originalHash': b['originalHash'], 'normalizedFragment': b['fragment'],
                    'extractionMethod': 'POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES'}
-        first, repeat = invoke('v14-g03-remaining-document-admission', request), invoke('v14-g03-remaining-document-admission', request)
+        first, repeat = invoke('v14-g02-document-admission', request), invoke('v14-g02-document-admission', request)
         if first.get('reviewId') != repeat.get('reviewId') or repeat.get('reused') is not True:
             raise ValueError('G03_REMAINING_DOCUMENT_ADMISSION_NOT_IDEMPOTENT')
         results.append({'symbol': b['symbol'], 'requirementCode': b['requirementCode'],

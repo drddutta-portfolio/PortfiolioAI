@@ -2,6 +2,7 @@ import {describe,it,expect,beforeEach,afterEach,vi} from 'vitest'
 import {admitRemainingG03Document} from './v14-g03-remaining-document-admission-runtime'
 import {G03_REMAINING_SOURCE_SCOPE as scope,prepareG02Source,g02StableId} from './v14-g02-source-import'
 import {G03_REMAINING_DOCUMENT_BATCH as batch} from './v14-g03-document-review'
+import {issueRemainingG03Grant} from './v14-g03-remaining-grant-runtime'
 type Row=Record<string,unknown>
 beforeEach(()=>vi.useFakeTimers({now:new Date('2026-10-16T04:00:00Z')}))
 afterEach(()=>vi.useRealTimers())
@@ -28,6 +29,22 @@ async function fixture(b= batch[0]){
  return {db,rows,body,writes:()=>writes}
 }
 describe('isolated remaining-G03 admission enforces exact originals, owner isolation and atomic replay',()=>{
+ it('issues one zero-provider grant per stock/run and refuses expired reissuance',async()=>{
+  const f=await fixture(),body={action:'ISSUE_G03_REMAINING_CANONICAL_ONLY_GRANT',authorizationHash:scope.policy.directiveSha256,securityId:batch[0].securityId},claims={run_id:'1',run_attempt:'1',sha:'test',workflow_ref:'canonical'}
+  const first=await issueRemainingG03Grant(f.db,'test-only-key',body,claims),repeat=await issueRemainingG03Grant(f.db,'test-only-key',body,claims)
+  expect(first).toMatchObject({status:200,data:{scope:'SECURITY_IDS:'+body.securityId,providerCalls:0,reused:false}})
+  expect(repeat).toMatchObject({status:200,data:{grantId:first.data.grantId,reused:true}});expect(f.writes()).toBe(1)
+  vi.setSystemTime(new Date('2026-10-16T04:06:00Z'))
+  expect(await issueRemainingG03Grant(f.db,'test-only-key',body,claims)).toMatchObject({status:409,code:'G03_REMAINING_GRANT_EXPIRED_NO_REISSUANCE'});expect(f.writes()).toBe(1)
+ })
+ it('rejects foreign grant owners and serializes simultaneous issuance',async()=>{
+  const f=await fixture(),body={action:'ISSUE_G03_REMAINING_CANONICAL_ONLY_GRANT',authorizationHash:scope.policy.directiveSha256,securityId:batch[0].securityId}
+  f.rows.portfolios[0].user_id='foreign'
+  expect(await issueRemainingG03Grant(f.db,'test-only-key',body,{})).toMatchObject({status:403});expect(f.writes()).toBe(0)
+  f.rows.portfolios[0].user_id=scope.policy.ownerId
+  const values=await Promise.all([issueRemainingG03Grant(f.db,'test-only-key',body,{}),issueRemainingG03Grant(f.db,'test-only-key',body,{})])
+  expect(values.map(x=>x.status).sort()).toEqual([200,409]);expect(f.writes()).toBe(1)
+ })
  it.each(batch)('admits exactly the reviewed source-bound finding and reuses it: $symbol $requirementCode',async b=>{
   const f=await fixture(b),first=await admitRemainingG03Document(f.db,f.body,{sha:'test',run_id:'1'}),again=await admitRemainingG03Document(f.db,f.body,{sha:'test',run_id:'1'})
   expect(first).toMatchObject({securityId:b.securityId,reused:false,providerApiCalls:0,canonicalMaterialization:false})

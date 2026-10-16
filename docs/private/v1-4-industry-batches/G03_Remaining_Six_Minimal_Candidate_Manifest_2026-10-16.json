@@ -1,0 +1,470 @@
+[
+  {
+    "name": "v14-g02-document-admission",
+    "baselineVersion": 24,
+    "baselineHash": "3f032915f5c6a36d9f3d0c377d1c1930cf06749b325e1ba6441010bc5e24fc4d",
+    "oldRuntimeFiles": 58,
+    "oldRuntimeFilesByteIdentical": 57,
+    "changedOldFiles": [
+      "supabase/functions/v14-g02-document-admission/index.ts"
+    ],
+    "addedRouteOnly": true,
+    "newFiles": [
+      "supabase/functions/_shared/v14-g03-remaining-document-admission-runtime.ts",
+      "supabase/functions/_shared/v14-g03-remaining-authorization.json",
+      "supabase/functions/_shared/v14-g03-remaining-original-pins.json",
+      "supabase/functions/_shared/v14-g03-remaining-document-batch.json",
+      "supabase/functions/_shared/v14-g03-remaining-isolated-scope.ts",
+      "supabase/functions/_shared/p7-ic-input-validation.ts",
+      "supabase/functions/_shared/angel-one.ts",
+      "supabase/functions/_shared/market-data.ts",
+      "supabase/functions/_shared/security.ts"
+    ],
+    "fileHashes": [
+      {
+        "name": "supabase/functions/v14-g02-document-admission/index.ts",
+        "sha256": "6432cf02cab540b0f14c9e36552ef5977c03685ed1ccac95c6948b71dce6dc70"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-executor-identity.ts",
+        "sha256": "f8e5033b432193a9e41b1716f06a5955a0b2dca7afe87b9dffd714d94cb69be7"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-executor-identity.ts",
+        "sha256": "09a86068b30c184a788c8ac3028b7c27b2a39d18344de33ca2ad351f668ab537"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-valuation-admission-runtime.ts",
+        "sha256": "bd95d08e44dcdad51d22fab44ccdc39dbc0b9e7137325e042b733fc8ac95cb93"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-source-import.ts",
+        "sha256": "c5b551d6ed88dae1e6c302d69934910840895e2e36b2377af37f293b64a05bc1"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-valuation-original-pins.json",
+        "sha256": "b80a725d4d7b6b7785d48e41eb85627e57a7d8153f1efaa545a6da00ae3f3bde"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-margin-original-pins.json",
+        "sha256": "d57744d74700aad54bab1f461080f6836b9b0b0831c7b6ed4ccbfedae1d6fd80"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-original-pins.json",
+        "sha256": "f6f04c200cc0a0d4acb30f62fded83dde07e201132ae614dba79a1a1b0f395d6"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-pilot-authorization.json",
+        "sha256": "bc864283682758841769097d6af3f64ded25de31c88cf695f176fde9d92c05bb"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-original-pins.json",
+        "sha256": "7470a36e344911bc3d99d4be0ba1b63dd9e09ca2f0d1a225c66452c4a22220c7"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-authorization.json",
+        "sha256": "aeb53f1fbd715484ff2f820a27f739d00c3e5a2140bcd86fcf45d86a20809087"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-debt-original-pins.json",
+        "sha256": "fbb5ca0c272ebe6c47506200cf904de7b30af79a5b7ed31ab2d1a201bbb8cd0a"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-financial-authorization.json",
+        "sha256": "af9c481865c862de08ba1d9f984fe568749fbb2a0884a131f81eb9f129690ca0"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-original-pins.json",
+        "sha256": "4b34f611193c4914e992c4e0b7bb5ef104eaf1716e07cc6740d1c3d36a5ac9f6"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-owner-authorization.json",
+        "sha256": "08e3aa56a7b4ae2e689f7a9f35f16a2f0b8d1c64eae52d34dd886f734d611f2c"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-document-review.ts",
+        "sha256": "cf893e31cf81b6be7911625fdebdbc2b15d50ef86abd262e11b28fcc203f2d71"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-document-review-batch.json",
+        "sha256": "84a307fb76abaa63462dc311a0efbceb0da1814ccf4629e2ab101c1146608211"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-valuation-components.ts",
+        "sha256": "db825895c11da7ac8b0d0b3c7eae45eafa06b608c4c396bacd0b8abcd68da197"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-cash-components.ts",
+        "sha256": "e3891a3e1685178dca0c4fb29233851b966ce2e998132b6a325a080bee8f75a5"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-valuation-review.ts",
+        "sha256": "d16de530277d31705ed87eeb8b3cee7d6d27145d88316556964dbed98ea5a621"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-valuation-review-batch.json",
+        "sha256": "43d091404b8a8571256aef991e17a81c2e1db7d5eec622ff3cc9f751690d1fa5"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-history-tail-capture-integrity.ts",
+        "sha256": "80537aa951201c8a526278348c8e4cffb1c3f98216ca9d9da395bd19503fd80e"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-cash-review.ts",
+        "sha256": "583a1d40e741e7c26f042927d5f24dd02415c4549b0103c3c3cc8f2af9066050"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-cash-review-batch.json",
+        "sha256": "5b8a8cf45a060067478b467520bd2d1b1697c76e87ad9195b23c4f5d167d08a6"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-debt-review.ts",
+        "sha256": "c796efe6533e7d37522d82afe0f7344e914ba8e1ffbec37a631270ad4225ff10"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-debt-review-batch.json",
+        "sha256": "a53a99b6a0c36cb37647675dea16a81676a88f1a91c1dcb0ff7d7dbfe096acff"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-debt-components.ts",
+        "sha256": "15ae26049c26d930a997ef02883d2fa2f10ed19863b55bd3d4f9e1ef3e28aa8b"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-margin-admission-runtime.ts",
+        "sha256": "423badfcb2668963e0eac95a4af811cf577fd36d40c273b2664202d72bb14909"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-margin-components.ts",
+        "sha256": "4f4c6757040ee43d3f3bda3435992edb93f2604ac9e3945f655298d1764341e7"
+      },
+      {
+        "name": "src/features/research/pharmaHistoryNormalization.ts",
+        "sha256": "4e41f1d972548ae89095550c170ff33884d9ec5e32503aee8f361efe240a84ce"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-margin-review.ts",
+        "sha256": "89a1eea428641a65cb5d88b87918f1f4ad84a096ffa76a2d6e1ba9c5c4677fb1"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-margin-review-batch.json",
+        "sha256": "8c707b619d407c774eac5c21d4f87a85346a0bbe82cf0ce337bf2937ae2cd6f0"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-financial-research-runtime.ts",
+        "sha256": "398c6e1fe32aa1b5c6c4e8b276b2dc5e96a2d107f8b9e22c5542bb032a751969"
+      },
+      {
+        "name": "supabase/functions/_shared/trendlyne-observed.ts",
+        "sha256": "a6346184ebdb2984597d4127eb06c1ec3f23be8b1b72ffc75fd4957b8c7c6376"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-debt-admission-runtime.ts",
+        "sha256": "0e5608228467324a6208cdc75728cde3789fa6acbc50195b74991b43a60a2863"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-session-status-runtime.ts",
+        "sha256": "08aa74ccf3c4b959e8a438aaa2bf91386ec85563332971c675ee65bfbf9ac586"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-open-session-timing.ts",
+        "sha256": "8899d50ef8e945943e6e10aee10fb669adbc09b51d045d1b26d5f83963dff884"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-open-session-status.ts",
+        "sha256": "ee5dde63997747d60532e12338d497ad67755372f20ae4f7518ecb53fdd27928"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-pre-open-calendar.ts",
+        "sha256": "013291abc1d515035d03af65374b8e8e5e934f116f55c0a85454d707940f5185"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-open-session-status-runtime.ts",
+        "sha256": "11cb4f4abe5ccd201a625aa455a80a48609138deb4808fb4e8dcd4eb7af93242"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-cash-admission-runtime.ts",
+        "sha256": "29ac5b630e0d0359f79d4bebeb11246aefeb5266b271346913a5718e6a45d4eb"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-admission-runtime.ts",
+        "sha256": "4ea38a3b78610d6b6e0f75672a257a50d90ea215ed9d01a3c4ef1f44db88e7da"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-review.ts",
+        "sha256": "63d8cfffe3bb77675635730bc2da709f73d657773e2ce4467e7acecb2abf8e79"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-review-batch.json",
+        "sha256": "5e5a0a095dec2bf7121576a3011ed1542a8d58d9e4e91adb197c89b9185aaacf"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-history-numeric-equality.ts",
+        "sha256": "407010dc8eb3288787cba740a84c2aa1b851e0329f9bab3b62c420b4708e22a4"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-document-review.ts",
+        "sha256": "91785fa6a5101f52460dc63e9a00b074c5866e09ccdbdaefeff42d40b494ebb4"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-order-authorization.json",
+        "sha256": "fde52ee7c1e54aef03b954502e02bbe2f8c6b1ae1141c5763a389d462cfcb012"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-order-review-batch.json",
+        "sha256": "52144d5f6f5dcbb62df7118d42378ce7abb41cba631e5d0a688e03f62c9ebbec"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-document-review-batch.json",
+        "sha256": "f742b947f09a26e1aac0a529000bb001ae363de19142536627d9312bdea4d9c4"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-history-renewal-runtime.ts",
+        "sha256": "6dfc3de1162abb83f5d5e31ab96c7edd98b14c37938bcd2f6ee138c88c080129"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-r2.ts",
+        "sha256": "46bee5201272f30c2875d4b3412e15dcf589c33f3d9b7a8459d7631153c7a083"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-delta.ts",
+        "sha256": "3f8734d488d4556c4cc0f91a07b9b8898e08d74ccf530fc8b9f7f9ad80484c08"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-history.ts",
+        "sha256": "5fa465df044e07ebfa53160fd31e1704f80926f9a902bcc5fe96e40b06c3d070"
+      },
+      {
+        "name": "supabase/functions/_shared/p7-ic-benchmark-adapter.ts",
+        "sha256": "f78a60aabac7998fa9e6a9b76ca1857cbeda6f2ecb5ef2e49151dc3162bba377"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-tail-validation.ts",
+        "sha256": "fbd6791ca26d3b251f324cc1503fe2edd3376d5511b4e98fe6c9a4703f088361"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-history-renewal.ts",
+        "sha256": "4929b2d3f36631b74b45b3703627bd14b8deabf2221f1e1678ec6b0ebbf25817"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-history-renewal-pins.json",
+        "sha256": "cfaec107d5722af74e28a8ff5c1d5566247d745328b773993e58101781537b1b"
+      },
+      {
+        "name": "supabase/functions/v14-g02-document-admission/deno.json",
+        "sha256": "2cf21aad8fdafda2faa1c8689e539ee9b6504a5bce24c54bb2db0d3d1f1c6280"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-document-admission-runtime.ts",
+        "sha256": "b6e6f2c4fa3e4e2c8b1075782e5cb9a38a116a7904320a1e318f55af8d5a5a56"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-authorization.json",
+        "sha256": "831c74738415337c210c2c0c0cb6a275eedfb7ebca270b95775ab8f5cd89e342"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-original-pins.json",
+        "sha256": "1986af7da7efb0c48b06d35fa06f843468f2905d9c3286f31681e8480a8a843e"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-document-batch.json",
+        "sha256": "c612bd11c9a59b47d95c3612d4bce95073085d987c44413e671c27561ad8e4ff"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-isolated-scope.ts",
+        "sha256": "916adf31ba04fe0abda1e1ae1c3ca5afae8cbf3b8a9f9c4ab8b9bd775c0dae4b"
+      },
+      {
+        "name": "supabase/functions/_shared/p7-ic-input-validation.ts",
+        "sha256": "ef43b21c264b67141c4e55a89e2322453db9987988c31bb9efbb95b9d980e1d2"
+      },
+      {
+        "name": "supabase/functions/_shared/angel-one.ts",
+        "sha256": "918b000b8a998ab97444faa5589c6d3ef59e0d8cedcd8d686ef6b12382425287"
+      },
+      {
+        "name": "supabase/functions/_shared/market-data.ts",
+        "sha256": "29f4de202de002bf13f4a02c0dcc8893d950ce14b0eee7fefe4aa9762fc259f0"
+      },
+      {
+        "name": "supabase/functions/_shared/security.ts",
+        "sha256": "66f71d10e097c473b439d2c9b9a7b4de9bd2546f57c02abc6750aa0d18141935"
+      }
+    ]
+  },
+  {
+    "name": "v14-g02-execution-grant",
+    "baselineVersion": 9,
+    "baselineHash": "b4a3f178a62d1cf66c1b8888c0d6b54081e18481e0cd2cae334bd863a34f1bc5",
+    "oldRuntimeFiles": 34,
+    "oldRuntimeFilesByteIdentical": 33,
+    "changedOldFiles": [
+      "supabase/functions/v14-g02-execution-grant/index.ts"
+    ],
+    "addedRouteOnly": true,
+    "newFiles": [
+      "supabase/functions/_shared/v14-g03-remaining-grant-runtime.ts",
+      "supabase/functions/_shared/v14-g03-remaining-isolated-scope.ts",
+      "supabase/functions/_shared/v14-g03-remaining-authorization.json",
+      "supabase/functions/_shared/p7-ic-input-validation.ts",
+      "supabase/functions/v14-g02-execution-grant/deno.json"
+    ],
+    "fileHashes": [
+      {
+        "name": "supabase/functions/v14-g02-execution-grant/index.ts",
+        "sha256": "6ee813e079f971690cd60c1c506b075b97c5c129983271becdaa8d875315588c"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-renewal-runtime.ts",
+        "sha256": "8f85cbfba7cf65a7ce02fefa6c1e6cab2c33286da4b8e0efd655eccbb4a7ad2a"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-r2.ts",
+        "sha256": "46bee5201272f30c2875d4b3412e15dcf589c33f3d9b7a8459d7631153c7a083"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-delta.ts",
+        "sha256": "3f8734d488d4556c4cc0f91a07b9b8898e08d74ccf530fc8b9f7f9ad80484c08"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-official-benchmark-history.ts",
+        "sha256": "5fa465df044e07ebfa53160fd31e1704f80926f9a902bcc5fe96e40b06c3d070"
+      },
+      {
+        "name": "supabase/functions/_shared/p7-ic-benchmark-adapter.ts",
+        "sha256": "f78a60aabac7998fa9e6a9b76ca1857cbeda6f2ecb5ef2e49151dc3162bba377"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-tail-validation.ts",
+        "sha256": "fbd6791ca26d3b251f324cc1503fe2edd3376d5511b4e98fe6c9a4703f088361"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-history-numeric-equality.ts",
+        "sha256": "407010dc8eb3288787cba740a84c2aa1b851e0329f9bab3b62c420b4708e22a4"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-source-import.ts",
+        "sha256": "bc33489fa4ed125deb19558f4ecb982b81c95ce59d3261214c59301124187bfb"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-original-pins.json",
+        "sha256": "f6f04c200cc0a0d4acb30f62fded83dde07e201132ae614dba79a1a1b0f395d6"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-pilot-authorization.json",
+        "sha256": "bc864283682758841769097d6af3f64ded25de31c88cf695f176fde9d92c05bb"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-original-pins.json",
+        "sha256": "7470a36e344911bc3d99d4be0ba1b63dd9e09ca2f0d1a225c66452c4a22220c7"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-roce-authorization.json",
+        "sha256": "aeb53f1fbd715484ff2f820a27f739d00c3e5a2140bcd86fcf45d86a20809087"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-original-pins.json",
+        "sha256": "9d4e59063efdae48f9c7fc61a64f023cbe5bec8134b7dcd113d11fb1ca9712b1"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-owner-authorization.json",
+        "sha256": "08e3aa56a7b4ae2e689f7a9f35f16a2f0b8d1c64eae52d34dd886f734d611f2c"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-executor-identity.ts",
+        "sha256": "2429beb1c6b84af8c651e4c6a1eb2cf3e34f081abefc029f72923809dc7d587a"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-renewal.ts",
+        "sha256": "ae464f7cab003ec47019a82eb3c1b511f372fba9edadd75ce6cf5cd1edad2d73"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-renewal-pins.json",
+        "sha256": "ace3a8476afd9b48f447e7afeb962dd9a1bd3c52df18ae36d769e9d12277d37d"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-authorization.json",
+        "sha256": "e75b7afd8fa15bb79262085f65c904ea8a7b3f66fb039850ced9b0fa3385a93c"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-append-runtime.ts",
+        "sha256": "3ef22207058bff5c51d36459a8289eeaaf1356544dbb9394d1494fcc2ee9ee92"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-append.ts",
+        "sha256": "98de8036e49586420791a631776c38402d68015cf83a2b5162aff9d305e27430"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-append-pins.json",
+        "sha256": "e6cd88ee6804ef8b7e36b37ea5232ee842ed229d2f7b60fef52bbf3d583848a7"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-market-scope.ts",
+        "sha256": "0d51330c803dbc8a84a362270cf4b6a85775a46882ccaa3a9672bb2f40c1bf62"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-materialization-scope.ts",
+        "sha256": "5badd8670cff2a93f5aa56a8dd7a33bd7f53ee9748ab47cd7a993570cd7b366f"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-validation-scope.ts",
+        "sha256": "96fc4ae5bae1569d91803f697db4a04525b7355279ddcd9d0e25f32b9dce9ec1"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-owner-authorization.json",
+        "sha256": "a026d244a49ae35a328b4557d4113c71cb616a03d22e22332ad122b8a8aa4959"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-market-history-runtime.ts",
+        "sha256": "8c82497ab2f0b888e26facdd55fef04ff3368b53b3526a0b5aa60ee7d0b6e642"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g02-market-cache-authority.ts",
+        "sha256": "4f9ce539acd66b4a953955cec350709abec27d59eef9363e5322a0a17d710124"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-maintenance-dispatch.ts",
+        "sha256": "4d8dfaad7ada7f12611424a89d898b753fe1209462d7ee6b119c37469f7bb49c"
+      },
+      {
+        "name": "supabase/functions/_shared/angel-one.ts",
+        "sha256": "918b000b8a998ab97444faa5589c6d3ef59e0d8cedcd8d686ef6b12382425287"
+      },
+      {
+        "name": "supabase/functions/_shared/market-data.ts",
+        "sha256": "29f4de202de002bf13f4a02c0dcc8893d950ce14b0eee7fefe4aa9762fc259f0"
+      },
+      {
+        "name": "supabase/functions/_shared/security.ts",
+        "sha256": "66f71d10e097c473b439d2c9b9a7b4de9bd2546f57c02abc6750aa0d18141935"
+      },
+      {
+        "name": "supabase/functions/_shared/p4-execution-grant.ts",
+        "sha256": "6d3d32dc3c75dd12730a1165463e5fbb0be559ae026e5a72fb9697ff055e5c05"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-bank-maintenance-accounting.ts",
+        "sha256": "9d8b154ded0977e93124792689980c5e073d2193a6ba271c9a7969f9c6366469"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-grant-runtime.ts",
+        "sha256": "6c9a73fa18eb3c21938906135c841d99441f31222752b3e3053d9bdd487a2762"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-isolated-scope.ts",
+        "sha256": "916adf31ba04fe0abda1e1ae1c3ca5afae8cbf3b8a9f9c4ab8b9bd775c0dae4b"
+      },
+      {
+        "name": "supabase/functions/_shared/v14-g03-remaining-authorization.json",
+        "sha256": "831c74738415337c210c2c0c0cb6a275eedfb7ebca270b95775ab8f5cd89e342"
+      },
+      {
+        "name": "supabase/functions/_shared/p7-ic-input-validation.ts",
+        "sha256": "ef43b21c264b67141c4e55a89e2322453db9987988c31bb9efbb95b9d980e1d2"
+      },
+      {
+        "name": "supabase/functions/v14-g02-execution-grant/deno.json",
+        "sha256": "2cf21aad8fdafda2faa1c8689e539ee9b6504a5bce24c54bb2db0d3d1f1c6280"
+      }
+    ]
+  }
+]

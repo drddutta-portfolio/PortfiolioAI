@@ -1,6 +1,10 @@
 import type {SupabaseClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
-import {G03_REMAINING_SOURCE_SCOPE as scope,g02StableId,hashG02,g02SourcePin} from './v14-g02-source-import.ts'
-import {G03_REMAINING_DOCUMENT_BATCH as batch,G03_DOCUMENT_KIND,G03_DOCUMENT_REVIEW_KIND} from './v14-g03-document-review.ts'
+import {g02StableId,hashG02,g02SourcePin,type OriginalSourceScope} from './v14-g02-source-import.ts'
+import policy from './v14-g03-remaining-authorization.json' with {type:'json'}
+import pins from './v14-g03-remaining-original-pins.json' with {type:'json'}
+const scope:OriginalSourceScope={group:'G03',policy,pins,originalKind:'V1_4_G03_REGISTERED_OFFICIAL_ORIGINAL'}
+import batch from './v14-g03-remaining-document-batch.json' with {type:'json'}
+import {G03_DOCUMENT_KIND,G03_DOCUMENT_REVIEW_KIND} from './v14-g03-document-review.ts'
 import {g02PostgresTimestamp} from './v14-g02-document-review.ts'
 
 /** Fixed documentary findings only: no providers, arbitrary reviews or snapshots. */

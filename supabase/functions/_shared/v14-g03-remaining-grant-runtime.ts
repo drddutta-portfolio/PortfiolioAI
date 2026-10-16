@@ -1,22 +1,12 @@
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
-import {createRemoteJWKSet,jwtVerify} from 'https://esm.sh/jose@6.1.0'
-import {g03ValidationExecutorQualified} from '../_shared/v14-g03-validation-scope.ts'
-import {g03RemainingMaterializationScope} from '../_shared/v14-g03-materialization-scope.ts'
-import policy from '../_shared/v14-g03-remaining-authorization.json' with {type:'json'}
-const audience=`https://${policy.developmentProject}.supabase.co/functions/v1/v14-g03-remaining-execution-grant`,jwks=createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'))
+import type {SupabaseClient} from 'https://esm.sh/@supabase/supabase-js@2.115.0'
+import {g03RemainingMaterializationScope} from './v14-g03-remaining-isolated-scope.ts'
+import policy from './v14-g03-remaining-authorization.json' with {type:'json'}
 const hash=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(v))))).map(x=>x.toString(16).padStart(2,'0')).join('')
-Deno.serve(async req=>{
- const reply=(status:number,code:string,data:Record<string,unknown>={})=>new Response(JSON.stringify({code,...data}),{status,headers:{'content-type':'application/json','cache-control':'no-store'}})
- if(req.method!=='POST')return reply(405,'METHOD_NOT_ALLOWED')
- const url=Deno.env.get('SUPABASE_URL')??'',key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')??''
- if(url!==`https://${policy.developmentProject}.supabase.co`||!key)return reply(409,'DEVELOPMENT_ONLY')
- let claims:Record<string,unknown>
- try{claims=(await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'})).payload}catch{return reply(401,'SIGNED_G03_REMAINING_EXECUTOR_REQUIRED')}
- if(claims.event_name!=='workflow_dispatch'||!g03ValidationExecutorQualified(claims))return reply(403,'G03_REMAINING_EXECUTOR_SCOPE_INVALID')
- const body=await req.json().catch(()=>null)
- const scope=body&&typeof body==='object'&&!Array.isArray(body)?g03RemainingMaterializationScope(body):null
+export async function issueRemainingG03Grant(db:SupabaseClient,key:string,body:Record<string,unknown>,claims:Record<string,unknown>){
+ const reply=(status:number,code:string,data:Record<string,unknown>={})=>({status,code,data})
+ const scope=g03RemainingMaterializationScope(body)
  if(!scope)return reply(400,'EXACT_G03_REMAINING_CANONICAL_SCOPE_REQUIRED')
- const db=createClient(url,key,{auth:{persistSession:false}}),holder=crypto.randomUUID(),operation='G03_REMAINING_GRANT:'+String(claims.run_id)+':'+body.securityId
+ const holder=crypto.randomUUID(),operation='G03_REMAINING_GRANT:'+String(claims.run_id)+':'+body.securityId
  const lease=await db.rpc('acquire_data_ingestion_lease_v1',{p_source_code:'OWNER_REVIEWED_CLASSIFICATION',p_operation:operation,p_lease_holder:holder,p_lease_seconds:60})
  if(lease.error||lease.data?.[0]?.acquired!==true)return reply(409,'G03_REMAINING_GRANT_BUSY')
  try{
@@ -35,4 +25,4 @@ Deno.serve(async req=>{
   return reply(200,'G03_CANONICAL_ONLY_GRANT',{grantId:id,reused:false,scope,providerCalls:0})
  }catch{return reply(503,'G03_REMAINING_GRANT_ISSUANCE_FAILED')}
  finally{await db.rpc('release_data_ingestion_lease_v1',{p_source_code:'OWNER_REVIEWED_CLASSIFICATION',p_operation:operation,p_lease_holder:holder,p_cooldown_seconds:0})}
-})
+}
