@@ -82,6 +82,11 @@ HISTORICAL_RESULTS_IDENTITIES = {
         "ex_date":"2026-01-14","split_new_per_old":"5",
         "evidence":"Kotak Mahindra Bank issuer split disclosure 2026-01-16",
     },
+    "ANGELONE":{
+        "source_isin":"INE732I01013","current_isin":"INE732I01021",
+        "ex_date":"2026-02-26","split_new_per_old":"10",
+        "evidence":"BSE DR-829/2025-2026; NSE Clearing NCL/CMPT/72965 2026-02-25",
+    },
 }
 
 def historical_result_identity(symbol: str, current_isin: str, source_isin: str, period_end: str):
