@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Dependencies
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
       - name: Deterministic verifier tests
         run: python scripts/results/test_r4_verify_quarterly.py -v
       - name: Development guard and R2-based selection
@@ -50,11 +50,4 @@ jobs:
           test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
           test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
           python scripts/results/r4-verify-quarterly.py ${{ github.event_name == 'push' && '--apply' || (inputs.apply_selections && '--apply' || '') }}
-      - name: Upload nonsecret report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-r4-source-verification
-          path: tmp/results-r4/readback.json
-          if-no-files-found: warn
-          retention-days: 21
+# Detailed source/readback data remains in private Development storage, not GitHub artifacts.
