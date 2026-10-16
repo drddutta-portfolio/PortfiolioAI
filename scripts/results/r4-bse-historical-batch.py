@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import time
+from r4_recovery_queue import task_id
 
 import boto3
 import fitz
@@ -455,7 +456,7 @@ def main():
         universe=candidates(db);db.rollback()
         explicit={x.strip().upper() for x in args.symbols.split(",") if x.strip()}
         if explicit:universe=[c for c in universe if c[0] in explicit]
-        else:universe=[c for i,c in enumerate(universe) if i%args.shard_count==args.shard_index]
+        else:universe=[c for c in universe if int(task_id(c[2],"BSE",None,{}),16)%args.shard_count==args.shard_index]
         universe=universe[:args.max_companies]
         client=r2_client() if args.apply else None
         counts=Counter()
@@ -500,8 +501,11 @@ def main():
                                     if origin.get("original_r2_key"):
                                         parsed["original_r2_key"]=origin["original_r2_key"]
                                     approved.append((src,raw,origin,parsed))
-                                except (ValueError,fitz.FileDataError,RuntimeError) as e:
-                                    rejects[str(e)[:300]]+=1
+                                except Exception as e:
+                                    rejects[type(e).__name__+":"+str(e)[:250]]+=1
+                                    entry.setdefault("source_errors",[]).append({"attachment_name":src.get("attachment_name"),
+                                        "status":"REVIEW_REQUIRED" if isinstance(e,(ValueError,fitz.FileDataError)) else "RETRY_REQUIRED",
+                                        "reason":type(e).__name__+":"+str(e)[:250]})
                             entry["candidates"]=len(discovery["results"])
                             entry["candidate_limit_reached"]=len(ordered)>args.max_pdfs_per_quarter
                             entry["rejection_counts"]=dict(rejects)
