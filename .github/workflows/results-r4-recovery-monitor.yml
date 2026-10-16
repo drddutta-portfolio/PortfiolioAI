@@ -51,3 +51,4 @@ jobs:
           name: r4-monitor-${{ github.run_id }}
           path: tmp/results-r4/monitor-checkpoints.json
           retention-days: 21
+# Retry transient partial passes without treating one failure as cohort completion.
