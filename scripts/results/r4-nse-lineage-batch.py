@@ -142,7 +142,12 @@ def main():
                 rename=None;rename_reference=None
                 if symbol in RULES and any(p<RULES[symbol]["effective_date"] for p in missing):
                     try:rename,rename_reference=load_rename_authority(client,session,symbol)
-                    except Exception as error:counts["rename_authority_error_"+type(error).__name__]+=1
+                    except Exception as error:
+                        safe={"QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED","RENAME_AUTHORITY_PAGE_BOUND_EXCEEDED",
+                              "OFFICIAL_RENAME_IDENTITY_NOT_PROVEN","OFFICIAL_RENAME_EFFECTIVE_DATE_NOT_PROVEN",
+                              "OFFICIAL_RENAME_SCRIP_NOT_PROVEN","RENAME_AUTHORITY_HASH_MISMATCH"}
+                        reason=str(error) if str(error) in safe else type(error).__name__
+                        counts["rename_authority_error_"+reason]+=1
                 def collect_year(pair):
                     year,provider=pair
                     if not any(p.startswith(year) for p in missing):return {"status":"NO_TARGET_PERIODS"}
