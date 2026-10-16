@@ -26,6 +26,7 @@ from botocore.config import Config
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from portfolio_bse import PortfolioBSE
+from r4_pdf_geometry import extract_page
 
 REF = "lrgpjimipfkyoqbpsqzz"
 BUCKET = "portfolioai-history-dev"
@@ -143,7 +144,7 @@ def financial_row(lines, labels, metric):
         # Same-text-row only: no unsafe transfer from adjacent statement rows.
         suffix=re.sub(r"^.*?(?:(?:operations)|(?:period)|(?:tax)|(?:diluted)|(?:expended)|(?:earned))\b",
                       "",stripped,flags=re.I)
-        suffix=re.sub(r"\(\s*\d{1,2}\s*[-+−]\s*\d{1,2}\s*\)","",suffix)
+        suffix=re.sub(r"\(\s*\d{1,2}\s*[-+−•]\s*\d{1,2}\s*\)","",suffix)
         values=numeric_cells(suffix)
         if len(values)>=3 and len(values)<=9:
             found.append((line,values))
@@ -162,6 +163,23 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         raise ValueError("PDF_PAGE_COUNT_INVALID")
     outcomes=[]
     diagnostics=Counter()
+    geometric=[]
+    for page_no in range(min(len(pdf),40)):
+        try:
+            parsed=extract_page(pdf[page_no],page_no+1,period,symbol in BANKS,symbol in INSURERS)
+            cover=" ".join(pdf[i].get_text("text",sort=True)[:5000]
+                           for i in range(min(3,len(pdf))))
+            if not issuer_identity(issuer,cover+" "+parsed["header_evidence"]):
+                raise ValueError("ISSUER_LEGAL_NAME_NOT_CONFIRMED")
+            geometric.append(parsed)
+        except ValueError as error:
+            diagnostics[str(error)]+=1
+    if geometric:
+        preferred="CONSOLIDATED" if any(p["scope"]=="CONSOLIDATED" for p in geometric) else "STANDALONE"
+        choices=[p for p in geometric if p["scope"]==preferred]
+        if len({tuple(sorted((k,f["value"]) for k,f in p["facts"].items())) for p in choices})!=1:
+            raise ValueError("AMBIGUOUS_SAME_SCOPE_GEOMETRIC_STATEMENTS")
+        return choices[0]
     for page_no in range(min(len(pdf),40)):
         text=pdf[page_no].get_text("text",sort=True)
         lines=[" ".join(x.split()) for x in text.splitlines() if x.strip()]
@@ -305,7 +323,7 @@ def persist(db,client,row,period,source,raw,parsed,publication):
     symbol,isin,sid,name,code=row
     original_sha=sha(raw)
     root=PREFIX+f"security_id={isin}/period_end={period}/"
-    original_key=root+f"original_version={original_sha}/issuer-original.pdf"
+    original_key=parsed.get("original_r2_key",root+f"original_version={original_sha}/issuer-original.pdf")
     immutable_put(client,original_key,raw)
     manifest={
         "contract":CONTRACT,"symbol":symbol,"isin":isin,"issuer_name":name,
@@ -320,6 +338,9 @@ def persist(db,client,row,period,source,raw,parsed,publication):
         "historical_eps_reporting_basis":"AS_FILED_NOT_RETROSPECTIVELY_ADJUSTED",
         "historical_share_adjustment_authorized":False,
         "figures_review_pending":True,
+        "parser_revision":parsed.get("parser_revision","LEGACY_SAME_ROW_V2"),
+        "supersedes_parser_source_id":parsed.get("supersedes_parser_source_id"),
+        "parser_correction_reason":parsed.get("parser_correction_reason"),
     }
     manifestbytes=canonical(manifest)
     manifesthash=sha(manifestbytes)
