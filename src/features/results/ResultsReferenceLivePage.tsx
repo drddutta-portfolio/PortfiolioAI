@@ -24,6 +24,7 @@ interface Preview { readonly entry: Entry; readonly period: Period; readonly obs
 const number = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 })
 const LABELS: Readonly<Record<string, string>> = {
   OPERATING_REVENUE_QUARTER: "Revenue",
+  NET_PREMIUM_EARNED_QUARTER: "Net Premium Earned",
   OPERATING_PROFIT_QUARTER: "Operating Profit",
   ADVANCES_GROWTH_YOY: "Advances Growth",
   DEPOSITS_GROWTH_YOY: "Deposits Growth",
@@ -102,7 +103,7 @@ function formattedValue(row: ResultsSourceObservation): string {
 function primaryObservation(rows: readonly ResultsSourceObservation[], bank: boolean) {
   const codes = bank
     ? ["NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", "ADVANCES_GROWTH_YOY", "DEPOSITS_GROWTH_YOY"]
-    : ["OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER", "OPERATING_PROFIT_QUARTER"]
+    : ["NET_PREMIUM_EARNED_QUARTER", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER", "OPERATING_PROFIT_QUARTER"]
   for (const code of codes) {
     const found = rows.find((row) => row.code === code && row.selected)
       ?? rows.find((row) => row.code === code)
