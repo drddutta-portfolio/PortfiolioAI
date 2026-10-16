@@ -331,7 +331,8 @@ def check_fact(r,m):
             return "LEGACY_FINANCIAL_CONTEXT_NOT_PROVEN"
     if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1":
         f=m["facts"][key]
-        if m.get("parser_revision")=="LEGACY_SAME_ROW_V2" and key!="NET_INTEREST_INCOME_QUARTER":
+        if (m.get("parser_revision","LEGACY_SAME_ROW_V2")=="LEGACY_SAME_ROW_V2"
+            and not f.get("manual_source_page_fingerprint") and key!="NET_INTEREST_INCOME_QUARTER"):
             # Replay the original row's numeric prefix independently. Numeric
             # formula references are labels, including OCR's bullet for minus.
             line=re.sub(r"\([^)]*[+−•-][^)]*\)","",f.get("evidence_line",""))
