@@ -74,3 +74,15 @@ def dispatch_failed(state,source,now):
     entry["last_dispatched"]=now
     entry["not_before"]=now+1800
     entry["dispatch_failures"]=entry.get("dispatch_failures",0)+1
+
+def observe_completed(state,source,run,now):
+    """Retry transient failed passes sooner, without hammering persistent failures."""
+    entry=state.setdefault(source,{})
+    if entry.get("last_completed_run")==run["id"]:return
+    entry["last_completed_run"]=run["id"]
+    if run.get("conclusion") in ("failure","timed_out","cancelled"):
+        failures=entry.get("consecutive_failures",0)+1
+        entry["consecutive_failures"]=failures
+        if entry.get("last_dispatched",0):
+            entry["not_before"]=min(entry.get("not_before",now+1800),now+(1800 if failures<=3 else 21600))
+    elif run.get("conclusion")=="success":entry["consecutive_failures"]=0
