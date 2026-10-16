@@ -1,7 +1,7 @@
 """Inspect retained originals and issuer fields; no canonical financial writes."""
 import sys,json,os,requests,psycopg,hashlib,xml.etree.ElementTree as ET
 from collections import Counter
-from r4_nse_issuer_bridge import legal_key
+from r4_nse_issuer_bridge import legal_key,bridge_from_sources
 from pathlib import Path
 from datetime import datetime,timezone
 sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -26,7 +26,7 @@ def main():
                 for year,provider in (("2024",lineage.legacy),("2025",lineage.integrated)):
                     if not any(p.startswith(year) for p in missing):continue
                     day=datetime.now(timezone.utc).date().isoformat()
-                    catalog_key=batch.PREFIX+f"nse-catalog-v1/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
+                    catalog_key=batch.PREFIX+f"nse-catalog-v2/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
                     records=lineage.get_json(client,catalog_key)
                     if records is None:records=provider.list_filings(session,symbol)
                     for item in records[:2]:
@@ -51,8 +51,21 @@ def main():
                                 if nodes:counts[year+":xml_identity_field_present:"+name]+=1
                                 if name=="Symbol" and any((n.text or "").strip()==symbol for n in nodes):counts[year+":xml_symbol_exact"]+=1
                             for tag in tags:
-                                if any(t in tag.lower() for t in ("revenuefrom","profitlossfor","diluted","premium","interestearned","interestexpended")):
+                                if any(t in tag.lower() for t in ("revenuefrom","profit","earningspershare","earningslosspershare","diluted","premium","interest")):
                                     counts[year+":financial_tag_present:"+tag]+=1
+                            for node in root:
+                                if lineage.legacy.local(node.tag)=="context":
+                                    if node.attrib.get("id")=="OneD":counts[year+":expected_quarter_context_present"]+=1
+                                    else:counts[year+":other_context_present"]+=1
+                            try:
+                                proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
+                                period=provider.dateval(item.get("toDate"))
+                                normalized={**item,"fromDate":datetime.fromisoformat(batch.WINDOWS[period][0]).strftime("%d-%b-%Y")}
+                                parsed,error=lineage.legacy.extract(raw,normalized,symbol,isin,proof)
+                                if error:counts[year+":parser_error:"+error]+=1
+                                else:
+                                    for metric in parsed["facts"]:counts[year+":parsed_metric:"+metric]+=1
+                            except ValueError as error:counts[year+":identity_rejection:"+str(error)]+=1
                         except ET.ParseError:counts[year+":invalid_xml"]+=1
             except Exception as error:counts["operational_error:"+type(error).__name__]+=1
         # No issuer identifiers, raw source values, portfolio data or artifacts are exported.
