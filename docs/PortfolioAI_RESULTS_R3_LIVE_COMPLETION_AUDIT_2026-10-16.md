@@ -50,3 +50,28 @@ Implementation committed to `PortfolioAI-Development`:
 **Verified execution result at update:** code commits were accepted by GitHub; the Development Vercel commit status was successful. **Neither a successful GitHub Actions source-backfill execution nor new 262/262 database coverage has been independently verified.** The latest queried Supabase R3 scan remained RUNNING with 214 planned items and 0 newly accepted observations. No evidence-backed basis exists to mark the 31 complete. No main or Production changes.
 
 The collector continues using pre-existing selected facts, bounded verified original issuer-source data and compact Dev R2 storage. Missing documentation, source conflicts, historical share-basis issues or unproven source units must remain review-pending. A green frontend deployment is NOT evidence of financial data completeness.
+
+## October 16 continuation — 233/262 and BSE-first Development recovery
+
+Verified selected-core coverage in the locked September/December 2025 and March/June 2026 window is **233/262**, with **29 incomplete**.
+
+- 3 selected quarters (7): BDL, COROMANDEL, DATAPATTNS, MGL, WELSPUNLIV, YATRA, ZAGGLE.
+- 2 selected quarters (2): AVANTIFEED, VAML.
+- No selected complete core triplet in the target window (20): 360ONE, ABCAPITAL, ANGELONE, CGCL, CHOLAFIN, HDFCAMC, HUDCO, ICICIAMC, IREDA, JIOFIN, LTF, MFSL, MUTHOOTFIN, NAM-INDIA, PNBHOUSING, SHRIRAMFIN, STARHEALTH, TATACAP, TDPOWERSYS, UTIAMC.
+
+SANSERA and UNIONBANK are no longer incomplete; no unverified attribution is made to the new BSE workflow.
+
+Original issuer filings for several shortfalls disagree in EPS/PAT, including AVANTIFEED 2025-12 consolidated EPS 10.96 vs 12.00, BDL 2025-09 minor PAT discrepancy, COROMANDEL scale conflict, DATAPATTNS zero vs 24.71 EPS, and MGL/WELSPUNLIV/YATRA/ZAGGLE source-version discrepancies. R4 must remain fail-closed and not choose a newest-version winner without a certified correction.
+
+Development implementation commits:
+- a08861d: BSEIndiaApi v3.3.3 BSE-first compact results enrichment for only incomplete equities, exact scrip+ISIN, period/date-linked issuer, compact INR-crore revenue/PAT only as REVIEW-PENDING; no guessed diluted EPS, scope, publication time or canonical selection.
+- 5139304: focused BSE source/period/EPS/conflict protection tests.
+- 543244f: BSE-first stage connected ahead of existing issuer/NSE acquisition in Development workflow; BSE failure cannot suppress issuer fallback.
+- b8bb348: satisfy mandatory observation freshness field in optional review-only secondary-source write.
+All changes stay in PortfolioAI-Development and do not alter V1-4 investment scoring or main.
+
+Runtime verification: read-only BSE resultsSnapshot request from the Development Supabase backend returned HTTP 403 Access Denied (pg_net request 614); there was no successful source acquisition by that request. Do not bypass the access denial. The new Python GitHub Actions BSE collector has no independently verified successful execution/readback yet, and it must not be reported as executed solely on Vercel READY.
+
+Previously unfinished Results quarterly scan now has terminal PARTIAL status, completed 2026-10-16T04:04:08.936Z: 262/262 items processed, 14 not qualified, zero newly accepted observations. Finishing a visit is not equal to acquiring new financial quarters.
+
+**R3 remains NOT COMPLETE.** Require 262/262 genuine selected four-quarter original-filing readback (or an explicit owner-approved contract change). Preserve conflicts/unavailable quarters honestly.
