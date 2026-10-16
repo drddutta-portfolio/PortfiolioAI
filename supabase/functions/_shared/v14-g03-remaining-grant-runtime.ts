@@ -6,9 +6,10 @@ export async function issueRemainingG03Grant(db:SupabaseClient,key:string,body:R
  const reply=(status:number,code:string,data:Record<string,unknown>={})=>({status,code,data})
  const scope=g03RemainingMaterializationScope(body)
  if(!scope)return reply(400,'EXACT_G03_REMAINING_CANONICAL_SCOPE_REQUIRED')
- const holder=crypto.randomUUID(),operation='G03_REMAINING_GRANT:'+String(claims.run_id)+':'+body.securityId
+ const holder=crypto.randomUUID(),operation=('G03_REMAINING_GRANT_'+String(claims.run_id)+'_'+scope).replace(/[^A-Za-z0-9_]/g,'_').toUpperCase()
  const lease=await db.rpc('acquire_data_ingestion_lease_v1',{p_source_code:'OWNER_REVIEWED_CLASSIFICATION',p_operation:operation,p_lease_holder:holder,p_lease_seconds:60})
- if(lease.error||lease.data?.[0]?.acquired!==true)return reply(409,'G03_REMAINING_GRANT_BUSY')
+ if(lease.error)return reply(503,'G03_REMAINING_GRANT_LEASE_FAILED',{databaseCode:lease.error.code})
+ if(lease.data?.[0]?.acquired!==true)return reply(409,'G03_REMAINING_GRANT_BUSY')
  try{
   const owner=await db.from('portfolios').select('user_id').eq('id',policy.portfolioId).single()
   if(owner.error||owner.data.user_id!==policy.ownerId)return reply(403,'G03_REMAINING_OWNER_NOT_VERIFIED')

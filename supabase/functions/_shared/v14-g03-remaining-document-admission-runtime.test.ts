@@ -21,6 +21,7 @@ async function fixture(b= batch[0]){
   async insert(row:Row){if(!['data_source_records','research_evidence_requirement_reviews'].includes(this.table))throw Error('OUT_OF_SCOPE_WRITE');if(rows[this.table].some(r=>r.id===row.id))return {error:{code:'23505'}};rows[this.table].push(row);writes++;return {error:null}}
  }
  const db={from:(table:string)=>new Query(table),rpc:async(name:string,p:Record<string,string>)=>{
+  if(!/^[A-Z0-9_]+$/.test(p.p_operation))return {error:{code:'23514'},data:null}
   if(name==='acquire_data_ingestion_lease_v1'){const acquired=!held.has(p.p_operation);if(acquired)held.add(p.p_operation);return {error:null,data:[{acquired}]}}
   if(name!=='release_data_ingestion_lease_v1')throw Error('OUT_OF_SCOPE_RPC')
   held.delete(p.p_operation);return {error:null,data:[]}

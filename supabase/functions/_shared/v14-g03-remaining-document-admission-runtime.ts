@@ -12,9 +12,10 @@ export async function admitRemainingG03Document(db:SupabaseClient,body:Record<st
  const allowed=['action','authorizationHash','securityId','requirementCode','originalHash','normalizedFragment','extractionMethod']
  const b=batch.find(b=>b.securityId===body.securityId&&b.requirementCode===body.requirementCode)
  if(Object.keys(body).some(k=>!allowed.includes(k))||body.action!=='ADMIT_FIXED_G03_REMAINING_DOCUMENT'||body.authorizationHash!==scope.policy.directiveSha256||!b||body.originalHash!==b.originalHash||body.normalizedFragment!==b.fragment||body.extractionMethod!=='POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES')throw Error('EXACT_G03_REMAINING_DOCUMENT_REQUIRED')
- const holder=crypto.randomUUID(),operation='G03_REMAINING_DOCUMENT:'+b.securityId+':'+b.requirementCode
+ const holder=crypto.randomUUID(),operation='G03_REMAINING_DOCUMENT_'+b.symbol+'_'+b.requirementCode
  const lease=await db.rpc('acquire_data_ingestion_lease_v1',{p_source_code:'OWNER_REVIEWED_CLASSIFICATION',p_operation:operation,p_lease_holder:holder,p_lease_seconds:60})
- if(lease.error||lease.data?.[0]?.acquired!==true)throw Error('G03_REMAINING_DOCUMENT_BUSY')
+ if(lease.error)throw Error('G03_REMAINING_DOCUMENT_LEASE_FAILED_'+lease.error.code)
+ if(lease.data?.[0]?.acquired!==true)throw Error('G03_REMAINING_DOCUMENT_BUSY')
  try{
   const pin=g02SourcePin(b.originalHash,scope),originalId=await g02StableId({kind:scope.originalKind,security:b.securityId,hash:b.originalHash}),documentId=await g02StableId({kind:'G03_DOCUMENT',security:b.securityId,hash:b.originalHash}),linkId=await g02StableId({kind:'G03_DOCUMENT_SOURCE',documentId,sourceId:originalId})
   const owner=await db.from('portfolios').select('user_id').eq('id',scope.policy.portfolioId).single(),original=await db.from('data_source_records').select('raw_payload,payload_hash,source_code').eq('id',originalId).single(),document=await db.from('research_documents').select('security_id,canonical_content_hash,identity_status').eq('id',documentId).single(),link=await db.from('research_document_sources').select('source_record_id,research_document_id,content_hash,source_status').eq('id',linkId).single()
