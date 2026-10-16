@@ -89,6 +89,11 @@ HISTORICAL_RESULTS_IDENTITIES = {
         "ex_date":"2026-02-26","split_new_per_old":"10",
         "evidence":"BSE DR-829/2025-2026; NSE Clearing NCL/CMPT/72965 2026-02-25",
     },
+    "CAMS":{
+        "source_isin":"INE596I01012","current_isin":"INE596I01020",
+        "ex_date":"2025-12-05","split_new_per_old":"5",
+        "evidence":"NSE Clearing NCL/CMPT/71607 2025-12-04; NSE issuer results 2025-05-05 and 2026-01-22",
+    },
     "TDPOWERSYS":{
         "source_isin":"INE419M01027","current_isin":"INE419M01035",
         "ex_date":"2026-08-24","split_new_per_old":"2",
