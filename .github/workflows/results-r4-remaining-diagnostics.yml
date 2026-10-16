@@ -21,3 +21,5 @@ jobs:
       - run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
       - name: Inspect schema and aggregate checks without financial or issuer payloads
         run: python scripts/results/r4-remaining-source-diagnostics.py
+
+# Aggregate context categories only: no context identifiers, issuer details or amounts are exported.
