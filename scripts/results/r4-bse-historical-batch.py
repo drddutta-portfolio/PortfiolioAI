@@ -345,8 +345,8 @@ def main():
                                 date.fromisoformat(start),date.fromisoformat(end),max_pages=5)
                             approved=[]
                             rejects=Counter()
-                            for src in discovery["results"]:
-                                if len(approved)>=args.max_pdfs_per_quarter:break
+                            for attempt,src in enumerate(discovery["results"]):
+                                if attempt>=args.max_pdfs_per_quarter:break
                                 if not src.get("attachment_name"):continue
                                 try:
                                     raw,origin=bse.retrieve_original_pdf(src["attachment_name"])
