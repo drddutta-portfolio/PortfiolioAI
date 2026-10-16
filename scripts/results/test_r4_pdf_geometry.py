@@ -1,0 +1,52 @@
+import unittest
+import fitz
+from decimal import Decimal
+from r4_pdf_geometry import extract_page,iso_date
+
+def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for the period/year (5•6)",note=False):
+    doc=fitz.open();p=doc.new_page(width=1000,height=850)
+    p.insert_text((25,30),"NATCO PHARMA LIMITED",fontsize=10)
+    p.insert_text((25,50),"Consolidated financial results",fontsize=10)
+    p.insert_text((25,70),"Amounts in INR millions",fontsize=10)
+    p.insert_text((460,100),"Quarter ended" if quarter else "Year ended",fontsize=10)
+    for i,date in enumerate([first,"30.06.2024","30.09.2023"]):p.insert_text((450+i*150,125),date,fontsize=10)
+    for y,label,values in [(160,"Revenue from operations",["4,748","13,711","7,586"]),
+                           (190,label,[profit,"6,765","2,127"]),
+                           (220,"(b) Diluted",["7.43","37.81","11.88"])]:
+        p.insert_text((25,y),label,fontsize=10)
+        for i,value in enumerate(values):p.insert_text((475+i*150,y),value,fontsize=10)
+    if note:p.insert_text((25,260),"Notes to standalone and consolidated results",fontsize=10)
+    return doc,p
+
+class GeometryTest(unittest.TestCase):
+    def test_numeric_formula_in_label_is_not_a_financial_cell(self):
+        doc,p=fixture()
+        out=extract_page(p,1,"2024-09-30")
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"132.4")
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"7.43")
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["original_value"],"1,324")
+
+    def test_later_notes_do_not_change_statement_scope(self):
+        doc,p=fixture(note=True)
+        self.assertEqual(extract_page(p,1,"2024-09-30")["scope"],"CONSOLIDATED")
+
+    def test_wrong_first_date_rejected(self):
+        doc,p=fixture(first="31.12.2024")
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30")
+
+    def test_annual_column_rejected(self):
+        doc,p=fixture(quarter=False)
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30")
+
+    def test_missing_decimal_is_never_guessed(self):
+        doc,p=fixture(profit="1 324")
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30")
+
+    def test_negative_profit_preserved(self):
+        doc,p=fixture(profit="(1,324)")
+        self.assertEqual(extract_page(p,1,"2024-09-30")["facts"]["NET_PROFIT_QUARTER"]["value"],"-132.4")
+
+    def test_compact_month_date(self):
+        self.assertEqual(iso_date("September 30,2024"),"2024-09-30")
+
+if __name__=="__main__":unittest.main()
