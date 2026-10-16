@@ -48,12 +48,31 @@ def main():
             db.commit()
             print("R4_TRENDLYNE_CAPTURE",json.dumps({"tool":tool,"runId":result["runId"],"r2_key":key,"bytes":len(raw),"canonical_facts":0}),flush=True)
             return result["result"]
-        tools=call("capabilities","LIST_TOOLS",{})
+        with db.cursor() as cur:
+            cur.execute("""SELECT raw_payload->>'r2_key' key FROM data_source_records
+              WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'
+                AND raw_payload->'request'->>'tool'='LIST_TOOLS'
+              ORDER BY retrieved_at DESC LIMIT 1""")
+            prior=cur.fetchone()
+        db.rollback()
+        if prior:
+            tools=json.loads(client.get_object(Bucket=batch.BUCKET,Key=prior[0])["Body"].read())["result"]
+        else:tools=call("capabilities","LIST_TOOLS",{})
         if not isinstance(tools,dict) or not isinstance(tools.get("tools"),list):raise RuntimeError("MCP_TOOL_LIST_SCHEMA_UNKNOWN")
         names={t["name"]:t for t in tools["tools"]}
         for name,tool in names.items():
             if any(x in name.lower() for x in ("financ","param","document","histor")):
                 print("R4_MCP_TOOL_SCHEMA",json.dumps(tool),flush=True)
+        if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="PARAMETERS":
+            if "search_financial_parameters" not in names:raise RuntimeError("PARAMETER_DISCOVERY_UNSUPPORTED")
+            for index,query in enumerate([
+                "historical quarterly revenue from operations sales 6Q 7Q 8Q ago",
+                "historical quarterly net profit after tax 6Q 7Q 8Q ago",
+                "historical diluted earnings per share EPS 6Q 7Q 8Q ago",
+                "financial reporting quarter end date results period date"]):
+                result=call("parameters-"+str(index),"search_financial_parameters",{"query":query})
+                print("R4_EXACT_PARAMETER_DISCOVERY",index,str(result)[:40000],flush=True)
+            return
         with db.cursor() as cur:
             cur.execute("""SELECT s.id::text,s.symbol,s.isin,i.provider_instrument_id
               FROM securities s JOIN LATERAL (
