@@ -30,6 +30,15 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_nbfc_catalog_and_seed_discovery_is_identity_bounded(self):
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html"
+        catalog=[{"symbol":"JIOFIN","ixbrl":url},{"symbol":"ANGELONE","ixbrl":url},
+                 {"symbol":"JIOFIN","ixbrl":"https://untrusted.example/x"}]
+        self.assertEqual(module.listing_urls(catalog,"JIOFIN"),[url])
+        self.assertEqual(module.listing_urls(catalog,"ANGELONE"),[url])
+        self.assertIn(url,module.OFFICIAL_NSE_SEEDS["JIOFIN"])
+        self.assertEqual(len(module.OFFICIAL_NSE_SEEDS["ANGELONE"]),2)
+
     def test_nbfc_original_jiofin_q1_fy27_consolidated_first_column(self):
         html="""<h2>INTEGRATED FILING NBFC</h2>
           <table><tr><td>NSE Symbol</td><td>JIOFIN</td></tr>
