@@ -15,9 +15,13 @@ batch= lineage.batch
 def main():
     if os.environ.get("R4_PUBLIC_RENAME_ONLY")=="1":
         counts=Counter()
+        public_session=requests.Session()
+        public_session.headers.update({"User-Agent":"Mozilla/5.0","Accept-Language":"en-IN,en;q=0.8"})
+        try:public_session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30).raise_for_status()
+        except Exception:counts["standard_session_bootstrap_failed"]+=1
         for symbol,rule in RULES.items():
             try:
-                response=requests.get(rule["url"],timeout=35);response.raise_for_status();raw=response.content
+                response=public_session.get(rule["url"],timeout=35);response.raise_for_status();raw=response.content
                 counts["public_notices_retrieved"]+=1
                 counts["prefix_is_pdf" if raw.startswith(b"%PDF") else "prefix_not_pdf"]+=1
                 if not raw.startswith(b"%PDF"):
@@ -34,7 +38,9 @@ def main():
                     safe={"QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED","RENAME_AUTHORITY_PAGE_BOUND_EXCEEDED",
                         "OFFICIAL_RENAME_IDENTITY_NOT_PROVEN","OFFICIAL_RENAME_EFFECTIVE_DATE_NOT_PROVEN","OFFICIAL_RENAME_SCRIP_NOT_PROVEN"}
                     counts[str(error) if str(error) in safe else "NOTICE_VALIDATION_ERROR"]+=1
-            except Exception as error:counts["public_notice_transport_or_decode_error"]+=1
+            except Exception as error:
+                status=getattr(getattr(error,"response",None),"status_code",None)
+                counts["public_notice_http_"+str(status) if isinstance(status,int) else "public_notice_transport_or_decode_error"]+=1
         print("R4_PUBLIC_AUTHORITY_AGGREGATE",json.dumps(dict(counts)),flush=True)
         return
     url=os.environ["SUPABASE_DB_URL"]
