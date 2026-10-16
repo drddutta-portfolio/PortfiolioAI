@@ -4,7 +4,7 @@ from collections import Counter
 from pathlib import Path
 import fitz,psycopg
 from r4_ocr_geometry import extract_ocr
-from r4_recovery_queue import task_id,attempt_all
+from r4_recovery_queue import task_id,attempt_all,run_with_timeout
 spec=importlib.util.spec_from_file_location("batch",Path(__file__).with_name("r4-bse-historical-batch.py"))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
@@ -55,7 +55,7 @@ def main():
                                     code=getattr(error,"response",{}).get("Error",{}).get("Code")
                                     if code not in ("404","NoSuchKey","NotFound"):raise
                                     try:
-                                        parsed=extract_ocr(raw,period,symbol in batch.BANKS,symbol in batch.INSURERS)
+                                        parsed=run_with_timeout(extract_ocr,(raw,period,symbol in batch.BANKS,symbol in batch.INSURERS),180)
                                         proof={"original_sha256":digest,"parsed":parsed}
                                     except ValueError as rejected:
                                         proof={"original_sha256":digest,"parsed":None,"rejection":str(rejected)}
