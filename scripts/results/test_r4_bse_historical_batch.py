@@ -57,6 +57,12 @@ class BseOriginalTest(unittest.TestCase):
             [r"^profit for the period"],"PROFIT")
         self.assertEqual(values,[batch.Decimal("1000"),batch.Decimal("900"),batch.Decimal("800")])
 
+    def test_original_natco_ocr_bullet_formula_is_not_a_negative_profit(self):
+        _,values=batch.financial_row([
+            "7 Profit for the period/ year (5•6) 1,324 6,765 2,127 14,774 10,020 13,883"],
+            [r"^profit for the period"],"PROFIT")
+        self.assertEqual(values[0],batch.Decimal("1324"))
+
     def test_company_period_units(self):
         out=batch.extract(fixture(),"CAMS",
             "Computer Age Management Services Limited","2024-09-30")
