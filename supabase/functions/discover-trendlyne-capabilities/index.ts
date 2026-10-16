@@ -1,3 +1,4 @@
+import { handleR4History } from "../_shared/results-r4-trendlyne-history.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const cors = {
@@ -145,6 +146,7 @@ async function completeRunItem(
 }
 
 Deno.serve(async (request) => {
+  if(request.headers.get("x-portfolioai-r4")==="history") return handleR4History(request)
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
 
