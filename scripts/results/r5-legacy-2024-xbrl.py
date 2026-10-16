@@ -30,12 +30,17 @@ NSE_API="https://www.nseindia.com/api/corporates-financial-results"
 XBRLI="http://www.xbrl.org/2003/instance"
 FIELD_MAP={
  "OPERATING_REVENUE_QUARTER":("RevenueFromOperations",),
- "NET_PROFIT_QUARTER":("ProfitLossForPeriod",),
+ "NET_PROFIT_QUARTER":("ProfitLossForPeriod","ProfitLossForThePeriod","ProfitLossForPeriodBeforeMinorityInterest"),
  "EPS_DILUTED":("DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",),
 }
 BANK_FIELDS={
  "NET_PROFIT_QUARTER":("ProfitLossForThePeriod",),
  "EPS_DILUTED":("DilutedEarningsPerShareAfterExtraordinaryItems",),
+}
+INSURANCE_FIELDS={
+ "NET_PREMIUM_EARNED_QUARTER":("PremiumEarned",),
+ "NET_PROFIT_QUARTER":("ProfitLossAfterTax",),
+ "EPS_DILUTED":("BasicAndDilutedEPSAfterExtraordinaryItemsNetOfTaxExpenseForThePeriodNotToBeAnnualized",),
 }
 def local(s):return s.rsplit("}",1)[-1]
 def digest(b):return hashlib.sha256(b).hexdigest()
@@ -181,7 +186,7 @@ def extract(raw,metadata,symbol,isin,issuer_bridge=None):
           "context_ids":sorted({x[1] for x in xs})}
  bank=symbol in _r3.BANK_TICKERS
  facts={}
- for code,tags in (BANK_FIELDS if bank else FIELD_MAP).items():
+ for code,tags in (INSURANCE_FIELDS if symbol in _r3.INSURERS else BANK_FIELDS if bank else FIELD_MAP).items():
   item=fact(tags,code)
   if item:facts[code]=item
  if bank:
