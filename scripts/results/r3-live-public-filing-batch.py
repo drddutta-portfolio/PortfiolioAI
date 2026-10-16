@@ -47,7 +47,8 @@ BANK_REQUIRED = frozenset(("NET_INTEREST_INCOME_QUARTER", "NET_PROFIT_QUARTER", 
 BANK_TICKERS = frozenset((
     "AUBANK", "AXISBANK", "BANDHANBNK", "BANKBARODA", "FEDERALBNK",
     "HDFCBANK", "ICICIBANK", "IDBI", "IDFCFIRSTB", "INDIANB",
-    "KARURVYSYA", "KOTAKBANK", "SBIN",
+    "KARURVYSYA", "KOTAKBANK", "SBIN", "UNIONBANK",
+    "BANKINDIA", "CANBK", "RBLBANK",
 ))
 RESULT_METRICS = ("EPS_DILUTED", "OPERATING_REVENUE_QUARTER", "NET_PROFIT_QUARTER",
                   "OPERATING_PROFIT_QUARTER", "NET_INTEREST_INCOME_QUARTER",
@@ -572,13 +573,29 @@ def main():
         for symbol,isin,security_id in stocks:
             entry={"symbol":symbol,"qualified":0,"observations":0,"reason":None}
             with conn.cursor() as cur:
-                cur.execute("""SELECT period_end,consolidation_scope,source_record_id,metric_code
+                # Source availability is NOT completed R3 coverage. Count only
+                # R4 source-selected same-filing core observations as complete.
+                cur.execute("""SELECT f.period_end,f.consolidation_scope,
+                                      f.source_record_id,f.metric_code
+                    FROM public.fundamental_observation_decisions d
+                    JOIN public.fundamental_observations f
+                      ON f.id=d.selected_observation_id
+                    WHERE f.security_id=%s AND f.period_end=ANY(%s::date[])
+                      AND f.period_type='QUARTER' AND f.numeric_value IS NOT NULL
+                      AND f.metric_code=ANY(%s)""",
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
+                completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                # Qualified but unselected original observations must be
+                # reconciled by the R4 source verifier, not repulled as if new.
+                cur.execute("""SELECT period_end,consolidation_scope,
+                                      source_record_id,metric_code
                     FROM public.fundamental_observations
                     WHERE security_id=%s AND period_end=ANY(%s::date[])
                       AND period_type='QUARTER' AND numeric_value IS NOT NULL
                       AND metric_code=ANY(%s)""",
-                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED | {"GROSS_NPA_PERCENT"})))
-                completed=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                    (security_id,list(TARGET_QUARTERS),list(CORE_METRICS | BANK_REQUIRED)))
+                already_sourced=completed_quarters(cur.fetchall(), banking=symbol in BANK_TICKERS)
+                pending_review=already_sourced-completed
                 if requalify:
                     cur.execute("""SELECT DISTINCT period_end
                         FROM public.fundamental_observation_decisions
@@ -588,9 +605,12 @@ def main():
                         (security_id,list(TARGET_QUARTERS)))
                     completed=missing_r4_selected_quarters(cur.fetchall())
             conn.rollback()
+            acquired=set()
             if len(completed)==len(TARGET_QUARTERS):
                 entry["reason"]="FOUR_QUARTERS_ALREADY_COMPLETE"
                 log["already_complete"]+=1
+            elif len(completed | pending_review)==len(TARGET_QUARTERS):
+                entry["reason"]="FOUR_QUARTERS_ORIGINALS_EXIST_R4_SELECTION_PENDING"
             else:
                 try:
                     listing=fetch_json(session,symbol)
@@ -639,14 +659,18 @@ def main():
                                                          "nse_symbol":unique_field(tt,"nse symbol"),
                                                          "source_isin":unique_field(tt,"isin")})
                                 continue
-                            if data["period_end"] not in TARGET_QUARTERS or data["period_end"] in completed:
-                                continue  # Preserve qualified quarters without duplicate writes.
+                            if (data["period_end"] not in TARGET_QUARTERS
+                                or data["period_end"] in completed
+                                or data["period_end"] in pending_review
+                                or data["period_end"] in acquired):
+                                continue  # Reuse source facts and avoid duplicate downloads/writes.
                             entry["qualified"]+=1
                             log["documents_parsed"]+=1
                             entry["observations"]+=persist(conn,s3,data,url,sha(res.content))
                             if (BANK_REQUIRED if symbol in BANK_TICKERS else CORE_METRICS).issubset(data["facts"]):
-                                completed.add(data["period_end"])
-                            if len(completed)==len(TARGET_QUARTERS):
+                                acquired.add(data["period_end"])
+                            # A capture is pending R4 selection, not already complete.
+                            if len(completed | pending_review | acquired)==len(TARGET_QUARTERS):
                                 break
                         if not entry["qualified"] and not entry["reason"]:
                             entry["reason"]="NO_NEW_QUALIFIED_QUARTER"
@@ -658,6 +682,7 @@ def main():
                         entry["missing_quarters"]=sorted(set(TARGET_QUARTERS)-completed)
                         log["stock_outcomes"].append(entry)
                         break  # Respect source blocks/rate limits; never bypass.
+            entry["pending_selection_quarters"]=sorted(pending_review | acquired)
             entry["missing_quarters"]=sorted(set(TARGET_QUARTERS)-completed)
             log["visited"]+=1
             log["observations_inserted"]+=entry["observations"]
