@@ -70,4 +70,31 @@ describe("Results rolling-quarter navigator", () => {
     fireEvent.click(screen.getByRole("button", { name: "Scroll towards latest quarters" }))
     expect(matrix.scrollLeft).toBe(700)
   })
+
+  it("shows one custom financial tooltip without an overlapping browser title", () => {
+    const stock = {
+      securityId: "sample", symbol: "SAMPLE", company: "Sample Company",
+      sector: "Manufacturing", industry: "Industrial Products", assetClass: "EQUITY",
+      quantity: "10", averageCost: "100", currentPrice: "101", currentValue: "1010",
+      unrealisedPnl: "10", realisedPnl: null,
+    } as PortfolioPosition
+    const view = {
+      portfolio: { id: "example", currency: "INR" },
+      openPositions: [stock], closedPositions: [],
+    } as unknown as PortfolioViewModel
+    mocks.usePortfolio.mockReturnValue({ portfolio: view, isLoading: false, error: null })
+    mocks.load.mockResolvedValue([])
+    mocks.status.mockResolvedValue({ lastScan: null, newResults: 0, run: null })
+    render(<ResultsLivePage />)
+    const cell = screen.getByRole("button", { name: /SAMPLE Q1 FY27/ })
+    expect(cell.hasAttribute("title")).toBe(false)
+    fireEvent.mouseEnter(cell)
+    expect(screen.getAllByRole("tooltip")).toHaveLength(1)
+    expect(screen.getByText("SAMPLE — Q1 FY27")).toBeInTheDocument()
+    fireEvent.mouseLeave(cell)
+    expect(screen.queryByRole("tooltip")).toBeNull()
+    // The complete assessment reason belongs to the selected result, not a
+    // second hovering browser tooltip.
+    expect(screen.getByText("Why this quarterly grade?")).toBeInTheDocument()
+  })
 })
