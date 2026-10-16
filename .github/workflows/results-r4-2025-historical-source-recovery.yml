@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches: [PortfolioAI-Development]
-    paths: [.github/workflows/results-r4-2025-historical-source-recovery.yml]
+    paths:
+      - .github/workflows/results-r4-2025-historical-source-recovery.yml
+      - scripts/results/test_r3_legacy_2025_xbrl.py
 permissions:
   contents: read
 concurrency:
