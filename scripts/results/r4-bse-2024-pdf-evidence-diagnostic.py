@@ -50,7 +50,7 @@ def analyze_bytes(symbol,isin,period,source,b,origin):
             "attachment_name":source.get("attachment"),
             "verified_canonical_isin_in_pdf":isin in found_isins,
             "detected_isins":sorted(found_isins)[:5],"sha256":sha256(b).hexdigest(),
-            "official_url":origin.get("url"),
+            "official_url":origin.get("source_url"),
             "pdf_pages":len(pdf),"financial_pages":pages[:3],
             "issuer_period_scope_not_yet_qualified":True}
 
@@ -62,7 +62,7 @@ def main():
     args=p.parse_args()
     if not 1<=args.max_docs<=24:raise SystemExit("PDF_BOUND_EXCEEDED")
     raw=json.loads(Path(args.source_index).read_text())
-    if raw.get("qualification_status")!="DISCOVERY_ONLY" or raw.get("database_writes") != 0:
+    if raw.get("qualification_status")!="DISCOVERY_ONLY" or raw.get("writes") != 0:
         raise SystemExit("NOT_READ_ONLY_BSE_SOURCE_INDEX")
     if not isinstance(raw.get("targets"),list):
         raise SystemExit("NOT_BSE_SOURCE_INDEX")
