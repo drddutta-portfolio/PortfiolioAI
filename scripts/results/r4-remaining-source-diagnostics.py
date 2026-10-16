@@ -2,6 +2,8 @@
 import sys,json,os,requests,psycopg,hashlib,xml.etree.ElementTree as ET
 from collections import Counter
 from r4_nse_issuer_bridge import legal_key,bridge_from_sources
+from r4_issuer_rename import RULES,verify_rename_pdf
+import fitz
 from pathlib import Path
 from datetime import datetime,timezone
 sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -11,6 +13,30 @@ lineage=importlib.util.module_from_spec(spec);spec.loader.exec_module(lineage)
 batch= lineage.batch
 
 def main():
+    if os.environ.get("R4_PUBLIC_RENAME_ONLY")=="1":
+        counts=Counter()
+        for symbol,rule in RULES.items():
+            try:
+                response=requests.get(rule["url"],timeout=35);response.raise_for_status();raw=response.content
+                counts["public_notices_retrieved"]+=1
+                counts["prefix_is_pdf" if raw.startswith(b"%PDF") else "prefix_not_pdf"]+=1
+                if not raw.startswith(b"%PDF"):
+                    if raw.lstrip().startswith(b"%PDF"):counts["pdf_has_whitespace_prefix"]+=1
+                    continue
+                with fitz.open(stream=raw,filetype="pdf") as document:
+                    normalized="".join(" ".join(p.get_text("text") for p in document).upper().split())
+                    counts["public_notice_pages"]+=len(document)
+                for field in ("old_symbol","old_name","new_name"):
+                    token="".join(rule[field].upper().split())
+                    counts[field+"_present" if token in normalized else field+"_absent"]+=1
+                try:verify_rename_pdf(raw,symbol,rule["url"]);counts["verified_notices"]+=1
+                except ValueError as error:
+                    safe={"QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED","RENAME_AUTHORITY_PAGE_BOUND_EXCEEDED",
+                        "OFFICIAL_RENAME_IDENTITY_NOT_PROVEN","OFFICIAL_RENAME_EFFECTIVE_DATE_NOT_PROVEN","OFFICIAL_RENAME_SCRIP_NOT_PROVEN"}
+                    counts[str(error) if str(error) in safe else "NOTICE_VALIDATION_ERROR"]+=1
+            except Exception as error:counts["public_notice_transport_or_decode_error"]+=1
+        print("R4_PUBLIC_AUTHORITY_AGGREGATE",json.dumps(dict(counts)),flush=True)
+        return
     url=os.environ["SUPABASE_DB_URL"]
     if batch.REF not in url or os.environ["CLOUDFLARE_R2_BUCKET"]!=batch.BUCKET:raise RuntimeError("DEVELOPMENT_ONLY")
     client=batch.r2_client();session=requests.Session();session.headers.update({"User-Agent":"Mozilla/5.0"})
