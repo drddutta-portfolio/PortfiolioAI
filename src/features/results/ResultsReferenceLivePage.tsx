@@ -70,7 +70,8 @@ function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], ent
   const own = rows.filter(r => r.securityId === entry.position.securityId && r.selected &&
     r.source === "COMPANY_EXCHANGE_FILING")
   const bank = isBank(entry.position.industry) || hasBankMetrics(own)
-  const core = [bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
+  const insurer = entry.position.symbol === "STARHEALTH"
+  const core = [insurer ? "NET_PREMIUM_EARNED_QUARTER" : bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
     "NET_PROFIT_QUARTER", "EPS_DILUTED"]
   return makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).length === 4 &&
     makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).every(period => {
@@ -118,11 +119,12 @@ function resultStatus(allRows: readonly ResultsSourceObservation[], entry: Entry
 function quarterCellLabel(allRows: readonly ResultsSourceObservation[], entry: Entry, period: Period, primary: ResultsSourceObservation | null) {
   if (!primary) return "—"
   const bank=isBank(entry.position.industry) || hasBankMetrics(allRows.filter(row => row.securityId === entry.position.securityId && row.periodEnd === period.end))
-  const code=bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
+  const insurer=entry.position.symbol==="STARHEALTH"
+  const code=insurer ? "NET_PREMIUM_EARNED_QUARTER" : bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
   const comp=compareQuarterMetric(allRows, entry.position.securityId, period.end, code)
   if (comp.current && (comp.yoy !== null || comp.qoq !== null)) {
     const pct=comp.yoy ?? comp.qoq!
-    return (bank ? "NII " : "Rev ") + (Number(pct)>0?"+":"") + pct+"% "+(comp.yoy!==null?"YoY":"QoQ")
+    return (insurer ? "Net premium " : bank ? "NII " : "Rev ") + (Number(pct)>0?"+":"") + pct+"% "+(comp.yoy!==null?"YoY":"QoQ")
   }
   return (LABELS[primary.code] ?? "Metric") + " " + formattedValue(primary)
 }
@@ -141,7 +143,8 @@ function StatusDot({ status, pending = false }: { readonly status: string; reado
 function PreviewCard({ preview, calibrations }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations }) {
   const { entry, period, observations } = preview
   const grade = resultStatus(preview.history, entry, period.end, calibrations)
-  const topCode = (isBank(entry.position.industry) || hasBankMetrics(observations)) ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
+  const topCode = entry.position.symbol === "STARHEALTH" ? "NET_PREMIUM_EARNED_QUARTER" :
+    (isBank(entry.position.industry) || hasBankMetrics(observations)) ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
   const mainComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, topCode)
   const patComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, "NET_PROFIT_QUARTER")
   const displayed = primaryObservation(observations, isBank(entry.position.industry) || hasBankMetrics(observations))
