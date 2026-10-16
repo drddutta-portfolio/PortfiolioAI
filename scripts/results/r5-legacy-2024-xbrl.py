@@ -148,7 +148,9 @@ def extract(raw,metadata,symbol,isin,issuer_bridge=None):
   if any(local(e.tag) in ("scenario","segment") for e in node.iter()):continue
   identities=[e for e in node.iter() if local(e.tag)=="identifier"]
   allowed_identifiers={symbol}
-  if issuer_bridge is not None:allowed_identifiers.add(issuer_bridge.bse_scrip_code)
+  if issuer_bridge is not None:
+   allowed_identifiers.add(issuer_bridge.bse_scrip_code)
+   if issuer_bridge.historical_symbol:allowed_identifiers.add(issuer_bridge.historical_symbol)
   if len(identities)!=1 or (identities[0].text or "").strip() not in allowed_identifiers:continue
   starts=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="startDate"]
   ends=[(e.text or "").strip() for e in node.iter() if local(e.tag)=="endDate"]
