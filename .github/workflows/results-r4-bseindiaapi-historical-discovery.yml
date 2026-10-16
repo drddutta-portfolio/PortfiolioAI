@@ -36,7 +36,7 @@ jobs:
           set -euo pipefail
           mkdir -p tmp/results-r4
           python scripts/results/r3-bse-2024-gap-source-index.py \
-            --symbols 'AXISBANK,AUROPHARMA,BEL,CANBK,DRREDDY,FEDERALBNK,GRASIM,HAL,ICICIBANK,ONGC,SBIN,TITAN,AVANTIFEED,CAMS,CHOLAFIN,HUDCO,IREDA,JIOFIN,LTF,MFSL,MUTHOOTFIN,PNBHOUSING,SHRIRAMFIN,STARHEALTH' \
+            --symbols 'AXISBANK,AUROPHARMA,BEL,CANBK,DRREDDY,FEDERALBNK,GRASIM,HAL,ICICIBANK,ONGC,SBIN,TITAN,AVANTIFEED,CAMS,CHOLAFIN,HUDCO,IREDA,BDL,CEMPRO,CGCL,COFORGE,TDPOWERSYS,SHRIRAMFIN,STARHEALTH' \
             --limit 24 --max-pages 2 --output tmp/results-r4/bseindiaapi-2024-discovery.json
           python - <<'PY'
           import json
