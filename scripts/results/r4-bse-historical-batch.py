@@ -362,6 +362,8 @@ def persist(db,client,row,period,source,raw,parsed,publication):
         "parser_revision":parsed.get("parser_revision","LEGACY_SAME_ROW_V2"),
         "supersedes_parser_source_id":parsed.get("supersedes_parser_source_id"),
         "parser_correction_reason":parsed.get("parser_correction_reason"),
+        "ocr_independent_checks":parsed.get("ocr_independent_checks"),
+        "ocr_proof_r2_key":parsed.get("ocr_proof_r2_key"),
     }
     manifestbytes=canonical(manifest)
     manifesthash=sha(manifestbytes)
