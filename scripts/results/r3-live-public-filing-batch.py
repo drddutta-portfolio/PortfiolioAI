@@ -87,6 +87,11 @@ HISTORICAL_RESULTS_IDENTITIES = {
         "ex_date":"2026-02-26","split_new_per_old":"10",
         "evidence":"BSE DR-829/2025-2026; NSE Clearing NCL/CMPT/72965 2026-02-25",
     },
+    "TDPOWERSYS":{
+        "source_isin":"INE419M01027","current_isin":"INE419M01035",
+        "ex_date":"2026-08-24","split_new_per_old":"2",
+        "evidence":"NSE/CML/75855 2026-08-20; BSE DR-700/2026-2027",
+    },
 }
 
 def historical_result_identity(symbol: str, current_isin: str, source_isin: str, period_end: str):
