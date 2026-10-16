@@ -55,7 +55,19 @@ def main():
                                     counts[year+":financial_tag_present:"+tag]+=1
                             for node in root:
                                 if lineage.legacy.local(node.tag)=="context":
-                                    if node.attrib.get("id")=="OneD":counts[year+":expected_quarter_context_present"]+=1
+                                    if node.attrib.get("id")=="OneD":
+                                        counts[year+":expected_quarter_context_present"]+=1
+                                        ids=[(n.text or "").strip() for n in node.iter() if lineage.legacy.local(n.tag)=="identifier"]
+                                        starts=[(n.text or "").strip() for n in node.iter() if lineage.legacy.local(n.tag)=="startDate"]
+                                        ends=[(n.text or "").strip() for n in node.iter() if lineage.legacy.local(n.tag)=="endDate"]
+                                        period=provider.dateval(item.get("toDate"))
+                                        if period in batch.WINDOWS and starts==[batch.WINDOWS[period][0]] and ends==[period]:counts[year+":quarter_dates_exact"]+=1
+                                        if any(lineage.legacy.local(n.tag) in ("scenario","segment") for n in node.iter()):counts[year+":quarter_has_dimensions"]+=1
+                                        embedded_isins={(n.text or "").strip() for n in root if lineage.legacy.local(n.tag)=="ISIN"}
+                                        if ids==[symbol]:counts[year+":quarter_identifier_matches_symbol"]+=1
+                                        elif ids==[code]:counts[year+":quarter_identifier_matches_scrip"]+=1
+                                        elif len(ids)==1 and ids[0] in embedded_isins:counts[year+":quarter_identifier_matches_embedded_isin"]+=1
+                                        else:counts[year+":quarter_identifier_other"]+=1
                                     else:counts[year+":other_context_present"]+=1
                             try:
                                 proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
