@@ -6,10 +6,14 @@ on:
         description: Register qualified originals and admit only the fixed documentary findings
         type: boolean
         default: false
+  push:
+    branches: [codex/g02-industry-evidence]
+    paths: [.github/workflows/g03-remaining-document-qualification.yml]
 permissions:
   contents: read
 jobs:
   qualify:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: PortfolioAI-Development
     timeout-minutes: 20
