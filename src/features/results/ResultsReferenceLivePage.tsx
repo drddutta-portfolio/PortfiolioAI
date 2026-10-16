@@ -40,14 +40,22 @@ const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
   rows.some((row) => row.code === "NET_INTEREST_INCOME_QUARTER" || row.code === "GROSS_NPA_PERCENT" || row.code === "NET_NPA_PERCENT")
 
 // R5 approved four-quarter window. Never auto-advance to unqualified new quarter.
+// Completed calendar quarters, newest first, beginning March 2025.
+ // Do not wait for four-stock coverage before displaying a newly reported quarter.
 function makePeriods(): Period[] {
-  return [
-    { end: "2026-06-30", label: "Q1 FY27" },
-    { end: "2026-03-31", label: "Q4 FY26" },
-    { end: "2025-12-31", label: "Q3 FY26" },
-    { end: "2025-09-30", label: "Q2 FY26" },
-  ]
+  const now = new Date()
+  const qStartMonth = Math.floor(now.getUTCMonth() / 3) * 3
+  const previousEnd = new Date(Date.UTC(now.getUTCFullYear(), qStartMonth, 0))
+  const periods: Period[] = []
+  for (let end = previousEnd; end >= new Date(Date.UTC(2025, 2, 31)); end = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() - 2, 0))) {
+    const month = end.getUTCMonth() + 1
+    const quarter = month === 3 ? 4 : month === 6 ? 1 : month === 9 ? 2 : 3
+    const fiscalYear = month === 3 ? end.getUTCFullYear() : end.getUTCFullYear() + 1
+    periods.push({ end: end.toISOString().slice(0, 10), label: `Q${quarter} FY${String(fiscalYear).slice(-2)}` })
+  }
+  return periods
 }
+const R5_REQUIRED_QUARTERS = new Set(["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"])
 
 function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
   return rows.filter((row) => row.securityId === securityId && row.periodEnd === end)
@@ -63,7 +71,8 @@ function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], ent
   const bank = isBank(entry.position.industry) || hasBankMetrics(own)
   const core = [bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
     "NET_PROFIT_QUARTER", "EPS_DILUTED"]
-  return makePeriods().every(period => {
+  return makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).length === 4 &&
+    makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).every(period => {
     const quarter = own.filter(r => r.periodEnd === period.end && core.includes(r.code))
     if (quarter.length !== 3 || new Set(quarter.map(r => r.code)).size !== 3) return false
     if (quarter.some(r => !r.sourceRecordId || !r.scope ||
@@ -329,12 +338,28 @@ export function ResultsLivePage() {
   const [industry, setIndustry] = useState("ALL")
   const [statuses, setStatuses] = useState<Set<StatusFilter>>(new Set())
   const [scrollTop, setScrollTop] = useState(0)
+  const [onlyNew, setOnlyNew] = useState(false)
+  const [gridScrollWidth, setGridScrollWidth] = useState(0)
   const [selection, setSelection] = useState<Selection | null>(null)
   const [preview, setPreview] = useState<Preview | null>(null)
   const [collapsed, setCollapsed] = useState(false)
   const [insightExpanded, setInsightExpanded] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const bottomScrollRef = useRef<HTMLDivElement>(null)
   const periods = useMemo(() => makePeriods(), [])
+
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const measure = () => setGridScrollWidth(grid.scrollWidth)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(grid)
+    const table = grid.querySelector("table")
+    if (table) observer.observe(table)
+    return () => observer.disconnect()
+  }, [periods.length, evidenceRevision])
 
   const entries = useMemo((): Entry[] => {
     if (!portfolio) return []
@@ -412,9 +437,10 @@ export function ResultsLivePage() {
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
+    if (onlyNew && !observations.some(row => row.securityId === p.securityId && row.periodEnd === periods[0]?.end)) return false
     if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end, industryCalibrations)))) return false
     return true
-  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations])
+  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew])
 
   const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
   const newestObservation = suggestedEntry
@@ -451,7 +477,7 @@ export function ResultsLivePage() {
     setScrollTop(0)
   }
   const clearFilters = () => {
-    setQuery(""); setFilter("ALL"); setIndustry("ALL"); setStatuses(new Set()); setScrollTop(0)
+    setQuery(""); setFilter("ALL"); setIndustry("ALL"); setStatuses(new Set()); setOnlyNew(false); setScrollTop(0)
   }
   const rowHeight = 44
   const start = Math.max(0, Math.floor(scrollTop / rowHeight) - 4)
@@ -465,7 +491,7 @@ export function ResultsLivePage() {
     <header className="results-page-header">
       <div><h1 id="results-title">Results</h1><p>Quarterly and annual company performance for all current and closed portfolio positions.</p></div>
       <section className="results-collection-status" aria-label="Results collection status">
-        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? "Running…" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
+        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanBusy ? "Scanning…" : "Paused · resume" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
         <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New stored metric observations</small></div>
         <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{loadingEvidence ? "Loading quarterly evidence…" : sourceCompanyCount + " of " + entries.length + " with results · " + sourceQuarterCount + " stock-quarters"}</small></div>
         <button type="button" disabled={scanBusy || entries.length === 0} onClick={() => void runScan()} title={scanBusy ? "Processing quarterly data" : "Check existing and newly linked source data"}>{scanBusy ? "↻ Scanning…" : scanStatus?.run?.status === "RUNNING" ? "↻ Resume Scan" : "↻ Run Scan Now"}</button>
@@ -483,7 +509,7 @@ export function ResultsLivePage() {
         <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((name) => <option key={name}>{name}</option>)}</select></label>
         {(["STRONG", "MIXED", "WEAK", "UNAVAILABLE"] as const).map((s) =>
           <button type="button" key={s} className={statuses.has(s) ? "active" : ""} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
-        <button type="button" disabled title="Newly reported detection requires an operational R6 scanner"><span className="ref-status-dot new"/>Newly Reported</button>
+        <button type="button" className={onlyNew ? "active" : ""} aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Show companies with observations in the latest reported quarter"><span className="ref-status-dot new"/>Newly Reported</button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
       </div>
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
@@ -498,9 +524,9 @@ export function ResultsLivePage() {
       </section>
       {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
-      <div className="results-matrix-shell" aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}>
+      <div className="results-matrix-shell" ref={gridRef} aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => { setScrollTop(e.currentTarget.scrollTop); if (bottomScrollRef.current) bottomScrollRef.current.scrollLeft = e.currentTarget.scrollLeft }}>
         <table className="results-matrix">
-          <thead><tr><th className="stock-column"><span>{filtered.length} stocks</span>Stock</th>{periods.map((p, i) => <th key={p.end}>{p.label}{i === 0 ? <small>(Latest completed) ↓</small> : null}</th>)}</tr></thead>
+          <thead><tr><th className="stock-column"><span>{filtered.length} stocks</span>Stock</th>{periods.map((p, i) => <th key={p.end}>{p.label}{i === 0 ? <small>(Rolling reports) ↓</small> : null}</th>)}</tr></thead>
           <tbody>
             {start > 0 ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: start * rowHeight }} /></tr> : null}
             {visible.map((entry) => <tr key={entry.position.securityId}><th scope="row" className="stock-column">{entry.position.symbol}<small>{entry.position.industry ?? "Unclassified"} · {entry.kind === "CURRENT" ? "Current" : "Closed"}</small></th>{periods.map((p) => {
@@ -524,6 +550,7 @@ export function ResultsLivePage() {
           </tbody>
         </table>
       </div>
+      <div className="results-bottom-scroll" ref={bottomScrollRef} role="scrollbar" aria-label="Scroll all quarterly results horizontally" aria-orientation="horizontal" tabIndex={0} onScroll={(e) => { if (gridRef.current) gridRef.current.scrollLeft = e.currentTarget.scrollLeft }}><div style={{ width: gridScrollWidth || "80rem", height: 1 }}/></div>
       {filtered.length === 0 ? <div className="results-empty">No matching securities for the current filters.</div> : null}
       {chosen && period ? <div className="selected-analysis" ref={analysisRef}>
         <div className="selected-analysis-heading">
