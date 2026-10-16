@@ -1,0 +1,37 @@
+name: Results R4 Development BSE 2024 Statement Column Readback
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bse-statement-column-review.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get verified original BSE PDF diagnostics
+        uses: actions/download-artifact@v4
+        with:
+          name: results-r4-bseindiaapi-original-pdf-evidence
+          run-id: 38930659966
+          github-token: ${{ github.token }}
+          path: tmp/results-r4
+      - name: Read financial statement page and issuer identity excerpts
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-r4/issuer-original-pdf-evidence.json'))
+          for doc in r['pdf_evidence']:
+            symbol=doc['symbol']
+            if symbol not in ('CAMS','COFORGE','BEL','AXISBANK','STARHEALTH'):continue
+            print('R4_BSE_ORIGINAL_REVIEW',json.dumps({
+             'symbol':symbol,'quarter':doc['quarter'],'published_at':doc['published_at'],
+             'official_url':doc['official_url'],'sha256':doc['sha256'],
+             'current_isin_in_pdf':doc['verified_canonical_isin_in_pdf'],
+             'headline':doc['headline'],'financial_pages':doc['financial_pages'][:2]
+            },ensure_ascii=True))
+          PY
