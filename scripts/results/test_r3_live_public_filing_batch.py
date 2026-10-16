@@ -103,6 +103,13 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertEqual(module.completed_quarters(bank_rows,banking=True),{"2026-06-30"})
         self.assertEqual(module.completed_quarters(bank_rows,banking=False),set())
 
+    def test_angelone_official_2026_february_split_prevents_false_isin_rejection(self):
+        link=module.historical_result_identity("ANGELONE","INE732I01021","INE732I01013","2025-12-31")
+        self.assertIsNotNone(link)
+        self.assertEqual(link["split_new_per_old"],"10")
+        self.assertIn("DR-829/2025-2026",link["evidence"])
+        self.assertIsNone(module.historical_result_identity("ANGELONE","INE732I01021","INE732I01013","2026-03-31"))
+
     def test_r4_requalification_ignores_unselected_observation_presence(self):
         found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
         self.assertEqual(found,{"2026-03-31"})
