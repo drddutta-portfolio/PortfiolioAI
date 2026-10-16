@@ -487,3 +487,20 @@
   .ref-results .ref-full-ai-grid { grid-template-columns:1fr; }
   .ref-results .ref-full-ai-heading { flex-direction:column; }
 }
+
+/* Explicit bottom horizontal navigator for the multi-quarter Results matrix.
+   Scroll positions are synchronized with the table in ResultsReferenceLivePage. */
+.ref-results .results-bottom-scroll {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 18px;
+  margin: .2rem .7rem .55rem;
+  border: 1px solid #e4eaf3;
+  border-radius: .35rem;
+  scrollbar-width: auto;
+  scrollbar-color: #8baccd #edf2f8;
+}
+.ref-results .results-bottom-scroll::-webkit-scrollbar { height: 12px; }
+.ref-results .results-bottom-scroll::-webkit-scrollbar-track { background: #edf2f8; border-radius: 8px; }
+.ref-results .results-bottom-scroll::-webkit-scrollbar-thumb { background: #8baccd; border-radius: 8px; }
+@media(max-width:680px) { .ref-results .results-bottom-scroll { margin: .2rem .25rem .5rem; } }
