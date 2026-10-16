@@ -305,6 +305,11 @@ def main():
      parsed,error=extract(response.content,item,symbol,isin)
      if error:
       report["failures"][error]+=1
+      if error=="UNKNOWN_HISTORICAL_ISIN" and symbol=="AXISBANK" and len(report.setdefault("axisbank_catalog_diagnostics",[]))<2:
+       report["axisbank_catalog_diagnostics"].append({
+          "period":period,"catalog_isin_raw":str(item.get("isin"))[:36],
+          "catalog_isin_type":type(item.get("isin")).__name__,
+          "catalog_field_names":sorted(str(k) for k in item.keys())[:35]})
       if error=="NO_QUALIFIED_FINANCIAL_FACTS" and len(report.setdefault("source_format_diagnostics",[]))<3:
        report["source_format_diagnostics"].append({"symbol":symbol,"period":period,
          "details":source_diagnostic(response.content)})
