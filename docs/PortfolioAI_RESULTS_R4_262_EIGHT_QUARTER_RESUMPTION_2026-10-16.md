@@ -161,3 +161,32 @@ Post-run independent selected-source SQL readback:
 - Original-source validation preserved the 5,528 existing qualified selection candidates and **0 selection conflicts** in the latest pilot.
 
 **R4 full historical data completeness is NOT PASS**. Next priority is proving historical old ISINs and source quarter single-period contexts for remaining 253, with audited BSE original PDFs / dated issuer originals and genuinely comparable pre-listing treatments. Trendlyne relative quarter measurements are not suitable substitutes for the primary source requirement. Production/main untouched.
+
+
+## BSE-first historical rescue continuation (16 October 2026, Development)
+
+Owner requested all remaining 253 historical quarter results, BSEIndiaApi primary and Trendlyne fallback. Work executed, full R4 **NOT PASS**.
+
+- General Development BSE pipeline added at scripts/results/r4-bse-historical-batch.py: bounded company-specific official financial announcement discovery, original PDF retrieval, per-page/PDF-geometry financial text interpretation, period/issuer/scope/units and three-metric validation, original SHA256 and immutable R2 evidence, compact Supabase observations, R4 independent source selection, plus stage-specific diagnostics and tests.
+- GitHub four-shard initial run 38938316679 (https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38938316679) scanned 114 equity identities and 253 less one previously qualified source slots, but admitted zero new quarters from the generic parser. Revised run 38940030319 (https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38940030319) improved diagnostic detail/geometry; no newly selected generic candidate independently established at report time. Never equate a successful fetch with a qualified financial result.
+- Original official BSE BEL September 2024 PDF (https://www.bseindia.com/xml-data/corpfiling/AttachHis/2c66684c-6ab1-4b53-a142-887e4f092ef0.pdf); SHA256 a0cf85d451ba3f0cffa9c74c7a21757cda273f9425c506d6750b2da8e330ac56, visibly audited first Consolidated quarter column, issuer Bharat Electronics Limited, BSE 500049 and canonical ISIN INE263A01024. Revenue 4604.90 crore, period profit 1092.78 crore, diluted EPS 1.50.
+- Original official BSE BEL December 2024 PDF (https://www.bseindia.com/xml-data/corpfiling/AttachHis/119a097d-eaa1-4c26-82c4-6fe22c064c96.pdf); SHA256 38065e01963687c9df8dee365ad7e16d51604674dab5100b96ed7b83e667213b, visibly audited original Consolidated quarter first column. Revenue 5770.69 crore, period profit 1311.60 crore, diluted EPS 1.79.
+- Pinned original-source process preserved both PDFs and their SHA-locked manifests to Dev R2, stored six financial observations and independently R4 source-selected all six without overriding previous sources. Workflows 38940256838 and 38940936804 both terminal SUCCESS:
+  https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38940256838
+  https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38940936804
+
+Exact **live independent Development Supabase source-selected result readback**:
+
+| Period | Qualified / 262 | Unresolved |
+| --- | ---: | ---: |
+| Sep 2024 | 170 | 92 |
+| Dec 2024 | 174 | 88 |
+| Mar 2025 | 222 | 40 |
+| Jun 2025 | 231 | 31 |
+| TOTAL historical | **797 / 1048** | **251** |
+
+Prior starting count was 795/1048, 253 unresolved. Only **2 newly qualified historical BEL quarters** were proven; do not claim comprehensive repair or financial R4 PASS. Combined eight-quarter count would be 1827/2096 if paused 18 R3 gaps remain unchanged; re-read current displayed scope before treating as a separately verified aggregate.
+
+Trendlyne MCP remains an authorized active backend source with 239 MATCHED identities and 26 stored Results R3 gap captures (13 parameter + 13 document search successful 16 Oct 2026), but these are mixed-source review payloads rather than proven historical exact three-metric original quarters. No new direct, authenticated Trendlyne historical-quarter retrieval was performed by this continuation, and no Trendlyne historical data was promoted. Do not state that the Trendlyne fallback is fully implemented or that 251 missing quarters are unavailable from external exchanges.
+
+**Remaining blockers:** source-specific PDF table structures, front page combined scope, row geometry and corrupted text layers, true issuer and pre/post corporate-action chronology, original revisions, and genuine prelisting/demerger exceptions. Expand source-specific signed-original adapters, qualified old-ISIN evidence, and explicit prelisting classifications without downgrading evidence. Preserve R3 pause, Dev isolation, historical as-reported EPS, and all V1-4 investment-score authority.
