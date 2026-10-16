@@ -104,3 +104,17 @@ Last measured complete quarterly cohort remains **233/262**, leaving 29 companie
 Prior conflicting originals in seven gaps must not be force-selected. STARHEALTH is a general insurer with a different exchange original statement and premium/PAT metrics; using ordinary operating revenue and diluted EPS requires separately evidenced, industry-appropriate metric admission and cannot be assumed. TDPOWERSYS original ISIN mismatch is now narrowly bridged, but its new source selection has not yet been independently verified.
 
 **Status: R3 still INCOMPLETE** despite substantial progress. UI requires refresh after final source readback and must not be claimed 262/262 until all companies satisfy genuine R4 selection. No Production/main/V1-4 canonical research changes.
+
+## Split-targeted R3 verification — 249/262 confirmed
+
+After the protected ANGELONE and TDPOWERSYS repair, independent Supabase Development readback shows **249 of 262 equities** have the four source-selected same-filing 2025-09/2025-12/2026-03/2026-06 Revenue (or bank NII), PAT, diluted EPS triplets, up 16 companies from 233/262 at the beginning of this recovery. These are selected original-source facts, not merely acquired source documents. **13 companies and 18 exact company-quarter slots remain unqualified.**
+
+The targeted Development-only GitHub workflow `.github/workflows/results-r3-targeted-split-recovery.yml` (commit 1e8320c) acquired and ran R4 for ANGELONE and TDPOWERSYS. R4 `fundamental_observation_decisions` showed all four quarters selected for both companies at 2026-10-16T05:06:28Z. ANGELONE September and December 2025 original consolidated statements were acquired with proven pre-split ISIN `INE732I01013`, current ISIN `INE732I01021`, and original diluted EPS retained (22.71 and 28.79 respectively); no share-price rebasing or EPS adjustment took place. TDPOWERSYS had all four original quarters selected using historical ISIN `INE419M01027`, current `INE419M01035`, under NSE/CML/75855.
+
+The 13 remaining exceptions in the locked four quarter scope, as of this readback:
+- Single missing Sep 2025: 360ONE, BDL, ICICIAMC, JIOFIN.
+- Single missing Mar 2026: COROMANDEL, DATAPATTNS, MGL, YATRA, ZAGGLE.
+- Single missing Dec 2025: WELSPUNLIV.
+- Two missing Sep/Dec 2025: AVANTIFEED, VAML.
+- Four missing Sep/Dec 2025 & Mar/Jun 2026: STARHEALTH (insurer-specific general-insurance financial statement format, not ordinary revenue/PAT/EPS).
+All original issuer revision conflicts and publication uncertainty must remain explicit; older or other-scope/other-quarter records are not substitutions. Neither UI nor final acceptance may claim 262/262 before the gate passes. Production/main unchanged.
