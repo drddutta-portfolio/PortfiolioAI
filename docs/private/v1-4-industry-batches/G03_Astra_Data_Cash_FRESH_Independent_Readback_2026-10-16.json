@@ -1,0 +1,2888 @@
+{
+  "verifiedAtUtc": "2026-10-16T16:08:58Z",
+  "implementationHead": "3913590347e811cca9e68e3d6734f2c7fc29ee4b",
+  "sourceAuthoritySha256": "00fffce1d4289eaed604b6e87f9c93b5335bde3664ba1cceb16413746075d01d",
+  "beforeSelected": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "snapshot_id": "29f70e10-6f75-4a18-b6a3-c26712b76bf5",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "8f834bf3-1b99-4474-8c53-9bc0475a7a20",
+      "selected_at": "2026-10-16 04:10:34.515306+00",
+      "blockers": 8,
+      "fundamental_observations": 44,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "snapshot_id": "5bf62a80-c6e2-4971-bfac-420d951b62d7",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "b79ab49a-2b1f-49a7-b54c-8e0a568582fe",
+      "selected_at": "2026-10-16 04:10:56.386687+00",
+      "blockers": 8,
+      "fundamental_observations": 24,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "snapshot_id": "12d732a6-5745-4fb8-a69d-22c7bded6a82",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "240f7825-6f33-4921-9b95-7f58f441a116",
+      "selected_at": "2026-10-16 04:10:42.365571+00",
+      "blockers": 8,
+      "fundamental_observations": 76,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "snapshot_id": "0abd559f-6a0a-45a4-b4c3-8b510ff361aa",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "127924c7-8d70-478c-a87a-44f8e7558816",
+      "selected_at": "2026-10-16 04:11:05.004121+00",
+      "blockers": 8,
+      "fundamental_observations": 48,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "snapshot_id": "1a94ced6-7f71-4e35-969f-cfe73d246786",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "6c0696a6-16d4-4949-8fe0-63c85a4c1aed",
+      "selected_at": "2026-10-16 04:10:25.620108+00",
+      "blockers": 8,
+      "fundamental_observations": 81,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "snapshot_id": "27d916af-e290-41ef-9b0b-647a6844ff8a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "58f27dd2-3211-404e-85eb-973c84b3b6bf",
+      "selected_at": "2026-10-16 04:10:49.683657+00",
+      "blockers": 8,
+      "fundamental_observations": 39,
+      "requirement_reviews": 2
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "snapshot_id": "97c13456-51d7-46bb-b7cf-f75d1fced620",
+      "snapshot_status": "READY",
+      "selection_id": "e452af5f-12c2-46e9-8d92-5c674d56b97a",
+      "selected_at": "2026-10-16 03:06:05.496931+00",
+      "blockers": 0,
+      "fundamental_observations": 57,
+      "requirement_reviews": 26
+    }
+  ],
+  "afterSelected": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "snapshot_id": "cee34770-5d48-4a0e-97df-30a5cef2effe",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "eb5930cd-8bbb-49a6-845b-4156e8f671bc",
+      "selection_run_id": "dd0ec829-a3a1-483d-a903-12a3ddef8a50",
+      "evaluation_as_of": "2026-10-16 16:05:22.127335+00",
+      "selected_at": "2026-10-16 16:05:53.980755+00",
+      "execution_grant_id": "0de76af7-54ca-4e77-a000-429944f6f92f",
+      "blockers": 7,
+      "fundamental_observations": 44,
+      "requirement_reviews": 5,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "7529c4a1-f0df-5dbf-ac50-39148e6b2672",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "06bc4acf-ab78-51aa-a66f-8f3444bb00f2"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "FRESH",
+          "reason": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "25af8f72-dd0d-567e-a87f-b81629f6ba73",
+          "required": true,
+          "normalized_value": {
+            "series": [
+              {
+                "id": "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2024-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2023-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:38.414+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.767131",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "99b9f355-c9a1-55ab-aad5-c826aacdba7f",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2025-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2024-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:39.52+00:00",
+                "boolean_value": null,
+                "numeric_value": "-0.405212",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "c6a37709-70f9-564d-ad93-3f67c4ba7a11",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "d369d215-f7a3-54fb-a610-d51216b8b908",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2026-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2025-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:40.569+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.295353",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "25af8f72-dd0d-567e-a87f-b81629f6ba73",
+                "consolidation_scope": "STANDALONE"
+              }
+            ],
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+                "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+                "d369d215-f7a3-54fb-a610-d51216b8b908"
+              ],
+              "componentSeries": [
+                {
+                  "reviewId": "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+                  "periodEnd": "2024-03-31",
+                  "components": {
+                    "pat": "18169.00",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2024,
+                    "cfoOriginal": "13938.00",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-8720.00",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.767131",
+                    "derived": true,
+                    "cfoCrore": "139.38",
+                    "fcfCrore": "52.18",
+                    "patCrore": "181.69",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "87.20",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+                  "periodEnd": "2025-03-31",
+                  "components": {
+                    "pat": "22181.00",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2025,
+                    "cfoOriginal": "-8988.00",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-10643.00",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "-0.405212",
+                    "derived": true,
+                    "cfoCrore": "-89.88",
+                    "fcfCrore": "-196.31",
+                    "patCrore": "221.81",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "106.43",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "d369d215-f7a3-54fb-a610-d51216b8b908",
+                  "periodEnd": "2026-03-31",
+                  "components": {
+                    "pat": "27137.00",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2026,
+                    "cfoOriginal": "8015.00",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-7206.00",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.295353",
+                    "derived": true,
+                    "cfoCrore": "80.15",
+                    "fcfCrore": "8.09",
+                    "patCrore": "271.37",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "72.06",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                }
+              ],
+              "sourceRecordIds": [
+                "99b9f355-c9a1-55ab-aad5-c826aacdba7f",
+                "c6a37709-70f9-564d-ad93-3f67c4ba7a11",
+                "25af8f72-dd0d-567e-a87f-b81629f6ba73"
+              ],
+              "documentSourceIds": [],
+              "financialContract": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+              "researchDocumentIds": [
+                "42a9e594-0667-5976-add9-7b27e440d552",
+                "fd2574dc-64ca-5b87-ae0e-ddd125563c1c"
+              ],
+              "sourcePayloadHashes": [
+                "fddba690396dbb252e2181dfff3b0d5185c1838739f9e78d981105804efee37d",
+                "365f69cc51daafef8ebf75bb0d3fa38680895633f43a4af1e7fa00307f18e034",
+                "1a55208bcba193c5be841850f5d72dc315083895f149303fdc65a6286f22ff67"
+              ],
+              "financialContractSha256": "00fffce1d4289eaed604b6e87f9c93b5335bde3664ba1cceb16413746075d01d",
+              "providerCfoRegistryUnchanged": true,
+              "originalComparativesPreserved": true,
+              "historicalPitAvailabilityNotClaimed": true
+            },
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1"
+          },
+          "selected_evidence": "d369d215-f7a3-54fb-a610-d51216b8b908"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "c4034e3d-0cff-55e9-ade4-8fd4b8a37470",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "e3c34f0a-ec6c-5267-aedd-9fd3f0a28a34"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "snapshot_id": "5bf62a80-c6e2-4971-bfac-420d951b62d7",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "b79ab49a-2b1f-49a7-b54c-8e0a568582fe",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:56.386687+00",
+      "execution_grant_id": "e299026d-a7de-44fd-ad41-36d712158ea9",
+      "blockers": 8,
+      "fundamental_observations": 24,
+      "requirement_reviews": 2,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "29374fc1-467a-5ddd-a007-2a868c66a52c",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "8fc21ff6-4686-5b57-a85c-d60a75f5d234"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "required": true,
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "FC Est. 1Y fwd Free Cash Flow Growth Ann. %",
+                "numericValue": -1196.71
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": -119.98
+              },
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -1958.69
+              }
+            ]
+          },
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "e2365890-d83a-5cf2-a974-98453944a0f6",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "4a532b17-336f-5a1e-a9e5-af730e2ab66b"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "snapshot_id": "12d732a6-5745-4fb8-a69d-22c7bded6a82",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "240f7825-6f33-4921-9b95-7f58f441a116",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:42.365571+00",
+      "execution_grant_id": "307822c3-41b3-48cb-a1be-19b58d7541cc",
+      "blockers": 8,
+      "fundamental_observations": 76,
+      "requirement_reviews": 2,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "58c41508-79ff-5da3-ac11-f4816f25d0d8",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "d8226397-a1fc-52ad-a279-82afeceefa6f"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "required": true,
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": 94.47
+              },
+              {
+                "label": "Operating Cash Flow 3Y Growth %",
+                "numericValue": 2558.34
+              }
+            ]
+          },
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "52b74a5f-e53e-5286-a6ce-7abea1faa30d",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "3ee1eb61-c472-5c6c-a7bc-8bc129fbf428"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "snapshot_id": "0abd559f-6a0a-45a4-b4c3-8b510ff361aa",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "127924c7-8d70-478c-a87a-44f8e7558816",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:11:05.004121+00",
+      "execution_grant_id": "84842e9d-08ea-4e75-af54-544a154d228d",
+      "blockers": 8,
+      "fundamental_observations": 48,
+      "requirement_reviews": 2,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "ed55dc41-4d33-5615-ae57-f07d362f9ac4",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "45b45cc7-1f8d-5be5-af4d-fff32f1db586"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "REVIEW_REQUIRED",
+          "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "d2af1a1a-830f-5258-a098-6ca7a8ea087f",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "fb83865e-fdb7-5d0c-ac7a-af31a97607c4"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "snapshot_id": "f9f291d3-6bf3-4323-a56f-d6d78b1c8f35",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "4f8a3646-287c-4189-b869-21121994e780",
+      "selection_run_id": "dd0ec829-a3a1-483d-a903-12a3ddef8a50",
+      "evaluation_as_of": "2026-10-16 16:05:22.127335+00",
+      "selected_at": "2026-10-16 16:05:39.243343+00",
+      "execution_grant_id": "77007014-38e0-46eb-a6a8-c532a89fba46",
+      "blockers": 7,
+      "fundamental_observations": 81,
+      "requirement_reviews": 5,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "5ab11dcf-ec37-571f-ab4f-38dcf87406ab",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "c5f61f88-30c5-5881-abcd-9cc1f37d8e3e"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "FRESH",
+          "reason": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "3cc921bf-721c-585b-a88b-619011d23efc",
+          "required": true,
+          "normalized_value": {
+            "series": [
+              {
+                "id": "82cea981-6f80-5520-a8a7-1624f9916a54",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2024-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2023-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:24.481+00:00",
+                "boolean_value": null,
+                "numeric_value": "-1.658843",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "637a428a-7aa2-5850-a27a-9b29e75978dc",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2025-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2024-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:26.302+00:00",
+                "boolean_value": null,
+                "numeric_value": "-0.690016",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "f6d967d6-d6c0-5c36-a148-bf8f078c2762",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2026-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2025-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-16T15:52:28.445+00:00",
+                "boolean_value": null,
+                "numeric_value": "2.114063",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "3cc921bf-721c-585b-a88b-619011d23efc",
+                "consolidation_scope": "STANDALONE"
+              }
+            ],
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "82cea981-6f80-5520-a8a7-1624f9916a54",
+                "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+                "1b1748d8-cf57-5f44-a0fd-968d278b1b2e"
+              ],
+              "componentSeries": [
+                {
+                  "reviewId": "82cea981-6f80-5520-a8a7-1624f9916a54",
+                  "periodEnd": "2024-03-31",
+                  "components": {
+                    "pat": "11299.07",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2024,
+                    "cfoOriginal": "-18743.38",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-4717.61",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "-1.658843",
+                    "derived": true,
+                    "cfoCrore": "-187.43",
+                    "fcfCrore": "-234.61",
+                    "patCrore": "112.99",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "47.18",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+                  "periodEnd": "2025-03-31",
+                  "components": {
+                    "pat": "14338.54",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2025,
+                    "cfoOriginal": "-9893.82",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-7537.02",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "-0.690016",
+                    "derived": true,
+                    "cfoCrore": "-98.94",
+                    "fcfCrore": "-174.31",
+                    "patCrore": "143.39",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "75.37",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e",
+                  "periodEnd": "2026-03-31",
+                  "components": {
+                    "pat": "17783.73",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2026,
+                    "cfoOriginal": "37595.92",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-8223.82",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "2.114063",
+                    "derived": true,
+                    "cfoCrore": "375.96",
+                    "fcfCrore": "293.72",
+                    "patCrore": "177.84",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "82.24",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                }
+              ],
+              "sourceRecordIds": [
+                "637a428a-7aa2-5850-a27a-9b29e75978dc",
+                "f6d967d6-d6c0-5c36-a148-bf8f078c2762",
+                "3cc921bf-721c-585b-a88b-619011d23efc"
+              ],
+              "documentSourceIds": [],
+              "financialContract": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+              "researchDocumentIds": [
+                "358b4160-aa28-5c8a-aabf-4a615b158315",
+                "abce290e-d490-5722-a862-ce9a6f53e2e3"
+              ],
+              "sourcePayloadHashes": [
+                "4686af0aaa19607663af21245887f81c2e10d7885826351cbce740f3fa983395",
+                "069bed258c8ca1a785907a73b37a895e300c960c0f40c68d42f16fe8a6b00692",
+                "64b9f8882db6034a0f345bb2838ce065cf5361ff03d2913ff145b000c1ac6bab"
+              ],
+              "financialContractSha256": "00fffce1d4289eaed604b6e87f9c93b5335bde3664ba1cceb16413746075d01d",
+              "providerCfoRegistryUnchanged": true,
+              "originalComparativesPreserved": true,
+              "historicalPitAvailabilityNotClaimed": true
+            },
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1"
+          },
+          "selected_evidence": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "102898a4-bd50-5f2d-ae32-e0cec7eba9da",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "44c403b8-3ad9-562a-aa2e-c1de27cae5b3"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "snapshot_id": "27d916af-e290-41ef-9b0b-647a6844ff8a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "58f27dd2-3211-404e-85eb-973c84b3b6bf",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:49.683657+00",
+      "execution_grant_id": "de358612-2951-4a46-a182-3305c6a4466d",
+      "blockers": 8,
+      "fundamental_observations": 39,
+      "requirement_reviews": 2,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "550a6aae-54c3-58d4-ad86-ea5adee0872a",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "98a76748-e8ba-5f78-a591-4e488658bb44"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "required": true,
+          "normalized_value": {
+            "state": "AVAILABLE",
+            "evidenceCode": "CFO_FCF_CONVERSION",
+            "minimumPeriods": 1,
+            "matchedSections": [
+              {
+                "label": "Operating Cash Flow YoY Growth %",
+                "numericValue": -20.06
+              }
+            ]
+          },
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "fb5d6da2-bdc7-5211-a4c6-06305e381a2f",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "d180096d-6b1d-59b2-a9df-ec9de7e9a32a"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "snapshot_id": "97c13456-51d7-46bb-b7cf-f75d1fced620",
+      "snapshot_status": "READY",
+      "selection_id": "e452af5f-12c2-46e9-8d92-5c674d56b97a",
+      "selection_run_id": "2e0ae209-1a56-4d8d-b9ae-b7b493c196d8",
+      "evaluation_as_of": "2026-10-16 03:05:50.009335+00",
+      "selected_at": "2026-10-16 03:06:05.496931+00",
+      "execution_grant_id": "2b79173f-f991-4f72-ac2c-9cacb842cd0f",
+      "blockers": 0,
+      "fundamental_observations": 57,
+      "requirement_reviews": 26,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "d66deded-c38c-5c07-a054-6597b302f6f5"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "FRESH",
+          "reason": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+          "required": true,
+          "normalized_value": {
+            "series": [
+              {
+                "id": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2024-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2023-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:21.555+00:00",
+                "boolean_value": null,
+                "numeric_value": "1.150853",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "c4e5db08-c412-59b7-a578-52b23332effd",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2025-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2024-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:23.685+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.086465",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "c68f9112-c7e0-585c-bf59-ae75652111c5",
+                "consolidation_scope": "STANDALONE"
+              },
+              {
+                "id": "bfb36725-d431-550b-8b75-179fe5459444",
+                "unit": "RATIO",
+                "currency": null,
+                "date_value": null,
+                "period_end": "2026-03-31",
+                "text_value": null,
+                "fresh_until": "2027-03-31T00:00:00+00:00",
+                "metric_code": "CFO_FCF_CONVERSION",
+                "period_type": "YEAR",
+                "source_code": "COMPANY_EXCHANGE_FILING",
+                "period_start": "2025-04-01",
+                "published_at": null,
+                "retrieved_at": "2026-10-15T04:42:25.396+00:00",
+                "boolean_value": null,
+                "numeric_value": "0.247060",
+                "evidence_status": "AVAILABLE",
+                "source_record_id": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+                "consolidation_scope": "STANDALONE"
+              }
+            ],
+            "reviewedEvidence": {
+              "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+              "reviewIds": [
+                "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                "bfb36725-d431-550b-8b75-179fe5459444"
+              ],
+              "componentSeries": [
+                {
+                  "reviewId": "1496f8e7-d48f-5349-b5a6-b39c548657bb",
+                  "periodEnd": "2024-03-31",
+                  "components": {
+                    "pat": "402000",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2024,
+                    "cfoOriginal": "464801",
+                    "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "219",
+                    "cashCapexOutflow": "-64714",
+                    "excludedMutualFundGain": "1939"
+                  },
+                  "derivation": {
+                    "cfoPat": "1.150853",
+                    "derived": true,
+                    "cfoCrore": "4626.43",
+                    "fcfCrore": "3979.29",
+                    "patCrore": "4020.00",
+                    "adjustmentKind": "PORTFOLIOAI_CLASSIFICATION_NORMALIZATION",
+                    "cashCapexCrore": "647.14",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "cdf75b44-5f76-5e79-8c9f-8a7b7bb4653f",
+                  "periodEnd": "2025-03-31",
+                  "components": {
+                    "pat": "528825",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2025,
+                    "cfoOriginal": "45725",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-100407",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.086465",
+                    "derived": true,
+                    "cfoCrore": "457.25",
+                    "fcfCrore": "-546.82",
+                    "patCrore": "5288.25",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "1004.07",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                },
+                {
+                  "reviewId": "bfb36725-d431-550b-8b75-179fe5459444",
+                  "periodEnd": "2026-03-31",
+                  "components": {
+                    "pat": "604848",
+                    "unit": "INR_LAKH",
+                    "scope": "STANDALONE",
+                    "fiscalYear": 2026,
+                    "cfoOriginal": "149434",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "excludedRental": "0",
+                    "cashCapexOutflow": "-98312",
+                    "excludedMutualFundGain": "0"
+                  },
+                  "derivation": {
+                    "cfoPat": "0.247060",
+                    "derived": true,
+                    "cfoCrore": "1494.34",
+                    "fcfCrore": "511.22",
+                    "patCrore": "6048.48",
+                    "adjustmentKind": "ISSUER_REPORTED",
+                    "cashCapexCrore": "983.12",
+                    "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+                    "calculationAuthority": "deriveG03CashConversion",
+                    "issuerReportedRestatement": false
+                  }
+                }
+              ],
+              "sourceRecordIds": [
+                "c4e5db08-c412-59b7-a578-52b23332effd",
+                "c68f9112-c7e0-585c-bf59-ae75652111c5",
+                "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10"
+              ],
+              "documentSourceIds": [],
+              "financialContract": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+              "researchDocumentIds": [
+                "475da4cc-4fc5-5970-aae2-052d109eea94",
+                "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+              ],
+              "sourcePayloadHashes": [
+                "ca7e34640f47f8773f00057c376ad7f674b9ae00cfec1f07a7bed7fb1b998bc9",
+                "ee35054e08a8c999f3beb94e78efbb2d70dcdbf8ba46f8e04164a7933c9cd7ed",
+                "d281e6827070da4fe892ab2e1f59e1c56fef6b1dafa153fd1918d6dd540454b7"
+              ],
+              "financialContractSha256": "d12ba4ef7b7554bc2dc0cb53d83b6609fe61cf2453c3b25eeae73b5b79d618bd",
+              "providerCfoRegistryUnchanged": true,
+              "originalComparativesPreserved": true,
+              "historicalPitAvailabilityNotClaimed": true
+            },
+            "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1"
+          },
+          "selected_evidence": "bfb36725-d431-550b-8b75-179fe5459444"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_BENCHMARK_HISTORY_READY",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "FRESH",
+          "reason": "APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "9ca3ac8c-c293-5b94-a3a3-f027da3921aa",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "9d13c947-de36-5438-adfb-d055bd5b57c7"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "FRESH",
+          "reason": "APPROVED_MARGIN_PAIRS_SELECTED_UNDATED_TTM_RETAINED",
+          "source": "33bc927d-4df1-544c-a8ed-fa7f527a4110",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "9c4c9e20-643e-54a9-a096-9a7cf43dbb5f"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "b55ae585-9921-550a-a49a-8dd977003321",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "90f400e7-5f9c-5ace-a8f7-0d7f6806db4c"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "FRESH",
+          "reason": "G03_FIXED_ISSUER_SERIES_SELECTED_LEGACY_UNQUALIFIED_RETAINED",
+          "source": "19bce51f-582d-51ec-a73e-15e5a7f501de",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "7e65174e-354b-5a9d-a36f-b6a2992a88b8"
+        },
+        {
+          "code": "VALUATION",
+          "state": "FRESH",
+          "reason": "APPROVED_DATED_VALUATION_REVIEW_NO_CANONICAL",
+          "source": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+          "required": true,
+          "normalized_value": null,
+          "selected_evidence": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe"
+        }
+      ]
+    }
+  ],
+  "actualAdmission": {
+    "originals": [
+      {
+        "symbol": "ASTRAMICRO",
+        "sha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "byteLength": 8389931,
+        "archiveWrite": false,
+        "sourceId": "8375fbcd-62b0-570e-a48d-30e16b66f3d8",
+        "duplicateRegistration": "IDEMPOTENT"
+      },
+      {
+        "symbol": "ASTRAMICRO",
+        "sha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "byteLength": 6462595,
+        "archiveWrite": false,
+        "sourceId": "22f929fe-1c06-5cde-ad70-fbc20804861f",
+        "duplicateRegistration": "IDEMPOTENT"
+      },
+      {
+        "symbol": "DATAPATTNS",
+        "sha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "byteLength": 7663843,
+        "archiveWrite": false,
+        "sourceId": "281f9f71-956d-5077-a43e-465af63f3ca9",
+        "duplicateRegistration": "IDEMPOTENT"
+      },
+      {
+        "symbol": "DATAPATTNS",
+        "sha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "byteLength": 13207936,
+        "archiveWrite": false,
+        "sourceId": "bb73ccdb-a2ad-5416-af0b-a73f3607e3a7",
+        "duplicateRegistration": "IDEMPOTENT"
+      }
+    ],
+    "verifiedCells": [
+      {
+        "id": "ASTRAMICRO_CFO_2026_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Net cash inflows / (outflows) from operating activities",
+        "rowValues": [
+          "37,595.92",
+          "(9,893.82)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "37,595.92",
+        "originalValue": "37595.92",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "37595.92",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CFO_2025_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Net cash inflows / (outflows) from operating activities",
+        "rowValues": [
+          "37,595.92",
+          "(9,893.82)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(9,893.82)",
+        "originalValue": "-9893.82",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-9893.82",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_PPE_2026_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Payments for property, plant and equipment",
+        "rowValues": [
+          "(7,767.64)",
+          "(6,899.44)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "(7,767.64)",
+        "originalValue": "-7767.64",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-7767.64",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_PPE_2025_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Payments for property, plant and equipment",
+        "rowValues": [
+          "(7,767.64)",
+          "(6,899.44)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(6,899.44)",
+        "originalValue": "-6899.44",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-6899.44",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_INTANGIBLES_2026_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Payments for intangible assets",
+        "rowValues": [
+          "(456.18)",
+          "(637.58)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "(456.18)",
+        "originalValue": "-456.18",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-456.18",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_INTANGIBLES_2025_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "label": "Payments for intangible assets",
+        "rowValues": [
+          "(456.18)",
+          "(637.58)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(637.58)",
+        "originalValue": "-637.58",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-637.58",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_PAT_2026_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 208,
+        "label": "Profit for the year",
+        "rowValues": [
+          "17,783.73",
+          "14,338.54"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "17,783.73",
+        "originalValue": "17783.73",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "17783.73",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_PAT_2025_968c",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 208,
+        "label": "Profit for the year",
+        "rowValues": [
+          "17,783.73",
+          "14,338.54"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "14,338.54",
+        "originalValue": "14338.54",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "14338.54",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CFO_2025_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Net cash outflows from operating activities",
+        "rowValues": [
+          "(9,893.82)",
+          "(18,743.38)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(9,893.82)",
+        "originalValue": "-9893.82",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-9893.82",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CFO_2024_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Net cash outflows from operating activities",
+        "rowValues": [
+          "(9,893.82)",
+          "(18,743.38)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "(18,743.38)",
+        "originalValue": "-18743.38",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-18743.38",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_PPE_2025_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Payments for property, plant and equipment",
+        "rowValues": [
+          "(6,899.44)",
+          "(4,336.05)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(6,899.44)",
+        "originalValue": "-6899.44",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-6899.44",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_PPE_2024_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Payments for property, plant and equipment",
+        "rowValues": [
+          "(6,899.44)",
+          "(4,336.05)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "(4,336.05)",
+        "originalValue": "-4336.05",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-4336.05",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_INTANGIBLES_2025_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Payments for intangible assets",
+        "rowValues": [
+          "(637.58)",
+          "(381.56)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(637.58)",
+        "originalValue": "-637.58",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-637.58",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_CASH_INTANGIBLES_2024_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "label": "Payments for intangible assets",
+        "rowValues": [
+          "(637.58)",
+          "(381.56)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "(381.56)",
+        "originalValue": "-381.56",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "-381.56",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_PAT_2025_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 173,
+        "label": "Profit for the year",
+        "rowValues": [
+          "14,338.54",
+          "11,299.07"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "14,338.54",
+        "originalValue": "14338.54",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "14338.54",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "ASTRAMICRO_PAT_2024_2761",
+        "symbol": "ASTRAMICRO",
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 173,
+        "label": "Profit for the year",
+        "rowValues": [
+          "14,338.54",
+          "11,299.07"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "11,299.07",
+        "originalValue": "11299.07",
+        "originalUnit": "INR_LAKH",
+        "exactINRLakh": "11299.07",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CFO_2026_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Net cash from /(used in) operating activities (A)",
+        "rowValues": [
+          "80.15",
+          "(89.88)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "80.15",
+        "originalValue": "80.15",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "8015.00",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CFO_2025_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Net cash from /(used in) operating activities (A)",
+        "rowValues": [
+          "80.15",
+          "(89.88)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(89.88)",
+        "originalValue": "-89.88",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-8988.00",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_PPE_2026_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+        "rowValues": [
+          "(44.47)",
+          "(35.86)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "(44.47)",
+        "originalValue": "-44.47",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-4447.00",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_PPE_2025_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+        "rowValues": [
+          "(44.47)",
+          "(35.86)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(35.86)",
+        "originalValue": "-35.86",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-3586.00",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_INTANGIBLES_2026_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Purchase of intangible assets and intangible under development",
+        "rowValues": [
+          "(27.59)",
+          "(70.57)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "(27.59)",
+        "originalValue": "-27.59",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-2759.00",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_INTANGIBLES_2025_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 130,
+        "label": "Purchase of intangible assets and intangible under development",
+        "rowValues": [
+          "(27.59)",
+          "(70.57)"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(70.57)",
+        "originalValue": "-70.57",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-7057.00",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_PAT_2026_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 129,
+        "label": "Profit for the year (A)",
+        "rowValues": [
+          "271.37",
+          "221.81"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2026,
+        "literalValue": "271.37",
+        "originalValue": "271.37",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "27137.00",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_PAT_2025_ce64",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 129,
+        "label": "Profit for the year (A)",
+        "rowValues": [
+          "271.37",
+          "221.81"
+        ],
+        "rowFiscalYears": [
+          2026,
+          2025
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "221.81",
+        "originalValue": "221.81",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "22181.00",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CFO_2025_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Net cash (used in) / generated from operating activities (A)",
+        "rowValues": [
+          "(89.88)",
+          "139.38"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(89.88)",
+        "originalValue": "-89.88",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-8988.00",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CFO_2024_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Net cash (used in) / generated from operating activities (A)",
+        "rowValues": [
+          "(89.88)",
+          "139.38"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "139.38",
+        "originalValue": "139.38",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "13938.00",
+        "role": "CFO",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_PPE_2025_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+        "rowValues": [
+          "(35.86)",
+          "(46.02)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(35.86)",
+        "originalValue": "-35.86",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-3586.00",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_PPE_2024_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+        "rowValues": [
+          "(35.86)",
+          "(46.02)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "(46.02)",
+        "originalValue": "-46.02",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-4602.00",
+        "role": "CASH_PPE",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_INTANGIBLES_2025_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Purchase of intangible assets and intangible under development",
+        "rowValues": [
+          "(70.57)",
+          "(41.18)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "(70.57)",
+        "originalValue": "-70.57",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-7057.00",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_CASH_INTANGIBLES_2024_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 114,
+        "label": "Purchase of intangible assets and intangible under development",
+        "rowValues": [
+          "(70.57)",
+          "(41.18)"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "(41.18)",
+        "originalValue": "-41.18",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "-4118.00",
+        "role": "CASH_INTANGIBLES",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_PAT_2025_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 113,
+        "label": "Profit for the year (A)",
+        "rowValues": [
+          "221.81",
+          "181.69"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2025,
+        "literalValue": "221.81",
+        "originalValue": "221.81",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "22181.00",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      },
+      {
+        "id": "DATAPATTNS_PAT_2024_bf16",
+        "symbol": "DATAPATTNS",
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 113,
+        "label": "Profit for the year (A)",
+        "rowValues": [
+          "221.81",
+          "181.69"
+        ],
+        "rowFiscalYears": [
+          2025,
+          2024
+        ],
+        "fiscalYear": 2024,
+        "literalValue": "181.69",
+        "originalValue": "181.69",
+        "originalUnit": "INR_CRORE",
+        "exactINRLakh": "18169.00",
+        "role": "PAT",
+        "scope": "STANDALONE"
+      }
+    ],
+    "scopeEvidence": [
+      {
+        "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+        "pdfPage": 209,
+        "requiredFragments": [
+          "Standalone Statement of Cash Flows",
+          "March 31, 2026",
+          "Rs. Lakhs"
+        ]
+      },
+      {
+        "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+        "pdfPage": 174,
+        "requiredFragments": [
+          "Standalone Statement of Cash Flows",
+          "March 31, 2025",
+          "Rs. Lakhs"
+        ]
+      },
+      {
+        "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+        "pdfPage": 25,
+        "requiredFragments": [
+          "The Company has no subsidiaries. Hence, there is",
+          "no requirement to prepare Consolidated Financial"
+        ]
+      },
+      {
+        "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+        "pdfPage": 27,
+        "requiredFragments": [
+          "The Company has no subsidiaries. Hence, there is",
+          "no requirement to prepare Consolidated Financial"
+        ]
+      }
+    ],
+    "providerCalls": 0,
+    "canonicalMaterialization": false,
+    "acceptedReviews": 6,
+    "admissions": [
+      {
+        "symbol": "ASTRAMICRO",
+        "code": "G03_REMAINING_CASH_ADMITTED_NOT_CANONICAL_READY",
+        "results": [
+          {
+            "reviewId": "82cea981-6f80-5520-a8a7-1624f9916a54",
+            "sourceId": "637a428a-7aa2-5850-a27a-9b29e75978dc",
+            "periodEnd": "2024-03-31",
+            "derivation": {
+              "cfoCrore": "-187.43",
+              "patCrore": "112.99",
+              "cashCapexCrore": "47.18",
+              "fcfCrore": "-234.61",
+              "cfoPat": "-1.658843",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          },
+          {
+            "reviewId": "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+            "sourceId": "f6d967d6-d6c0-5c36-a148-bf8f078c2762",
+            "periodEnd": "2025-03-31",
+            "derivation": {
+              "cfoCrore": "-98.94",
+              "patCrore": "143.39",
+              "cashCapexCrore": "75.37",
+              "fcfCrore": "-174.31",
+              "cfoPat": "-0.690016",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          },
+          {
+            "reviewId": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e",
+            "sourceId": "3cc921bf-721c-585b-a88b-619011d23efc",
+            "periodEnd": "2026-03-31",
+            "derivation": {
+              "cfoCrore": "375.96",
+              "patCrore": "177.84",
+              "cashCapexCrore": "82.24",
+              "fcfCrore": "293.72",
+              "cfoPat": "2.114063",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          }
+        ],
+        "providerCalls": 0,
+        "providerApiCalls": 0,
+        "canonicalMaterialization": false,
+        "metricRegistryWrites": 0,
+        "duplicateAdmission": "IDEMPOTENT"
+      },
+      {
+        "symbol": "DATAPATTNS",
+        "code": "G03_REMAINING_CASH_ADMITTED_NOT_CANONICAL_READY",
+        "results": [
+          {
+            "reviewId": "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+            "sourceId": "99b9f355-c9a1-55ab-aad5-c826aacdba7f",
+            "periodEnd": "2024-03-31",
+            "derivation": {
+              "cfoCrore": "139.38",
+              "patCrore": "181.69",
+              "cashCapexCrore": "87.20",
+              "fcfCrore": "52.18",
+              "cfoPat": "0.767131",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          },
+          {
+            "reviewId": "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+            "sourceId": "c6a37709-70f9-564d-ad93-3f67c4ba7a11",
+            "periodEnd": "2025-03-31",
+            "derivation": {
+              "cfoCrore": "-89.88",
+              "patCrore": "221.81",
+              "cashCapexCrore": "106.43",
+              "fcfCrore": "-196.31",
+              "cfoPat": "-0.405212",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          },
+          {
+            "reviewId": "d369d215-f7a3-54fb-a610-d51216b8b908",
+            "sourceId": "25af8f72-dd0d-567e-a87f-b81629f6ba73",
+            "periodEnd": "2026-03-31",
+            "derivation": {
+              "cfoCrore": "80.15",
+              "patCrore": "271.37",
+              "cashCapexCrore": "72.06",
+              "fcfCrore": "8.09",
+              "cfoPat": "0.295353",
+              "calculationAuthority": "deriveG03CashConversion",
+              "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+              "adjustmentKind": "ISSUER_REPORTED",
+              "issuerReportedRestatement": false,
+              "derived": true
+            },
+            "reused": false
+          }
+        ],
+        "providerCalls": 0,
+        "providerApiCalls": 0,
+        "canonicalMaterialization": false,
+        "metricRegistryWrites": 0,
+        "duplicateAdmission": "IDEMPOTENT"
+      }
+    ]
+  },
+  "actualCanonicalSaves": [
+    {
+      "symbol": "ASTRAMICRO",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 7,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "dd0ec829-a3a1-483d-a903-12a3ddef8a50",
+        "evaluationAsOf": "2026-10-16T16:05:22.127335+00:00",
+        "sourceCutoffAt": "2026-10-16T16:05:22.127335+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "eb3bc12d-6d21-40ec-8bcc-054713ee91b6"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "f9f291d3-6bf3-4323-a56f-d6d78b1c8f35"
+        ],
+        "selectionIds": [
+          "4f8a3646-287c-4189-b869-21121994e780"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 7,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "dd0ec829-a3a1-483d-a903-12a3ddef8a50",
+        "evaluationAsOf": "2026-10-16T16:05:22.127335+00:00",
+        "sourceCutoffAt": "2026-10-16T16:05:22.127335+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "4cd44d45-e5c6-4696-9744-25c19f44ac8e"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "cee34770-5d48-4a0e-97df-30a5cef2effe"
+        ],
+        "selectionIds": [
+          "eb5930cd-8bbb-49a6-845b-4156e8f671bc"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    }
+  ],
+  "independentSourceAndReviewHashVerification": [
+    {
+      "reviewId": "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+      "sourceId": "99b9f355-c9a1-55ab-aad5-c826aacdba7f",
+      "sourceHash": "fddba690396dbb252e2181dfff3b0d5185c1838739f9e78d981105804efee37d",
+      "reviewHash": "26b6a14a91afc3faa817fde573dd43bbf828dfefb8e4cf67119e61a42712e71d",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+      "sourceId": "c6a37709-70f9-564d-ad93-3f67c4ba7a11",
+      "sourceHash": "365f69cc51daafef8ebf75bb0d3fa38680895633f43a4af1e7fa00307f18e034",
+      "reviewHash": "24c1b078c29416ba0919eb878ce6348a255461ae5156f1037309424502cc8aeb",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "d369d215-f7a3-54fb-a610-d51216b8b908",
+      "sourceId": "25af8f72-dd0d-567e-a87f-b81629f6ba73",
+      "sourceHash": "1a55208bcba193c5be841850f5d72dc315083895f149303fdc65a6286f22ff67",
+      "reviewHash": "321146aa0442dbd22c88401616b6ae435493175f009109363d693ac061310c4c",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "82cea981-6f80-5520-a8a7-1624f9916a54",
+      "sourceId": "637a428a-7aa2-5850-a27a-9b29e75978dc",
+      "sourceHash": "4686af0aaa19607663af21245887f81c2e10d7885826351cbce740f3fa983395",
+      "reviewHash": "68f222c559e182a2d2d8678450005772a91024f93732ffa0e688576f8be04bd5",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+      "sourceId": "f6d967d6-d6c0-5c36-a148-bf8f078c2762",
+      "sourceHash": "069bed258c8ca1a785907a73b37a895e300c960c0f40c68d42f16fe8a6b00692",
+      "reviewHash": "c0d13d9cb21453acd7714fe364a3580a611746acf52639b9e4c862bcae212361",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e",
+      "sourceId": "3cc921bf-721c-585b-a88b-619011d23efc",
+      "sourceHash": "64b9f8882db6034a0f345bb2838ce065cf5361ff03d2913ff145b000c1ac6bab",
+      "reviewHash": "c4113719ffe97cb82f299f88f4838dde4583135e98017a421b887fc64206269e",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    }
+  ],
+  "independentGrantReadback": [
+    {
+      "grant_id": "0de76af7-54ca-4e77-a000-429944f6f92f",
+      "scope": "SECURITY_IDS:4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "77007014-38e0-46eb-a6a8-c532a89fba46",
+      "scope": "SECURITY_IDS:eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    }
+  ],
+  "providerUsageEventsAcrossG03Since20261016T0900UTC": 0,
+  "currentProspective": {
+    "evaluationAsOf": "2026-10-16T16:05:22.127335+00:00",
+    "totals": {
+      "REVIEW_REQUIRED": 6,
+      "STALE": 1
+    },
+    "stocks": [
+      {
+        "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "REVIEW_REQUIRED",
+            "reason": "REPORTING_PERIOD_INVALID"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "VALUATION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+        "status": "STALE",
+        "blockers": [
+          {
+            "code": "VALUATION",
+            "state": "INSUFFICIENT",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "REVIEW_REQUIRED",
+            "reason": "REPORTING_PERIOD_INVALID"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "REVIEW_REQUIRED",
+            "reason": "REPORTING_PERIOD_INVALID"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "VALUATION",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "CFO_FCF_CONVERSION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "VALUATION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "CFO_FCF_CONVERSION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "VALUATION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "REVIEW_REQUIRED",
+            "reason": "REPORTING_PERIOD_INVALID"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "REVIEW_REQUIRED",
+            "reason": "REPORTING_PERIOD_INVALID"
+          },
+          {
+            "code": "CFO_FCF_CONVERSION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "VALUATION",
+            "state": "REVIEW_REQUIRED",
+            "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "STALE",
+            "reason": "HISTORY_LATEST_SESSION_STALE"
+          }
+        ]
+      },
+      {
+        "securityId": "92fbe654-b418-4f72-b63c-36c57aec095b",
+        "status": "REVIEW_REQUIRED",
+        "blockers": [
+          {
+            "code": "OPERATING_MARGIN_HISTORY",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "ROCE_OR_ROIC",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "CFO_FCF_CONVERSION",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "VALUATION",
+            "state": "MISSING",
+            "reason": "REQUIRED_EVIDENCE_MISSING"
+          },
+          {
+            "code": "MOMENTUM_12M_RELATIVE",
+            "state": "REVIEW_REQUIRED",
+            "reason": "HISTORY_CONTRACT_NOT_PROVEN"
+          },
+          {
+            "code": "DRAWDOWN_VOLATILITY_RISK",
+            "state": "REVIEW_REQUIRED",
+            "reason": "HISTORY_CONTRACT_NOT_PROVEN"
+          }
+        ]
+      }
+    ]
+  },
+  "preservation": {
+    "otherFiveSelectionsUnchanged": true,
+    "allSevenFundamentalObservationCountsUnchanged": true,
+    "belAcceptedReviews": 26,
+    "belFundamentalObservations": 57,
+    "migrations": 0,
+    "schedulerChanges": 0,
+    "productionMainChanges": 0,
+    "newReadyStocks": 0,
+    "newReadyValuePaise": 0
+  },
+  "workflows": {
+    "qualificationOnly": 38879887273,
+    "actualAdmission": 38927270887,
+    "canonicalValidationAndSave": 38929136074,
+    "fullRepositoryVerification": 38879945134,
+    "architectureGuard": 38879945243
+  },
+  "deployedFunctions": [
+    {
+      "name": "v14-g02-official-source-import",
+      "version": 11,
+      "sha256": "87567c65d1920a8eb60e626b341384c92ee5982d8bf7ce94be1e5d751c15a6b4"
+    },
+    {
+      "name": "v14-g02-document-admission",
+      "version": 27,
+      "sha256": "9bab3b45be638501cc7b22ec7fe027a6decf0a5b888d0b44a52ae753982b566d"
+    },
+    {
+      "name": "p7-ic2-materialize-readiness",
+      "version": 80,
+      "sha256": "a937051a22526dec6ec7d188606b114d14d5ea90d2e9441721bcc5a5795e18bc"
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # PortfolioAI Development Status
 
+## G03 Astra/Data cash conversion persisted FRESH — 16 October 2026, 21:35 IST
+
+Independent Development selected-snapshot readback confirms **CFO_FCF_CONVERSION FRESH for ASTRAMICRO and DATAPATTNS**, three matched standalone years each (FY2024–FY2026). Six actual annual reviews cleared **two mandatory requirements**; both stocks decreased **8 → 7 blockers** and remain REVIEW_REQUIRED. Other four remaining stocks retain eight blockers each; remaining-six selected blockers **48 → 46**. All prior documentary findings and five unaffected selections are preserved. Four retained PDFs/32 paired source cells were verified without reacquisition; existing Decimal authority derives cash conversion and FCF with negative years retained. Generic provider CFO and all seven fundamental-observation counts remain unchanged.
+
+Freshness must not be conflated with stored historical selection: BEL's earlier selected READY snapshot remains unchanged, but tonight's read-only validation returns **STALE with three non-FRESH market/price-dependent requirements** after its session proof expired. **Current prospective G03 READY is 0/7 / ₹0 current eligible frozen READY value** at 21:35 IST. The prior selected BEL ₹26,789 READY assessment remains auditable at its original evaluation; it is not permanent current readiness or a regression in accepted financial/documentary evidence.
+
+Actual qualification **38879887273**, admission **38927270887** and guarded two-stock saves **38929136074** passed. All six source/review hashes independently recompute; duplicate admissions/grant issuance are idempotent, each grant consumed once and replay rejected. Importer v11, admission v27 and canonical v80 are ACTIVE with matching deployment readback and preserved existing auth/BANK/BEL code. Implementation `3913590347e811cca9e68e3d6734f2c7fc29ee4b` passed Full Repository Verification **38879945134** and Architecture Guard **38879945243**; local **516 Edge / 52 preserved-live package tests**, three candidate entrypoint Deno checks and seven Python qualification tests passed. No migration, provider usage event, scheduler, Production/main or merge change occurred.
+
+[Actual cash execution, preserved adverse facts and remaining work](private/v1-4-industry-batches/G03_Astra_Data_Cash_Execution_2026-10-16.md) · [Independent selected/source/grant readback](private/v1-4-industry-batches/G03_Astra_Data_Cash_FRESH_Independent_Readback_2026-10-16.json).
+
 ## Remaining G03 documentary progress persisted — 16 October 2026, 09:40 IST
 
 ASTRAMICRO, DATAPATTNS, MTARTECH, HAL, GRSE and ZENTEC now each have **BUSINESS_DURABILITY and OWNERSHIP_GOVERNANCE persisted FRESH**: twelve cleared mandatory requirements. Seven original registrations, twelve delegated reviews and six stock-scoped canonical saves executed successfully, with independent source/review hash and selected-snapshot readback. Current comparable blockers are **10 → 8 per remaining stock, 60 → 48 overall**. All six remain REVIEW_REQUIRED; no newly READY stock/value is claimed. Adverse governance findings are preserved.
