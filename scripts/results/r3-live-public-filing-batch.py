@@ -82,7 +82,7 @@ HISTORICAL_RESULTS_IDENTITIES = {
     "KOTAKBANK":{
         "source_isin":"INE237A01028","current_isin":"INE237A01036",
         "ex_date":"2026-01-14","split_new_per_old":"5",
-        "evidence":"Kotak Mahindra Bank issuer split disclosure 2026-01-16",
+        "evidence":"Kotak Mahindra Bank issuer split disclosure 2026-01-16; MSE/LIST/18443/2026 2026-01-09",
     },
     "ANGELONE":{
         "source_isin":"INE732I01013","current_isin":"INE732I01021",
