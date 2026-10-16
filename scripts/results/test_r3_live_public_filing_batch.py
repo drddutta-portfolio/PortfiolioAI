@@ -30,6 +30,30 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_r3_requires_three_selected_metrics_from_the_same_original(self):
+        rows=[
+            ("2025-09-30","CONSOLIDATED","issuer-1","OPERATING_REVENUE_QUARTER"),
+            ("2025-09-30","CONSOLIDATED","issuer-1","NET_PROFIT_QUARTER"),
+            ("2025-09-30","CONSOLIDATED","issuer-2","EPS_DILUTED"),
+            ("2025-12-31","CONSOLIDATED","issuer-3","OPERATING_REVENUE_QUARTER"),
+            ("2025-12-31","CONSOLIDATED","issuer-3","NET_PROFIT_QUARTER"),
+            ("2025-12-31","CONSOLIDATED","issuer-3","EPS_DILUTED"),
+        ]
+        self.assertEqual(module.completed_quarters(rows),{"2025-12-31"})
+        rows.append(("2025-09-30","CONSOLIDATED","issuer-1","EPS_DILUTED"))
+        self.assertEqual(module.completed_quarters(rows),{"2025-09-30","2025-12-31"})
+
+    def test_r3_unionbank_uses_bank_nii_pnl_and_eps_contract(self):
+        self.assertIn("UNIONBANK",module.BANK_TICKERS)
+        self.assertIn("BANKINDIA",module.BANK_TICKERS)
+        bank_rows=[
+            ("2026-06-30","STANDALONE","issuer-bank","NET_INTEREST_INCOME_QUARTER"),
+            ("2026-06-30","STANDALONE","issuer-bank","NET_PROFIT_QUARTER"),
+            ("2026-06-30","STANDALONE","issuer-bank","EPS_DILUTED"),
+        ]
+        self.assertEqual(module.completed_quarters(bank_rows,banking=True),{"2026-06-30"})
+        self.assertEqual(module.completed_quarters(bank_rows,banking=False),set())
+
     def test_r4_requalification_ignores_unselected_observation_presence(self):
         found=module.missing_r4_selected_quarters([("2026-03-31",),("2026-12-31",)])
         self.assertEqual(found,{"2026-03-31"})
