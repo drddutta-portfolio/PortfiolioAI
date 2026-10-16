@@ -108,6 +108,18 @@ def extract(raw,metadata,symbol,isin):
    return None,"SOURCE_EMBEDDED_ISIN_MISMATCH"
   reported_isin="INE419M01027"
   independent_isin_evidence="NSE_CML75855_TDPOWERSYS_2024_PRE_SPLIT_ISIN"
+ # KOTAKBANK's historical Rs.5 share was explicitly mapped to the Rs.1
+ # canonical issue by MSE/LIST/18443/2026 (Jan 09, 2026), ex Jan 14.
+ # Refuse ambiguous embedded company identity or a different source ISIN.
+ if (reported_isin is None or str(reported_isin).strip().upper() in
+     ("","NA","N/A","NONE","NOT AVAILABLE","-","NOTLISTED")) and symbol=="KOTAKBANK" and isin=="INE237A01036":
+  embedded={((node.text or "").strip().upper()) for node in root.iter()
+            if local(node.tag).lower() in ("isin","isinnumber","isincode")
+            and (node.text or "").strip()}
+  if embedded and embedded!={"INE237A01028"}:
+   return None,"SOURCE_EMBEDDED_ISIN_MISMATCH"
+  reported_isin="INE237A01028"
+  independent_isin_evidence="MSE_LIST18443_KOTAKBANK_2024_PRE_SPLIT_ISIN"
  link=_r3.historical_result_identity(symbol,isin,reported_isin,end) if reported_isin!=isin else None
  if reported_isin!=isin and not link:return None,"UNKNOWN_HISTORICAL_ISIN"
  v=metadata.get("consolidated")
