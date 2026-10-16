@@ -4,6 +4,7 @@ from collections import Counter
 from pathlib import Path
 import fitz,psycopg
 from r4_ocr_geometry import extract_ocr
+from r4_recovery_queue import task_id,attempt_all
 spec=importlib.util.spec_from_file_location("batch",Path(__file__).with_name("r4-bse-historical-batch.py"))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
@@ -18,7 +19,7 @@ def main():
     client=batch.r2_client();counts=Counter();details=[]
     with psycopg.connect(url) as db:
         missing=batch.candidates(db);db.rollback()
-        targets={symbol:(isin,sid,name,periods) for i,(symbol,isin,sid,name,periods) in enumerate(missing) if i%8==args.shard}
+        targets={symbol:(isin,sid,name,periods) for symbol,isin,sid,name,periods in missing if int(task_id(sid,"OCR",None,{}),16)%8==args.shard}
         sources={}
         for filename in Path(args.reports).rglob("bse-original-shard-*.json"):
             report=json.loads(filename.read_text())
@@ -36,9 +37,10 @@ def main():
                 try:
                     scrip=bse.get_scrip_candidate(symbol)["bse_scrip_code"]
                     legal=batch.verified_issuer(bse,scrip,isin)
-                    for period in periods:
+                    def collect_period(period):
                         approved=[];entry={"symbol":symbol,"period":period,"sources":[]}
-                        for digest,source in sources.get((symbol,period),{}).items():
+                        def collect_source(pair):
+                            digest,source=pair
                             raw=client.get_object(Bucket=batch.BUCKET,Key=source["original_r2_key"])["Body"].read()
                             if batch.sha(raw)!=digest:raise RuntimeError("IMMUTABLE_ORIGINAL_MISMATCH")
                             counts["retained_originals_read"]+=1
@@ -71,6 +73,11 @@ def main():
                             except ValueError as error:
                                 counts["ocr_rejected"]+=1
                                 entry["sources"].append({"sha256":digest,"status":"REVIEW_REQUIRED","reason":str(error)[:300]})
+                        def source_error(pair,error):
+                            db.rollback();counts["source_errors"]+=1
+                            entry["sources"].append({"sha256":pair[0],"status":"RETRY_REQUIRED",
+                                "reason":type(error).__name__+":"+str(error)[:200]})
+                        attempt_all(sources.get((symbol,period),{}).items(),collect_source,source_error,lambda item,result:None)
                         if approved:
                             scopes={p["scope"] for _,_,p in approved}
                             scope="CONSOLIDATED" if "CONSOLIDATED" in scopes else "STANDALONE"
@@ -89,9 +96,19 @@ def main():
                         output=Path(f"tmp/results-r4/ocr-shard-{args.shard}.json");output.parent.mkdir(parents=True,exist_ok=True)
                         output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
                         print("R4_OCR_PROGRESS",json.dumps({"symbol":symbol,"period":period,"status":entry["status"],"counts":dict(counts)}),flush=True)
+                    def period_error(period,error):
+                        db.rollback();counts["period_errors"]+=1
+                        details.append({"symbol":symbol,"period":period,"status":"RETRY_REQUIRED",
+                            "reason":type(error).__name__+":"+str(error)[:200]})
+                    attempt_all(periods,collect_period,period_error,lambda item,result:None)
                 except Exception as error:
                     db.rollback();counts["company_error"]+=1
+                    for period in periods:
+                        details.append({"symbol":symbol,"period":period,"stage":"ISSUER_OR_COMPANY",
+                            "status":"RETRY_REQUIRED","reason":type(error).__name__+":"+str(error)[:200]})
                     print("R4_OCR_COMPANY_ERROR",symbol,type(error).__name__,str(error)[:200],flush=True)
+    output=Path(f"tmp/results-r4/ocr-shard-{args.shard}.json");output.parent.mkdir(parents=True,exist_ok=True)
+    output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
     print("R4_OCR_FINAL",json.dumps({"shard":args.shard,"counts":dict(counts)}),flush=True)
 
 if __name__=="__main__":main()
