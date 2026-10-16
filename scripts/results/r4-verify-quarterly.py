@@ -5,7 +5,7 @@ time, adjust historical share basis or change any investment research score."""
 import argparse, hashlib, json, os, re
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date
+from datetime import date,datetime
 from decimal import Decimal, InvalidOperation
 from urllib.parse import urlparse
 import boto3, psycopg
@@ -161,7 +161,8 @@ def check_manifest(record,manifest):
         proof=manifest.get("issuer_bridge")
         identity_key=manifest.get("issuer_identity_evidence_r2_key")
         identity_sha=manifest.get("issuer_identity_evidence_sha256")
-        if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
+        if (manifest.get("period_end") not in ("2024-09-30","2024-12-31","2025-03-31","2025-06-30")
+            or u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
             or not re.fullmatch(r"/corporate/xbrl/[A-Za-z0-9_.-]+\.xml",u.path)
             or u.query or u.fragment or not re.fullmatch(r"[a-f0-9]{64}",str(original or ""))
             or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
@@ -612,7 +613,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -624,15 +625,6 @@ def verify(db,s3,apply):
         # Bound R2 reads without making any concurrent database writes. S3
         # clients support concurrent GET; each source is fetched at most once.
         by_id={str(r["source_record_id"]):r for r in observations}
-        bridge_parser=None
-        if any(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1" for r in observations):
-            import importlib.util
-            from pathlib import Path
-            spec=importlib.util.spec_from_file_location("r4_bridge_financial_replay",Path(__file__).with_name("r5-legacy-2024-xbrl.py"))
-            bridge_parser=importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(bridge_parser)
-            bridge_parser.PERIODS={"2024-09-30":"2024-07-01","2024-12-31":"2024-10-01",
-                                   "2025-03-31":"2025-01-01","2025-06-30":"2025-04-01"}
         def check_one(pair):
             k,r=pair
             raw=r["raw_payload"];pointer=raw.get("r2_key") if isinstance(raw,dict) else None
@@ -671,25 +663,22 @@ def verify(db,s3,apply):
                     error="R2_RETAINED_ORIGINAL_XBRL_UNAVAILABLE"
             if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1":
                 try:
-                    from r4_nse_issuer_bridge import bridge_from_sources
+                    from r4_nse_issuer_bridge import bridge_from_sources,verify_original_facts
                     proof_bytes=s3.get_object(Bucket=BUCKET,Key=document["issuer_identity_evidence_r2_key"])["Body"].read()
                     if sha(proof_bytes)!=document["issuer_identity_evidence_sha256"]:
                         raise ValueError("IDENTITY_EVIDENCE_HASH_MISMATCH")
                     proof=json.loads(proof_bytes);metadata=proof["nse_catalog_record"]
                     if metadata["xbrl"]!=document["issuer_filing_url"] or proof["nse_original_sha256"]!=sha(original_bytes):
                         raise ValueError("IDENTITY_ORIGINAL_LINK_MISMATCH")
+                    catalog_scope={"Consolidated":"CONSOLIDATED","Non-Consolidated":"STANDALONE"}.get(metadata.get("consolidated"))
+                    if (catalog_scope!=document["consolidation_scope"] or
+                        datetime.strptime(metadata["toDate"],"%d-%b-%Y").date().isoformat()!=document["period_end"]):
+                        raise ValueError("CATALOG_SCOPE_OR_PERIOD_MISMATCH")
                     bridge=bridge_from_sources(original_bytes,metadata,document["symbol"],document["isin"],
                                                proof["bse_header"],proof["bse_listing"])
                     if bridge.payload()!=document["issuer_bridge"]:
                         raise ValueError("IDENTITY_REPLAY_MISMATCH")
-                    normalized={**metadata,"fromDate":document["period_start"],"toDate":document["period_end"]}
-                    replay,reason=bridge_parser.extract(original_bytes,normalized,document["symbol"],document["isin"],bridge)
-                    if reason or replay["scope"]!=document["consolidation_scope"]:
-                        raise ValueError("FINANCIAL_CONTEXT_REPLAY_FAILED")
-                    for code,fact in document["facts"].items():
-                        actual=replay["facts"].get(code)
-                        if not actual or any(actual.get(field)!=fact.get(field) for field in ("value","unit","original_value","original_unit","context_ids","component_context_ids")):
-                            raise ValueError("ORIGINAL_FINANCIAL_FACT_REPLAY_MISMATCH")
+                    verify_original_facts(original_bytes,document,bridge)
                 except Exception as exc:
                     error="NSE_EXCHANGE_LINEAGE_REPLAY_FAILED_"+type(exc).__name__
             return k,(document,error)
