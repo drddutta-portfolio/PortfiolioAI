@@ -1,6 +1,7 @@
 """Failure isolation and deterministic retry scheduling; no financial interpretation."""
 import hashlib
 import json
+import multiprocessing
 
 SOURCES=("results-r4-nse-lineage-recovery.yml",
          "results-r4-historical-recovery-v3.yml",
@@ -20,6 +21,35 @@ def attempt_all(items,process,on_error,on_result):
             result=on_error(item,error)
         # Checkpoint errors are fatal: continuing without an audit trail is unsafe.
         on_result(item,result)
+
+def _isolated_worker(connection,operation,args):
+    try:
+        connection.send(("OK",operation(*args)))
+    except ValueError as error:
+        connection.send(("REJECTED",str(error)))
+    except Exception as error:
+        connection.send(("ERROR",type(error).__name__+":"+str(error)[:200]))
+    finally:
+        connection.close()
+
+def run_with_timeout(operation,args,timeout):
+    """Terminate a stuck native OCR operation without losing the parent queue."""
+    context=multiprocessing.get_context("spawn")
+    reader,writer=context.Pipe(duplex=False)
+    process=context.Process(target=_isolated_worker,args=(writer,operation,args))
+    process.start();writer.close()
+    try:
+        if not reader.poll(timeout):raise TimeoutError("PER_ORIGINAL_PROCESSING_TIMEOUT")
+        try:status,value=reader.recv()
+        except EOFError as error:raise RuntimeError("ORIGINAL_WORKER_EXITED_WITHOUT_RESULT") from error
+        if status=="REJECTED":raise ValueError(value)
+        if status!="OK":raise RuntimeError(value)
+        return value
+    finally:
+        reader.close()
+        process.join(0.1)
+        if process.is_alive():process.terminate();process.join(2)
+        if process.is_alive():process.kill();process.join(2)
 
 def next_source(now,state,runs):
     """Rotate through all sources even when a preceding source made no progress."""
