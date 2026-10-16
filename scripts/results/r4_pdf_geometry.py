@@ -93,6 +93,10 @@ def extract_page(page,page_no,period,bank=False,insurer=False):
             elif re.match(r"^interest\s+earned\b",label,re.I):metric="INTEREST_EARNED"
             elif re.match(r"^interest\s+expended\b",label,re.I):metric="INTEREST_EXPENDED"
             elif re.match(r"^(?:net\s+)?premiums?\s+earned\b",label,re.I):metric="NET_PREMIUM_EARNED_QUARTER"
+            elif re.match(r"^profit\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
+            elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
+            elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
+            elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
             elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?)?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
@@ -119,7 +123,19 @@ def extract_page(page,page_no,period,bank=False,insurer=False):
                 "evidence_line":(earned["evidence_line"]+" || "+spent["evidence_line"])[:800]}
         required=(revenue,"NET_PROFIT_QUARTER","EPS_DILUTED")
         if all(k in found for k in required):
+            arithmetic=None
+            if "PROFIT_BEFORE_TAX" in found:
+                tax=(Decimal(found["TAX_EXPENSE"]["value"]) if "TAX_EXPENSE" in found else
+                     Decimal(found["CURRENT_TAX"]["value"])+Decimal(found["DEFERRED_TAX"]["value"])
+                     if "CURRENT_TAX" in found and "DEFERRED_TAX" in found else None)
+                if tax is not None:
+                    difference=Decimal(found["PROFIT_BEFORE_TAX"]["value"])-tax-Decimal(found["NET_PROFIT_QUARTER"]["value"])
+                    if abs(difference)>Decimal("0.02")/divisor:
+                        raise ValueError("PROFIT_TAX_RECONCILIATION_FAILED")
+                    arithmetic={"contract":"PBT_MINUS_TAX_EQUALS_PAT","difference_crore":str(difference),
+                        "pbt":found["PROFIT_BEFORE_TAX"],"tax_crore":str(tax)}
             return {"scope":scope,"page":page_no,"unit":unit,"first_column_period":period,
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
+                "arithmetic_validation":arithmetic,
                 "parser_revision":"PDF_WORD_COORDINATES_V3"}
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
