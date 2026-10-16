@@ -1,10 +1,9 @@
+import { validR4WorkflowClaims } from "./r4-workflow-claims.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const REF="lrgpjimipfkyoqbpsqzz"
 const SOURCE="TRENDLYNE_MCP"
 const PORTFOLIO="6193a4aa-3235-4057-bddc-209fcf443fc2"
-const AUD="portfolioai-results-r4"
-const WORKFLOW="drddutta-portfolio/PortfiolioAI/.github/workflows/results-r4-trendlyne-history.yml@refs/heads/PortfolioAI-Development"
 const reply=(status:number,body:unknown)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json"}})
 const decode=(value:string)=>Uint8Array.from(atob(value.replace(/-/g,"+").replace(/_/g,"/")),x=>x.charCodeAt(0))
 
@@ -18,14 +17,8 @@ async function workflowIdentity(req:Request):Promise<Record<string,unknown>>{
   const header=JSON.parse(new TextDecoder().decode(decode(parts[0])))
   const claims=JSON.parse(new TextDecoder().decode(decode(parts[1])))
   const now=Date.now()/1000
-  if(header.alg!=="RS256"||claims.iss!=="https://token.actions.githubusercontent.com"
-     ||claims.aud!==AUD||claims.repository_id!=="1357024254"
-     ||claims.repository!=="drddutta-portfolio/PortfiolioAI"
-     ||claims.ref!=="refs/heads/PortfolioAI-Development"
-     ||claims.workflow_ref!==WORKFLOW||claims.event_name!=="push"
-     ||typeof claims.exp!=="number"||claims.exp<=now
-     ||typeof claims.nbf!=="number"||claims.nbf>now+30)throw new Error("AUTH_INVALID")
-  const response=await fetch("https://token.actions.githubusercontent.com/.well-known/jwks")
+  if(!validR4WorkflowClaims(header,claims,now))throw new Error("AUTH_INVALID")
+  const response=await fetch("https://token.actions.githubusercontent.com/.well-known/jwks",{signal:AbortSignal.timeout(10000)})
   if(!response.ok)throw new Error("AUTH_KEYS_UNAVAILABLE")
   const jwks=await response.json() as {keys:(JsonWebKey & {kid?:string})[]}
   const jwk=jwks.keys.find(k=>k.kid===header.kid)
@@ -55,7 +48,7 @@ class Client {
       "user-agent":"PortfolioAI/1.0",
     }
     if(this.session) headers["mcp-session-id"]=this.session
-    const r=await fetch(this.endpoint,{method:"POST",headers,body:JSON.stringify(payload)})
+    const r=await fetch(this.endpoint,{method:"POST",headers,body:JSON.stringify(payload),signal:AbortSignal.timeout(45000)})
     if(!r.ok) throw new Error("PROVIDER_HTTP_"+r.status)
     this.session=r.headers.get("mcp-session-id")??this.session
     const body=await r.text()
@@ -110,7 +103,7 @@ export async function handleR4History(req:Request){
   const usage=await db.from("provider_usage_events").select("id",{count:"exact",head:true}).eq("source_code",SOURCE).gte("attempted_at",monthStart.toISOString())
   if(usage.error||!quota.monthly_limit||(usage.count??quota.monthly_limit)>=quota.monthly_limit)
     return reply(429,{error:"MONTHLY_BUDGET_BLOCKED"})
-  const operation="RESULTS_R4_HISTORY_"+String(claims.run_id)+"_"+body.requestId.toUpperCase().replace(/-/g,"_")
+  const operation="RESULTS_R4_HISTORY_"+String(claims.run_id)+"_A"+String(claims.run_attempt)+"_"+body.requestId.toUpperCase().replace(/-/g,"_")
   const prior=await db.from("data_ingestion_runs").select("id").eq("source_code",SOURCE).eq("operation",operation).limit(1)
   if(prior.error)return reply(500,{error:"IDEMPOTENCY_CHECK_FAILED"})
   if(prior.data?.length)return reply(409,{error:"ALREADY_ATTEMPTED",runId:prior.data[0].id})
@@ -124,7 +117,7 @@ export async function handleR4History(req:Request){
   const reserved=await db.rpc("reserve_provider_budget_v1",{p_source_code:SOURCE,p_ingestion_run_id:runId,
     p_reservation_key:operation,p_estimated_units:1,p_reservation_seconds:180})
   const reservation=reserved.data?.[0]
-  if(reserved.error||!reservation?.reserved){await db.from("data_ingestion_runs").update({status:"FAILED",completed_at:new Date().toISOString(),error_summary:"BUDGET_RESERVATION_FAILED"}).eq("id",runId);return reply(429,{error:"BUDGET_RESERVATION_FAILED",runId})}
+  if(reserved.error||!reservation?.reserved){await db.from("data_ingestion_runs").update({status:"FAILED",completed_at:new Date().toISOString(),error_summary:"BUDGET_RESERVATION_FAILED"}).eq("id",runId);return reply(429,{error:"BUDGET_RESERVATION_FAILED",reason:reservation?.reason_code??"BUDGET_RESERVATION_FAILED",runId})}
   let result:unknown=null,error:string|null=null
   try{
     const client=new Client(endpoint)
