@@ -23,3 +23,5 @@ jobs:
         run: python scripts/results/r4-remaining-source-diagnostics.py
 
 # Aggregate context categories only: no context identifiers, issuer details or amounts are exported.
+
+# Compare anonymous identity/date categories for remaining context failures.
