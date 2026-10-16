@@ -1,0 +1,60 @@
+{
+  "approval": "Owner Approved the single shared two-service checkpoint on 16 October 2026",
+  "approvedManifest": "G03_BEL_Shared_Deployment_Candidate_Manifest_2026-10-16.json",
+  "originalImplementationCommit": "24c49bf48e44d72c1854ec022cccc65f0bfe78eb",
+  "correctionAndPackageRegressionCommit": "4772d8ab80c90e75ad470b09f0b10d01e6e91fdb",
+  "actualDeployments": [
+    {
+      "name": "v14-g02-document-admission",
+      "version": 24,
+      "bundleSha256": "3f032915f5c6a36d9f3d0c377d1c1930cf06749b325e1ba6441010bc5e24fc4d",
+      "runtimeFiles": 58,
+      "actualRuntimeContentsMatchApprovedManifest": true,
+      "verifyJwt": false,
+      "customOidcUnchanged": true
+    },
+    {
+      "name": "p7-ic2-materialize-readiness",
+      "version": 78,
+      "bundleSha256": "c132940669cf166834e3dae5bf1ab94697c2b930b3761e85ff95a061480b726e",
+      "runtimeFiles": 70,
+      "actualRuntimeContentsMatchApprovedManifestExceptListedCorrection": true,
+      "verifyJwt": true
+    }
+  ],
+  "correction": {
+    "file": "supabase/functions/_shared/v14-reviewed-evidence.ts",
+    "approvedSha256": "2ccb1db1f87a7e61e6918953423334d8d60c9d63bd1ad711b551e6ee34e49f31",
+    "correctedSha256": "d1f08e6e7d6b2a072804eaa5c13da31739296405e3599b31597a9aeb883a151c",
+    "patch": "scripts/v1-4/patches/g03-bel-preserved-canonical-valuation-authority.patch",
+    "scope": "Recognize existing exact approved BEL valuation source and composite fallback; preserve all other auth/grant/BANK/runtime paths"
+  },
+  "verification": {
+    "assembledPackageTests": 55,
+    "assembledPackageTestFiles": 9,
+    "packageDenoCompilation": "PASS",
+    "checkoutEdgeTests": 470,
+    "hostedFullVerificationRun": 38843795649,
+    "hostedArchitectureRun": 38843798494,
+    "liveValuationAdmissionRun": 38843122960,
+    "liveGuardedReadySaveRun": 38843772764,
+    "hostedFullVerificationConclusion": "SUCCESS",
+    "hostedArchitectureConclusion": "SUCCESS"
+  },
+  "omittedUploadOnlyDependencies": {
+    "admission": [
+      "p7-ic-input-validation.ts",
+      "v14-bank-dual-clock.ts",
+      "angel-one.ts",
+      "market-data.ts",
+      "security.ts"
+    ],
+    "canonical": [
+      "v14-g03-valuation-original-pins.json"
+    ]
+  },
+  "noMissingExecutableDependencies": true,
+  "productionChanges": false,
+  "schemaChanges": false,
+  "otherSixG03SelectionsChanged": false
+}

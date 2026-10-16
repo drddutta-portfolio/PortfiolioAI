@@ -1,4 +1,15 @@
-## BEL cash conversion persisted FRESH: four blockers → three — 15 October 2026
+# PortfolioAI Development Status
+
+## BEL persisted READY — 16 October 2026, 08:36 IST
+
+The approved shared Development deployments and signed BEL-only continuation completed. Independent database readback confirms selected snapshot `97c13456-51d7-46bb-b7cf-f75d1fced620`, selection `e452af5f-12c2-46e9-8d92-5c674d56b97a`: **READY, 11/11 mandatory requirements FRESH, zero blockers**, **₹26,789.00 frozen value READY** at evaluation 08:35:50 IST. Other six G03 selections remain unchanged; G03 selected readiness is **1/7 wider, 1/4 frozen**. This does not close the remaining industries or all V1-4 operating gates.
+
+Valuation admission 38843122960 and guarded canonical save 38843772764 both succeeded; duplicate admission/grant issuance are idempotent and grant replay is rejected. Three source/review hashes independently recompute correctly. All 23 prior accepted reviews and 57 fundamental observations remain preserved; accepted reviews now total 26. Zero BEL provider-usage events occurred during activation. Reviewer v24 and canonical v78 are ACTIVE with preserved authentication/grants/BANK modules. A preserved-live source-gate omission was reproduced and corrected before the successful save; no grant or save occurred in the failed prospective run.
+
+Final correction/test-runner commit `4772d8ab80c90e75ad470b09f0b10d01e6e91fdb` passed Full Repository Verification **38843795649** and Architecture Guard **38843798494**. The actual preserved-live package separately passes **55 adapter tests and Deno compilation**, and the checkout Edge suite passes **470 tests**. Subsequent execution-record changes are documentation only.
+
+The selected assessment uses the existing pre-open calendar proof **strictly before 09:00 IST on 16 October**. Recorded source expiries are unchanged, and current readiness must be re-evaluated at subsequent session boundaries. It is not permanent READY or a new maintenance/scheduler acceptance claim. [Execution and limits](private/v1-4-industry-batches/G03_BEL_READY_Activation_Execution_2026-10-16.md) · [Independent database/source readback](private/v1-4-industry-batches/G03_BEL_READY_Independent_Readback_2026-10-16.json).
+
 
 ## BEL margin persisted FRESH; one remaining valuation blocker — 16 October 2026 IST
 

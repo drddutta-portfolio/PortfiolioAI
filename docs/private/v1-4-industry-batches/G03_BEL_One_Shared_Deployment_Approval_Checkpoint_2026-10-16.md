@@ -1,5 +1,8 @@
 # BEL — one shared Development deployment checkpoint
 
+**Execution disposition — 16 October 2026:** the owner approved this shared-service checkpoint. The authorized deployments, actual three-date valuation admission and BEL-only guarded save completed. BEL is independently persisted READY at the recorded evaluation, 11/11 mandatory requirements FRESH. [Executed result and freshness limits](G03_BEL_READY_Activation_Execution_2026-10-16.md). The proposal and earlier automatic-review restriction below are retained as historical context, not a current request for repeated approval.
+
+
 ## Actual independently verified state
 
 The current selected BEL snapshot is `47664389-ea9c-4bce-aef2-a1f8183380b5`, selection `2cea310c-095e-4070-a721-4d5dc2fc59cf`, saved at 02:04:48 IST on 16 October 2026 by run 38803021687. Operating-margin history is now persisted FRESH. Nine other qualified mandatory items, including market history, cash/debt, ROCE, orders and documentary reviews, remain preserved: ten FRESH of eleven required items in total. **Mandatory blockers decreased 2 → 1.** The sole remaining blocker is VALUATION; BEL remains REVIEW_REQUIRED with ₹0 READY frozen value. Frozen BEL value is ₹26,789.00, unchanged. Other six G03 selections are independently unchanged.

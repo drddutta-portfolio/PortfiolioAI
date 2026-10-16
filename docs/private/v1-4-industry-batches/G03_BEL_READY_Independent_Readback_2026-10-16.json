@@ -1,0 +1,843 @@
+{
+  "verifiedAtUtc": "2026-10-16T03:08:41Z",
+  "scope": "BEL_ONLY_G03_DEVELOPMENT",
+  "status": "PERSISTED_READY_AT_EVALUATION",
+  "before": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "selection_id": "2cea310c-095e-4070-a721-4d5dc2fc59cf",
+      "snapshot_id": "47664389-ea9c-4bce-aef2-a1f8183380b5",
+      "selected_at": "2026-10-15 20:34:48.805116+00",
+      "snapshot_status": "REVIEW_REQUIRED"
+    }
+  ],
+  "after": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 1,
+      "blockers": 10
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 1,
+      "blockers": 10
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "selection_id": "e452af5f-12c2-46e9-8d92-5c674d56b97a",
+      "snapshot_id": "97c13456-51d7-46bb-b7cf-f75d1fced620",
+      "selected_at": "2026-10-16 03:06:05.496931+00",
+      "snapshot_status": "READY",
+      "required_count": 11,
+      "fresh_count": 11,
+      "blockers": 0
+    }
+  ],
+  "belRequiredItems": [
+    {
+      "requirement_code": "BUSINESS_DURABILITY",
+      "evidence_state": "FRESH",
+      "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+      "selected_evidence_id": "d66deded-c38c-5c07-a054-6597b302f6f5",
+      "raw_source_record_id": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "requirement_code": "CFO_FCF_CONVERSION",
+      "evidence_state": "FRESH",
+      "reason_code": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+      "selected_evidence_id": "bfb36725-d431-550b-8b75-179fe5459444",
+      "raw_source_record_id": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_HISTORY_CONTRACT_READY",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "requirement_code": "IC3_SNAPSHOT_LINEAGE",
+      "evidence_state": "FRESH",
+      "reason_code": "IC3_LINEAGE_READY",
+      "selected_evidence_id": null,
+      "raw_source_record_id": null,
+      "fresh_through": null
+    },
+    {
+      "requirement_code": "MOMENTUM_12M_RELATIVE",
+      "evidence_state": "FRESH",
+      "reason_code": "STOCK_BENCHMARK_HISTORY_READY",
+      "selected_evidence_id": null,
+      "raw_source_record_id": "b47c813c-d281-56ab-a802-d1a71a57e245",
+      "fresh_through": null
+    },
+    {
+      "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+      "evidence_state": "FRESH",
+      "reason_code": "APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL",
+      "selected_evidence_id": "9d13c947-de36-5438-adfb-d055bd5b57c7",
+      "raw_source_record_id": "9ca3ac8c-c293-5b94-a3a3-f027da3921aa",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "requirement_code": "OPERATING_MARGIN_HISTORY",
+      "evidence_state": "FRESH",
+      "reason_code": "APPROVED_MARGIN_PAIRS_SELECTED_UNDATED_TTM_RETAINED",
+      "selected_evidence_id": "9c4c9e20-643e-54a9-a096-9a7cf43dbb5f",
+      "raw_source_record_id": "33bc927d-4df1-544c-a8ed-fa7f527a4110",
+      "fresh_through": "2026-11-27"
+    },
+    {
+      "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+      "evidence_state": "FRESH",
+      "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+      "selected_evidence_id": "90f400e7-5f9c-5ace-a8f7-0d7f6806db4c",
+      "raw_source_record_id": "b55ae585-9921-550a-a49a-8dd977003321",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "requirement_code": "OWNERSHIP_GOVERNANCE",
+      "evidence_state": "FRESH",
+      "reason_code": "REVIEW_FALLBACK_NO_CANONICAL",
+      "selected_evidence_id": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea",
+      "raw_source_record_id": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+      "fresh_through": "2027-03-31"
+    },
+    {
+      "requirement_code": "ROCE_OR_ROIC",
+      "evidence_state": "FRESH",
+      "reason_code": "G03_FIXED_ISSUER_SERIES_SELECTED_LEGACY_UNQUALIFIED_RETAINED",
+      "selected_evidence_id": "7e65174e-354b-5a9d-a36f-b6a2992a88b8",
+      "raw_source_record_id": "19bce51f-582d-51ec-a73e-15e5a7f501de",
+      "fresh_through": "2027-01-12"
+    },
+    {
+      "requirement_code": "VALUATION",
+      "evidence_state": "FRESH",
+      "reason_code": "APPROVED_DATED_VALUATION_REVIEW_NO_CANONICAL",
+      "selected_evidence_id": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe",
+      "raw_source_record_id": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+      "fresh_through": "2026-10-16"
+    }
+  ],
+  "valuationLineage": {
+    "series": [
+      {
+        "id": "6f7b2475-1352-53e9-a227-b40f2e9c92c7",
+        "unit": "COMPOSITE_VALUATION",
+        "currency": null,
+        "date_value": "2026-10-13",
+        "period_end": "2026-10-13",
+        "text_value": null,
+        "fresh_until": "2026-10-15T18:29:59+00:00",
+        "metric_code": "VALUATION",
+        "period_type": "POINT_IN_TIME",
+        "source_code": "COMPANY_EXCHANGE_FILING",
+        "period_start": "2026-10-13",
+        "published_at": null,
+        "retrieved_at": "2026-10-16T02:59:31.797+00:00",
+        "boolean_value": null,
+        "numeric_value": "45.330630",
+        "evidence_status": "AVAILABLE",
+        "source_record_id": "faf13717-56cb-5fd0-a3ce-96803cdb9eb3",
+        "consolidation_scope": "STANDALONE"
+      },
+      {
+        "id": "86807491-865f-5123-a12e-a1a0ba61627d",
+        "unit": "COMPOSITE_VALUATION",
+        "currency": null,
+        "date_value": "2026-10-14",
+        "period_end": "2026-10-14",
+        "text_value": null,
+        "fresh_until": "2026-10-15T18:29:59+00:00",
+        "metric_code": "VALUATION",
+        "period_type": "POINT_IN_TIME",
+        "source_code": "COMPANY_EXCHANGE_FILING",
+        "period_start": "2026-10-14",
+        "published_at": null,
+        "retrieved_at": "2026-10-16T02:59:32.974+00:00",
+        "boolean_value": null,
+        "numeric_value": "45.610964",
+        "evidence_status": "AVAILABLE",
+        "source_record_id": "fb337a1f-bc74-5655-a617-bbfb2721bc93",
+        "consolidation_scope": "STANDALONE"
+      },
+      {
+        "id": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe",
+        "unit": "COMPOSITE_VALUATION",
+        "currency": null,
+        "date_value": "2026-10-15",
+        "period_end": "2026-10-15",
+        "text_value": null,
+        "fresh_until": "2026-10-15T18:29:59+00:00",
+        "metric_code": "VALUATION",
+        "period_type": "POINT_IN_TIME",
+        "source_code": "COMPANY_EXCHANGE_FILING",
+        "period_start": "2026-10-15",
+        "published_at": null,
+        "retrieved_at": "2026-10-16T02:59:34.036+00:00",
+        "boolean_value": null,
+        "numeric_value": "45.378347",
+        "evidence_status": "AVAILABLE",
+        "source_record_id": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+        "consolidation_scope": "STANDALONE"
+      }
+    ],
+    "reviewedEvidence": {
+      "version": "V1_4_REVIEW_LEDGER_ADAPTER_V2",
+      "reviewIds": [
+        "6f7b2475-1352-53e9-a227-b40f2e9c92c7",
+        "86807491-865f-5123-a12e-a1a0ba61627d",
+        "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe"
+      ],
+      "componentSeries": [
+        {
+          "reviewId": "6f7b2475-1352-53e9-a227-b40f2e9c92c7",
+          "components": {
+            "price": "380",
+            "scope": "STANDALONE",
+            "shares": "7309778829",
+            "currency": "INR",
+            "annualCfo": "149434",
+            "annualPat": "604848",
+            "grossDebt": "6546",
+            "amountUnit": "INR_LAKH",
+            "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+            "cashFlowEnd": "2026-03-31",
+            "priorJunePat": "96913",
+            "cashFlowStart": "2025-04-01",
+            "valuationDate": "2026-10-13",
+            "currentJunePat": "104833",
+            "annualCashCapex": "98312",
+            "financialTtmEnd": "2026-06-30",
+            "financialTtmStart": "2025-07-01",
+            "shareAvailabilityAt": "2026-07-13T16:51:00+05:30",
+            "annualOperatingEbitda": "801530",
+            "verifiedUnpledgedCash": "0",
+            "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+            "priorJuneOperatingEbitda": "123994",
+            "currentJuneOperatingEbitda": "138920"
+          },
+          "derivation": {
+            "peTtm": "45.330630",
+            "ttmEps": "8.382852810",
+            "ttmPatLakh": "612768",
+            "exactShares": "7309778829",
+            "forecastsUsed": false,
+            "valuationDate": "2026-10-13",
+            "marketCapCrore": "277771.595502000",
+            "fcfYieldPercent": "0.184043",
+            "cashFlowPeriodEnd": "2026-03-31",
+            "financialPeriodEnd": "2026-06-30",
+            "calculationAuthority": "deriveG03Valuation",
+            "enterpriseValueCrore": "277837.055502000",
+            "evOperatingEbitdaTtm": "34.029642",
+            "issuerReportedRatios": false,
+            "ttmOperatingEbitdaLakh": "816456",
+            "qualifiedAnnualFcfCrore": "511.22"
+          },
+          "valuationDate": "2026-10-13"
+        },
+        {
+          "reviewId": "86807491-865f-5123-a12e-a1a0ba61627d",
+          "components": {
+            "price": "382.35",
+            "scope": "STANDALONE",
+            "shares": "7309778829",
+            "currency": "INR",
+            "annualCfo": "149434",
+            "annualPat": "604848",
+            "grossDebt": "6546",
+            "amountUnit": "INR_LAKH",
+            "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+            "cashFlowEnd": "2026-03-31",
+            "priorJunePat": "96913",
+            "cashFlowStart": "2025-04-01",
+            "valuationDate": "2026-10-14",
+            "currentJunePat": "104833",
+            "annualCashCapex": "98312",
+            "financialTtmEnd": "2026-06-30",
+            "financialTtmStart": "2025-07-01",
+            "shareAvailabilityAt": "2026-10-14T13:59:51+05:30",
+            "annualOperatingEbitda": "801530",
+            "verifiedUnpledgedCash": "0",
+            "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+            "priorJuneOperatingEbitda": "123994",
+            "currentJuneOperatingEbitda": "138920"
+          },
+          "derivation": {
+            "peTtm": "45.610964",
+            "ttmEps": "8.382852810",
+            "ttmPatLakh": "612768",
+            "exactShares": "7309778829",
+            "forecastsUsed": false,
+            "valuationDate": "2026-10-14",
+            "marketCapCrore": "279489.393526815",
+            "fcfYieldPercent": "0.182912",
+            "cashFlowPeriodEnd": "2026-03-31",
+            "financialPeriodEnd": "2026-06-30",
+            "calculationAuthority": "deriveG03Valuation",
+            "enterpriseValueCrore": "279554.853526815",
+            "evOperatingEbitdaTtm": "34.240039",
+            "issuerReportedRatios": false,
+            "ttmOperatingEbitdaLakh": "816456",
+            "qualifiedAnnualFcfCrore": "511.22"
+          },
+          "valuationDate": "2026-10-14"
+        },
+        {
+          "reviewId": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe",
+          "components": {
+            "price": "380.4",
+            "scope": "STANDALONE",
+            "shares": "7309778829",
+            "currency": "INR",
+            "annualCfo": "149434",
+            "annualPat": "604848",
+            "grossDebt": "6546",
+            "amountUnit": "INR_LAKH",
+            "priceBasis": "PRICE_RETURN_RAW_CLOSE",
+            "cashFlowEnd": "2026-03-31",
+            "priorJunePat": "96913",
+            "cashFlowStart": "2025-04-01",
+            "valuationDate": "2026-10-15",
+            "currentJunePat": "104833",
+            "annualCashCapex": "98312",
+            "financialTtmEnd": "2026-06-30",
+            "financialTtmStart": "2025-07-01",
+            "shareAvailabilityAt": "2026-10-14T13:59:51+05:30",
+            "annualOperatingEbitda": "801530",
+            "verifiedUnpledgedCash": "0",
+            "financialAvailabilityAt": "2026-08-05T20:35:20+05:30",
+            "priorJuneOperatingEbitda": "123994",
+            "currentJuneOperatingEbitda": "138920"
+          },
+          "derivation": {
+            "peTtm": "45.378347",
+            "ttmEps": "8.382852810",
+            "ttmPatLakh": "612768",
+            "exactShares": "7309778829",
+            "forecastsUsed": false,
+            "valuationDate": "2026-10-15",
+            "marketCapCrore": "278063.986655160",
+            "fcfYieldPercent": "0.183850",
+            "cashFlowPeriodEnd": "2026-03-31",
+            "financialPeriodEnd": "2026-06-30",
+            "calculationAuthority": "deriveG03Valuation",
+            "enterpriseValueCrore": "278129.446655160",
+            "evOperatingEbitdaTtm": "34.065454",
+            "issuerReportedRatios": false,
+            "ttmOperatingEbitdaLakh": "816456",
+            "qualifiedAnnualFcfCrore": "511.22"
+          },
+          "valuationDate": "2026-10-15"
+        }
+      ],
+      "sourceRecordIds": [
+        "faf13717-56cb-5fd0-a3ce-96803cdb9eb3",
+        "fb337a1f-bc74-5655-a617-bbfb2721bc93",
+        "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec"
+      ],
+      "retainedCaptures": [
+        {
+          "id": "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+          "record_kind": "V1_4_G03_HISTORY_TAIL_CAPTURE",
+          "source_code": "ANGEL_ONE",
+          "payload_hash": "f7de5310bccf822e81f691343df76af81d8625dcb4a272bd2b0bfc7a865ebaa2"
+        },
+        {
+          "id": "7b3221d4-1580-5474-a48b-98dc9730adb1",
+          "record_kind": "V1_4_HISTORY_CONTRACT_VALIDATION",
+          "source_code": "CONTROLLED_PUBLIC_WEB",
+          "payload_hash": "af396e153574ea6cfe47ef7cce047091b4ce83769c4162ff839e7c831efca442"
+        },
+        {
+          "id": "89305415-2cdd-439d-9582-2d4e772f73f0",
+          "record_kind": "V1_4_G03_HISTORY_TAIL_CAPTURE",
+          "source_code": "ANGEL_ONE",
+          "payload_hash": "fdbaff4ca1ca55b13a5f2b9880654e6536bb1a962aba5ec5b5bee3dd97695349"
+        }
+      ],
+      "documentSourceIds": [
+        "d1059e3a-0584-517c-afcd-f15f594a20b5"
+      ],
+      "financialContract": "G03_BEL_FINANCIAL_COMPONENTS_V1",
+      "availabilityProofs": [
+        {
+          "catalogRow": {
+            "diff": "00:00:01",
+            "type": "Integrated Filing- Financials",
+            "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1702067_27072026043726_WEB.xml",
+            "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_178591_27072026163726_iXBRL_WEB.html",
+            "cmName": "Bharat Electronics Limited",
+            "seq_Id": "178591",
+            "smName": "Bharat Electronics Limited",
+            "symbol": "BEL",
+            "audited": "Un-Audited",
+            "qe_Date": "30-JUN-2026",
+            "type_Sub": "Original",
+            "pdf_attach": null,
+            "attFileSize": "0 Bytes",
+            "consolidated": "Standalone",
+            "revised_Date": null,
+            "xbrlFileSize": "17.84 KB",
+            "creation_Date": "27-Jul-2026 16:37:27",
+            "ixbrlFileSize": "37.95 KB",
+            "broadcast_Date": "27-Jul-2026 16:37:26",
+            "revision_Remark": null
+          },
+          "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+          "publishedAt": "2026-07-27T16:37:27+05:30",
+          "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+          "originalSha256": "72d4b34e351e165ccc784a65018bbb818f2101412b7672c4d8390571a1fefc5f",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT"
+        },
+        {
+          "catalogRow": {
+            "diff": "00:00:02",
+            "type": "Integrated Filing- Financials",
+            "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1669276_19052026043916_WEB.xml",
+            "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_158846_19052026163916_iXBRL_WEB.html",
+            "cmName": "Bharat Electronics Limited",
+            "seq_Id": "158846",
+            "smName": "Bharat Electronics Limited",
+            "symbol": "BEL",
+            "audited": "Audited",
+            "qe_Date": "31-MAR-2026",
+            "type_Sub": "Original",
+            "pdf_attach": "https://nsearchives.nseindia.com/corporate/null",
+            "attFileSize": "0 Bytes",
+            "consolidated": "Standalone",
+            "revised_Date": null,
+            "xbrlFileSize": "98.15 KB",
+            "creation_Date": "19-May-2026 16:39:16",
+            "ixbrlFileSize": "97.39 KB",
+            "broadcast_Date": "19-May-2026 16:39:14",
+            "revision_Remark": null
+          },
+          "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+          "publishedAt": "2026-05-19T16:39:16+05:30",
+          "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+          "originalSha256": "840aac068542cb5df2577285860772a268776f89d663042423add9375307dfcd",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT"
+        },
+        {
+          "catalogRow": {
+            "diff": "00:00:00",
+            "type": "Integrated Filing- Financials",
+            "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1495131_28072025040833_WEB.xml",
+            "ixbrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_106192_28072025160833_iXBRL_WEB.html",
+            "cmName": "Bharat Electronics Limited",
+            "seq_Id": "106192",
+            "smName": "Bharat Electronics Limited",
+            "symbol": "BEL",
+            "audited": "Un-Audited",
+            "qe_Date": "30-JUN-2025",
+            "type_Sub": "Original",
+            "pdf_attach": null,
+            "attFileSize": "0 Bytes",
+            "consolidated": "Standalone",
+            "revised_Date": null,
+            "xbrlFileSize": "18.55 KB",
+            "creation_Date": "28-Jul-2025 16:08:33",
+            "ixbrlFileSize": "39.72 KB",
+            "broadcast_Date": "28-Jul-2025 16:08:33",
+            "revision_Remark": null
+          },
+          "catalogKind": "NSE_INTEGRATED_FINANCIAL_ORIGINAL",
+          "publishedAt": "2025-07-28T16:08:33+05:30",
+          "catalogSha256": "69b6919694434ec350e4b641db6b1ff988b9aa060585af084a063d97cf02f072",
+          "originalSha256": "521343c1958dec64ac20c32592791141b1803e982d9094642ea8bdaac447c244",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT"
+        },
+        {
+          "catalogRow": {
+            "dt": "05082026203519",
+            "desc": "Shareholders meeting",
+            "an_dt": "05-Aug-2026 20:35:19",
+            "bflag": null,
+            "orgid": null,
+            "seq_id": "106727442",
+            "symbol": "BEL",
+            "csvName": null,
+            "hasXbrl": true,
+            "old_new": null,
+            "sm_isin": "INE263A01016",
+            "sm_name": "Bharat Electronics Limited",
+            "fileSize": "15.45 MB",
+            "sort_date": "2026-08-05 20:35:19",
+            "difference": "00:00:01",
+            "smIndustry": "Electronics - Industrial",
+            "attFileSize": "15.45 MB",
+            "attchmntFile": "https://nsearchives.nseindia.com/corporate/BEL_05082026203450_Lettersigned.pdf",
+            "attchmntText": "Bharat Electronics Limited has informed the Exchange regarding Notice of 72nd Annual General Meeting to be held on August 28, 2026",
+            "exchdisstime": "05-Aug-2026 20:35:20"
+          },
+          "catalogKind": "NSE_ANNUAL_REPORT_DISSEMINATION",
+          "publishedAt": "2026-08-05T20:35:20+05:30",
+          "catalogSha256": "6e179452f2abcd26ab85335e37b276752539bafa148e512f0c11780409cd3d91",
+          "originalSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT",
+          "identicalOfficialAttachmentSha256": "c9bd3de33371906f80061253768b7eb4efad7e2f10acae36e97ea0b9b8537453"
+        },
+        {
+          "catalogRow": {
+            "date": "30-SEP-2026",
+            "desc": "NEW_1",
+            "isin": "INE263A01016",
+            "name": "Bharat Electronics Limited",
+            "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1737569_14102026015942_WEB.xml",
+            "index": "-",
+            "format": null,
+            "symbol": "BEL",
+            "industry": "-",
+            "recordId": "214286",
+            "newColumn": true,
+            "public_val": "48.86",
+            "remarksWeb": "N",
+            "systemDate": "14-OCT-2026 13:59:51",
+            "cgTimeStamp": null,
+            "countString": null,
+            "revisedData": "N",
+            "revisedDate": null,
+            "pr_and_prgrp": "51.14",
+            "revisionDate": null,
+            "xbrlFileSize": "138.31 KB",
+            "broadcastDate": "14-OCT-2026 13:59:47",
+            "revisedRemark": null,
+            "revisedStatus": "-",
+            "underlyingDrs": null,
+            "employeeTrusts": "0",
+            "revisionRemark": null,
+            "submissionDate": "14-OCT-2026",
+            "timeDifference": "00:00:04",
+            "typeOfSubmission": null,
+            "promoterDematNotes": "",
+            "publicShareholdingNotes": "",
+            "shareholdingPatternNotes": ""
+          },
+          "catalogKind": "NSE_SHAREHOLDING_ORIGINAL",
+          "publishedAt": "2026-10-14T13:59:51+05:30",
+          "catalogSha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+          "originalSha256": "8759b6fed5e573e2440efeb3988b3ae8710fb6ec6b9e9c6fc8d2864d3aebccdc",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT"
+        },
+        {
+          "catalogRow": {
+            "date": "30-JUN-2026",
+            "desc": "NEW_1",
+            "isin": "INE263A01016",
+            "name": "Bharat Electronics Limited",
+            "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1691499_13072026045050_WEB.xml",
+            "index": "-",
+            "format": null,
+            "symbol": "BEL",
+            "industry": "-",
+            "recordId": "210952",
+            "newColumn": true,
+            "public_val": "48.86",
+            "remarksWeb": "N",
+            "systemDate": "13-JUL-2026 16:51:00",
+            "cgTimeStamp": null,
+            "countString": null,
+            "revisedData": "N",
+            "revisedDate": null,
+            "pr_and_prgrp": "51.14",
+            "revisionDate": null,
+            "xbrlFileSize": "141.48 KB",
+            "broadcastDate": "13-JUL-2026 16:50:55",
+            "revisedRemark": null,
+            "revisedStatus": "-",
+            "underlyingDrs": null,
+            "employeeTrusts": "0",
+            "revisionRemark": null,
+            "submissionDate": "13-JUL-2026",
+            "timeDifference": "00:00:05",
+            "typeOfSubmission": null,
+            "promoterDematNotes": "",
+            "publicShareholdingNotes": "",
+            "shareholdingPatternNotes": ""
+          },
+          "catalogKind": "NSE_SHAREHOLDING_ORIGINAL",
+          "publishedAt": "2026-07-13T16:51:00+05:30",
+          "catalogSha256": "a947b3892f98aa8da53f0b981d57d92c6348e6eca75ef2c62f18979556235603",
+          "originalSha256": "c63b47c31b5fa126c5fd66c091a097e1ce2f9337dd7d9db3eed0a6013820af76",
+          "availabilityBasis": "CONSERVATIVE_LATER_OF_NSE_DECLARED_DISSEMINATION_AND_SYSTEM_TIMESTAMP",
+          "availabilityPrecision": "EXACT"
+        }
+      ],
+      "researchDocumentIds": [
+        "2a84c944-86cc-557d-aaf6-07e1e88aedaf"
+      ],
+      "sourcePayloadHashes": [
+        "ea882bbc2c5d45a03c297f1e644acdb76977e12627467dbd18be6b846e2a83e0",
+        "a17556eff12e085733a11d654591f6c7bfe841d8b986a977970a6b4edd40ff37",
+        "0578f751089341d699b9855a9588c16334bf2cf305738ae68e3a1a9ae7c4995f"
+      ],
+      "calculationAuthority": "deriveG03Valuation",
+      "allThreeMetricsPerDate": true,
+      "financialContractSha256": "d12ba4ef7b7554bc2dc0cb53d83b6609fe61cf2453c3b25eeae73b5b79d618bd",
+      "currentSessionValidation": {
+        "version": "G03_VALUATION_EXISTING_COMPLETED_SESSION_VALIDATION_V1",
+        "freshThrough": "2026-10-16T03:30:00.000Z",
+        "latestSession": "2026-10-15",
+        "marketLineage": {
+          "version": "V1_4_HISTORY_READINESS_V1",
+          "returnBasis": "PRICE_RETURN_RAW_CLOSE",
+          "preOpenCalendar": {
+            "verifiedAt": "2026-10-16T03:05:50.009335+00:00",
+            "validBefore": "2026-10-16T09:00:00+05:30",
+            "sourceRecordIds": [
+              "d3a39583-b851-4a5a-99b6-dcc412c4ad26",
+              "8e9e7299-7dfc-46fc-b6bd-4d04e23aedbc",
+              "48f002f9-a178-44a8-a144-1123b2ab3e28"
+            ],
+            "latestCompletedSession": "2026-10-15"
+          },
+          "sourceAuthority": "ANGEL_ONE",
+          "openSessionStatus": null,
+          "currentSessionDecision": "UNKNOWN",
+          "lineageSourceRecordIds": [
+            "d77b371f-54ab-4fae-b2db-66e9bb2b9c75",
+            "f2ddce35-1785-4931-aaa0-e67db1871dfb",
+            "f7647709-8691-4787-8fbd-ce39e7a2a1f5",
+            "51869a37-d810-4458-bd31-592a349fa54c",
+            "8e260174-b2b2-4d0c-8d96-f324c4a87ae3",
+            "9f2b18b1-f388-4f57-8924-9a14592126e8",
+            "b72612d0-ec4d-484f-97f2-710257d7e606",
+            "4aa0b077-b233-4a9a-ae76-15cadbbb3dc3",
+            "2f1d29be-bc91-4548-8eb7-929e57c85946",
+            "d85c3a00-4929-4ce1-96f3-a28ddb1ca650",
+            "a282177c-ac93-4aaf-b2f9-49906bd35877",
+            "298cf68a-3593-4cdc-9a7d-15cd531cd1f0",
+            "bf4769f3-e503-4a75-81bc-92484bfa1415",
+            "656d4528-b3cc-4dbf-b5f1-a7e620873fe4",
+            "76947ca5-5b1d-4089-b956-13095f35f20a",
+            "0f050351-d4a4-5559-a791-2972258c8f95",
+            "c9bfeca5-8f5d-5f9b-a0d7-e47d290303e5",
+            "10f8301b-3456-5b52-a343-e45c5d662dba",
+            "83d4a1e6-bfa8-5035-a28f-9a810b3c4a5d",
+            "bba7a7aa-0cf5-59b3-af2e-db83ba6ce356",
+            "8a348f48-eea7-5b84-a82e-9a920c5fe7fd",
+            "bf44a7ed-15e4-5af4-ae95-52f82a32ebba",
+            "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+            "b47c813c-d281-56ab-a802-d1a71a57e245",
+            "db4b7237-2214-5711-abf2-73a7aa99d690",
+            "89305415-2cdd-439d-9582-2d4e772f73f0"
+          ],
+          "corporateActionSourceRecordIds": [
+            "d77b371f-54ab-4fae-b2db-66e9bb2b9c75",
+            "f2ddce35-1785-4931-aaa0-e67db1871dfb",
+            "f7647709-8691-4787-8fbd-ce39e7a2a1f5",
+            "51869a37-d810-4458-bd31-592a349fa54c",
+            "8e260174-b2b2-4d0c-8d96-f324c4a87ae3",
+            "9f2b18b1-f388-4f57-8924-9a14592126e8",
+            "b72612d0-ec4d-484f-97f2-710257d7e606",
+            "4aa0b077-b233-4a9a-ae76-15cadbbb3dc3",
+            "2f1d29be-bc91-4548-8eb7-929e57c85946",
+            "d85c3a00-4929-4ce1-96f3-a28ddb1ca650",
+            "a282177c-ac93-4aaf-b2f9-49906bd35877",
+            "298cf68a-3593-4cdc-9a7d-15cd531cd1f0",
+            "bf4769f3-e503-4a75-81bc-92484bfa1415",
+            "656d4528-b3cc-4dbf-b5f1-a7e620873fe4",
+            "76947ca5-5b1d-4089-b956-13095f35f20a",
+            "bf44a7ed-15e4-5af4-ae95-52f82a32ebba",
+            "db4b7237-2214-5711-abf2-73a7aa99d690"
+          ],
+          "currentSessionDecisionRecordId": null,
+          "exchangeCalendarSourceRecordIds": [
+            "f8c01bb3-b6ab-47b1-b5b7-2ec464304de5",
+            "0f050351-d4a4-5559-a791-2972258c8f95",
+            "c9bfeca5-8f5d-5f9b-a0d7-e47d290303e5",
+            "10f8301b-3456-5b52-a343-e45c5d662dba",
+            "83d4a1e6-bfa8-5035-a28f-9a810b3c4a5d",
+            "bba7a7aa-0cf5-59b3-af2e-db83ba6ce356",
+            "8a348f48-eea7-5b84-a82e-9a920c5fe7fd",
+            "b47c813c-d281-56ab-a802-d1a71a57e245",
+            "7c6e0272-5d37-48b3-a15e-3c3bad659aa1"
+          ]
+        },
+        "priceSourceIds": [
+          "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+          "6d7c7e10-9c95-4a79-ae80-e1322a1c07ba",
+          "89305415-2cdd-439d-9582-2d4e772f73f0"
+        ],
+        "sourceExpiryUnchanged": true,
+        "recordedDatesUnchanged": true,
+        "marketValidationAuthority": "validateStockHistoryReadiness"
+      },
+      "recordedSourceFreshThrough": "2026-10-15T18:29:59+00:00",
+      "requiredSeparateOrderContext": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+      "bankHistoricalContractNotApplied": true,
+      "financialPitAvailabilityQualified": true
+    },
+    "validationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1"
+  },
+  "counts": {
+    "acceptedReviewCount": 26,
+    "belSnapshotsSinceActivation": 1,
+    "fundamentalObservationCount": 57,
+    "belSelectionsSinceActivation": 1,
+    "providerUsageSinceActivation": 0
+  },
+  "otherSixSelectedSnapshotsUnchanged": true,
+  "frozenReadyValuePaise": 2678900,
+  "evaluationAsOf": "2026-10-16T03:05:50.009335+00:00",
+  "selectedAt": "2026-10-16T03:06:05.496931+00",
+  "effectiveSessionFreshThrough": "2026-10-16T03:30:00.000Z",
+  "recordedSourceFreshThroughUnchanged": "2026-10-15T18:29:59+00:00",
+  "admissionRun": 38843122960,
+  "guardedSaveRun": 38843772764,
+  "duplicateAdmission": "IDEMPOTENT",
+  "duplicateGrantIssuance": "IDEMPOTENT",
+  "grantReplay": "REJECTED_ALREADY_USED",
+  "developmentDeployments": [
+    {
+      "name": "v14-g02-document-admission",
+      "version": 24,
+      "hash": "3f032915f5c6a36d9f3d0c377d1c1930cf06749b325e1ba6441010bc5e24fc4d",
+      "verifyJwt": false,
+      "customOidcAuthenticationPreserved": true
+    },
+    {
+      "name": "p7-ic2-materialize-readiness",
+      "version": 78,
+      "hash": "c132940669cf166834e3dae5bf1ab94697c2b930b3761e85ff95a061480b726e",
+      "verifyJwt": true
+    }
+  ],
+  "limits": [
+    "READY is the selected canonical assessment at the stated evaluation, not an investment recommendation.",
+    "Effective freshness must be re-evaluated at session boundaries; no permanent READY or automatic maintenance closure is claimed.",
+    "The other six G03 stocks and other V1-4 industry stages are not complete."
+  ],
+  "hashVerification": [
+    {
+      "reviewId": "6f7b2475-1352-53e9-a227-b40f2e9c92c7",
+      "sourceId": "faf13717-56cb-5fd0-a3ce-96803cdb9eb3",
+      "sourceHashValid": true,
+      "reviewHashValid": true,
+      "exactReviewApproved": true,
+      "exactSourceApproved": true,
+      "ownerSessionAttribution": null
+    },
+    {
+      "reviewId": "86807491-865f-5123-a12e-a1a0ba61627d",
+      "sourceId": "fb337a1f-bc74-5655-a617-bbfb2721bc93",
+      "sourceHashValid": true,
+      "reviewHashValid": true,
+      "exactReviewApproved": true,
+      "exactSourceApproved": true,
+      "ownerSessionAttribution": null
+    },
+    {
+      "reviewId": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe",
+      "sourceId": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+      "sourceHashValid": true,
+      "reviewHashValid": true,
+      "exactReviewApproved": true,
+      "exactSourceApproved": true,
+      "ownerSessionAttribution": null
+    }
+  ]
+}
