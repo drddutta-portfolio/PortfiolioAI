@@ -6,6 +6,7 @@ from decimal import Decimal
 from pathlib import Path
 import psycopg,requests
 from r4_nse_issuer_bridge import bridge_from_sources
+from r4_recovery_queue import attempt_all
 
 def load(name,file):
     spec=importlib.util.spec_from_file_location(name,Path(__file__).with_name(file))
@@ -93,12 +94,21 @@ def main():
     if seed.exists():
         for item in json.loads(seed.read_text()):source_index[item["metadata"]["xbrl"]]=item
     session=requests.Session();session.headers.update({"User-Agent":"Mozilla/5.0","Accept-Language":"en-IN,en;q=0.8"})
-    session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30).raise_for_status()
+    try:
+        session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30).raise_for_status()
+    except Exception as error:
+        counts["session_bootstrap_errors"]+=1
+        print("R4_NSE_BOOTSTRAP_RETRY_REQUIRED",type(error).__name__,flush=True)
     with psycopg.connect(url) as db,batch.PortfolioBSE() as bse:
         cohort=batch.candidates(db);db.rollback()
         cohort=[r for r in cohort if int(hashlib.sha256(str(r[2]).encode()).hexdigest(),16)%8==args.shard]
         for symbol,isin,sid,name,missing in cohort:
             entry={"symbol":symbol,"missing":missing,"results":[]}
+            details.append(entry)
+            def checkpoint():
+                output=Path(f"tmp/results-r4/nse-lineage-shard-{args.shard}.json")
+                output.parent.mkdir(parents=True,exist_ok=True)
+                output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
             try:
                 code=bse.get_scrip_candidate(symbol)["bse_scrip_code"]
                 header=bse._bse.equityMetaInfo(code)
@@ -106,8 +116,9 @@ def main():
                 matches=[x for x in listing if str(x.get("SCRIP_CD"))==code and x.get("ISIN_NUMBER")==isin]
                 if len(matches)!=1:raise ValueError("EXACT_BSE_LISTING_IDENTITY_UNPROVEN")
                 listing=matches[0]
-                for year,provider in (("2024",legacy),("2025",integrated)):
-                    if not any(p.startswith(year) for p in missing):continue
+                def collect_year(pair):
+                    year,provider=pair
+                    if not any(p.startswith(year) for p in missing):return {"status":"NO_TARGET_PERIODS"}
                     day=datetime.now(timezone.utc).date().isoformat()
                     catalog_key=batch.PREFIX+f"nse-catalog-v1/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
                     records=get_json(client,catalog_key)
@@ -115,9 +126,9 @@ def main():
                         records=provider.list_filings(session,symbol)
                         batch.immutable_put(client,catalog_key,batch.canonical(records));counts["catalog_calls"]+=1
                     else:counts["catalog_reused"]+=1
-                    for item in records:
+                    def collect_filing(item):
                         period=provider.dateval(item.get("toDate"))
-                        if period not in missing:continue
+                        if period not in missing:return {"status":"OUTSIDE_TARGET_PERIODS"}
                         original=item["xbrl"];cachekey=batch.PREFIX+"nse-source-cache/"+hashlib.sha256(original.encode()).hexdigest()+"/source.json"
                         cached=get_json(client,cachekey)
                         if cached:
@@ -134,30 +145,53 @@ def main():
                         digest=batch.sha(raw);original_key=batch.PREFIX+"evidence/original_version="+digest+"/original-xbrl.xml"
                         batch.immutable_put(client,original_key,raw)
                         batch.immutable_put(client,cachekey,batch.canonical({"source_url":original,"sha256":digest,"original_r2_key":original_key}))
-                        try:
-                            proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
-                            # This record is a derived parser input, never the source catalog.
-                            normalized={**item,"fromDate":datetime.fromisoformat(batch.WINDOWS[period][0]).strftime("%d-%b-%Y"),
-                                        "toDate":datetime.fromisoformat(period).strftime("%d-%b-%Y")}
-                            parsed,error=legacy.extract(raw,normalized,symbol,isin,proof)
-                            if error:raise ValueError(error)
-                            revenue="NET_INTEREST_INCOME_QUARTER" if symbol in batch.BANKS else "NET_PREMIUM_EARNED_QUARTER" if symbol in batch.INSURERS else "OPERATING_REVENUE_QUARTER"
-                            required={revenue,"NET_PROFIT_QUARTER","EPS_DILUTED"}
-                            if not required.issubset(parsed["facts"]):raise ValueError("NO_COMPLETE_EXACT_QUARTER_CORE_TRIO")
-                            parsed["facts"]={k:parsed["facts"][k] for k in sorted(required)}
-                            new=persist(db,client,sid,raw,item,parsed,proof,header,listing)
-                            counts["facts_inserted"]+=new;counts["quarter_source_candidates"]+=1
-                            result={"period":period,"scope":parsed["scope"],"status":"SOURCE_WRITTEN_PENDING_R4_SELECTION",
-                                "source_url":original,"facts_inserted":new,"values":{k:f["value"] for k,f in parsed["facts"].items()}}
-                        except ValueError as error:
-                            counts["rejected_"+str(error)[:100]]+=1
-                            result={"period":period,"source_url":original,"status":"REVIEW_REQUIRED","reason":str(error)}
-                        entry["results"].append(result)
+                        proof=bridge_from_sources(raw,item,symbol,isin,header,listing)
+                        # This record is a derived parser input, never the source catalog.
+                        normalized={**item,"fromDate":datetime.fromisoformat(batch.WINDOWS[period][0]).strftime("%d-%b-%Y"),
+                                    "toDate":datetime.fromisoformat(period).strftime("%d-%b-%Y")}
+                        parsed,error=legacy.extract(raw,normalized,symbol,isin,proof)
+                        if error:raise ValueError(error)
+                        revenue="NET_INTEREST_INCOME_QUARTER" if symbol in batch.BANKS else "NET_PREMIUM_EARNED_QUARTER" if symbol in batch.INSURERS else "OPERATING_REVENUE_QUARTER"
+                        required={revenue,"NET_PROFIT_QUARTER","EPS_DILUTED"}
+                        if not required.issubset(parsed["facts"]):raise ValueError("NO_COMPLETE_EXACT_QUARTER_CORE_TRIO")
+                        parsed["facts"]={k:parsed["facts"][k] for k in sorted(required)}
+                        new=persist(db,client,sid,raw,item,parsed,proof,header,listing)
+                        counts["facts_inserted"]+=new;counts["quarter_source_candidates"]+=1
+                        result={"period":period,"scope":parsed["scope"],"status":"SOURCE_WRITTEN_PENDING_R4_SELECTION",
+                            "source_url":original,"facts_inserted":new,"values":{k:f["value"] for k,f in parsed["facts"].items()}}
+                        return result
+                    attempt_all(records,collect_filing,filing_error,save_result)
+                    seen={x.get("period") for x in entry["results"]}
+                    for period in missing:
+                        if period.startswith(year) and period not in seen:
+                            save_result(None,{"period":period,"status":"NO_EXACT_PERIOD_FILING","source":"NSE"})
+                    return {"status":"CATALOG_PROCESSED","year":year}
+                def filing_error(item,error):
+                    db.rollback()
+                    reason=type(error).__name__+":"+str(error)[:200]
+                    status="REVIEW_REQUIRED" if isinstance(error,ValueError) else "RETRY_REQUIRED"
+                    counts["rejected_"+str(error)[:100] if status=="REVIEW_REQUIRED" else "filing_errors"]+=1
+                    period=next((p for p in missing if datetime.fromisoformat(p).strftime("%d-%b-%Y").lower()==str(item.get("toDate")).lower()),item.get("toDate"))
+                    return {"period":period,"source_url":item.get("xbrl"),"status":status,"reason":reason}
+                def save_result(item,result):
+                    if result["status"]=="OUTSIDE_TARGET_PERIODS":return
+                    entry["results"].append(result)
+                    checkpoint()
+                def catalog_error(pair,error):
+                    db.rollback();counts["catalog_errors"]+=1
+                    year,_=pair
+                    for period in missing:
+                        if period.startswith(year):
+                            save_result(None,{"period":period,"status":"RETRY_REQUIRED","stage":"CATALOG",
+                                "reason":type(error).__name__+":"+str(error)[:200]})
+                    return {"status":"RETRY_REQUIRED","year":year}
+                attempt_all((("2024",legacy),("2025",integrated)),collect_year,catalog_error,lambda item,result:None)
             except Exception as error:
                 db.rollback();entry["error"]=type(error).__name__+":"+str(error)[:200];counts["company_errors"]+=1
-            details.append(entry)
-            output=Path(f"tmp/results-r4/nse-lineage-shard-{args.shard}.json");output.parent.mkdir(parents=True,exist_ok=True)
-            output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
+                for period in missing:
+                    entry["results"].append({"period":period,"stage":"ISSUER_OR_COMPANY",
+                        "status":"RETRY_REQUIRED","reason":entry["error"]})
+            checkpoint()
             print("R4_NSE_LINEAGE_PROGRESS",json.dumps({"symbol":symbol,"counts":dict(counts),"results":entry["results"],"error":entry.get("error")}),flush=True)
     print("R4_NSE_LINEAGE_FINAL",json.dumps({"shard":args.shard,"companies":len(details),"counts":dict(counts)}),flush=True)
 
