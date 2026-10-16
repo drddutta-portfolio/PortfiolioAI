@@ -489,7 +489,7 @@ export function ResultsLivePage() {
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
         <strong>R5 · Jun 2026</strong>
         <span>{loadingEvidence ? "Assessing selected source data…" :
-          r5Coverage.complete + " stocks with four qualified quarters"}</span>
+          r5Coverage.complete + " / " + entries.length + " stocks with four qualified quarters · " + (entries.length - r5Coverage.complete) + " R3 pending"}</span>
         <span className="ref-r5-strong">Strong {r5Coverage.counts.STRONG}</span>
         <span className="ref-r5-mixed">Mixed {r5Coverage.counts.MIXED}</span>
         <span className="ref-r5-weak">Weak {r5Coverage.counts.WEAK}</span>
