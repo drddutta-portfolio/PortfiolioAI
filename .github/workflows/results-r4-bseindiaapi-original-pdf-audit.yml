@@ -1,0 +1,46 @@
+name: Results R4 Development BseIndiaApi Original PDF Evidence
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bseindiaapi-original-pdf-audit.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: results-r4-bse-original-pdf-evidence-dev
+  cancel-in-progress: false
+jobs:
+  original-pdf-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download 24-security original filing index from verified Development run
+        uses: actions/download-artifact@v4
+        with:
+          name: results-r4-bseindiaapi-2024-discovery-only
+          run-id: 38929899357
+          github-token: ${{ github.token }}
+          path: tmp/results-r4
+      - name: Install BseIndiaApi and PDF evidence libraries
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'requests==2.32.5' 'mthrottle==0.0.2' 'pymupdf==1.26.6'
+      - name: Validate script and inspect bounded BSE issuer original PDF evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/results/r4-bse-2024-pdf-evidence-diagnostic.py
+          python scripts/results/r4-bse-2024-pdf-evidence-diagnostic.py \
+            --source-index tmp/results-r4/bseindiaapi-2024-discovery.json \
+            --max-docs 16 --out tmp/results-r4/issuer-original-pdf-evidence.json
+      - name: Retain exact document hashes and period/source diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r4-bseindiaapi-original-pdf-evidence
+          path: tmp/results-r4/issuer-original-pdf-evidence.json
+          if-no-files-found: warn
+          retention-days: 21
