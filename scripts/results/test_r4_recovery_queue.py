@@ -4,12 +4,29 @@ import unittest
 import re
 import time
 
-from r4_recovery_queue import run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed
+from r4_recovery_queue import run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed,observe_completed
 
 spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("r4-recovery-monitor.py"))
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_partial_provider_pass_retries_without_waiting_a_day(self):
+        state={};source=SOURCES[-1];dispatched(state,source,100)
+        observe_completed(state,source,{"id":1,"conclusion":"failure"},200)
+        self.assertEqual(state[source]["not_before"],2000)
+        observe_completed(state,source,{"id":1,"conclusion":"failure"},300)
+        self.assertEqual(state[source]["not_before"],2000)
+        self.assertEqual(state[source]["consecutive_failures"],1)
+
+    def test_repeated_source_failures_back_off_and_success_resets(self):
+        state={};source=SOURCES[-1]
+        for index in range(1,5):
+            dispatched(state,source,index*100)
+            observe_completed(state,source,{"id":index,"conclusion":"failure"},index*100+10)
+        self.assertEqual(state[source]["not_before"],410+21600)
+        observe_completed(state,source,{"id":5,"conclusion":"success"},500)
+        self.assertEqual(state[source]["consecutive_failures"],0)
+
     def test_native_worker_returns_verified_parser_output(self):
         self.assertEqual(run_with_timeout(int,("7",),5),7)
 
