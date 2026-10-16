@@ -51,6 +51,10 @@ def readback(db_url: str) -> dict:
                 AND o.period_end=ANY(%s::date[])
                 AND o.metric_code=ANY(%s)
                 AND o.evidence_status='AVAILABLE'
+                AND o.source_code='COMPANY_EXCHANGE_FILING'
+                AND o.currency='INR'
+                AND ((o.metric_code='EPS_DILUTED' AND o.unit='INR_PER_SHARE')
+                     OR (o.metric_code<>'EPS_DILUTED' AND o.unit='INR_CRORE'))
                 AND o.numeric_value IS NOT NULL
                 AND o.source_record_id IS NOT NULL
             """, (list(PERIODS), METRICS))
