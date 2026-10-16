@@ -20,6 +20,7 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_TRENDLYNE_MODE: PARAMETERS
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
