@@ -6,6 +6,9 @@ on:
     branches:
       - PortfolioAI-Development
     paths:
+      - scripts/results/r3-live-public-filing-batch.py
+      - scripts/results/test_r3_live_public_filing_batch.py
+      - scripts/results/r4-verify-quarterly.py
       - .github/workflows/results-r3-targeted-remaining-12.yml
 
 permissions:
