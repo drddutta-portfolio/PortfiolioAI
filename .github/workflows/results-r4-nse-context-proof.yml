@@ -1,0 +1,54 @@
+name: Results R4 NSE Historical Identity and Context Proof
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-nse-context-proof.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Retain and inspect exact historical NSE original identities and contexts
+        run: |
+          python - <<'PY'
+          import importlib.util,sys,json,requests,hashlib,xml.etree.ElementTree as ET
+          from pathlib import Path
+          sys.path.insert(0,'scripts/results')
+          def module(name,path):
+              spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+          old=module('legacy','scripts/results/r5-legacy-2024-xbrl.py')
+          batch=module('batch','scripts/results/r4-bse-historical-batch.py')
+          client=batch.r2_client()
+          session=requests.Session();session.headers.update({'User-Agent':'Mozilla/5.0','Accept-Language':'en-IN,en;q=0.8'})
+          session.get('https://www.nseindia.com/companies-listing/corporate-filings-financial-results',timeout=30).raise_for_status()
+          for symbol in ['AUROPHARMA','AXISBANK','CCL','ONGC']:
+              try:
+                  records=old.list_filings(session,symbol)
+                  for item in records:
+                      if old.dateval(item.get('toDate')) not in old.PERIODS:continue
+                      response=session.get(item['xbrl'],timeout=35);response.raise_for_status()
+                      raw=response.content;root=ET.fromstring(raw)
+                      sha=hashlib.sha256(raw).hexdigest()
+                      key=batch.PREFIX+'nse-diagnostics/original_version='+sha+'/original-xbrl.xml'
+                      batch.immutable_put(client,key,raw)
+                      identities=[{'tag':old.local(n.tag),'value':(n.text or '').strip(),'attributes':n.attrib}
+                                  for n in root.iter() if any(t in old.local(n.tag).lower() for t in ['isin','symbol','scrip','cin','companyname','nameofcompany','identifier'])]
+                      contexts=[{'id':n.attrib.get('id'),'text':ET.tostring(n,encoding='unicode')[:3500]}
+                                for n in root if old.local(n.tag)=='context'][:8]
+                      print('R4_NSE_CONTEXT_PROOF',json.dumps({'symbol':symbol,'metadata':item,
+                          'original_sha256':sha,'r2_key':key,'identities':identities[:25],'contexts':contexts}),flush=True)
+              except Exception as e:print('R4_NSE_PROOF_ERROR',symbol,type(e).__name__,str(e)[:250],flush=True)
+          PY
