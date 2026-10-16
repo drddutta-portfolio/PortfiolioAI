@@ -331,6 +331,17 @@ def check_fact(r,m):
             return "LEGACY_FINANCIAL_CONTEXT_NOT_PROVEN"
     if m.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1":
         f=m["facts"][key]
+        if m.get("parser_revision")=="LEGACY_SAME_ROW_V2" and key!="NET_INTEREST_INCOME_QUARTER":
+            # Replay the original row's numeric prefix independently. Numeric
+            # formula references are labels, including OCR's bullet for minus.
+            line=re.sub(r"\([^)]*[+−•-][^)]*\)","",f.get("evidence_line",""))
+            line=re.sub(r"^\s*\d{1,2}[.)]?\s+","",line)
+            nums=re.findall(r"(?<![A-Za-z0-9,])\(?-?(?:\d{1,3}(?:,\d{2,3})+|\d+)(?:\.\d+)?\)?(?![A-Za-z0-9,])",line)
+            if not nums:return "BSE_BATCH_ORIGINAL_ROW_VALUE_UNPROVEN"
+            original=Decimal(nums[0].replace(",","").replace("(","-").replace(")",""))
+            divisor={"INR_LAKH":Decimal(100),"INR_MILLION":Decimal(10),"INR_CRORE":Decimal(1),"INR_PER_SHARE":Decimal(1)}.get(f.get("original_unit"))
+            if divisor is None or original/divisor!=Decimal(str(f["value"])):
+                return "BSE_BATCH_ORIGINAL_ROW_VALUE_MISMATCH"
         if (f.get("page")!=m.get("financial_page") or f.get("column_index")!=0
             or f.get("original_unit") not in ("INR_LAKH","INR_CRORE","INR_MILLION","INR_PER_SHARE")
             or not isinstance(f.get("evidence_line"),str)
@@ -735,3 +746,4 @@ def main():
     with open("tmp/results-r4/readback.json","w") as f:json.dump(result,f,indent=2,sort_keys=True)
     print(json.dumps(result,sort_keys=True))
 if __name__=="__main__":main()
+
