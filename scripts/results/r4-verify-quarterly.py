@@ -82,7 +82,8 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_BSE_2024_ORIGINAL_PDF_COMPACT_V1",
                          "PORTFOLIOAI_RESULTS_BSE_ASTRAL_2024_PDF_COMPACT_V1",
                          "PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1",
-                         "PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"):
+                         "PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1",
+                         "PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
     # Narrow 2024 catalog ISIN omission; source NSE symbol is independently
@@ -154,6 +155,29 @@ def check_manifest(record,manifest):
             or manifest.get("original_xbrl_retained") is not True
             or manifest.get("reporting_currency")!="INR"):
             return "INVALID_RETAINED_LEGACY_XBRL_REFERENCE"
+    if contract=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1":
+        original=manifest.get("original_sha256_retained")
+        original_key=manifest.get("original_r2_key")
+        proof=manifest.get("issuer_bridge")
+        identity_key=manifest.get("issuer_identity_evidence_r2_key")
+        identity_sha=manifest.get("issuer_identity_evidence_sha256")
+        if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
+            or not re.fullmatch(r"/corporate/xbrl/[A-Za-z0-9_.-]+\.xml",u.path)
+            or u.query or u.fragment or not re.fullmatch(r"[a-f0-9]{64}",str(original or ""))
+            or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
+            or "/original_version="+original+"/original-xbrl.xml" not in original_key
+            or manifest.get("original_xbrl_retained") is not True
+            or manifest.get("raw_nse_bytes_retained") is not True
+            or not isinstance(proof,dict) or proof.get("contract")!="RESULTS_R4_NSE_XML_EXCHANGE_CODE_ISSUER_LINEAGE_V1"
+            or proof.get("symbol")!=manifest.get("symbol") or proof.get("canonical_isin")!=manifest.get("isin")
+            or proof.get("share_basis")!="AS_FILED_EPS_ONLY_CORPORATE_ACTION_COMPARABILITY_UNPROVEN"
+            or not re.fullmatch(r"[0-9]{6}",str(proof.get("bse_scrip_code","")))
+            or not re.fullmatch(r"[a-f0-9]{64}",str(identity_sha or ""))
+            or not isinstance(identity_key,str) or not identity_key.startswith(PREFIX)
+            or "/source_version="+identity_sha+"/exchange-issuer-identity.json" not in identity_key
+            or manifest.get("historical_eps_reporting_basis")!="AS_FILED_NOT_RETROSPECTIVELY_ADJUSTED"
+            or manifest.get("historical_share_adjustment_authorized") is not False):
+            return "NSE_EXCHANGE_ISSUER_LINEAGE_UNPROVEN"
     if contract in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1"):
         if (u.scheme!="https" or u.hostname!="nsearchives.nseindia.com"
             or not re.fullmatch(r"/corporate/xbrl/INTEGRATED_FILING_(?:INDAS|BANKING)_[A-Za-z0-9_]+\.xml",u.path,re.I)
@@ -336,7 +360,7 @@ def check_fact(r,m):
     try:
         if Decimal(str(r["numeric_value"]))!=Decimal(str(fact["value"])):return "NUMERIC_MISMATCH"
     except (ValueError,InvalidOperation,KeyError,TypeError):return "INVALID_DECIMAL"
-    if m.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2024_COMPACT_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1"):
+    if m.get("contract") in ("PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2025_XBRL_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_2024_COMPACT_V1","PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1"):
         original_fact=m["facts"][key]
         if not isinstance(original_fact,dict):return "LEGACY_FACT_MALFORMED"
         contexts=original_fact.get("context_ids",original_fact.get("component_context_ids"))
@@ -600,6 +624,15 @@ def verify(db,s3,apply):
         # Bound R2 reads without making any concurrent database writes. S3
         # clients support concurrent GET; each source is fetched at most once.
         by_id={str(r["source_record_id"]):r for r in observations}
+        bridge_parser=None
+        if any(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1" for r in observations):
+            import importlib.util
+            from pathlib import Path
+            spec=importlib.util.spec_from_file_location("r4_bridge_financial_replay",Path(__file__).with_name("r5-legacy-2024-xbrl.py"))
+            bridge_parser=importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(bridge_parser)
+            bridge_parser.PERIODS={"2024-09-30":"2024-07-01","2024-12-31":"2024-10-01",
+                                   "2025-03-31":"2025-01-01","2025-06-30":"2025-04-01"}
         def check_one(pair):
             k,r=pair
             raw=r["raw_payload"];pointer=raw.get("r2_key") if isinstance(raw,dict) else None
@@ -626,7 +659,7 @@ def verify(db,s3,apply):
                         error="R2_RETAINED_ORIGINAL_PDF_HASH_MISMATCH"
                 except Exception:
                     error="R2_RETAINED_ORIGINAL_PDF_UNAVAILABLE"
-            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1":
+            if not error and document.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"):
                 try:
                     original_bytes=s3.get_object(
                         Bucket=BUCKET,Key=document["original_r2_key"])["Body"].read()
@@ -636,6 +669,29 @@ def verify(db,s3,apply):
                         error="R2_RETAINED_ORIGINAL_XBRL_HASH_MISMATCH"
                 except Exception:
                     error="R2_RETAINED_ORIGINAL_XBRL_UNAVAILABLE"
+            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1":
+                try:
+                    from r4_nse_issuer_bridge import bridge_from_sources
+                    proof_bytes=s3.get_object(Bucket=BUCKET,Key=document["issuer_identity_evidence_r2_key"])["Body"].read()
+                    if sha(proof_bytes)!=document["issuer_identity_evidence_sha256"]:
+                        raise ValueError("IDENTITY_EVIDENCE_HASH_MISMATCH")
+                    proof=json.loads(proof_bytes);metadata=proof["nse_catalog_record"]
+                    if metadata["xbrl"]!=document["issuer_filing_url"] or proof["nse_original_sha256"]!=sha(original_bytes):
+                        raise ValueError("IDENTITY_ORIGINAL_LINK_MISMATCH")
+                    bridge=bridge_from_sources(original_bytes,metadata,document["symbol"],document["isin"],
+                                               proof["bse_header"],proof["bse_listing"])
+                    if bridge.payload()!=document["issuer_bridge"]:
+                        raise ValueError("IDENTITY_REPLAY_MISMATCH")
+                    normalized={**metadata,"fromDate":document["period_start"],"toDate":document["period_end"]}
+                    replay,reason=bridge_parser.extract(original_bytes,normalized,document["symbol"],document["isin"],bridge)
+                    if reason or replay["scope"]!=document["consolidation_scope"]:
+                        raise ValueError("FINANCIAL_CONTEXT_REPLAY_FAILED")
+                    for code,fact in document["facts"].items():
+                        actual=replay["facts"].get(code)
+                        if not actual or any(actual.get(field)!=fact.get(field) for field in ("value","unit","original_value","original_unit","context_ids","component_context_ids")):
+                            raise ValueError("ORIGINAL_FINANCIAL_FACT_REPLAY_MISMATCH")
+                except Exception as exc:
+                    error="NSE_EXCHANGE_LINEAGE_REPLAY_FAILED_"+type(exc).__name__
             return k,(document,error)
         with ThreadPoolExecutor(max_workers=12) as pool:
             for k,validated in pool.map(check_one,by_id.items()):
@@ -661,13 +717,14 @@ def verify(db,s3,apply):
                             r["metric_code"]=="EPS_DILUTED" and
                             (r["raw_payload"].get("historical_identity_link") or r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1")),
                         "general_bse_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"),
+                        "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE)
                         } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -697,6 +754,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.general_bse_eps THEN
                                  'RESULTS_R4_BSE_ORIGINAL_PDF_R2_SOURCE_RECONCILED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_RETROSPECTIVE_SPLIT_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_V1_4_AUTHORITY'
+                               WHEN p.nse_bridge_eps THEN
+                                 'RESULTS_R4_NSE_ORIGINAL_XBRL_EXCHANGE_ISSUER_LINEAGE_RECONCILED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_CATALOG_ISIN_REWRITE_OR_SHARE_ADJUSTMENT; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_V1_4_AUTHORITY'
                                WHEN p.original_share_basis THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED; DO_NOT_COMPARE_EPS_ACROSS_SPLIT; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                ELSE 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY' END
