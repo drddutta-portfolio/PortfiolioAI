@@ -59,6 +59,27 @@ class BseOriginalTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             batch.extract(b,"CAMS","Computer Age Management Services Limited","2024-09-30")
 
+    def test_separate_financial_row_blocks_are_joined_by_geometry(self):
+        d=fitz.open()
+        page=d.new_page(width=1100,height=800)
+        for i,row in enumerate([
+            "COMPUTER AGE MANAGEMENT SERVICES LIMITED",
+            "Statement of UNAUDITED CONSOLIDATED FINANCIAL RESULTS for the quarter ended 30.09.2024",
+            "Amounts in Rs. Lakhs",
+            "Quarter ended 30.09.2024 30.06.2024 30.09.2023"]):
+            page.insert_text((25,36+i*22),row,fontsize=10)
+        for i,(label,nums) in enumerate([
+            ("Revenue from operations",["10,000.00","9,000.00","8,000.00"]),
+            ("Net profit for the period",["1,000.00","900.00","800.00"]),
+            ("Diluted earnings per share",["5.00","4.00","3.00"])
+        ]):
+            y=140+i*22
+            page.insert_text((25,y),label,fontsize=10)
+            for n,value in enumerate(nums):
+                page.insert_text((480+n*140,y),value,fontsize=10)
+        out=batch.extract(d.tobytes(),"CAMS","Computer Age Management Services Limited","2024-09-30")
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"10.00")
+
     def test_indian_grouping(self):
         self.assertEqual(batch.numeric_cells("2,48,893.10 2,38,788.80 19,000.50")[0],
                          batch.Decimal("248893.10"))
