@@ -8,6 +8,7 @@ on:
       - scripts/results/r5-legacy-2024-xbrl.py
       - scripts/results/test_r5_legacy_2024_xbrl.py
       - scripts/results/r4-verify-quarterly.py
+      - scripts/results/r3-live-public-filing-batch.py
 permissions:
   contents: read
 concurrency:
@@ -25,7 +26,7 @@ jobs:
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R5_LEGACY_STOCK_LIMIT: "262"
       RESULTS_R5_LEGACY_ACK: "2024_SEP_DEC_ORIGINAL_XBRL"
-      RESULTS_R5_LEGACY_SYMBOLS: AXISBANK
+      RESULTS_R5_LEGACY_SYMBOLS: CAMS
       RESULTS_R5_LEGACY_DRY_RUN: "0"
     steps:
       - uses: actions/checkout@v4
