@@ -1,12 +1,6 @@
 name: Results R4 Development BSE Original Source Recovery
 on:
   workflow_dispatch:
-  push:
-    branches: [PortfolioAI-Development]
-    paths:
-      - .github/workflows/results-r4-bse-original-batch.yml
-      - scripts/results/r4-bse-historical-batch.py
-      - scripts/results/test_r4_bse_historical_batch.py
 permissions:
   contents: read
 concurrency:
