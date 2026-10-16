@@ -144,3 +144,20 @@ The long-listed 12-company original-source recovery run and narrowly evidenced A
 **Additional split evidence:** Official MSE [MSE/LIST/18443/2026, 9 Jan 2026](https://www.msei.in/SX-Content/Circulars/2026/January/Circular-18443.pdf) ties KOTAKBANK pre-split ISIN **INE237A01028** to new **INE237A01036**, 5:1 effective 2026-01-14; a narrowly scoped 2024 verifier patch and regression added and isolated historical-original acquisition run started. Do not claim coverage increase until live independent readback confirms new issuer trios.
 
 **Why R4 cannot be marked fully PASS yet:** 253 of the 259 historical slots remain without qualified source-selected trios. Most 2024 NSE legacy candidates fail because their historical filing ISIN or one-quarter accounting context cannot be proven. BSE attachments can establish an official dated corporate-result document, but may not establish old/new share identity, consolidation scope, source version and diluted EPS table column. Some 2024-2025 slots involve pre-listing/mergers/demergers and must be justified by dated issuer evidence, not fabricated or auto-marked N/A. Trendlyne relative-quarter metrics are unsuitable as standalone proof of source-quarter precision. R3 remains paused.
+
+## End-of-turn historical R4 readback — exact source accepted
+
+Post-run independent selected-source SQL readback:
+- 2024-09: **169/262** qualified (**93** missing/unqualified)
+- 2024-12: **173/262** qualified (**89** missing/unqualified)
+- 2025-03: **222/262** qualified (**40** missing/unqualified)
+- 2025-06: **231/262** qualified (**31** missing/unqualified)
+- **Historical: 795/1048** original-source selected; **253 remain**. Six quarters (four CAMS, two TDPOWERSYS) newly qualified in this user request; starting historical baseline was **789/1048, 259 missing**.
+- 8-quarter aggregate **1825/2096** qualified, 271 unresolved including the separately paused 18 R3 quarters; the 249/262 R3 display cohort remains protected.
+- [KOTAKBANK 2024 pilot run 38932902520](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38932902520) **SUCCESS as workflow only**, zero observations admitted, four `UNKNOWN_HISTORICAL_ISIN` candidate rejects and zero new decisions, despite independently verified MSE/LIST/18443/2026 old/current ISIN split mapping. Correct action: keep those two 2024 quarters unqualified until their exact archive identity can be shown. [TDPOWERSYS 2024 pilot run 38932545374](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38932545374) similarly executed but admitted zero from five unknown-ISIN sources.
+- [R4 March/June 2025 original recovery 38931855996](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38931855996) passed and admitted **12 TDPOWERSYS source observations**, 6 selected facts across 2 quarter-end groups; 0 conflicts with existing source decisions.
+- [R4 CAMS 2024 recovery 38931510503](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38931510503) qualified both Sep/Dec 2024 CAMS source trios. All pre-split EPS as reported, no rebasing.
+- BseIndiaApi 159 dated BSE company financial-announcement candidates and 15 downloaded original PDFs are discovery inputs only; none was falsely promoted without contemporaneous issuer/SCRIP code, old/new ISIN, three-month financial table, unit, source version and diluted EPS verification.
+- Original-source validation preserved the 5,528 existing qualified selection candidates and **0 selection conflicts** in the latest pilot.
+
+**R4 full historical data completeness is NOT PASS**. Next priority is proving historical old ISINs and source quarter single-period contexts for remaining 253, with audited BSE original PDFs / dated issuer originals and genuinely comparable pre-listing treatments. Trendlyne relative quarter measurements are not suitable substitutes for the primary source requirement. Production/main untouched.
