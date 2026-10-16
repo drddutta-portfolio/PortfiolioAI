@@ -1,4 +1,5 @@
 import {admitRemainingG03Document} from '../_shared/v14-g03-remaining-document-admission-runtime.ts'
+import {admitRemainingG03Cash} from '../_shared/v14-g03-remaining-cash-runtime.ts'
 import {g03RemainingExecutorQualified} from '../_shared/v14-g03-remaining-isolated-scope.ts'
 import {g03ValuationExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {admitFixedG03Valuation} from '../_shared/v14-g03-valuation-admission-runtime.ts'
@@ -32,6 +33,10 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const v=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=v.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
+ if(body?.action==='ADMIT_FIXED_G03_REMAINING_CASH'){
+  if(!g03RemainingExecutorQualified(claims))return reply(403,'G03_REMAINING_EXECUTOR_SCOPE_INVALID')
+  try{const result=await admitRemainingG03Cash(createClient(url,key,{auth:{persistSession:false}}),body,claims);return reply(200,result.code,result)}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_]+$/.test(e.message)?e.message:'G03_REMAINING_CASH_FAILED')}
+ }
  if(body?.action==='ADMIT_FIXED_G03_REMAINING_DOCUMENT'){
   if(!g03RemainingExecutorQualified(claims))return reply(403,'G03_REMAINING_EXECUTOR_SCOPE_INVALID')
   try{const result=await admitRemainingG03Document(createClient(url,key,{auth:{persistSession:false}}),body,claims);return reply(200,result.code,result)}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_]+$/.test(e.message)?e.message:'G03_REMAINING_DOCUMENT_FAILED')}

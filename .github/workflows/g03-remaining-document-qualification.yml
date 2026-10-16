@@ -2,6 +2,10 @@ name: G03 Remaining Six Fixed Documentary Qualification
 on:
   workflow_dispatch:
     inputs:
+      cash_components:
+        description: Qualify the fixed Astra/Data three-year cash cells instead of documentary findings
+        type: boolean
+        default: false
       admit_documents:
         description: Register qualified originals and admit only the fixed documentary findings
         type: boolean
@@ -27,13 +31,19 @@ jobs:
           python-version: '3.11'
       - run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils
       - run: pip install boto3==1.35.99
-      - name: Verify exact originals and admit only fixed documentary findings
+      - name: Verify retained originals and qualify selected fixed evidence
         env:
           G03_ADMIT_REMAINING_DOCUMENTS: ${{ inputs.admit_documents }}
+          G03_QUALIFY_REMAINING_CASH: ${{ inputs.cash_components }}
           CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
-        run: python scripts/v1-4/g03_remaining_documents.py
+        run: |
+          if [ "$G03_QUALIFY_REMAINING_CASH" = "true" ]; then
+            python scripts/v1-4/g03_remaining_cash.py
+          else
+            python scripts/v1-4/g03_remaining_documents.py
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:

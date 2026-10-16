@@ -4,6 +4,7 @@ import {qualifyG03ValuationCurrentSession,type G03ValuationHistoryContext} from 
 import {approvedG03MarginReview,approvedG03MarginSource,fixedG03UnqualifiedMarginCandidate,G03_MARGIN_BATCH} from './v14-g03-margin-review.ts'
 import {deriveG03Margin,G03_MARGIN_FRESH_THROUGH,type MarginComponents} from './v14-g03-margin-components.ts'
 import {approvedG03CashReview,approvedG03CashSource,G03_CASH_BATCH,stableCash} from './v14-g03-cash-review.ts'
+import {remainingCashSecurityQualified,REMAINING_CASH_BATCH,REMAINING_CASH_POLICY} from './v14-g03-remaining-cash-contract.ts'
 import {approvedG03DebtReview,approvedG03DebtSource,G03_DEBT_BATCH,stableDebt} from './v14-g03-debt-review.ts'
 import {deriveG03DebtCoverage,type DebtComponents} from './v14-g03-debt-components.ts'
 import {deriveG03CashConversion,type CashComponents,G03_FINANCIAL_POLICY} from './v14-g03-cash-components.ts'
@@ -132,9 +133,9 @@ export async function validateReviewedRequirementEvidence(input:{
 }):Promise<ReviewedEvidenceResult|null>{
  const {portfolioId,securityId,requirementCode,family:requestedFamily,evaluationAsOfMs,sourceCutoffAtMs}=input
  // The established profile classifies conversion as LOCAL_DERIVATION. Only
- // this owner-approved, source-bound BEL component contract uses numeric
+ // these fixed owner-authorized source-bound cash contracts use numeric
  // review validation internally; all other local derivations stay blocked.
- const family=requestedFamily==='LOCAL_DERIVATION'&&portfolioId===G03_FINANCIAL_POLICY.portfolioId&&securityId===G03_FINANCIAL_POLICY.securityId&&requirementCode==='CFO_FCF_CONVERSION'?'NUMERIC_SERIES':requestedFamily
+ const family=requestedFamily==='LOCAL_DERIVATION'&&portfolioId===G03_FINANCIAL_POLICY.portfolioId&&(securityId===G03_FINANCIAL_POLICY.securityId||remainingCashSecurityQualified(securityId))&&requirementCode==='CFO_FCF_CONVERSION'?'NUMERIC_SERIES':requestedFamily
  if(!["NUMERIC_SERIES","OWNERSHIP_4Q","TEXT_EVIDENCE_REVIEW"].includes(family))return null
  const scoped=input.reviews.filter(r=>r.portfolio_id===portfolioId&&r.security_id===securityId&&r.requirement_code===requirementCode)
  if(!scoped.length)return null
@@ -290,9 +291,10 @@ export async function validateReviewedRequirementEvidence(input:{
  if(!support.length&&insufficient.length)return fail("INSUFFICIENT","REVIEWED_SOURCE_INSUFFICIENT",insufficient.map(x=>x.id))
  if(!support.length)return fail("REVIEW_REQUIRED","NO_APPROVED_ACTIVE_REVIEW",active.map(x=>x.id))
  if(requirementCode==='CFO_FCF_CONVERSION'&&support.some(r=>r.review_kind==='DELEGATED_G03_APPROVED_CASH_COMPONENT_REVIEW')){
-   if(input.minimum!==3||support.length!==3||new Set(observations.map(x=>x.period_end)).size!==3||!G03_CASH_BATCH.periods.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','CASH_COMPONENT_THREE_MATCHED_PERIODS_REQUIRED',support.map(r=>r.id))
+   const remaining=remainingCashSecurityQualified(securityId),expected=remaining?REMAINING_CASH_BATCH.periods.filter(b=>b.securityId===securityId):G03_CASH_BATCH.periods
+   if(input.minimum!==3||support.length!==3||new Set(observations.map(x=>x.period_end)).size!==3||!expected.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','CASH_COMPONENT_THREE_MATCHED_PERIODS_REQUIRED',support.map(r=>r.id))
    const result=resultFrom([...observations].sort((a,b)=>a.period_end!.localeCompare(b.period_end!)),support,input.documentSources,'APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY')
-   return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:G03_FINANCIAL_POLICY.contractSha256,componentSeries:support.map(r=>({reviewId:r.id,periodEnd:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),providerCfoRegistryUnchanged:true,originalComparativesPreserved:true,historicalPitAvailabilityNotClaimed:true}}
+   return {...result,lineage:{...result.lineage,financialContract:G03_FINANCIAL_POLICY.version,financialContractSha256:remaining?REMAINING_CASH_POLICY.directiveSha256:G03_FINANCIAL_POLICY.contractSha256,componentSeries:support.map(r=>({reviewId:r.id,periodEnd:r.period_end,components:r.metadata.financial_components,derivation:r.metadata.derivation})),providerCfoRegistryUnchanged:true,originalComparativesPreserved:true,historicalPitAvailabilityNotClaimed:true}}
  }
  if(requirementCode==='NET_DEBT_AND_INTEREST_COVERAGE'&&support.some(r=>r.review_kind==='DELEGATED_G03_APPROVED_DEBT_COMPONENT_REVIEW')){
    if(input.minimum!==3||support.length!==3||new Set(observations.map(x=>x.period_end)).size!==3||!G03_DEBT_BATCH.periods.every(b=>support.some(r=>r.id===b.reviewId)))return fail('INSUFFICIENT','DEBT_COMPONENT_THREE_MATCHED_PERIODS_REQUIRED',support.map(r=>r.id))

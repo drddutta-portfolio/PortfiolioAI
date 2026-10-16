@@ -1,4 +1,5 @@
 import {g03RemainingExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
+import {G03_REMAINING_CASH_SOURCE_SCOPE} from '../_shared/v14-g03-remaining-cash-contract.ts'
 import {G03_REMAINING_SOURCE_SCOPE} from '../_shared/v14-g02-source-import.ts'
 import {g03ValuationExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {g03MarginExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
@@ -16,13 +17,14 @@ Deno.serve(async req=>{
  let claims:Record<string,unknown>
  try{const verified=await jwtVerify((req.headers.get('authorization')??'').replace(/^Bearer\s+/i,''),jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'5m'});claims=verified.payload}catch{return reply(401,'SIGNED_G02_EXECUTOR_REQUIRED')}
  const body=await req.json().catch(()=>null)
- const remaining=body?.action==='REGISTER_PINNED_G03_REMAINING_ORIGINAL'
+ const remainingCash=body?.action==='REGISTER_PINNED_G03_REMAINING_CASH_ORIGINAL'
+ const remaining=body?.action==='REGISTER_PINNED_G03_REMAINING_ORIGINAL'||remainingCash
  const valuation=body?.action==='REGISTER_PINNED_G03_VALUATION_ORIGINAL'
  const margin=body?.action==='REGISTER_PINNED_G03_MARGIN_ORIGINAL'
- const debt=body?.action==='REGISTER_PINNED_G03_DEBT_ORIGINAL',roce=body?.action==='REGISTER_PINNED_G03_ROCE_ORIGINAL',scope=remaining?G03_REMAINING_SOURCE_SCOPE:valuation?G03_VALUATION_SOURCE_SCOPE:margin?G03_MARGIN_SOURCE_SCOPE:debt?G03_DEBT_SOURCE_SCOPE:roce?G03_ROCE_SOURCE_SCOPE:body?.action==='REGISTER_PINNED_G03_ORIGINAL'?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE
+ const debt=body?.action==='REGISTER_PINNED_G03_DEBT_ORIGINAL',roce=body?.action==='REGISTER_PINNED_G03_ROCE_ORIGINAL',scope=remainingCash?G03_REMAINING_CASH_SOURCE_SCOPE:remaining?G03_REMAINING_SOURCE_SCOPE:valuation?G03_VALUATION_SOURCE_SCOPE:margin?G03_MARGIN_SOURCE_SCOPE:debt?G03_DEBT_SOURCE_SCOPE:roce?G03_ROCE_SOURCE_SCOPE:body?.action==='REGISTER_PINNED_G03_ORIGINAL'?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE
  if(!(remaining?g03RemainingExecutorQualified(claims):valuation?g03ValuationExecutorQualified(claims):margin?g03MarginExecutorQualified(claims):debt?g03DebtExecutorQualified(claims):roce?g03RoceExecutorQualified(claims):scope.group==='G03'?g03SourceExecutorQualified(claims):g02SourceExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
  const sourcePolicy=scope.policy
- if(body?.action!==(remaining?'REGISTER_PINNED_G03_REMAINING_ORIGINAL':valuation?'REGISTER_PINNED_G03_VALUATION_ORIGINAL':margin?'REGISTER_PINNED_G03_MARGIN_ORIGINAL':debt?'REGISTER_PINNED_G03_DEBT_ORIGINAL':roce?'REGISTER_PINNED_G03_ROCE_ORIGINAL':'REGISTER_PINNED_'+scope.group+'_ORIGINAL')||body.authorizationHash!==sourcePolicy.directiveSha256||typeof body.originalHash!=='string'||typeof body.readUrl!=='string'||!g02ReadUrlAllowed(body.originalHash,body.readUrl,scope))return reply(400,'EXACT_G02_SOURCE_AND_AUTHORIZATION_REQUIRED')
+ if(body?.action!==(remainingCash?'REGISTER_PINNED_G03_REMAINING_CASH_ORIGINAL':remaining?'REGISTER_PINNED_G03_REMAINING_ORIGINAL':valuation?'REGISTER_PINNED_G03_VALUATION_ORIGINAL':margin?'REGISTER_PINNED_G03_MARGIN_ORIGINAL':debt?'REGISTER_PINNED_G03_DEBT_ORIGINAL':roce?'REGISTER_PINNED_G03_ROCE_ORIGINAL':'REGISTER_PINNED_'+scope.group+'_ORIGINAL')||body.authorizationHash!==sourcePolicy.directiveSha256||typeof body.originalHash!=='string'||typeof body.readUrl!=='string'||!g02ReadUrlAllowed(body.originalHash,body.readUrl,scope))return reply(400,'EXACT_G02_SOURCE_AND_AUTHORIZATION_REQUIRED')
  const db=createClient(url,key,{auth:{persistSession:false}})
  try{
   const pin=g02SourcePin(body.originalHash,scope),owner=await db.from('portfolios').select('user_id').eq('id',sourcePolicy.portfolioId).single(),security=await db.from('securities').select('id,symbol').eq('id',pin.security_id).single(),authority=await db.from('data_sources').select('is_active').eq('code',pin.source_code).single()

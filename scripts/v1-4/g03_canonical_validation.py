@@ -46,7 +46,7 @@ def main():
     if session_evidence is not None:
         (out / 'sanitized-current-session-evidence.json').write_text(json.dumps(session_evidence, indent=2) + '\n')
     (out / 'sanitized-results.json').write_text(json.dumps(result, indent=2) + '\n')
-    if os.environ.get('G03_MATERIALIZE_REMAINING_DOCUMENTS') == 'true':
+    if os.environ.get('G03_MATERIALIZE_REMAINING_DOCUMENTS') == 'true' or os.environ.get('G03_MATERIALIZE_REMAINING_CASH') == 'true':
         from g03_remaining_canonical_save import materialize_remaining
         materialize_remaining(result, body, audience, gateway, out)
     if os.environ.get('G03_MATERIALIZE_BEL') == 'true':

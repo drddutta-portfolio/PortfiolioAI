@@ -1,0 +1,916 @@
+{
+  "cells": [
+    {
+      "id": "ASTRAMICRO_CFO_2026_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Net cash inflows / (outflows) from operating activities",
+      "rowValues": [
+        "37,595.92",
+        "(9,893.82)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "37,595.92",
+      "originalValue": "37595.92",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "37595.92",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CFO_2025_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Net cash inflows / (outflows) from operating activities",
+      "rowValues": [
+        "37,595.92",
+        "(9,893.82)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(9,893.82)",
+      "originalValue": "-9893.82",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-9893.82",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_PPE_2026_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Payments for property, plant and equipment",
+      "rowValues": [
+        "(7,767.64)",
+        "(6,899.44)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(7,767.64)",
+      "originalValue": "-7767.64",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-7767.64",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_PPE_2025_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Payments for property, plant and equipment",
+      "rowValues": [
+        "(7,767.64)",
+        "(6,899.44)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(6,899.44)",
+      "originalValue": "-6899.44",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-6899.44",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_INTANGIBLES_2026_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Payments for intangible assets",
+      "rowValues": [
+        "(456.18)",
+        "(637.58)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(456.18)",
+      "originalValue": "-456.18",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-456.18",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_INTANGIBLES_2025_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "label": "Payments for intangible assets",
+      "rowValues": [
+        "(456.18)",
+        "(637.58)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(637.58)",
+      "originalValue": "-637.58",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-637.58",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_PAT_2026_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 208,
+      "label": "Profit for the year",
+      "rowValues": [
+        "17,783.73",
+        "14,338.54"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "17,783.73",
+      "originalValue": "17783.73",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "17783.73",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_PAT_2025_968c",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 208,
+      "label": "Profit for the year",
+      "rowValues": [
+        "17,783.73",
+        "14,338.54"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "14,338.54",
+      "originalValue": "14338.54",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "14338.54",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CFO_2025_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Net cash outflows from operating activities",
+      "rowValues": [
+        "(9,893.82)",
+        "(18,743.38)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(9,893.82)",
+      "originalValue": "-9893.82",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-9893.82",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CFO_2024_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Net cash outflows from operating activities",
+      "rowValues": [
+        "(9,893.82)",
+        "(18,743.38)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(18,743.38)",
+      "originalValue": "-18743.38",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-18743.38",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_PPE_2025_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Payments for property, plant and equipment",
+      "rowValues": [
+        "(6,899.44)",
+        "(4,336.05)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(6,899.44)",
+      "originalValue": "-6899.44",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-6899.44",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_PPE_2024_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Payments for property, plant and equipment",
+      "rowValues": [
+        "(6,899.44)",
+        "(4,336.05)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(4,336.05)",
+      "originalValue": "-4336.05",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-4336.05",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_INTANGIBLES_2025_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Payments for intangible assets",
+      "rowValues": [
+        "(637.58)",
+        "(381.56)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(637.58)",
+      "originalValue": "-637.58",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-637.58",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_CASH_INTANGIBLES_2024_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "label": "Payments for intangible assets",
+      "rowValues": [
+        "(637.58)",
+        "(381.56)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(381.56)",
+      "originalValue": "-381.56",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "-381.56",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_PAT_2025_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 173,
+      "label": "Profit for the year",
+      "rowValues": [
+        "14,338.54",
+        "11,299.07"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "14,338.54",
+      "originalValue": "14338.54",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "14338.54",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "ASTRAMICRO_PAT_2024_2761",
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 173,
+      "label": "Profit for the year",
+      "rowValues": [
+        "14,338.54",
+        "11,299.07"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "11,299.07",
+      "originalValue": "11299.07",
+      "originalUnit": "INR_LAKH",
+      "exactINRLakh": "11299.07",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CFO_2026_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Net cash from /(used in) operating activities (A)",
+      "rowValues": [
+        "80.15",
+        "(89.88)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "80.15",
+      "originalValue": "80.15",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "8015.00",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CFO_2025_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Net cash from /(used in) operating activities (A)",
+      "rowValues": [
+        "80.15",
+        "(89.88)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(89.88)",
+      "originalValue": "-89.88",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-8988.00",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_PPE_2026_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+      "rowValues": [
+        "(44.47)",
+        "(35.86)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(44.47)",
+      "originalValue": "-44.47",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-4447.00",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_PPE_2025_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+      "rowValues": [
+        "(44.47)",
+        "(35.86)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(35.86)",
+      "originalValue": "-35.86",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-3586.00",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_INTANGIBLES_2026_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Purchase of intangible assets and intangible under development",
+      "rowValues": [
+        "(27.59)",
+        "(70.57)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "(27.59)",
+      "originalValue": "-27.59",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-2759.00",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_INTANGIBLES_2025_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 130,
+      "label": "Purchase of intangible assets and intangible under development",
+      "rowValues": [
+        "(27.59)",
+        "(70.57)"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(70.57)",
+      "originalValue": "-70.57",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-7057.00",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_PAT_2026_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 129,
+      "label": "Profit for the year (A)",
+      "rowValues": [
+        "271.37",
+        "221.81"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2026,
+      "literalValue": "271.37",
+      "originalValue": "271.37",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "27137.00",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_PAT_2025_ce64",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 129,
+      "label": "Profit for the year (A)",
+      "rowValues": [
+        "271.37",
+        "221.81"
+      ],
+      "rowFiscalYears": [
+        2026,
+        2025
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "221.81",
+      "originalValue": "221.81",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "22181.00",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CFO_2025_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Net cash (used in) / generated from operating activities (A)",
+      "rowValues": [
+        "(89.88)",
+        "139.38"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(89.88)",
+      "originalValue": "-89.88",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-8988.00",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CFO_2024_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Net cash (used in) / generated from operating activities (A)",
+      "rowValues": [
+        "(89.88)",
+        "139.38"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "139.38",
+      "originalValue": "139.38",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "13938.00",
+      "role": "CFO",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_PPE_2025_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+      "rowValues": [
+        "(35.86)",
+        "(46.02)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(35.86)",
+      "originalValue": "-35.86",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-3586.00",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_PPE_2024_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Purchase of property, plant and equipment, capital work in progress, net including",
+      "rowValues": [
+        "(35.86)",
+        "(46.02)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(46.02)",
+      "originalValue": "-46.02",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-4602.00",
+      "role": "CASH_PPE",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_INTANGIBLES_2025_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Purchase of intangible assets and intangible under development",
+      "rowValues": [
+        "(70.57)",
+        "(41.18)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "(70.57)",
+      "originalValue": "-70.57",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-7057.00",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_CASH_INTANGIBLES_2024_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 114,
+      "label": "Purchase of intangible assets and intangible under development",
+      "rowValues": [
+        "(70.57)",
+        "(41.18)"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "(41.18)",
+      "originalValue": "-41.18",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "-4118.00",
+      "role": "CASH_INTANGIBLES",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_PAT_2025_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 113,
+      "label": "Profit for the year (A)",
+      "rowValues": [
+        "221.81",
+        "181.69"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2025,
+      "literalValue": "221.81",
+      "originalValue": "221.81",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "22181.00",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    },
+    {
+      "id": "DATAPATTNS_PAT_2024_bf16",
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 113,
+      "label": "Profit for the year (A)",
+      "rowValues": [
+        "221.81",
+        "181.69"
+      ],
+      "rowFiscalYears": [
+        2025,
+        2024
+      ],
+      "fiscalYear": 2024,
+      "literalValue": "181.69",
+      "originalValue": "181.69",
+      "originalUnit": "INR_CRORE",
+      "exactINRLakh": "18169.00",
+      "role": "PAT",
+      "scope": "STANDALONE"
+    }
+  ],
+  "periods": [
+    {
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "fiscalYear": 2024,
+      "periodStart": "2023-04-01",
+      "periodEnd": "2024-03-31",
+      "sourceId": "637a428a-7aa2-5850-a27a-9b29e75978dc",
+      "reviewId": "82cea981-6f80-5520-a8a7-1624f9916a54",
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "fragment": "Net cash outflows from operating activities (18,743.38) [2024 INR_LAKH]; Payments for property, plant and equipment (4,336.05) [2024 INR_LAKH]; Payments for intangible assets (381.56) [2024 INR_LAKH]; Profit for the year 11,299.07 [2024 INR_LAKH]",
+      "components": {
+        "fiscalYear": 2024,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "-18743.38",
+        "cashCapexOutflow": "-4717.61",
+        "pat": "11299.07",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "fiscalYear": 2025,
+      "periodStart": "2024-04-01",
+      "periodEnd": "2025-03-31",
+      "sourceId": "f6d967d6-d6c0-5c36-a148-bf8f078c2762",
+      "reviewId": "2d20709a-aef0-5abf-abe8-74ac84acb2f1",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "fragment": "Net cash inflows / (outflows) from operating activities (9,893.82) [2025 INR_LAKH]; Payments for property, plant and equipment (6,899.44) [2025 INR_LAKH]; Payments for intangible assets (637.58) [2025 INR_LAKH]; Profit for the year 14,338.54 [2025 INR_LAKH]",
+      "components": {
+        "fiscalYear": 2025,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "-9893.82",
+        "cashCapexOutflow": "-7537.02",
+        "pat": "14338.54",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "securityId": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "fiscalYear": 2026,
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "sourceId": "3cc921bf-721c-585b-a88b-619011d23efc",
+      "reviewId": "1b1748d8-cf57-5f44-a0fd-968d278b1b2e",
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "fragment": "Net cash inflows / (outflows) from operating activities 37,595.92 [2026 INR_LAKH]; Payments for property, plant and equipment (7,767.64) [2026 INR_LAKH]; Payments for intangible assets (456.18) [2026 INR_LAKH]; Profit for the year 17,783.73 [2026 INR_LAKH]",
+      "components": {
+        "fiscalYear": 2026,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "37595.92",
+        "cashCapexOutflow": "-8223.82",
+        "pat": "17783.73",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "fiscalYear": 2024,
+      "periodStart": "2023-04-01",
+      "periodEnd": "2024-03-31",
+      "sourceId": "99b9f355-c9a1-55ab-aad5-c826aacdba7f",
+      "reviewId": "914c9766-3f26-5ad1-adbd-12b61adf56f7",
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "fragment": "Net cash (used in) / generated from operating activities (A) 139.38 [2024 INR_CRORE]; Purchase of property, plant and equipment, capital work in progress, net including (46.02) [2024 INR_CRORE]; Purchase of intangible assets and intangible under development (41.18) [2024 INR_CRORE]; Profit for the year (A) 181.69 [2024 INR_CRORE]",
+      "components": {
+        "fiscalYear": 2024,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "13938.00",
+        "cashCapexOutflow": "-8720.00",
+        "pat": "18169.00",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "fiscalYear": 2025,
+      "periodStart": "2024-04-01",
+      "periodEnd": "2025-03-31",
+      "sourceId": "c6a37709-70f9-564d-ad93-3f67c4ba7a11",
+      "reviewId": "ba36ad5b-6fe3-597e-a2b2-2725e825238b",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "fragment": "Net cash from /(used in) operating activities (A) (89.88) [2025 INR_CRORE]; Purchase of property, plant and equipment, capital work in progress, net including (35.86) [2025 INR_CRORE]; Purchase of intangible assets and intangible under development (70.57) [2025 INR_CRORE]; Profit for the year (A) 221.81 [2025 INR_CRORE]",
+      "components": {
+        "fiscalYear": 2025,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "-8988.00",
+        "cashCapexOutflow": "-10643.00",
+        "pat": "22181.00",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "securityId": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "fiscalYear": 2026,
+      "periodStart": "2025-04-01",
+      "periodEnd": "2026-03-31",
+      "sourceId": "25af8f72-dd0d-567e-a87f-b81629f6ba73",
+      "reviewId": "d369d215-f7a3-54fb-a610-d51216b8b908",
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "fragment": "Net cash from /(used in) operating activities (A) 80.15 [2026 INR_CRORE]; Purchase of property, plant and equipment, capital work in progress, net including (44.47) [2026 INR_CRORE]; Purchase of intangible assets and intangible under development (27.59) [2026 INR_CRORE]; Profit for the year (A) 271.37 [2026 INR_CRORE]",
+      "components": {
+        "fiscalYear": 2026,
+        "scope": "STANDALONE",
+        "unit": "INR_LAKH",
+        "classification": "FY2026_ISSUER_OPERATING_INVESTING_CLASSIFICATION",
+        "cfoOriginal": "8015.00",
+        "cashCapexOutflow": "-7206.00",
+        "pat": "27137.00",
+        "excludedRental": "0",
+        "excludedMutualFundGain": "0",
+        "adjustmentKind": "ISSUER_REPORTED"
+      }
+    }
+  ],
+  "scopeEvidence": [
+    {
+      "originalSha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "pdfPage": 209,
+      "requiredFragments": [
+        "Standalone Statement of Cash Flows",
+        "March 31, 2026",
+        "Rs. Lakhs"
+      ]
+    },
+    {
+      "originalSha256": "2761bdffb9363e2591c8ab6da4c1f4751c5729e5155790748bd504022f4efdcb",
+      "pdfPage": 174,
+      "requiredFragments": [
+        "Standalone Statement of Cash Flows",
+        "March 31, 2025",
+        "Rs. Lakhs"
+      ]
+    },
+    {
+      "originalSha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "pdfPage": 25,
+      "requiredFragments": [
+        "The Company has no subsidiaries. Hence, there is",
+        "no requirement to prepare Consolidated Financial"
+      ]
+    },
+    {
+      "originalSha256": "bf16bf4b6f188aa99145ca8bbe171d2365e6df7eb88246629583ad224215c1e7",
+      "pdfPage": 27,
+      "requiredFragments": [
+        "The Company has no subsidiaries. Hence, there is",
+        "no requirement to prepare Consolidated Financial"
+      ]
+    }
+  ]
+}

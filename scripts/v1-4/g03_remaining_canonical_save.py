@@ -14,6 +14,9 @@ def materialize_remaining(result, body, audience, gateway, out):
     rows = {r['securityId']: r for r in result['results']}
     results = []
     for symbol, security_id in policy['symbols'].items():
+        cash_only = os.environ.get('G03_MATERIALIZE_REMAINING_CASH') == 'true'
+        if cash_only and symbol not in ('ASTRAMICRO', 'DATAPATTNS'):
+            continue
         row = rows[security_id]
         mandatory = [i for i in row['items'] if i.get('required')]
         fully_fresh = row['status'] == 'READY' and all(i['evidence_state'] == 'FRESH' for i in mandatory)
@@ -23,6 +26,8 @@ def materialize_remaining(result, body, audience, gateway, out):
         if any(not any(i['requirement_code'] == code and i['evidence_state'] == 'FRESH'
                        for i in mandatory) for code in policy['allowedRequirementCodes']):
             raise ValueError('G03_REMAINING_DOCUMENTS_NOT_FRESH_NO_GRANT_OR_SAVE:' + symbol)
+        if cash_only and not any(i['requirement_code'] == 'CFO_FCF_CONVERSION' and i['evidence_state'] == 'FRESH' for i in mandatory):
+            raise ValueError('G03_REMAINING_CASH_NOT_FRESH_NO_GRANT_OR_SAVE:' + symbol)
         grant_body = {'action': 'ISSUE_G03_REMAINING_CANONICAL_ONLY_GRANT',
                       'authorizationHash': policy['directiveSha256'], 'securityId': security_id}
         grant = invoke('v14-g02-execution-grant', grant_body, grant_response=True)

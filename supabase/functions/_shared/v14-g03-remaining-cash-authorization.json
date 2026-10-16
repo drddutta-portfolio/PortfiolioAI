@@ -1,0 +1,23 @@
+{
+  "developmentProject": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "ownerId": "f9e48c4c-d796-424b-95f7-2a4a97149543",
+  "version": "V1_4_G03_ASTRA_DATA_MATCHED_CASH_V1",
+  "directiveSha256": "00fffce1d4289eaed604b6e87f9c93b5335bde3664ba1cceb16413746075d01d",
+  "authorityDocument": "docs/private/v1-4-industry-batches/G03_Astra_Data_Cash_Execution_Authority_2026-10-16.md",
+  "securityIds": [
+    "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "4cd44d45-e5c6-4696-9744-25c19f44ac8e"
+  ],
+  "symbols": {
+    "ASTRAMICRO": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "DATAPATTNS": "4cd44d45-e5c6-4696-9744-25c19f44ac8e"
+  },
+  "sourceAuthority": "COMPANY_EXCHANGE_FILING",
+  "providerCallsAllowed": 0,
+  "requiredFiscalYears": [
+    2024,
+    2025,
+    2026
+  ]
+}
