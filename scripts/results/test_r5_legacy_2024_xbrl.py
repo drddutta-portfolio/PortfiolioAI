@@ -28,6 +28,28 @@ def xml(fact="1500000000",currency="iso4217:INR",epsunit=True,dimensions=False):
 </xbrli:xbrl>""".encode()
 
 class LegacyTests(unittest.TestCase):
+ def test_explicit_exchange_lineage_preserves_source_and_exact_financials(self):
+  from r4_nse_issuer_bridge import bridge_from_sources
+  raw=xml().replace(b'</xbrli:xbrl>',b'<ind:Symbol>RELIANCE</ind:Symbol><ind:ScripCode>500325</ind:ScripCode></xbrli:xbrl>')
+  metadata={**METADATA,"isin":"RETAINED_CATALOG_ISIN","companyName":"Reliance Industries Limited",
+    "xbrl":"https://nsearchives.nseindia.com/corporate/xbrl/INDAS_123.xml"}
+  proof=bridge_from_sources(raw,metadata,"RELIANCE","INE002A01018",
+    {"SecurityCode":"500325","ISIN":"INE002A01018"},
+    {"SCRIP_CD":"500325","ISIN_NUMBER":"INE002A01018","Issuer_Name":"Reliance Industries Ltd."})
+  out,error=module.extract(raw,metadata,"RELIANCE","INE002A01018",proof)
+  self.assertIsNone(error)
+  self.assertEqual(out["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"150")
+  self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"10")
+  self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"7.5")
+  self.assertEqual(out["original_catalog_isin"],"RETAINED_CATALOG_ISIN")
+  self.assertEqual(metadata["isin"],"RETAINED_CATALOG_ISIN")
+  self.assertIsNone(out["historical_identity_link"])
+
+ def test_boolean_or_dict_cannot_bypass_historical_identity(self):
+  out,error=module.extract(xml(),METADATA,"RELIANCE","INE002A01018",{"verified":True})
+  self.assertIsNone(out)
+  self.assertEqual(error,"UNVERIFIED_EXCHANGE_ISSUER_BRIDGE")
+
  def test_exact_positive_originals(self):
   x,e=module.extract(xml(),METADATA,"RELIANCE","INE002A01018")
   self.assertIsNone(e)
@@ -151,3 +173,4 @@ class LegacyTests(unittest.TestCase):
   self.assertTrue(module.origin("https://nsearchives.nseindia.com/corporate/xbrl/INDAS_123.xml"))
   self.assertFalse(module.origin("https://evil.org/corporate/xbrl/INDAS_123.xml"))
 if __name__=="__main__":unittest.main()
+
