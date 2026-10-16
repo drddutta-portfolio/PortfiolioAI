@@ -1,0 +1,20 @@
+--- a/supabase/functions/_shared/v14-reviewed-evidence.ts
++++ b/supabase/functions/_shared/v14-reviewed-evidence.ts
+@@ -217,7 +217,7 @@
+    if(delegatedDebt&&!approvedG03DebtSource(r,source))return fail("REVIEW_REQUIRED","G03_DEBT_SOURCE_NOT_QUALIFIED",[r.id])
+    if(delegatedRoce&&!approvedG03RoceSource(r,source))return fail("REVIEW_REQUIRED","G03_ROCE_SOURCE_NOT_QUALIFIED",[r.id])
+    if(delegatedG03&&!approvedG03DocumentSource(r,source))return fail("REVIEW_REQUIRED","G03_DOCUMENT_SOURCE_NOT_QUALIFIED",[r.id])
+-   if(delegated&&source.source_code!=="TRENDLYNE_MCP"&&!approvedBankOfficialFallback(r,source,input.portfolioOwnerId,family)&&!approvedG02DocumentSource(r,source)&&!approvedG03DocumentSource(r,source)&&!approvedG03RoceSource(r,source)&&!approvedG03CashSource(r,source)&&!approvedG03DebtSource(r,source))
++   if(delegated&&source.source_code!=="TRENDLYNE_MCP"&&!approvedBankOfficialFallback(r,source,input.portfolioOwnerId,family)&&!approvedG02DocumentSource(r,source)&&!approvedG03DocumentSource(r,source)&&!approvedG03RoceSource(r,source)&&!approvedG03CashSource(r,source)&&!approvedG03DebtSource(r,source)&&!approvedG03ValuationSource(r,source))
+     return fail("REVIEW_REQUIRED","DELEGATED_SOURCE_AUTHORITY_NOT_PROVEN",[r.id])
+    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
+    if(source.record_kind==="V1_4_KVB_ROA_ORIGINAL_SOURCE_V1"){
+@@ -521,7 +521,7 @@
+  }
+  // Composite observations are validated by their approved AND-component
+  // contract above; they are not raw metric aliases or registry observations.
+- if(!input.canonicalRows.length&&r?.state==='FRESH'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&['APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY','APPROVED_SOURCE_BOUND_DEBT_COMPONENT_SERIES_READY'].includes(r.reason))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:r.reason==='APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY'?'APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL':'APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL'}
++ if(!input.canonicalRows.length&&r?.state==='FRESH'&&r.lineage.financialContract===G03_FINANCIAL_POLICY.version&&['APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY','APPROVED_SOURCE_BOUND_DEBT_COMPONENT_SERIES_READY','APPROVED_SOURCE_BOUND_DATED_VALUATIONS_READY'].includes(r.reason))return {authority:'REVIEW' as const,validation:{state:'FRESH' as const,reason:r.reason,selected:r.observations},reviewed:r,reason:r.reason==='APPROVED_SOURCE_BOUND_CASH_COMPONENT_SERIES_READY'?'APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL':r.reason==='APPROVED_SOURCE_BOUND_DATED_VALUATIONS_READY'?'APPROVED_DATED_VALUATION_REVIEW_NO_CANONICAL':'APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL'}
+  if((canonical.state==="INSUFFICIENT"||canonical.state==="STALE")&&r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
+    const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})
+    if(combined.state==="FRESH")return {authority:"COMBINED" as const,validation:combined,reviewed:r,reason:"REVIEW_SUPPLEMENTS_CANONICAL_SERIES"}
