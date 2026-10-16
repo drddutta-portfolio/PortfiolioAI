@@ -477,6 +477,10 @@ OFFICIAL_NSE_SEEDS={
     "ANGELONE":(
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_174795_15072026180820_iXBRL_WEB.html",
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_151098_16042026203126_iXBRL_WEB.html",
+    ),
+    "TDPOWERSYS":(
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_185131_11082026172616_iXBRL_WEB.html",
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_138537_29012026173514_iXBRL_WEB.html",
     )
 }
 
