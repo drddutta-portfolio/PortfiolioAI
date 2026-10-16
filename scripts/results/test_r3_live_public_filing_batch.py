@@ -30,6 +30,48 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_general_insurer_gi_original_first_quarter_contract(self):
+        html="""<table><tr><td>NSE Symbol</td><td>STARHEALTH</td></tr>
+        <tr><td>ISIN</td><td>INE575P01011</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+        <tr><td>Reporting Type</td><td>Quarterly</td></tr>
+        <tr><td>Nature of report standalone or consolidated</td><td>Standalone</td></tr></table>
+        <table><tr><td>Date of start of reporting period</td><td>01-Oct-2025</td><td>01-Apr-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-Dec-2025</td><td>31-Dec-2025</td></tr>
+        <tr><td>Premium Earned (Net)</td><td>3,52,032.00</td><td>9,52,032.00</td></tr>
+        <tr><td>Profit / (loss) after tax</td><td>31,893.00</td><td>91,893.00</td></tr>
+        <tr><td>Basic and diluted EPS after extraordinary items (net of tax expense) for the period (not to be annualized)</td><td>5.45</td><td>15.45</td></tr>
+        </table>"""
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/GI_109861_04102024201642_iXBRL_WEB.html"
+        self.assertIsNotNone(module.ALLOWED_FILE.fullmatch("/corporate/ixbrl/GI_109861_04102024201642_iXBRL_WEB.html"))
+        parsed,reason=module.extract_source(html,"STARHEALTH","INE575P01011",url)
+        self.assertIsNone(reason)
+        self.assertEqual(parsed["period_end"],"2025-12-31")
+        self.assertEqual(parsed["scope"],"STANDALONE")
+        self.assertEqual(parsed["facts"]["NET_PREMIUM_EARNED_QUARTER"]["value"],"3520.32")
+        self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"318.93")
+        self.assertEqual(parsed["facts"]["EPS_DILUTED"]["value"],"5.45")
+        self.assertNotIn("OPERATING_REVENUE_QUARTER",parsed["facts"])
+        self.assertEqual(module.completed_quarters([
+            ("2025-12-31","STANDALONE","one","NET_PREMIUM_EARNED_QUARTER"),
+            ("2025-12-31","STANDALONE","one","NET_PROFIT_QUARTER"),
+            ("2025-12-31","STANDALONE","one","EPS_DILUTED")
+        ],insurance=True),{"2025-12-31"})
+
+    def test_general_insurer_rejects_gwp_relabelled_revenue(self):
+        html="""<table><tr><td>NSE Symbol</td><td>STARHEALTH</td></tr>
+        <tr><td>ISIN</td><td>INE575P01011</td></tr>
+        <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr></table>
+        <table><tr><td>Date of start of reporting period</td><td>01-Oct-2025</td></tr>
+        <tr><td>Date of end of reporting period</td><td>31-Dec-2025</td></tr>
+        <tr><td>Gross Premiums Written</td><td>400000</td></tr>
+        <tr><td>Profit / (loss) after tax</td><td>31000</td></tr>
+        <tr><td>Basic and diluted EPS after extraordinary items</td><td>5</td></tr></table>"""
+        data,reason=module.extract_insurance(html,"STARHEALTH","INE575P01011")
+        self.assertIsNone(data)
+        self.assertEqual(reason,"INSURANCE_STATEMENT_NOT_UNIQUE")
+
+
     def test_nbfc_catalog_and_seed_discovery_is_identity_bounded(self):
         url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html"
         catalog=[{"symbol":"JIOFIN","ixbrl":url},{"symbol":"ANGELONE","ixbrl":url},
