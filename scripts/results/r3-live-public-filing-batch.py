@@ -571,15 +571,32 @@ def listing_urls(payload, symbol):
     return list(dict.fromkeys(urls))
 
 def fetch_json(session, symbol):
-    params={"index":"equities","symbol":symbol,
-            "type":"Integrated Filing- Financials","page":1,"size":100,
-            "from_date":"01-01-2025","to_date":date.today().strftime("%d-%m-%Y")}
-    url="https://www.nseindia.com/api/integrated-filing-results?"+urlencode(params)
-    r=session.get(url,timeout=22,headers={"Accept":"application/json","Referer":"https://www.nseindia.com/companies-listing/corporate-integrated-filing"})
-    if r.status_code in (401,403,429):raise RuntimeError("LISTING_ACCESS_DENIED_"+str(r.status_code))
-    r.raise_for_status()
-    if "json" not in r.headers.get("content-type","").lower():raise RuntimeError("LISTING_NOT_JSON")
-    return r.json()
+    # The first NSE page can omit 2025-09 sources now that FY27 results
+    # are arriving. Use bounded paging, never unlimited discovery.
+    records=[]
+    for page in range(1,5):
+        params={"index":"equities","symbol":symbol,
+                "type":"Integrated Filing- Financials","page":page,"size":100,
+                "from_date":"01-01-2025","to_date":date.today().strftime("%d-%m-%Y")}
+        url="https://www.nseindia.com/api/integrated-filing-results?"+urlencode(params)
+        r=session.get(url,timeout=22,headers={"Accept":"application/json",
+            "Referer":"https://www.nseindia.com/companies-listing/corporate-integrated-filing"})
+        if r.status_code in (401,403,429):
+            raise RuntimeError("LISTING_ACCESS_DENIED_"+str(r.status_code))
+        r.raise_for_status()
+        if "json" not in r.headers.get("content-type","").lower():
+            raise RuntimeError("LISTING_NOT_JSON")
+        payload=r.json()
+        page_records=payload if isinstance(payload,list) else (
+            payload.get("data",payload.get("records",[])) if isinstance(payload,dict) else [])
+        if isinstance(page_records,dict):
+            page_records=page_records.get("data",[])
+        if not isinstance(page_records,list):
+            raise RuntimeError("UNEXPECTED_LISTING_PAGE_STRUCTURE")
+        records.extend(page_records)
+        if len(page_records)<100:break
+        time.sleep(0.8)
+    return records
 
 def r2_client():
     acc=required("CLOUDFLARE_R2_ACCOUNT_ID").strip()
