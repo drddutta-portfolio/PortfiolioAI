@@ -99,7 +99,7 @@ jobs:
           print(json.dumps({k:r[k] for k in ("equities","etfs_excluded","complete_equities","incomplete_equities","result")},sort_keys=True))
           PY
       - name: Enforce truthful R3 262-equity completion gate
-        if: ${{ github.ref_name == 'PortfolioAI-Development' }}
+        if: ${{ !cancelled() && github.ref_name == 'PortfolioAI-Development' }}
         run: python scripts/results/r3-current-coverage-readback.py --strict > tmp/results-r3/strict-coverage.json
       - name: Publish non-secret acquisition and source-verification readbacks
         if: always()
