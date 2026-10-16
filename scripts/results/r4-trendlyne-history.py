@@ -21,6 +21,20 @@ def main():
         def call(request_id,tool,args,security=None):
             body={"tool":tool,"args":args,"requestId":request_id}
             if security:body["securityId"]=security
+            with db.cursor() as cur:
+                cur.execute("""SELECT raw_payload->>'r2_key' FROM data_source_records
+                  WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'
+                    AND raw_payload->'request'->>'tool'=%s
+                    AND raw_payload->'request'->'args'=%s::jsonb
+                    AND coalesce(raw_payload->'request'->>'securityId','')=%s
+                    AND retrieved_at>=current_date ORDER BY retrieved_at DESC LIMIT 1""",
+                    (tool,json.dumps(args),security or ""))
+                cached=cur.fetchone()
+            db.rollback()
+            if cached:
+                data=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cached[0])["Body"].read())
+                print("R4_TRENDLYNE_REUSED",request_id,tool,flush=True)
+                return data["result"]
             request=urllib.request.Request("https://"+batch.REF+".supabase.co/functions/v1/discover-trendlyne-capabilities",
                 data=json.dumps(body).encode(),headers={"Authorization":"Bearer "+oidc(),
                 "content-type":"application/json","x-portfolioai-r4":"history"})
@@ -72,6 +86,50 @@ def main():
                 "financial reporting quarter end date results period date"]):
                 result=call("parameters-"+str(index),"search_financial_parameters",{"query":query})
                 print("R4_EXACT_PARAMETER_DISCOVERY",index,str(result)[:40000],flush=True)
+            return
+        if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="HISTORICAL":
+            with db.cursor() as cur:
+                cur.execute("""SELECT raw_payload->>'r2_key' FROM data_source_records
+                  WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'
+                    AND raw_payload->'request'->>'tool'='search_financial_parameters'""")
+                keys=[r[0] for r in cur.fetchall()]
+            db.rollback()
+            parameters={}
+            for key in keys:
+                value=json.loads(client.get_object(Bucket=batch.BUCKET,Key=key)["Body"].read())["result"]
+                decoded=json.loads(value) if isinstance(value,str) else value
+                for p in decoded.get("data",[]):parameters[p["parameter"]]=p["helping_text"]
+            wanted=[p for p in ("srqmq7","srqmq6","srqmy2","npqmq7","npqmq6","npqmy2",
+                "beforedilutedepsq","epsadjqmq7","epsadjqmq6","epsadjqmq8") if p in parameters]
+            if not wanted:raise RuntimeError("OBSERVED_PARAMETER_TOKENS_REQUIRED")
+            cohort=batch.candidates(db);db.rollback()
+            planned=[];blocked=[]
+            for symbol,isin,sid,name,periods in cohort:
+                with db.cursor() as cur:
+                    cur.execute("""SELECT provider_instrument_id FROM security_identity_observations
+                      WHERE security_id=%s AND source_code='TRENDLYNE_MCP' AND evidence_status='MATCHED'
+                        AND observed_isin=%s AND provider_instrument_id IS NOT NULL
+                      ORDER BY created_at DESC LIMIT 1""",(sid,isin))
+                    identity=cur.fetchone()
+                db.rollback()
+                if not identity:
+                    blocked.append({"symbol":symbol,"reason":"EXACT_PROVIDER_IDENTITY_UNRESOLVED","periods":periods});continue
+                pid=identity[0]
+                planned.append((str(sid),symbol,None,"get_stock_parameter_values",
+                    {"stock_codes":[symbol],"parameters":wanted}))
+                for period in periods:
+                    query=(f"Only {name} ({symbol}), Trendlyne stock ID {pid}, ISIN {isin}: signed consolidated quarterly financial results for the three months ended {period}. "
+                           "Revenue from operations, profit after tax for the period, diluted EPS, original units, exact dated quarter column and official BSE/NSE/issuer filing URL. "
+                           "Exclude unrelated companies, annual and cumulative period figures.")
+                    planned.append((str(sid),symbol,period,"get_document_search_results",{"query":query}))
+            shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
+            selected=[(i,p) for i,p in enumerate(planned) if i%shards==shard]
+            if len(selected)>40:raise RuntimeError("PROVIDER_PER_RUN_BOUND_EXCEEDED")
+            print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":blocked,"parameter_labels":{p:parameters[p] for p in wanted}}),flush=True)
+            for index,(sid,symbol,period,tool,args) in selected:
+                result=call("historical-"+str(index),tool,args,sid)
+                print("R4_TRENDLYNE_EVIDENCE",json.dumps({"symbol":symbol,"period":period,"tool":tool,"result":str(result)[:18000],
+                    "relative_parameter_dates_not_inferred":True,"canonical_promotion_performed":False}),flush=True)
             return
         with db.cursor() as cur:
             cur.execute("""SELECT s.id::text,s.symbol,s.isin,i.provider_instrument_id
