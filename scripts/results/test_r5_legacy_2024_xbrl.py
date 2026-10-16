@@ -66,6 +66,24 @@ class LegacyTests(unittest.TestCase):
   self.assertIsNone(other)
   self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
 
+ def test_cams_2024_original_historical_isin_uses_exact_split_proof(self):
+  original=xml().replace(b"RELIANCE",b"CAMS")
+  manifest={**METADATA,"symbol":"CAMS"}
+  manifest.pop("isin")
+  x,err=module.extract(original,manifest,"CAMS","INE596I01020")
+  self.assertIsNone(err)
+  self.assertEqual(x["source_isin"],"INE596I01012")
+  self.assertIn("NCL/CMPT/71607",x["historical_identity_link"]["evidence"])
+  self.assertEqual(x["independent_isin_evidence"],"NCL_CMPT71607_CAMS_2024_PRE_SPLIT_ISIN")
+  self.assertEqual(x["facts"]["EPS_DILUTED"]["value"],"7.5")
+  forged=original.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
+  fail,reason=module.extract(forged,manifest,"CAMS","INE596I01020")
+  self.assertIsNone(fail)
+  self.assertEqual(reason,"SOURCE_EMBEDDED_ISIN_MISMATCH")
+  other,reason=module.extract(original,manifest,"CAMS","INE596I01021")
+  self.assertIsNone(other)
+  self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
+
  def test_source_embedded_isin_must_not_disagree_with_nse_circular(self):
   issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
   issuer_xml=issuer_xml.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
