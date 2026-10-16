@@ -1,0 +1,36 @@
+{
+  "verifiedAtUtc": "2026-10-16T04:13:57Z",
+  "deployments": [
+    {
+      "name": "v14-g02-official-source-import",
+      "version": 10,
+      "sha256": "f206aa46094845f53bad0571f4706cf4e811e49bf2ed8ca35b77e9245f67ff34",
+      "verifyJwt": false
+    },
+    {
+      "name": "p7-ic2-materialize-readiness",
+      "version": 79,
+      "sha256": "6169891416c006b8cb6a067ab8c25af44e5b59e5f2e146f3dea95bd1ad8714af",
+      "verifyJwt": true
+    },
+    {
+      "name": "v14-g02-document-admission",
+      "version": 26,
+      "sha256": "27370a4d5866456db6c4528ea190466af9ccda90a0add326156ceaf234218b7f",
+      "verifyJwt": false
+    },
+    {
+      "name": "v14-g02-execution-grant",
+      "version": 11,
+      "sha256": "fb068f168524a0c5d0a8ce029146601e3b0479a37418564685947796d295e63c",
+      "verifyJwt": false
+    }
+  ],
+  "existingRuntimePreservation": {
+    "admissionInitialMinimalRoute": "57/58 preceding files byte-identical; existing entrypoint adds one exact action",
+    "grantInitialMinimalRoute": "33/34 preceding files byte-identical; existing entrypoint adds one exact action",
+    "canonical": "69/70 preceding files byte-identical; fixed documentary recognition only",
+    "leaseFix": "only newly added remaining-stock runtime operation names and explicit acquisition-error reporting changed; no schema change"
+  },
+  "getFunctionReadback": "Every returned runtime file matches its final deployed candidate after normalizing bundle path prefixes. Type-only compiler dependencies may be omitted by the platform."
+}

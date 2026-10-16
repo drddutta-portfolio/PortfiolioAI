@@ -1,0 +1,1425 @@
+{
+  "verifiedAtUtc": "2026-10-16T04:13:57Z",
+  "scope": "G03_SIX_REMAINING_DOCUMENTARY_CONTINUATION_DEVELOPMENT",
+  "implementationHead": "d63b360c059233090905fe6f8d5b6886b80033d4",
+  "population": {
+    "ASTRAMICRO": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+    "DATAPATTNS": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+    "MTARTECH": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+    "HAL": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+    "GRSE": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+    "ZENTEC": "92fbe654-b418-4f72-b63c-36c57aec095b"
+  },
+  "beforeSelected": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "selection_id": "1670b9db-0152-4034-8ed6-4d785b00671c",
+      "snapshot_id": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+      "selected_at": "2026-10-07 20:28:12.201386+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "selection_id": "84bf145c-31c6-4b25-bc58-0b7693eb6bbb",
+      "snapshot_id": "19a2fee7-9190-43d8-90ac-9a2a8319e0a4",
+      "selected_at": "2026-10-07 20:27:05.638436+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "selection_id": "a75036c9-682e-491e-95c7-1d2338cd9655",
+      "snapshot_id": "76b3b6bd-fc0a-4ac2-b243-3759673278b2",
+      "selected_at": "2026-10-07 04:15:48.867561+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 1,
+      "blockers": 10
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "selection_id": "d11deef1-6a04-4245-a1b5-bc1f1b7205aa",
+      "snapshot_id": "551b57a0-0a22-422a-8ea3-304ccf7a009a",
+      "selected_at": "2026-10-05 19:57:21.107944+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 1,
+      "blockers": 10
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "selection_id": "94b02857-1159-4236-99be-6f17c89bcd93",
+      "snapshot_id": "2a55097f-67f9-4777-8f7f-8914728b7d0f",
+      "selected_at": "2026-10-07 20:25:17.060272+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "selection_id": "7f2cb0d6-bef4-47c7-91ca-b9ff1e602113",
+      "snapshot_id": "5cdba472-feed-41ff-bc45-559bb772e509",
+      "selected_at": "2026-10-07 20:27:09.472364+00",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "required_count": 11,
+      "fresh_count": 3,
+      "blockers": 8
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "selection_id": "e452af5f-12c2-46e9-8d92-5c674d56b97a",
+      "snapshot_id": "97c13456-51d7-46bb-b7cf-f75d1fced620",
+      "selected_at": "2026-10-16 03:06:05.496931+00",
+      "snapshot_status": "READY",
+      "required_count": 11,
+      "fresh_count": 11,
+      "blockers": 0
+    }
+  ],
+  "beforeCurrentProspectiveBlockersPerRemainingStock": 10,
+  "afterSelected": [
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "snapshot_id": "29f70e10-6f75-4a18-b6a3-c26712b76bf5",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "8f834bf3-1b99-4474-8c53-9bc0475a7a20",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:34.515306+00",
+      "execution_grant_id": "4258ab13-98b9-4209-a23a-3cab41aeea19",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "7529c4a1-f0df-5dbf-ac50-39148e6b2672",
+          "selected_evidence": "06bc4acf-ab78-51aa-a66f-8f3444bb00f2"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "94ac5bdb-e2ab-426d-9e89-38bcbf9cf0d5",
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "25f8556d-19f2-46f6-9cc5-c9e0a7cd5706",
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "c4034e3d-0cff-55e9-ade4-8fd4b8a37470",
+          "selected_evidence": "e3c34f0a-ec6c-5267-aedd-9fd3f0a28a34"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "snapshot_id": "5bf62a80-c6e2-4971-bfac-420d951b62d7",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "b79ab49a-2b1f-49a7-b54c-8e0a568582fe",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:56.386687+00",
+      "execution_grant_id": "e299026d-a7de-44fd-ad41-36d712158ea9",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "29374fc1-467a-5ddd-a007-2a868c66a52c",
+          "selected_evidence": "8fc21ff6-4686-5b57-a85c-d60a75f5d234"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "500ebeb1-acf8-4e09-a3c9-b58358797dd0",
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "e2365890-d83a-5cf2-a974-98453944a0f6",
+          "selected_evidence": "4a532b17-336f-5a1e-a9e5-af730e2ab66b"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "34fe259b-056c-4b65-af6a-3e7b2ce70df4",
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "snapshot_id": "12d732a6-5745-4fb8-a69d-22c7bded6a82",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "240f7825-6f33-4921-9b95-7f58f441a116",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:42.365571+00",
+      "execution_grant_id": "307822c3-41b3-48cb-a1be-19b58d7541cc",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "58c41508-79ff-5da3-ac11-f4816f25d0d8",
+          "selected_evidence": "d8226397-a1fc-52ad-a279-82afeceefa6f"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "9df81d0b-df32-4ec3-aa77-9be14855648d",
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "52b74a5f-e53e-5286-a6ce-7abea1faa30d",
+          "selected_evidence": "3ee1eb61-c472-5c6c-a7bc-8bc129fbf428"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "5c42aacf-abec-4fe4-a810-3ed9b6dabe02",
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "snapshot_id": "0abd559f-6a0a-45a4-b4c3-8b510ff361aa",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "127924c7-8d70-478c-a87a-44f8e7558816",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:11:05.004121+00",
+      "execution_grant_id": "84842e9d-08ea-4e75-af54-544a154d228d",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "ed55dc41-4d33-5615-ae57-f07d362f9ac4",
+          "selected_evidence": "45b45cc7-1f8d-5be5-af4d-fff32f1db586"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "REVIEW_REQUIRED",
+          "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "HISTORY_CONTRACT_NOT_PROVEN",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "d2af1a1a-830f-5258-a098-6ca7a8ea087f",
+          "selected_evidence": "fb83865e-fdb7-5d0c-ac7a-af31a97607c4"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "snapshot_id": "1a94ced6-7f71-4e35-969f-cfe73d246786",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "6c0696a6-16d4-4949-8fe0-63c85a4c1aed",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:25.620108+00",
+      "execution_grant_id": "d4158c2f-a040-424f-a7b3-ac7c62fa4aaf",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "5ab11dcf-ec37-571f-ab4f-38dcf87406ab",
+          "selected_evidence": "c5f61f88-30c5-5881-abcd-9cc1f37d8e3e"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "MISSING",
+          "reason": "REQUIRED_EVIDENCE_MISSING",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "REPORTING_PERIOD_INVALID",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "6778b629-e6e2-4c49-95d9-8595c62fe0f3",
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "102898a4-bd50-5f2d-ae32-e0cec7eba9da",
+          "selected_evidence": "44c403b8-3ad9-562a-aa2e-c1de27cae5b3"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "72b0a8e2-ba84-4fa8-8868-139171476c0d",
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "snapshot_id": "27d916af-e290-41ef-9b0b-647a6844ff8a",
+      "snapshot_status": "REVIEW_REQUIRED",
+      "selection_id": "58f27dd2-3211-404e-85eb-973c84b3b6bf",
+      "selection_run_id": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+      "evaluation_as_of": "2026-10-16 04:10:12.0516+00",
+      "selected_at": "2026-10-16 04:10:49.683657+00",
+      "execution_grant_id": "de358612-2951-4a46-a182-3305c6a4466d",
+      "blockers": 8,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "550a6aae-54c3-58d4-ad86-ea5adee0872a",
+          "selected_evidence": "98a76748-e8ba-5f78-a591-4e488658bb44"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence": null
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "STALE",
+          "reason": "HISTORY_LATEST_SESSION_STALE",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence": null
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence": null
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+          "source": "187d2ca6-053e-492e-9b55-1f34ac9b91f3",
+          "selected_evidence": null
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "fb5d6da2-bdc7-5211-a4c6-06305e381a2f",
+          "selected_evidence": "d180096d-6b1d-59b2-a9df-ec9de7e9a32a"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence": null
+        },
+        {
+          "code": "VALUATION",
+          "state": "REVIEW_REQUIRED",
+          "reason": "DATED_REPORTING_PERIODS_NOT_PROVEN",
+          "source": "dc9b6725-67f4-4200-be6d-9b05e5e185bd",
+          "selected_evidence": null
+        }
+      ]
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "snapshot_id": "97c13456-51d7-46bb-b7cf-f75d1fced620",
+      "snapshot_status": "READY",
+      "selection_id": "e452af5f-12c2-46e9-8d92-5c674d56b97a",
+      "selection_run_id": "2e0ae209-1a56-4d8d-b9ae-b7b493c196d8",
+      "evaluation_as_of": "2026-10-16 03:05:50.009335+00",
+      "selected_at": "2026-10-16 03:06:05.496931+00",
+      "execution_grant_id": "2b79173f-f991-4f72-ac2c-9cacb842cd0f",
+      "blockers": 0,
+      "requirements": [
+        {
+          "code": "BUSINESS_DURABILITY",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "a0b3e336-9136-546e-ac03-edaf13ddd8dc",
+          "selected_evidence": "d66deded-c38c-5c07-a054-6597b302f6f5"
+        },
+        {
+          "code": "CFO_FCF_CONVERSION",
+          "state": "FRESH",
+          "reason": "APPROVED_CASH_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "60c7adcd-c5b5-5532-bd6b-38edd6a5bd10",
+          "selected_evidence": "bfb36725-d431-550b-8b75-179fe5459444"
+        },
+        {
+          "code": "DRAWDOWN_VOLATILITY_RISK",
+          "state": "FRESH",
+          "reason": "STOCK_HISTORY_CONTRACT_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "IC3_SNAPSHOT_LINEAGE",
+          "state": "FRESH",
+          "reason": "IC3_LINEAGE_READY",
+          "source": null,
+          "selected_evidence": null
+        },
+        {
+          "code": "MOMENTUM_12M_RELATIVE",
+          "state": "FRESH",
+          "reason": "STOCK_BENCHMARK_HISTORY_READY",
+          "source": "b47c813c-d281-56ab-a802-d1a71a57e245",
+          "selected_evidence": null
+        },
+        {
+          "code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "state": "FRESH",
+          "reason": "APPROVED_DEBT_COMPONENT_REVIEW_NO_CANONICAL",
+          "source": "9ca3ac8c-c293-5b94-a3a3-f027da3921aa",
+          "selected_evidence": "9d13c947-de36-5438-adfb-d055bd5b57c7"
+        },
+        {
+          "code": "OPERATING_MARGIN_HISTORY",
+          "state": "FRESH",
+          "reason": "APPROVED_MARGIN_PAIRS_SELECTED_UNDATED_TTM_RETAINED",
+          "source": "33bc927d-4df1-544c-a8ed-fa7f527a4110",
+          "selected_evidence": "9c4c9e20-643e-54a9-a096-9a7cf43dbb5f"
+        },
+        {
+          "code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "b55ae585-9921-550a-a49a-8dd977003321",
+          "selected_evidence": "90f400e7-5f9c-5ace-a8f7-0d7f6806db4c"
+        },
+        {
+          "code": "OWNERSHIP_GOVERNANCE",
+          "state": "FRESH",
+          "reason": "REVIEW_FALLBACK_NO_CANONICAL",
+          "source": "6a2f01d9-da63-5331-ac97-f97aa64e6b40",
+          "selected_evidence": "a3fabf47-dd0c-5339-a1c0-ade81c51c4ea"
+        },
+        {
+          "code": "ROCE_OR_ROIC",
+          "state": "FRESH",
+          "reason": "G03_FIXED_ISSUER_SERIES_SELECTED_LEGACY_UNQUALIFIED_RETAINED",
+          "source": "19bce51f-582d-51ec-a73e-15e5a7f501de",
+          "selected_evidence": "7e65174e-354b-5a9d-a36f-b6a2992a88b8"
+        },
+        {
+          "code": "VALUATION",
+          "state": "FRESH",
+          "reason": "APPROVED_DATED_VALUATION_REVIEW_NO_CANONICAL",
+          "source": "c9734ce6-1e4c-55cf-adac-2e4a9c0ddcec",
+          "selected_evidence": "06bf47d7-1ca0-5684-af00-35ae8c7ff2fe"
+        }
+      ]
+    }
+  ],
+  "originalRegistrations": [
+    {
+      "symbol": "ASTRAMICRO",
+      "sha256": "968c8b7c39a7e04a8ccfd53144cf8fad450aef170af8eedd842e694a6f845a0d",
+      "byteLength": 8389931,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        9,
+        182
+      ],
+      "sourceId": "8375fbcd-62b0-570e-a48d-30e16b66f3d8",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "sha256": "ce6414fc4af37d0112a97cb197d83ca68e5fd30ebd2a500f3305b66bee212246",
+      "byteLength": 7663843,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        6,
+        69
+      ],
+      "sourceId": "281f9f71-956d-5077-a43e-465af63f3ca9",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "GRSE",
+      "sha256": "15116e4cee11072ebd288085e502fb1f3a0e4c5e2247d8186be5e636319660ce",
+      "byteLength": 6457019,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        4,
+        54
+      ],
+      "sourceId": "fc4ddc8a-5f8b-513f-a8ae-7ab8cec7b26d",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "MTARTECH",
+      "sha256": "911187bf984fd39de8362a4f8a8be373beb6d13322357186489571284d6b8fc6",
+      "byteLength": 13819589,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        8,
+        97
+      ],
+      "sourceId": "63899c52-3ea6-5ba1-ab32-5628faa242a8",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "HAL",
+      "sha256": "381b72ee844c2f4a6aa8f256e897414b24c539613b373b9fafa0fb6c819ebc66",
+      "byteLength": 12603450,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        49,
+        109
+      ],
+      "sourceId": "fc004b3a-41c6-5461-a07d-a5f6e75832f8",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "ZENTEC",
+      "sha256": "6ace2e0b85c2917d1158af79039918f5ae2dc223d14c0fe28bc0845c408e4507",
+      "byteLength": 16482122,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        2
+      ],
+      "sourceId": "bf463a7b-ea23-54a1-ae75-42a8c48b0cd1",
+      "duplicateRegistration": "IDEMPOTENT"
+    },
+    {
+      "symbol": "ZENTEC",
+      "sha256": "f4609aba4152fee38b9ba9bb3a4569e4b64593d4d054e3ce7d5b3bb4406b1092",
+      "byteLength": 289816,
+      "r2ObjectCreated": false,
+      "pagesQualified": [
+        1
+      ],
+      "sourceId": "e50901b3-170b-5283-af54-dcbc8e29fe9c",
+      "duplicateRegistration": "IDEMPOTENT"
+    }
+  ],
+  "acceptedReviews": [
+    {
+      "symbol": "ASTRAMICRO",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "c5f61f88-30c5-5881-abcd-9cc1f37d8e3e",
+      "sourceId": "5ab11dcf-ec37-571f-ab4f-38dcf87406ab",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "ASTRAMICRO",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "44c403b8-3ad9-562a-aa2e-c1de27cae5b3",
+      "sourceId": "102898a4-bd50-5f2d-ae32-e0cec7eba9da",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "06bc4acf-ab78-51aa-a66f-8f3444bb00f2",
+      "sourceId": "7529c4a1-f0df-5dbf-ac50-39148e6b2672",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "e3c34f0a-ec6c-5267-aedd-9fd3f0a28a34",
+      "sourceId": "c4034e3d-0cff-55e9-ade4-8fd4b8a37470",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "GRSE",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "8fc21ff6-4686-5b57-a85c-d60a75f5d234",
+      "sourceId": "29374fc1-467a-5ddd-a007-2a868c66a52c",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "GRSE",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "4a532b17-336f-5a1e-a9e5-af730e2ab66b",
+      "sourceId": "e2365890-d83a-5cf2-a974-98453944a0f6",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "MTARTECH",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "d8226397-a1fc-52ad-a279-82afeceefa6f",
+      "sourceId": "58c41508-79ff-5da3-ac11-f4816f25d0d8",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "MTARTECH",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "3ee1eb61-c472-5c6c-a7bc-8bc129fbf428",
+      "sourceId": "52b74a5f-e53e-5286-a6ce-7abea1faa30d",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "HAL",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "98a76748-e8ba-5f78-a591-4e488658bb44",
+      "sourceId": "550a6aae-54c3-58d4-ad86-ea5adee0872a",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "HAL",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "d180096d-6b1d-59b2-a9df-ec9de7e9a32a",
+      "sourceId": "fb5d6da2-bdc7-5211-a4c6-06305e381a2f",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "ZENTEC",
+      "requirementCode": "BUSINESS_DURABILITY",
+      "reviewId": "45b45cc7-1f8d-5be5-af4d-fff32f1db586",
+      "sourceId": "ed55dc41-4d33-5615-ae57-f07d362f9ac4",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    },
+    {
+      "symbol": "ZENTEC",
+      "requirementCode": "OWNERSHIP_GOVERNANCE",
+      "reviewId": "fb83865e-fdb7-5d0c-ac7a-af31a97607c4",
+      "sourceId": "d2af1a1a-830f-5258-a098-6ca7a8ea087f",
+      "duplicateAdmission": "IDEMPOTENT",
+      "doesNotProve": [
+        "clean_governance",
+        "ownership_percentage_trend",
+        "positive_score",
+        "financial_growth",
+        "valuation",
+        "overall_READY"
+      ]
+    }
+  ],
+  "independentSourceAndReviewHashVerification": [
+    {
+      "reviewId": "06bc4acf-ab78-51aa-a66f-8f3444bb00f2",
+      "sourceId": "7529c4a1-f0df-5dbf-ac50-39148e6b2672",
+      "sourceHash": "df2bb7522b023ef530122e44c4d59ee6af45edae04b388013cd3ef147e89c0d2",
+      "reviewHash": "4956333a91b5400f0c9d36484ad25537d7fa164b71a8d03804ddd843f156ad37",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "3ee1eb61-c472-5c6c-a7bc-8bc129fbf428",
+      "sourceId": "52b74a5f-e53e-5286-a6ce-7abea1faa30d",
+      "sourceHash": "e080cb00b2740659af5190af63b4fd9ecac8d71c47ba9a9f49522606059b98b7",
+      "reviewHash": "d4dd203d4e48c80be40e31b479148d1a09db324e776a456acbf8173873c28d65",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "44c403b8-3ad9-562a-aa2e-c1de27cae5b3",
+      "sourceId": "102898a4-bd50-5f2d-ae32-e0cec7eba9da",
+      "sourceHash": "4f58605500c06b58678053b07bdf437484e6df4dbd11e5b36f1b5b358d9a4023",
+      "reviewHash": "12d96994bcd349c64b3bc6e0a55295b5c73eebb70a9246ae7e929e398d74e9b4",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "45b45cc7-1f8d-5be5-af4d-fff32f1db586",
+      "sourceId": "ed55dc41-4d33-5615-ae57-f07d362f9ac4",
+      "sourceHash": "dad050ddaaf2021c02cbfbd915972c6bc7d8b143158bf137a4d7877dd41a8f05",
+      "reviewHash": "628cd001d7b119fa4d03887b98d3227fb0096a8bf7ee067aac970e53d088614e",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "4a532b17-336f-5a1e-a9e5-af730e2ab66b",
+      "sourceId": "e2365890-d83a-5cf2-a974-98453944a0f6",
+      "sourceHash": "0e213e4f5911f603ffae6de246202c7d51d76ecaf20ee9d9780dbd480df9143d",
+      "reviewHash": "4a9d70ee4ead681fffcb9ea6a5d58637d18a94a517e295fe53774ccf0b30629b",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "8fc21ff6-4686-5b57-a85c-d60a75f5d234",
+      "sourceId": "29374fc1-467a-5ddd-a007-2a868c66a52c",
+      "sourceHash": "bc050375e1a435f1c982fc5a1dfa7cca9c2c011fa67425c3bff14bad0068c2d6",
+      "reviewHash": "14dd5661ebca326cfbf7dfb660740a8f8144681e85b7287b0705ed627891ac0d",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "98a76748-e8ba-5f78-a591-4e488658bb44",
+      "sourceId": "550a6aae-54c3-58d4-ad86-ea5adee0872a",
+      "sourceHash": "c922446c46e58143d8afb0c46103a5f66b474c421a4e4e5c220ff36de07e0de9",
+      "reviewHash": "a8318478b00978e0bede18121d61d974ac8e2f7760dcb0a46f21c4d6be23618f",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "c5f61f88-30c5-5881-abcd-9cc1f37d8e3e",
+      "sourceId": "5ab11dcf-ec37-571f-ab4f-38dcf87406ab",
+      "sourceHash": "2a98f7db4c9325859d36fd4914677aa587858834b047dddf52f418e2a6589bf0",
+      "reviewHash": "ba035109940f45b6dc0785343a069e2960d6753ce4cb58fac45eaaeb449d87c0",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "d180096d-6b1d-59b2-a9df-ec9de7e9a32a",
+      "sourceId": "fb5d6da2-bdc7-5211-a4c6-06305e381a2f",
+      "sourceHash": "6461b1900f6ed96a85c28436b4c4abe75e8542727ffdb9a014a47c0b04044f9b",
+      "reviewHash": "4b72bc5d7ebc61b9804c20005011e504e9cf829f70b94198fdefea24f9d8a740",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "d8226397-a1fc-52ad-a279-82afeceefa6f",
+      "sourceId": "58c41508-79ff-5da3-ac11-f4816f25d0d8",
+      "sourceHash": "29831329d6989a4ec272904a74d5248e434434aadc20f9afc5bd6bd653e2af46",
+      "reviewHash": "c15b0a89bd9d21ba2220060b1ab93c4925d093182001c69e939a99c27919bf5c",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "e3c34f0a-ec6c-5267-aedd-9fd3f0a28a34",
+      "sourceId": "c4034e3d-0cff-55e9-ade4-8fd4b8a37470",
+      "sourceHash": "2adbd2f8e6c34169b120d6d1c0f05663aebabc8f190af400389581cae22e4ede",
+      "reviewHash": "e784a46ccc5e4358b1597b9450cb93d80e0aa57b55671d4216f1013d0ea9cc76",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    },
+    {
+      "reviewId": "fb83865e-fdb7-5d0c-ac7a-af31a97607c4",
+      "sourceId": "d2af1a1a-830f-5258-a098-6ca7a8ea087f",
+      "sourceHash": "771bad1a72eb083edf516847ee802e8f1fbf600a6af2c2cff67e0913deea0071",
+      "reviewHash": "1ec6115dc5ae13d3007f8d87e0717ca798d815195a9985964e7bade2557bc2a6",
+      "sourceHashVerified": true,
+      "reviewHashVerified": true,
+      "publicationUnknown": true,
+      "delegated": true
+    }
+  ],
+  "grantReadback": [
+    {
+      "grant_id": "307822c3-41b3-48cb-a1be-19b58d7541cc",
+      "scope": "SECURITY_IDS:8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "4258ab13-98b9-4209-a23a-3cab41aeea19",
+      "scope": "SECURITY_IDS:4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "84842e9d-08ea-4e75-af54-544a154d228d",
+      "scope": "SECURITY_IDS:92fbe654-b418-4f72-b63c-36c57aec095b",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "d4158c2f-a040-424f-a7b3-ac7c62fa4aaf",
+      "scope": "SECURITY_IDS:eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "de358612-2951-4a46-a182-3305c6a4466d",
+      "scope": "SECURITY_IDS:ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    },
+    {
+      "grant_id": "e299026d-a7de-44fd-ad41-36d712158ea9",
+      "scope": "SECURITY_IDS:5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "provider_calls_allowed": "0",
+      "consumption_count": 1
+    }
+  ],
+  "canonicalSaveResults": [
+    {
+      "symbol": "ASTRAMICRO",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "eb3bc12d-6d21-40ec-8bcc-054713ee91b6"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "1a94ced6-7f71-4e35-969f-cfe73d246786"
+        ],
+        "selectionIds": [
+          "6c0696a6-16d4-4949-8fe0-63c85a4c1aed"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "4cd44d45-e5c6-4696-9744-25c19f44ac8e"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "29f70e10-6f75-4a18-b6a3-c26712b76bf5"
+        ],
+        "selectionIds": [
+          "8f834bf3-1b99-4474-8c53-9bc0475a7a20"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "MTARTECH",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "8d0db594-078d-4663-bfcd-ba8e3cf1ec32"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "12d732a6-5745-4fb8-a69d-22c7bded6a82"
+        ],
+        "selectionIds": [
+          "240f7825-6f33-4921-9b95-7f58f441a116"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "HAL",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "ece0aa93-0d35-4748-9316-dd2eb100ad63"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "27d916af-e290-41ef-9b0b-647a6844ff8a"
+        ],
+        "selectionIds": [
+          "58f27dd2-3211-404e-85eb-973c84b3b6bf"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "GRSE",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "5661e19b-de4b-4ddf-a034-46d6c9f0af8f"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "5bf62a80-c6e2-4971-bfac-420d951b62d7"
+        ],
+        "selectionIds": [
+          "b79ab49a-2b1f-49a7-b54c-8e0a568582fe"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    },
+    {
+      "symbol": "ZENTEC",
+      "prospectiveStatus": "REVIEW_REQUIRED",
+      "remainingMandatoryBlockers": 8,
+      "result": {
+        "status": "IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",
+        "dryRun": false,
+        "inputValidationVersion": "P7_IC_V1_4_INPUT_VALIDATION_V1",
+        "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+        "selectionRunId": "9ff34848-3930-4b0f-a5e8-e92c3110778d",
+        "evaluationAsOf": "2026-10-16T04:10:12.051600+00:00",
+        "sourceCutoffAt": "2026-10-16T04:10:12.051600+00:00",
+        "offset": null,
+        "processed": 1,
+        "totalEquities": 239,
+        "nextOffset": null,
+        "selectionMode": "SECURITY_IDS",
+        "requestedSecurityIds": [
+          "92fbe654-b418-4f72-b63c-36c57aec095b"
+        ],
+        "providerCalls": 0,
+        "totals": {
+          "REVIEW_REQUIRED": 1
+        },
+        "writeTotals": {
+          "snapshotsCreated": 1,
+          "snapshotsReused": 0,
+          "selectionsCreated": 1,
+          "selectionsReused": 0
+        },
+        "snapshotIds": [
+          "0abd559f-6a0a-45a4-b4c3-8b510ff361aa"
+        ],
+        "selectionIds": [
+          "127924c7-8d70-478c-a87a-44f8e7558816"
+        ]
+      },
+      "duplicateGrantIssuance": "IDEMPOTENT",
+      "grantReplay": "REJECTED_ALREADY_USED"
+    }
+  ],
+  "currentSessionQualification": {
+    "code": "G03_CURRENT_OPEN_SESSION_QUALIFIED",
+    "recordId": "b1f315a2-6ac5-52ce-a89e-54119996aefe",
+    "proof": {
+      "sessionDate": "2026-10-16",
+      "latestCompletedSession": "2026-10-15",
+      "sourceRecordIds": [
+        "b1f315a2-6ac5-52ce-a89e-54119996aefe",
+        "6389c2dd-bf96-5da0-ac57-d03bafa4d9ce",
+        "d3a39583-b851-4a5a-99b6-dcc412c4ad26",
+        "8e9e7299-7dfc-46fc-b6bd-4d04e23aedbc",
+        "48f002f9-a178-44a8-a144-1123b2ab3e28"
+      ],
+      "verifiedAt": "2026-10-16T04:10:10.58+00:00",
+      "observedAt": "2026-10-16T04:08:00.000Z",
+      "validBefore": "2026-10-16T04:13:00.000Z"
+    },
+    "reused": false,
+    "publicSourceRequests": 1,
+    "providerApiCalls": 0,
+    "canonicalMaterialization": false
+  },
+  "preservation": {
+    "belSelectionUnchanged": true,
+    "belFundamentalObservations": 57,
+    "belAcceptedReviews": 26,
+    "providerUsageEventsAcrossG03SinceAdmissionStart": 0,
+    "schemaMigrations": 0,
+    "schedulerChanges": 0,
+    "productionMainChanges": 0
+  },
+  "freshnessLimit": "BEL was prospectively READY at 04:10:12 UTC using a current-session proof valid strictly before 04:13 UTC. Its prior selected READY snapshot is preserved. This record does not claim perpetual current READY after proof expiry.",
+  "workflows": {
+    "originalQualification": 38847019438,
+    "actualAdmission": 38848663789,
+    "actualCanonicalSave": 38849191576,
+    "fullRepositoryVerification": 38848666384,
+    "architectureGuard": 38848668813
+  }
+}

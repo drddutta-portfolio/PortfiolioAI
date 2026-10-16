@@ -1,5 +1,15 @@
 # PortfolioAI Development Status
 
+## Remaining G03 documentary progress persisted — 16 October 2026, 09:40 IST
+
+ASTRAMICRO, DATAPATTNS, MTARTECH, HAL, GRSE and ZENTEC now each have **BUSINESS_DURABILITY and OWNERSHIP_GOVERNANCE persisted FRESH**: twelve cleared mandatory requirements. Seven original registrations, twelve delegated reviews and six stock-scoped canonical saves executed successfully, with independent source/review hash and selected-snapshot readback. Current comparable blockers are **10 → 8 per remaining stock, 60 → 48 overall**. All six remain REVIEW_REQUIRED; no newly READY stock/value is claimed. Adverse governance findings are preserved.
+
+BEL's selected READY snapshot/selection, 26 accepted reviews and 57 fundamental observations remain unchanged. Selected G03 readiness remains **1/7 wider, 1/4 frozen / ₹26,789.00**. BEL also passed current prospective validation at 09:40:12 IST, bounded by an authoritative NSE session proof strictly before **09:43 IST**; that does not establish perpetual effective readiness. The new six-stock findings clear documentary requirements, not the remaining financial and current-market evidence.
+
+Actual admission **38848663789** and canonical save **38849191576** passed. Six zero-provider grants were each consumed once, duplicate issuance was idempotent, and replay was rejected. Source importer v10, documentary admission v26, canonical v79 and grant v11 are ACTIVE. Final implementation `d63b360c059233090905fe6f8d5b6886b80033d4` passed Full Repository Verification **38848666384** (**2,448 application / 508 Edge tests**) and Architecture Guard **38848668813**. An actual lease-key constraint violation was fixed and regression-tested without a migration. The initially rejected broader candidate was replaced with a separately reviewed minimal added-action implementation; no rejection or function quota was bypassed.
+
+Next work targets issuer-specific cash/debt/ROCE, eight-quarter margins, four-period orders, Industrials valuation inputs and controlled market-history tails. No new documentary approval is pending. Zero provider usage events were independently observed during admission; no BANK/scheduler, schema, Production/main or merge change occurred. [Actual execution and exact remaining gaps](private/v1-4-industry-batches/G03_Remaining_Six_Documentary_Execution_2026-10-16.md) · [Independent readback](private/v1-4-industry-batches/G03_Remaining_Six_Documentary_Independent_Readback_2026-10-16.json).
+
 ## BEL persisted READY — 16 October 2026, 08:36 IST
 
 The approved shared Development deployments and signed BEL-only continuation completed. Independent database readback confirms selected snapshot `97c13456-51d7-46bb-b7cf-f75d1fced620`, selection `e452af5f-12c2-46e9-8d92-5c674d56b97a`: **READY, 11/11 mandatory requirements FRESH, zero blockers**, **₹26,789.00 frozen value READY** at evaluation 08:35:50 IST. Other six G03 selections remain unchanged; G03 selected readiness is **1/7 wider, 1/4 frozen**. This does not close the remaining industries or all V1-4 operating gates.
