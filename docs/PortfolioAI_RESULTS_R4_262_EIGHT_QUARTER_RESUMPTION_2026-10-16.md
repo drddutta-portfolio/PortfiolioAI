@@ -72,3 +72,31 @@ Any later R4 completion must classify/verify missing histories and genuine non-a
 **Legal issuer chronology for VAML:** [Vedanta Aluminium's original 20 April 2026 release](https://vedantaaluminium.com/media/press-releases/list/vedanta-fixes-1st-may-as-record-date-for-demerger-announces-share-allotment-details/) and [NSE company financial filing](https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_180504_30072026153539_iXBRL_WEB.html) explicitly establish the resulting-company demerger effective **1 May 2026**. Pre-demerger Vedanta segment numbers cannot be silently presented as originally reported VAML equity statements. This supports a **business-comparability exception requiring issuer-specific evidence**, but does not automatically declare all past VAML financial quarters nonexistent or establish approved historical diluted EPS/share basis. Keep missing periods unresolved until classified and sourced under a separately evidenced original-reporting contract.
 
 **R4 status remains PARTIAL, not full acceptance.** R3 current-quarter acquisition stays paused, no Production/main writes and no V1-4 scoring changes. Do not claim 262/262 x 8 from 12 failed historical issuer identity checks or a green workflow alone.
+
+## October 16 ongoing official NSE historical qualification — real source-selected improvement
+
+After the earlier verified 1,802/2,096 R4 baseline, the historical Sep/Dec 2024 NSE original-file recovery and subsequent independent R4 verification have now produced **at least eleven newly source-selected company-quarter metric trios** (**33 new selected financial facts** from the 2026-10-16 09:20 UTC baseline) confirmed by live Development SQL.
+
+**Independently rechecked 8-period selected-core coverage**:
+| Quarter | Selected qualified trios of 262 | Missing/unqualified |
+|---|---:|---:|
+| 2024-09 | 165 | 97 |
+| 2024-12 | 169 | 93 |
+| 2025-03 | 220 | 42 |
+| 2025-06 | 229 | 33 |
+| 2025-09 | 255 | 7 |
+| 2025-12 | 258 | 4 |
+| 2026-03 | 256 | 6 |
+| 2026-06 | 261 | 1 |
+| **Total** | **1,813/2,096** | **283** |
+
+The 2024 new original-source evidence includes issuer-original consolidated/standalone facts from ANGELONE, ARVINDFASN, AURIONPRO, BANKINDIA and DDEVPLSTIK. The September and December quarters for ANGELONE (original pre-split EPS), ARVINDFASN, AURIONPRO and BANKINDIA have been positively read back as source-selected. Do not infer share-adjusted EPS comparability from old EPS values.
+
+Live [R4 AXISBANK 2024 issuer identity pilot run 38880464871](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38880464871) completed successfully as a workflow, but **acquired zero new AXISBANK source results**. It returned 4 `UNKNOWN_HISTORICAL_ISIN` diagnostics; separate concurrent historical original-file ingestion populated additional 2024 source records and this run's protected R4 selector admitted 21 new selected fact rows from previously eligible full-cohort evidence, with zero protected decision conflicts. It is incorrect to attribute that increase to AXISBANK.
+- The [prior broad 12-company legacy attempt](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38879146991) returned 48 `UNKNOWN_HISTORICAL_ISIN`, zero data admits; subsequent exact NSE/CML/61473 AXISBANK identity bridge **did not by itself remove the issuer-source identity blocker**. Its test fixture initially failed because the fixture used nonbank metrics; corrected, tested, but no unauthorized identity override was admitted.
+- A previously automatically triggered legacy-2024 full-cohort original-source workflow was still executing during this audit. The count above reflects **only already persisted, verified decisions**, not assumptions about that job.
+- R4 262×8 readback now checks that prospective displayed/current and corresponding prior-year sources have identical preferred Consolidated/Standalone scope; prior approved test-backed R4 verifier [run 38879435574](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38879435574) passed with **723 same-scope, non-explicitly-split-guarded provisional YoY pairs** at its earlier source snapshot, not fully publication/share-basis-proven growth signals.
+- Because the owner paused R3, the two R3 acquisition GitHub workflows were subsequently changed to **manual dispatch only**, and the broad legacy-2024 workflow's auto-push trigger was removed. Previously triggered runs cannot be reinterpreted as new R3 authorization; no new R3 acceptance or Production action was claimed.
+- Repository-wide CI previously showed 9 failing tests across Results historical visual assertions and canonical authority registry (2,344 tests passed). The earlier `lint:edge` unexpected-any compiler issue was repaired. These UI tests are separate acceptance gates, and must not be silently described as PASS or fixed by redesigning the approved UI.
+
+**Current completion statement:** R4 verifier engineering and original-source selection are operating and producing real historical qualification, but **full R4 source-data acceptance remains PARTIAL**, with 283 exceptions at the latest accepted SQL readback. No fake data, no overridden existing selected observations, no Production/main changes; V1-4 scores untouched.
