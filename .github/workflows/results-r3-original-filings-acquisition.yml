@@ -11,6 +11,7 @@ on:
         options: ["12", "40", "262"]
   push:
     branches:
+      - PortfolioAI-Development
       - results-r3-batch-scan-20261014
       - results-r4-exception-closure-20261014
       - results-r4-legacy-requalification-20261014
@@ -18,6 +19,7 @@ on:
     paths:
       - scripts/results/r3-live-public-filing-batch.py
       - scripts/results/test_r3_live_public_filing_batch.py
+      - scripts/results/r3-current-coverage-readback.py
       - .github/workflows/results-r3-original-filings-acquisition.yml
 
 permissions:
@@ -80,14 +82,34 @@ jobs:
               ("universe_target","visited","with_documents","documents_parsed",
                "observations_inserted","blocked")},sort_keys=True))
           PY
-      - name: Verify and select requalified Development-only source evidence
-        if: github.ref_name == 'results-r4-legacy-requalification-20261014' || github.ref_name == 'results-r4-old-isin-reacquisition-20261015'
+      - name: Source-verify and select only admissible quarterly originals
+        # This immutable R2 evidence gate does NOT select unverified, conflicting
+        # or absent filings. It refuses to overwrite previous R4 selections.
+        if: ${{ !cancelled() && (github.ref_name == 'PortfolioAI-Development' || github.ref_name == 'results-r4-legacy-requalification-20261014' || github.ref_name == 'results-r4-old-isin-reacquisition-20261015') }}
         run: python scripts/results/r4-verify-quarterly.py --apply
-      - name: Publish non-secret acquisition readback
+      - name: Independently read back all 262 equities and four exact quarters
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p tmp/results-r3
+          python scripts/results/r3-current-coverage-readback.py > tmp/results-r3/coverage.json
+          python - <<'PY'
+          import json
+          r=json.load(open("tmp/results-r3/coverage.json"))
+          print(json.dumps({k:r[k] for k in ("equities","etfs_excluded","complete_equities","incomplete_equities","result")},sort_keys=True))
+          PY
+      - name: Enforce truthful R3 262-equity completion gate
+        if: ${{ github.ref_name == 'PortfolioAI-Development' }}
+        run: python scripts/results/r3-current-coverage-readback.py --strict > tmp/results-r3/strict-coverage.json
+      - name: Publish non-secret acquisition and source-verification readbacks
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: results-r3-official-source-acquisition
-          path: tmp/results-r3/collection.json
+          path: |
+            tmp/results-r3/collection.json
+            tmp/results-r3/coverage.json
+            tmp/results-r3/strict-coverage.json
+            tmp/results-r4/readback.json
           if-no-files-found: warn
           retention-days: 15
