@@ -30,6 +30,46 @@ def fixture(qstart="01-04-2026",qend="30-06-2026",isin="INE002A01018",unit="Lakh
     </body></html>"""
 
 class ResultsAcquisitionTests(unittest.TestCase):
+    def test_nbfc_original_jiofin_q1_fy27_consolidated_first_column(self):
+        html="""<h2>INTEGRATED FILING NBFC</h2>
+          <table><tr><td>NSE Symbol</td><td>JIOFIN</td></tr>
+            <tr><td>ISIN</td><td>INE758E01017</td></tr>
+            <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr>
+            <tr><td>Reporting Type</td><td>Quarterly</td></tr></table>
+          <table><tr><td>Date of start of reporting period</td><td>01-04-2026</td><td>01-04-2026</td></tr>
+            <tr><td>Date of end of reporting period</td><td>30-06-2026</td><td>30-06-2026</td></tr>
+            <tr><td>Nature of report standalone or consolidated</td><td>Consolidated</td><td>Consolidated</td></tr>
+            <tr><td>Total Revenue From Operations</td><td>2,00,447.00</td><td>2,00,447.00</td></tr>
+            <tr><td>Total profit (loss) for period</td><td>83,025.00</td><td>83,025.00</td></tr>
+            <tr><td>Basic earnings per share</td><td>1.27</td><td>1.27</td></tr>
+            <tr><td>Diluted earnings per share</td><td>1.27</td><td>1.27</td></tr></table>
+          <table><tr><td>Date of end of reporting period</td><td>30-06-2026</td></tr>
+            <tr><td>Revenue from operations</td><td>2,00,447.00</td></tr></table>"""
+        url="https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html"
+        self.assertIsNotNone(module.ALLOWED_FILE.fullmatch("/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html"))
+        parsed,reason=module.extract_source(html,"JIOFIN","INE758E01017",url)
+        self.assertIsNone(reason)
+        self.assertEqual(parsed["period_end"],"2026-06-30")
+        self.assertEqual(parsed["scope"],"CONSOLIDATED")
+        self.assertEqual(parsed["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"2004.47")
+        self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"830.25")
+        self.assertEqual(parsed["facts"]["EPS_DILUTED"]["value"],"1.27")
+        self.assertEqual(parsed["facts"]["EPS_DILUTED"]["original_unit"],"INR_PER_SHARE")
+
+    def test_nbfc_disallow_ytd_or_identity_guess(self):
+        html="""<table><tr><td>NSE Symbol</td><td>ANGELONE</td></tr>
+          <tr><td>ISIN</td><td>INE732I01021</td></tr>
+          <tr><td>Level of rounding used in financial results</td><td>Lakhs</td></tr></table>
+          <table><tr><td>Date of start of reporting period</td><td>01-04-2025</td></tr>
+          <tr><td>Date of end of reporting period</td><td>31-12-2025</td></tr>
+          <tr><td>Nature of report standalone or consolidated</td><td>Consolidated</td></tr>
+          <tr><td>Total revenue from operations</td><td>10000</td></tr>
+          <tr><td>Total profit (loss) for period</td><td>500</td></tr>
+          <tr><td>Diluted earnings per share</td><td>1.5</td></tr></table>"""
+        self.assertEqual(module.extract_nbfc(html,"ANGELONE","INE732I01021")[1],"NBFC_SINGLE_QUARTER_UNPROVEN")
+        self.assertEqual(module.extract_nbfc(html,"JIOFIN","INE758E01017")[1],"NBFC_SYMBOL_MISMATCH")
+
+
     def test_r3_requires_three_selected_metrics_from_the_same_original(self):
         rows=[
             ("2025-09-30","CONSOLIDATED","issuer-1","OPERATING_REVENUE_QUARTER"),
