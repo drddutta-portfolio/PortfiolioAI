@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/results-r4-bse-bel-2024-pinned.yml
       - scripts/results/r4-bse-bel-2024-pinned.py
+      - scripts/results/r4-bse-bel-dec-2024-pinned.py
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,6 +20,7 @@ jobs:
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R4_BSE_BEL_PIN_ACK: BEL_SEP2024_VISUAL_ORIGINAL_PROOF
+      RESULTS_R4_BSE_BEL_DEC_ACK: BEL_DEC2024_VISUAL_ORIGINAL_PROOF
       RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +38,7 @@ jobs:
           python -m py_compile scripts/results/r4-bse-bel-2024-pinned.py scripts/results/r4-bse-historical-batch.py
           python scripts/results/test_r4_bse_historical_batch.py -v
           python scripts/results/r4-bse-bel-2024-pinned.py
+          python scripts/results/r4-bse-bel-dec-2024-pinned.py
       - name: Independent source hash verification and protected selection
         run: |
           mkdir -p tmp/results-r4
