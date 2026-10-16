@@ -110,7 +110,7 @@ export async function handleR4History(req:Request){
   const usage=await db.from("provider_usage_events").select("id",{count:"exact",head:true}).eq("source_code",SOURCE).gte("attempted_at",monthStart.toISOString())
   if(usage.error||!quota.monthly_limit||(usage.count??quota.monthly_limit)>=quota.monthly_limit)
     return reply(429,{error:"MONTHLY_BUDGET_BLOCKED"})
-  const operation="RESULTS_R4_HISTORY_"+String(claims.run_id)+"_"+body.requestId
+  const operation="RESULTS_R4_HISTORY_"+String(claims.run_id)+"_"+body.requestId.toUpperCase().replace(/-/g,"_")
   const prior=await db.from("data_ingestion_runs").select("id").eq("source_code",SOURCE).eq("operation",operation).limit(1)
   if(prior.error)return reply(500,{error:"IDEMPOTENCY_CHECK_FAILED"})
   if(prior.data?.length)return reply(409,{error:"ALREADY_ATTEMPTED",runId:prior.data[0].id})
