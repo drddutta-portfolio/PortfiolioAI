@@ -19,7 +19,9 @@ def main():
         with urllib.request.urlopen(request,timeout=30) as response:return json.load(response)["value"]
     client=batch.r2_client()
     with psycopg.connect(url,autocommit=False) as db:
+        fresh_calls=0
         def call(request_id,tool,args,security=None):
+            nonlocal fresh_calls
             body={"tool":tool,"args":args,"requestId":request_id}
             if security:body["securityId"]=security
             with db.cursor() as cur:
@@ -36,6 +38,8 @@ def main():
                 data=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cached[0])["Body"].read())
                 print("R4_TRENDLYNE_REUSED",request_id,tool,flush=True)
                 return data["result"]
+            if fresh_calls>=40:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
+            fresh_calls+=1
             request=urllib.request.Request("https://"+batch.REF+".supabase.co/functions/v1/discover-trendlyne-capabilities",
                 data=json.dumps(body).encode(),headers={"Authorization":"Bearer "+oidc(),
                 "content-type":"application/json","x-portfolioai-r4":"history"})
@@ -126,7 +130,6 @@ def main():
             shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
             identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]
             selected=sorted((key,p) for key,p in identified if int(key,16)%shards==shard)
-            if len(selected)>40:raise RuntimeError("PROVIDER_PER_RUN_BOUND_EXCEEDED")
             print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":blocked,"parameter_labels":{p:parameters[p] for p in wanted}}),flush=True)
             outcomes=[]
             def process(task):
@@ -138,7 +141,8 @@ def main():
             def failed(task,error):
                 db.rollback()
                 return {"status":"RETRY_REQUIRED","reason":type(error).__name__,
-                    "http_status":getattr(error,"code",None)}
+                    "http_status":getattr(error,"code",None),
+                    "budget_deferred":str(error)=="PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED"}
             def checkpoint(task,result):
                 key,(_,symbol,period,tool,_)=task
                 outcomes.append({"task_id":key,"symbol":symbol,"period":period,"tool":tool,**result})
