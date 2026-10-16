@@ -56,14 +56,6 @@ jobs:
         run: |
           mkdir -p tmp/results-r4
           python scripts/results/r4-nse-lineage-batch.py --shard ${{ matrix.shard }}
-      - name: Retain per-company originals and rejection diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-nse-lineage-shard-${{ matrix.shard }}
-          path: tmp/results-r4/nse-lineage-shard-${{ matrix.shard }}.json
-          if-no-files-found: warn
-          retention-days: 21
   verify:
     needs: recover
     if: always()
@@ -100,14 +92,4 @@ jobs:
           a=json.load(open('tmp/results-r4/nse-after-readback.json'))
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
-      - name: Retain acceptance and exceptions
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-nse-independent-readback
-          path: |
-            tmp/results-r4/readback.json
-            tmp/results-r4/eight-quarter-readback.json
-            tmp/results-r4/nse-after-readback.json
-          if-no-files-found: warn
-          retention-days: 21
+# Per-company evidence stays in private Development R2/DB; no GitHub artifact export.
