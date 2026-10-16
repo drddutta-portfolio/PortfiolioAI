@@ -490,7 +490,8 @@ def extract_insurance(html: str, symbol: str, isin: str):
     if not qstart or qend not in TARGET_QUARTERS or not 75<=(date.fromisoformat(qend)-date.fromisoformat(qstart)).days<=100:
         return None,"INSURANCE_QUARTER_UNPROVEN"
     scopes=field_values(stmt,"nature of report standalone or consolidated")
-    scope=scopes[0].upper() if scopes else unique_field(tables,"nature of report standalone or consolidated")
+    declared_scope=scopes[0] if scopes else unique_field(tables,"nature of report standalone or consolidated")
+    scope=str(declared_scope).strip().upper() if declared_scope else None
     if scope not in ("STANDALONE","CONSOLIDATED"):return None,"INSURANCE_SCOPE_UNPROVEN"
     facts={}
     for label,key in (("premium earned (net)","NET_PREMIUM_EARNED_QUARTER"),
