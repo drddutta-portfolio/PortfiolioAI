@@ -1,0 +1,432 @@
+{
+  "assessment": "G03_NOT_COMPLETE_EXECUTOR_UNABLE_TO_CLOSE_ALL_REQUIREMENTS",
+  "evaluation_as_of": "2026-10-16T17:06:16.853475+00:00",
+  "validated_head": "e759cad436f3725a6f955281d6b0362452f2956d",
+  "validation_run": "https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38937083866",
+  "artifact_id": 12062110149,
+  "artifact_digest": "sha256:4aadebb84a194f5016d252d2a8b0207cfd6be7ffefb077c3d0c06cfb8ed0b974",
+  "sanitized_result_sha256": "0a3838ee5fbf9da8b1b745b9bf81b18f29a8f59a32210218c4d5a214bdf9f217",
+  "scope_note": "Seven-stock execution set includes four frozen G03 members; no cohort changes. Prospective validation is not a persisted selection.",
+  "current_ready": 0,
+  "fresh_requirements": 28,
+  "blocked_requirements": 49,
+  "current_eligible_frozen_ready_paise": 0,
+  "readonly_proof": {
+    "dryRun": true,
+    "providerCalls": 0,
+    "writeTotals": {
+      "snapshotsCreated": 0,
+      "snapshotsReused": 0,
+      "selectionsCreated": 0,
+      "selectionsReused": 0
+    },
+    "snapshotIds": [],
+    "selectionIds": []
+  },
+  "rows": [
+    {
+      "symbol": "ASTRAMICRO",
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 4,
+      "blocked_required": 7,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "BEL",
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "prospective_status": "STALE",
+      "fresh_required": 8,
+      "blocked_required": 3,
+      "blockers": [
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "INSUFFICIENT",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "DATAPATTNS",
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 4,
+      "blocked_required": 7,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "GRSE",
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 3,
+      "blocked_required": 8,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "HAL",
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 3,
+      "blocked_required": 8,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "MTARTECH",
+      "security_id": "8d0db594-078d-4663-bfcd-ba8e3cf1ec32",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 3,
+      "blocked_required": 8,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DOCUMENT_EVIDENCE_REQUIRES_REVIEW"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "REPORTING_PERIOD_INVALID"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "DATED_REPORTING_PERIODS_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "STALE",
+          "reason_code": "HISTORY_LATEST_SESSION_STALE"
+        }
+      ]
+    },
+    {
+      "symbol": "ZENTEC",
+      "security_id": "92fbe654-b418-4f72-b63c-36c57aec095b",
+      "prospective_status": "REVIEW_REQUIRED",
+      "fresh_required": 3,
+      "blocked_required": 8,
+      "blockers": [
+        {
+          "requirement_code": "OPERATING_MARGIN_HISTORY",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "ROCE_OR_ROIC",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "CFO_FCF_CONVERSION",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "VALUATION",
+          "evidence_state": "MISSING",
+          "reason_code": "REQUIRED_EVIDENCE_MISSING"
+        },
+        {
+          "requirement_code": "MOMENTUM_12M_RELATIVE",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "HISTORY_CONTRACT_NOT_PROVEN"
+        },
+        {
+          "requirement_code": "DRAWDOWN_VOLATILITY_RISK",
+          "evidence_state": "REVIEW_REQUIRED",
+          "reason_code": "HISTORY_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    }
+  ],
+  "blocker_family_counts": {
+    "CFO_FCF_CONVERSION": 4,
+    "DRAWDOWN_VOLATILITY_RISK": 7,
+    "MOMENTUM_12M_RELATIVE": 7,
+    "NET_DEBT_AND_INTEREST_COVERAGE": 6,
+    "OPERATING_MARGIN_HISTORY": 6,
+    "ORDER_BOOK_AND_EXECUTION_GROWTH": 6,
+    "ROCE_OR_ROIC": 6,
+    "VALUATION": 7
+  },
+  "public_source_probes": [
+    {
+      "name": "nse-indices-20261016.csv",
+      "url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_16102026.csv",
+      "observed_at": "2026-10-16T17:06:09.382288+00:00",
+      "canonical_admission": false,
+      "status": 200,
+      "resolved_url": "https://nsearchives.nseindia.com/content/indices/ind_close_all_16102026.csv",
+      "bytes": 15623,
+      "content_type": "text/csv",
+      "sha256": "13d74d011fb4fef3e46e8fb8d988bcd989d97b35d42ac1972d77481369bf2bd1",
+      "usable": true
+    },
+    {
+      "name": "nse-equities-20261016.csv",
+      "url": "https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_16102026.csv",
+      "observed_at": "2026-10-16T17:06:09.383128+00:00",
+      "canonical_admission": false,
+      "status": 200,
+      "resolved_url": "https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_16102026.csv",
+      "bytes": 397218,
+      "content_type": "text/csv",
+      "sha256": "8afbcce6d74f667f910213f8e1405092676f977f6e0693e1c082d7e13966a162",
+      "usable": true
+    },
+    {
+      "name": "nse-corporate-actions-20260925-20261016.json",
+      "url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=25-09-2026&to_date=16-10-2026",
+      "observed_at": "2026-10-16T17:10:44.017378+00:00",
+      "canonical_admission": false,
+      "status": 200,
+      "resolved_url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=25-09-2026&to_date=16-10-2026",
+      "bytes": 9239,
+      "content_type": "application/json; charset=utf-8",
+      "sha256": "b669b06be71e5577e5ff0ba9c845d607a208a6bba768214412a16592dc928d05",
+      "usable": true
+    }
+  ],
+  "unadmitted_nse_price_candidates": [
+    {
+      "SYMBOL": "ASTRAMICRO",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "1625.20"
+    },
+    {
+      "SYMBOL": "BEL",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "376.85"
+    },
+    {
+      "SYMBOL": "DATAPATTNS",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "4072.00"
+    },
+    {
+      "SYMBOL": "GRSE",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "2120.20"
+    },
+    {
+      "SYMBOL": "HAL",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "4989.00"
+    },
+    {
+      "SYMBOL": "MTARTECH",
+      "SERIES": "BE",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "7054.50"
+    },
+    {
+      "SYMBOL": "ZENTEC",
+      "SERIES": "EQ",
+      "DATE1": "16-Oct-2026",
+      "CLOSE_PRICE": "1655.60"
+    }
+  ],
+  "new_canonical_admissions_this_continuation": 0,
+  "new_canonical_materializations_this_continuation": 0,
+  "new_paid_provider_calls_this_continuation": 0,
+  "source_probe_note": "Three successful public HTTP requests. Earlier corporate-actions probe used an incorrect endpoint and returned 404; corrected established endpoint succeeded. Do not interpret that initial URL error as missing data. These are local captures, not canonical source admissions, Angel One observations, or proofs that all history/contracts are qualified."
+}
