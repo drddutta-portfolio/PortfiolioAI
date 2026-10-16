@@ -1,0 +1,50 @@
+name: Results R4 Development Ten Minute Recovery Monitor
+on:
+  workflow_dispatch:
+    inputs:
+      cycle:
+        description: Bounded five-hour controller cycle
+        default: "0"
+        type: string
+      last_remaining:
+        description: Last gap count dispatched for recovery
+        default: "2097"
+        type: string
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-recovery-monitor.yml]
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: results-r4-ten-minute-monitor-development
+  cancel-in-progress: false
+jobs:
+  monitor:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 315
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      GH_TOKEN: ${{ github.token }}
+      MONITOR_CYCLE: ${{ inputs.cycle || '0' }}
+      LAST_DISPATCH_REMAINING: ${{ inputs.last_remaining || '2097' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: PortfolioAI-Development
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install pinned read-only audit dependency
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
+      - name: Validate controller syntax
+        run: python -m py_compile scripts/results/r4-recovery-monitor.py
+      - name: Check every ten minutes and resume eligible cached recovery
+        run: python scripts/results/r4-recovery-monitor.py
+      - name: Preserve monitoring checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-monitor-${{ github.run_id }}
+          path: tmp/results-r4/monitor-checkpoints.json
+          retention-days: 21
