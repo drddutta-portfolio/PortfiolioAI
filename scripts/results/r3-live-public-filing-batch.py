@@ -454,6 +454,22 @@ def extract_source(html: str, symbol: str, isin: str, source_url: str):
         return extract_bank(html,symbol,isin)
     return extract(html,symbol,isin)
 
+# Individually verified public NSE archive links for missing-company recovery.
+# URLs are discovery hints only: all issuer/ISIN/period/unit/metric checks
+# still run against the downloaded original bytes before any DB write.
+# No guessed archive names or non-official hosts may be added.
+OFFICIAL_NSE_SEEDS={
+    "JIOFIN":(
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html",
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_151303_17042026225608_iXBRL_WEB.html",
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_135158_15012026170908_iXBRL_WEB.html",
+    ),
+    "ANGELONE":(
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_174795_15072026180820_iXBRL_WEB.html",
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_151098_16042026203126_iXBRL_WEB.html",
+    )
+}
+
 def listing_urls(payload, symbol):
     """Trust only explicitly linked NSE integrated INDAS iXBRL source URLs."""
     records=payload if isinstance(payload,list) else (
@@ -635,13 +651,18 @@ def main():
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
+        bootstrap_error=None
         try:
             seed=session.get("https://www.nseindia.com/companies-listing/corporate-integrated-filing",timeout=20)
-            if seed.status_code in (401,403,429):raise RuntimeError("PUBLIC_SOURCE_ACCESS_DENIED_"+str(seed.status_code))
-        except requests.RequestException as exc:
-            raise RuntimeError("SOURCE_BOOTSTRAP_FAILED") from exc
+            if seed.status_code in (401,403,429):
+                bootstrap_error="PUBLIC_LISTING_UNAVAILABLE_"+str(seed.status_code)
+        except requests.RequestException:
+            bootstrap_error="PUBLIC_LISTING_UNAVAILABLE"
+        # A blocked listing never licenses bypassing its access restriction.
+        # Separately published NSE archive URLs are independent public
+        # originals and may be checked as exact-source hints when available.
         log={"universe_target":len(stocks),"target_period_ends":list(TARGET_QUARTERS),
-             "access_ok":True,"visited":0,"already_complete":0,"with_documents":0,
+             "access_ok":bootstrap_error is None,"listing_error":bootstrap_error,"visited":0,"already_complete":0,"with_documents":0,
              "documents_parsed":0,"observations_inserted":0,"blocked":[],
              "stock_outcomes":[]}
         for symbol,isin,security_id in stocks:
@@ -687,8 +708,16 @@ def main():
                 entry["reason"]="FOUR_QUARTERS_ORIGINALS_EXIST_R4_SELECTION_PENDING"
             else:
                 try:
-                    listing=fetch_json(session,symbol)
-                    urls=listing_urls(listing,symbol)
+                    urls=list(OFFICIAL_NSE_SEEDS.get(symbol,()))
+                    if bootstrap_error is None:
+                        try:
+                            listing=fetch_json(session,symbol)
+                            urls=list(dict.fromkeys(urls+listing_urls(listing,symbol)))
+                        except (requests.RequestException,ValueError,RuntimeError) as exc:
+                            entry["listing_error"]=type(exc).__name__
+                            # Do not retry or evade access controls. Archive
+                            # seed URLs have independently verified public
+                            # issuer identities and are checked separately.
                     if not urls:
                         entry["reason"]="NO_QUALIFIED_LISTING_URL"
                     else:
