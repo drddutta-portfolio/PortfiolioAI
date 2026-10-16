@@ -15,6 +15,11 @@ batch= lineage.batch
 def main():
     if os.environ.get("R4_PUBLIC_RENAME_ONLY")=="1":
         counts=Counter()
+        retained_client=None
+        if os.environ.get("R4_RETAIN_PUBLIC_AUTHORITY")=="1":
+            if os.environ.get("CLOUDFLARE_R2_BUCKET")!=batch.BUCKET or batch.REF not in os.environ.get("SUPABASE_DB_URL",""):
+                raise RuntimeError("DEVELOPMENT_ONLY")
+            retained_client=batch.r2_client()
         public_session=requests.Session()
         public_session.headers.update({"User-Agent":"Mozilla/5.0","Accept-Language":"en-IN,en;q=0.8"})
         try:public_session.get("https://www.nseindia.com/companies-listing/corporate-filings-financial-results",timeout=30).raise_for_status()
@@ -33,7 +38,14 @@ def main():
                 for field in ("old_symbol","old_name","new_name"):
                     token="".join(rule[field].upper().split())
                     counts[field+"_present" if token in normalized else field+"_absent"]+=1
-                try:verify_rename_pdf(raw,symbol,rule["url"]);counts["verified_notices"]+=1
+                try:
+                    verified=verify_rename_pdf(raw,symbol,rule["url"]);counts["verified_notices"]+=1
+                    if retained_client:
+                        original_key=batch.PREFIX+"evidence/original_version="+verified.sha256+"/issuer-rename.pdf"
+                        batch.immutable_put(retained_client,original_key,raw)
+                        reference={"source_url":rule["url"],"r2_key":original_key,"sha256":verified.sha256}
+                        batch.immutable_put(retained_client,batch.PREFIX+"issuer-rename-authorities-v1/symbol="+symbol+"/authority.json",batch.canonical(reference))
+                        counts["retained_verified_public_notices"]+=1
                 except ValueError as error:
                     safe={"QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED","RENAME_AUTHORITY_PAGE_BOUND_EXCEEDED",
                         "OFFICIAL_RENAME_IDENTITY_NOT_PROVEN","OFFICIAL_RENAME_EFFECTIVE_DATE_NOT_PROVEN","OFFICIAL_RENAME_SCRIP_NOT_PROVEN"}
