@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/results-r4-2025-historical-source-recovery.yml
       - scripts/results/test_r3_legacy_2025_xbrl.py
+      - scripts/results/r3-live-public-filing-batch.py
+      - scripts/results/r4-verify-quarterly.py
 permissions:
   contents: read
 concurrency:
@@ -24,7 +26,7 @@ jobs:
       RESULTS_R3_2025_LEGACY_ACK: "2025_MAR_JUN_ORIGINAL_XBRL"
       RESULTS_R3_2025_DRY_RUN: "0"
       RESULTS_R3_2025_STOCK_LIMIT: "262"
-      RESULTS_R3_2025_SYMBOLS: "AVANTIFEED,CAMS,CEMPRO,CGPOWER,COFORGE,GMBREW,KRN,LT,MANKIND,SANSERA,SYRMA,ZYDUSWELL"
+      RESULTS_R3_2025_SYMBOLS: "CAMS"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
