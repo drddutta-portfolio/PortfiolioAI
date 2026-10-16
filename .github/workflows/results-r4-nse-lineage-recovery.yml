@@ -49,6 +49,7 @@ jobs:
           python scripts/results/test_r4_bse_historical_batch.py -v
           python scripts/results/test_portfolio_bse.py -v
           python scripts/results/test_r4_nse_issuer_bridge.py -v
+          python scripts/results/test_r4_issuer_rename.py -v
           python scripts/results/test_r5_legacy_2024_xbrl.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
@@ -95,3 +96,5 @@ jobs:
 # Per-company evidence stays in private Development R2/DB; no GitHub artifact export.
 
 # Recover explicit insurance and original before-minority PAT fields; no financial exports.
+
+# Independently replay source-pinned official issuer rename notices before admission.
