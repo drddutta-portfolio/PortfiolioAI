@@ -1,11 +1,5 @@
 name: Results R5 Development 2024 Original XBRL Recovery
 on:
-  push:
-    branches: [PortfolioAI-Development]
-    paths:
-      - .github/workflows/results-r5-legacy-2024-acquisition.yml
-      - scripts/results/r5-legacy-2024-xbrl.py
-      - scripts/results/test_r5_legacy_2024_xbrl.py
   workflow_dispatch:
     inputs:
       full_cohort:
