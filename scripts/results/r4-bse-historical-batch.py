@@ -67,12 +67,34 @@ def date_forms(period):
     return (d.strftime("%d.%m.%Y"), d.strftime("%d-%m-%Y"),
             d.strftime("%d/%m/%Y"), d.strftime("%d %B %Y").upper(),
             d.strftime("%B %d, %Y").upper(), d.strftime("%d-%b-%Y").upper(),
-            d.strftime("%d %b %Y").upper(), d.strftime("%d-%m-%y"))
+            d.strftime("%d %b %Y").upper(), d.strftime("%d-%m-%y"),
+            d.strftime("%d %B, %Y").upper(),
+            d.strftime("%d-%B-%Y").upper(),
+            d.strftime("%d %b, %Y").upper(),
+            d.strftime("%B %d %Y").upper())
 
 def numeric_cells(row):
     # Match Indian and international group separators without truncating 2,48,893.
     return [Decimal(m.group(0).replace(",", "").replace("(", "-").replace(")", ""))
             for m in NUM.finditer(row) if m.group(0).strip() not in ("-", "")]
+
+def geometry_rows(page):
+    """Use PyMuPDF physical text locations when table cells are separate blocks.
+    No OCR, guesses across rows, or nearest-neighbour column interpolation.
+    """
+    words=[w for w in page.get_text("words",sort=True)
+           if len(w)>4 and str(w[4]).strip()]
+    words.sort(key=lambda w: ((w[1]+w[3])/2, w[0]))
+    rows=[]
+    for w in words:
+        middle=(w[1]+w[3])/2
+        # Geometrically exact table row, not a text-order concatenation.
+        if not rows or abs(middle-rows[-1][0])>2.6:
+            rows.append([middle,[w]])
+        else:
+            rows[-1][1].append(w)
+    return [" ".join(str(w[4]) for w in sorted(group,key=lambda x:x[0]))
+            for _middle,group in rows if len(group)>2]
 
 def financial_row(lines, labels, metric):
     found=[]
@@ -103,6 +125,8 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
     for page_no in range(min(len(pdf),40)):
         text=pdf[page_no].get_text("text",sort=True)
         lines=[" ".join(x.split()) for x in text.splitlines() if x.strip()]
+        geometry=geometry_rows(pdf[page_no])
+        financial_lines=lines+geometry
         if len(lines)<8:
             continue
         title=" ".join(lines[:65]).upper()
@@ -111,6 +135,10 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
         if not any(form in title for form in date_forms(period)):
             continue
         # Explicit scope and unit must be on this actual financial-statement page.
+        if re.search(r"\bCONSOLIDATED\b",title) and re.search(r"\bSTANDALONE\b",title):
+            # Combined statement announcements may carry two independent tables.
+            # Never choose a consolidated heading on a standalone table.
+            continue
         if re.search(r"\bCONSOLIDATED\b",title):
             scope="CONSOLIDATED"
         elif re.search(r"\bSTANDALONE\b",title):
@@ -139,17 +167,17 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
             continue
         # A recognizable date is necessary but not sufficient for table column order.
         # Require it among the first 120 chars after the QUARTER ENDED heading.
-        if not any(x in first_header[:120] for x in date_forms(period)):
+        if not any(x in first_header[:180] for x in date_forms(period)):
             continue
         bank=symbol in BANKS
         insurer=symbol in INSURERS
         if insurer:
-            revenue_row,revenue_values=financial_row(lines,
+            revenue_row,revenue_values=financial_row(financial_lines,
                 [r"^(?:net\s+)?premium(?:s)?\s+earned\b"],"PREMIUM")
             revenue_code="NET_PREMIUM_EARNED_QUARTER"
         elif bank:
-            earned_line,earned=financial_row(lines,[r"^interest\s+earned\b"],"INTEREST_EARNED")
-            spent_line,spent=financial_row(lines,[r"^interest\s+expended\b"],"INTEREST_EXPENDED")
+            earned_line,earned=financial_row(financial_lines,[r"^interest\s+earned\b"],"INTEREST_EARNED")
+            spent_line,spent=financial_row(financial_lines,[r"^interest\s+expended\b"],"INTEREST_EXPENDED")
             revenue_row=earned_line+" || "+spent_line
             revenue_values=[earned[0]-spent[0]]
             revenue_code="NET_INTEREST_INCOME_QUARTER"
@@ -157,11 +185,11 @@ def extract(raw, symbol, issuer, period, expected_cin=None):
             revenue_row,revenue_values=financial_row(lines,
                 [r"^(?:revenue|income)\s+from\s+operations\b"],"REVENUE")
             revenue_code="OPERATING_REVENUE_QUARTER"
-        profit_row,profit=financial_row(lines,
+        profit_row,profit=financial_row(financial_lines,
             [r"^(?:net\s+)?profit\s*(?:/|\()\s*loss.*\b(?:period|tax)\b",
              r"^(?:net\s+)?profit\s+(?:after\s+tax|for\s+the\s+period)\b",
              r"^profit\s+after\s+tax\b"],"PROFIT")
-        eps_row,eps=financial_row(lines,
+        eps_row,eps=financial_row(financial_lines,
             [r"^(?:\(?2\)?\s*)?diluted\s*(?:earnings\s+per\s+share|eps|\(rs)",
              r"^earnings\s+per\s+share\s*\(?diluted\)?"],"DILUTED_EPS")
         vals={
@@ -345,7 +373,12 @@ def main():
                                 date.fromisoformat(start),date.fromisoformat(end),max_pages=5)
                             approved=[]
                             rejects=Counter()
-                            for attempt,src in enumerate(discovery["results"]):
+                            priority=lambda src: (
+                                1 if re.search(r"newspaper|press release|presentation|advertisement|media release",str(src.get("title","")),re.I) else 0,
+                                0 if re.search(r"(?:unaudited|audited)\s+(?:standalone|consolidated)|financial results|board meeting outcome",str(src.get("title","")),re.I) else 1
+                            )
+                            ordered=sorted(discovery["results"],key=priority)
+                            for attempt,src in enumerate(ordered):
                                 if attempt>=args.max_pdfs_per_quarter:break
                                 if not src.get("attachment_name"):continue
                                 try:
