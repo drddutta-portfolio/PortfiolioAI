@@ -1,7 +1,7 @@
 """Bounded Development recovery controller; inspect every ten minutes and rotate sources."""
 import importlib.util,json,os,time,urllib.request
 from pathlib import Path
-from r4_recovery_queue import SOURCES,next_source,dispatched,dispatch_failed
+from r4_recovery_queue import SOURCES,next_source,dispatched,dispatch_failed,observe_completed
 
 REPO="drddutta-portfolio/PortfiolioAI"
 BRANCH="PortfolioAI-Development"
@@ -32,6 +32,8 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
             # Query each workflow independently: unrelated CI runs cannot hide an active collector.
             rows=request("/actions/workflows/"+source+"/runs?branch="+BRANCH+"&per_page=10")["workflow_runs"]
             runs[source]=rows
+            completed=next((r for r in rows if r["status"]=="completed"),None)
+            if completed:observe_completed(state,source,completed,now)
             point["source_runs"][source]=[{"id":r["id"],"status":r["status"],"conclusion":r.get("conclusion")} for r in rows[:1]]
             point["active_runs"].extend(r["id"] for r in rows if r["status"]!="completed")
         except Exception as error:
