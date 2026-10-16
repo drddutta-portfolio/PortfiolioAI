@@ -42,9 +42,15 @@ class IssuerBridge:
     xml_reported_isin:str|None
     contract:str=CONTRACT
     share_basis:str="AS_FILED_EPS_ONLY_CORPORATE_ACTION_COMPARABILITY_UNPROVEN"
-    def payload(self):return asdict(self)
+    historical_symbol:str|None=None
+    issuer_rename_evidence_sha256:str|None=None
+    def payload(self):
+        value=asdict(self)
+        if self.historical_symbol is None:value.pop("historical_symbol")
+        if self.issuer_rename_evidence_sha256 is None:value.pop("issuer_rename_evidence_sha256")
+        return value
 
-def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing):
+def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=None):
     origin=urlparse(metadata.get("xbrl",""))
     if origin.scheme!="https" or origin.hostname!="nsearchives.nseindia.com" or not re.fullmatch(r"/corporate/xbrl/[A-Za-z0-9_.-]+\.xml",origin.path) or origin.query or origin.fragment:
         raise ValueError("UNQUALIFIED_NSE_ORIGINAL")
@@ -57,7 +63,15 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing):
         if len(values)>1:raise ValueError("AMBIGUOUS_ORIGINAL_ISSUER_FIELD:"+name)
         return next(iter(values),None)
     code=unique("ScripCode")
-    if unique("Symbol")!=symbol or metadata.get("symbol")!=symbol or not re.fullmatch(r"\d{6}",code or ""):
+    original_symbol=unique("Symbol")
+    if rename is not None:
+        from r4_issuer_rename import RenameProof
+        from datetime import datetime
+        if (not isinstance(rename,RenameProof) or rename.symbol!=symbol or rename.scrip!=code
+            or datetime.strptime(metadata.get("toDate",""),"%d-%b-%Y").date().isoformat()>=rename.effective_date):
+            raise ValueError("UNQUALIFIED_HISTORICAL_RENAME_LINK")
+    allowed_symbols={symbol,rename.old_symbol} if rename is not None else {symbol}
+    if original_symbol not in allowed_symbols or metadata.get("symbol")!=symbol or not re.fullmatch(r"\d{6}",code or ""):
         raise ValueError("HISTORICAL_XML_EXCHANGE_IDENTITY_UNPROVEN")
     if str(bse_meta.get("SecurityCode"))!=code or bse_meta.get("ISIN")!=isin:
         raise ValueError("BSE_HEADER_CANONICAL_IDENTITY_MISMATCH")
@@ -66,8 +80,19 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing):
     legal=bse_listing.get("Issuer_Name")
     named=catalog_issuer_name(metadata)
     if not legal_key(legal) or legal_key(legal)!=legal_key(named):
-        raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")
-    return IssuerBridge(symbol,isin,code,legal,named,metadata.get("isin"),unique("ISIN"))
+        # An explicit source-pinned rename can reconcile only its two exact
+        # legal names. Never use fuzzy company-name matching or a ticker guess.
+        if rename is None:raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")
+        from r4_issuer_rename import compact
+        def rename_name(value):
+            value=re.sub(r"\b(?:LTD|LIMITED)\b","",str(value or ""),flags=re.I)
+            return compact(value)
+        names={rename_name(rename.old_name),rename_name(rename.new_name)} if rename else set()
+        if rename_name(legal) not in names or rename_name(named) not in names:
+            raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")
+    return IssuerBridge(symbol,isin,code,legal,named,metadata.get("isin"),unique("ISIN"),
+        historical_symbol=rename.old_symbol if rename is not None else None,
+        issuer_rename_evidence_sha256=rename.sha256 if rename is not None else None)
 
 def verify_original_facts(raw,manifest,bridge):
     """Independent numeric/context replay, without collector or network dependencies."""
@@ -79,7 +104,7 @@ def verify_original_facts(raw,manifest,bridge):
     identifiers=[(n.text or "").strip() for n in ctx.iter() if local(n.tag)=="identifier"]
     starts=[(n.text or "").strip() for n in ctx.iter() if local(n.tag)=="startDate"]
     ends=[(n.text or "").strip() for n in ctx.iter() if local(n.tag)=="endDate"]
-    if len(identifiers)!=1 or identifiers[0] not in (bridge.symbol,bridge.bse_scrip_code) or starts!=[manifest["period_start"]] or ends!=[manifest["period_end"]]:
+    if len(identifiers)!=1 or identifiers[0] not in (bridge.symbol,bridge.bse_scrip_code,bridge.historical_symbol) or starts!=[manifest["period_start"]] or ends!=[manifest["period_end"]]:
         raise ValueError("ORIGINAL_ISSUER_OR_QUARTER_CONTEXT_MISMATCH")
     units={}
     for n in root:
