@@ -36,3 +36,17 @@ Zero selected same-filing quarters in target window (20): 360ONE, ABCAPITAL, ANG
 
 ## Scope discipline
 No changes to main / Production, V1-4 research scores, frozen baseline, or retroactively guessed observation dates. Never claim completion merely because 240 companies have *some* four quarters.
+
+## Development execution implementation — 16 October 2026
+
+Owner instruction: **All 31 missing equities are explicitly IN R3 scope**. ETFs are separate. Do not remove these equities from the Results table or from the 262 acceptance denominator.
+
+Implementation committed to `PortfolioAI-Development`:
+- `255ba82`: R3 original-filing collector counts ONLY already R4-selected same-source quarterly triplets as completed. Unselected original source facts are carried forward as reconciliation candidates, not completion. Banking coverage includes UNIONBANK and other verified bank symbols.
+- `7615258`: focused same-source triplet and banking-contract regression cases added to existing collector test suite.
+- `76d27ef`: new Development-only `scripts/results/r3-current-coverage-readback.py` independently enumerates transaction-derived equities, excludes ETFs, identifies exact missing September/December 2025 and March/June 2026 quarters, and emits explicit `INCOMPLETE` until 262/262 qualify.
+- `a5a556b` and `2348b9c`: Development `.github/workflows/results-r3-original-filings-acquisition.yml` now responds to scoped Development pushes. After collection it invokes existing R4 immutable Cloudflare R2 source verification/selection, emits coverage JSON artifact, and enforces a fail-closed 262-equity completion check even after partial source failures.
+
+**Verified execution result at update:** code commits were accepted by GitHub; the Development Vercel commit status was successful. **Neither a successful GitHub Actions source-backfill execution nor new 262/262 database coverage has been independently verified.** The latest queried Supabase R3 scan remained RUNNING with 214 planned items and 0 newly accepted observations. No evidence-backed basis exists to mark the 31 complete. No main or Production changes.
+
+The collector continues using pre-existing selected facts, bounded verified original issuer-source data and compact Dev R2 storage. Missing documentation, source conflicts, historical share-basis issues or unproven source units must remain review-pending. A green frontend deployment is NOT evidence of financial data completeness.
