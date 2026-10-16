@@ -100,7 +100,14 @@ def check_manifest(record,manifest):
             and manifest.get("period_end") in ("2024-09-30","2024-12-31")
             and manifest.get("independent_isin_evidence")=="NCL_CMPT71607_CAMS_2024_PRE_SPLIT_ISIN"
             and manifest.get("eps_as_originally_reported_before_split") is True)
-        if not (exact_axis or exact_cams):
+        exact_td=(manifest.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"
+            and manifest.get("symbol")=="TDPOWERSYS"
+            and manifest.get("isin")=="INE419M01035"
+            and manifest.get("original_filing_isin")=="INE419M01027"
+            and manifest.get("period_end") in ("2024-09-30","2024-12-31")
+            and manifest.get("independent_isin_evidence")=="NSE_CML75855_TDPOWERSYS_2024_PRE_SPLIT_ISIN"
+            and manifest.get("eps_as_originally_reported_before_split") is True)
+        if not (exact_axis or exact_cams or exact_td):
             return "LEGACY_HISTORICAL_ISIN_CIRCULAR_UNPROVEN"
     try:
         days=(date.fromisoformat(manifest["period_end"])-date.fromisoformat(manifest["period_start"])).days
