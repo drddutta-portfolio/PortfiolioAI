@@ -46,3 +46,5 @@ jobs:
           name: r4-original-replay-correction
           path: tmp/results-r4/
           retention-days: 7
+
+# Replay unversioned V2 source manifests under corrected V3 contract.
