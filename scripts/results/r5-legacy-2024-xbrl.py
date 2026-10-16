@@ -70,6 +70,18 @@ def extract(raw,metadata,symbol,isin):
  if end not in PERIODS or start!=PERIODS[end]:return None,"INVALID_2024_QUARTER"
  if metadata.get("symbol")!=symbol:return None,"CATALOG_SYMBOL_MISMATCH"
  reported_isin=metadata.get("isin")
+ independent_isin_evidence=None
+ # Legacy NSE catalog sometimes omits ISIN entirely; that is not proof of
+ # another security. Allow exactly the original AXISBANK share identity proven
+ # by NSE CML/61473 (March 2024); all other companies remain fail-closed.
+ if not reported_isin and symbol=="AXISBANK" and isin=="INE238A01034":
+  embedded={((node.text or "").strip().upper()) for node in root.iter()
+            if local(node.tag).lower() in ("isin","isinnumber","isincode")
+            and (node.text or "").strip()}
+  if embedded and embedded!={isin}:
+   return None,"SOURCE_EMBEDDED_ISIN_MISMATCH"
+  reported_isin=isin
+  independent_isin_evidence="NSE_CML61473_2024_AXISBANK_INE238A01034"
  link=_r3.historical_result_identity(symbol,isin,reported_isin,end) if reported_isin!=isin else None
  if reported_isin!=isin and not link:return None,"UNKNOWN_HISTORICAL_ISIN"
  v=metadata.get("consolidated")
@@ -136,7 +148,8 @@ def extract(raw,metadata,symbol,isin):
  if not facts:return None,"NO_QUALIFIED_FINANCIAL_FACTS"
  return {"symbol":symbol,"isin":isin,"source_isin":reported_isin,"period_start":start,
          "period_end":end,"scope":scope,"facts":facts,
-         "historical_identity_link":link},None
+         "historical_identity_link":link,
+         "independent_isin_evidence":independent_isin_evidence},None
 
 def source_diagnostic(raw):
  try:root=ET.fromstring(raw)
@@ -176,7 +189,9 @@ def persist(db,s3,raw,record,parsed):
   "consolidation_scope":parsed["scope"],"issuer_filing_url":record["xbrl"],
   "original_sha256_retained":original_sha,"original_xbrl_retained":True,
   "original_r2_key":xmlkey,"reporting_currency":"INR",
-  "original_filing_isin":parsed["source_isin"],"catalog_broadcast_date":record.get("broadCastDate"),
+  "original_filing_isin":parsed["source_isin"],
+  "independent_isin_evidence":parsed.get("independent_isin_evidence"),
+  "catalog_broadcast_date":record.get("broadCastDate"),
   "original_publication_precision":"CATALOG_ONLY_UNVERIFIED",
   "raw_nse_bytes_retained":True,"figures_review_pending":True,
   "facts":parsed["facts"]
