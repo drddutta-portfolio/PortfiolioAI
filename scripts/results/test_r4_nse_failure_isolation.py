@@ -121,6 +121,7 @@ class IsolationTest(unittest.TestCase):
              patch.object(m.batch,"candidates",return_value=[("FIXTURE","FIXTURE",sid,"Fixture",periods)]), \
              patch.object(m.batch,"r2_client",return_value=client),patch.object(m.batch,"verified_issuer",return_value="Fixture"), \
              patch.object(m.batch,"immutable_put"),patch.object(m,"extract_ocr",side_effect=lambda *args:dict(parsed)), \
+             patch.object(m,"run_with_timeout",side_effect=lambda operation,args,timeout:operation(*args)), \
              patch.object(m.fitz,"open",return_value=[]),patch.object(m.batch,"issuer_identity",return_value=True), \
              patch.object(m.batch,"persist",return_value=3):
             Path("reports").mkdir();Path("reports/bse-original-shard-0.json").write_text(json.dumps(report))
