@@ -99,8 +99,12 @@ def verify_original_facts(raw,manifest,bridge):
         if not found or len({v for v,_ in found})!=1:raise ValueError("ORIGINAL_FINANCIAL_FACT_AMBIGUOUS")
         return found[0]
     tags={"OPERATING_REVENUE_QUARTER":("RevenueFromOperations",),
-          "NET_PROFIT_QUARTER":("ProfitLossForPeriod","ProfitLossForThePeriod"),
+          "NET_PROFIT_QUARTER":("ProfitLossForPeriod","ProfitLossForThePeriod","ProfitLossForPeriodBeforeMinorityInterest"),
           "EPS_DILUTED":("DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations","DilutedEarningsPerShareAfterExtraordinaryItems")}
+    if bridge.symbol=="STARHEALTH":
+        tags={"NET_PREMIUM_EARNED_QUARTER":("PremiumEarned",),
+              "NET_PROFIT_QUARTER":("ProfitLossAfterTax",),
+              "EPS_DILUTED":("BasicAndDilutedEPSAfterExtraordinaryItemsNetOfTaxExpenseForThePeriodNotToBeAnnualized",)}
     for code,fact in manifest["facts"].items():
         if code=="NET_INTEREST_INCOME_QUARTER":
             earned,_=read(("InterestEarned",));spent,_=read(("InterestExpended","InterestExpenses"))
