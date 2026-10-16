@@ -108,7 +108,7 @@ NUM = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
 DATE = re.compile(r"^\d\d[-/.](?:\d\d|[A-Za-z]{3,9})[-/.]20\d\d$")
 CORS = {"User-Agent":"PortfolioAI/1.0 quarterly research; publicly linked issuer statements"}
 # NBFC is its own NSE iXBRL format, separate from standard Ind-AS and banking.
-ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/(?:INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS)|GI)_[A-Za-z0-9_]+\.html$",re.I)
+ALLOWED_FILE = re.compile(r"^/corporate/ixbrl/(?:INTEGRATED_FILING_(?:INDAS|BANKING|NBFC_INDAS|GI)|GI)_[A-Za-z0-9_]+\.html$",re.I)
 
 def sha(raw: bytes) -> str: return hashlib.sha256(raw).hexdigest()
 
@@ -517,7 +517,7 @@ def extract_insurance(html: str, symbol: str, isin: str):
             "period_end":qend,"scope":scope,"facts":facts},None
 
 def extract_source(html: str, symbol: str, isin: str, source_url: str):
-    if re.search(r"/GI_[A-Za-z0-9_]+\.html$",urlparse(source_url).path,re.I):
+    if re.search(r"/(?:INTEGRATED_FILING_)?GI_[A-Za-z0-9_]+\.html$",urlparse(source_url).path,re.I):
         return extract_insurance(html,symbol,isin)
     path=urlparse(source_url).path
     if re.search(r"/INTEGRATED_FILING_NBFC_INDAS_[A-Za-z0-9_]+\.html$",path,re.I):
