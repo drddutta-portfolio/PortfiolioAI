@@ -25,8 +25,8 @@ def materialize_remaining(result, body, audience, gateway, out):
             raise ValueError('G03_REMAINING_DOCUMENTS_NOT_FRESH_NO_GRANT_OR_SAVE:' + symbol)
         grant_body = {'action': 'ISSUE_G03_REMAINING_CANONICAL_ONLY_GRANT',
                       'authorizationHash': policy['directiveSha256'], 'securityId': security_id}
-        grant = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
-        repeat = invoke('v14-g02-execution-grant', grant_body, grant_response=True)
+        grant = invoke('v14-g03-remaining-execution-grant', grant_body, grant_response=True)
+        repeat = invoke('v14-g03-remaining-execution-grant', grant_body, grant_response=True)
         if (grant.get('scope') != 'SECURITY_IDS:' + security_id or grant.get('providerCalls') != 0
                 or repeat.get('grantId') != grant.get('grantId') or repeat.get('reused') is not True):
             raise ValueError('G03_REMAINING_GRANT_SCOPE_OR_IDEMPOTENCE_INVALID')

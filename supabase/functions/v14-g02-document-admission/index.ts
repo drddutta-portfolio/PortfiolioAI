@@ -1,6 +1,3 @@
-import {g03RemainingExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
-import {G03_REMAINING_SOURCE_SCOPE} from '../_shared/v14-g02-source-import.ts'
-import {G03_REMAINING_DOCUMENT_BATCH} from '../_shared/v14-g03-document-review.ts'
 import {g03ValuationExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
 import {admitFixedG03Valuation} from '../_shared/v14-g03-valuation-admission-runtime.ts'
 import {g03MarginExecutorQualified} from '../_shared/v14-g03-executor-identity.ts'
@@ -62,12 +59,11 @@ Deno.serve(async req=>{
   if(!g03FinancialExecutorQualified(claims))return reply(403,'G03_FINANCIAL_EXECUTOR_SCOPE_INVALID')
   try{return reply(200,'G03_CASH_COMPONENTS_ADMITTED_NOT_CANONICAL_READY',await admitFixedG03Cash(createClient(url,key,{auth:{persistSession:false}}),body,claims))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G03_CASH_ADMISSION_FAILED')}
  }
- const remaining=body?.action==='ADMIT_FIXED_G03_REMAINING_DOCUMENT'
- const order=body?.action==='ADMIT_FIXED_G03_ORDER_HISTORY',g03=remaining||order||body?.action==='ADMIT_FIXED_G03_DOCUMENT',scope=remaining?G03_REMAINING_SOURCE_SCOPE:g03?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE,sourcePolicy=order?G03_ORDER_POLICY:scope.policy,selectedBatch=remaining?G03_REMAINING_DOCUMENT_BATCH:order?G03_ORDER_REVIEW_BATCH:g03?G03_DOCUMENT_REVIEW_BATCH:batch,documentKind=g03?G03_DOCUMENT_KIND:G02_DOCUMENT_KIND,reviewKind=g03?G03_DOCUMENT_REVIEW_KIND:G02_DOCUMENT_REVIEW_KIND
- if(!(remaining?g03RemainingExecutorQualified(claims):order?g03OrderExecutorQualified(claims):g03?g03DocumentExecutorQualified(claims):g02DocumentExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
+ const order=body?.action==='ADMIT_FIXED_G03_ORDER_HISTORY',g03=order||body?.action==='ADMIT_FIXED_G03_DOCUMENT',scope=g03?G03_SOURCE_SCOPE:G02_SOURCE_SCOPE,sourcePolicy=order?G03_ORDER_POLICY:scope.policy,selectedBatch=order?G03_ORDER_REVIEW_BATCH:g03?G03_DOCUMENT_REVIEW_BATCH:batch,documentKind=g03?G03_DOCUMENT_KIND:G02_DOCUMENT_KIND,reviewKind=g03?G03_DOCUMENT_REVIEW_KIND:G02_DOCUMENT_REVIEW_KIND
+ if(!(order?g03OrderExecutorQualified(claims):g03?g03DocumentExecutorQualified(claims):g02DocumentExecutorQualified(claims)))return reply(403,scope.group+'_EXECUTOR_SCOPE_INVALID')
  if(body?.action==='RENEW_FIXED_G02_STOCK_HISTORY'){try{return reply(200,'G02_STOCK_HISTORY_PROOFS_RENEWED_NOT_READY',await renewG02History(createClient(url,key,{auth:{persistSession:false}}),body))}catch(e){return reply(409,e instanceof Error&&/^[A-Z0-9_:]+$/.test(e.message)?e.message:'G02_HISTORY_RENEWAL_FAILED')}}
  const b=selectedBatch.find(x=>x.securityId===body?.securityId&&x.requirementCode===(body.requirementCode??'BUSINESS_DURABILITY')&&(!order||x.reportingPeriodEnd===body.reportingPeriodEnd))
- if(body?.action!==(remaining?'ADMIT_FIXED_G03_REMAINING_DOCUMENT':order?'ADMIT_FIXED_G03_ORDER_HISTORY':g03?'ADMIT_FIXED_G03_DOCUMENT':'ADMIT_FIXED_G02_DURABILITY_DOCUMENT')||body.authorizationHash!==sourcePolicy.directiveSha256||!b||body.originalHash!==b.originalHash||body.normalizedFragment!==b.fragment||body.extractionMethod!=='POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES')return reply(400,'EXACT_G02_DOCUMENT_BATCH_REQUIRED')
+ if(body?.action!==(order?'ADMIT_FIXED_G03_ORDER_HISTORY':g03?'ADMIT_FIXED_G03_DOCUMENT':'ADMIT_FIXED_G02_DURABILITY_DOCUMENT')||body.authorizationHash!==sourcePolicy.directiveSha256||!b||body.originalHash!==b.originalHash||body.normalizedFragment!==b.fragment||body.extractionMethod!=='POPPLER_LAYOUT_WHITESPACE_NORMALIZED_ORIGINAL_BYTES')return reply(400,'EXACT_G02_DOCUMENT_BATCH_REQUIRED')
  if(order&&(!b||!('sourceReportPeriodEnd' in b)||!g03OrderFactsQualified(b as typeof G03_ORDER_REVIEW_BATCH[number],body.verifiedOrderCells)))return reply(400,'G03_ORDER_CHART_CELLS_NOT_VERIFIED')
  const orderFacts=order&&b&&'sourceReportPeriodEnd' in b?g03OrderFacts(b as typeof G03_ORDER_REVIEW_BATCH[number]):null
  const db=createClient(url,key,{auth:{persistSession:false}})
