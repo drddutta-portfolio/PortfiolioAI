@@ -559,7 +559,7 @@ export function ResultsLivePage() {
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
-                type="button" aria-pressed={active} title={outcome.explanation}
+                type="button" aria-pressed={active}
                 aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
@@ -599,6 +599,10 @@ export function ResultsLivePage() {
           <InsightCard entry={chosen} rows={detailRows} allRows={observations} periodEnd={period.end} calibrations={industryCalibrations} expanded={insightExpanded} onToggle={() => setInsightExpanded((value) => !value)}/>
         </div>
         {insightExpanded ? <FullAiAnalysis entry={chosen} period={period} rows={detailRows} allRows={observations} calibrations={industryCalibrations}/> : null}
+        <details className="ref-evidence" aria-label="Quarterly grade explanation">
+          <summary>Why this quarterly grade?</summary>
+          <div className="ref-evidence-body"><p>{gradeQuarterR5(observations, chosen.position.securityId, period.end, chosen.position.sector, chosen.position.industry, industryCalibrations).explanation}</p></div>
+        </details>
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
       <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
