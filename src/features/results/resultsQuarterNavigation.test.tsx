@@ -63,7 +63,7 @@ describe("Results rolling-quarter navigator", () => {
       matrix.scrollLeft = 1200
       fireEvent.scroll(matrix)
     })
-    expect(slider).toHaveValue("1200")
+    expect((slider as HTMLInputElement).value).toBe("1200")
 
     fireEvent.click(screen.getByRole("button", { name: "Scroll towards older quarters" }))
     expect(matrix.scrollLeft).toBe(1400)
