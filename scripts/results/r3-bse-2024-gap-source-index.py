@@ -58,6 +58,8 @@ ORDER BY s.symbol
 def main():
     cli=argparse.ArgumentParser()
     cli.add_argument("--limit",type=int,default=120)
+    cli.add_argument("--symbols",default="",
+      help="Optional exact 2024 missing-equity symbols to audit before applying limit")
     cli.add_argument("--max-pages",type=int,default=3)
     cli.add_argument("--output",default="tmp/results-r3-bse-2024/source-index.json")
     args=cli.parse_args()
@@ -69,10 +71,19 @@ def main():
         with db.cursor() as c:
             c.execute(SELECT,(PID,))
             missing=c.fetchall()
+    targets={x.strip().upper() for x in args.symbols.split(",") if x.strip()}
+    if targets:
+        known={symbol for symbol,_isin,_sep,_dec in missing}
+        unknown=targets-known
+        if unknown:
+            raise SystemExit("TARGETS_NOT_2024_GAP_EQUITIES:"+",".join(sorted(unknown)))
+        missing=[row for row in missing if row[0] in targets]
     missing=missing[:args.limit]
     report={"contract":"PORTFOLIOAI_R3_2024_BSE_ISSUER_ORIGINAL_DISCOVERY_V1",
             "writes":0,"qualification_status":"DISCOVERY_ONLY",
             "total_target_equities":len(missing),"periods":list(WINDOWS),
+            "source_acquisition":False,"results_selected":False,
+            "historical_current_isin_not_proof_of_2024_share_basis":True,
             "targets":[]}
     outcomes=Counter()
     with PortfolioBSE() as bse:
