@@ -2,13 +2,24 @@ import importlib.util
 from pathlib import Path
 import unittest
 import re
+import time
 
-from r4_recovery_queue import SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed
+from r4_recovery_queue import run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed
 
 spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("r4-recovery-monitor.py"))
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_native_worker_returns_verified_parser_output(self):
+        self.assertEqual(run_with_timeout(int,("7",),5),7)
+
+    def test_native_worker_preserves_validation_rejection(self):
+        with self.assertRaises(ValueError):run_with_timeout(int,("invalid",),5)
+
+    def test_native_worker_timeout_does_not_block_next_item(self):
+        with self.assertRaises(TimeoutError):run_with_timeout(time.sleep,(60,),0.1)
+        self.assertEqual(run_with_timeout(int,("8",),5),8)
+
     def test_workflow_output_references_have_a_defining_step(self):
         root=Path(__file__).resolve().parents[2]/".github"/"workflows"
         for path in root.glob("results-r4-*.yml"):
