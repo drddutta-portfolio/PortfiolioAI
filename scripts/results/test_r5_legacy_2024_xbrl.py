@@ -35,6 +35,33 @@ class LegacyTests(unittest.TestCase):
   self.assertEqual(x["facts"]["OPERATING_REVENUE_QUARTER"]["value"],"150")
   self.assertEqual(x["facts"]["NET_PROFIT_QUARTER"]["value"],"10")
   self.assertEqual(x["facts"]["EPS_DILUTED"]["value"],"7.5")
+ def test_missing_2024_catalog_isin_needs_exact_nse_circular(self):
+  issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
+  metadata={**METADATA,"symbol":"AXISBANK"}
+  metadata.pop("isin")
+  out,err=module.extract(issuer_xml,metadata,"AXISBANK","INE238A01034")
+  self.assertIsNone(err)
+  self.assertEqual(out["source_isin"],"INE238A01034")
+  self.assertEqual(out["independent_isin_evidence"],"NSE_CML61473_2024_AXISBANK_INE238A01034")
+  forged,reason=module.extract(issuer_xml,metadata,"AXISBANK","INE238A01035")
+  self.assertIsNone(forged)
+  self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
+  other_xml=xml()
+  other_metadata={**METADATA}
+  other_metadata.pop("isin")
+  other,reason=module.extract(other_xml,other_metadata,"RELIANCE","INE002A01018")
+  self.assertIsNone(other)
+  self.assertEqual(reason,"UNKNOWN_HISTORICAL_ISIN")
+
+ def test_source_embedded_isin_must_not_disagree_with_nse_circular(self):
+  issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
+  issuer_xml=issuer_xml.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
+  metadata={**METADATA,"symbol":"AXISBANK"}
+  metadata.pop("isin")
+  record,error=module.extract(issuer_xml,metadata,"AXISBANK","INE238A01034")
+  self.assertIsNone(record)
+  self.assertEqual(error,"SOURCE_EMBEDDED_ISIN_MISMATCH")
+
  def test_missing_identity(self):
   x,e=module.extract(xml(),METADATA,"INFY","INE009A01021")
   self.assertIsNone(x);self.assertEqual(e,"CATALOG_SYMBOL_MISMATCH")
