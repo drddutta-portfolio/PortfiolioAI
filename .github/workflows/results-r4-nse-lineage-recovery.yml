@@ -93,3 +93,5 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
 # Per-company evidence stays in private Development R2/DB; no GitHub artifact export.
+
+# Recover explicit insurance and original before-minority PAT fields; no financial exports.
