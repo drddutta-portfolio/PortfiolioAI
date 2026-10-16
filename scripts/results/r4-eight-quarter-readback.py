@@ -59,7 +59,8 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
         if r["metric_code"] in core and field_eligible(r):
             key = (str(r["source_record_id"]), r["consolidation_scope"])
             groups[key].add(r["metric_code"])
-            if "REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED" in (r.get("notes") or ""):
+            if ("REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED" in (r.get("notes") or "")
+                or "HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN" in (r.get("notes") or "")):
                 share_basis_warning = True
     complete_groups = [key for key, metrics in groups.items() if core.issubset(metrics)]
     if complete_groups:
