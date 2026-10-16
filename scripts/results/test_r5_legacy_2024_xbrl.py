@@ -98,6 +98,26 @@ class LegacyTests(unittest.TestCase):
   self.assertIsNone(parsed)
   self.assertEqual(error,"SOURCE_EMBEDDED_ISIN_MISMATCH")
 
+ def test_kotak_2024_original_bank_isin_uses_exchange_split_circular(self):
+  original=(xml().replace(b"RELIANCE",b"KOTAKBANK")
+    .replace(b"ProfitLossForPeriod",b"ProfitLossForThePeriod")
+    .replace(b"DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+             b"DilutedEarningsPerShareAfterExtraordinaryItems"))
+  original=original.replace(b"</xbrli:xbrl>",
+    b'<ind:InterestEarned contextRef="OneD" unitRef="INR">2500000000</ind:InterestEarned>'
+    b'<ind:InterestExpended contextRef="OneD" unitRef="INR">1000000000</ind:InterestExpended>'
+    b'</xbrli:xbrl>')
+  metadata={**METADATA,"symbol":"KOTAKBANK"}
+  metadata.pop("isin")
+  data,error=module.extract(original,metadata,"KOTAKBANK","INE237A01036")
+  self.assertIsNone(error)
+  self.assertEqual(data["source_isin"],"INE237A01028")
+  self.assertIn("MSE/LIST/18443/2026",data["historical_identity_link"]["evidence"])
+  self.assertEqual(data["independent_isin_evidence"],"MSE_LIST18443_KOTAKBANK_2024_PRE_SPLIT_ISIN")
+  wrong,error=module.extract(original,metadata,"KOTAKBANK","INE237A01028")
+  self.assertIsNone(wrong)
+  self.assertEqual(error,"UNKNOWN_HISTORICAL_ISIN")
+
  def test_source_embedded_isin_must_not_disagree_with_nse_circular(self):
   issuer_xml=xml().replace(b"RELIANCE",b"AXISBANK")
   issuer_xml=issuer_xml.replace(b"</xbrli:xbrl>",b'<ind:ISIN>INE999A01011</ind:ISIN></xbrli:xbrl>')
