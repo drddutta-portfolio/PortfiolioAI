@@ -103,6 +103,13 @@ class ResultsAcquisitionTests(unittest.TestCase):
         self.assertEqual(module.completed_quarters(bank_rows,banking=True),{"2026-06-30"})
         self.assertEqual(module.completed_quarters(bank_rows,banking=False),set())
 
+    def test_td_power_systems_official_august_split_keeps_original_eps(self):
+        link=module.historical_result_identity("TDPOWERSYS","INE419M01035","INE419M01027","2026-06-30")
+        self.assertIsNotNone(link)
+        self.assertEqual(link["split_new_per_old"],"2")
+        self.assertIn("NSE/CML/75855",link["evidence"])
+        self.assertIsNone(module.historical_result_identity("TDPOWERSYS","INE419M01035","INE419M01027","2026-09-30"))
+
     def test_angelone_official_2026_february_split_prevents_false_isin_rejection(self):
         link=module.historical_result_identity("ANGELONE","INE732I01021","INE732I01013","2025-12-31")
         self.assertIsNotNone(link)
