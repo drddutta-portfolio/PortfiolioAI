@@ -22,7 +22,7 @@ def main():
               FROM data_source_records r
               JOIN securities s ON s.symbol=r.raw_payload->>'symbol' AND s.isin=r.raw_payload->>'isin'
               WHERE r.record_kind=%s AND r.retrieved_at>='2026-10-16 18:00:00+00'
-                AND r.raw_payload->>'parser_revision'='LEGACY_SAME_ROW_V2'
+                AND coalesce(r.raw_payload->>'parser_revision','LEGACY_SAME_ROW_V2')='LEGACY_SAME_ROW_V2'
               ORDER BY s.symbol,r.retrieved_at""",(batch.KIND,))
             records=cur.fetchall()
         db.rollback()
