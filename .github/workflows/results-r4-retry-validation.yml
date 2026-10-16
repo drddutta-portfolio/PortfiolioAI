@@ -45,3 +45,4 @@ jobs:
       - name: Whitespace integrity
         run: git diff HEAD^ HEAD --check
 # Includes isolated native OCR timeout and continuation regressions.
+# Includes transient failed-pass retry cooldown regressions.
