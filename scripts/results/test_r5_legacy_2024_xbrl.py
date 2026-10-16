@@ -52,6 +52,32 @@ class LegacyTests(unittest.TestCase):
   wrong=deepcopy(out);wrong["period_start"]="2024-04-01"
   with self.assertRaises(ValueError):verify_original_facts(raw,wrong,proof)
 
+ def test_original_before_minority_profit_label_is_replayed_exactly(self):
+  raw=xml().replace(b"ProfitLossForPeriod",b"ProfitLossForPeriodBeforeMinorityInterest")
+  out,error=module.extract(raw,METADATA,"RELIANCE","INE002A01018")
+  self.assertIsNone(error)
+  self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"10")
+
+ def test_conflicting_original_profit_labels_do_not_silently_win(self):
+  raw=xml().replace(b"</xbrli:xbrl>",b'<ind:ProfitLossForPeriodBeforeMinorityInterest contextRef="OneD" unitRef="INR">90000000</ind:ProfitLossForPeriodBeforeMinorityInterest></xbrli:xbrl>')
+  out,error=module.extract(raw,METADATA,"RELIANCE","INE002A01018")
+  self.assertIsNone(error)
+  self.assertNotIn("NET_PROFIT_QUARTER",out["facts"])
+
+ def test_general_insurance_uses_earned_net_premium_and_post_extraordinary_eps(self):
+  from r4_nse_issuer_bridge import bridge_from_sources,verify_original_facts
+  raw=xml().replace(b"RELIANCE",b"STARHEALTH").replace(b"RevenueFromOperations",b"PremiumEarned").replace(b"ProfitLossForPeriod",b"ProfitLossAfterTax").replace(b"DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",b"BasicAndDilutedEPSAfterExtraordinaryItemsNetOfTaxExpenseForThePeriodNotToBeAnnualized")
+  raw=raw.replace(b"</xbrli:xbrl>",b'<ind:Symbol>STARHEALTH</ind:Symbol><ind:ScripCode>543412</ind:ScripCode><ind:NetPremiumWritten contextRef="OneD" unitRef="INR">9990000000</ind:NetPremiumWritten></xbrli:xbrl>')
+  metadata={**METADATA,"symbol":"STARHEALTH","isin":"INE575P01011","companyName":"Star Health And Allied Insurance Company Limited","xbrl":"https://nsearchives.nseindia.com/corporate/xbrl/GI_123.xml"}
+  proof=bridge_from_sources(raw,metadata,"STARHEALTH","INE575P01011",{"SecurityCode":"543412","ISIN":"INE575P01011"},{"SCRIP_CD":"543412","ISIN_NUMBER":"INE575P01011","Issuer_Name":metadata["companyName"]})
+  out,error=module.extract(raw,metadata,"STARHEALTH","INE575P01011",proof)
+  self.assertIsNone(error)
+  self.assertEqual(set(out["facts"]),{"NET_PREMIUM_EARNED_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"})
+  self.assertEqual(out["facts"]["NET_PREMIUM_EARNED_QUARTER"]["value"],"150")
+  verify_original_facts(raw,out,proof)
+  self.assertNotIn("NET_PREMIUM_EARNED_QUARTER",module.extract(raw.replace(b"PremiumEarned",b"GrossPremiumsWritten"),metadata,"STARHEALTH","INE575P01011",proof)[0]["facts"])
+  self.assertNotIn("EPS_DILUTED",module.extract(raw.replace(b"EPSAfterExtraordinary",b"EPSBeforeExtraordinary"),metadata,"STARHEALTH","INE575P01011",proof)[0]["facts"])
+
  def test_boolean_or_dict_cannot_bypass_historical_identity(self):
   out,error=module.extract(xml(),METADATA,"RELIANCE","INE002A01018",{"verified":True})
   self.assertIsNone(out)
