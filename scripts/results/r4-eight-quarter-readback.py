@@ -63,8 +63,11 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
                 share_basis_warning = True
     complete_groups = [key for key, metrics in groups.items() if core.issubset(metrics)]
     if complete_groups:
+        scopes = {scope for _source, scope in complete_groups}
+        preferred_scope = "CONSOLIDATED" if "CONSOLIDATED" in scopes else "STANDALONE"
         return {"status": "QUALIFIED", "reason": "SAME_SOURCE_SAME_SCOPE_CORE_TRIO",
                 "complete_source_count": len(complete_groups),
+                "preferred_scope": preferred_scope,
                 "historical_eps_share_basis_guard": share_basis_warning}
     if selections:
         return {"status": "PARTIAL_SELECTED", "reason": "SELECTED_FACTS_NOT_ONE_QUALIFIED_SOURCE",
@@ -154,13 +157,25 @@ def readback(db_url: str) -> dict:
     year_benchmark_pairs = {"2025-09-30": "2024-09-30", "2025-12-31": "2024-12-31",
                             "2026-03-31": "2025-03-31", "2026-06-30": "2025-06-30"}
     per_symbol_period = {(x["symbol"], x["period_end"]): x for x in details}
-    potential_yoy_pairs = sum(
-        per_symbol_period[(symbol,period)]["status"] == "QUALIFIED"
-        and per_symbol_period[(symbol,baseline)]["status"] == "QUALIFIED"
-        and not per_symbol_period[(symbol,period)].get("historical_eps_share_basis_guard", False)
-        and not per_symbol_period[(symbol,baseline)].get("historical_eps_share_basis_guard", False)
+    same_source_period_yoy_candidates = [
+        (symbol, period, baseline,
+         per_symbol_period[(symbol, period)], per_symbol_period[(symbol, baseline)])
         for _,symbol in equities for period,baseline in year_benchmark_pairs.items()
-    )
+        if per_symbol_period[(symbol,period)]["status"] == "QUALIFIED"
+        and per_symbol_period[(symbol,baseline)]["status"] == "QUALIFIED"
+    ]
+    qualified_baseline_pairs = len(same_source_period_yoy_candidates)
+    pair_reasons = Counter()
+    potential_yoy_pairs = 0
+    for symbol, period, baseline, now, old in same_source_period_yoy_candidates:
+        if now["preferred_scope"] != old["preferred_scope"]:
+            pair_reasons["CROSS_PERIOD_SCOPE_MISMATCH"] += 1
+        elif (now.get("historical_eps_share_basis_guard", False)
+              or old.get("historical_eps_share_basis_guard", False)):
+            pair_reasons["PRE_SPLIT_EPS_BASIS_NOT_ADJUSTED"] += 1
+        else:
+            potential_yoy_pairs += 1
+    pair_reasons["SAME_SCOPE_AND_NOT_EXPLICITLY_SPLIT_GUARDED"] = potential_yoy_pairs
     total = len(equities) * len(PERIODS)
     if len(equities) != 262 or len(details) != total:
         raise RuntimeError("R4_COHORT_OR_SLOT_CARDINALITY_MISMATCH")
@@ -173,13 +188,16 @@ def readback(db_url: str) -> dict:
         "period_ends": PERIODS,
         "total_slots": total,
         "displayed_four_quarter_complete_equities": qualified_equities,
+        "baseline_period_pairs_with_both_qualified": qualified_baseline_pairs,
         "potential_yoy_pairs_not_final_comparability": potential_yoy_pairs,
+        "yoy_candidate_diagnostics": dict(sorted(pair_reasons.items())),
         "status_counts": dict(sorted(counts.items())),
         "by_period": {p:dict(sorted(period_counts[p].items())) for p in PERIODS},
         "unresolved": [item for item in details if item["status"] != "QUALIFIED"],
         "status": "PASS" if counts["QUALIFIED"] == total else "PARTIAL",
         "limitations": [
             "Missing issuer existence is UNPROVEN, never auto-mark NOT_APPLICABLE",
+            "Potential YoY pairs require identical selected Consolidated/Standalone scope",
             "Potential YoY pairs are NOT comparable until publication/share-basis/identity checks",
             "Stored Trendlyne-only review captures never count as selected issuer originals",
             "R3 protected selections and V1-4 research remain unchanged"
