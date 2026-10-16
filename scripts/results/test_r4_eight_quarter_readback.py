@@ -31,6 +31,18 @@ class EightQuarterReadbackTests(unittest.TestCase):
         self.assertEqual(m.classify("RELIANCE",rows,[])["status"],"QUALIFIED")
         self.assertEqual(m.classify("RELIANCE",rows,[])["complete_source_count"],1)
 
+    def test_preferred_scope_is_explicit_for_yoy_pair_eligibility(self):
+        core=m.required_for("RELIANCE")
+        rows=[row(x,source="s",scope="STANDALONE") for x in core]
+        rows += [row(x,source="c",scope="CONSOLIDATED") for x in core]
+        qualified=m.classify("RELIANCE",rows,[])
+        self.assertEqual(qualified["status"],"QUALIFIED")
+        self.assertEqual(qualified["complete_source_count"],2)
+        self.assertEqual(qualified["preferred_scope"],"CONSOLIDATED")
+        standalone=m.classify("RELIANCE",rows[:3],[])
+        self.assertEqual(standalone["preferred_scope"],"STANDALONE")
+        self.assertNotEqual(qualified["preferred_scope"],standalone["preferred_scope"])
+
     def test_different_sources_do_not_mix(self):
         rows=[row("NET_PROFIT_QUARTER","a"),row("EPS_DILUTED","b"),row("OPERATING_REVENUE_QUARTER","a")]
         self.assertEqual(m.classify("RELIANCE",rows,[])["status"],"PARTIAL_SELECTED")
