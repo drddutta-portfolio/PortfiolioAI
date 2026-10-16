@@ -83,6 +83,16 @@ def check_manifest(record,manifest):
                          "PORTFOLIOAI_RESULTS_BSE_ASHOKA_2024_PDF_COMPACT_V1"):
         return "UNAPPROVED_CONTRACT"
     if manifest.get("period_end") not in QUARTERS:return "OUTSIDE_QUARTERS"
+    # Narrow 2024 catalog ISIN omission; source NSE symbol is independently
+    # tied to exactly this issued security in official NSE circular CML/61473.
+    if manifest.get("independent_isin_evidence"):
+        if not (manifest.get("contract")=="PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1"
+            and manifest.get("symbol")=="AXISBANK"
+            and manifest.get("isin")=="INE238A01034"
+            and manifest.get("original_filing_isin")=="INE238A01034"
+            and manifest.get("period_end") in ("2024-09-30","2024-12-31")
+            and manifest.get("independent_isin_evidence")=="NSE_CML61473_2024_AXISBANK_INE238A01034"):
+            return "LEGACY_HISTORICAL_ISIN_CIRCULAR_UNPROVEN"
     try:
         days=(date.fromisoformat(manifest["period_end"])-date.fromisoformat(manifest["period_start"])).days
         if not 75<=days<=100:return "NOT_SINGLE_QUARTER"
