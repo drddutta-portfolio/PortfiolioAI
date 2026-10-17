@@ -7,7 +7,7 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * Each historical quarter uses ONLY its own and earlier qualified financials
  * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V4"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V5"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 export interface ResultsQuarterGrade {
   readonly status: R5Grade
@@ -297,7 +297,19 @@ export function gradeQuarterR5(
     return gradeCompanyTrajectory(observations, securityId, end, topCode, group)
   }
   const pair = comparable(observations, securityId, end, topCode)
-  if (!pair) return fail(group, "Comparable, same-filing Revenue/NII and PAT percentage comparisons are missing or incompatible in either quarter.")
+  if (!pair) {
+    // Calibrated peers cannot rescue an issuer's mathematically invalid
+    // percentage baseline. But the *already approved* same-original own-company
+    // level-change contract remains legitimate if >=2 independent comparisons
+    // INCLUDING the current quarter independently satisfy that stricter rule.
+    // Mark the answer as COMPANY_TREND, never as an industry percentile.
+    const ownTrend = gradeCompanyTrajectory(observations, securityId, end, topCode, group)
+    if (ownTrend.status !== "UNAVAILABLE") return {
+      ...ownTrend,
+      explanation: "Industry-peer percentages unavailable for this issuer; no peer percentile assigned. " + ownTrend.explanation,
+    }
+    return fail(group, "Comparable, same-filing Revenue/NII and PAT percentage comparisons are missing or incompatible in either quarter.")
+  }
   const strong = pair.currentProfit.gt(0) &&
     pair.top.gte(calibration.p75Top) && pair.profit.gte(calibration.p75Profit)
   const weak = !pair.currentProfit.gt(0) ||
