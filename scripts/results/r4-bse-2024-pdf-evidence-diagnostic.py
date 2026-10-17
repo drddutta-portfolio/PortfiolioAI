@@ -17,7 +17,7 @@ import fitz
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from portfolio_bse import PortfolioBSE
 
-EXPECTED = {"AXISBANK","BEL","HAL","AVANTIFEED","CAMS","COFORGE","SHRIRAMFIN","STARHEALTH"}
+EXPECTED = {"AXISBANK","BEL","HAL","AVANTIFEED","CAMS","COFORGE","SHRIRAMFIN","STARHEALTH","BLUSPRING","CPPLUS","EBGNG","GROWW","HEXT","IGL","IKS","ITCHOTELS","JASH","LENSKART","PINELABS","SSWL","TATACAP","TATAPOWER","TMCV","TMPV","UTLSOLAR","VENTIVE","FEDERALBNK"}
 QUARTERS = {"2024-09-30","2024-12-31"}
 TOPICS = ("revenue from operations","net interest income","premium earned",
           "profit after tax","profit for the period","profit / (loss)",
