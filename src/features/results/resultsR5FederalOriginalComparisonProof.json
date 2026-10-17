@@ -1,5 +1,35 @@
 {
+  "approvedSources": [
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "02b099d3-46f0-45f5-bac8-3945ab2df748",
+        "NET_INTEREST_INCOME_QUARTER": "fe52a5ad-6415-46f5-aecb-4af72e145c92",
+        "NET_PROFIT_QUARTER": "fee47bfb-e887-4ae4-8b64-52217baa0d2e"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "e6080dc4-9abe-412f-94e7-23609c51bf76",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "a698268f-06cf-4e31-8093-7a6c90797660",
+        "NET_INTEREST_INCOME_QUARTER": "5107043d-7d7d-498c-826f-a4b696bc7263",
+        "NET_PROFIT_QUARTER": "5fe493f8-0749-41eb-a874-157d5967a2d2"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "e6080dc4-9abe-412f-94e7-23609c51bf76",
+      "symbol": "FEDERALBNK"
+    }
+  ],
   "contract": "R5_FEDERAL_SIGNED_ISSUER_ORIGINAL_TWO_QUARTERS_V1",
   "environment": "Development",
-  "approvedSources": []
+  "originalR2Prefix": "portfolioai-results/development/v1/quarterly/security_id=INE171A01029/period_end=2024-12-31/original_version=602e0ce12375f7c4ecee8403d4c194aeb48010933d1b39fd099ee298d2c3a16d/",
+  "scope": "CONSOLIDATED",
+  "sourceOriginalSHA256": "602e0ce12375f7c4ecee8403d4c194aeb48010933d1b39fd099ee298d2c3a16d"
 }
