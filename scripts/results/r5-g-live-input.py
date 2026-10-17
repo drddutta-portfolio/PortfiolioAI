@@ -20,7 +20,7 @@ CORE = ("OPERATING_REVENUE_QUARTER", "NET_INTEREST_INCOME_QUARTER",
 OUT = Path("tmp/results-r5-g/selected-source-input.json")
 
 
-def selected_fact(row):
+def selected_fact(row, selected=True):
     (oid, sid, code, value, period_start, end, unit, currency, scope,
      source, record_id, published, retrieved, notes) = row
     return dict(
@@ -31,7 +31,7 @@ def selected_fact(row):
         sourceRecordId=str(record_id) if record_id else None,
         publishedAt=published.isoformat() if published else None,
         retrievedAt=retrieved.isoformat() if retrieved else "",
-        selected=True,
+        selected=selected,
         originalShareBasis="REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED" in (notes or "")
         or "HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN" in (notes or ""),
     )
@@ -81,6 +81,37 @@ def extract(db_url):
               ORDER BY o.security_id,o.period_end,o.metric_code,o.id
             """, (ids, list(PERIODS), list(CORE)))
             observations = [selected_fact(row) for row in c.fetchall()]
+            # R5 comparison-only original facts are admitted exclusively by
+            # independently hash-verified, repo-pinned observation identity.
+            # They are never added to R4's canonical selection.
+            proof=json.loads(Path("src/features/results/resultsR5ComparisonProof.json").read_text())
+            if (proof["contract"]!="R5_INDEPENDENT_ORIGINAL_COMPARISON_PROOF_V1"
+                    or proof["environment"]!="Development"):
+                raise RuntimeError("UNQUALIFIED_R5_COMPARISON_MANIFEST")
+            desired=set(
+                oid for source in proof["approvedSources"]
+                for oid in source["observations"].values())
+            already={row["id"] for row in observations}
+            missing=sorted(desired-already)
+            if missing:
+                c.execute("""
+                  SELECT o.id,o.security_id,o.metric_code,o.numeric_value,
+                         o.period_start,o.period_end,o.unit,o.currency,
+                         o.consolidation_scope,o.source_code,o.source_record_id,
+                         o.published_at,o.retrieved_at,NULL::text AS notes
+                  FROM public.fundamental_observations o
+                  WHERE o.id=ANY(%s::uuid[])
+                    AND o.security_id=ANY(%s::uuid[])
+                    AND o.period_type='QUARTER'
+                    AND o.evidence_status='AVAILABLE'
+                    AND o.numeric_value IS NOT NULL
+                    AND o.source_code='COMPANY_EXCHANGE_FILING'
+                  ORDER BY o.id
+                """,(missing,ids))
+                alternatives=[selected_fact(row,selected=False) for row in c.fetchall()]
+                if {row["id"] for row in alternatives}!=set(missing):
+                    raise RuntimeError("R5_VERIFIED_ORIGINAL_IDENTITY_MISSING_OR_CHANGED")
+                observations.extend(alternatives)
     if len(set(row["id"] for row in observations)) != len(observations):
         raise RuntimeError("DUPLICATE_SELECTED_OBSERVATION_ID")
     return {
@@ -102,7 +133,8 @@ def main():
     OUT.write_text(json.dumps(payload, separators=(",",":"), sort_keys=True))
     print("R5_G_INPUT_READY "+json.dumps({
         "cohort":len(payload["cohort"]),
-        "selectedFacts":len(payload["observations"]),
+        "selectedFacts":sum(1 for row in payload["observations"] if row["selected"]),
+        "r5VerifiedCandidateFacts":sum(1 for row in payload["observations"] if not row["selected"]),
         "sourceSelected":True,"securitiesWithReviewedIndustry":sum(
           bool(p["sector"] and p["industry"]) for p in payload["cohort"]),
         "rawValuesNotPublished":True},sort_keys=True))
