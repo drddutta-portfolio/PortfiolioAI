@@ -1,0 +1,72 @@
+name: Results R5 Original R2 Scope Proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-original-scope-proof.yml
+      - scripts/results/r4-verify-quarterly.py
+      - scripts/results/test_r5_original_scope_proof.py
+permissions:
+  contents: read
+concurrency:
+  group: r5-original-scope-proof-development
+  cancel-in-progress: true
+jobs:
+  verified-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+      RESULTS_R5_SOURCE_PROOF_READBACK: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify Development-only read-only verification contract
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test "$CLOUDFLARE_R2_BUCKET" = portfolioai-history-dev
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+      - name: Install pinned verification dependencies
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+      - name: R5 read-only original-proof regression
+        run: |
+          python scripts/results/test_r5_original_scope_proof.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Verify all source original R2 bytes and 24 identified comparison scope cases (NO WRITES)
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-verify-quarterly.py > tmp/results-r4/r5-original-source-proof-log.json
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-r4/readback.json'))
+          assert r['mode']=='DRY_RUN' and r['created_decisions']==0
+          proof=r['r5_verified_scope_proof']
+          assert proof['historical_pairs_checked']==24 and not proof['source_admission_performed']
+          print('R5_VERIFIED_ORIGINAL_SCOPE_SUMMARY',json.dumps({
+            'hash_checked_original_sources':r['r2_sources_checked'],
+            'qualified_original_fact_rows':r['qualified_fact_rows'],
+            'scope_pairs_original_verified':proof['pairs_with_verified_same_scope_originals'],
+            'source_admission_performed':proof['source_admission_performed'],
+            'no_db_writes':True},sort_keys=True))
+          PY
+      - name: Store proof summary (no financial figures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-original-r2-scope-proof
+          path: tmp/results-r4/readback.json
+          if-no-files-found: warn
+          retention-days: 14
