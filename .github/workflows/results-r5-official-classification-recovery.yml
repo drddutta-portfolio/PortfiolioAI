@@ -1,0 +1,76 @@
+name: Results R5 Official Canonical Classification Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-official-classification-recovery.yml
+      - scripts/results/r5-qualify-missing-classifications.py
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-classification-source-admission-development
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      RESULTS_R5_G_INPUT: tmp/results-r5-g/selected-source-input.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Guard Development and dependencies
+        run: |
+          test "${GITHUB_REPOSITORY}" = "drddutta-portfolio/PortfiolioAI"
+          test "${GITHUB_REF}" = "refs/heads/PortfolioAI-Development"
+          test -n "${SUPABASE_DB_URL}"
+          npm ci
+          python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
+          npm run check:architecture
+          npm run typecheck
+      - name: Snapshot only missing canonical classifications in the existing 262-equity cohort
+        run: python scripts/results/r5-qualify-missing-classifications.py inventory
+      - name: Acquire first-party NSE quote taxonomy; never guess on official failure
+        run: |
+          set +e
+          node scripts/k1-fetch-nse-primary-classification.mjs \
+            --input tmp/results-r5-identity/symbols.txt \
+            --output tmp/results-r5-identity/nse.json \
+            --delay-ms 450 --max-attempts 1
+          code=$?
+          set -e
+          test -s tmp/results-r5-identity/nse.json
+          echo "NSE_CAPTURE_EXIT_STATUS=$code"
+      - name: Admit only exact-ISIN first-party classifications into previously empty canonical fields
+        run: python scripts/results/r5-qualify-missing-classifications.py reconcile --input tmp/results-r5-identity/nse.json --apply
+      - name: Recompute actual 262-equity source-selected R5 engine immediately
+        run: |
+          python scripts/results/r5-g-live-input.py
+          npx vitest run src/features/results/resultsR5GLiveCensus.test.ts src/features/results/resultsR5HistoricalCensus.test.ts src/features/results/resultsR5VerifiedComparison.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/quarterlyR5.test.ts
+          python scripts/results/r5-historical-scope-audit.py
+      - name: Verify compilation and canonical integrity
+        run: |
+          npm run build
+          npm run typecheck
+      - name: Publish only derived admissions and grade counts (no raw sources or database credentials)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-262-derived-classification-and-grade-recovery
+          path: |
+            tmp/results-r5-identity/derived-classification-recovery.json
+            tmp/results-r5-g/historical-grade-census.json
+            tmp/results-r5-g/grade-census.json
+            tmp/results-r5-g/alternate-scope-reconciliation.json
+          if-no-files-found: warn
+          retention-days: 14
