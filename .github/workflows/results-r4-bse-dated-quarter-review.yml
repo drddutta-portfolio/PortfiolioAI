@@ -39,3 +39,5 @@ jobs:
         run: python scripts/results/r4-bse-dated-quarter-review.py --shard ${{ matrix.shard }}
       # Compact issuer financial evidence stays private in Development R2/DB.
       # Original NSE HTML is not retained; no public financial artifact uploads.
+
+# Recheck every slot using actual quarter-group headings rather than financial-page titles.

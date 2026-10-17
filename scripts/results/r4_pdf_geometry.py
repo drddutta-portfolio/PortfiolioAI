@@ -79,9 +79,13 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         quarter_words=[w for _,ws in near for w in ws if re.fullmatch(r"quarters?",str(w[4]),re.I)]
         if allow_comparative:
             group_right=third+(third-second)/2
-            if not any(first_left<=(w[0]+w[2])/2<=group_right for w in quarter_words):continue
-            if any(re.fullmatch(r"years?|half|nine|six",str(w[4]),re.I)
-                   for _,ws in near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
+            # Financial-page titles often say "quarter and year ended".
+            # Only actual column-group headings prove quarter/annual scope.
+            group_near=[(yy,ws) for yy,ws in near if not re.search(r"financial|statements?|results",row_text(ws),re.I)]
+            group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"quarters?|qtrs?",str(w[4]),re.I)]
+            if not any(first_left<=(w[0]+w[2])/2<=group_right for w in group_quarters):continue
+            if any(re.fullmatch(r"years?(?:[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I)
+                   for _,ws in group_near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
             centers=[(d[1]+d[2])/2 for d in dates]
             center=centers[column]
             left=(centers[column-1]+center)/2 if column else first_left

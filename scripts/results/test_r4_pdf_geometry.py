@@ -19,6 +19,13 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_financial_title_year_does_not_override_real_quarter_group(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.insert_text((450,85),"FINANCIAL RESULTS FOR THE QUARTER AND YEAR ENDED",fontsize=10)
+        parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(parsed["column_index"],2)
+        self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"212.7")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
