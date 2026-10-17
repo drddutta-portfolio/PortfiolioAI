@@ -78,3 +78,4 @@ jobs:
         run: |
           python scripts/results/r4-verify-quarterly.py --apply
           python scripts/results/r4-eight-quarter-readback.py
+# Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.

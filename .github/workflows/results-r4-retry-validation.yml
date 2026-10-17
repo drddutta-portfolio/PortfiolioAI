@@ -72,3 +72,4 @@ jobs:
 # Recheck clean source-file EOFs after all replay regressions passed.
 
 # Recheck explicit EPS annotation provenance and private original-page review isolation.
+# Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.

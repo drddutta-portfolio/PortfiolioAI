@@ -56,3 +56,4 @@ jobs:
       # Financial rows, originals and rejection traces stay in private Development storage.
 
 # Retry the complete remaining cohort after explicit nonannualised EPS annotation support.
+# Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.

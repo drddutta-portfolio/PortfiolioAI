@@ -41,10 +41,18 @@ def date_phrases(period):
 
 def common_statement_note(nse_text, pdf_text, period):
     # A date elsewhere in an annual report or a generic scope label is not proof.
-    for phrase in date_phrases(period)[:4]:
-        note = 'statement of financial results includes results for the quarter ended ' + phrase
-        if has_phrase(nse_text,note) and has_phrase(pdf_text,note):
-            return note
+    # The same positive statement may explicitly list two historical quarters.
+    # The requested date must occur inside that shared closed statement phrase.
+    for qualifier in ('','unaudited ','audited '):
+        for plural in ('quarter','quarters'):
+            prefix='statement of '+qualifier+'financial results includes results for the '+plural+' ended '
+            for phrase in date_phrases(period)[:4]:
+                note=prefix+phrase
+                if has_phrase(nse_text,note) and has_phrase(pdf_text,note):return note
+                for other in sorted(HISTORICAL-{period}):
+                    for earlier in date_phrases(other)[:4]:
+                        note=prefix+earlier+' and '+phrase
+                        if has_phrase(nse_text,note) and has_phrase(pdf_text,note):return note
     raise ValueError('SCOPE_BRIDGE_SAME_STATEMENT_HISTORICAL_NOTE_UNPROVEN')
 
 def make_bridge(raw, url, current_period):

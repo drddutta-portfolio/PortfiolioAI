@@ -19,6 +19,31 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def auxiliary_tax_fixture(self,total=True):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        rows=[(300,'Profit before tax','3,000'),(325,'Current tax','800'),(350,'Deferred tax','73'),(375,'Current tax expense relating to previous year','-')]
+        if total:rows.append((400,'Total tax expense','873'))
+        for y,label,value in rows:
+            p.insert_text((25,y),label,fontsize=10)
+            for x in (475,625,775):p.insert_text((x,y),value,fontsize=10)
+        return doc,p
+
+    def test_explicit_total_tax_survives_unavailable_prior_year_component(self):
+        doc,p=self.auxiliary_tax_fixture()
+        result=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(result['facts']['NET_PROFIT_QUARTER']['value'],'212.7')
+        self.assertEqual(result['arithmetic_validation']['tax_crore'],'87.3')
+        self.assertEqual(result['arithmetic_validation']['difference_crore'],'0.0')
+
+    def test_unavailable_prior_tax_is_not_assumed_zero(self):
+        doc,p=self.auxiliary_tax_fixture(total=False)
+        result=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertIsNone(result['arithmetic_validation'])
+
+    def test_dash_in_required_profit_is_still_rejected(self):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024',profit='-')
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):extract_page(p,1,'2025-09-30',allow_comparative=True)
+
     def starred_eps(self,footnote=True):
         doc,p=fixture(first='30.09.2025',third='30.09.2024')
         p.add_redact_annot(fitz.Rect(450,206,850,225),fill=(1,1,1));p.apply_redactions()

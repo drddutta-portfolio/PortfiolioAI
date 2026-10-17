@@ -21,6 +21,13 @@ def example(note=NOTE,revenue='474.8',isin='INE987654321'):
     return doc,make_bridge(html,URL,'2025-09-30')
 
 class ScopeBridgeBoundsTests(unittest.TestCase):
+    def test_same_unaudited_note_can_explicitly_name_two_quarters(self):
+        note='The Statement of Unaudited Financial Results includes results for the Quarter ended June 30, 2025 and September 30, 2024.'
+        self.assertTrue(common_statement_note(note,note,'2025-06-30'))
+        self.assertTrue(common_statement_note(note,note,'2024-09-30'))
+        with self.assertRaises(ValueError):common_statement_note(note,note,'2024-12-31')
+        with self.assertRaises(ValueError):common_statement_note(note,note.replace('and September 30, 2024','and September 30, 2023'),'2024-09-30')
+
     def test_only_original_nse_archives_origin(self):
         self.assertTrue(original_origin(URL))
         self.assertFalse(original_origin(URL.replace('nseindia.com','nseindia.com.evil.test')))

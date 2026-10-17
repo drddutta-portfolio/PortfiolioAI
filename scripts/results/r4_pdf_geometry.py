@@ -231,7 +231,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
-        found={};eps_context="";eps_group_started=False
+        found={};unavailable_tax_components=set();eps_context="";eps_group_started=False
         table_rows=rows[header_index+1:]
         for row_index,(yy,ws) in enumerate(table_rows):
             label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)]))
@@ -256,6 +256,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^profit\s*(?:/\s*\(?loss\)?|\(loss\))?\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
             elif allow_comparative and bank and re.match(r"^profit\s+from\s+ordinary\s+activities\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
             elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
+            elif allow_comparative and re.match(r"^(?:(?:current|deferred)\s+)?tax(?:\s+expense)?\s+(?:relating to|in respect of)\s+(?:earlier|previous)\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
             elif allow_comparative and re.match(r"^tax\s+(?:relating to|in respect of)\s+earlier\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
@@ -270,6 +271,9 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",context,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
+            if allow_comparative and metric in ('CURRENT_TAX','DEFERRED_TAX','TAX_EARLIER_YEARS') and row_text(cell).strip() in ('-','—','–'):
+                unavailable_tax_components.add(metric)
+                continue # An unavailable auxiliary component is not a reported zero.
             annotated_eps=allow_comparative and metric=="EPS_DILUTED" and annualisation_marker
             value,original=number(cell,allow_annualisation_marker=annotated_eps)
             # Prove that this is a table row with another value in the next column.
@@ -302,7 +306,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if "PROFIT_BEFORE_TAX" in found:
                 tax=(Decimal(found["TAX_EXPENSE"]["value"]) if "TAX_EXPENSE" in found else
                      Decimal(found["CURRENT_TAX"]["value"])+Decimal(found["DEFERRED_TAX"]["value"])+(Decimal(found["TAX_EARLIER_YEARS"]["value"]) if "TAX_EARLIER_YEARS" in found else Decimal(0))
-                     if "CURRENT_TAX" in found and "DEFERRED_TAX" in found else None)
+                     if "CURRENT_TAX" in found and "DEFERRED_TAX" in found and not unavailable_tax_components else None)
                 if tax is not None:
                     difference=Decimal(found["PROFIT_BEFORE_TAX"]["value"])-tax-Decimal(found["NET_PROFIT_QUARTER"]["value"])
                     if abs(difference)>Decimal("0.02")/divisor:
