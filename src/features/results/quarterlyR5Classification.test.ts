@@ -274,4 +274,27 @@ describe("R5 exact-industry quarterly operating signal", () => {
       {...row,selected:false}:row)).status).toBe("UNAVAILABLE")
   })
 
+  it("supports evidence-only Revenue/PAT company trends for explicitly reviewed non-bank finance without bank-NII proxies",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*20)),
+      fact(date,"NET_PROFIT_QUARTER",String(20+i*5)),
+    ])
+    for(const group of ["Non Banking Financial Company (NBFC)","Asset Management Company",
+      "Asset Management Cos.","Financial Institutions","Investment Company","Housing Finance Company"]){
+      const result=graded(rows,"Financial Services",group,
+        policy("Financial Services",group))
+      expect(result.status).toBe("STRONG")
+      expect(result.basis).toBe("COMPANY_TREND")
+      expect(result.explanation).toContain("LIMITED NON-BANK FINANCIAL OPERATING TREND")
+      expect(result.explanation).toContain("prudential strength are NOT assessed")
+      expect(result.explanation).toContain("NOT an industry percentile")
+    }
+    const incomplete=rows.filter(r=>r.periodEnd!=="2025-12-31")
+    expect(graded(incomplete,"Financial Services","Non Banking Financial Company (NBFC)").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","General Insurance").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","Life Insurance").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","Unknown Lender").status).toBe("UNAVAILABLE")
+  })
+
 })
