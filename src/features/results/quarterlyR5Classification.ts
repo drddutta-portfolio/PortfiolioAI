@@ -7,8 +7,9 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * Each historical quarter uses ONLY its own and earlier qualified financials
  * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V6"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V7"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
+type OperatingMetric = "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER" | "NET_PREMIUM_EARNED_QUARTER"
 export interface ResultsQuarterGrade {
   readonly status: R5Grade
   readonly policyVersion: string
@@ -29,7 +30,7 @@ export interface R5IndustryCalibration {
   readonly group: string
   readonly sampleSize: number
   readonly distinctIssuers: number
-  readonly topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER"
+  readonly topCode: OperatingMetric
   readonly p25Top: string
   readonly p75Top: string
   readonly p25Profit: string
@@ -68,14 +69,14 @@ const normalized = (value: string | null) =>
 const groupKey = (sector: string | null, industry: string | null) =>
   normalized(sector) + "::" + normalized(industry)
 const bankIndustry = (industry: string) => /\bBANKS?\b/.test(industry)
-const NON_BANK_FINANCIAL_TREND = /^(NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY)$/
+const NON_BANK_FINANCIAL_TREND = /^(NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY|LIFE INSURANCE|GENERAL INSURANCE)$/
 function financialOperatingTrendOnly(sector: string | null, industry: string | null): boolean {
   return normalized(sector) === "FINANCIAL SERVICES" && NON_BANK_FINANCIAL_TREND.test(normalized(industry))
 }
 
 /** Unknown, unreviewed or incompatible business-model groups remain ungraded. */
 function modelFor(sector: string | null, industry: string | null):
-  "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER" | null {
+  OperatingMetric | null {
   const s = normalized(sector), i = normalized(industry)
   if (!s || !i || s === "UNCLASSIFIED" || i === "UNCLASSIFIED") return null
   if (s === "BANKING") return bankIndustry(i) ? "NET_INTEREST_INCOME_QUARTER" : null
@@ -83,7 +84,10 @@ function modelFor(sector: string | null, industry: string | null):
   // issuer-specific operating Revenue/PAT trends. This is NOT a prudential or
   // credit-quality grade. No peer percentiles may be inferred for this group.
   if (s === "FINANCIAL SERVICES") {
-    return /^(FINANCIAL TECHNOLOGY \(FINTECH\)|INTERNET SOFTWARE & SERVICES|DEPOSITORIES, CLEARING HOUSES AND OTHER INTERMEDIARIES|STOCKBROKING & ALLIED|FINTECH \/ INSURANCE BROKERAGE & PLATFORM|NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY)$/.test(i)
+    // A general insurer has an independently sourced net-premiums-earned metric;
+    // ordinary revenue is never an acceptable substitute for it.
+    if (i === "GENERAL INSURANCE") return "NET_PREMIUM_EARNED_QUARTER"
+    return /^(FINANCIAL TECHNOLOGY \(FINTECH\)|INTERNET SOFTWARE & SERVICES|DEPOSITORIES, CLEARING HOUSES AND OTHER INTERMEDIARIES|STOCKBROKING & ALLIED|FINTECH \/ INSURANCE BROKERAGE & PLATFORM|NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY|LIFE INSURANCE)$/.test(i)
       ? "OPERATING_REVENUE_QUARTER" : null
   }
   if (s === "FINANCE" ||
@@ -105,7 +109,7 @@ const fail = (group: string, why: string): ResultsQuarterGrade => ({
 function comparable(
   observations: readonly ResultsSourceObservation[],
   securityId: string, end: string,
-  topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
+  topCode: OperatingMetric,
 ): { top: Decimal; profit: Decimal; currentProfit: Decimal } | null {
   const top = compareQuarterMetric(observations, securityId, end, topCode)
   const profit = compareQuarterMetric(observations, securityId, end, "NET_PROFIT_QUARTER")
@@ -157,7 +161,7 @@ export function buildIndustryR5Calibrations(
       profiles.set(peer.securityId, null)
     } else if (!profiles.has(peer.securityId)) profiles.set(peer.securityId, peer)
   }
-  const grouped = new Map<string, { topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER"; top: Decimal[]; profit: Decimal[]; issuers: Set<string> }>()
+  const grouped = new Map<string, { topCode: OperatingMetric; top: Decimal[]; profit: Decimal[]; issuers: Set<string> }>()
   for (const [securityId, peer] of profiles) {
     if (!peer) continue
     const topCode = modelFor(peer.sector, peer.industry)
@@ -217,7 +221,7 @@ function directionalComparison(
   rows: readonly ResultsSourceObservation[],
   securityId: string,
   end: string,
-  topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
+  topCode: OperatingMetric,
 ): { top: Decimal; profit: Decimal; currentProfit: Decimal } | null {
   const previous = previousQuarterEnd(end)
   if (!previous) return null
@@ -249,7 +253,7 @@ function gradeCompanyTrajectory(
   observations: readonly ResultsSourceObservation[],
   securityId: string,
   end: string,
-  topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
+  topCode: OperatingMetric,
   group: string,
 ): ResultsQuarterGrade {
   if (end < FIRST_GRADED_QUARTER || !previousQuarterEnd(end)) {
@@ -275,7 +279,8 @@ function gradeCompanyTrajectory(
     sampleSize: pairs.length, basis: "COMPANY_TREND",
     explanation: "Company-only quarterly trend using " + pairs.length +
       " source-coherent adjacent-quarter level changes and the " +
-      (topCode === "NET_INTEREST_INCOME_QUARTER" ? "bank NII/PAT" : "operating Revenue/PAT") +
+      (topCode === "NET_INTEREST_INCOME_QUARTER" ? "bank NII/PAT" :
+       topCode === "NET_PREMIUM_EARNED_QUARTER" ? "net earned insurance premium/PAT" : "operating Revenue/PAT") +
       " contract. " +
       (strong ? "At least two comparisons show joint improvement, including the latest quarter, with a profitable current quarter." :
        weak ? "The latest loss or repeated joint contraction merits review." :
@@ -298,9 +303,15 @@ export function gradeQuarterR5(
   if (!topCode) return fail(group, "Industry is unavailable or its financial-statement model is not supported.")
   if (financialOperatingTrendOnly(sector,industry)) {
     const trend=gradeCompanyTrajectory(observations,securityId,end,topCode,group)
-    return trend.status === "UNAVAILABLE" ? trend : {
+    if (trend.status === "UNAVAILABLE") return trend
+    const insurance = normalized(industry) === "GENERAL INSURANCE" || normalized(industry) === "LIFE INSURANCE"
+    return {
       ...trend,
-      explanation: "LIMITED NON-BANK FINANCIAL OPERATING TREND: issuer-only Revenue/PAT comparison. Funding cost, asset quality, AUM, capital, NIM, ROA and prudential strength are NOT assessed. No bank-style investment or peer rating. " + trend.explanation,
+      explanation: insurance
+        ? "LIMITED INSURANCE OPERATING TREND: issuer-only " +
+          (topCode === "NET_PREMIUM_EARNED_QUARTER" ? "net earned premiums" : "reported operating revenue") +
+          "/PAT across independently same-scope original filings. Claims ratio, combined ratio, solvency, APE/VNB and underwriting quality are NOT assessed. No insurer-strength, peer or investment rating. " + trend.explanation
+        : "LIMITED NON-BANK FINANCIAL OPERATING TREND: issuer-only Revenue/PAT comparison. Funding cost, asset quality, AUM, capital, NIM, ROA and prudential strength are NOT assessed. No bank-style investment or peer rating. " + trend.explanation,
     }
   }
   const calibration = calibrations.get(end + "|" + groupKey(sector,industry)) ??
