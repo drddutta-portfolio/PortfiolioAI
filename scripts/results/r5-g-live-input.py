@@ -51,7 +51,7 @@ def extract(db_url):
                 ON e.security_id=s.id
               WHERE t.portfolio_id=%s AND t.superseded_at IS NULL
                 AND s.asset_class='EQUITY'
-              ORDER BY s.symbol,s.id
+              ORDER BY s.symbol,s.id::text
             """, (PORTFOLIO,))
             equities = [dict(securityId=sid, symbol=symbol, sector=sector,
                             industry=industry)
