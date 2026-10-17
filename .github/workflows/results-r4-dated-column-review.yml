@@ -1,0 +1,40 @@
+name: Results R4 Full Backlog Dated Column Review
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-dated-column-review.yml]
+permissions: {contents: read}
+concurrency:
+  group: results-r4-dated-column-review-development
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        shard: [0, 1, 2, 3]
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install pinned evidence dependencies
+        run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Verify exact dated-column extraction including the real HTML adapter
+        run: |
+          python scripts/results/test_r4_dated_columns.py -v
+          python scripts/results/test_r4_issuer_name.py -v
+          python scripts/results/test_r4_private_inventory.py -v
+      - name: Review every assigned missing quarter without financial promotion
+        run: python scripts/results/r4-dated-column-recovery.py --shard ${{ matrix.shard }}
+      # Compact issuer financial evidence stays private in Development R2/DB.
+      # Original NSE HTML is not retained; no public financial artifact uploads.
