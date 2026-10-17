@@ -60,3 +60,27 @@ The verifier checked 3,957 private original-source records, qualified 11,905 fac
 
 Verification: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38974576073
 Code validation: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38973235964
+
+
+## 2026-10-17 IST — owner-requested fresh Trendlyne/BseIndiaApi pulls and KRN conflict resolution
+
+Verified Development coverage is now **1,997 / 2,096 (95.3%)**. Historical R4 gaps decreased **82 → 81**; the **18 deferred R3 gaps are unchanged**. Final readback: QUALIFIED 1,997; MISSING 89; CONFLICT 9; REVIEW_REQUIRED 1. R4 remains PARTIAL. All 262 equities have selected data; 219 have all eight quarters selected.
+
+The owner explicitly requested fresh provider calls for conflicts and missing quarters. The collectors now support an explicit fresh mode: Trendlyne bypasses successful daily capture reuse, and BSE re-downloads originals while retaining immutable content-addressed bytes and per-GitHub-run source references. Existing source caches and earlier observations are not overwritten. Subsequent retries may reuse successful owner-requested fresh captures only, and each failed item remains independent.
+
+Trendlyne run 38997001342 captured 108 of 109 planned responses; one request received HTTP 429 because four parallel jobs exceeded the configured concurrency limit of three. This was a runner configuration issue, not proof of exhausting the owner's 1,000/day or 10,000/month quota. Parallelism was reduced to two. Retry run 38997512585 completed all 16 shards successfully, reused successful fresh responses and made the remaining call. There are now 109 fresh retained captures: 78 exact dated-quarter document searches and 31 stock-parameter responses. Four provider identities remained unresolved and were not guessed. Relative-quarter parameter values remain review evidence rather than inferred historical dates.
+
+BseIndiaApi fresh runs 38997009271 and 38997539176 attempted the 35-company unresolved cohort with up to 15 candidate PDFs per quarter, retaining 87 downloaded originals per pass. Five issuer lookups failed exact identity checks. The generic parser did not admit a new financial trio from those downloads. Fresh Trendlyne document citations can now feed an exact BSE-host/GUID allowlist into original-PDF recovery after capture-hash and request-security/quarter checks; no usable BSE attachment links were found in this cohort's fresh captures. Provider text or financial numbers are never auto-promoted as original issuer evidence.
+
+One real conflict was resolved: KRN, consolidated quarter ended 2025-03-31. A newly retrieved official issuer response dated 2025-07-10 states that the XBRL discrepancies were corrected and includes the NSE submission acknowledgement. The original PDF is retained and hash-checked privately in R2. Selection binds the exact issuer/ISIN, original and revised source versions, both original XBRL hashes and full expected financial trios, then independently reopens and validates the correction notice and acknowledgement. Only the specifically proven superseded source versions are excluded from selection; immutable observations remain intact. No general latest-filing-wins rule, fabricated value or share/EPS rebasing was introduced. The new decision notes record the correction and historical EPS comparability guard.
+
+An intermediate verification run failed because its correction-capture runner lacked the BSE adapter's mthrottle dependency. The pinned dependency set was corrected; final run **38997848764** completed every collection shard and independent verification successfully. It created three KRN decisions, preserved 6,041 existing decisions, and found zero conflicts with accepted decisions. It checked 3,957 source records. Qualified candidate fact rows decreased from 11,905 to 11,899 because the six specifically superseded candidate rows are excluded from selection, not deleted. A direct canonical DB readback confirms all three KRN metrics carry the correction audit note.
+
+Validation run **38997586142** passed 72 targeted regressions, architecture checks, TypeScript, application lint, Edge lint, production build and whitespace checks. Local fresh-pull/citation/correction regressions and syntax checks also passed. The broader pre-existing Results UI/registry failures remain outside this fixed-UI change.
+
+No UI, main/Production, schema, migrations, RLS, provider-authentication or holdings/accounting formulas changed. Originals, detailed provider responses and per-company traces remain private in Development R2/DB; the changed workflows publish aggregate logs and do not upload financial artifacts. The remaining 81 historical gaps require further original-source/identity/parser or correction evidence; fresh captures alone do not constitute accepted results. The remaining historical numeric conflict is BDL 2025-03-31; it has not been forced through by choosing a newer value.
+
+Final verification: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38997848764
+Fresh Trendlyne retry completion: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38997512585
+Code validation: https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/38997586142
+Original KRN correction: https://nsearchives.nseindia.com/corporate/KRNHEAT_10072025164541_replywithack.pdf
