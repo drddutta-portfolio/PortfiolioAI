@@ -1,5 +1,5 @@
 """Private, hash-checked transport for original-page review; no financial writes."""
-import base64, importlib.util, json, os, re, zlib
+import base64, importlib.util, json, os, re, zlib, uuid
 from pathlib import Path
 from collections import Counter
 import psycopg, fitz
@@ -14,7 +14,10 @@ def main():
     client=batch.r2_client();counts=Counter();index=[]
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
+        shard=int(os.getenv('RESULTS_R4_REVIEW_SHARD','0'))
+        if shard not in range(4):raise RuntimeError('INVALID_REVIEW_SHARD')
         for symbol,isin,sid,_name,periods in cohort:
+            if uuid.UUID(str(sid)).int%4!=shard:continue
             entry={'symbol':symbol,'isin':isin,'security_id':str(sid),'periods':periods,'sources':[]}
             with db.cursor() as cur:
                 cur.execute("SELECT DISTINCT ON(raw_payload->>'period_end') raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s ORDER BY raw_payload->>'period_end',retrieved_at DESC",(str(sid),))
@@ -48,7 +51,7 @@ def main():
                 entry['sources'].append(outcome)
             index.append(entry);counts['issuers_attempted']+=1
             print('R4_PRIVATE_ORIGINAL_REVIEW_PROGRESS',json.dumps(dict(counts)),flush=True)
-        payload={'contract':'RESULTS_R4_PRIVATE_ORIGINAL_REVIEW_INDEX_V1','workflow_run_id':os.getenv('GITHUB_RUN_ID'),'source_commit':os.getenv('GITHUB_SHA'),'counts':dict(counts),'issuers':index}
+        payload={'contract':'RESULTS_R4_PRIVATE_ORIGINAL_REVIEW_INDEX_V1','workflow_run_id':os.getenv('GITHUB_RUN_ID'),'shard':shard,'source_commit':os.getenv('GITHUB_SHA'),'counts':dict(counts),'issuers':index}
         raw=batch.canonical(payload);digest=batch.sha(raw);key=batch.PREFIX+'private-original-review/index/sha256='+digest+'/index.json'
         batch.immutable_put(client,key,raw)
         metadata=batch.canonical({'contract':payload['contract'],'workflow_run_id':payload['workflow_run_id'],'source_commit':payload['source_commit'],'counts':dict(counts),'r2_key':key,'sha256':digest})

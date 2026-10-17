@@ -7,13 +7,18 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-private-original-review-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   inspect:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: {shard: [0, 1, 2, 3]}
     env:
+      RESULTS_R4_REVIEW_SHARD: ${{ matrix.shard }}
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
@@ -30,4 +35,4 @@ jobs:
       # Original bytes and the review index remain private in Development R2.
       # No original, image, financial trace or encoded payload is logged or uploaded as a public artifact.
 
-# Retain compact hash-linked native page coordinates for private parser diagnosis.
+# Review all remaining issuers in four independent shards; private originals and coordinates only.
