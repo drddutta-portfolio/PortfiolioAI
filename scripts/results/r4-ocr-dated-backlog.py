@@ -66,6 +66,9 @@ def main():
                                     rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
                     except Exception as error:
                         rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
+                    finally:
+                        counts['originals_finished']=counts.get('originals_finished',0)+1
+                        print('R4_DATED_OCR_ORIGINAL_PROGRESS',json.dumps(dict(counts)),flush=True)
             except Exception as error:
                 db.rollback();rejects['COMPANY_'+(str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__)]+=1
             for period in periods:

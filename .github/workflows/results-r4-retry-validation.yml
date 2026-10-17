@@ -60,3 +60,4 @@ jobs:
 # Includes isolated native OCR timeout and continuation regressions.
 # Includes transient failed-pass retry cooldown regressions.
 # Recheck full source replay after EOF integrity and acquisition dependency repairs.
+# Validate fresh-download bound assertions and complete dated OCR replay.

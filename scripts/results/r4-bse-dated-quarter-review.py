@@ -39,8 +39,9 @@ def main():
                 for start,end in windows:
                     try:
                         discovered=bse.financial_announcements(scrip,date.fromisoformat(start),date.fromisoformat(end),max_pages=5)
-                        ordered=sorted(discovered["results"],key=lambda x:(bool(re.search(r"newspaper|presentation|advertisement|press release",x.get("title",""),re.I)),not bool(re.search(r"financial results|audited|board meeting outcome",x.get("title",""),re.I))))
-                        sources.extend({"attachment_name":x["attachment_name"]} for x in ordered[:4 if symbol=="BDL" else 2] if x.get("attachment_name"))
+                        ordered=sorted(discovered["results"],key=lambda x:(bool(re.search(r"newspaper|presentation|advertisement|press release",(x.get("title","")+" "+x.get("headline","")),re.I)),not bool(re.search(r"financial results|audited|board meeting outcome",(x.get("title","")+" "+x.get("headline","")),re.I))))
+                        eligible=[x for x in ordered if not re.search(r"newspaper|presentation|advertisement|press release|transcript|webcast|audio recording|trading window|prior intimation",x.get("title",""),re.I)]
+                        sources.extend({"attachment_name":x["attachment_name"],"catalog_title":x.get("title","")} for x in eligible[:8] if x.get("attachment_name"))
                     except Exception as error:counts["catalog_error_"+type(error).__name__]+=1
                 for source in sources:
                     filename=source.get("attachment_name")

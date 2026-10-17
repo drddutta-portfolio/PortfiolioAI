@@ -171,6 +171,7 @@ class PortfolioBSE:
                 selected.append({
                     "bse_scrip_code": code,
                     "title": title[:480],
+                    "headline": extra[:2000],
                     "published_at": row.get("NEWS_DT"),
                     "submission_at": row.get("News_submission_dt"),
                     "news_id": row.get("NEWSID"),

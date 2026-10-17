@@ -116,6 +116,7 @@ class PortfolioBseTests(unittest.TestCase):
         self.assertEqual(len(res["results"]), 1)
         only = res["results"][0]
         self.assertEqual(only["attachment_name"], PDF)
+        self.assertIn("headline",only)
         self.assertEqual(only["qualification_status"], "DISCOVERY_ONLY")
         self.assertTrue(only["official_pdf_candidates"][0].startswith(
             "https://www.bseindia.com/xml-data/corpfiling/AttachHis/"
