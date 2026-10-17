@@ -134,6 +134,15 @@ class GeometryTest(unittest.TestCase):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True,scope_hint="STANDALONE")
 
+    def test_month_above_the_explicit_day_and_year(self):
+        doc,p=fixture(first="September",third="September")
+        p.add_redact_annot(fitz.Rect(595,112,710,130),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((600,125),"June",fontsize=10)
+        for x,rest in [(450,"30, 2025"),(600,"30, 2025"),(750,"30, 2024")]:p.insert_text((x,140),rest,fontsize=10)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["column_index"],2)
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
@@ -183,3 +192,4 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
 if __name__=="__main__":unittest.main()
+

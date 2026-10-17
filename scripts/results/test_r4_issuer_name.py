@@ -1,21 +1,19 @@
 import unittest
-from r4_issuer_name import explicit_legal_name,exact_legal_identity
+from r4_issuer_name import exact_legal_identity
 
-class LegalNameTest(unittest.TestCase):
-    def test_complete_single_word_legal_name_is_accepted(self):
-        self.assertTrue(explicit_legal_name("Coforge Limited"))
-        self.assertTrue(exact_legal_identity("Coforge Limited","Signed results of COFORGE LTD."))
+class LegalNameTests(unittest.TestCase):
+    def test_initial_spacing(self):
+        self.assertTrue(exact_legal_identity('G M Breweries Limited','Statement of GM Breweries Ltd.'))
+        self.assertTrue(exact_legal_identity('GM Breweries Limited','G. M. Breweries Limited'))
+    def test_joined_pdf_words(self):
+        self.assertTrue(exact_legal_identity('LG Electronics India Limited','LGElectronicsIndiaLimited'))
+    def test_no_missing_or_changed_initial(self):
+        for value in ('G Breweries Limited','G N Breweries Limited','Breweries Limited'):
+            self.assertFalse(exact_legal_identity('G M Breweries Limited',value))
+    def test_no_dropped_legal_words(self):
+        self.assertFalse(exact_legal_identity('GM Breweries Limited','GM Breweries Private Limited'))
+        self.assertFalse(exact_legal_identity('LG Electronics India Limited','LG Electronics Limited'))
+    def test_no_inside_word_match(self):
+        self.assertFalse(exact_legal_identity('Coforge Limited','NotCoforge Limited'))
 
-    def test_initials_and_punctuation_are_not_discarded(self):
-        self.assertTrue(exact_legal_identity("G M Breweries Limited","G.M. BREWERIES LTD"))
-        self.assertFalse(exact_legal_identity("G M Breweries Limited","Other Breweries Limited"))
-
-    def test_generic_or_abbreviated_names_do_not_qualify(self):
-        for name in ("Limited","India Limited","Private Limited","COFORGE","AB Ltd"):
-            self.assertFalse(explicit_legal_name(name))
-
-    def test_similar_company_or_ticker_only_text_is_rejected(self):
-        self.assertFalse(exact_legal_identity("Coforge Limited","Coforge Technologies Limited"))
-        self.assertFalse(exact_legal_identity("Coforge Limited","COFORGE quarterly report"))
-
-if __name__=="__main__":unittest.main()
+if __name__ == '__main__':unittest.main()

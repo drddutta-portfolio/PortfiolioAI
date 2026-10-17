@@ -10,7 +10,7 @@ from r4_recovery_queue import task_id
 
 spec=importlib.util.spec_from_file_location("batch",Path(__file__).with_name("r4-bse-historical-batch.py"))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
-WINDOWS=(("2025-10-01","2025-11-30"),("2026-01-01","2026-02-28"),("2026-04-01","2026-05-31"),("2026-07-01","2026-08-31"))
+WINDOWS=(("2025-10-01","2025-12-31"),("2026-01-01","2026-03-31"),("2026-04-01","2026-06-30"),("2026-07-01","2026-09-30"))
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--shard",type=int,required=True);args=parser.parse_args()
@@ -33,6 +33,13 @@ def main():
                 identity={"header":header,"listing":listing,"issuer_name":legal,"bse_scrip_code":scrip}
                 for period in periods:
                     sources.extend(inventory.get((symbol,period),{}).get("sources",[]))
+                    # Provider output discovers original URLs; every original
+                    # still passes the complete BSE identity and PDF proof.
+                    try:
+                        extra=batch.fresh_trendlyne_bse_sources(db,client,sid,period)
+                        sources.extend(extra);counts["fresh_provider_original_links"]+=len(extra)
+                    except Exception as error:
+                        db.rollback();counts["provider_link_error_"+type(error).__name__]+=1
                 windows=list(WINDOWS)+[batch.WINDOWS[p][1:] for p in periods]
                 windows=list(dict.fromkeys(windows))
                 if symbol=="BDL":windows.append(("2025-06-01","2025-08-31"))

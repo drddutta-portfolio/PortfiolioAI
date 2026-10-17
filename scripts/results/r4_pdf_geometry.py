@@ -86,6 +86,23 @@ def dated_headers(rows):
             if any(a<=match.start()<b for a,b in occupied):continue
             ws=[w for a,b,w in spans if a<match.end() and b>match.start()]
             partial.append((index,y,match.group().rstrip(','),min(w[0] for w in ws),max(w[2] for w in ws)))
+    # Some statements put only the month above a separate day/year line.
+    for index,(y,ws) in enumerate(rows):
+        for w in ws:
+            month=str(w[4]).strip(",|[]()")
+            if not re.fullmatch(MONTH,month,re.I):continue
+            # A complete date on this same line must keep its own coordinates.
+            if any(i==index and d[1]<=w[0] and d[2]>=w[2] for i,_,d in complete):continue
+            matches=[]
+            for j,(yy,next_ws) in enumerate(rows):
+                if not 2.5<yy-y<=28:continue
+                selected=[v for v in next_ws if w[0]-8<=(v[0]+v[2])/2<=w[2]+8]
+                printed=row_text(selected).strip(" |[]()")
+                m=re.fullmatch(r"(\d{1,2}),?\s*(20\d{2})",printed)
+                if not m:continue
+                parsed=iso_date(month+" "+m[1]+" "+m[2])
+                if parsed:matches.append((j,yy,(parsed,min(w[0],min(v[0] for v in selected)),max(w[2],max(v[2] for v in selected)))))
+            if len(matches)==1:complete.append(matches[0])
     for index,y,raw,x0,x2 in partial:
         years=[]
         for j,(yy,ws) in enumerate(rows):
@@ -271,3 +288,4 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]],scope_hint_used=scope_hint_used)
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
+

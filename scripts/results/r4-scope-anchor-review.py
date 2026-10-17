@@ -31,7 +31,7 @@ def main():
                       JOIN data_source_records d ON d.id=o.source_record_id
                       WHERE x.security_id=%s AND x.period_type='QUARTER' AND x.period_end=ANY(%s::date[])
                         AND o.source_code='COMPANY_EXCHANGE_FILING' AND o.currency='INR'
-                        AND d.raw_payload->>'contract'='PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1'
+                        AND d.raw_payload->>'contract' IN ('PORTFOLIOAI_RESULTS_PUBLIC_FILING_V1','PORTFOLIOAI_RESULTS_VERIFIED_NSE_INTEGRATED_CURRENT_XBRL_V1')
                         AND o.metric_code=ANY(%s::text[])
                       GROUP BY d.id HAVING count(DISTINCT o.metric_code)=3 ORDER BY d.id LIMIT 16""",(sid,sorted(CURRENT),sorted(core)))
                     rows=cur.fetchall()
@@ -40,7 +40,7 @@ def main():
                 for aid,digest,metadata,facts in rows:
                     if batch.sha(batch.canonical(metadata))!=digest:raise ValueError('CURRENT_ANCHOR_RECORD_HASH_MISMATCH')
                     if metadata.get('isin')!=isin or metadata.get('symbol')!=symbol or metadata.get('period_end') not in CURRENT:continue
-                    if not str(metadata.get('issuer_filing_url','')).startswith('https://nsearchives.nseindia.com/corporate/ixbrl/'):continue
+                    if not re.fullmatch(r'https://nsearchives\.nseindia\.com/corporate/(?:ixbrl|xbrl)/[^?#]+',str(metadata.get('issuer_filing_url',''))):continue
                     raw=client.get_object(Bucket=batch.BUCKET,Key=metadata['r2_key'])['Body'].read()
                     if batch.sha(raw)!=metadata['r2_manifest_sha256'] or json.loads(raw)!={k:v for k,v in metadata.items() if k not in ('r2_key','r2_manifest_sha256')}:raise ValueError('CURRENT_ANCHOR_MANIFEST_MISMATCH')
                     if set(facts)!=core or any(Decimal(str(metadata['facts'][m]['value']))!=Decimal(facts[m]['value']) or metadata['facts'][m]['unit']!=facts[m]['unit'] for m in core):raise ValueError('CURRENT_ANCHOR_OBSERVATION_MISMATCH')
