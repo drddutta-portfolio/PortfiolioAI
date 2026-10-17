@@ -96,7 +96,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
       { ...fact(q,"EPS_DILUTED",String(5+i)),unit:"INR_PER_SHARE" },
     ]))
     render(<ResultsLivePage />)
-    expect(await screen.findByText(/1 \\/ 2 stocks with four qualified quarters/)).toBeInTheDocument()
+    expect(await screen.findByText(/1 \/ 2 stocks with four qualified quarters/)).toBeInTheDocument()
     const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
     expect(within(coverage).getByText("Strong 1")).toBeInTheDocument()
     expect(within(coverage).getByText(/0 peer-ranked · 1 own-trend/)).toBeInTheDocument()
@@ -125,7 +125,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
       {...fact(date,"EPS_DILUTED",String(5+j)),securityId:stock.securityId,id:stock.securityId+date+"eps",sourceRecordId:stock.securityId+date,unit:"INR_PER_SHARE"},
     ])))
     render(<ResultsLivePage />)
-    expect(await screen.findByText(/223 \\/ 223 stocks with four qualified quarters/)).toBeInTheDocument()
+    expect(await screen.findByText(/223 \/ 223 stocks with four qualified quarters/)).toBeInTheDocument()
     const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
     expect(within(coverage).getByText(/223 peer-ranked · 0 own-trend/)).toBeInTheDocument()
     expect(within(coverage).getByText("Not rated 0")).toBeInTheDocument()
