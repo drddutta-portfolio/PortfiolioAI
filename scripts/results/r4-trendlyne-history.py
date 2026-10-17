@@ -34,9 +34,9 @@ def main():
                     (tool,json.dumps(args),security or ""))
                 cached=cur.fetchone()
             db.rollback()
-            if cached:
+            if cached and os.getenv("RESULTS_R4_FORCE_FRESH")!="1":
                 data=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cached[0])["Body"].read())
-                print("R4_TRENDLYNE_REUSED",request_id,tool,flush=True)
+                print("R4_TRENDLYNE_REUSED",tool,flush=True)
                 return data["result"]
             if fresh_calls>=40:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
             fresh_calls+=1
@@ -46,8 +46,8 @@ def main():
             try:
                 with urllib.request.urlopen(request,timeout=120) as response:result=json.load(response)
             except urllib.error.HTTPError as error:
-                text=error.read().decode()
-                print("R4_TRENDLYNE_REQUEST_FAILED",error.code,text[:1200],flush=True)
+                error.read()
+                print("R4_TRENDLYNE_REQUEST_FAILED",error.code,flush=True)
                 raise
             raw=batch.canonical(result);digest=hashlib.sha256(raw).hexdigest()
             key=batch.PREFIX+"trendlyne-history/sha256="+digest+"/capture.json"
@@ -55,7 +55,8 @@ def main():
             (dest/(request_id+".json")).write_bytes(raw)
             metadata={"contract":"RESULTS_R4_TRENDLYNE_HISTORY_REVIEW_V2",
                 "request":body,"provider_run_id":result["runId"],"r2_key":key,"sha256":digest,
-                "canonical_promotion_performed":False,"original_source_qualification_required":True}
+                "canonical_promotion_performed":False,"original_source_qualification_required":True,
+                "fresh_request":os.getenv("RESULTS_R4_FORCE_FRESH")=="1"}
             encoded=batch.canonical(metadata)
             with db.cursor() as cur:
                 cur.execute("""INSERT INTO data_source_records
@@ -65,7 +66,7 @@ def main():
                   (result["runId"],batch.sha(encoded),encoded.decode(),
                    '{"review_only":true,"retention":"IMMUTABLE_R2"}'))
             db.commit()
-            print("R4_TRENDLYNE_CAPTURE",json.dumps({"tool":tool,"runId":result["runId"],"r2_key":key,"bytes":len(raw),"canonical_facts":0}),flush=True)
+            print("R4_TRENDLYNE_CAPTURE",json.dumps({"tool":tool,"bytes":len(raw),"canonical_facts":0}),flush=True)
             return result["result"]
         with db.cursor() as cur:
             cur.execute("""SELECT raw_payload->>'r2_key' key FROM data_source_records
@@ -81,7 +82,7 @@ def main():
         names={t["name"]:t for t in tools["tools"]}
         for name,tool in names.items():
             if any(x in name.lower() for x in ("financ","param","document","histor")):
-                print("R4_MCP_TOOL_SCHEMA",json.dumps(tool),flush=True)
+                print("R4_MCP_TOOL_AVAILABLE",name,flush=True)
         if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="PARAMETERS":
             if "search_financial_parameters" not in names:raise RuntimeError("PARAMETER_DISCOVERY_UNSUPPORTED")
             for index,query in enumerate([
@@ -90,7 +91,7 @@ def main():
                 "historical diluted earnings per share EPS 6Q 7Q 8Q ago",
                 "financial reporting quarter end date results period date"]):
                 result=call("parameters-"+str(index),"search_financial_parameters",{"query":query})
-                print("R4_EXACT_PARAMETER_DISCOVERY",index,str(result)[:40000],flush=True)
+                print("R4_EXACT_PARAMETER_DISCOVERY",index,"retained_privately",flush=True)
             return
         if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="HISTORICAL":
             with db.cursor() as cur:
@@ -130,13 +131,11 @@ def main():
             shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
             identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]
             selected=sorted((key,p) for key,p in identified if int(key,16)%shards==shard)
-            print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":blocked,"parameter_labels":{p:parameters[p] for p in wanted}}),flush=True)
+            print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":len(blocked),"fresh":os.getenv("RESULTS_R4_FORCE_FRESH")=="1"}),flush=True)
             outcomes=[]
             def process(task):
                 key,(sid,symbol,period,tool,args)=task
                 result=call("historical-"+key[:48],tool,args,sid)
-                print("R4_TRENDLYNE_EVIDENCE",json.dumps({"symbol":symbol,"period":period,"tool":tool,"result":str(result)[:18000],
-                    "relative_parameter_dates_not_inferred":True,"canonical_promotion_performed":False}),flush=True)
                 return {"status":"CAPTURED_REVIEW_ONLY"}
             def failed(task,error):
                 db.rollback()
@@ -146,9 +145,11 @@ def main():
             def checkpoint(task,result):
                 key,(_,symbol,period,tool,_)=task
                 outcomes.append({"task_id":key,"symbol":symbol,"period":period,"tool":tool,**result})
-                (dest/"requests-report.json").write_text(json.dumps({"shard":shard,"identity_blocked":blocked,
-                    "planned":len(selected),"outcomes":outcomes},sort_keys=True))
-                print("R4_TRENDLYNE_REQUEST_STATUS",json.dumps(outcomes[-1]),flush=True)
+                report={"shard":shard,"identity_blocked":blocked,"planned":len(selected),"outcomes":outcomes}
+                encoded=batch.canonical(report)
+                batch.immutable_put(client,batch.PREFIX+"private-recovery-traces/sha256="+batch.sha(encoded)+"/trendlyne.json",encoded)
+                (dest/"requests-report.json").write_bytes(encoded)
+                print("R4_TRENDLYNE_REQUEST_STATUS",json.dumps({"attempted":len(outcomes),"status":result["status"]}),flush=True)
             attempt_all(selected,process,failed,checkpoint)
             failures=sum(r["status"]=="RETRY_REQUIRED" for r in outcomes)
             print("R4_TRENDLYNE_BATCH_COMPLETE",json.dumps({"planned":len(selected),"attempted":len(outcomes),"failed":failures}),flush=True)
@@ -174,6 +175,6 @@ def main():
         args={"query":f"Only {symbol}, Trendlyne instrument ID {pid}, ISIN {isin}. Retrieve exact originally reported CONSOLIDATED quarterly revenue from operations, net profit for the period after tax, and diluted earnings per share for the three months ended 30 September 2024 and 31 December 2024. Return exact financial period dates, scope, units and original exchange filing URLs. Do not return annual, TTM, half-year or latest relative-quarter values or unrelated companies."}
         if "type" in properties:args["type"]="stock"
         result=call("exact-quarter-probe",name,args,sid)
-        print("R4_TRENDLYNE_EXACT_QUARTER_RESPONSE",str(result)[:18000],flush=True)
+        print("R4_TRENDLYNE_EXACT_QUARTER_RESPONSE","retained_privately",flush=True)
 
 if __name__=="__main__":main()
