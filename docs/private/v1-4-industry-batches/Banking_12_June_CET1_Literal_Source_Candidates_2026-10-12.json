@@ -1,0 +1,415 @@
+{
+  "version": "BANK_12_JUNE_CET1_LITERAL_V1",
+  "provider_calls": 0,
+  "canonical_admissions": 0,
+  "automatic_retries": 0,
+  "sources": [
+    {
+      "symbol": "AXISBANK",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "filing": {
+        "filingId": "175726",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "18-Jul-2026 15:19:03",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_175726_18072026151904_iXBRL_WEB.html",
+        "originalSha256": "8ccf8b01e5196fc38a41d7b25bfbabdd47f155d5c7802e282605caaaec8979bd",
+        "originalBytes": 40098,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "496f7a9ee505ecfb56460b998ab144020a93ae512455858d9350deea011c3c45",
+      "actual_bytes": 40087,
+      "local_path": "/workspace/bank-twelve-originals/AXISBANK-175726.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "14.6400",
+          "14.6400"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "15.3500",
+          "15.3500"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "filing": {
+        "filingId": "178034",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "24-Jul-2026 19:04:14",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_178034_24072026190417_iXBRL_WEB.html",
+        "originalSha256": "1a1c50db961e31e63275f3f6431ab6f0b3eadb16e7a60a9a5741cf08f53a3825",
+        "originalBytes": 36965,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "4b435a8daf618ca3f6631885f4bd8e8bc93b6b615c4ca167f3724c685afbdc7c",
+      "actual_bytes": 36954,
+      "local_path": "/workspace/bank-twelve-originals/BANKBARODA-178034.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "13.900",
+          "13.900"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0.5100",
+          "0.5100"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "HDFCBANK",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "filing": {
+        "filingId": "175753",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "18-Jul-2026 16:01:10",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_175753_18072026160136_iXBRL_WEB.html",
+        "originalSha256": "e3e876a323038c06482c0831a0b47a33effb88996bd2995a419be0322e1c63c1",
+        "originalBytes": 35424,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "e5d993dba41251b83461c5363d1c57133a85c7af066c4c644688c6ac78657487",
+      "actual_bytes": 35413,
+      "local_path": "/workspace/bank-twelve-originals/HDFCBANK-175753.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "19.5700",
+          "19.5700"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0",
+          "0"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "IDBI",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "filing": {
+        "filingId": "175799",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "18-Jul-2026 17:33:07",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_175799_18072026173332_iXBRL_WEB.html",
+        "originalSha256": "d4c9dd2f0770e23536bf72fcaf9c95c5c5189d3f52806f4c3e42a9619034281c",
+        "originalBytes": 36122,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "ec6bf8cebcb169aa250a326103af72a26e137c6b868a652178b44af3ff78564f",
+      "actual_bytes": 36111,
+      "local_path": "/workspace/bank-twelve-originals/IDBI-175799.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "26.3800",
+          "26.3800"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0",
+          "0"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "filing": {
+        "filingId": "178279",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "25-Jul-2026 16:33:14",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_178279_25072026163346_iXBRL_WEB.html",
+        "originalSha256": "75569470d77e58d4cba952520570c52462eeb987f0763862700d957d258a9188",
+        "originalBytes": 35743,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "88d42e0a6ad9d3af469becb67b4438b5edba43649a0d1fd6cb9df923536b8357",
+      "actual_bytes": 35732,
+      "local_path": "/workspace/bank-twelve-originals/IDFCFIRSTB-178279.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "13.3300",
+          "13.3300"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0",
+          "0"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "INDIANB",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "filing": {
+        "filingId": "173758",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "10-Jul-2026 20:05:59",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_173758_10072026200559_iXBRL_WEB.html",
+        "originalSha256": "8d2916ff78992107e612062dd44cd5a269c72de87ba9d0fcbd1e36654a63fba6",
+        "originalBytes": 32908,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "0eb1a60d3e65c481bba3cb9a817c617166161823b5ee823aaeb323bdc3db0cfc",
+      "actual_bytes": 32897,
+      "local_path": "/workspace/bank-twelve-originals/INDIANB-173758.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "16.5100",
+          "16.5100"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0",
+          "0"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "filing": {
+        "filingId": "175826",
+        "type": "Integrated Filing- Financials",
+        "reportingQuarterEnd": "30-JUN-2026",
+        "consolidationLabel": "Standalone",
+        "broadcastDateLiteral": "18-Jul-2026 18:47:07",
+        "originalUrl": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_175826_18072026184707_iXBRL_WEB.html",
+        "originalSha256": "fc475e5485d5634357f2293f24e9dff5c9ea640f3ab45564dd678cb7480f8dc5",
+        "originalBytes": 31596,
+        "admissionStatus": "NOT_ADMITTED"
+      },
+      "canonical_admitted": false,
+      "actual_sha256": "b36b2445bfe46d6b0bc3cc99cd61939e961f9a68910e5b2e8ff2b464da1c9197",
+      "actual_bytes": 31585,
+      "local_path": "/workspace/bank-twelve-originals/KOTAKBANK-175826.html",
+      "literal_capital_rows": [
+        [
+          "(ii)",
+          "Capital adequacy ratio"
+        ],
+        [
+          "",
+          "CET 1 ratio",
+          "22.3800",
+          "22.3800"
+        ],
+        [
+          "",
+          "Additional Tier 1 ratio",
+          "0",
+          "0"
+        ]
+      ],
+      "period_scope_rows": [
+        [
+          "A",
+          "Date of start of reporting period",
+          "01-04-2026",
+          "01-04-2026"
+        ],
+        [
+          "B",
+          "Date of end of reporting period",
+          "30-06-2026",
+          "30-06-2026"
+        ],
+        [
+          "D",
+          "Nature of report standalone or consolidated",
+          "Standalone",
+          "Standalone"
+        ]
+      ],
+      "basel_iii_fragments": []
+    }
+  ],
+  "boundary": "CET1 literal and source regulatory wording candidates only. No inference that Additional Tier1 is totalCAR. Preserve freshhash separately from priorpins."
+}

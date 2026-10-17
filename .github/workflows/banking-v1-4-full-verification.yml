@@ -8,6 +8,13 @@ on:
       - "src/routes/AppRoutes.tsx"
       - "src/pages/SettingsPage.tsx"
       - "supabase/functions/p7-ic2-materialize-readiness/**"
+      - "supabase/functions/_shared/v14-bank-twelve-*"
+      - "supabase/functions/v14-bank-twelve-capital-admission/**"
+      - "supabase/functions/v14-bank-twelve-growth-admission/**"
+      - "scripts/v1-4/bank_twelve_capital_execute.py"
+      - "scripts/v1-4/bank_twelve_growth_execute.py"
+      - ".github/workflows/banking-v14-twelve-growth.yml"
+      - ".github/workflows/banking-v14-twelve-capital.yml"
       - ".github/workflows/banking-v1-4-full-verification.yml"
   workflow_dispatch:
 

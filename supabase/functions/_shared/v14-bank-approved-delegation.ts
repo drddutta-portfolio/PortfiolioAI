@@ -1,5 +1,6 @@
 import policy from "./v14-bank-approved-delegation.json" with {type:"json"}
 import issuerPolicy from "./v14-bank-verified-issuer-delegation.json" with {type:"json"}
+import {approvedTwelveBankReview,approvedTwelveBankIssuerSource,BANK_TWELVE_POLICY} from "./v14-bank-twelve-delegation.ts"
 import type {RequirementReview,ReviewedSourceRecord,ReviewEvidenceFamily} from "./v14-reviewed-evidence.ts"
 
 export const BANK_DELEGATION_POLICY=policy
@@ -8,6 +9,7 @@ const kinds:Partial<Record<ReviewEvidenceFamily,string>>={NUMERIC_SERIES:"DELEGA
 /** Existing service-role-only append ledger is the write authority; metadata is
  * integrity hashed and cannot be supplied through the read-only handler. No owner impersonation. */
 export function approvedBankDelegatedReview(review:RequirementReview,ownerId:string,family:ReviewEvidenceFamily):boolean{
+ if(approvedTwelveBankReview(review,ownerId,family))return true
  const a=review.metadata.review_authorization as Record<string,unknown>|null
  const issuerApproved=review.reviewed_by===null&&review.review_kind===issuerPolicy.review_kind&&family==="NUMERIC_SERIES"&&review.portfolio_id===issuerPolicy.portfolioId
   &&ownerId===issuerPolicy.ownerId&&Object.hasOwn(issuerPolicy.approvedIssuerHosts,review.security_id)
@@ -26,6 +28,7 @@ export function approvedBankDelegatedReview(review:RequirementReview,ownerId:str
 /** Override only provider identity for qualified official-filing reviews. All
  * existing metric units, periods, scope, freshness and series validators remain. */
 export function approvedBankOfficialFallback(review:RequirementReview,source:ReviewedSourceRecord,ownerId:string,family:ReviewEvidenceFamily):boolean{
+ if(approvedTwelveBankIssuerSource(review,source,ownerId,family))return true
  if(!approvedBankDelegatedReview(review,ownerId,family))return false
  const a=review.metadata.review_authorization as Record<string,unknown>|null
  if(a?.policy_id===issuerPolicy.id){
@@ -55,4 +58,15 @@ export function approvedBankOfficialFallback(review:RequirementReview,source:Rev
  if(p.security_id!==review.security_id||p.policy_id!==policy.id||p.symbol!==policy.securities[review.security_id as keyof typeof policy.securities])return false
  if(typeof p.original_sha256!=="string"||! /^[0-9a-f]{64}$/u.test(p.original_sha256)||typeof p.original_url!=="string")return false
  try{const u=new URL(p.original_url);return u.protocol==="https:"&&u.hostname==="nsearchives.nseindia.com"&&u.pathname.startsWith("/corporate/")}catch{return false}
+}
+
+/** Report the actual validated delegation; never relabel CHATGPT as CODEX. */
+export function approvedBankFallbackLineage(review:RequirementReview,source:ReviewedSourceRecord,ownerId:string,family:ReviewEvidenceFamily):{sourceAdmissionPolicy:string;executor:string;personalOwnerReview:false}|null{
+ if(!approvedBankOfficialFallback(review,source,ownerId,family))return null
+ const authorization=review.metadata.review_authorization as Record<string,unknown>
+ const selected=[policy,issuerPolicy,BANK_TWELVE_POLICY].find(p=>p.id===authorization.policy_id)
+ return selected?{sourceAdmissionPolicy:selected.id,executor:selected.executor,personalOwnerReview:false}:null
+}
+export function approvedBankFallbackPolicyId(value:unknown):boolean{
+ return typeof value==="string"&&[policy.id,issuerPolicy.id,BANK_TWELVE_POLICY.id].includes(value)
 }

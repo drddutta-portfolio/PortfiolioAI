@@ -1,0 +1,1518 @@
+{
+  "version": "BANK_12_NIM_SOURCE_INPUT_BOUNDARY_V1",
+  "as_of_date": "2026-10-12",
+  "scope": "12 banks; KARURVYSYA excluded from output, acquisition and all writes",
+  "method": "One retained-source pass plus one exchange-discovery window per bank (Jul-Aug2026), at most one substantive original presentation acquired per bank. Hash-preserve fresh source variants rather than replace retained pins. Exact-text discovery is not factual admission.",
+  "network_requests": 23,
+  "provider_calls": 0,
+  "database_writes": 0,
+  "canonical_admissions": 0,
+  "active_nim_contract": "DIRECT_SOURCE_CERTIFIED_TRAILING_FOUR_QUARTER_NIM_ONLY",
+  "prohibited_substitutions": [
+    "Annual NIM relabelled TTM",
+    "Average quarterly percentage NIM",
+    "Rounded NIM inverted into average assets",
+    "Net-profit-margin relabelled NIM",
+    "Annual interest earned or expense treated as four current contiguous quarter inputs"
+  ],
+  "proposed_fallback_boundary": "Existing exact-input methodology amendment remains inactive pending explicit owner decision; approval would not establish missing average-interest-earning-assets inputs.",
+  "rbi_source_binding_candidate": {
+    "url": "https://www.rbi.org.in/scripts/NotificationPreVersion.aspx?Histid=24&id=13143",
+    "sha256": "1a7080a332989f9c01f1973f1473c22951dc6316bcc6f8cfa80f4f85ddcaa834",
+    "date": "2025-11-28",
+    "passage": "Chapter III business-ratio footnotes: ROA refers to average working funds; working funds are average total assets excluding accumulated losses reported in RBI Form X during the financial year.",
+    "bank_applicability_and_amendments": "REQUIRES_PER_ISSUER_VERIFICATION; NOT_AUTOMATIC_ACCEPTANCE"
+  },
+  "banks": [
+    {
+      "symbol": "AUBANK",
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "3c8f9043-447d-4070-87dc-774fd7179b01",
+          "filing_id": "153377",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153377_27042026232414_iXBRL_WEB.html",
+          "sha256": "17a58690af55eaf852d720374841f0719eb2629541891c64201819ab9f724d66",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "acc52eaa2e38290692c512e3a5d23b62d1b7691b39362ac13dd6b109ad0ae4aa",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "17a58690af55eaf852d720374841f0719eb2629541891c64201819ab9f724d66",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "27-Apr-2026 23:24:13",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.4500",
+            "1.5700"
+          ],
+          "annual_roa_value": "1.5700",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/AUBANK_25072026133942_Investor_Presentation_Submission.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "SFB applicability must be verified separately",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "AUBANK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=AUBANK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "e301bd75368e2bfac1dd5402d57b4c41c60bc720a780a725018d6a71951517e0",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/AUBANK_25072026133942_Investor_Presentation_Submission.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/AUBANK_25072026133942_Investor_Presentation_Submission.pdf",
+        "original_sha256": "50a3d15c520eb42a83aa5d4896e3f99f3d202a5986da969562b4e9ae597f79ab",
+        "original_bytes": 4711259,
+        "exchange_dissem_time_literal": "25-Jul-2026 13:41:01",
+        "announcement": {
+          "an_dt": "25-Jul-2026 13:41:00",
+          "attFileSize": "4.49 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/AUBANK_25072026133942_Investor_Presentation_Submission.pdf",
+          "attchmntText": "AU Small Finance Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "25072026134100",
+          "exchdisstime": "25-Jul-2026 13:41:01",
+          "fileSize": "4.49 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106710907",
+          "smIndustry": null,
+          "sm_isin": "INE949L01017",
+          "sm_name": "AU Small Finance Bank Limited",
+          "sort_date": "2026-07-25 13:41:00",
+          "symbol": "AUBANK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/AUBANK-presentation.pdf",
+        "text_chars": 94711,
+        "literal_matches": {
+          "nim": [
+            " selected products\n\n                \u2751 PAT grew by 37% YoY to \u20b9796 cr; annualized RoA/RoE at 1.7% and 15.6%\n                  \u25aa    NIM expanded by 47 bps YoY to 5.9% from 5.4% in Q1'FY26; On QoQ basis, NIM moderated by 7 bps on reversal of certain\nProfitability          seasonal one-offs highlighted in Q4\u2019FY26\n& Capital         \u25aa    Core PPoP (ex treas",
+            "nnualized RoA/RoE at 1.7% and 15.6%\n                  \u25aa    NIM expanded by 47 bps YoY to 5.9% from 5.4% in Q1'FY26; On QoQ basis, NIM moderated by 7 bps on reversal of certain\nProfitability          seasonal one-offs highlighted in Q4\u2019FY26\n& Capital         \u25aa    Core PPoP (ex treasury gains) grew strongly at 41% YoY led by 32% NII growth and 33% growt",
+            "y strong loan growth and expansion in margins by 47 bps YoY\n\n       Core Other                     \u20b9680 cr                   \u25aa    NIM moderated by 7 bps QoQ on reversal of certain Q4 one-offs - day count benefit and lower slippages in Q4\n        income                          33%                \u2751 Core other income up 33% YoY driven by higher business",
+            "                                    17%/36%\n\n                                       5.9%                Profitability\n            NIM\n                                      47 bps\n                                                           \u2751 PPoP increased 9% YoY to \u20b9 1,435 cr; Core PPoP (ex treasury gains) increased by 41% YoY to \u20b91,426 cr\n            ",
+            "\u2751 PAT up 37% YoY to \u20b9 796 cr; annualised RoA at 1.7% and RoE at 15.6%\n\nNote: Growth ratio computed on YoY basis unless specified;\nNIM is calculated on daily avg. of interest earning assets including off book; for profitability ratios, average total asset is derived by taking average of monthly total assets   9\n\f1   KEY UPDATES\n\n2   FINANCIAL HIGHLIGHT",
+            " 12\n\fKey ratios\n\n                     Particulars                          Q1'FY27   Q1'FY26   Q4'FY26   FY26\n                    NIM                                    5.9%      5.4%      6.0%     5.7%\n  Margins           Gross advance yield                    13.7%     14.1%     13.8%    13.9%\n                    Cost of funds                       "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": [
+            "                                    \u20b940                          \u20b9279                        7.0\u00d7\n *PAT and EPS is calculated for Trailing 12 months\n                                                                                                                                                   34\n\f   With consistent and strong execution track record\u2026.\n\n   \u20b9 in Bn "
+          ]
+        },
+        "ttm_match_exclusion": "Trailing12months footnote applies PAT/EPS, not NIM.",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "0dd713de-6d63-4057-b081-f1176ce7a77b",
+        "hash": "5a1fb246cf2cff9c0d7bf4ff115ceb9ce8f039d7e3b152c8a8a29baca309be53",
+        "symbol": "AUBANK",
+        "urls": [],
+        "nim": [
+          "ble: Profit for the quarter by 37% year-onyear to INR796 crores, driven by core PPOP growth of 41%. Net interest margin increased by 47 basis points year-on-vear to 5.9%. Core fee income by 33% yearon-vear driven by higher business volumes: grew grew\\\\nCost to assets ratio, excluding CGFMU premium was 4%, up marginally from 3.9% last year, driven b"
+        ]
+      },
+      "annual_fresh_original_scans": []
+    },
+    {
+      "symbol": "AXISBANK",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "e549740d-ca84-4cc5-864c-6ea5d82a262f",
+          "filing_id": "153576",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153576_28042026155521_iXBRL_WEB.html",
+          "sha256": "a90260811f8eb4fd8c109f29064042d4ece7e7ad76890e74899bed79bf8881fb",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "037697ec779275a9df8babfad209caeeac1f64c2dc43bc1611ecfe6203ecd24b",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "a90260811f8eb4fd8c109f29064042d4ece7e7ad76890e74899bed79bf8881fb",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "28-Apr-2026 15:55:21",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "1.5800",
+            "1.4500"
+          ],
+          "annual_roa_value": "1.4500",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "AXISBANK-175726.html",
+          "sha256": "496f7a9ee505ecfb56460b998ab144020a93ae512455858d9350deea011c3c45",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/AXISBANK1_18072026113638_PressRelease_IR_PPT_Q1FY27Signed.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "AXISBANK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=AXISBANK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "8f5d07cd6288e013d9098348f2bf29d42aa9c7d1a20c37ff3ea96784db12b3da",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/AXISBANK1_18072026132045_IRRevisedSigned.pdf",
+          "https://nsearchives.nseindia.com/corporate/AXISBANK1_18072026113638_PressRelease_IR_PPT_Q1FY27Signed.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/AXISBANK1_18072026113638_PressRelease_IR_PPT_Q1FY27Signed.pdf",
+        "original_sha256": "0d86db55ab20839f932c76cc82596a7af2d9eb7ace39cc8bb4276a8267526a87",
+        "original_bytes": 4217393,
+        "exchange_dissem_time_literal": "18-Jul-2026 11:37:40",
+        "announcement": {
+          "an_dt": "18-Jul-2026 11:37:39",
+          "attFileSize": "4.02 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/AXISBANK1_18072026113638_PressRelease_IR_PPT_Q1FY27Signed.pdf",
+          "attchmntText": "Axis Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "18072026113739",
+          "exchdisstime": "18-Jul-2026 11:37:40",
+          "fileSize": "4.02 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106702415",
+          "smIndustry": "Banks",
+          "sm_isin": "INE238A01026",
+          "sm_name": "Axis Bank Limited",
+          "sort_date": "2026-07-18 11:37:39",
+          "symbol": "AXISBANK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/AXISBANK-presentation.pdf",
+        "text_chars": 256736,
+        "literal_matches": {
+          "nim": [
+            "profit at \u20b911,659 crores, up 16% QOQ; Core operating profit at \u20b911,122 crores, up 5% QOQ\n        o Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\n\n\u2022   Robust deposit growth delivered across average and period end balances\n        o QOQ QAB1 | MEB1 basis, total deposits up 6% | 3%; TD1 up 7% | 5%, CA up 3% | -6%, SA up 6% | 1%, respectively\n        ",
+            "res, up 16% QOQ; Core operating profit at \u20b911,122 crores, up 5% QOQ\n        o Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\n\n\u2022   Robust deposit growth delivered across average and period end balances\n        o QOQ QAB1 | MEB1 basis, total deposits up 6% | 3%; TD1 up 7% | 5%, CA up 3% | -6%, SA up 6% | 1%, respectively\n        o QAB",
+            "                                                   2\n\fProfit & Loss Account: Period ended 30th June 2026\n\nNet Interest Income and Net Interest Margin\nThe Bank\u2019s Net Interest Income (NII) for Q1FY27 stood at `14,646 crores up 8% YOY basis. Net Interest Margin (NIM) for\nQ1FY27 stood at 3.46%.\n\nOther Income\nFee income for Q1FY27 grew 7% YOY to `6,156 crores. Retail fees",
+            " Interest Income and Net Interest Margin\nThe Bank\u2019s Net Interest Income (NII) for Q1FY27 stood at `14,646 crores up 8% YOY basis. Net Interest Margin (NIM) for\nQ1FY27 stood at 3.46%.\n\nOther Income\nFee income for Q1FY27 grew 7% YOY to `6,156 crores. Retail fees grew 2% YOY, constituted 67% of the Bank\u2019s total fee\nincome. The Corporate & Commercial banking fees togethe",
+            "Net Interest Margin\nThe Bank\u2019s Net Interest Income (NII) for Q1FY27 stood at `14,646 crores up 8% YOY basis. Net Interest Margin (NIM) for\nQ1FY27 stood at 3.46%.\n\nOther Income\nFee income for Q1FY27 grew 7% YOY to `6,156 crores. Retail fees grew 2% YOY, constituted 67% of the Bank\u2019s total fee\nincome. The Corporate & Commercial banking fees together gre",
+            "                                                                             Consolidated ROE 5                                   Net Interest Margin 5                            Operating Profit Margin 5                  Cost to Assets 5\n\n\n\n\n      Balance Sheet                                                                    16.67% | 14.64%                        ",
+            "g performance\n                                                                                   \u2022 Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\n                                                                                   \u2022 Fee income up 7% YOY; granular fee constituted 90% of overall fees; Retail fee up 2% YOY\n                              ",
+            "                                                                            \u2022 Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\n                                                                                   \u2022 Fee income up 7% YOY; granular fee constituted 90% of overall fees; Retail fee up 2% YOY\n                                   ",
+            "                                                                                Quarterly Results Q1FY27                 8\n\f      Net interest margin trend\n                                             Advances mix by rate type\n                                                                                                                                              ",
+            "     Other EBLR\n\n           Base Rate linked          Foreign currency- floating   Fixed\n\n\n                                       Net interest Margin (NIM)\n                                                                                                                                        NIM Movement - Q4 FY26 to Q1 FY27\n\n                                       NIM",
+            "       Base Rate linked          Foreign currency- floating   Fixed\n\n\n                                       Net interest Margin (NIM)\n                                                                                                                                        NIM Movement - Q4 FY26 to Q1 FY27\n\n                                       NIM - Ov",
+            "                                                                                                                                  NIM Movement - Q4 FY26 to Q1 FY27\n\n                                       NIM - Overall              NIM - Domestic\n\n\n                 3.91%              3.82%               3.75%                3.73%\n                      ",
+            "                                                        NIM Movement - Q4 FY26 to Q1 FY27\n\n                                       NIM - Overall              NIM - Domestic\n\n\n                 3.91%              3.82%               3.75%                3.73%\n                                                                                                ",
+            "                             NIM Movement - Q4 FY26 to Q1 FY27\n\n                                       NIM - Overall              NIM - Domestic\n\n\n                 3.91%              3.82%               3.75%                3.73%\n                                                                                                    3.60%\n                 "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "revision_boundary": "Original first Investor Presentation used for bounded discovery only; later revised presentation identified in same exchange response. Factual admission must reconcile revision before use.",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "0e58c2ea-0905-41cc-8a04-3cc6f11cc29f",
+        "hash": "ffba12c52f7fdcdae7929ea104b3f92df2aa54133a2270a72d7f12a48eb08d0b",
+        "symbol": "AXISBANK",
+        "urls": [],
+        "nim": [
+          "anular fee constituted 90% of overall fees; Retail fee up 2% YOY\\\\n- Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\\\\n- Cost to assets at 2.20%, declined 21 bps YOY and 8 bps QOQ\\\\n- YOY QABI MEBI basis, total deposits grew 18% 18%; term deposits grew 21% 23%, CA grew 13% 6%, SA grew 14% 14%, respectively\\\\n- QABI MEB' CASA grew ",
+          "d 90% of overall fees; Retail fee up 2% YOY\\\\n- Net Interest Income up 8% YOY, Net Interest Margin (NIM) at 3.46%\\\\n- Cost to assets at 2.20%, declined 21 bps YOY and 8 bps QOQ\\\\n- YOY QABI MEBI basis, total deposits grew 18% 18%; term deposits grew 21% 23%, CA grew 13% 6%, SA grew 14% 14%, respectively\\\\n- QABI MEB' CASA grew 13% 11% YOY and 5% | ",
+          "1 |\\\\n| Q1FY27 | 7,114 |\\\\n| Metric | Value |\\\\n| :--- | :--- |\\\\n| YOY | 23% |\\\\n| QOQ | 1% |\\\\n## Net interest margin trend\\\\n## Advances mix by rate type\\\\n| Category | Percentage |\\\\n| :--- | :--- |\\\\n| Repo linked | 61% |\\\\n| MCLR linked | 7% |\\\\n| Other EBLR | 3% |\\\\n| Base Rate linked | 3% |\\\\n| Foreign currency- floating | 0.3% |\\\\n| Fixed ",
+          "1 |\\\\n| Q1FY27 | 7,114 |\\\\n| Metric | Value |\\\\n| :--- | :--- |\\\\n| YOY | 23% |\\\\n| QOQ | 1% |\\\\n## Net interest margin trend\\\\n## Advances mix by rate type\\\\n## Loan Type Distribution\\\\n| Loan Type | Percentage |\\\\n| :--- | :--- |\\\\n| Repo linked | 61% |\\\\n| MCLR linked | 7% |\\\\n| Other EBLR | 3% |\\\\n| Base Rate linked | 0.3% |\\\\n| Foreign currenc",
+          "Bank Ltd.|AXISBANK|140|Investor Presentation|2026-07-18\\\\n--- |\\\\n| YOY | 23% |\\\\n| QOQ | 1% |\\\\n## Net interest margin trend\\\\n## Advances mix by rate type\\\\n| Category | Percentage |\\\\n| :--- | :--- |\\\\n| Repo linked | 61% |\\\\n| MCLR linked | 7% |\\\\n| Other EBLR | 3% |\\\\n| Base Rate linked | 3% |\\\\n| Foreign currency- floating | 0.3% |\\\\n| Fixed "
+        ]
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153576_28042026155521_iXBRL_WEB.html",
+          "fresh_original_sha256": "037697ec779275a9df8babfad209caeeac1f64c2dc43bc1611ecfe6203ecd24b",
+          "bytes": 740181,
+          "old_pin_sha256": "a90260811f8eb4fd8c109f29064042d4ece7e7ad76890e74899bed79bf8881fb",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "0dd21e10-d950-46ec-80ae-e1c0d486751c",
+          "filing_id": "153854",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153854_28042026202816_iXBRL_WEB.html",
+          "sha256": "eda046d0d5a4e2f8ace72803eed845613534bddb7f821932fa56304c9b3ec654",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "d4e862a5b6cd1d3aeae61e7201e082ad5f31cb3c09162e09f07fa92124070333",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "eda046d0d5a4e2f8ace72803eed845613534bddb7f821932fa56304c9b3ec654",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "28-Apr-2026 20:28:14",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.2700",
+            "0.6400"
+          ],
+          "annual_roa_value": "0.6400",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "BANDHANBNK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=BANDHANBNK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "6cf1747c1b940c0b9874cd4aa582e942cce48c8607d83a1ac345138b575c041d",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf",
+        "original_sha256": "bb48052d6d5b7ec1ebb9d995916d5e0a919deaea74a00f7965726bb5ef42fba4",
+        "original_bytes": 2161472,
+        "exchange_dissem_time_literal": "21-Jul-2026 16:25:15",
+        "announcement": {
+          "an_dt": "21-Jul-2026 16:25:14",
+          "attFileSize": "2.06 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/BANDHANBNK_21072026162457_SE_Disclosure_Investor_PPT_Q1_21072026_sd.pdf",
+          "attchmntText": "Bandhan Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "21072026162514",
+          "exchdisstime": "21-Jul-2026 16:25:15",
+          "fileSize": "2.06 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106705063",
+          "smIndustry": null,
+          "sm_isin": "INE545U01014",
+          "sm_name": "Bandhan Bank Limited",
+          "sort_date": "2026-07-21 16:25:14",
+          "symbol": "BANDHANBNK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/BANDHANBNK-presentation.pdf",
+        "text_chars": 116830,
+        "literal_matches": {
+          "nim": [
+            "oY & -1.2% QoQ)                 (-18.6% YoY & -5.8% QoQ)       (34.9% YoY & -6.1% QoQ)\n\n\n                                         NIM                                       OPEX / Assets                                ROA                          ROE\n\n      Ratios                           6.2%                                           4.3%            ",
+            "     Spread\n\n     Capital Adequacy Ratio (incl. Profit)                                                                           NIM (Annualized)\n                                         CRAR\n\n\n          19.4%            18.0%                        18.2%\n           0.8%            0.7%                          0.7%\n                                  "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "f604e332-9d6c-4cc1-b355-7386a0c2f2f0",
+        "hash": "2519fd4194975a11e667fc7987f9bb906177d5bc3c9d9bf67800e3719449f56e",
+        "symbol": "BANDHANBNK",
+        "urls": [],
+        "nim": [
+          "18.6% | 0.8% | 19.4% |\\\\n| Mar'26 | 17.3% | 0.7% | 18.0% |\\\\n| Jun'26 | 17.5% | 0.7% | 18.2% |\\\\n## NIM (Annualized)\\\\n| Period | NIM |\\\\n| :--- | :--- |\\\\n| Q1FY26 | 6.4% |\\\\n| Q4FY26 | 6.2% |\\\\n| Q1FY27 | 6.2% |\\\\n| FY25 | 7.1% |\\\\n| FY26 | 6.1% |\\\\n2232426|Bandhan Bank Ltd.|BANDHANBNK|79883|Investor Presentation|2026-07-21\\\\nnon-interest income ",
+          "'26 | 17.3% | 0.7% | 18.0% |\\\\n| Jun'26 | 17.5% | 0.7% | 18.2% |\\\\n## NIM (Annualized)\\\\n| Period | NIM |\\\\n| :--- | :--- |\\\\n| Q1FY26 | 6.4% |\\\\n| Q4FY26 | 6.2% |\\\\n| Q1FY27 | 6.2% |\\\\n| FY25 | 7.1% |\\\\n| FY26 | 6.1% |\\\\n2232426|Bandhan Bank Ltd.|BANDHANBNK|79883|Investor Presentation|2026-07-21\\\\nnon-interest income would have been ~22% YoY durin",
+          "Ltd.|BANDHANBNK|79883|Investor Presentation|2026-07-21\\\\n|\\\\n| Jun'26 | 17.5% | 0.7% | 18.2% |\\\\n## NIM (Annualized)\\\\n| Period | NIM |\\\\n| :--- | :--- |\\\\n| Q1FY26 | 6.4% |\\\\n| Q4FY26 | 6.2% |\\\\n| Q1FY27 | 6.2% |\\\\n| FY25 | 7.1% |\\\\n| FY26 | 6.1% |\\\\n## Break up of Non-Interest Income\\\\n| [Details of other Income | Q1FY26 | Q4FY26 | Q1FY27 | QoQ |",
+          " Presentation|2026-07-21\\\\n|\\\\n| Jun'26 | 17.5% | 0.7% | 18.2% |\\\\n## NIM (Annualized)\\\\n| Period | NIM |\\\\n| :--- | :--- |\\\\n| Q1FY26 | 6.4% |\\\\n| Q4FY26 | 6.2% |\\\\n| Q1FY27 | 6.2% |\\\\n| FY25 | 7.1% |\\\\n| FY26 | 6.1% |\\\\n## Break up of Non-Interest Income\\\\n| [Details of other Income | Q1FY26 | Q4FY26 | Q1FY27 | QoQ | Yoy | FY25 | FY26 | Yoy |\\\\n|"
+        ]
+      },
+      "annual_fresh_original_scans": []
+    },
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "3b52b883-a7e6-4e84-a22b-6538d739fb08",
+          "filing_id": "156426",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156426_08052026203710_iXBRL_WEB.html",
+          "sha256": "99bb60a71c5901e209d9c0cdaef038a0a7d8bc0851888a99089187e39cc9af3b",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "ad7ae6adcd99d6a0d076dadebd1c04ffa8f8b88d91b0bee4ff4f3401c99872f3",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "99bb60a71c5901e209d9c0cdaef038a0a7d8bc0851888a99089187e39cc9af3b",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "08-May-2026 20:37:08",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "1.1500",
+            "1.0600"
+          ],
+          "annual_roa_value": "1.0600",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "BANKBARODA-178034.html",
+          "sha256": "4b435a8daf618ca3f6631885f4bd8e8bc93b6b615c4ca167f3724c685afbdc7c",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "BANKBARODA",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=BANKBARODA&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "90b942f2df5be4845b7a4a9cf373bc8c068d9ffe596820c1e60c6d5b6424b694",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf",
+        "original_sha256": "2ce02e78de37cbbdf4023d45f99c56e65a5ebc988fa524d5ef4abf56dc18758c",
+        "original_bytes": 3115724,
+        "exchange_dissem_time_literal": "24-Jul-2026 17:04:39",
+        "announcement": {
+          "an_dt": "24-Jul-2026 17:04:38",
+          "attFileSize": "2.97 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/BANKBARODA_24072026170431_SEPRESENTATION.pdf",
+          "attchmntText": "Bank Of Baroda has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "General Updates",
+          "difference": "00:00:01",
+          "dt": "24072026170438",
+          "exchdisstime": "24-Jul-2026 17:04:39",
+          "fileSize": "2.97 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106709908",
+          "smIndustry": "Banks",
+          "sm_isin": "INE028A01013",
+          "sm_name": "Bank of Baroda",
+          "sort_date": "2026-07-24 17:04:38",
+          "symbol": "BANKBARODA"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/BANKBARODA-presentation.pdf",
+        "text_chars": 98623,
+        "literal_matches": {
+          "nim": [
+            "                     Net Profit (INR crore)\n                                                                                      Net Interest Margin (%)                                                                   Without       considering\nDomestic Deposits                        12,04,283            13,81,535       14.7                                         ",
+            "       Key Ratios\n\n                Cost of Deposits                              Yield on Advances                                Net Interest Margin\nDomestic                                      Domestic                                       Domestic\n  5.22%     5.00%            5.07%              8.61%                      8.24%              3.06%         3.08%    "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "c26a07ed-072a-426d-8f78-f9a82ac5b747",
+        "hash": "919cd2ae687b0b56e5c72471574e2d109c61103c8b6d445b401a68766c84ec0f",
+        "symbol": "BANKBARODA",
+        "urls": [],
+        "nim": []
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156426_08052026203710_iXBRL_WEB.html",
+          "fresh_original_sha256": "ad7ae6adcd99d6a0d076dadebd1c04ffa8f8b88d91b0bee4ff4f3401c99872f3",
+          "bytes": 107711,
+          "old_pin_sha256": "99bb60a71c5901e209d9c0cdaef038a0a7d8bc0851888a99089187e39cc9af3b",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "de0210e0-584a-4379-a00d-86db6dea084e",
+          "filing_id": "174178",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_174178_13072026190423_iXBRL_WEB.html",
+          "sha256": "ea795b2d1c9ffad592d1184c3d57af0de02b6bf362db7478c8e8cf6ed9777905",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "3fa73215174208a0d13ed170838e469637028a3d9e96396ae09d200dda4b1099",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "ea795b2d1c9ffad592d1184c3d57af0de02b6bf362db7478c8e8cf6ed9777905",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": null,
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.3400",
+            "1.1500"
+          ],
+          "annual_roa_value": "1.1500",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        },
+        {
+          "source_record_id": "de0210e0-584a-4379-a00d-86db6dea084e",
+          "filing_id": "154328",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154328_29042026190229_iXBRL_WEB.html",
+          "sha256": "51839750611d5b415d1525d555556e541112c7fbf4382ce63781f1e888725435",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "994d7b64acd44cdea5ce420137847b3ff88da39d4668641a8648a40b40b9fd51",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "51839750611d5b415d1525d555556e541112c7fbf4382ce63781f1e888725435",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "29-Apr-2026 19:02:12",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.3400",
+            "1.1500"
+          ],
+          "annual_roa_value": "1.1500",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "FEDERALBNK-175530.html",
+          "sha256": "5c8da492e2de9850f47e00b5d53b907bf1b0e447dec1da77159a5e0649186a0f",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/FEDERALBNK_17072026134906_fbl_investor_presentation_170726_signd.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "FEDERALBNK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=FEDERALBNK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "601f31a395b16add1aa8e016c1ddd439548b6f3cbbe0067b9e1112352a75c606",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/FEDERALBNK_17072026134906_fbl_investor_presentation_170726_signd.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/FEDERALBNK_17072026134906_fbl_investor_presentation_170726_signd.pdf",
+        "original_sha256": "d4f296091e0ba25efb40bbfb376b2cb5e52c0c65d25d100201e5fda45108c30a",
+        "original_bytes": 2299871,
+        "exchange_dissem_time_literal": "17-Jul-2026 13:50:28",
+        "announcement": {
+          "an_dt": "17-Jul-2026 13:50:27",
+          "attFileSize": "2.19 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/FEDERALBNK_17072026134906_fbl_investor_presentation_170726_signd.pdf",
+          "attchmntText": "The Federal Bank  Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "17072026135027",
+          "exchdisstime": "17-Jul-2026 13:50:28",
+          "fileSize": "2.19 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106701366",
+          "smIndustry": "Banks",
+          "sm_isin": "INE171A01011",
+          "sm_name": "The Federal Bank  Limited",
+          "sort_date": "2026-07-17 13:50:27",
+          "symbol": "FEDERALBNK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/FEDERALBNK-presentation.pdf",
+        "text_chars": 121331,
+        "literal_matches": {
+          "nim": [
+            "  1.00 % (Q1 FY26)         10.30 % (Q1 FY26)       \u20b9 14.07 (Q1 FY26)        \u20b9 138.35(Q1 FY26)\n\n    HIGHLIGHTS                     NIM                 Cost to Income            Credit Cost            Slippage Ratio\n       FOR                        3.33 %                  52.50 %                  41 bps                   61 bps\n                        ",
+            "one-off)\n\fKey Ratios\n\n    Cost of Deposits, Cost of Funds,\n                                                                       Net Interest Margin (%)*                            Cost to Income Ratio (%)#\n    Yield on Net Advances (%)\n                                                                                                       3.74\n                       ",
+            "                         Credit cost (%)*                                                                           Risk adjusted NIM (%)*\n                   Retail#               Wholesale#                   Bank#\n       1.90\n\n                          1.48\n                                                                                              "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "2f940155-b97a-4492-afc3-293c47752cd2",
+        "hash": "2ffd6f341a749e60cd625d5480bb22118afb3c498be623451f510ee81d35dcfc",
+        "symbol": "FEDERALBNK",
+        "urls": [
+          "https://www.federal"
+        ],
+        "nim": [
+          "vestor Presentation|2026-09-08\\\\n| +26.1% Yoy |\\\\n| Operating Profit | {1,897 Cr | record qtr |\\\\n| Net Interest Margin | 3.33% | +39bps Yoy |\\\\n| Return on Equity | 12.01% | vS 10.30% |\\\\n| Cost-to-Income | 52.50% | -239bps |\\\\n| EPS | {19.15 | +36.1% Yoy |\\\\nNet Interest Income recent quarterly trend (* Cr)\\\\n| Quarter | Value |\\\\n| :--- | :--- |",
+          "| \\\\u20b91,177 Cr (+36.6% YoY) |\\\\n| Return on Equity | 12.01% |\\\\n| Return on Assets | 1.22% |\\\\n| Net Interest Margin | 3.33% |\\\\n| Cost-to-income | 52.50% |\\\\n| Earnings per Share | \\\\u20b919.15 |\\\\n## ASSET QUALITY &amp; CAPITAL - Q1 FY27\\\\n| Metric | Value |\\\\n| :--- | :--- |\\\\n| GNPA | 1.52% |\\\\n| NNPA | 0.18% (decadal low) |\\\\n| Provision Co",
+          "| \\\\u20b91,177 Cr (+36.6% YoY) |\\\\n| Return on Equity | 12.01% |\\\\n| Return on Assets | 1.22% |\\\\n| Net Interest Margin | 3.33% |\\\\n| Cost-to-income | 52.50% |\\\\n| Earnings per Share | \\\\u20b919.15 |\\\\n2304834|Federal Bank Ltd.|FEDERALBNK|412|Investor Presentation|2026-09-08\\\\nPresentation for the said meetings.\\\\nNo unpublished price sensitive inf",
+          " FY26 | 1.09 |\\\\n| Q3 FY26 | 1.15 |\\\\n| Q4 FY26 | 1.36 (1.24 Excl one off) |\\\\n| Q1 FY27 | 1.22 |\\\\nNet Interest Margin (%)\\\\n| Quarter | Value |\\\\n| :--- | :--- |\\\\n| Q1 FY26 | 2.94 |\\\\n| Q2 FY26 | 3.06 |\\\\n| Q3 FY26 | 3.18 |\\\\n| Q4 FY26 | 3.74 (3.20 Excl one off) |\\\\n| Q1 FY27 | 3.33 |\\\\nRoE (%)*\\\\n2227714|Federal Bank Ltd.|FEDERALBNK|412|Investo"
+        ]
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_174178_13072026190423_iXBRL_WEB.html",
+          "fresh_original_sha256": "3fa73215174208a0d13ed170838e469637028a3d9e96396ae09d200dda4b1099",
+          "bytes": 108868,
+          "old_pin_sha256": "ea795b2d1c9ffad592d1184c3d57af0de02b6bf362db7478c8e8cf6ed9777905",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        },
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154328_29042026190229_iXBRL_WEB.html",
+          "fresh_original_sha256": "994d7b64acd44cdea5ce420137847b3ff88da39d4668641a8648a40b40b9fd51",
+          "bytes": 109552,
+          "old_pin_sha256": "51839750611d5b415d1525d555556e541112c7fbf4382ce63781f1e888725435",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "HDFCBANK",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "direct_nim_ttm_status": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "8c830a2e-8a37-44aa-964e-98238b7bca4d",
+          "filing_id": "151455",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151455_18042026192837_iXBRL_WEB.html",
+          "sha256": "a3e4b5d130621618061f5c7475935c62951d4240ddb5a3e19213e846fbbee6e2",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "7b0c983dff3f003d4fc324d31c951b9ae570a35fa2f01e8b799bbe67f6cead48",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "a3e4b5d130621618061f5c7475935c62951d4240ddb5a3e19213e846fbbee6e2",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "18-Apr-2026 19:28:36",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.4800",
+            "1.9400"
+          ],
+          "annual_roa_value": "1.9400",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "HDFCBANK-175753.html",
+          "sha256": "e5d993dba41251b83461c5363d1c57133a85c7af066c4c644688c6ac78657487",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/HDFCBANK_18072026151522_SE_Intimation_earningcall_presentation18jul2026.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "HDFCBANK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=HDFCBANK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "9ac483c072affb839a29c432e5ea2f8b0169bd5ed6aadfe33a0b69199205a7ff",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/HDFCBANK_18072026151522_SE_Intimation_earningcall_presentation18jul2026.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_18072026151522_SE_Intimation_earningcall_presentation18jul2026.pdf",
+        "original_sha256": "2058db8cf54a01107272ba7df35ebd54a64f0c47810feadb7f4121d5b8a3b24f",
+        "original_bytes": 296457,
+        "exchange_dissem_time_literal": "18-Jul-2026 15:18:06",
+        "announcement": {
+          "an_dt": "18-Jul-2026 15:18:05",
+          "attFileSize": "289.51 KB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/HDFCBANK_18072026151522_SE_Intimation_earningcall_presentation18jul2026.pdf",
+          "attchmntText": "HDFC Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "18072026151805",
+          "exchdisstime": "18-Jul-2026 15:18:06",
+          "fileSize": "289.51 KB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106702560",
+          "smIndustry": "Banks",
+          "sm_isin": "INE040A01018",
+          "sm_name": "HDFC Bank Limited",
+          "sort_date": "2026-07-18 15:18:05",
+          "symbol": "HDFCBANK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/HDFCBANK-presentation.pdf",
+        "text_chars": 2256,
+        "literal_matches": {
+          "nim": [],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "qualification_boundary": "This is an official signed presentation-location letter only; no substantive presentation data. Exact current presentation URL remains unavailable from this letter.",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "c6e41aff-d2f0-48f4-a5ad-0650835d00c0",
+        "hash": "85f7e136b8f5fcda7f2d24a66cf251a6ea27a1ab699a75f12fa772fbadc59385",
+        "symbol": "HDFCBANK",
+        "urls": [],
+        "nim": [
+          "71.3 |\\\\nTotal Advances grew by 12.1 per cent and Total Deposits grew by 14.4 per cent year-on-year Net Interest Margin (NIM) was at\\\\n| Category | FY 2024-25 | FY 2025-26 | Growth (%) |\\\\n| :--- | :--- | :--- | :--- |\\\\n| Advances | 26,19,609 | 29,37,166 | 12.1% |\\\\n| Deposits | 27,14,715 | 31,05,250 | 14.4% |\\\\nGross Non-Performing Assets (GNPAs)",
+          "es grew by 12.1 per cent and Total Deposits grew by 14.4 per cent year-on-year Net Interest Margin (NIM) was at\\\\n| Category | FY 2024-25 | FY 2025-26 | Growth (%) |\\\\n| :--- | :--- | :--- | :--- |\\\\n| Advances | 26,19,609 | 29,37,166 | 12.1% |\\\\n| Deposits | 27,14,715 | 31,05,250 | 14.4% |\\\\nGross Non-Performing Assets (GNPAs) stood at 1.15 per ce",
+          "71.3 |\\\\nTotal Advances grew by 12.1 per cent and Total Deposits grew by 14.4 per cent year-on-year Net Interest Margin (NIM) was at\\\\n2220298|HDFC Bank Ltd.|HDFCBANK|533|Annual Report|2026-04-17\\\\n5.8 |\\\\n| Dividend | 5.9 |\\\\n| Provisions | 6.6 |\\\\n| Transfer to Reserve | 10.6 |\\\\n| Operating Expense | 20.6 |\\\\n| Interest Expense | 50.5 |\\\\n## Ear",
+          "es grew by 12.1 per cent and Total Deposits grew by 14.4 per cent year-on-year Net Interest Margin (NIM) was at\\\\n2220298|HDFC Bank Ltd.|HDFCBANK|533|Annual Report|2026-04-17\\\\n5.8 |\\\\n| Dividend | 5.9 |\\\\n| Provisions | 6.6 |\\\\n| Transfer to Reserve | 10.6 |\\\\n| Operating Expense | 20.6 |\\\\n| Interest Expense | 50.5 |\\\\n## Earnings Per Share\\\\n48."
+        ]
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151455_18042026192837_iXBRL_WEB.html",
+          "fresh_original_sha256": "7b0c983dff3f003d4fc324d31c951b9ae570a35fa2f01e8b799bbe67f6cead48",
+          "bytes": 495187,
+          "old_pin_sha256": "a3e4b5d130621618061f5c7475935c62951d4240ddb5a3e19213e846fbbee6e2",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "ICICIBANK",
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "14a38f65-7918-418d-86ad-c08428d91f91",
+          "filing_id": "151429",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151429_18042026180754_iXBRL_WEB.html",
+          "sha256": "0f614116f9e584e1a1088d0ea8e58b658d14a4300ea9471081dbcfba412153b5",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "298e1a5b8d0afa05e74c8aee3537fb8804981f010124904028abca229114f446",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "0f614116f9e584e1a1088d0ea8e58b658d14a4300ea9471081dbcfba412153b5",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "18-Apr-2026 18:07:54",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "2.400",
+            "2.3300"
+          ],
+          "annual_roa_value": "2.3300",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/ICICI2022_18072026163744_NSEBSE_InvestorPresentation.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "ICICIBANK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=ICICIBANK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "721fa80775015be591f052c484797201f7d5bd0440e86e3db3f01876675e8f60",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/ICICI2022_22072026064344_NSEBSE_22072026.pdf",
+          "https://nsearchives.nseindia.com/corporate/ICICI2022_18072026163744_NSEBSE_InvestorPresentation.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/ICICI2022_18072026163744_NSEBSE_InvestorPresentation.pdf",
+        "original_sha256": "c521cb437e6fcff5de368a8661a42dbec8d8d77313a0cd5bb01e4f4cf1c574c0",
+        "original_bytes": 1145977,
+        "exchange_dissem_time_literal": "18-Jul-2026 16:37:58",
+        "announcement": {
+          "an_dt": "18-Jul-2026 16:37:57",
+          "attFileSize": "1.09 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/ICICI2022_18072026163744_NSEBSE_InvestorPresentation.pdf",
+          "attchmntText": "ICICI Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "18072026163757",
+          "exchdisstime": "18-Jul-2026 16:37:58",
+          "fileSize": "1.09 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106702626",
+          "smIndustry": "Banks",
+          "sm_isin": "INE090A01013",
+          "sm_name": "ICICI Bank Limited",
+          "sort_date": "2026-07-18 16:37:57",
+          "symbol": "ICICIBANK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/ICICIBANK-presentation.pdf",
+        "text_chars": 55619,
+        "literal_matches": {
+          "nim": [
+            "y ratios\nPercent                                                           FY2026         Q1-2026         Q4-2026         Q1-2027\nNet interest margin1,2                                                  4.32            4.34             4.32              4.36\nCost of deposits                                                        4.62            4.85             4.43  ",
+            " Cost of deposits                                                  4.62               4.85                 4.43              4.41\nNet interest margin2                                                 4.32               4.34                 4.32              4.36\n- Domestic                                                           4.39               4.40               "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "751f3aba-27ac-4e02-b660-a3a2db2135d6",
+        "hash": "bb052f55b3820c17dad03c64bc62081d8647706555bb3f0c7b7d87685374a54f",
+        "symbol": "ICICIBANK",
+        "urls": [],
+        "nim": [
+          "-2027 |\\\\n|--------------------------|----------|----------|----------|-----------|-----------|\\\\n| Net interest margin | 4.53 | 4.32 | 4.32 | 4.34 | 4.36 |\\\\n| Cost/ average assets | 2.29 | 2.18 | 2.22 | 2.19 | 2.15 |\\\\n| Return on average assets | 2.37 | 2.4 | | 2.44 | 2.49 |\\\\n| Return on average equity | 18.71 | 17.95 | 15.97 | 17.07 | 17.14 |\\",
+          "? 24,384 crore (USS 2.6 billion) in Q1-2027 from &lt; 21,635 crore (US$ 2.3 billion) in Q1-2026\\\\n- Net interest margin was 4.36% in Q1-2027 compared to 4.32% in Q4-2026 and 4.34% in Q1-2026\\\\n- Non-interest income; excluding treasury, increased by 16.0% year-on-year to ? 8,425 crore (USS 890 million) in Q1-2027 from = 7,264 crore (USS 767 million)"
+        ]
+      },
+      "annual_fresh_original_scans": []
+    },
+    {
+      "symbol": "IDBI",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "direct_nim_ttm_status": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "2745ed49-632c-46e1-aa2f-0b4f9dbecd64",
+          "filing_id": "155018",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155018_30042026194728_iXBRL_WEB.html",
+          "sha256": "e89f8169a6a7de41cb1bd7f30cbc40c25c5ea36131112fcc7f0c1fc94be5bc93",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "143b3648a0a28a58c8b639065c7c58180c0d0abcb9af506bb792fc364183607d",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "e89f8169a6a7de41cb1bd7f30cbc40c25c5ea36131112fcc7f0c1fc94be5bc93",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "30-Apr-2026 19:46:15",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "1.7500",
+            "2.2700"
+          ],
+          "annual_roa_value": "2.2700",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "IDBI-175799.html",
+          "sha256": "ec6bf8cebcb169aa250a326103af72a26e137c6b868a652178b44af3ff78564f",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "specific_official_nim_disclosure_lead": null,
+      "public_acquisition_state": "NO_EXACT_Q1_PRESENTATION_LEAD_IN_BOUNDED_EXCHANGE_WINDOW",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "IDBI",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=IDBI&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 1,
+        "discovery_sha256": "ed80a4bb850eca8447cd1c93272024dead5a035ce464a46878dc996ee17e2e3c",
+        "eligible_presentation_urls": [],
+        "state": "NO_EXACT_Q1_PRESENTATION_LEAD_IN_BOUNDED_EXCHANGE_WINDOW",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "0d1ec4a7-0a73-4251-8904-0f74faf34385",
+        "hash": "c903f7d68185146ba5fa87537cc1339cc69c92578d93b483efb26e9debacdd29",
+        "symbol": "IDBI",
+        "urls": [
+          "https://www.idbi.bank.in/)",
+          "https://www.idbi.bank.in/idbi-bank-general-code-of-conduct-ethics.aspx)"
+        ],
+        "nim": [
+          "% of Net NPAs to Net Advances | (d) % of Net NPAs to Net Advances | 0.16 | 0.15 | 0.21 | 0.15 |\\\\n| Net Interest Margin % (Annualised) | Net Interest Margin % (Annualised) | 3.61 | 4.15 | 3,68 | 3.77 |\\\\n| (vi) Return on Assets \\\\\\\"0 Annualised) | (vi) Return on Assets \\\\\\\"0 Annualised) | 1.89 | 1.75 | 2.01 | 227 |\\\\n| (vii) Net Worth (excl. Revalu",
+          " of Net NPAs to Net Advances | 0.16 | 0.15 | 0.21 | 0.15 |\\\\n| Net Interest Margin % (Annualised) | Net Interest Margin % (Annualised) | 3.61 | 4.15 | 3,68 | 3.77 |\\\\n| (vi) Return on Assets \\\\\\\"0 Annualised) | (vi) Return on Assets \\\\\\\"0 Annualised) | 1.89 | 1.75 | 2.01 | 227 |\\\\n| (vii) Net Worth (excl. Revaluation Reserve.FCTR & Intangibles) | (",
+          " | Value |\\\\n| :--- | :--- |\\\\n| 2025-26 | 26.65 |\\\\n| 2024-25 | 25.05 |\\\\n| 2023-24 | 22.26 |\\\\n## Net Interest Margin (%)\\\\n| Year | Value |\\\\n| :--- | :--- |\\\\n| 2025-26 | 3.77 |\\\\n| 2024-25 | 4.56 |\\\\n| 2023-24 | 4.93 |\\\\n2228809|IDBI Bank Ltd.|IDBI|588|Result|2026-07-18\\\\nfull financial year ended March 31. 2026 and the published year to date ",
+          "n| Value |\\\\n| :--- | :--- |\\\\n| 2025-26 | 26.65 |\\\\n| 2024-25 | 25.05 |\\\\n| 2023-24 | 22.26 |\\\\n## Net Interest Margin (%)\\\\n| Year | Value |\\\\n| :--- | :--- |\\\\n| 2025-26 | 3.77 |\\\\n| 2024-25 | 4.56 |\\\\n| 2023-24 | 4.93 |\\\\n## Deposit Mix (%)\\\\n| Category | Percentage |\\\\n| :--- | :--- |\\\\n| Bulk | 23.76% |\\\\n| Savings | 26.23% |\\\\n| Retail Term "
+        ]
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155018_30042026194728_iXBRL_WEB.html",
+          "fresh_original_sha256": "143b3648a0a28a58c8b639065c7c58180c0d0abcb9af506bb792fc364183607d",
+          "bytes": 147279,
+          "old_pin_sha256": "e89f8169a6a7de41cb1bd7f30cbc40c25c5ea36131112fcc7f0c1fc94be5bc93",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "f6d08ae2-c3cd-409b-9bcf-85a71637ddfb",
+          "filing_id": "152940",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_152940_25042026185222_iXBRL_WEB.html",
+          "sha256": "d59b952a547b004458c818589b7643b60b36da34b1320b56094f35b80761cea9",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "2f0d4aa1a25d746f573b083c8b92baa08f2c1cc5226cca97ba3234b30fc54d23",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "d59b952a547b004458c818589b7643b60b36da34b1320b56094f35b80761cea9",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "25-Apr-2026 18:52:22",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.3300",
+            "0.4400"
+          ],
+          "annual_roa_value": "0.4400",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "IDFCFIRSTB-178279.html",
+          "sha256": "88d42e0a6ad9d3af469becb67b4438b5edba43649a0d1fd6cb9df923536b8357",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_25072026170055_Investor_Presentation_Q1FY27_SE.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "IDFCFIRSTB",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=IDFCFIRSTB&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "ec8df4d8568278fbe9f1f7508933260ca536ed3e929b418e2485316fc1845d2e",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_25072026170055_Investor_Presentation_Q1FY27_SE.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_25072026170055_Investor_Presentation_Q1FY27_SE.pdf",
+        "original_sha256": "b0529698b6c21d804750b5c3dfcebf2c7d77873eb2e808c7a96335c451d811c8",
+        "original_bytes": 6163043,
+        "exchange_dissem_time_literal": "25-Jul-2026 17:01:18",
+        "announcement": {
+          "an_dt": "25-Jul-2026 17:01:17",
+          "attFileSize": "5.88 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_25072026170055_Investor_Presentation_Q1FY27_SE.pdf",
+          "attchmntText": "IDFC First Bank Limited has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "25072026170117",
+          "exchdisstime": "25-Jul-2026 17:01:18",
+          "fileSize": "5.88 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106711076",
+          "smIndustry": null,
+          "sm_isin": "INE092T01019",
+          "sm_name": "IDFC First Bank Limited",
+          "sort_date": "2026-07-25 17:01:17",
+          "symbol": "IDFCFIRSTB"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/IDFCFIRSTB-presentation.pdf",
+        "text_chars": 217530,
+        "literal_matches": {
+          "nim": [
+            "bps QoQ)\n\n\n\n\n                                                                                                                     Net Interest Margin                                       Risk Adjusted NII\n                 GNPA ratio                                            NNPA ratio\n                                                                                 ",
+            "YoY and 5% QoQ\n2.   Total Deposits includes Customer Deposits (Rs. 2,99,405 Cr) and Certificate of Deposits (Rs. 12,486 Cr).\n3.   NIM is Gross of IBPC & Sell-down\n4.   Risk Adjusted NII = (Net Interest Income Less Provisions) as a % to Average Total Assets\n5.   In Q1 FY27, the Bank received CGFMU claim of Rs. 515 crores. We have voluntarily created co",
+            "              18,376                                  48,651                       14% CAGR\n\n\n                                    NIM %                                           8.2%                                     1.6%                                    3.1%                                    6.0%                         286 bps\n PROFITABILITY\n\n\n",
+            "sets of Rs. 3,05,370 Cr\n                 \u2022    Profitability numbers are for H1 FY19, Dec-18 are of Q3 FY19; Jun-25 are of Q1FY26; NIM is Gross of IBPC & Sell-down for Q1 FY27 | C:I excluding trading gains was 70.7% for Q1 FY27 and 81.6% for Q3 FY19   6\n\f                                                                                                   ",
+            "proved to ~10%, and Bank moved into less risky segments of LAP and Affordable home loans at average portfolio yield of ~18%, with NIM of ~8%.\n\u2022    Post merger, the CoF further improved to 6% (FY26), and Bank moved to more safer segments like Prime HL, Prime LAP, Prime BBG with average yield of ~13% and NIM of ~5.75%.\n\u2022    Thus, the Bank progressively ",
+            "r improved to 6% (FY26), and Bank moved to more safer segments like Prime HL, Prime LAP, Prime BBG with average yield of ~13% and NIM of ~5.75%.\n\u2022    Thus, the Bank progressively expanded into lower-yield, lower-credit, cost segments to access larger markets.\n\u2022    But Bank retains its unique DNA and ability to serve these underserved markets. We have ",
+            "                                                                                              Section 5: Profitability & Capital\n\nNIM strong at 5.96%                                                                                                                                                      Jun-26\n\n\n\n   Risk Adjusted NII (Q1-FY27): 4.75%       ",
+            "k\n                                                                                                                                NIM has diminished\n\n\n                                                                                                6.36%                                                       Includes benefit of\n                          ",
+            "9             FY20            FY21             FY22             FY23    FY24           FY25          FY26       Q1 FY27\n\n    FY18 NIM is as reported by erstwhile IDFC Bank in respective period investor presentation\n\n                                                                                                                                         ",
+            "ased from \u20b938,455 crore ($4.1b) to\n\u20b9 2,99,405 crore ($31.6b) between 2018 and 2025, while the CASA ratio rose from 8.7% to 50.8%, NIM (Q1 FY27) at 5.96% with Q1 FY27 PAT of \u20b91,075 crore ($113m).\n\nHe has been recognized by numerous awards including \u201cBanker of the Year 2023\u201d by leading Indian publication Financial Express, Ernst and Young \"Entrepreneur ",
+            "                                                                                    15,257                                        Net Interest Margin (%)\n                                                       75,337\n                                    73,055\n                 70,248                                 13%                                                   "
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "d238817e-bc06-4b7c-9126-e2e1eeff0ec6",
+        "hash": "4a8def7dbaf1ea3d260b7107005a1faa9d26b8fe03f3895575ab0e313e348173",
+        "symbol": "IDFCFIRSTB",
+        "urls": [],
+        "nim": []
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_152940_25042026185222_iXBRL_WEB.html",
+          "fresh_original_sha256": "2f0d4aa1a25d746f573b083c8b92baa08f2c1cc5226cca97ba3234b30fc54d23",
+          "bytes": 213263,
+          "old_pin_sha256": "d59b952a547b004458c818589b7643b60b36da34b1320b56094f35b80761cea9",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "INDIANB",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "ca22559c-b464-4715-96cb-85dcc5f87c7f",
+          "filing_id": "154404",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154404_29042026203012_iXBRL_WEB.html",
+          "sha256": "38d7c092ef2f989429c8f4ec835a516680d7081b16969daf82db3f270b4cba43",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "edaad1fce0ad29bb015bc1b3be55d70af73c8b4a70cd03ffa7eaf18d586620f7",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "38d7c092ef2f989429c8f4ec835a516680d7081b16969daf82db3f270b4cba43",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "29-Apr-2026 20:30:12",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "1.2800",
+            "1.3100"
+          ],
+          "annual_roa_value": "1.3100",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "INDIANB-173758.html",
+          "sha256": "0eb1a60d3e65c481bba3cb9a817c617166161823b5ee823aaeb323bdc3db0cfc",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/INDIANB_10072026130155_SE_Presentation30062026.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "INDIANB",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=INDIANB&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "6165aea1edee43812be0d64c8def759e053e98ef0517d878ac3e0f11451e1b12",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/INDIANB_19082026193733_SE_Analyst_Presentation19082026.pdf",
+          "https://nsearchives.nseindia.com/corporate/INDIANB_10072026130155_SE_Presentation30062026.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/INDIANB_10072026130155_SE_Presentation30062026.pdf",
+        "original_sha256": "9ddd3a767d378a8631b5a729e95ca460ab4cac908a12fce8d4a084440136d710",
+        "original_bytes": 5008084,
+        "exchange_dissem_time_literal": "10-Jul-2026 13:02:29",
+        "announcement": {
+          "an_dt": "10-Jul-2026 13:02:28",
+          "attFileSize": "4.78 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/INDIANB_10072026130155_SE_Presentation30062026.pdf",
+          "attchmntText": "Indian Bank has informed the Exchange about Investor Presentation",
+          "bflag": null,
+          "csvName": null,
+          "desc": "Investor Presentation",
+          "difference": "00:00:01",
+          "dt": "10072026130228",
+          "exchdisstime": "10-Jul-2026 13:02:29",
+          "fileSize": "4.78 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106693333",
+          "smIndustry": "Banks",
+          "sm_isin": "INE562A01011",
+          "sm_name": "Indian Bank",
+          "sort_date": "2026-07-10 13:02:28",
+          "symbol": "INDIANB"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/INDIANB-presentation.pdf",
+        "text_chars": 129381,
+        "literal_matches": {
+          "nim": [
+            "                       0\n\n\n                            CoD                       YoA                             YoI              NIM (Domestic)                RoA\n                           4.80%                     8.09%                                                   3.41%                   1.31%\n                                                  ",
+            "   6.99\n           5     Yield on Funds                                   8.27        7.95      8.00        8.13\n           6     Net Interest Margin (NIM)                        3.23        3.23      3.29        3.24\n           7     Net Interest Margin (NIM) Domestic               3.35        3.35      3.41        3.36\n           8     Cost to Income Ratio         ",
+            "    Yield on Funds                                   8.27        7.95      8.00        8.13\n           6     Net Interest Margin (NIM)                        3.23        3.23      3.29        3.24\n           7     Net Interest Margin (NIM) Domestic               3.35        3.35      3.41        3.36\n           8     Cost to Income Ratio              ",
+            "   8.13\n           6     Net Interest Margin (NIM)                        3.23        3.23      3.29        3.24\n           7     Net Interest Margin (NIM) Domestic               3.35        3.35      3.41        3.36\n           8     Cost to Income Ratio                            45.78       44.99     44.80       46.03\n           9     Return on Assets (RoA)       ",
+            "    Net Interest Margin (NIM)                        3.23        3.23      3.29        3.24\n           7     Net Interest Margin (NIM) Domestic               3.35        3.35      3.41        3.36\n           8     Cost to Income Ratio                            45.78       44.99     44.80       46.03\n           9     Return on Assets (RoA)            ",
+            "0.20%\nRecovery                   \u20b91885 Cr       \u20b94500 Cr ~ \u20b95500 Cr\nAUC                        \u20b9751 Cr        \u20b91200 Cr ~ \u20b91500 Cr\nNIM                         3.29%           3.10% ~ 3.25%\nRoA                         1.31%           1.20% ~ 1.30%\nCost to Income Ratio       44.80%                ~ 45%\nCredit Cost                 0.23%                < 1"
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": []
+        },
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "8a29efc5-94f3-4d8e-809a-e9580e13e819",
+        "hash": "b4b680bd8acfc3d4292debb2e611850917671432eb1a3d33eebcaca5b27982b9",
+        "symbol": "INDIANB",
+        "urls": [],
+        "nim": [
+          "n&amp; Ratings\\\\n2276933|Indian Bank|INDIANB|609|Investor Presentation|2026-08-19\\\\n3.10% ~ 3.25% | NIM |\\\\n| | 1.20% ~ 1.30% | RoA |\\\\n| 44.80%/ | 45% | Costto Income Ratio |\\\\n| 0.23% | < 1% | Credit Cost |\\\\n| 0.77% | < 1% | Slippage Ratio |\\\\n| 2254 Cr | | NCLT |\\\\n| ARC | *200 Cr | 0 |\\\\n2219260|Indian Bank|INDIANB|609|Investor Presentation|20"
+        ]
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154404_29042026203012_iXBRL_WEB.html",
+          "fresh_original_sha256": "edaad1fce0ad29bb015bc1b3be55d70af73c8b4a70cd03ffa7eaf18d586620f7",
+          "bytes": 82927,
+          "old_pin_sha256": "38d7c092ef2f989429c8f4ec835a516680d7081b16969daf82db3f270b4cba43",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "direct_nim_ttm_status": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "0ac63c4a-e937-4e6e-a3d9-416cdfd03917",
+          "filing_id": "155303",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155303_02052026191411_iXBRL_WEB.html",
+          "sha256": "7b0aae65b1ac979a9b43fa300096145e32ef2f3aecc1458b0c37affc0d1925af",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "f42c02ace52a1a40ea9cd1a680b0a63cb8d3be8fa42d2b3e234ba535f96e76ac",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "7b0aae65b1ac979a9b43fa300096145e32ef2f3aecc1458b0c37affc0d1925af",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "02-May-2026 19:14:10",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "0.5300",
+            "1.9700"
+          ],
+          "annual_roa_value": "1.9700",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [
+        {
+          "filename": "KOTAKBANK-175826.html",
+          "sha256": "b36b2445bfe46d6b0bc3cc99cd61939e961f9a68910e5b2e8ff2b464da1c9197",
+          "state": "LOCAL_RETAINED_JUNE_LEAD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REPORT",
+          "direct_nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0
+        }
+      ],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "NOT_OBSERVED_IN_VERIFIED_ORIGINAL_PRESENTATION",
+      "specific_official_nim_disclosure_lead": "https://nsearchives.nseindia.com/corporate/KMBLTAB_18072026125020_InvestorPresentationJuly182026signed.pdf",
+      "public_acquisition_state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "KOTAKBANK",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=KOTAKBANK&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "d736d9e8fc8400c68a5c7670ff107fee3f77eb7b50f2ce7ce824deb3ce051023",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/KOTAK_17082026062647_InvestorPresentation.pdf",
+          "https://nsearchives.nseindia.com/corporate/KMBLTAB_18072026125020_InvestorPresentationJuly182026signed.pdf"
+        ],
+        "state": "ORIGINAL_CAPTURED_TEXT_SEARCHED_NOT_ADMITTED",
+        "original_url": "https://nsearchives.nseindia.com/corporate/KMBLTAB_18072026125020_InvestorPresentationJuly182026signed.pdf",
+        "original_sha256": "b7f20df822f55235b542220f0076877dad4f87f8375221febd99f7964b005bf2",
+        "original_bytes": 1339091,
+        "exchange_dissem_time_literal": "18-Jul-2026 12:50:34",
+        "announcement": {
+          "an_dt": "18-Jul-2026 12:50:33",
+          "attFileSize": "1.28 MB",
+          "attchmntFile": "https://nsearchives.nseindia.com/corporate/KMBLTAB_18072026125020_InvestorPresentationJuly182026signed.pdf",
+          "attchmntText": "Investor Presentation for Earnings Conference Call on the Consolidated and Standalone Unaudited Financial Results of the Bank for the quarter ended June 30, 2026",
+          "bflag": null,
+          "csvName": null,
+          "desc": "General Updates",
+          "difference": "00:00:01",
+          "dt": "18072026125033",
+          "exchdisstime": "18-Jul-2026 12:50:34",
+          "fileSize": "1.28 MB",
+          "hasXbrl": true,
+          "old_new": null,
+          "orgid": null,
+          "seq_id": "106702454",
+          "smIndustry": "Banks",
+          "sm_isin": "INE237A01010",
+          "sm_name": "Kotak Mahindra Bank Limited",
+          "sort_date": "2026-07-18 12:50:33",
+          "symbol": "KOTAKBANK"
+        },
+        "local_original": "/workspace/bank-twelve-originals/nim-targeted/KOTAKBANK-presentation.pdf",
+        "text_chars": 68192,
+        "literal_matches": {
+          "nim": [
+            " PAT \u20b9 4,123 cr 26%                                            4.53%\n                                                             NIM                                   ROA             2.14%               Cost / Income 45.6%                          Credit Cost*    0.46%\n\nQ1FY26                                                                           ",
+            "      Particulars                             Q1FY27     Q1FY26     Q4FY26\n\n                                                      NIM                        4.53%      4.65%      4.67%\n                                                      Cost of Funds              4.46%      5.01%      4.45%\n                                      Profitability   Retur"
+          ],
+          "average_interest_earning_assets": [],
+          "ttm": [
+            "nking + Solitaire ;\nRelationship Value = Advances + Deposits + Demat + Investments; Solitaire Programme was launched in May\u201925 | #Rolling 12 months average acquisitions numbers of new Full KYC Funded Savings Accounts\n\fFocus Customer Segments : Non - Individual Customers\nserved through curated propositions\n\n\n\n\n                                                       "
+          ]
+        },
+        "ttm_match_exclusion": "Rolling12months footnote applies savings-account acquisitions, not NIM.",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": {
+        "id": "96f91b84-1474-483e-9f27-86176db30a98",
+        "hash": "e5db7af7b3d15d83241956539987ca905b3b6430e3dabe698e6d94a4815be5b6",
+        "symbol": "KOTAKBANK",
+        "urls": [],
+        "nim": []
+      },
+      "annual_fresh_original_scans": [
+        {
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155303_02052026191411_iXBRL_WEB.html",
+          "fresh_original_sha256": "f42c02ace52a1a40ea9cd1a680b0a63cb8d3be8fa42d2b3e234ba535f96e76ac",
+          "bytes": 2018966,
+          "old_pin_sha256": "7b0aae65b1ac979a9b43fa300096145e32ef2f3aecc1458b0c37affc0d1925af",
+          "old_pin_does_not_match_fresh_capture": true,
+          "revision_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy",
+          "nim_literal_matches": 0,
+          "average_earning_assets_literal_matches": 0,
+          "admitted": false
+        }
+      ]
+    },
+    {
+      "symbol": "SBIN",
+      "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "direct_nim_ttm_status": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "not_a_global_absence_claim": true,
+      "sources": [
+        {
+          "source_record_id": "506ba799-c6e9-4f94-9ee5-4ec7df9bf778",
+          "filing_id": "156316",
+          "url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156316_08052026164017_iXBRL_WEB.html",
+          "sha256": "732da02fafb1ef412b6947cd3ad25b4463705ae76da08a8caad8ba4ac6e29d82",
+          "original_bytes_hash_verified_locally": false,
+          "local_representation_hash_if_unverified": "0d9d84752cf690e2e8770aa0b9f9876268ed26c4a27c3a8ac4a686efe5b75b59",
+          "retained_original_verification_record": {
+            "path": "docs/private/v1-4-industry-batches/Banking_13_Annual_ROA_Original_Verification_2026-10-12.json",
+            "actual_sha256": "732da02fafb1ef412b6947cd3ad25b4463705ae76da08a8caad8ba4ac6e29d82",
+            "verification_mode": "RETAINED_HASH_PINNED_ORIGINAL"
+          },
+          "publication_literal": "08-May-2026 16:40:13",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "scope": "STANDALONE",
+          "literal_roa_row": [
+            "",
+            "Return on assets",
+            "1.0700",
+            "1.1200"
+          ],
+          "annual_roa_value": "1.1200",
+          "nim_exact_text_scan": null,
+          "scan_state": "RETAINED_VERIFICATION_EXISTS_ORIGINAL_BYTES_NOT_LOCALLY_RECOVERED"
+        }
+      ],
+      "other_local_filing_scan": [],
+      "four_contiguous_quarter_nii_inputs": "NOT_QUALIFIED_IN_THIS_PASS",
+      "four_source_certified_average_interest_earning_assets_inputs": "UNKNOWN_NO_SUBSTANTIVE_ORIGINAL_PRESENTATION_TEXT",
+      "specific_official_nim_disclosure_lead": null,
+      "public_acquisition_state": "FAILED_NO_RETRY",
+      "next_bounded_operation": "Use retained provider discovery payload or issuer investor-presentation archive to identify one exact current-period original disclosure; qualify direct TTM label, denominator, period and scope. Do not repeat generic fundamentals calls.",
+      "roa_admission_needed": [
+        "Reuse retained exact full-year standalone ROA cell and hash-pinned original source record",
+        "Bind independent RBI financial-statements source and exact average-working-funds denominator passage",
+        "Verify regulatory scope/effective date and amendments for this issuer/reporting year",
+        "Verify canonical original source registration and publication binding",
+        "Run approved multi-source factual admission, canonical validation and independent selected-snapshot readback"
+      ],
+      "regulatory_exception": "Commercial-bank applicability must be verified for issuer and FY2025-26",
+      "canonical_admitted": false,
+      "bounded_exchange_presentation_pass": {
+        "symbol": "SBIN",
+        "discovery_url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=SBIN&from_date=01-07-2026&to_date=31-08-2026",
+        "canonical_admissions": 0,
+        "provider_calls": 0,
+        "public_requests": 2,
+        "discovery_sha256": "7c6493a3e8c9927497f2f23d96921dd8f567c87b5de25b1ae6f35ff9f89c0614",
+        "eligible_presentation_urls": [
+          "https://nsearchives.nseindia.com/corporate/SBIN_07082026135619_Presentation.pdf"
+        ],
+        "state": "FAILED_NO_RETRY",
+        "error": "HTTP Error 503: Service Unavailable",
+        "accounting_basis": "Whole deduplicated pass including first original attempt; cached reruns are zero additional requests."
+      },
+      "retained_document_search_evidence": null,
+      "annual_fresh_original_scans": []
+    }
+  ],
+  "local_original_recovery_summary": {
+    "annual_hash_pinned_sources_available_in_retained_verification_report": 13,
+    "annual_local_bytes_matching_retained_pin": 0,
+    "consequence": "Cannot treat these local annual representations as independent original proof; recover existing immutable originals before numeric/source-semantic admission. This is a provenance/recovery gap, not missing financial facts."
+  },
+  "network_accounting": {
+    "exchange_discovery_calls": 12,
+    "original_pdf_successful_downloads": 10,
+    "original_pdf_failed_attempts": 1,
+    "failed_symbol": "SBIN",
+    "automatic_retries": 0,
+    "existing_annual_originals_reused": 9,
+    "provider_calls": 0
+  },
+  "current_pass_summary": {
+    "substantive_originals": 9,
+    "presentation_location_letters": 1,
+    "no_discovery_lead": "IDBI",
+    "failed_original": "SBIN",
+    "source_certified_direct_TTM_NIM_found": 0,
+    "source_certified_average_interest_earning_assets_found": 0,
+    "do_not_repeat_same_queries": "Future acquisition requires exact new official source lead or input-contract decision, not repeated generic requests."
+  }
+}

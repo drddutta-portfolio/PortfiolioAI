@@ -1,0 +1,4750 @@
+{
+  "version": "BANK_12_RETAINED_FINANCIAL_CANDIDATES_V1",
+  "as_of_date": "2026-10-12",
+  "scope": "12 banks excluding KARURVYSYA; no KVB evidence or selections touched",
+  "provider_calls": 0,
+  "network_requests": 9,
+  "database_writes": 0,
+  "canonical_admissions": 0,
+  "banks": [
+    {
+      "symbol": "AUBANK",
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "documents": [
+        {
+          "filing_id": "153377",
+          "retained_manifest_source_id": "3c8f9043-447d-4070-87dc-774fd7179b01",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153377_27042026232414_iXBRL_WEB.html",
+          "expected_original_sha256": "17a58690af55eaf852d720374841f0719eb2629541891c64201819ab9f724d66",
+          "local_sha256": "acc52eaa2e38290692c512e3a5d23b62d1b7691b39362ac13dd6b109ad0ae4aa",
+          "local_bytes": 105896,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/AUBANK-153377.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "27-Apr-2026 23:24:13",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "16.8600",
+            "literal_value": "16.8600",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "16.8600",
+              "16.8600"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.5700",
+            "literal_value": "1.5700",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.4500",
+              "1.5700"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "1863633.90",
+              "literal_value": "18,63,633.90",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "5,01,914.67",
+                "18,63,633.90"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "952365.62",
+              "literal_value": "9,52,365.62",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "2,43,681.89",
+                "9,52,365.62"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "264125.43",
+              "literal_value": "2,64,125.43",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "83,186.95",
+                "2,64,125.43"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "74826.71",
+              "literal_value": "74,826.71",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "74,826.71",
+                "74,826.71"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "10",
+              "literal_value": "10",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "10",
+                "10"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "35.4",
+              "literal_value": "35.4",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "11.13",
+                "35.4"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "35.01",
+              "literal_value": "35.01",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "11.01",
+                "35.01"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "16.8600",
+              "literal_value": "16.8600",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "16.8600",
+                "16.8600"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.5700",
+              "literal_value": "1.5700",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.4500",
+                "1.5700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "2.0300",
+              "literal_value": "2.0300",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "2.0300",
+                "2.0300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.7400",
+              "literal_value": "0.7400",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.7400",
+                "0.7400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "16.8600",
+              "16.8600"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.4500",
+              "1.5700"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "19,22,525.49"
+            ],
+            [
+              "",
+              "Deposits",
+              "1,52,66,116.35"
+            ],
+            [
+              "",
+              "Advances",
+              "1,34,27,563.10"
+            ],
+            [
+              "",
+              "Total Assets",
+              "1,91,79,746.81"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": true,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "basel_iii_literal_fragments": []
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": "SFB applicability separate from ordinary banks"
+    },
+    {
+      "symbol": "AXISBANK",
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "documents": [
+        {
+          "filing_id": "153576",
+          "retained_manifest_source_id": "e549740d-ca84-4cc5-864c-6ea5d82a262f",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153576_28042026155521_iXBRL_WEB.html",
+          "expected_original_sha256": "a90260811f8eb4fd8c109f29064042d4ece7e7ad76890e74899bed79bf8881fb",
+          "local_sha256": "495099dde65459a33061da5d7d6f5499332fb7df6b3946b62113118fc01b1eb1",
+          "local_bytes": 740190,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/AXISBANK-153576.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "28-Apr-2026 15:55:21",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "14.3800",
+            "literal_value": "14.3800",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "14.3800",
+              "14.3800"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.4500",
+            "literal_value": "1.4500",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "1.5800",
+              "1.4500"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "12703223.00",
+              "literal_value": "1,27,03,223.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "32,72,409.00",
+                "1,27,03,223.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "7098419.00",
+              "literal_value": "70,98,419.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "18,26,691.00",
+                "70,98,419.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "2445666.00",
+              "literal_value": "24,45,666.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "7,07,131.00",
+                "24,45,666.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "62163.00",
+              "literal_value": "62,163.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "62,163.00",
+                "62,163.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "2",
+              "literal_value": "2",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "2",
+                "2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "78.82",
+              "literal_value": "78.82",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "22.76",
+                "78.82"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "78.31",
+              "literal_value": "78.31",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "22.63",
+                "78.31"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "14.3800",
+              "literal_value": "14.3800",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "14.3800",
+                "14.3800"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.4500",
+              "literal_value": "1.4500",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "1.5800",
+                "1.4500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.2300",
+              "literal_value": "1.2300",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.2300",
+                "1.2300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.3700",
+              "literal_value": "0.3700",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.3700",
+                "0.3700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "14.3800",
+              "14.3800"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "14.7800",
+              "14.7800"
+            ],
+            [
+              "",
+              "Return on assets",
+              "1.5800",
+              "1.4500"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "2,03,57,263.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "13,35,83,397.00"
+            ],
+            [
+              "",
+              "Advances",
+              "12,33,56,988.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "18,86,84,988.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/AXISBANK-153576.html",
+            "sha256": "037697ec779275a9df8babfad209caeeac1f64c2dc43bc1611ecfe6203ecd24b",
+            "bytes": 740181,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "36198b1d6bc29b76e8e0dc24fec9803b402059c63049c40c864ead9349c35ba2",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "documents": [
+        {
+          "filing_id": "153854",
+          "retained_manifest_source_id": "0dd21e10-d950-46ec-80ae-e1c0d486751c",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_153854_28042026202816_iXBRL_WEB.html",
+          "expected_original_sha256": "eda046d0d5a4e2f8ace72803eed845613534bddb7f821932fa56304c9b3ec654",
+          "local_sha256": "d4e862a5b6cd1d3aeae61e7201e082ad5f31cb3c09162e09f07fa92124070333",
+          "local_bytes": 196279,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/BANDHANBNK-153854.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "28-Apr-2026 20:28:14",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "18.0400",
+            "literal_value": "18.0400",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "18.0400",
+              "18.0400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "0.6400",
+            "literal_value": "0.6400",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.2700",
+              "0.6400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "2168911.22",
+              "literal_value": "21,68,911.22",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "5,42,843.13",
+                "21,68,911.22"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "1085942.34",
+              "literal_value": "10,85,942.34",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "2,63,284.01",
+                "10,85,942.34"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "122356.27",
+              "literal_value": "1,22,356.27",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "53,413.84",
+                "1,22,356.27"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "161097.23",
+              "literal_value": "1,61,097.23",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "1,61,097.23",
+                "1,61,097.23"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "10",
+              "literal_value": "10",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "10",
+                "10"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "7.6",
+              "literal_value": "7.6",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "3.32",
+                "7.6"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "7.59",
+              "literal_value": "7.59",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "3.31",
+                "7.59"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "18.0400",
+              "literal_value": "18.0400",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "18.0400",
+                "18.0400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "0.6400",
+              "literal_value": "0.6400",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.2700",
+                "0.6400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "3.2700",
+              "literal_value": "3.2700",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "3.2700",
+                "3.2700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.9700",
+              "literal_value": "0.9700",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.9700",
+                "0.9700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "18.0400",
+              "18.0400"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.2700",
+              "0.6400"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "23,96,392.46"
+            ],
+            [
+              "",
+              "Deposits",
+              "1,66,34,444.65"
+            ],
+            [
+              "",
+              "Advances",
+              "1,50,10,377.79"
+            ],
+            [
+              "",
+              "Total Assets",
+              "2,11,12,372.64"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "basel_iii_literal_fragments": []
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "BANKBARODA",
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "documents": [
+        {
+          "filing_id": "156426",
+          "retained_manifest_source_id": "3b52b883-a7e6-4e84-a22b-6538d739fb08",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156426_08052026203710_iXBRL_WEB.html",
+          "expected_original_sha256": "99bb60a71c5901e209d9c0cdaef038a0a7d8bc0851888a99089187e39cc9af3b",
+          "local_sha256": "cb072f82fdce7fd3b3f3373c628ef8ec583fc177593cc1f5f6527c15910dd2e6",
+          "local_bytes": 107720,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/BANKBARODA-156426.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "08-May-2026 20:37:08",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "13.1600",
+            "literal_value": "13.1600",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "13.1600",
+              "13.1600"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.0600",
+            "literal_value": "1.0600",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "1.1500",
+              "1.0600"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "12699365.00",
+              "literal_value": "1,26,99,365.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "32,64,184.00",
+                "1,26,99,365.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "7931119.00",
+              "literal_value": "79,31,119.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "20,14,817.00",
+                "79,31,119.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "2002106.00",
+              "literal_value": "20,02,106.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "5,61,568.00",
+                "20,02,106.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "103553.00",
+              "literal_value": "1,03,553.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "1,03,553.00",
+                "1,03,553.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "2",
+              "literal_value": "2",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "2",
+                "2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "38.72",
+              "literal_value": "38.72",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "10.86",
+                "38.72"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "38.72",
+              "literal_value": "38.72",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "10.86",
+                "38.72"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "13.1600",
+              "literal_value": "13.1600",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "13.1600",
+                "13.1600"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.0600",
+              "literal_value": "1.0600",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "1.1500",
+                "1.0600"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.8900",
+              "literal_value": "1.8900",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.8900",
+                "1.8900"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.4500",
+              "literal_value": "0.4500",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.4500",
+                "0.4500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "13.1600",
+              "13.1600"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0.4800",
+              "0.4800"
+            ],
+            [
+              "",
+              "Return on assets",
+              "1.1500",
+              "1.0600"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "1,52,17,326.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "16,48,48,723.00"
+            ],
+            [
+              "",
+              "Advances",
+              "14,09,09,412.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "20,09,16,381.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/BANKBARODA-156426.html",
+            "sha256": "ad7ae6adcd99d6a0d076dadebd1c04ffa8f8b88d91b0bee4ff4f3401c99872f3",
+            "bytes": 107711,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "95c14ba709a4f241d21bd363eaee9772a76f0670bf81ec2184b7ff81172fe07d",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "documents": [
+        {
+          "filing_id": "174178",
+          "retained_manifest_source_id": "de0210e0-584a-4379-a00d-86db6dea084e",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_174178_13072026190423_iXBRL_WEB.html",
+          "expected_original_sha256": "ea795b2d1c9ffad592d1184c3d57af0de02b6bf362db7478c8e8cf6ed9777905",
+          "local_sha256": "fd02445615ca89875cbe646b51fdf48a4af2122bcaab975d1d39b699a74457e3",
+          "local_bytes": 108877,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/FEDERALBNK-174178.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": null,
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "15.9300",
+            "literal_value": "15.9300",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "15.9300",
+              "15.9300"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.1500",
+            "literal_value": "1.1500",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.3400",
+              "1.1500"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "2769538.00",
+              "literal_value": "27,69,538.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "7,39,909.00",
+                "27,69,538.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "1703797.00",
+              "literal_value": "17,03,797.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "4,22,648.00",
+                "17,03,797.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "411732.00",
+              "literal_value": "4,11,732.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "1,25,910.00",
+                "4,11,732.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "49286.00",
+              "literal_value": "49,286.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "49,286.00",
+                "49,286.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "2",
+              "literal_value": "2",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "2",
+                "2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "16.74",
+              "literal_value": "16.74",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "5.11",
+                "16.74"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "16.56",
+              "literal_value": "16.56",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "5.05",
+                "16.56"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "15.9300",
+              "literal_value": "15.9300",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "15.9300",
+                "15.9300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.1500",
+              "literal_value": "1.1500",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.3400",
+                "1.1500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.6200",
+              "literal_value": "1.6200",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.6200",
+                "1.6200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.200",
+              "literal_value": "0.200",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.200",
+                "0.200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "15.9300",
+              "15.9300"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.3400",
+              "1.1500"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "38,21,221.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "3,13,90,939.00"
+            ],
+            [
+              "",
+              "Advances",
+              "2,64,59,437.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "3,87,52,149.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": true,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/FEDERALBNK-174178.html",
+            "sha256": "3fa73215174208a0d13ed170838e469637028a3d9e96396ae09d200dda4b1099",
+            "bytes": 108868,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": true
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "80910e9d309ea28e110ad2012b91b26f75e3206b18c2a633c7a75de9e16666f9",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [
+            "BI guidelines, banks are required to make Pillar 3 disclosures including leverage ratio, liquidity coverage ratio and Net Stable Funding Ratio (NSFR) under the Basel III Capital Regulations. Accordingly, such applicable disclosures have been placed on the website of the Bank which can be accessed at the following link: https://www.federal.bank.in/regulatory-disclosures. These disclosures have not been subjected to a"
+          ],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        },
+        {
+          "filing_id": "154328",
+          "retained_manifest_source_id": "de0210e0-584a-4379-a00d-86db6dea084e",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154328_29042026190229_iXBRL_WEB.html",
+          "expected_original_sha256": "51839750611d5b415d1525d555556e541112c7fbf4382ce63781f1e888725435",
+          "local_sha256": "695500d89af27dc35914824c0a012d7bb4e0c42dd7c48bc257335e82bc3b9630",
+          "local_bytes": 109561,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/FEDERALBNK-154328.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "29-Apr-2026 19:02:12",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "15.9300",
+            "literal_value": "15.9300",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "15.9300",
+              "15.9300"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.1500",
+            "literal_value": "1.1500",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.3400",
+              "1.1500"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "2769538.00",
+              "literal_value": "27,69,538.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "7,39,909.00",
+                "27,69,538.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "1703797.00",
+              "literal_value": "17,03,797.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "4,22,648.00",
+                "17,03,797.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "411732.00",
+              "literal_value": "4,11,732.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "1,25,910.00",
+                "4,11,732.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "49286.00",
+              "literal_value": "49,286.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "49,286.00",
+                "49,286.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "2",
+              "literal_value": "2",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "2",
+                "2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "16.74",
+              "literal_value": "16.74",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "5.11",
+                "16.74"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "16.56",
+              "literal_value": "16.56",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "5.05",
+                "16.56"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "15.9300",
+              "literal_value": "15.9300",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "15.9300",
+                "15.9300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.1500",
+              "literal_value": "1.1500",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.3400",
+                "1.1500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.6200",
+              "literal_value": "1.6200",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.6200",
+                "1.6200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.200",
+              "literal_value": "0.200",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.200",
+                "0.200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "15.9300",
+              "15.9300"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.3400",
+              "1.1500"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "38,21,221.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "3,13,90,939.00"
+            ],
+            [
+              "",
+              "Advances",
+              "2,64,59,437.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "3,87,52,149.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": true,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/FEDERALBNK-154328.html",
+            "sha256": "994d7b64acd44cdea5ce420137847b3ff88da39d4668641a8648a40b40b9fd51",
+            "bytes": 109552,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": true
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "6186dbed2903a1384a79741d040f15e44b6e39575378308284abe11896308e0e",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [
+            "BI guidelines, banks are required to make Pillar 3 disclosures including leverage ratio, liquidity coverage ratio and Net Stable Funding Ratio (NSFR) under the Basel III Capital Regulations. Accordingly, such applicable disclosures have been placed on the website of the Bank which can be accessed at the following link: https://www.federal.bank.in/regulatory-disclosures. These disclosures have not been subjected to a"
+          ],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": "Two originals contain same extracted figures; verify correction/revision lineage rather than retrieval ordering"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "documents": [
+        {
+          "filing_id": "151455",
+          "retained_manifest_source_id": "8c830a2e-8a37-44aa-964e-98238b7bca4d",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151455_18042026192837_iXBRL_WEB.html",
+          "expected_original_sha256": "a3e4b5d130621618061f5c7475935c62951d4240ddb5a3e19213e846fbbee6e2",
+          "local_sha256": "84fa01f4074ad7d810ddb26b074c3b732eb30b194cb0e2d7f44d9081b0e1c843",
+          "local_bytes": 495196,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/HDFCBANK-151455.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "18-Apr-2026 19:28:36",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "19.7100",
+            "literal_value": "19.7100",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "19.7100",
+              "19.7100"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.9400",
+            "literal_value": "1.9400",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.4800",
+              "1.9400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "30752208.00",
+              "literal_value": "3,07,52,208.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "76,61,002.00",
+                "3,07,52,208.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "17883604.00",
+              "literal_value": "1,78,83,604.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "43,52,845.00",
+                "1,78,83,604.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "7467129.00",
+              "literal_value": "74,67,129.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "19,22,105.00",
+                "74,67,129.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "153934.00",
+              "literal_value": "1,53,934.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "1,53,934.00",
+                "1,53,934.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "1",
+              "literal_value": "1",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "1",
+                "1"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "48.62",
+              "literal_value": "48.62",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "12.49",
+                "48.62"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "48.4",
+              "literal_value": "48.4",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "12.45",
+                "48.4"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "19.7100",
+              "literal_value": "19.7100",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "19.7100",
+                "19.7100"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.9400",
+              "literal_value": "1.9400",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.4800",
+                "1.9400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.1500",
+              "literal_value": "1.1500",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.1500",
+                "1.1500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.3800",
+              "literal_value": "0.3800",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.3800",
+                "0.3800"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "19.7100",
+              "19.7100"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.4800",
+              "1.9400"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "5,56,81,645.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "31,05,25,048.00"
+            ],
+            [
+              "",
+              "Advances",
+              "29,37,16,626.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "43,64,88,632.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/HDFCBANK-151455.html",
+            "sha256": "7b0c983dff3f003d4fc324d31c951b9ae570a35fa2f01e8b799bbe67f6cead48",
+            "bytes": 495187,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "6768f1a8f0e1ef5de5baedfed80368c0154ae1f764b255d2f38eef369a5ae19c",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "ICICIBANK",
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "documents": [
+        {
+          "filing_id": "151429",
+          "retained_manifest_source_id": "14a38f65-7918-418d-86ad-c08428d91f91",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_151429_18042026180754_iXBRL_WEB.html",
+          "expected_original_sha256": "0f614116f9e584e1a1088d0ea8e58b658d14a4300ea9471081dbcfba412153b5",
+          "local_sha256": "298e1a5b8d0afa05e74c8aee3537fb8804981f010124904028abca229114f446",
+          "local_bytes": 1693971,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/ICICIBANK-151429.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "18-Apr-2026 18:07:54",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "16.3500",
+            "literal_value": "16.3500",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "16.3500",
+              "16.3500"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "2.3300",
+            "literal_value": "2.3300",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "2.400",
+              "2.3300"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "16994609.00",
+              "literal_value": "1,69,94,609.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "43,27,539.00",
+                "1,69,94,609.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "8187086.00",
+              "literal_value": "81,87,086.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "20,29,632.00",
+                "81,87,086.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "5014664.00",
+              "literal_value": "50,14,664.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "13,70,168.00",
+                "50,14,664.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "143223.00",
+              "literal_value": "1,43,223.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "1,43,223.00",
+                "1,43,223.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "2",
+              "literal_value": "2",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "2",
+                "2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "70.21",
+              "literal_value": "70.21",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "19.15",
+                "70.21"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "69.2",
+              "literal_value": "69.2",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "18.9",
+                "69.2"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "16.3500",
+              "literal_value": "16.3500",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "16.3500",
+                "16.3500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "2.3300",
+              "literal_value": "2.3300",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "2.400",
+                "2.3300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.400",
+              "literal_value": "1.400",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.400",
+                "1.400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.3300",
+              "literal_value": "0.3300",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.3300",
+                "0.3300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "16.3500",
+              "16.3500"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "2.400",
+              "2.3300"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "3,33,25,712.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "17,94,62,498.00"
+            ],
+            [
+              "",
+              "Advances",
+              "15,53,89,295.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "23,72,53,100.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "basel_iii_literal_fragments": []
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "IDBI",
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "documents": [
+        {
+          "filing_id": "155018",
+          "retained_manifest_source_id": "2745ed49-632c-46e1-aa2f-0b4f9dbecd64",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155018_30042026194728_iXBRL_WEB.html",
+          "expected_original_sha256": "e89f8169a6a7de41cb1bd7f30cbc40c25c5ea36131112fcc7f0c1fc94be5bc93",
+          "local_sha256": "4079cda399c7f4464bd77500e7d4bc69d6d11c05fedb87233080e4a88670b691",
+          "local_bytes": 147288,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/IDBI-155018.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "30-Apr-2026 19:46:15",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "25.5600",
+            "literal_value": "25.5600",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "25.5600",
+              "25.5600"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "2.2700",
+            "literal_value": "2.2700",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "1.7500",
+              "2.2700"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "2899726.00",
+              "literal_value": "28,99,726.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "7,79,847.00",
+                "28,99,726.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "1548561.00",
+              "literal_value": "15,48,561.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "3,94,705.00",
+                "15,48,561.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "951336.00",
+              "literal_value": "9,51,336.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "1,94,317.00",
+                "9,51,336.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "1075240.00",
+              "literal_value": "10,75,240.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "10,75,240.00",
+                "10,75,240.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "10",
+              "literal_value": "10",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "10",
+                "10"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "8.85",
+              "literal_value": "8.85",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "1.81",
+                "8.85"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "8.85",
+              "literal_value": "8.85",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "1.81",
+                "8.85"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "25.5600",
+              "literal_value": "25.5600",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "25.5600",
+                "25.5600"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "2.2700",
+              "literal_value": "2.2700",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "1.7500",
+                "2.2700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "2.3200",
+              "literal_value": "2.3200",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "2.3200",
+                "2.3200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.1500",
+              "literal_value": "0.1500",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.1500",
+                "0.1500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "25.5600",
+              "25.5600"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "1.7500",
+              "2.2700"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "56,88,518.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "3,47,16,268.00"
+            ],
+            [
+              "",
+              "Advances",
+              "2,53,62,607.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "4,66,55,966.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/IDBI-155018.html",
+            "sha256": "143b3648a0a28a58c8b639065c7c58180c0d0abcb9af506bb792fc364183607d",
+            "bytes": 147279,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "443e76fabadd1951107d767288a8af9205054ddb608386ea408759c3d51389fa",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "documents": [
+        {
+          "filing_id": "152940",
+          "retained_manifest_source_id": "f6d08ae2-c3cd-409b-9bcf-85a71637ddfb",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_152940_25042026185222_iXBRL_WEB.html",
+          "expected_original_sha256": "d59b952a547b004458c818589b7643b60b36da34b1320b56094f35b80761cea9",
+          "local_sha256": "22730215e2acd120516a14e3dfa8e7f5d254b78cd8d0a73c35c711bf652b6874",
+          "local_bytes": 213272,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/IDFCFIRSTB-152940.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "25-Apr-2026 18:52:22",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "13.7300",
+            "literal_value": "13.7300",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "13.7300",
+              "13.7300"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "0.4400",
+            "literal_value": "0.4400",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.3300",
+              "0.4400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "4054882.00",
+              "literal_value": "40,54,882.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "10,55,277.00",
+                "40,54,882.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "1933355.00",
+              "literal_value": "19,33,355.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "4,87,558.00",
+                "19,33,355.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "163636.00",
+              "literal_value": "1,63,636.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "31,894.00",
+                "1,63,636.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "860170.00",
+              "literal_value": "8,60,170.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "8,60,170.00",
+                "8,60,170.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "10",
+              "literal_value": "10",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "10",
+                "10"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "1.93",
+              "literal_value": "1.93",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "0.37",
+                "1.93"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "1.91",
+              "literal_value": "1.91",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "0.37",
+                "1.91"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "13.7300",
+              "literal_value": "13.7300",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "13.7300",
+                "13.7300"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "0.4400",
+              "literal_value": "0.4400",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.3300",
+                "0.4400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.6100",
+              "literal_value": "1.6100",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.6100",
+                "1.6100"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.4800",
+              "literal_value": "0.4800",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.4800",
+                "0.4800"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "13.7300",
+              "13.7300"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.3300",
+              "0.4400"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "38,46,227.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "2,94,47,455.00"
+            ],
+            [
+              "",
+              "Advances",
+              "2,80,39,060.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "3,99,78,009.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/IDFCFIRSTB-152940.html",
+            "sha256": "2f0d4aa1a25d746f573b083c8b92baa08f2c1cc5226cca97ba3234b30fc54d23",
+            "bytes": 213263,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "d66b5f49d0e174bb783d8479525f47f33ae93e3da8c37febf864f7a376829419",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "INDIANB",
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "documents": [
+        {
+          "filing_id": "154404",
+          "retained_manifest_source_id": "ca22559c-b464-4715-96cb-85dcc5f87c7f",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_154404_29042026203012_iXBRL_WEB.html",
+          "expected_original_sha256": "38d7c092ef2f989429c8f4ec835a516680d7081b16969daf82db3f270b4cba43",
+          "local_sha256": "052a44637ba82a50ae458880023194c6ca4ea9b9cb733a20ac36477fa3d15438",
+          "local_bytes": 82936,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/INDIANB-154404.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "29-Apr-2026 20:30:12",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "16.400",
+            "literal_value": "16.400",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "16.400",
+              "16.400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.3100",
+            "literal_value": "1.3100",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "1.2800",
+              "1.3100"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "6745071.00",
+              "literal_value": "67,45,071.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "17,48,039.00",
+                "67,45,071.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "4053579.00",
+              "literal_value": "40,53,579.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "10,37,088.00",
+                "40,53,579.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "1215565.00",
+              "literal_value": "12,15,565.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "3,10,313.00",
+                "12,15,565.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "134696.00",
+              "literal_value": "1,34,696.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "1,34,696.00",
+                "1,34,696.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "10",
+              "literal_value": "10",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "10",
+                "10"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "90.24",
+              "literal_value": "90.24",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "23.04",
+                "90.24"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "90.24",
+              "literal_value": "90.24",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "23.04",
+                "90.24"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "16.400",
+              "literal_value": "16.400",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "16.400",
+                "16.400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.3100",
+              "literal_value": "1.3100",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "1.2800",
+                "1.3100"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.9800",
+              "literal_value": "1.9800",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.9800",
+                "1.9800"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.1500",
+              "literal_value": "0.1500",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.1500",
+                "0.1500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "16.400",
+              "16.400"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "0",
+              "0"
+            ],
+            [
+              "",
+              "Return on assets",
+              "1.2800",
+              "1.3100"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "76,94,429.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "8,27,72,630.00"
+            ],
+            [
+              "",
+              "Advances",
+              "6,54,88,823.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "9,87,95,283.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/INDIANB-154404.html",
+            "sha256": "edaad1fce0ad29bb015bc1b3be55d70af73c8b4a70cd03ffa7eaf18d586620f7",
+            "bytes": 82927,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "258189999fadeea0db3879a655d1cb0fd8b19762abede3d00480d292aa72ea5d",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+      "documents": [
+        {
+          "filing_id": "155303",
+          "retained_manifest_source_id": "0ac63c4a-e937-4e6e-a3d9-416cdfd03917",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_155303_02052026191411_iXBRL_WEB.html",
+          "expected_original_sha256": "7b0aae65b1ac979a9b43fa300096145e32ef2f3aecc1458b0c37affc0d1925af",
+          "local_sha256": "93323bba99542d463a4cd2a731eae847a974dafc2ac26b524ba02d6b41a57b93",
+          "local_bytes": 2018975,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/KOTAKBANK-155303.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "02-May-2026 19:14:10",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "21.3400",
+            "literal_value": "21.3400",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "21.3400",
+              "21.3400"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.9700",
+            "literal_value": "1.9700",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "0.5300",
+              "1.9700"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "5556397.00",
+              "literal_value": "55,56,397.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "14,17,477.00",
+                "55,56,397.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "2555390.00",
+              "literal_value": "25,55,390.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "6,29,930.00",
+                "25,55,390.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "1400770.00",
+              "literal_value": "14,00,770.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "4,02,655.00",
+                "14,00,770.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "99465.00",
+              "literal_value": "99,465.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "99,465.00",
+                "99,465.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "1",
+              "literal_value": "1",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "1",
+                "1"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "14.09",
+              "literal_value": "14.09",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "4.05",
+                "14.09"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "14.09",
+              "literal_value": "14.09",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "4.05",
+                "14.09"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "21.3400",
+              "literal_value": "21.3400",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "21.3400",
+                "21.3400"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.9700",
+              "literal_value": "1.9700",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "0.5300",
+                "1.9700"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.200",
+              "literal_value": "1.200",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.200",
+                "1.200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.2500",
+              "literal_value": "0.2500",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.2500",
+                "0.2500"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "21.3400",
+              "21.3400"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "1.0600",
+              "1.0600"
+            ],
+            [
+              "",
+              "Return on assets",
+              "0.5300",
+              "1.9700"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "1,34,20,394.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "5,72,45,613.00"
+            ],
+            [
+              "",
+              "Advances",
+              "4,96,00,916.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "7,83,00,276.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "exact_url_refetch": {
+            "path": "/workspace/bank-twelve-originals/KOTAKBANK-155303.html",
+            "sha256": "f42c02ace52a1a40ea9cd1a680b0a63cb8d3be8fa42d2b3e234ba535f96e76ac",
+            "bytes": 2018966,
+            "matches_retained_pin": false,
+            "http_calls": 1,
+            "automatic_retries": 0,
+            "explicit_basel_iii_present": false
+          },
+          "local_transform_analysis": {
+            "equals_original_after_universal_newline_normalization": false,
+            "equals_original_after_strip": false,
+            "financial_document_identical_after_removing_only_injected_script": true,
+            "semantic_sha256_without_injected_script": "d8d1663c33b56f5de8ef167d385e7a1c42777adfd20430a8b74d399b768b1f80",
+            "does_not_replace_original_hash": true
+          },
+          "basel_iii_literal_fragments": [],
+          "refetch_qualification": "Exact URL freshly acquired with separate immutable hash; source revision limited to injected delivery script relative to local copy"
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    },
+    {
+      "symbol": "SBIN",
+      "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+      "documents": [
+        {
+          "filing_id": "156316",
+          "retained_manifest_source_id": "506ba799-c6e9-4f94-9ee5-4ec7df9bf778",
+          "original_url": "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_BANKING_156316_08052026164017_iXBRL_WEB.html",
+          "expected_original_sha256": "732da02fafb1ef412b6947cd3ad25b4463705ae76da08a8caad8ba4ac6e29d82",
+          "local_sha256": "0d9d84752cf690e2e8770aa0b9f9876268ed26c4a27c3a8ac4a686efe5b75b59",
+          "local_bytes": 124631,
+          "local_path": "/workspace/kvb-originals/bank-annual-roa/SBIN-156316.html",
+          "original_hash_verified": false,
+          "local_copy_boundary": "Local HTML copy differs from pinned original. Treat as unverified representation; recover already retained immutable original before source-bound admission. Do not alter expected hash to local hash.",
+          "exchange_broadcast_literal": "08-May-2026 16:40:13",
+          "canonical_publication_bound": false,
+          "annual_cet1_candidate": {
+            "code": "CET1_RATIO",
+            "value": "12.2900",
+            "literal_value": "12.2900",
+            "literal_label": "CET 1 ratio",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "CET 1 ratio",
+              "12.2900",
+              "12.2900"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "annual_roa_candidate": {
+            "code": "ROA_REPORTED",
+            "value": "1.1200",
+            "literal_value": "1.1200",
+            "literal_label": "Return on assets",
+            "column": 3,
+            "period_start": "2025-04-01",
+            "period_end": "2026-03-31",
+            "scope": "STANDALONE",
+            "audit_state": "Audited",
+            "currency": "INR",
+            "unit": "PERCENT",
+            "document_scale": null,
+            "literal_row": [
+              "",
+              "Return on assets",
+              "1.0700",
+              "1.1200"
+            ],
+            "state": "EXTRACTED_NOT_ADMITTED"
+          },
+          "other_annual_observations": [
+            {
+              "code": "INTEREST_EARNED",
+              "value": "48279717.00",
+              "literal_value": "4,82,79,717.00",
+              "literal_label": "Total interest earned",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Total interest earned",
+                "1,23,09,767.00",
+                "4,82,79,717.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "INTEREST_EXPENSE",
+              "value": "30967669.00",
+              "literal_value": "3,09,67,669.00",
+              "literal_label": "Interest expenses",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "4",
+                "Interest expenses",
+                "78,71,767.00",
+                "3,09,67,669.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NET_PROFIT",
+              "value": "8003201.00",
+              "literal_value": "80,03,201.00",
+              "literal_label": "Net profit (loss) for the period",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "14",
+                "Net profit (loss) for the period",
+                "19,68,375.00",
+                "80,03,201.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "PAID_UP_EQUITY_CAPITAL",
+              "value": "92306.00",
+              "literal_value": "92,306.00",
+              "literal_label": "Paid-up equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "DOCUMENT_CURRENCY_SCALE",
+              "document_scale": "Lakhs",
+              "literal_row": [
+                "",
+                "Paid-up equity share capital",
+                "92,306.00",
+                "92,306.00"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "FACE_VALUE",
+              "value": "1",
+              "literal_value": "1",
+              "literal_label": "Face value of equity share capital",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Face value of equity share capital",
+                "1",
+                "1"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_BASIC",
+              "value": "87.59",
+              "literal_value": "87.59",
+              "literal_label": "Basic earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Basic earnings per share after extraordinary items",
+                "21.32",
+                "87.59"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "EPS_DILUTED",
+              "value": "87.59",
+              "literal_value": "87.59",
+              "literal_label": "Diluted earnings per share after extraordinary items",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "CURRENCY_PER_SHARE",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Diluted earnings per share after extraordinary items",
+                "21.32",
+                "87.59"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "CET1_RATIO",
+              "value": "12.2900",
+              "literal_value": "12.2900",
+              "literal_label": "CET 1 ratio",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "CET 1 ratio",
+                "12.2900",
+                "12.2900"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "ROA_REPORTED",
+              "value": "1.1200",
+              "literal_value": "1.1200",
+              "literal_label": "Return on assets",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "Return on assets",
+                "1.0700",
+                "1.1200"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "GNPA_RATIO",
+              "value": "1.4900",
+              "literal_value": "1.4900",
+              "literal_label": "% of gross NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of gross NPAs",
+                "1.4900",
+                "1.4900"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            },
+            {
+              "code": "NNPA_RATIO",
+              "value": "0.3900",
+              "literal_value": "0.3900",
+              "literal_label": "% of net NPAs",
+              "column": 3,
+              "period_start": "2025-04-01",
+              "period_end": "2026-03-31",
+              "scope": "STANDALONE",
+              "audit_state": "Audited",
+              "currency": "INR",
+              "unit": "PERCENT",
+              "document_scale": null,
+              "literal_row": [
+                "",
+                "% of net NPAs",
+                "0.3900",
+                "0.3900"
+              ],
+              "state": "EXTRACTED_NOT_ADMITTED"
+            }
+          ],
+          "supplemental_literal_rows": [
+            [
+              "(ii)",
+              "Capital adequacy ratio"
+            ],
+            [
+              "",
+              "CET 1 ratio",
+              "12.2900",
+              "12.2900"
+            ],
+            [
+              "",
+              "Additional Tier 1 ratio",
+              "1.0400",
+              "1.0400"
+            ],
+            [
+              "",
+              "Return on assets",
+              "1.0700",
+              "1.1200"
+            ],
+            [
+              "",
+              "Reserves and surplus",
+              "5,43,51,922.00"
+            ],
+            [
+              "",
+              "Deposits",
+              "59,75,64,212.00"
+            ],
+            [
+              "",
+              "Advances",
+              "48,77,89,483.00"
+            ],
+            [
+              "",
+              "Total Assets",
+              "76,23,01,201.00"
+            ]
+          ],
+          "explicit_basel_iii_text_in_local_copy": false,
+          "qualification": "RETAINED_LITERAL_CANDIDATE_NOT_ADMITTED",
+          "canonical_admitted": false,
+          "basel_iii_literal_fragments": []
+        }
+      ],
+      "remaining_source_requirements": [
+        "Recover existing hash-pinned original bytes and verify hash/length",
+        "Verify period and standalone scope against original",
+        "Bind independent exchange availability record",
+        "CET1: independently prove applicable Basel III framework; CET1 label alone is insufficient",
+        "ROA: independent RBI period/applicability and average-assets denominator binding",
+        "Source registration and authorized factual review followed by canonical readback"
+      ],
+      "specific_exception": null
+    }
+  ],
+  "shared_boundaries": {
+    "CAPITAL_ADEQUACY_RATIO": "No total CAR numeric fact qualified. Capital adequacy heading and Additional Tier 1 ratio must not be relabelled total CAR.",
+    "NIM_TTM": "Annual interest earned/expense cells do not prove direct TTM NIM or exact average earning assets.",
+    "ROE_ANNUAL": "No direct eligible annual ROE established; do not divide profit by current equity as average-equity ROE.",
+    "ADVANCES_GROWTH": "Balance-sheet Advances does not independently prove gross advances. Need comparable current/prior period scope and approved growth contract.",
+    "DEPOSITS_GROWTH": "One balance sheet deposit amount does not prove growth; need matching prior period and exact contract scope.",
+    "EPS_GROWTH": "Annual/quarter EPS exists but prior-period comparison and share basis remain unqualified.",
+    "VALUATION": "Current annual EPS does not qualify historical PIT EPS ledger."
+  },
+  "summary": {
+    "banks": 12,
+    "local_documents_inspected": 13,
+    "local_original_hash_matches": 0,
+    "annual_cet1_literal_candidates": 12,
+    "annual_roa_literal_candidates": 12,
+    "total_car_candidates_qualified": 0,
+    "targeted_refetches": 9,
+    "targeted_refetches_preserve_financial_document": 9
+  },
+  "next_action": "Recover already retained original artifact bytes; prioritize CET1 for AXISBANK/BANKBARODA/FEDERALBNK/HDFCBANK/IDBI/IDFCFIRSTB/INDIANB/KOTAKBANK, with explicit regulatory binding and latest-period freshness. No generic reacquisition needed.",
+  "bounded_original_reverification": {
+    "target_banks": [
+      "AXISBANK",
+      "BANKBARODA",
+      "FEDERALBNK",
+      "HDFCBANK",
+      "IDBI",
+      "IDFCFIRSTB",
+      "INDIANB",
+      "KOTAKBANK"
+    ],
+    "attempted_sources": 9,
+    "no_retries": true
+  }
+}
