@@ -39,7 +39,7 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    const sources=pinnedProof.approvedSources
    expect(sources.length).toBeGreaterThanOrEqual(100)
    expect(sources.some(x=>x.scope==="CONSOLIDATED")).toBe(true)
-   expect(new Set(sources.map(x=>x.securityId+"|"+x.periodEnd)).size).toBe(sources.length)
+   expect(new Set(sources.map(x=>x.securityId+"|"+x.periodEnd+"|"+x.scope)).size).toBe(sources.length)
    for(const evidence of sources){
      expect(["STANDALONE","CONSOLIDATED"]).toContain(evidence.scope)
      expect(evidence.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
@@ -59,6 +59,25 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(graded.status).toBe("STRONG")
    expect(graded.basis).toBe("COMPANY_TREND")
    expect(graded.explanation).toContain("canonical Results filing selections are untouched")
+ })
+ it("allows two independently verified scopes per issuer quarter without mixing them",()=>{
+   const alternate=quarters.map((q,i)=>{
+     const matching=fixture("CONSOLIDATED",q,i)
+     return {symbol:"MOCK",securityId:sid,periodEnd:q,scope:"CONSOLIDATED",
+       sourceRecordId:"canonical-original-"+q,
+       observations:Object.fromEntries(matching.map(row=>[row.code,row.id])),
+       approval:"R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"} satisfies VerifiedR5Source
+   })
+   const combined=[...proof,...alternate]
+   const consolidated=buildVerifiedR5ComparisonRows(rows,combined,"CONSOLIDATED")
+   const standalone=buildVerifiedR5ComparisonRows(rows,combined,"STANDALONE")
+   expect(consolidated.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(12)
+   expect(standalone.filter(r=>r.selected&&r.scope==="STANDALONE")).toHaveLength(12)
+   const a=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,consolidated)
+   const b=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,standalone)
+   expect(a.status).toBe("STRONG")
+   expect(b.status).toBe("STRONG")
+   expect(rows.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(6)
  })
  it("fails closed when any verified original hash-bound ID or scope is different",()=>{
    const altered=proof.map(x=>x.periodEnd==="2024-12-31"?
