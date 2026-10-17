@@ -69,3 +69,4 @@ jobs:
 # Validate alternate table layouts and immutable original replay on this Development head.
 
 # Verify private same-statement scope proofs and stable accepted source identities.
+# Recheck clean source-file EOFs after all replay regressions passed.

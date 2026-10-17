@@ -143,4 +143,3 @@ def extract_tables(tables,symbol,isin,period,bank=False,insurer=False):
 
 def extract(html,symbol,isin,period,bank=False,insurer=False):
     return extract_tables(tables_from_html(html),symbol,isin,period,bank,insurer)
-

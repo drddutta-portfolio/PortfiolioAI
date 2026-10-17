@@ -65,4 +65,3 @@ class HTMLShapeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'SPAN_BOUND'):tables_from_html('<table><tr><td colspan="'+span+'">1</td></tr></table>')
 
 if __name__=="__main__":unittest.main()
-
