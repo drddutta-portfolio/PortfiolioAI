@@ -35,7 +35,7 @@ def main():
                         pages.setdefault(int(m[1]),{})[m[2]]=proof['rejection']
                     # Revisit the current batch caches as well as the legacy
                     # per-period cache; a negative result remains diagnosable.
-                    for version in ('v3','v4'):
+                    for version in ('v3','v4','v5'):
                         batchprefix=batch.PREFIX+'ocr-dated-page-batch-'+version+'/original_version='+digest+'/'
                         listed=client.list_objects_v2(Bucket=batch.BUCKET,Prefix=batchprefix,MaxKeys=200)
                         for obj in listed.get('Contents',[]):

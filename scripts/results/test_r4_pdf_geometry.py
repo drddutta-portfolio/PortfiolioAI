@@ -191,6 +191,33 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(iso_date("September 30,2024"),"2024-09-30")
         self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
+class EarningSectionsTest(unittest.TestCase):
+    def test_only_explicit_combined_eps_section_can_supply_total_eps(self):
+        doc,page=fixture(first='30.09.2025',third='30.09.2024')
+        page.add_redact_annot(fitz.Rect(20,205,950,230),fill=(1,1,1));page.apply_redactions()
+        for y,heading,value in [(240,'Earnings per equity share - continuing operations','7.69'),(300,'Earnings per equity share - discontinued operations','-'),(360,'Earnings per equity share - continuing and discontinued operations','7.73')]:
+            page.insert_text((25,y),heading,fontsize=10)
+            page.insert_text((25,y+20),'Diluted',fontsize=10)
+            for x in (475,625,775):page.insert_text((x,y+20),value,fontsize=10)
+        out=extract_page(page,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'7.73')
+    def test_compact_subsections_do_not_combine_two_component_headings(self):
+        doc,page=fixture(first='30.09.2025',third='30.09.2024')
+        page.add_redact_annot(fitz.Rect(20,205,950,230),fill=(1,1,1));page.apply_redactions()
+        page.insert_text((25,240),'Earnings per equity share',fontsize=7)
+        for y,heading,value in [(250,'a) from continuing operations','7.69'),(280,'b) from discontinued operations','-'),(310,'c) from continuing and discontinued operations','7.73')]:
+            page.insert_text((25,y),heading,fontsize=7)
+            page.insert_text((25,y+8),'Basic',fontsize=7)
+            page.insert_text((25,y+16),'Diluted',fontsize=7)
+            for x in (475,625,775):page.insert_text((x,y+16),value,fontsize=7)
+        out=extract_page(page,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'7.73')
+
+    def test_component_eps_alone_does_not_qualify_the_trio(self):
+        doc,page=fixture(first='30.09.2025',third='30.09.2024')
+        page.insert_text((25,205),'Earnings per equity share - continuing operations',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'NO_PROVEN'):extract_page(page,1,'2024-09-30',allow_comparative=True)
+
 class NumericFootnoteTest(unittest.TestCase):
     def test_separate_footnote_markers_do_not_change_the_number(self):
         from r4_pdf_geometry import number

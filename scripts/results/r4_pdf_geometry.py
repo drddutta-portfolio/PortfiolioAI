@@ -219,10 +219,23 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
-        found={}
-        for yy,ws in rows[header_index+1:]:
+        found={};eps_context="";eps_group_started=False
+        table_rows=rows[header_index+1:]
+        for row_index,(yy,ws) in enumerate(table_rows):
             label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)]))
             if not label:continue
+            if allow_comparative:
+                if re.search(r"\bearnings?\s+per\s+(?:equity\s+)?share\b",label,re.I):
+                    eps_context=label;eps_group_started=False
+                    # A wrapped qualifier belongs to this heading only until
+                    # the first Basic/Diluted row, never to a later subsection.
+                    for _,following in table_rows[row_index+1:row_index+4]:
+                        following_label=clean_label(row_text([w for w in following if (w[0]+w[2])/2<first_left]))
+                        if re.match(r"^(?:basic|diluted)\b",following_label,re.I) or re.search(r"earnings?\s+per",following_label,re.I):break
+                        eps_context+=" "+following_label
+                elif eps_context and eps_group_started and re.match(r"^(?:[a-c]\s*[.)]\s*)?(?:from\s+|for\s+)?(?:continuing|discontinued)\b",label,re.I):
+                    eps_context=label;eps_group_started=False
+                if re.match(r"^(?:basic|diluted)\b",label,re.I):eps_group_started=True
             metric=None
             if re.match(r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b",label,re.I):metric="OPERATING_REVENUE_QUARTER"
             elif re.match(r"^interest\s+earned\b",label,re.I):metric="INTEREST_EARNED"
@@ -238,9 +251,11 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
-            if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","TAX_EARLIER_YEARS","EPS_DILUTED") and re.search(r"continuing|discontinued",label,re.I):continue
+            context=label+(" "+eps_context if metric=="EPS_DILUTED" else "")
+            component=bool(re.search(r"\bcontinuing\b",context,re.I)) != bool(re.search(r"\bdiscontinued\b",context,re.I))
+            if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","TAX_EARLIER_YEARS","EPS_DILUTED") and component:continue
             if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling|before\s+tax",label,re.I):continue
-            if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",label,re.I):continue
+            if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",context,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
             value,original=number(cell)

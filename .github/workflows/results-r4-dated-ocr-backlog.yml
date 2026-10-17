@@ -80,3 +80,5 @@ jobs:
 # Reprocess every slot with layout-only border removal and explicit bank PBT labels; immutable page proof revision v3.
 
 # Reuse private full-document scans; refresh page proofs for explicit native currency labels.
+
+# Parser-versioned negative proofs retry repaired layouts across the whole live backlog.

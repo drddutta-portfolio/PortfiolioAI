@@ -22,6 +22,9 @@ def main():
     if os.environ.get('RESULTS_R4_DATED_PDF_ACK')!='EXPLICIT_QUARTER_ORIGINAL_REPLAY':raise RuntimeError('WRITES_NOT_AUTHORIZED')
     url=os.environ['SUPABASE_DB_URL']
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
+    # Negative page proofs are valid only for the parser that produced them.
+    # A code repair must retry them, while unchanged runs reuse their evidence.
+    engine=batch.sha(b"\0".join(Path(__file__).with_name(name).read_bytes() for name in ('r4_pdf_geometry.py','r4_ocr_geometry.py','r4_ocr_dated_geometry.py')))
     client=batch.r2_client();counts=Counter()
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
@@ -53,7 +56,7 @@ def main():
                         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
                         for page_no,page_text in enumerate(audit['pages'],1):
                             if not re.search(r'diluted',page_text,re.I) or not re.search(r'revenue|interest earned|premium',page_text,re.I):continue
-                            key=batch.PREFIX+'ocr-dated-page-batch-v4/original_version='+digest+'/page='+str(page_no)+'/proof.json'
+                            key=batch.PREFIX+'ocr-dated-page-batch-v5/original_version='+digest+'/engine_version='+engine+'/page='+str(page_no)+'/proof.json'
                             proof=cached(client,key,lambda:run_with_timeout(extract_dated_periods,(raw,page_no,tuple(batch.WINDOWS),symbol in batch.BANKS,symbol in batch.INSURERS),240))
                             if 'result' not in proof:raise ValueError(proof['rejection'])
                             for period in periods:
