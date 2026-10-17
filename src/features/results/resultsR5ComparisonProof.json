@@ -68,6 +68,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "524eb2a2-0407-4f44-97bc-64af88f38c63",
+        "NET_PROFIT_QUARTER": "7c1fadfb-e82d-4301-bc9f-25a899e2f5c3",
+        "OPERATING_REVENUE_QUARTER": "23cfa6f9-61a6-4480-b9b8-97e66f482fdf"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "0451a0ce-963e-4d08-acb1-e46c113fc102",
+      "sourceRecordId": "519842b5-24e7-4c02-93c9-a98daabdcf19",
+      "symbol": "LGEINDIA"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "c7b65705-828c-4c1d-a7ea-44e797ac8829",
         "NET_INTEREST_INCOME_QUARTER": "7fd76fbc-f9cd-4618-b44c-e6888224bbbe",
         "NET_PROFIT_QUARTER": "d2833a2c-372f-43a8-8840-3bab992fc589"
@@ -237,6 +250,123 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "5acb994f-2e4c-4daa-aa62-24728586df62",
+        "NET_PROFIT_QUARTER": "eaada2d2-34bf-4086-8f7e-2c7d8fa9ccfd",
+        "OPERATING_REVENUE_QUARTER": "4bbe0926-13de-4d40-8e2a-f2222a117b64"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "ab57b221-71df-4217-a73c-0e8c005705dc",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "b0d9aa3a-e000-4f7b-9710-76d7edc3abf0",
+        "NET_PROFIT_QUARTER": "3868baa3-f3f8-42d6-894f-7da692875303",
+        "OPERATING_REVENUE_QUARTER": "86f2e40c-b7ff-49bd-8e1e-ecada0136f5f"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "c2f80fb1-3a34-4e77-9900-615bf304f7e1",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "99722776-7cb3-4fc3-a019-3446818d662c",
+        "NET_PROFIT_QUARTER": "01f8c1cb-31ce-4d37-b0c1-9533aa8a7822",
+        "OPERATING_REVENUE_QUARTER": "26ec49e4-3370-4db4-a415-267066aa0c08"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "511a933e-7196-46d9-a5a3-806f8afae959",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "b25b4422-0695-42ea-8bf3-d2f3860741b2",
+        "NET_PROFIT_QUARTER": "bd13581b-b0e1-4ac1-8d5b-f947476a7e7f",
+        "OPERATING_REVENUE_QUARTER": "54b55355-f2cb-4f18-bc61-39ec0f6fe73c"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "08c9a5b2-c67e-43d8-aa9a-b2321e7e9005",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "1570fba3-5156-4d3b-851b-85c4949c256a",
+        "NET_PROFIT_QUARTER": "f8fb307e-d1f5-4bdd-92dd-2d59f393e92c",
+        "OPERATING_REVENUE_QUARTER": "ce314a7d-e745-4ebb-a4f0-d6a930d62f95"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "937fb7e0-854f-4dd7-990b-0817dacea955",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "81943967-9bf7-491c-aebe-7ab49035393c",
+        "NET_PROFIT_QUARTER": "d05f27a8-361b-4205-abbe-48e822c03ac0",
+        "OPERATING_REVENUE_QUARTER": "1dec1aac-0f1d-49d4-a890-a11d62abed88"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "5f197234-e0eb-4e6f-b8f9-d7c1315d84b0",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "c2552845-1029-4dfc-a34b-0905cf2774ed",
+        "NET_PROFIT_QUARTER": "09373e79-a880-4a5e-b6ce-237bbaa2a883",
+        "OPERATING_REVENUE_QUARTER": "11926825-22cc-47ab-8fff-5522943c0ff3"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "340a0e7a-f8ee-4258-ad75-7ca1017272a9",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "0fd860dd-81de-4074-a1f2-3299094a6135",
+        "NET_PROFIT_QUARTER": "7c6471f3-2394-468a-bac8-eb845187b557",
+        "OPERATING_REVENUE_QUARTER": "b8723cf9-b2ab-4fe8-a5e8-c241797708ee"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "28c1c81b-f581-4a52-b303-34ad4030275c",
+      "sourceRecordId": "9b2751cb-2e8e-4816-92df-f3f821f2237d",
+      "symbol": "MANKIND"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "f3852066-bb8b-4860-a785-0af681733cf8",
+        "NET_PROFIT_QUARTER": "e4545eac-8f5c-4d83-8a44-30e1a03c7b56",
+        "OPERATING_REVENUE_QUARTER": "16495249-cdf2-43b6-9027-d66615528266"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "2bbdbd06-792b-472d-99f5-15ad7ed91b04",
+      "sourceRecordId": "ba58e95c-be7f-420d-856e-497d58a1fbe7",
+      "symbol": "NATIONALUM"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "f64c796e-ba44-4c19-82ec-c7edae233f32",
         "NET_PROFIT_QUARTER": "88fc774f-3352-43e7-acbc-f9a439dc258d",
         "OPERATING_REVENUE_QUARTER": "d72f86b4-c7a4-43ea-9788-63934da6af57"
@@ -263,6 +393,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "3520984e-f915-43a1-accb-b6b86165e4e6",
+        "NET_PROFIT_QUARTER": "9a77f7d5-e1c2-4345-8434-d66def88f66e",
+        "OPERATING_REVENUE_QUARTER": "a6032002-680e-4f1b-9f8c-e16d085d2823"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "2bbdbd06-792b-472d-99f5-15ad7ed91b04",
+      "sourceRecordId": "a95e463b-1130-4099-b164-0b0b3211884b",
+      "symbol": "NATIONALUM"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "a94a5e29-c567-433e-aa88-04eaad238bd0",
         "NET_PROFIT_QUARTER": "b49dd0c3-b6f0-472d-87d1-2484cbd792c6",
         "OPERATING_REVENUE_QUARTER": "c670aa2a-4be3-4519-b1b8-d1cfee9b7537"
@@ -271,6 +414,19 @@
       "scope": "CONSOLIDATED",
       "securityId": "2bbdbd06-792b-472d-99f5-15ad7ed91b04",
       "sourceRecordId": "92701c2e-052d-4f27-94e2-b4a7ab56da3c",
+      "symbol": "NATIONALUM"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "d5c81c06-f27b-4ad9-b97b-0663dc7ad4b4",
+        "NET_PROFIT_QUARTER": "6539a9b7-3541-47a8-b332-2b6c5e51163b",
+        "OPERATING_REVENUE_QUARTER": "3a937b81-5162-4d6a-bf98-5743d714bc3e"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "2bbdbd06-792b-472d-99f5-15ad7ed91b04",
+      "sourceRecordId": "5e9df38b-0903-451c-8450-c3c8d57d3ba1",
       "symbol": "NATIONALUM"
     },
     {
@@ -354,6 +510,110 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "37951369-5387-46a7-97cc-afc276ac20ea",
+        "NET_PROFIT_QUARTER": "a3fd30de-76e3-4d57-92d0-5c54b5f81843",
+        "OPERATING_REVENUE_QUARTER": "87023488-0672-4792-90f0-16062fcf6bc8"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "68125d04-cc9b-4a76-87a6-4eafb68aabf1",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "dd17c0fc-0cbe-491d-a8e7-3a7697577830",
+        "NET_PROFIT_QUARTER": "a4f38353-849a-476e-9e5f-b8fc7757883a",
+        "OPERATING_REVENUE_QUARTER": "4921891a-4925-4731-ae50-02ec4a7118a5"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "c0b12ef9-57cb-4c49-b7f6-f8a4a70ccc72",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "1ccbf582-68ef-49a9-81fb-dcc599327707",
+        "NET_PROFIT_QUARTER": "d64e1619-921e-4424-93b3-240c245d690e",
+        "OPERATING_REVENUE_QUARTER": "313b8f52-3737-4cb1-8f8a-4dedf7ee2602"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "60d5b49a-af56-4159-bec3-8b937caebaf6",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "da1856d5-d5d0-4801-aa14-9c99af158112",
+        "NET_PROFIT_QUARTER": "fd9b3b76-2f7d-45ee-b496-8b7e14c5c2e1",
+        "OPERATING_REVENUE_QUARTER": "7b0dfe3b-1ace-4b5a-9efd-35231893ceaa"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "e5e88c02-c1c5-46ed-af89-97be30898284",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "e6dbc546-513e-42d5-81f3-4c94936190a1",
+        "NET_PROFIT_QUARTER": "232430fa-4b9a-4915-a4ca-42deb56d2335",
+        "OPERATING_REVENUE_QUARTER": "e06f9ee2-f5b9-49ae-88ae-166ac3d6f267"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "fb3a6e64-8481-47d8-a2ae-79a3533403d3",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "f303756d-4f8d-44fa-87ad-5d7fd6dbf393",
+        "NET_PROFIT_QUARTER": "7ad72173-a938-4307-9011-2675d11989c9",
+        "OPERATING_REVENUE_QUARTER": "cb5b2508-2611-443a-888c-368ea9c7fb86"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "8fd2b2b0-ffb1-4575-8575-aee3e4624e9e",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "fe3da599-b0f4-4523-b571-26ef9c2ab078",
+        "NET_PROFIT_QUARTER": "4df4ae12-8949-4f94-98a7-cd2105ca25ee",
+        "OPERATING_REVENUE_QUARTER": "2749aea6-a33a-486c-8d94-bda97db2a8a5"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "346120e0-651f-4f77-94be-8a1e56e93250",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "2521dd09-e15e-419f-b4e2-e7c039af0350",
+        "NET_PROFIT_QUARTER": "1bc64fba-237d-4f21-aa66-3f348e0c6ecc",
+        "OPERATING_REVENUE_QUARTER": "c066d4f3-c8af-4063-bc7e-0ebfd91a171a"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "sourceRecordId": "c9ea7215-ca39-4c62-a606-12744d93e27e",
+      "symbol": "CGPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "a8a215ce-7b2e-493c-9beb-362ef04e852f",
         "NET_PROFIT_QUARTER": "74be56bd-6439-4af1-a244-c82f9b11f353",
         "OPERATING_REVENUE_QUARTER": "5b648afb-de56-4a9a-a71f-7ad024721254"
@@ -415,6 +675,71 @@
       "securityId": "5aa0fc8f-da21-4468-aac8-c0b5bec17669",
       "sourceRecordId": "d1f166d1-0c80-41f8-a018-f0ca7fbdcca5",
       "symbol": "BBOX"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "3237a9c5-962d-4ae3-bac4-617f19ac3710",
+        "NET_INTEREST_INCOME_QUARTER": "9366f61b-d8ea-4e4b-822d-eca5d63179ea",
+        "NET_PROFIT_QUARTER": "518c9686-3e38-47f4-90e9-8b4fca2f0fcb"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "b74b067b-edb9-4d40-b353-dbd80b1bd5cb",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "d3f3acf0-bd32-4917-80d4-7142cb97ecd2",
+        "NET_INTEREST_INCOME_QUARTER": "a2376d96-f9b5-4361-87ee-d492ee53dbb8",
+        "NET_PROFIT_QUARTER": "607eee2e-2b01-4ffc-a5d0-d2629752bef4"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "9cc0cac3-4093-4020-a40c-f3d9d7ae7076",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "c376a123-d9ff-420d-89a8-5c90a8993336",
+        "NET_INTEREST_INCOME_QUARTER": "d25bc0dc-fb2b-4dcf-8220-8c87587acf0b",
+        "NET_PROFIT_QUARTER": "7d880d9f-9f51-4faf-a92c-e87c6b534907"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "61f55254-5ebf-4b05-8b06-e1069edcc3a2",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "d4cfd1d6-5860-47ff-8ea0-6ff80e9f1076",
+        "NET_INTEREST_INCOME_QUARTER": "25304bad-90a8-4f21-ad00-3254eb1a18ea",
+        "NET_PROFIT_QUARTER": "0158026a-67b7-4b88-bc23-47631d98dadb"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "cfcb3ad9-e875-402d-80b2-1bf5a6c001e7",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "2c24da10-36ab-4db0-9c41-4e8ce10c7fbd",
+        "NET_INTEREST_INCOME_QUARTER": "bf8e96c7-5514-4f28-9d8b-aa7ee08d3ad6",
+        "NET_PROFIT_QUARTER": "4cb42ad8-5439-49a0-8e59-b3ad99990435"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "fba1fe13-eaa1-444f-acf0-0ad2cd68ddcd",
+      "symbol": "FEDERALBNK"
     },
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
@@ -614,6 +939,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "0f51ca65-3dd5-4d9a-b1ec-cbd70bc1c139",
+        "NET_PROFIT_QUARTER": "07b66e9b-8a39-4594-b822-2989a81d3da5",
+        "OPERATING_REVENUE_QUARTER": "7eddd12d-140a-48f0-926c-9cd7a0e9047b"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "sourceRecordId": "96a59040-5229-4fb3-b21e-b263f9f53f76",
+      "symbol": "ICEMAKE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "39dc90e6-2846-437e-9078-3efcb331d3ae",
         "NET_PROFIT_QUARTER": "edc476ba-cbd8-4b8b-8965-ac604bc4f215",
         "OPERATING_REVENUE_QUARTER": "84ca7650-b1c5-446b-a78c-983886194710"
@@ -627,6 +965,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "520bb1bb-69ec-44b9-8947-caf57a4481f8",
+        "NET_PROFIT_QUARTER": "77f0915f-cde4-48bc-afc6-0dc633e1a04a",
+        "OPERATING_REVENUE_QUARTER": "e07a58e0-ad04-4354-927d-92f81ac3824e"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "sourceRecordId": "c3efcfba-275c-4d5c-adcb-cfe577812a6c",
+      "symbol": "ICEMAKE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "bffeb602-d8a4-4efa-b97d-83ea248b1117",
         "NET_PROFIT_QUARTER": "4db44c02-76da-41c5-a744-5e4f0515c954",
         "OPERATING_REVENUE_QUARTER": "6921d141-94a0-406f-a49a-1d241fcc02bb"
@@ -635,6 +986,19 @@
       "scope": "STANDALONE",
       "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
       "sourceRecordId": "269b8876-886c-4fe4-ba6d-423a024e550e",
+      "symbol": "ICEMAKE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "dcf7b4c3-2c72-466b-ac55-d61ded5eaac1",
+        "NET_PROFIT_QUARTER": "053f4fdd-8ff8-48ed-9dbf-4fc57e8f1368",
+        "OPERATING_REVENUE_QUARTER": "80f05ddf-2fbb-4afd-9bfc-8928ee34755b"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "sourceRecordId": "c0b13714-46f5-4e8c-a086-af25cf927a1f",
       "symbol": "ICEMAKE"
     },
     {
@@ -661,6 +1025,19 @@
       "scope": "STANDALONE",
       "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
       "sourceRecordId": "8ed7d7f4-4795-4f53-a6c3-aa8dcc81c25a",
+      "symbol": "ICEMAKE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "6c436ccb-a480-42f2-bd1e-3d9f82b694a2",
+        "NET_PROFIT_QUARTER": "d09f73c5-ce19-4e82-92ce-ad2c24b9955c",
+        "OPERATING_REVENUE_QUARTER": "5d0e47d6-1c24-4539-b55a-2886a88519cd"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "sourceRecordId": "cfa577d2-d668-4617-a540-a70fe8ab1c41",
       "symbol": "ICEMAKE"
     },
     {
@@ -731,6 +1108,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "71d032ad-346a-4967-85ac-7b7bf71ba552",
+        "NET_PROFIT_QUARTER": "4b5e8269-5a88-42dd-8649-81d340564ffd",
+        "OPERATING_REVENUE_QUARTER": "9f22b970-0834-4c0d-b3dc-f21d4d86cd8b"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "9d28c14f-9035-4028-a8d7-128886031b00",
+      "sourceRecordId": "a7346417-ec4c-40b2-af72-b8088d1667fb",
+      "symbol": "MOTHERSON"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "6a87b815-e6b1-420d-bdd8-f890fbd762c6",
         "NET_PROFIT_QUARTER": "7db49ef3-6292-4ed5-bc38-9f2b35fab2c6",
         "OPERATING_REVENUE_QUARTER": "ae0840b8-42c3-47bd-b261-495784328a2f"
@@ -744,6 +1134,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "fee520e3-9dbb-4616-847a-989d9acbbe76",
+        "NET_PROFIT_QUARTER": "9f107420-2f81-4884-a470-7f38e0664ae1",
+        "OPERATING_REVENUE_QUARTER": "21d476f8-f4c1-4a77-a8d7-2fb04c30fdac"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "9d28c14f-9035-4028-a8d7-128886031b00",
+      "sourceRecordId": "e32115c4-c7c3-4b55-af46-7351ae0919ca",
+      "symbol": "MOTHERSON"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "a43f25e5-b18a-4c13-aef5-992bec3c1e87",
         "NET_PROFIT_QUARTER": "8c058cd6-c865-41fe-ba2a-f546941f465a",
         "OPERATING_REVENUE_QUARTER": "8f899a5b-d029-4f82-82f6-9b89b2bc6914"
@@ -752,6 +1155,19 @@
       "scope": "STANDALONE",
       "securityId": "9d28c14f-9035-4028-a8d7-128886031b00",
       "sourceRecordId": "9896021c-1096-438f-aab8-bd8554776509",
+      "symbol": "MOTHERSON"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "44ed5c09-4cec-4b15-bc40-2a317ef343be",
+        "NET_PROFIT_QUARTER": "0e92e677-92d4-4cf5-939b-5f88616aa97c",
+        "OPERATING_REVENUE_QUARTER": "9528ce54-0747-4b8b-885e-06b4b794213d"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "9d28c14f-9035-4028-a8d7-128886031b00",
+      "sourceRecordId": "934993bb-fbdb-4de4-8b71-8dcfe68c955b",
       "symbol": "MOTHERSON"
     },
     {
@@ -848,6 +1264,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "9c3e71ff-92ec-4729-9e88-44ff333df01b",
+        "NET_PROFIT_QUARTER": "68fe93f5-a77a-4383-adbf-b7c4d17a30cf",
+        "OPERATING_REVENUE_QUARTER": "b78fdcc8-fbfe-4cca-915b-137ac7928d24"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
+      "sourceRecordId": "fc77ff73-02da-459c-b72e-de791bbf1813",
+      "symbol": "SHARDACROP"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "854b743f-45cb-43a2-aad5-39825885602f",
         "NET_PROFIT_QUARTER": "a391d6ea-3638-4fa3-80ab-68922cf409cd",
         "OPERATING_REVENUE_QUARTER": "4c9e5457-408b-4086-b1f1-2dee7558ba5e"
@@ -861,6 +1290,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "88e4403c-def2-4252-873b-d80d7f87716e",
+        "NET_PROFIT_QUARTER": "431e3455-8447-4e1f-b9d5-dde7ed095b65",
+        "OPERATING_REVENUE_QUARTER": "91d4cd13-b349-4a7e-87e2-e4299432e0e7"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
+      "sourceRecordId": "75a39b58-e4b9-4089-b6b4-0d5c19860c68",
+      "symbol": "SHARDACROP"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "7db0454d-3b78-4dea-99a3-84cc38c088ea",
         "NET_PROFIT_QUARTER": "e83df7ec-afb0-4624-9e1c-53ff66196ced",
         "OPERATING_REVENUE_QUARTER": "677834e8-4aff-4119-b31c-dc6051cc6605"
@@ -869,6 +1311,32 @@
       "scope": "STANDALONE",
       "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
       "sourceRecordId": "a78f08f5-f523-429b-994b-6124ad5ca3c1",
+      "symbol": "SHARDACROP"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "e41665da-1d72-43f9-890a-a05ba5ae4a41",
+        "NET_PROFIT_QUARTER": "0211bacc-4d7f-4aa6-b108-14c4172f5579",
+        "OPERATING_REVENUE_QUARTER": "ddb78a99-9dec-4b6e-96e4-bc4484030dbc"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
+      "sourceRecordId": "f3bf559b-6fad-4d3d-bd4c-3a8af2fc87d6",
+      "symbol": "SHARDACROP"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "546d7ab8-604d-4c91-9937-8a943c86f9a5",
+        "NET_PROFIT_QUARTER": "d5cc2502-eefd-4805-b803-8077f5fd7041",
+        "OPERATING_REVENUE_QUARTER": "a9029987-d387-4370-a628-b9d256303c88"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
+      "sourceRecordId": "9b4211d2-fc05-4920-9192-eb8ae75109dc",
       "symbol": "SHARDACROP"
     },
     {
@@ -1095,6 +1563,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "3daf349a-b7fd-4bbd-8cf3-ef7e6fd5acb3",
+        "NET_PROFIT_QUARTER": "6a48105a-3b85-4d12-8ebf-328024b3f538",
+        "OPERATING_REVENUE_QUARTER": "2246722c-dc9e-4e0a-ada1-4d1375e9e467"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
+      "sourceRecordId": "28dc5d41-1522-44ec-8ca8-c74027e59214",
+      "symbol": "CHOLAFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "71e04e9e-7dc3-4f83-9af7-683d3b8ee0b9",
         "NET_PROFIT_QUARTER": "bc4d233a-8218-4a07-b31f-6c322cff7018",
         "OPERATING_REVENUE_QUARTER": "2efe3460-e6dd-44f1-96b4-7af81097cd5d"
@@ -1103,6 +1584,32 @@
       "scope": "STANDALONE",
       "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
       "sourceRecordId": "b223316f-fcf3-4980-be19-aa3c69710d05",
+      "symbol": "CHOLAFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "6acea369-eae2-4c8a-a869-e12432655649",
+        "NET_PROFIT_QUARTER": "93d65e3c-e5d4-4cd6-b3e2-65256e3d0c7e",
+        "OPERATING_REVENUE_QUARTER": "bd8f4ac6-adbd-40f5-8afe-bacfe7857ae1"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
+      "sourceRecordId": "51277c1b-78ff-49eb-95f0-243e65de405a",
+      "symbol": "CHOLAFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "1de2a667-934c-4089-9b95-19ee46e516a4",
+        "NET_PROFIT_QUARTER": "05990760-f3a1-45bf-98fb-4abf77921325",
+        "OPERATING_REVENUE_QUARTER": "3b5ba4fa-2f79-49e4-bae3-be8f4a27a035"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
+      "sourceRecordId": "185f2a7f-a625-4a6c-b7e0-b2646094f9c2",
       "symbol": "CHOLAFIN"
     },
     {
@@ -1169,6 +1676,84 @@
       "securityId": "d8c32eab-90ce-4202-9d44-6534d4d13e5e",
       "sourceRecordId": "9cdd43c0-95b7-4135-9749-77cc3ae10a0e",
       "symbol": "ITCHOTELS"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "0f26c28c-55a1-483a-b542-401b68485b6a",
+        "NET_PROFIT_QUARTER": "43f6fa4a-9038-4827-9597-2dbff41421a6",
+        "OPERATING_REVENUE_QUARTER": "5bc959c4-51af-4610-adf3-2cacd5a5e8ca"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "613f33f4-e53d-4ad9-b316-39c2c58cd7d2",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "022ae703-09d1-4e8f-bcd4-f637aa74c5ad",
+        "NET_PROFIT_QUARTER": "a46fdba4-3c38-4860-ad40-ee62be7b8d12",
+        "OPERATING_REVENUE_QUARTER": "fbc36b53-84ec-4b58-bab8-26cd2f67e3d5"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "f38165c0-0d9c-473a-bafe-e60cba352440",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "4424353f-d518-4288-8952-70f5c369d0e3",
+        "NET_PROFIT_QUARTER": "b791b26e-5e65-4eff-9430-b36dbc145d71",
+        "OPERATING_REVENUE_QUARTER": "4840a685-0e48-4e38-9b41-a425d6da3b03"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "d2c27f34-a069-47d0-b598-d4fc15188c90",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "f05e482c-f38f-451d-817e-0dcc3d44d660",
+        "NET_PROFIT_QUARTER": "9e210ea7-da22-4796-8dcb-c65c39224760",
+        "OPERATING_REVENUE_QUARTER": "0652c1a6-833e-491e-8d67-0d701ed172f2"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "093c657a-ff09-4942-b3bd-a4dcd3a501c4",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "2f236ff1-f34b-4b70-a04c-bb2f78404f19",
+        "NET_PROFIT_QUARTER": "77e7d73b-df58-4962-9425-162529c1c1cf",
+        "OPERATING_REVENUE_QUARTER": "1b0aec96-bf7b-4197-9f8e-f5435e306c50"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "5b4aa529-e475-4f46-b7ed-95c645e064d6",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "89bf8851-2431-4d71-97b5-b141c7745e2f",
+        "NET_PROFIT_QUARTER": "c1ea2d45-d636-4076-9eee-de82cb892156",
+        "OPERATING_REVENUE_QUARTER": "95c7b36d-0d43-4df1-91ac-3c9c0061b642"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "24cb359b-2ce0-4568-89a1-a874f8946a3e",
+      "symbol": "JIOFIN"
     },
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
