@@ -1,0 +1,40 @@
+name: Results R5 Federal Issuer Original Archive
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-federal-original-archive.yml
+      - scripts/results/r5-federal-bank-official-issuer-original.py
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-federal-original-dev
+  cancel-in-progress: false
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require exact development repository, branch, database, and R2 bucket
+        run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]]
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+      - name: Verify and archive original issuer financial PDF without numeric selection
+        run: |
+          python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6' 'requests==2.32.5'
+          python scripts/results/r5-federal-bank-official-issuer-original.py
