@@ -26,9 +26,16 @@ def strict_host(url):
         raise RuntimeError("SOURCE_ISSUER_DOMAIN_INVALID")
 def r2():
     acct=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip()
-    if not re.fullmatch("[0-9a-f]{32}",acct):
+    if re.fullmatch("[0-9a-f]{32}",acct):
+        endpoint="https://"+acct+".r2.cloudflarestorage.com"
+    elif acct.startswith("https://"):
+        parsed=urlparse(acct)
+        if parsed.scheme!="https" or not re.fullmatch(r"[0-9a-f]{32}\.r2\.cloudflarestorage\.com",parsed.hostname or "") or parsed.path not in ("","/") or parsed.query or parsed.fragment:
+            raise RuntimeError("R2_DEVELOPMENT_ENDPOINT_INVALID")
+        endpoint=acct.rstrip("/")
+    else:
         raise RuntimeError("R2_DEVELOPMENT_ACCOUNT_ID_INVALID")
-    return boto3.client("s3",endpoint_url="https://"+acct+".r2.cloudflarestorage.com",
+    return boto3.client("s3",endpoint_url=endpoint,
         aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
         aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
         region_name="auto",config=Config(retries={"max_attempts":2,"mode":"standard"}))
