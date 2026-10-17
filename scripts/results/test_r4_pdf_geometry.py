@@ -65,5 +65,6 @@ class GeometryTest(unittest.TestCase):
 
     def test_compact_month_date(self):
         self.assertEqual(iso_date("September 30,2024"),"2024-09-30")
+        self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
 if __name__=="__main__":unittest.main()
