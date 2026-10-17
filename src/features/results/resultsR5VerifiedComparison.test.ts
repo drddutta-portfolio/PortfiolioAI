@@ -93,6 +93,27 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    const invalid=proof.map(x=>({...x,approval:"UNVERIFIED_ISSUER"}))
    expect(buildVerifiedR5ComparisonRows(rows,invalid)).toBe(rows)
  })
+ it("replays net earned premium only for verified general-insurer original trios",()=>{
+   const premiumRows=rows.map(r=>r.code==="OPERATING_REVENUE_QUARTER" ?
+      {...r,code:"NET_PREMIUM_EARNED_QUARTER",id:r.id.replace("OPERATING_REVENUE_QUARTER","NET_PREMIUM_EARNED_QUARTER")} : r)
+   const premiumProof=proof.map(p=>({
+      ...p,symbol:"STARHEALTH",
+      observations:{
+         NET_PREMIUM_EARNED_QUARTER:p.observations.OPERATING_REVENUE_QUARTER!.replace("OPERATING_REVENUE_QUARTER","NET_PREMIUM_EARNED_QUARTER"),
+         NET_PROFIT_QUARTER:p.observations.NET_PROFIT_QUARTER!,
+         EPS_DILUTED:p.observations.EPS_DILUTED!,
+      },
+   }))
+   const alt=buildVerifiedR5ComparisonRows(premiumRows,premiumProof)
+   expect(alt.filter(x=>x.selected && x.code==="NET_PREMIUM_EARNED_QUARTER")).toHaveLength(4)
+   const insurance=gradeR5WithVerifiedOriginal(premiumRows,sid,"2025-06-30",
+      "Financial Services","General Insurance",calibration,alt)
+   expect(insurance.status).toBe("STRONG")
+   expect(insurance.basis).toBe("COMPANY_TREND")
+   expect(insurance.supportingMetrics).toContain("NET_PREMIUM_EARNED_QUARTER")
+   expect(insurance.explanation).toContain("insurer-strength")
+   expect(premiumRows.filter(x=>x.selected && x.scope==="CONSOLIDATED")).toHaveLength(6)
+ })
  it("does not change existing accepted ratings or require any fresh provider download",()=>{
    const coherent=quarters.flatMap((q,i)=>fixture("STANDALONE",q,i).map(r=>({...r,selected:true})))
    const alt=buildVerifiedR5ComparisonRows(coherent,proof)
