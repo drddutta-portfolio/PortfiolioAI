@@ -12,6 +12,7 @@ class R5OriginalScopeProof(unittest.TestCase):
         core=module.BANK_REQUIRED if symbol in module.BANKS else module.OTHER_REQUIRED
         return [
             dict(symbol=symbol,period_end=quarter,consolidation_scope=scope,
+                 id=doc+"-"+metric,security_id="test-security",
                  source_record_id=doc,metric_code=metric,
                  numeric_value=pat if metric=="NET_PROFIT_QUARTER" else 100)
             for metric in core
