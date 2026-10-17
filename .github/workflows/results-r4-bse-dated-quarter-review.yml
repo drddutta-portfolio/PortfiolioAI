@@ -41,3 +41,5 @@ jobs:
       # Original NSE HTML is not retained; no public financial artifact uploads.
 
 # Recheck every slot using actual quarter-group headings rather than financial-page titles.
+
+# Full-backlog replay with explicit vertically split dates and three-month headings.

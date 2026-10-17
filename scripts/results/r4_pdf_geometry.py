@@ -46,6 +46,65 @@ def date_cells(words):
         if parsed and ws:out.append((parsed,min(w[0] for w in ws),max(w[2] for w in ws)))
     return out
 
+MONTH=r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
+PARTIAL_DATE=re.compile(r"\b(?:\d{1,2}[- ]"+MONTH+r"|"+MONTH+r" \d{1,2}),?\b",re.I)
+SHORT_MONTH_DATE=re.compile(r"\b\d{1,2}-"+MONTH+r"-\d{2}\b",re.I)
+
+def dated_headers(rows):
+    """Join explicitly printed date parts only within the same physical column.
+
+    Never infer years or correct OCR glyphs. Ambiguous vertical matches reject.
+    Default first-column extraction continues to use the legacy one-row parser.
+    """
+    complete=[];partial=[]
+    for index,(y,words) in enumerate(rows):
+        text=row_text(words)
+        if re.search(r"financial|statement|results",text,re.I):continue
+        spans=[];offset=0
+        for w in words:
+            spans.append((offset,offset+len(str(w[4])),w));offset+=len(str(w[4]))+1
+        occupied=[]
+        for match in list(DATE.finditer(text))+list(SHORT_MONTH_DATE.finditer(text)):
+            raw=match.group();parsed=iso_date(raw)
+            if parsed is None:
+                for fmt in ("%d-%b-%y","%d-%B-%y"):
+                    try:parsed=datetime.strptime(raw,fmt).date().isoformat();break
+                    except ValueError:pass
+            if not parsed:continue
+            ws=[w for a,b,w in spans if a<match.end() and b>match.start()]
+            complete.append((index,y,(parsed,min(w[0] for w in ws),max(w[2] for w in ws))))
+            occupied.append((match.start(),match.end()))
+        for match in PARTIAL_DATE.finditer(text):
+            if any(a<=match.start()<b for a,b in occupied):continue
+            ws=[w for a,b,w in spans if a<match.end() and b>match.start()]
+            partial.append((index,y,match.group().rstrip(','),min(w[0] for w in ws),max(w[2] for w in ws)))
+    for index,y,raw,x0,x2 in partial:
+        years=[]
+        for j,(yy,ws) in enumerate(rows):
+            if not 2.5<yy-y<=28:continue
+            for w in ws:
+                if re.fullmatch(r"20\d{2}",str(w[4])) and x0-8<=(w[0]+w[2])/2<=x2+8:
+                    years.append((j,yy,str(w[4]),w))
+        if len(years)!=1:continue
+        j,yy,year,w=years[0];parsed=iso_date(raw+" "+year)
+        if parsed:complete.append((j,yy,(parsed,min(x0,w[0]),max(x2,w[2]))))
+    yielded=set()
+    for index,y,_ in complete:
+        candidates=[d for _,yy,d in complete if abs(yy-y)<=28]
+        candidates.sort(key=lambda d:(d[1]+d[2])/2)
+        merged=[];ambiguous=False
+        for d in candidates:
+            if merged and abs((d[1]+d[2]-merged[-1][1]-merged[-1][2])/2)<12:
+                if d[0]!=merged[-1][0]:ambiguous=True;break
+                continue
+            merged.append(d)
+        if ambiguous or len(merged)<3:continue
+        signature=tuple(merged)
+        if signature in yielded:continue
+        yielded.add(signature)
+        last=max(i for i,yy,d in complete if abs(yy-y)<=28)
+        yield last,rows[last][0],merged
+
 def number(words):
     text=row_text(words).strip()
     # Joining split decimal glyphs would invent punctuation. Keep for OCR review.
@@ -58,8 +117,8 @@ def clean_label(text):
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False):
     rows=rows_for(page)
-    for header_index,(y,words) in enumerate(rows):
-        dates=date_cells(words)
+    headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
+    for header_index,y,dates in headers:
         if len(dates)<3:continue
         matching=[i for i,d in enumerate(dates[:3]) if d[0]==period]
         if allow_comparative:
@@ -82,8 +141,13 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             # Financial-page titles often say "quarter and year ended".
             # Only actual column-group headings prove quarter/annual scope.
             group_near=[(yy,ws) for yy,ws in near if not re.search(r"financial|statements?|results",row_text(ws),re.I)]
-            group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"quarters?|qtrs?",str(w[4]),re.I)]
-            if not any(first_left<=(w[0]+w[2])/2<=group_right for w in group_quarters):continue
+            group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"quarters?|qtrs?",str(w[4]).strip("‘’\""),re.I)]
+            three_months=[]
+            for _,ws in group_near:
+                for a,b in zip(ws,ws[1:]):
+                    if re.fullmatch(r"3|three",str(a[4]),re.I) and re.fullmatch(r"months?",str(b[4]),re.I) and 0<=b[0]-a[2]<20:
+                        three_months.append(a)
+            if not any(first_left<=(w[0]+w[2])/2<=group_right for w in group_quarters+three_months):continue
             if any(re.fullmatch(r"years?(?:[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I)
                    for _,ws in group_near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
             centers=[(d[1]+d[2])/2 for d in dates]
@@ -115,6 +179,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                                     (r"\bCRORES?\b","INR_CRORE",1)]:
             unit_header=(" ".join(row_text(ws) for yy,ws in rows[:header_index] if y-yy<180).upper() if allow_comparative else upper)
             if re.search(regex,unit_header):units.append((unit,Decimal(divisor)))
+        if allow_comparative and not units and re.search(r"\b(?:INR|Rs\.?)\s+(?:in\s+)?Mn\b",unit_header,re.I):
+            units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
         found={}
@@ -183,3 +249,4 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column)
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
+

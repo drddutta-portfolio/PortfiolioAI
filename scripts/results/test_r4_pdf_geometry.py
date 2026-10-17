@@ -26,6 +26,33 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(parsed["column_index"],2)
         self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"212.7")
 
+    def test_explicit_split_date_years_preserve_physical_columns(self):
+        doc,p=fixture(first="30 September",third="30 September")
+        # Replace the fixture's middle numeric date with the explicit split form.
+        p.add_redact_annot(fitz.Rect(595,112,710,130),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((600,125),"30 June",fontsize=10)
+        for x,year in [(450,"2025"),(600,"2025"),(750,"2024")]:p.insert_text((x,140),year,fontsize=10)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["column_index"],2)
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
+
+    def test_split_date_missing_year_rejected(self):
+        doc,p=fixture(first="30 September",third="30 September")
+        p.insert_text((450,140),"2025",fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True)
+
+    def test_named_month_two_digit_year_and_three_months_heading(self):
+        doc,p=fixture(first="30-Sep-25",third="30-Sep-24")
+        p.add_redact_annot(fitz.Rect(450,85,550,104),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((460,100),"Three months ended",fontsize=10)
+        self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["column_index"],2)
+
+    def test_explicit_rs_mn_unit(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.add_redact_annot(fitz.Rect(20,55,250,74),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,70),"Rs in Mn",fontsize=10)
+        self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["unit"],"INR_MILLION")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
@@ -75,3 +102,4 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
 if __name__=="__main__":unittest.main()
+
