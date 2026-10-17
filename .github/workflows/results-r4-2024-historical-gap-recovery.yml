@@ -18,6 +18,11 @@ jobs:
   acquire-qualify:
     runs-on: ubuntu-latest
     timeout-minutes: 95
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        group: [0, 1]
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
@@ -26,7 +31,7 @@ jobs:
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R5_LEGACY_STOCK_LIMIT: "262"
       RESULTS_R5_LEGACY_ACK: "2024_SEP_DEC_ORIGINAL_XBRL"
-      RESULTS_R5_LEGACY_SYMBOLS: "BLUSPRING,CPPLUS,EBGNG,GROWW,HEXT,IGL,IKS,ITCHOTELS,JASH,SSWL,TATAPOWER,VENTIVE"
+      RESULTS_R5_LEGACY_SYMBOLS: ${{ matrix.group == 0 && 'BLUSPRING,CPPLUS,EBGNG,GROWW,HEXT,IGL,IKS,ITCHOTELS,JASH,SSWL,TATAPOWER,VENTIVE' || 'FEDERALBNK,NATIONALUM,GMBREW,UTLSOLAR,MANKIND,CGPOWER,SYRMA' }}
       RESULTS_R5_LEGACY_DRY_RUN: "0"
     steps:
       - uses: actions/checkout@v4
