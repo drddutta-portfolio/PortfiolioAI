@@ -24,6 +24,8 @@ class IsolationTest(unittest.TestCase):
         cls.module=importlib.util.module_from_spec(spec)
         with patch.dict(sys.modules,missing):
             spec.loader.exec_module(cls.module)
+            trend_spec=importlib.util.spec_from_file_location("trend_isolation",Path(__file__).with_name("r4-trendlyne-history.py"))
+            cls.trend=importlib.util.module_from_spec(trend_spec);trend_spec.loader.exec_module(cls.trend)
             ocr_spec=importlib.util.spec_from_file_location("ocr_isolation",Path(__file__).with_name("r4-ocr-retained-batch.py"))
             cls.ocr=importlib.util.module_from_spec(ocr_spec);ocr_spec.loader.exec_module(cls.ocr)
 
@@ -132,6 +134,55 @@ class IsolationTest(unittest.TestCase):
         self.assertEqual(len(result["details"]),2)
 
     def test_404_does_not_skip_later_quarter(self):self.run_case("download")
+
+    def test_fresh_bse_pull_does_not_reuse_or_overwrite_original_cache(self):
+        batch=self.module.batch;bse=MagicMock();client=MagicMock()
+        raw=b"%PDF-new source version"
+        bse.retrieve_original_pdf.return_value=(raw,{"sha256":batch.sha(raw),"attachment_name":"fixture.pdf"})
+        with patch.dict(os.environ,{"RESULTS_R4_FORCE_FRESH":"1","GITHUB_RUN_ID":"123","GITHUB_RUN_ATTEMPT":"2"}), \
+             patch.object(batch,"immutable_put") as put:
+            result,origin,reused=batch.retained_original(bse,client,"fixture.pdf")
+        self.assertEqual(result,raw);self.assertFalse(reused)
+        bse.retrieve_original_pdf.assert_called_once_with("fixture.pdf")
+        client.get_object.assert_not_called()
+        keys=[call.args[1] for call in put.call_args_list]
+        self.assertTrue(any("original_version="+batch.sha(raw) in key for key in keys))
+        self.assertTrue(any("run=123/attempt=2/fixture.pdf.json" in key for key in keys))
+        self.assertFalse(any("bse-source-cache/" in key for key in keys))
+
+    def test_fresh_bse_pull_requires_auditable_run_identity(self):
+        batch=self.module.batch;bse=MagicMock()
+        with patch.dict(os.environ,{"RESULTS_R4_FORCE_FRESH":"1","GITHUB_RUN_ID":"","GITHUB_RUN_ATTEMPT":""}):
+            with self.assertRaisesRegex(RuntimeError,"FRESH_CAPTURE_RUN_ID_REQUIRED"):
+                batch.retained_original(bse,None,"fixture.pdf")
+        bse.retrieve_original_pdf.assert_not_called()
+
+    def test_explicit_fresh_trendlyne_pull_calls_provider_despite_daily_capture(self):
+        m=self.trend
+        for fresh in ("0","1"):
+            with self.subTest(fresh=fresh):
+                db=MagicMock();cursor=db.cursor.return_value.__enter__.return_value
+                cursor.fetchone.side_effect=[("capabilities",),("daily-capture",)]
+                cursor.fetchall.return_value=[("sid","AUROPHARMA","ISIN","provider-id")]
+                client=MagicMock()
+                tools={"tools":[{"name":"get_parameter_values_multi_stock","inputSchema":{"properties":{"query":{}}}}]}
+                def stored(**kwargs):
+                    result=tools if kwargs["Key"]=="capabilities" else "old private source"
+                    return {"Body":io.BytesIO(json.dumps({"result":result}).encode())}
+                client.get_object.side_effect=stored
+                responses=[MagicMock(__enter__=lambda _:io.BytesIO(b'{"value":"fixture-token"}')),
+                    MagicMock(__enter__=lambda _:io.BytesIO(b'{"runId":"new-run","result":"new private source"}'))]
+                with tempfile.TemporaryDirectory() as directory,contextlib.chdir(directory),contextlib.redirect_stdout(io.StringIO()) as output, \
+                     patch.dict(os.environ,{"SUPABASE_DB_URL":"postgres://lrgpjimipfkyoqbpsqzz","CLOUDFLARE_R2_BUCKET":m.batch.BUCKET,
+                        "RESULTS_R4_FORCE_FRESH":fresh,"RESULTS_R4_TRENDLYNE_MODE":"PROBE",
+                        "ACTIONS_ID_TOKEN_REQUEST_URL":"https://example.test/token?x=1","ACTIONS_ID_TOKEN_REQUEST_TOKEN":"fixture"}), \
+                     patch.object(m.psycopg,"connect",return_value=MagicMock(__enter__=lambda _:db)), \
+                     patch.object(m.batch,"r2_client",return_value=client),patch.object(m.batch,"immutable_put") as put, \
+                     patch.object(m.urllib.request,"urlopen",side_effect=responses) as opened:
+                    m.main()
+                self.assertEqual(opened.call_count,2 if fresh=="1" else 0)
+                self.assertEqual(put.call_count,1 if fresh=="1" else 0)
+                self.assertNotIn("private source",output.getvalue())
     def test_identity_rejection_does_not_skip_other_filing(self):self.run_case("identity")
     def test_failed_database_write_does_not_skip_later_filing(self):self.run_case("database")
     def test_one_failed_catalog_does_not_skip_other_year(self):self.run_case(catalog_failure=True)
