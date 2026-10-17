@@ -1,6 +1,9 @@
 name: Results R4 Development BSE Original Source Recovery
 on:
   workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bse-original-batch.yml]
 permissions:
   contents: read
 concurrency:
@@ -12,7 +15,7 @@ jobs:
     timeout-minutes: 105
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 4
       matrix:
         shard: [0, 1, 2, 3]
     env:
@@ -21,6 +24,7 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_FORCE_FRESH: ${{ github.event_name == 'push' && '1' || '0' }}
       RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
     steps:
       - uses: actions/checkout@v4
@@ -40,21 +44,14 @@ jobs:
         run: |
           python -m py_compile scripts/results/r4-bse-historical-batch.py scripts/results/r4-verify-quarterly.py scripts/results/r4-eight-quarter-readback.py
           python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/test_r4_nse_failure_isolation.py -v
           python scripts/results/test_portfolio_bse.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
       - name: Acquire verified issuer originals for historical gaps
         run: |
           mkdir -p tmp/results-r4
-          python scripts/results/r4-bse-historical-batch.py --apply --shard-count 4 --shard-index ${{ matrix.shard }} --max-companies 80 --max-pdfs-per-quarter 5 --output tmp/results-r4/bse-original-shard-${{ matrix.shard }}.json
-      - name: Retain per-company originals and rejection diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-bse-original-shard-${{ matrix.shard }}
-          path: tmp/results-r4/bse-original-shard-${{ matrix.shard }}.json
-          if-no-files-found: warn
-          retention-days: 21
+          python scripts/results/r4-bse-historical-batch.py --apply --shard-count 4 --shard-index ${{ matrix.shard }} --max-companies 80 --max-pdfs-per-quarter 15 --output tmp/results-r4/bse-original-shard-${{ matrix.shard }}.json
   verify:
     needs: recover
     if: always()
@@ -76,7 +73,7 @@ jobs:
           [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
           [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
       - name: Install pinned verifier
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
       - name: Independent R2 source integrity and protected selections
         run: |
           mkdir -p tmp/results-r4
@@ -91,14 +88,4 @@ jobs:
           a=json.load(open('tmp/results-r4/bse-after-readback.json'))
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
-      - name: Retain acceptance and exceptions
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-bse-independent-readback
-          path: |
-            tmp/results-r4/readback.json
-            tmp/results-r4/eight-quarter-readback.json
-            tmp/results-r4/bse-after-readback.json
-          if-no-files-found: warn
-          retention-days: 21
+      # Originals, per-company traces and readbacks stay in private Development storage.
