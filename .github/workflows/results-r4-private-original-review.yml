@@ -29,3 +29,5 @@ jobs:
         run: python scripts/results/r4-private-original-review.py
       # Original bytes and the review index remain private in Development R2.
       # No original, image, financial trace or encoded payload is logged or uploaded as a public artifact.
+
+# Retain compact hash-linked native page coordinates for private parser diagnosis.

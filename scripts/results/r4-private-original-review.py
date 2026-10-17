@@ -1,8 +1,8 @@
 """Private, hash-checked transport for original-page review; no financial writes."""
-import base64, importlib.util, json, os
+import base64, importlib.util, json, os, re, zlib
 from pathlib import Path
 from collections import Counter
-import psycopg
+import psycopg, fitz
 
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
@@ -32,7 +32,17 @@ def main():
                     encoded=batch.canonical({'contract':'PRIVATE_ORIGINAL_REVIEW_TRANSPORT_V1','original_sha256':digest,'original_base64':base64.b64encode(raw).decode('ascii')})
                     key=batch.PREFIX+'private-original-review/sha256='+digest+'/original.json'
                     batch.immutable_put(client,key,encoded)
+                    pages=[]
+                    with fitz.open(stream=raw,filetype='pdf') as pdf:
+                        for page_no in range(min(len(pdf),40)):
+                            page=pdf[page_no];text=page.get_text('text')
+                            if not re.search(r'diluted',text,re.I) or not re.search(r'revenue|interest earned|premium',text,re.I):continue
+                            native=batch.canonical({'contract':'PRIVATE_ORIGINAL_PAGE_WORDS_V1','original_sha256':digest,'page':page_no+1,'width':page.rect.width,'height':page.rect.height,'words':page.get_text('words')})
+                            page_key=batch.PREFIX+'private-original-review/sha256='+digest+'/page='+str(page_no+1)+'/words.json'
+                            page_data=batch.canonical({'encoding':'ZLIB_BASE64','sha256':batch.sha(native),'data':base64.b64encode(zlib.compress(native)).decode('ascii')})
+                            batch.immutable_put(client,page_key,page_data);pages.append({'page':page_no+1,'r2_key':page_key,'sha256':batch.sha(page_data),'encoded_bytes':len(page_data)})
                     outcome.update(review_r2_key=key,review_sha256=batch.sha(encoded),original_bytes=len(raw));counts['originals_available']+=1
+                    outcome['native_review_pages']=pages
                 except Exception as error:
                     outcome['rejection']=str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__;counts['originals_rejected']+=1
                 entry['sources'].append(outcome)
