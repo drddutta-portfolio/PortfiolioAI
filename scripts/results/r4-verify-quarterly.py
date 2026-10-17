@@ -217,7 +217,8 @@ def check_manifest(record,manifest):
                 or manifest.get("source_reporting_basis") not in ("AS_FILED_OWN_QUARTER","LATER_FILING_REPORTED_COMPARATIVE")):
                 return "DATED_PDF_COLUMN_OR_IDENTITY_PROOF_UNPROVEN"
         if manifest.get("parser_revision")=="PDF_OCR_EXPLICIT_DATED_COLUMN_V1":
-            if (manifest.get("ocr_render_dpi",[300,450]) not in ([300,450],[200,400],[350,500])
+            if (manifest.get("ocr_segmentation_mode",3) not in (3,6,11)
+                or manifest.get("ocr_render_dpi",[300,450]) not in ([300,450],[200,400],[350,500])
                 or manifest.get("ocr_header_basis","RENDERED_HEADERS_ONLY") not in ("RENDERED_HEADERS_ONLY","ORIGINAL_NATIVE_GROUP_LABELS_WHEN_AVAILABLE_WITH_RENDERED_FACT_CELLS","ORIGINAL_NATIVE_GROUP_AND_UNIT_LABELS_WITH_RENDERED_FACT_CELLS")
                 or not re.fullmatch(r"[a-f0-9]{64}",str(manifest.get("ocr_document_text_sha256","")))
                 or manifest.get("ocr_document_audit_r2_key")!=PREFIX+"ocr-dated-document-v1/original_version="+str(original)+"/audit.json"):

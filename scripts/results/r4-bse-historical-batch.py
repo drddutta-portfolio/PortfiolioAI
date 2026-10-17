@@ -381,6 +381,7 @@ def persist(db,client,row,period,source,raw,parsed,publication):
         if parsed.get("parser_revision")=="PDF_OCR_EXPLICIT_DATED_COLUMN_V1":
             manifest.update({key:parsed[key] for key in ("ocr_document_text_sha256","ocr_document_audit_r2_key")})
             manifest["ocr_render_dpi"]=parsed.get("ocr_render_dpi",[300,450])
+            manifest["ocr_segmentation_mode"]=parsed.get("ocr_segmentation_mode",3)
             manifest["ocr_header_basis"]=parsed.get("ocr_header_basis","RENDERED_HEADERS_ONLY")
     manifestbytes=canonical(manifest)
     manifesthash=sha(manifestbytes)

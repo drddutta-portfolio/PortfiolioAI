@@ -147,6 +147,14 @@ def clean_label(text):
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None):
     rows=rows_for(page)
+    # A successful page must contain the same explicit revenue row used below.
+    # Reject covers/notes before the expensive split-date geometry search.
+    if allow_comparative:
+        revenue_pattern=(r"^interest\s+earned\b" if bank else
+                         r"^(?:net\s+)?premiums?\s+earned\b" if insurer else
+                         r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b")
+        if not any(re.match(revenue_pattern,clean_label(row_text(ws)),re.I) for _,ws in rows):
+            raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
     headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
         if len(dates)<3 or dates[0][0] is None:continue

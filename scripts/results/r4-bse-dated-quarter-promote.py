@@ -17,13 +17,14 @@ def main():
     if os.environ.get('RESULTS_R4_DATED_PDF_ACK')!='EXPLICIT_QUARTER_ORIGINAL_REPLAY':raise RuntimeError('WRITES_NOT_AUTHORIZED')
     url=os.environ['SUPABASE_DB_URL']
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
+    engine=batch.sha(b"\0".join(Path(__file__).with_name(name).read_bytes() for name in ('r4_pdf_geometry.py','r4_bse_dated_proof.py','r4_issuer_name.py')))
     client=batch.r2_client();counts=Counter()
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
         for symbol,isin,sid,_name,periods in cohort:
             replayed={}
             for period in periods:
-                outcome={'contract':'RESULTS_R4_BSE_DATED_PROMOTION_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'rejections':{},'originals_replayed':0,'observations_inserted':0}
+                outcome={'contract':'RESULTS_R4_BSE_DATED_PROMOTION_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'rejections':{},'originals_replayed':0,'observations_inserted':0,'workflow_run_id':os.getenv('GITHUB_RUN_ID'),'workflow_run_attempt':os.getenv('GITHUB_RUN_ATTEMPT'),'source_commit':os.getenv('GITHUB_SHA'),'parser_engine':engine}
                 rejects=Counter();grouped=defaultdict(list)
                 try:
                     with db.cursor() as cur:
@@ -38,14 +39,32 @@ def main():
                     for digest,source in originals.items():
                         try:
                             if digest not in replayed:
-                                raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
+                                stable_identity={'issuer_name':identity['issuer_name'],'bse_scrip_code':identity['bse_scrip_code'],'header':{k:identity['header'][k] for k in ('SecurityCode','ISIN')},'listing':{k:identity['listing'][k] for k in ('SCRIP_CD','ISIN_NUMBER','Issuer_Name')}}
+                                context={'symbol':symbol,'original_sha256':digest,'identity':stable_identity,'source_url':source['source_url'],'periods':sorted(periods),'parser_engine':engine}
+                                cachehash=batch.sha(batch.canonical(context))
+                                cachekey=batch.PREFIX+'native-dated-replay-v1/sha256='+cachehash+'/proof.json'
+                                raw=None;stored=None
                                 try:
-                                    parsed_all=run_with_timeout(replay_document,(raw,symbol,tuple(periods),identity,source),90)
-                                    replayed[digest]={'raw':raw,'result':parsed_all}
+                                    stored=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cachekey)['Body'].read())
+                                    if stored.get('context')!=context:raise ValueError('NATIVE_REPLAY_CACHE_CONTEXT_MISMATCH')
                                 except Exception as error:
-                                    # A timeout is shared only within this company
-                                    # pass. A later scheduled pass may retry it.
+                                    if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
+                                try:
+                                    if stored is None:
+                                        raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
+                                        parsed_all=run_with_timeout(replay_document,(raw,symbol,tuple(periods),identity,source),90)
+                                        stored={'context':context,'result':parsed_all}
+                                        batch.immutable_put(client,cachekey,batch.canonical(stored))
+                                        counts['originals_processed']+=1
+                                    else:counts['original_replays_reused']+=1
+                                    if any(entry['options'] for entry in stored['result'].values()) and raw is None:
+                                        raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
+                                    if raw is not None and batch.sha(raw)!=digest:raise ValueError('ORIGINAL_HASH_MISMATCH')
+                                    replayed[digest]={'raw':raw,'result':stored['result']}
+                                except Exception as error:
+                                    # Transient timeouts are not durably cached.
                                     replayed[digest]={'error':type(error).__name__}
+                                print('R4_DATED_ORIGINAL_PROGRESS',json.dumps(dict(counts)),flush=True)
                             cached=replayed[digest]
                             if 'error' in cached:
                                 rejects['SOURCE_'+cached['error']]+=1;continue

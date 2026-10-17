@@ -24,7 +24,7 @@ def main():
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
     # Negative page proofs are valid only for the parser that produced them.
     # A code repair must retry them, while unchanged runs reuse their evidence.
-    engine=batch.sha(b"\0".join(Path(__file__).with_name(name).read_bytes() for name in ('r4_pdf_geometry.py','r4_ocr_geometry.py','r4_ocr_dated_geometry.py')))
+    engine=batch.sha(b"\0".join(Path(__file__).with_name(name).read_bytes() for name in ('r4_pdf_geometry.py','r4_ocr_geometry.py','r4_ocr_dated_geometry.py','r4_ocr_cli.py')))
     client=batch.r2_client();counts=Counter()
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
@@ -91,7 +91,7 @@ def main():
                         counts['trios_ingested']+=1
                     except Exception as error:
                         db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
-                outcome={'contract':'RESULTS_R4_DATED_OCR_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'originals_checked':originals_checked,'observations_inserted':inserted,'rejections':dict(rejects)}
+                outcome={'contract':'RESULTS_R4_DATED_OCR_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'originals_checked':originals_checked,'observations_inserted':inserted,'rejections':dict(rejects),'workflow_run_id':os.getenv('GITHUB_RUN_ID'),'workflow_run_attempt':os.getenv('GITHUB_RUN_ATTEMPT'),'source_commit':os.getenv('GITHUB_SHA'),'parser_engine':engine}
                 encoded=batch.canonical(outcome);digest=batch.sha(encoded)
                 batch.immutable_put(client,batch.PREFIX+'dated-ocr-audits/sha256='+digest+'/audit.json',encoded)
                 with db.cursor() as cur:

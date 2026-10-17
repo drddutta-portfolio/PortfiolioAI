@@ -82,3 +82,5 @@ jobs:
 # Reuse private full-document scans; refresh page proofs for explicit native currency labels.
 
 # Parser-versioned negative proofs retry repaired layouts across the whole live backlog.
+
+# Retry all unresolved original pages with explicitly recorded table segmentation modes.

@@ -34,6 +34,27 @@ class DatedOCRTest(unittest.TestCase):
         self.assertEqual(result['2024-09-30']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
         self.assertEqual(result['2024-12-31']['rejection'],'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS')
 
+    def test_table_segmentation_replays_both_actual_financial_renders(self):
+        parsed,checks=extract_dated_page(self.raw,1,'2024-09-30',segmentation_mode=6)
+        self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(parsed['ocr_segmentation_mode'],6)
+        self.assertEqual(checks['segmentation_mode'],6)
+        manifest=deepcopy(self.manifest);manifest['facts']=parsed['facts'];manifest['ocr_segmentation_mode']=6
+        self.assertEqual(validate_original(self.raw,manifest,self.identity)['facts']['NET_PROFIT_QUARTER']['value'],'212.7')
+
+    def test_default_layout_failure_still_tries_other_quarters_and_table_layout(self):
+        from unittest.mock import patch
+        from r4_ocr_dated_geometry import extract_dated_periods
+        with patch('r4_ocr_dated_geometry.GroupHeaderOCRPage',side_effect=ValueError('UNREADABLE_DEFAULT_LAYOUT')):
+            result=extract_dated_periods(self.raw,1,('2024-09-30','2024-12-31'))
+        self.assertEqual(result['2024-09-30']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertIn(result['2024-09-30']['parsed']['ocr_segmentation_mode'],(6,11))
+        self.assertEqual(result['2024-12-31']['rejection'],'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS')
+
+    def test_unapproved_segmentation_mode_is_rejected(self):
+        with self.assertRaisesRegex(ValueError,'UNAPPROVED_TABLE_SEGMENTATION_MODE'):
+            extract_dated_page(self.raw,1,'2024-09-30',segmentation_mode=7)
+
     def test_identical_resolution_pair_cannot_supply_independent_proof(self):
         with self.assertRaisesRegex(ValueError,'UNAPPROVED'):
             extract_dated_page(self.raw,1,'2024-09-30',render_dpi=(300,300))
