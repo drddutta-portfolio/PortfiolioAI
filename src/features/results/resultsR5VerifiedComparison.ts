@@ -46,7 +46,8 @@ export function buildVerifiedR5ComparisonRows(
     const start=canonicalStart(item.periodEnd)
     if(!start || item.periodEnd<"2024-09-30" || item.periodEnd>"2025-09-30")continue
     const top=item.observations.NET_INTEREST_INCOME_QUARTER ?
-      "NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
+      "NET_INTEREST_INCOME_QUARTER":item.observations.NET_PREMIUM_EARNED_QUARTER ?
+      "NET_PREMIUM_EARNED_QUARTER":"OPERATING_REVENUE_QUARTER"
     const needs=[top,...CORE]
     if(Object.keys(item.observations).length!==3)continue
     const proof=new Set<string>()
@@ -70,7 +71,7 @@ export function buildVerifiedR5ComparisonRows(
   const shifted=rows.map(row=>{
     const chosen=accepted.get(row.securityId+"|"+row.periodEnd)
     if(!chosen || !["OPERATING_REVENUE_QUARTER","NET_INTEREST_INCOME_QUARTER",
-      "NET_PROFIT_QUARTER","EPS_DILUTED"].includes(row.code))return row
+      "NET_PREMIUM_EARNED_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"].includes(row.code))return row
     const selected=chosen.has(row.id)
     if(selected===row.selected)return row
     changed=true
