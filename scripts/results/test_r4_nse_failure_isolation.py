@@ -157,6 +157,20 @@ class IsolationTest(unittest.TestCase):
                 batch.retained_original(bse,None,"fixture.pdf")
         bse.retrieve_original_pdf.assert_not_called()
 
+    def test_fresh_trendlyne_citations_only_discover_hash_verified_bse_pdfs(self):
+        batch=self.module.batch;db=MagicMock();client=MagicMock()
+        filename="12345678-1234-1234-1234-123456789abc.pdf"
+        raw=json.dumps({"result":"https://evil.test/"+filename+" https://www.bseindia.com.evil.test/xml-data/corpfiling/AttachHis/"+filename+
+            " https://www.bseindia.com/xml-data/corpfiling/AttachHis/"+filename}).encode()
+        db.cursor.return_value.__enter__.return_value.fetchall.return_value=[("private-capture",batch.sha(raw))]
+        client.get_object.return_value={"Body":io.BytesIO(raw)}
+        sources=batch.fresh_trendlyne_bse_sources(db,client,"sid","2024-09-30")
+        self.assertEqual([r["attachment_name"] for r in sources],[filename])
+        self.assertNotIn("facts",sources[0])
+        client.get_object.return_value={"Body":io.BytesIO(raw+b"tampered")}
+        with self.assertRaisesRegex(RuntimeError,"TRENDLYNE_CAPTURE_HASH_MISMATCH"):
+            batch.fresh_trendlyne_bse_sources(db,client,"sid","2024-09-30")
+
     def test_explicit_fresh_trendlyne_pull_calls_provider_despite_daily_capture(self):
         m=self.trend
         for fresh in ("0","1"):
