@@ -1,0 +1,64 @@
+name: Results R5-G Live 262-Equity Grade Census
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-g-live-census.yml
+      - scripts/results/r5-g-live-input.py
+      - src/features/results/resultsR5GLiveCensus.test.ts
+      - src/features/results/quarterlyR5Classification.ts
+      - src/features/results/quarterlyR5.ts
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-g-development
+  cancel-in-progress: true
+jobs:
+  r5-g-grade-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      RESULTS_R5_G_INPUT: tmp/results-r5-g/selected-source-input.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned project and read-only database dependencies
+        run: |
+          npm ci
+          python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
+      - name: Verify Development isolation
+        run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          test -n "$SUPABASE_DB_URL"
+          npm run check:architecture
+          npm run typecheck
+      - name: Build private, transient canonical source-selection census
+        run: python scripts/results/r5-g-live-input.py
+      - name: Execute actual R5 engine and derive current Strong/Mixed/Weak/Not Rated
+        run: npx vitest run src/features/results/resultsR5GLiveCensus.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/quarterlyR5.test.ts
+      - name: Grade audit and source contract lint
+        run: npx eslint src/features/results/resultsR5GLiveCensus.test.ts
+      - name: Compile current Results UI
+        run: npm run build
+      - name: Publish derived summary only; never raw issuer source inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-g-derived-grade-census
+          path: tmp/results-r5-g/grade-census.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Verify git integrity
+        run: git diff --check HEAD^ HEAD
