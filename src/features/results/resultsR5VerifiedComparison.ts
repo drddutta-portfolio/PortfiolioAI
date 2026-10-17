@@ -1,6 +1,7 @@
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import { gradeQuarterR5, type ResultsQuarterGrade, type R5IndustryCalibrations } from "./quarterlyR5Classification"
 import manifest from "./resultsR5ComparisonProof.json"
+import federalSource from "./resultsR5FederalOriginalComparisonProof.json"
 
 /**
  * Independently R2-replayed original filings admitted for R5 COMPARISON ONLY.
@@ -19,6 +20,9 @@ export interface VerifiedR5Source {
 const CORE = ["NET_PROFIT_QUARTER", "EPS_DILUTED"] as const
 const APPROVAL = "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
 const unitFor = (code:string) => code === "EPS_DILUTED" ? "INR_PER_SHARE" : "INR_CRORE"
+const independentlyVerifiedOriginals:readonly VerifiedR5Source[] = [
+  ...manifest.approvedSources, ...federalSource.approvedSources,
+]
 
 function canonicalStart(end:string):string|null {
   const match=/^(\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
@@ -30,7 +34,7 @@ function canonicalStart(end:string):string|null {
 
 export function buildVerifiedR5ComparisonRows(
   rows:readonly ResultsSourceObservation[],
-  sources:readonly VerifiedR5Source[]=manifest.approvedSources,
+  sources:readonly VerifiedR5Source[]=independentlyVerifiedOriginals,
   scope?: "CONSOLIDATED"|"STANDALONE",
 ):readonly ResultsSourceObservation[] {
   if (!sources.length) return rows
@@ -89,7 +93,7 @@ function candidateRows(
   if(!variants){variants=new Map();cached.set(rows,variants)}
   const existing=variants.get(scope)
   if(existing)return existing
-  const computed=buildVerifiedR5ComparisonRows(rows,manifest.approvedSources,scope)
+  const computed=buildVerifiedR5ComparisonRows(rows,independentlyVerifiedOriginals,scope)
   variants.set(scope,computed)
   return computed
 }
