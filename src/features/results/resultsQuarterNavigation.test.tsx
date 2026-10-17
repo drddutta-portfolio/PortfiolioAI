@@ -91,6 +91,7 @@ describe("Results rolling-quarter navigator", () => {
     fireEvent.mouseEnter(cell)
     expect(screen.getAllByRole("tooltip")).toHaveLength(1)
     expect(screen.getByText("SAMPLE — Q1 FY27")).toBeInTheDocument()
+    expect(screen.getByText(/Why Not Rated: Quarterly filing is not yet available/)).toBeInTheDocument()
     fireEvent.mouseLeave(cell)
     expect(screen.queryByRole("tooltip")).toBeNull()
     // The complete assessment reason is shown only after explicitly
