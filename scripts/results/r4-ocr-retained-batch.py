@@ -21,8 +21,12 @@ def main():
         missing=batch.candidates(db);db.rollback()
         targets={symbol:(isin,sid,name,periods) for symbol,isin,sid,name,periods in missing if int(task_id(sid,"OCR",None,{}),16)%8==args.shard}
         sources={}
-        for filename in Path(args.reports).rglob("bse-original-shard-*.json"):
-            report=json.loads(filename.read_text())
+        if args.reports=="private-r2":
+            from r4_private_inventory import reports
+            inventory=reports(client,batch.BUCKET,batch.PREFIX)
+        else:
+            inventory=(json.loads(p.read_text()) for p in Path(args.reports).rglob("bse-original-shard-*.json"))
+        for report in inventory:
             for company in report.get("companies",[]):
                 symbol=company["symbol"]
                 if symbol not in targets:continue
@@ -95,7 +99,9 @@ def main():
                         details.append(entry)
                         output=Path(f"tmp/results-r4/ocr-shard-{args.shard}.json");output.parent.mkdir(parents=True,exist_ok=True)
                         output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
-                        print("R4_OCR_PROGRESS",json.dumps({"symbol":symbol,"period":period,"status":entry["status"],"counts":dict(counts)}),flush=True)
+                        trace=output.read_bytes()
+                        batch.immutable_put(client,batch.PREFIX+"private-recovery-traces/sha256="+batch.sha(trace)+"/ocr.json",trace)
+                        print("R4_OCR_PROGRESS",json.dumps({"periods_processed":len(details),"counts":dict(counts)}),flush=True)
                     def period_error(period,error):
                         db.rollback();counts["period_errors"]+=1
                         details.append({"symbol":symbol,"period":period,"status":"RETRY_REQUIRED",
@@ -106,7 +112,7 @@ def main():
                     for period in periods:
                         details.append({"symbol":symbol,"period":period,"stage":"ISSUER_OR_COMPANY",
                             "status":"RETRY_REQUIRED","reason":type(error).__name__+":"+str(error)[:200]})
-                    print("R4_OCR_COMPANY_ERROR",symbol,type(error).__name__,str(error)[:200],flush=True)
+                    print("R4_OCR_COMPANY_ERROR",type(error).__name__,flush=True)
     output=Path(f"tmp/results-r4/ocr-shard-{args.shard}.json");output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps({"counts":dict(counts),"details":details},sort_keys=True))
     print("R4_OCR_FINAL",json.dumps({"shard":args.shard,"counts":dict(counts)}),flush=True)
