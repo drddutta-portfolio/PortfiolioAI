@@ -3,7 +3,7 @@ import argparse,importlib.util,json,os,re
 from collections import Counter
 from pathlib import Path
 import fitz,psycopg
-from r4_ocr_geometry import OCRPage
+from r4_ocr_dated_geometry import GroupHeaderOCRPage as OCRPage
 from r4_pdf_geometry import rows_for,row_text,dated_headers
 from r4_recovery_queue import task_id
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'));batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
@@ -57,7 +57,11 @@ def main():
                             value={'contract':'RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1','diagnostic_only':True,'symbol':symbol,'isin':isin,'security_id':str(sid),'page':page_no,'source_url':source['source_url'],'original_sha256':digest,'rejections':rejections,'date_header_candidates':[{'row':i,'y':y,'dates':d} for i,y,d in dated_headers(rows)],'rows':[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in headers],'labels_without_amounts':[re.sub(r'[\d.,()+−-]+',' ',row_text(ws))[:220] for _,ws in rows[(revenue or 0):] if re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I)][:32]}
                             # Full numeric rows remain private Development evidence;
                             # these single-render diagnostics never become facts.
-                            value['metric_row_geometry']=[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in rows[(revenue or 0):] if re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I)][:32]
+                            selected=set()
+                            for ri,(yy,ws) in enumerate(rows):
+                                if ri<(revenue or 0) or not re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I):continue
+                                selected.update(range(max(revenue or 0,ri-3),min(len(rows),ri+2)))
+                            value['metric_row_geometry']=[{'y':rows[ri][0],'words':[[w[0],w[2],w[4]] for w in rows[ri][1]]} for ri in sorted(selected)][:100]
                             native_page=pdf[page_no-1]
                             value['native_fonts']=[{'xref':f[0],'type':f[2],'name':f[3],'encoding':f[5]} for f in native_page.get_fonts(full=True)]
                             unit_spans=[]

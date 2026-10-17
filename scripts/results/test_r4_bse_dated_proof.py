@@ -13,6 +13,22 @@ def proof_fixture():
     return raw,m,identity
 
 class DatedProofTest(unittest.TestCase):
+    def test_bounded_document_replay_keeps_absent_quarters_unresolved(self):
+        from r4_bse_dated_proof import replay_document
+        from r4_recovery_queue import run_with_timeout
+        raw,m,identity=proof_fixture()
+        source={'original_sha256':m['original_sha256_retained'],'source_url':m['issuer_filing_url']}
+        result=run_with_timeout(replay_document,(raw,m['symbol'],('2024-09-30','2024-12-31'),identity,source),15)
+        self.assertEqual(len(result['2024-09-30']['options']),1)
+        self.assertEqual(result['2024-09-30']['options'][0]['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(result['2024-12-31']['options'],[])
+        self.assertGreater(result['2024-12-31']['rejections']['NO_PROVEN_GEOMETRIC_QUARTER_TABLE'],0)
+    def test_document_replay_rejects_wrong_original_before_reading(self):
+        from r4_bse_dated_proof import replay_document
+        raw,m,identity=proof_fixture()
+        with self.assertRaisesRegex(ValueError,'ORIGINAL_HASH'):
+            replay_document(raw,m['symbol'],('2024-09-30',),identity,{'original_sha256':'0'*64,'source_url':m['issuer_filing_url']})
+
     def test_original_column_and_full_trio_replay(self):
         raw,m,identity=proof_fixture();self.assertEqual(validate_original(raw,m,identity)['column_index'],2)
     def test_mutated_value_rejected(self):

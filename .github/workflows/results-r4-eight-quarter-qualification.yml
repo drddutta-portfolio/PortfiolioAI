@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: results-r4-eight-quarter-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
   qualify-and-audit:

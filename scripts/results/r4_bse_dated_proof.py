@@ -59,3 +59,23 @@ def validate_original(raw,manifest,identity):
     expected='AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'
     if manifest['source_reporting_basis']!=expected:raise ValueError('DATED_PDF_REPORTING_BASIS_MISMATCH')
     return parsed
+
+
+def replay_document(raw,symbol,periods,identity,source):
+    """Pure per-original replay, suitable for a hard process deadline."""
+    from collections import Counter
+    digest=hashlib.sha256(raw).hexdigest()
+    if digest!=source['original_sha256']:raise ValueError('ORIGINAL_HASH_MISMATCH')
+    proof={**identity,'original_sha256':digest,'source_url':source['source_url']}
+    results={p:{'options':[],'rejections':Counter()} for p in periods}
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        for i in range(min(len(pdf),40)):
+            for period,outcome in results.items():
+                try:
+                    parsed=extract_page(pdf[i],i+1,period,symbol in BANKS,symbol=='STARHEALTH',allow_comparative=True)
+                    basis='AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'
+                    manifest={'symbol':symbol,'isin':identity['header']['ISIN'],'issuer_name':identity['issuer_name'],'bse_scrip_code':identity['bse_scrip_code'],'original_sha256_retained':digest,'issuer_filing_url':source['source_url'],'financial_page':i+1,'period_end':period,'consolidation_scope':parsed['scope'],'original_unit':parsed['unit'],'first_column_period':parsed['first_column_period'],'selected_column_period':period,'selected_column_index':parsed['column_index'],'source_reporting_basis':basis,'facts':parsed['facts']}
+                    validate_original(raw,manifest,proof)
+                    outcome['options'].append({'parsed':parsed,'proof':proof,'basis':basis})
+                except ValueError as error:outcome['rejections'][str(error).split(':')[0]]+=1
+    return results

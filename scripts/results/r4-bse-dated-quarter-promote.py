@@ -8,7 +8,8 @@ from collections import Counter,defaultdict
 from pathlib import Path
 import fitz,psycopg
 from r4_pdf_geometry import extract_page
-from r4_bse_dated_proof import validate_original,REVISION
+from r4_bse_dated_proof import replay_document,REVISION
+from r4_recovery_queue import run_with_timeout
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
@@ -20,6 +21,7 @@ def main():
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
         for symbol,isin,sid,_name,periods in cohort:
+            replayed={}
             for period in periods:
                 outcome={'contract':'RESULTS_R4_BSE_DATED_PROMOTION_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'rejections':{},'originals_replayed':0,'observations_inserted':0}
                 rejects=Counter();grouped=defaultdict(list)
@@ -35,20 +37,24 @@ def main():
                     originals={s['original_sha256']:s for s in review.get('all_sources',[])}
                     for digest,source in originals.items():
                         try:
-                            raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
-                            if batch.sha(raw)!=digest:raise ValueError('ORIGINAL_HASH_MISMATCH')
-                            with fitz.open(stream=raw,filetype='pdf') as pdf:
-                                outcome['originals_replayed']+=1
-                                for i in range(min(len(pdf),40)):
-                                    try:
-                                        parsed=extract_page(pdf[i],i+1,period,symbol in batch.BANKS,symbol in batch.INSURERS,allow_comparative=True)
-                                        basis='AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'
-                                        proof={**identity,'original_sha256':digest,'source_url':source['source_url']}
-                                        manifest={'symbol':symbol,'isin':isin,'issuer_name':identity['issuer_name'],'bse_scrip_code':identity['bse_scrip_code'],'original_sha256_retained':digest,'issuer_filing_url':source['source_url'],'financial_page':i+1,'period_end':period,'consolidation_scope':parsed['scope'],'original_unit':parsed['unit'],'first_column_period':parsed['first_column_period'],'selected_column_period':period,'selected_column_index':parsed['column_index'],'source_reporting_basis':basis,'facts':parsed['facts']}
-                                        validate_original(raw,manifest,proof)
-                                        vector=tuple(sorted((k,v['value'],v['unit']) for k,v in parsed['facts'].items()))
-                                        grouped[parsed['scope']].append((vector,parsed,source,raw,proof,basis))
-                                    except ValueError as error:rejects[str(error).split(':')[0]]+=1
+                            if digest not in replayed:
+                                raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
+                                try:
+                                    parsed_all=run_with_timeout(replay_document,(raw,symbol,tuple(periods),identity,source),90)
+                                    replayed[digest]={'raw':raw,'result':parsed_all}
+                                except Exception as error:
+                                    # A timeout is shared only within this company
+                                    # pass. A later scheduled pass may retry it.
+                                    replayed[digest]={'error':type(error).__name__}
+                            cached=replayed[digest]
+                            if 'error' in cached:
+                                rejects['SOURCE_'+cached['error']]+=1;continue
+                            raw=cached['raw'];response=cached['result'][period]
+                            outcome['originals_replayed']+=1;rejects.update(response['rejections'])
+                            for entry in response['options']:
+                                parsed=entry['parsed'];proof=entry['proof'];basis=entry['basis']
+                                vector=tuple(sorted((k,v['value'],v['unit']) for k,v in parsed['facts'].items()))
+                                grouped[parsed['scope']].append((vector,parsed,source,raw,proof,basis))
                         except Exception as error:rejects['SOURCE_'+type(error).__name__]+=1
                     for scope,options in sorted(grouped.items()):
                         if len({x[0] for x in options})!=1:
