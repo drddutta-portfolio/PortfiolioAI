@@ -50,6 +50,8 @@ describe("R5 exact-industry quarterly operating signal", () => {
     const rows=history("NET_INTEREST_INCOME_QUARTER","110","100","125","100")
     const bankPolicy = policy("Banking","Private Sector Bank",true)
     expect(graded(rows,"Banking","Private Sector Bank",bankPolicy).status).toBe("MIXED")
+    expect(graded(rows,"Financial Services","Public Sector Bank",policy("Financial Services","Public Sector Bank",true)).basis).toBe("INDUSTRY_PEER")
+    expect(graded(rows,"Financial Services","Public Sector Bank",policy("Financial Services","Public Sector Bank",true)).status).toBe("MIXED")
     expect(graded(rows,"Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals")).status).toBe("UNAVAILABLE")
     expect(graded(rows,"Financial Services","NBFC",bankPolicy).status).toBe("UNAVAILABLE")
   })
