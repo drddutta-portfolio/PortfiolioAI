@@ -1,0 +1,61 @@
+name: Results R5-F Live Evidence Recalculation Acceptance
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-f-live-acceptance.yml
+      - src/features/results/resultsR5LiveRefresh.ts
+      - src/features/results/resultsR5LiveRefresh.test.ts
+      - scripts/results/r5-f-live-coverage.py
+      - scripts/results/test_r5_f_live_coverage.py
+      - src/features/results/ResultsReferenceLivePage.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  r5-f:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: PortfolioAI-Development
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned JavaScript and database audit dependencies
+        run: |
+          npm ci
+          python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
+      - name: Check R5-F source isolation and TypeScript
+        run: |
+          npm run check:architecture
+          npm run typecheck
+      - name: Regression test selected-source comparisons, grading and R4-to-R5 refresh
+        run: |
+          npx vitest run src/features/results/resultsR5LiveRefresh.test.ts src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts
+          python scripts/results/test_r5_f_live_coverage.py -v
+      - name: Check changed R5-F code style
+        run: npx eslint src/features/results/resultsR5LiveRefresh.ts src/features/results/resultsR5LiveRefresh.test.ts src/features/results/ResultsReferenceLivePage.tsx
+      - name: Independent 262 x eight-quarter current Development source readback
+        run: python scripts/results/r5-f-live-coverage.py
+      - name: Build Results client unchanged visual design
+        run: npm run build
+      - name: Preserve source-selected coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-f-live-readback
+          path: tmp/results-r5/r5-f-source-qualified-progress.json
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Commit integrity
+        run: git diff --check HEAD^ HEAD
