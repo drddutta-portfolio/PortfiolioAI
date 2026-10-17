@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 95
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 4
       matrix:
         shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     env:
@@ -26,6 +26,7 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_FORCE_FRESH: ${{ github.event_name == 'push' && '1' || '0' }}
       RESULTS_R4_TRENDLYNE_MODE: HISTORICAL
       RESULTS_R4_TRENDLYNE_SHARD: ${{ matrix.shard }}
     steps:
@@ -46,10 +47,4 @@ jobs:
         run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
       - name: Collect every assigned request and defer individual failures
         run: python scripts/results/r4-trendlyne-history.py
-      - name: Retain responses and per-request retry checkpoints
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-trendlyne-history-shard-${{ matrix.shard }}
-          path: tmp/results-r4/trendlyne/
-          retention-days: 21
+      # Detailed captures and retry traces are retained privately in Development R2.
