@@ -13,7 +13,7 @@ export interface VerifiedR5Source {
   readonly periodEnd: string
   readonly scope: string
   readonly sourceRecordId: string
-  readonly observations: Readonly<Record<string,string>>
+  readonly observations: Readonly<Partial<Record<string,string>>>
   readonly approval: string
 }
 const CORE = ["NET_PROFIT_QUARTER", "EPS_DILUTED"] as const
