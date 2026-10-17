@@ -7,7 +7,7 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * Each historical quarter uses ONLY its own and earlier qualified financials
  * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V7"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V8"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 type OperatingMetric = "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER" | "NET_PREMIUM_EARNED_QUARTER"
 export interface ResultsQuarterGrade {
@@ -80,6 +80,9 @@ function modelFor(sector: string | null, industry: string | null):
   const s = normalized(sector), i = normalized(industry)
   if (!s || !i || s === "UNCLASSIFIED" || i === "UNCLASSIFIED") return null
   if (s === "BANKING") return bankIndustry(i) ? "NET_INTEREST_INCOME_QUARTER" : null
+  // The NSE classification hierarchy places banking under Financial Services. 
+  // Route only explicitly identified bank industries to NII/PAT, never a generic financial label.
+  if (s === "FINANCIAL SERVICES" && bankIndustry(i)) return "NET_INTEREST_INCOME_QUARTER"
   // These explicitly reviewed NON-BANK finance businesses have source-backed
   // issuer-specific operating Revenue/PAT trends. This is NOT a prudential or
   // credit-quality grade. No peer percentiles may be inferred for this group.
