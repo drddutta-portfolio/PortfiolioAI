@@ -13,7 +13,12 @@ RULES={
    "url":"https://nsearchives.nseindia.com/corporate/HBLPOWER_18122024095548_CommunicationtoStakeholders1812.pdf"},
  "ETERNAL":{"old_symbol":"ZOMATO","old_name":"Zomato",
    "new_name":"Eternal","effective_date":"2025-04-09","scrip":"543320",
-   "url":"https://nsearchives.nseindia.com/content/circulars/CML67420.pdf"},
+   "url":"https://nsearchives.nseindia.com/content/circulars/CML67420.pdf",
+   "alternate_urls":["https://www.msei.in/SX-Content/Circulars/2025/April/Circular-16983.pdf"]},
+ "CEMPRO":{"old_symbol":"ITDCEM","old_name":"ITD Cementation India",
+   "new_name":"Cemindia Projects","effective_date":"2025-09-17","scrip":"509496","require_scrip":False,
+   "url":"https://www.msei.in/SX-Content/Circulars/2025/September/Circular-17787.pdf",
+   "alternate_urls":["https://nsearchives.nseindia.com/content/circulars/CML70147.pdf"]},
 }
 
 @dataclass(frozen=True)
@@ -33,7 +38,7 @@ def compact(text):return re.sub(r"[^A-Z0-9]","",text.upper())
 
 def verify_rename_pdf(raw,symbol,source_url):
     rule=RULES.get(symbol)
-    if not rule or source_url!=rule["url"] or not raw.startswith(b"%PDF") or len(raw)>5_000_000:
+    if not rule or source_url not in [rule["url"],*rule.get("alternate_urls",[])] or not raw.startswith(b"%PDF") or len(raw)>5_000_000:
         raise ValueError("QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED")
     with fitz.open(stream=raw,filetype="pdf") as pdf:
         if len(pdf)>12:raise ValueError("RENAME_AUTHORITY_PAGE_BOUND_EXCEEDED")
@@ -49,7 +54,7 @@ def verify_rename_pdf(raw,symbol,source_url):
     # The NSE circular proves the name/symbol pair. The issuer notices also
     # explicitly prove the unchanged BSE code; the financial XML and two BSE
     # endpoints must independently prove that code in every case.
-    if symbol!="ETERNAL" and rule["scrip"] not in normalized:
+    if rule.get("require_scrip",symbol!="ETERNAL") and rule["scrip"] not in normalized:
         raise ValueError("OFFICIAL_RENAME_SCRIP_NOT_PROVEN")
     return RenameProof(symbol,rule["old_symbol"],rule["old_name"],rule["new_name"],
         rule["effective_date"],rule["scrip"],source_url,hashlib.sha256(raw).hexdigest())
