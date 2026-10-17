@@ -86,3 +86,4 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
       # No public financial artifacts; evidence and diagnostics stay private.
+# Recollect up to eight primary statement attachments per publication window using full catalog headlines.
