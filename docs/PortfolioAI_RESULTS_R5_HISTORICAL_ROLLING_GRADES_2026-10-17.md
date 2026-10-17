@@ -32,7 +32,7 @@ The live seven-quarter audit found these figures at execution time (they may mov
 | Mar 2026 | 256 | 73 | 106 | 18 | 197 |
 | Jun 2026 | 261 | 40 | 139 | 26 | 205 |
 | Sep 2026 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **1,524** | **310** | **658** | **202** | **1,170** |
+| **Total** | **1,524** | **310** | **718** | **142** | **1,170** |
 
 **574 historical stock-quarter cells are newly rated** in March, June and September 2025 (189 + 193 + 192). The previous static "637" referred to qualified data and supported business-model slots, **not 637 guaranteed grades**. Some still fail two valid adjacent quarter comparisons or other source/coherence requirements. Overall current 262-company June 2026 grading remains 40 Strong / 139 Mixed / 26 Weak / 57 Not Rated, with four-current-quarter-complete census unchanged at 249.
 
