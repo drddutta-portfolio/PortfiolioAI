@@ -91,8 +91,20 @@ def extract(db_url):
             if (proof["contract"]!="R5_INDEPENDENT_ORIGINAL_COMPARISON_PROOF_V1"
                     or proof["environment"]!="Development"):
                 raise RuntimeError("UNQUALIFIED_R5_COMPARISON_MANIFEST")
+            issuer_proof=json.loads(
+                Path("src/features/results/resultsR5FederalOriginalComparisonProof.json").read_text())
+            if issuer_proof.get("contract")!="R5_FEDERAL_SIGNED_ISSUER_ORIGINAL_TWO_QUARTERS_V1" or issuer_proof.get("environment")!="Development":
+                raise RuntimeError("UNQUALIFIED_FEDERAL_R5_ISSUER_COMPARISON_MANIFEST")
+            if issuer_proof["approvedSources"] and (
+                len(issuer_proof["approvedSources"])!=2
+                or not isinstance(issuer_proof.get("sourceOriginalSHA256"),str)
+                or len(issuer_proof["sourceOriginalSHA256"])!=64
+                or any(p["symbol"]!="FEDERALBNK" or p["scope"]!="CONSOLIDATED"
+                    or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
+                    for p in issuer_proof["approvedSources"])):
+                raise RuntimeError("FEDERAL_R5_SOURCE_PROOF_IS_NOT_EXACT_VERIFIED_LOCK")
             desired=set(
-                oid for source in proof["approvedSources"]
+                oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
             missing=sorted(desired-already)
