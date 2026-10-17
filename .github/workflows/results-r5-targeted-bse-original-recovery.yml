@@ -1,0 +1,90 @@
+name: Results R5 Targeted BSE Original Gap Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-targeted-bse-original-recovery.yml
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-targeted-bse-original-recovery-dev
+  cancel-in-progress: false
+jobs:
+  retrieve-and-admit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
+      RESULTS_R4_FORCE_FRESH: "0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify private Development isolated filing recovery
+        run: |
+          set -euo pipefail
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test "$CLOUDFLARE_R2_BUCKET" = portfolioai-history-dev
+          test -n "$CLOUDFLARE_R2_ACCOUNT_ID"
+          test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
+          test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
+      - name: Install pinned official BSE original-filing dependencies
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Verify parser, historical identity and protected-source selection tests
+        run: |
+          python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/test_portfolio_bse.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+          python scripts/results/test_r4_eight_quarter_readback.py -v
+      - name: Retrieve issuer originals for only missing R5 historical comparisons
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-r5
+          python scripts/results/r4-bse-historical-batch.py --apply \
+            --symbols 'AWHCL,BLUSPRING,CGPOWER,CPPLUS,EBGNG,GMBREW,GROWW,HEXT,IGL,IKS,ITCHOTELS,JASH,LENSKART,PINELABS,SSWL,SYRMA,TATACAP,TATAPOWER,TMCV,TMPV,UTLSOLAR,VENTIVE' \
+            --shard-count 1 --shard-index 0 --max-companies 24 --max-pdfs-per-quarter 15 \
+            --output tmp/results-r5/bse-targeted-original-recovery.json
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-r5/bse-targeted-original-recovery.json'))
+          print("R5_BSE_RECOVERY_AGGREGATE",json.dumps({k:r.get(k) for k in
+            ("visited","source_documents","observations_inserted","qualified","blocked","status_counts")},sort_keys=True))
+          PY
+      - name: Revalidate retained originals against R2 hash and protect R4 decisions
+        env:
+          RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+        run: |
+          python scripts/results/r4-verify-quarterly.py --apply
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-r4/readback.json'))
+          assert r['mode']=='APPLY' and r['conflicting_existing_decisions']==0
+          print("R5_AFTER_TARGETED_BSE_RECONCILIATION",json.dumps({k:r[k] for k in
+            ("created_decisions","unchanged_decisions","selected_stock_quarters","r2_sources_checked")},sort_keys=True))
+          PY
+      - name: Final 262 by eight-quarter evidence readback
+        run: |
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r5/after-bse-recovery.json
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-r5/after-bse-recovery.json'))
+          print("R5_AFTER_BSE_GAP_COUNTS",json.dumps({k:r.get(k) for k in
+            ("equities","status_counts","total_slots")},sort_keys=True))
+          PY
+      - name: Upload aggregated diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-targeted-bse-evidence-recovery
+          path: tmp/results-r5/bse-targeted-original-recovery.json
+          if-no-files-found: warn
+          retention-days: 14
