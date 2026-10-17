@@ -64,6 +64,24 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"212.7")
         self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
 
+    def test_unreadable_unselected_month_keeps_its_column_without_inventing_date(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.add_redact_annot(fitz.Rect(595,112,710,130),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((600,125),"30 Oocombor 2025",fontsize=10)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["column_index"],2)
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
+        with self.assertRaises(ValueError):extract_page(p,1,"2025-12-30",allow_comparative=True)
+
+    def test_all_explicit_tax_components_include_earlier_year_adjustment(self):
+        doc,p=fixture()
+        for y,label,value in [(250,"Profit before tax","1,500"),(280,"Current tax","200"),(310,"Deferred tax","(20)"),(340,"Tax relating to earlier years","(4)")]:
+            p.insert_text((25,y),label,fontsize=10)
+            for x in (475,625,775):p.insert_text((x,y),value,fontsize=10)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["arithmetic_validation"]["tax_crore"],"17.6")
+        self.assertEqual(out["arithmetic_validation"]["difference_crore"],"0.0")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
@@ -113,4 +131,3 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
 if __name__=="__main__":unittest.main()
-

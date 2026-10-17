@@ -48,6 +48,7 @@ def date_cells(words):
 
 MONTH=r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
 PARTIAL_DATE=re.compile(r"\b(?:\d{1,2}[- ]"+MONTH+r"|"+MONTH+r" \d{1,2}),?\b",re.I)
+UNKNOWN_NAMED_DATE=re.compile(r"\b\d{1,2} [A-Za-z]{3,12} 20\d{2}\b")
 SHORT_MONTH_DATE=re.compile(r"\b\d{1,2}-"+MONTH+r"-\d{2}\b",re.I)
 
 def dated_headers(rows):
@@ -73,6 +74,13 @@ def dated_headers(rows):
             if not parsed:continue
             ws=[w for a,b,w in spans if a<match.end() and b>match.start()]
             complete.append((index,y,(parsed,min(w[0] for w in ws),max(w[2] for w in ws))))
+            occupied.append((match.start(),match.end()))
+        # Retain the physical position of an unreadable, unselected date.
+        # Its date stays unknown; it never supplies the requested period.
+        for match in UNKNOWN_NAMED_DATE.finditer(text):
+            if any(a<match.end() and b>match.start() for a,b in occupied):continue
+            ws=[w for a,b,w in spans if a<match.end() and b>match.start()]
+            complete.append((index,y,(None,min(w[0] for w in ws),max(w[2] for w in ws))))
             occupied.append((match.start(),match.end()))
         for match in PARTIAL_DATE.finditer(text):
             if any(a<=match.start()<b for a,b in occupied):continue
@@ -119,7 +127,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
     rows=rows_for(page)
     headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
-        if len(dates)<3:continue
+        if len(dates)<3 or dates[0][0] is None:continue
         matching=[i for i,d in enumerate(dates[:3]) if d[0]==period]
         if allow_comparative:
             if len(matching)!=1:continue
@@ -196,11 +204,12 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
+            elif allow_comparative and re.match(r"^tax\s+(?:relating to|in respect of)\s+earlier\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?)?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
-            if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","EPS_DILUTED") and re.search(r"continuing|discontinued",label,re.I):continue
+            if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","TAX_EARLIER_YEARS","EPS_DILUTED") and re.search(r"continuing|discontinued",label,re.I):continue
             if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling",label,re.I):continue
             if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",label,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
@@ -235,7 +244,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             arithmetic=None
             if "PROFIT_BEFORE_TAX" in found:
                 tax=(Decimal(found["TAX_EXPENSE"]["value"]) if "TAX_EXPENSE" in found else
-                     Decimal(found["CURRENT_TAX"]["value"])+Decimal(found["DEFERRED_TAX"]["value"])
+                     Decimal(found["CURRENT_TAX"]["value"])+Decimal(found["DEFERRED_TAX"]["value"])+(Decimal(found["TAX_EARLIER_YEARS"]["value"]) if "TAX_EARLIER_YEARS" in found else Decimal(0))
                      if "CURRENT_TAX" in found and "DEFERRED_TAX" in found else None)
                 if tax is not None:
                     difference=Decimal(found["PROFIT_BEFORE_TAX"]["value"])-tax-Decimal(found["NET_PROFIT_QUARTER"]["value"])
@@ -250,4 +259,3 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column)
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
-

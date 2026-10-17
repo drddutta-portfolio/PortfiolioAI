@@ -13,7 +13,9 @@ class OCRTest(unittest.TestCase):
         from test_r4_pdf_geometry import fixture
         from r4_ocr_geometry import extract_ocr
         doc,page=fixture()
-        for y,label,value in [(250,"Profit before tax","1,500"),(280,"Total tax expense","176")]:
+        page.add_redact_annot(fitz.Rect(595,112,710,130),fill=(1,1,1));page.apply_redactions()
+        page.insert_text((600,125),"30 Oocombor 2024",fontsize=10)
+        for y,label,value in [(250,"Profit before tax","1,500"),(280,"Current tax","200"),(310,"Deferred tax","(20)"),(340,"Tax relating to earlier years","(4)")]:
             page.insert_text((25,y),label,fontsize=10)
             for x in (475,625,775):page.insert_text((x,y),value,fontsize=10)
         image=fitz.open();target=image.new_page(width=page.rect.width,height=page.rect.height)
