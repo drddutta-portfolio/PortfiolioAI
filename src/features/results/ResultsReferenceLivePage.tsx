@@ -7,6 +7,7 @@ import { buildIndustryR5Calibrations, gradeQuarterR5 } from "./quarterlyR5Classi
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
 import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparisons } from "./quarterlyR5"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
+import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResultsEvidence } from "./resultsR5LiveRefresh"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
 import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
@@ -337,6 +338,7 @@ export function ResultsLivePage() {
   const [scanBusy, setScanBusy] = useState(false)
   const [scanError, setScanError] = useState<string | null>(null)
   const [evidenceRevision, setEvidenceRevision] = useState(0)
+  const lastEvidenceRequestAt = useRef(Date.now())
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<PositionFilter>("ALL")
   const [industry, setIndustry] = useState("ALL")
@@ -352,6 +354,28 @@ export function ResultsLivePage() {
   const analysisRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const periods = useMemo(() => makePeriods(), [])
+
+  // R5-F: observe R4's source selections without launching another provider
+  // collection. Re-read only while the Results page is visible, and on a
+  // foreground resume after inactivity. Derived QoQ/YoY and grades useMemo
+  // recalculates automatically when any selected financial evidence changes.
+  useEffect(() => {
+    const refresh = () => {
+      if (!shouldRefreshResultsEvidence(
+        Date.now() - lastEvidenceRequestAt.current, document.visibilityState === "visible",
+      )) return
+      lastEvidenceRequestAt.current = Date.now()
+      setEvidenceRevision(value => value + 1)
+    }
+    const timer = window.setInterval(refresh, RESULTS_R5_REFRESH_INTERVAL_MS)
+    window.addEventListener("focus", refresh)
+    document.addEventListener("visibilitychange", refresh)
+    return () => {
+      window.clearInterval(timer)
+      window.removeEventListener("focus", refresh)
+      document.removeEventListener("visibilitychange", refresh)
+    }
+  }, [])
 
   useEffect(() => {
     const grid = gridRef.current
@@ -398,7 +422,7 @@ export function ResultsLivePage() {
     if (!portfolio) return
     let active = true
     void loadResultsSourceInventory(entries.map((entry) => entry.position.securityId))
-      .then((rows) => { if (active) { setObservations(rows); setEvidenceError(null) } })
+      .then((rows) => { if (active) { setObservations(previous => resultsEvidenceEqual(previous, rows) ? previous : rows); setEvidenceError(null) } })
       .catch((reason: unknown) => { if (active) { setObservations([]); setEvidenceError(reason instanceof Error ? reason.message : "Evidence cannot be loaded") } })
       .finally(() => { if (active) setLoadingEvidence(false) })
     return () => { active = false }
