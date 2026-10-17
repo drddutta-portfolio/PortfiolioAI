@@ -5,6 +5,7 @@ import {
   type R5IndustryPeer,
 } from "./quarterlyR5Classification"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
+import { compareQuarterMetric } from "./quarterlyR5"
 
 interface Security extends R5IndustryPeer { readonly symbol: string }
 interface Input {
@@ -49,6 +50,21 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     expect(data.cohort).toHaveLength(262)
     const calibrations=buildRollingIndustryR5Calibrations(data.observations,data.cohort,QUARTERS)
     const selectedById=new Map(data.cohort.map(s=>[s.securityId,data.observations.filter(o=>o.securityId===s.securityId)]))
+    // Preserve each individual qualified-but-unrated historical case. The
+    // actual R5 engine supplies the authoritative grade and explanation.
+    const historicalExceptions: {
+      symbol:string;quarter:string;industry:string|null;
+      reason:string;gradeBasis:string;previousQuarter:string;
+      historicalChecks:readonly {quarter:string;topSelected:boolean;profitSelected:boolean;
+        sameFilingAndScope:boolean;topQoQStatus:string;profitQoQStatus:string}[];
+      action:string;
+    }[]=[]
+    const priorQuarter=(end:string)=>{
+      const [y,m]=end.split("-").map(Number)
+      return new Date(Date.UTC(y!,m!-3,0)).toISOString().slice(0,10)
+    }
+    const banks=new Set("AUBANK AXISBANK BANDHANBNK BANKBARODA BANKINDIA CANBK FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK RBLBANK SBIN UNIONBANK".split(" "))
+    const classifications:Record<string,number>={}
     const byQuarter:Record<string,unknown>={}
     const overall={qualified:0,rated:0,notRated:0}
     for(const end of QUARTERS){
@@ -67,7 +83,43 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
         }
         if(qualifiedOriginal(own,security.symbol,end)){
           qualifiedCounts.qualified++
-          if(assessment.status==="UNAVAILABLE") qualifiedCounts.unrated++
+          if(assessment.status==="UNAVAILABLE") {
+            qualifiedCounts.unrated++
+            if(end==="2025-03-31"||end==="2025-06-30"||end==="2025-09-30"){
+              const top=banks.has(security.symbol)?"NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
+              const historicalChecks=[] as {quarter:string;topSelected:boolean;profitSelected:boolean;
+                sameFilingAndScope:boolean;topQoQStatus:string;profitQoQStatus:string}[]
+              let prior=end
+              for(let index=0;index<4;index++){
+                const quarter=prior
+                const primary=compareQuarterMetric(own,security.securityId,quarter,top)
+                const profit=compareQuarterMetric(own,security.securityId,quarter,"NET_PROFIT_QUARTER")
+                const a=primary.current,b=profit.current
+                historicalChecks.push({
+                  quarter,topSelected:Boolean(a),profitSelected:Boolean(b),
+                  sameFilingAndScope:Boolean(a&&b&&a.sourceRecordId&&
+                    a.sourceRecordId===b.sourceRecordId&&a.scope===b.scope),
+                  topQoQStatus:primary.qoq!==null?"ELIGIBLE":primary.qoqLimitation??"UNKNOWN",
+                  profitQoQStatus:profit.qoq!==null?"ELIGIBLE":profit.qoqLimitation??"UNKNOWN",
+                })
+                prior=priorQuarter(prior)
+              }
+              const reason=assessment.explanation
+              const action=reason.startsWith("Industry is unavailable")?"MODEL_NOT_SUPPORTED":
+                reason.startsWith("Comparable, same-filing")?"RECONCILE_ADJACENT_QUARTER_AND_SOURCE_COMPATIBILITY":
+                historicalChecks.slice(0,3).some(check=>!check.topSelected||!check.profitSelected)?
+                  "RECOVER_QUALIFIED_PRIOR_SOURCE_SELECTION":
+                  historicalChecks.slice(0,3).some(check=>!check.sameFilingAndScope)?
+                    "RECONCILE_ISSUER_FILING_AND_SCOPE":
+                    "INSUFFICIENT_PEER_OR_HISTORICAL_COMPARISON_CONTRACT"
+              classifications[action]=(classifications[action]??0)+1
+              historicalExceptions.push({
+                symbol:security.symbol,quarter:end,industry:security.industry,
+                reason,gradeBasis:assessment.basis,
+                previousQuarter:priorQuarter(end),historicalChecks,action,
+              })
+            }
+          }
           else qualifiedCounts.rated++
         }
       }
@@ -79,12 +131,23 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
       overall.rated+=qualifiedCounts.rated
       overall.notRated+=qualifiedCounts.unrated
     }
+    historicalExceptions.sort((a,b)=>a.quarter.localeCompare(b.quarter)||a.symbol.localeCompare(b.symbol))
+    const historicalQualifiedUnrated=["2025-03-31","2025-06-30","2025-09-30"].reduce((n,q)=>{
+      const row=byQuarter[q] as {qualified:{unrated:number}}
+      return n+row.qualified.unrated
+    },0)
+    expect(historicalExceptions).toHaveLength(historicalQualifiedUnrated)
     const report={
       contract:"R5_ROLLING_HISTORICAL_GRADE_CENSUS_V1",
       quarterEnds:QUARTERS,cohort:262,
       observationSource:"Selected original issuer financial observations in Development",
       engineVersion:RESULTS_GRADING_VERSION,
       overall,byQuarter,
+      historicalExceptions:{
+        count:historicalExceptions.length,actionCounts:classifications,
+        rows:historicalExceptions,
+        note:"Exact engine grade failures among source-qualified issuer company-quarters in three newly enabled historical columns; does not equal the arithmetic remainder of a prior fixed 637-slot cohort.",
+      },
       newlyEligibleHistoricalQuarterEnds:["2025-03-31","2025-06-30","2025-09-30"],
       reportStatus:"ENGINE_GRADE_CENSUS_VERIFIED_NOT_FINAL_UI_ACCEPTANCE",
       limitations:["No look-ahead historical peer thresholds", "No unqualified financial figures",
@@ -93,6 +156,7 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     }
     mkdirSync("tmp/results-r5-g",{recursive:true})
     writeFileSync("tmp/results-r5-g/historical-grade-census.json",JSON.stringify(report,null,2))
-    console.log("R5_HISTORICAL_GRADE_CENSUS",JSON.stringify(report))
+    console.log("R5_HISTORICAL_GRADE_CENSUS",JSON.stringify({...report,historicalExceptions:{...report.historicalExceptions,rowsOmittedFromLogs:true,rows:undefined}}))
+    console.log("R5_HISTORICAL_FAILURES",JSON.stringify({count:historicalExceptions.length,actions:classifications,examples:historicalExceptions.slice(0,12).map(x=>({symbol:x.symbol,quarter:x.quarter,action:x.action}))}))
   })
 })
