@@ -52,13 +52,13 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(screen.getByRole("tab",{name:"Quarterly Results"})).toHaveAttribute("aria-selected","true")
     expect(screen.getByRole("columnheader",{name:/Q1 FY27/})).toBeInTheDocument()
     expect(screen.getByRole("columnheader",{name:"Q2 FY26"})).toBeInTheDocument()
-    expect(screen.queryByRole("columnheader",{name:/Q2 FY27/})).not.toBeInTheDocument()
-    expect(screen.queryByRole("columnheader",{name:"Q1 FY26"})).not.toBeInTheDocument()
+    expect(screen.getByRole("columnheader",{name:/Q2 FY27/})).toBeInTheDocument()
+    expect(screen.getByRole("columnheader",{name:"Q1 FY26"})).toBeInTheDocument()
     expect(screen.getByRole("tab",{name:/Annual Results/})).toBeDisabled()
     expect(screen.getByRole("button",{name:"Current Holdings"})).toBeInTheDocument()
     expect(screen.getByRole("button",{name:"Closed Positions"})).toBeInTheDocument()
     expect(screen.getByRole("button",{name:"Strong"})).toBeInTheDocument()
-    const headings=["Portfolio Position","Net Interest Income — Last 4 Quarters","Key Metrics (Q1 FY27)","AI Insight"]
+    const headings=["Portfolio Position","Net Interest Income — Last 6 Quarters","Key Metrics (Q1 FY27)","AI Insight"]
     for (const title of headings) expect(screen.getByRole("heading",{name:title})).toBeInTheDocument()
     const bankRow=screen.getByText("BANKTEST").closest("tr")
     expect(bankRow).not.toBeNull()
@@ -96,7 +96,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
       { ...fact(q,"EPS_DILUTED",String(5+i)),unit:"INR_PER_SHARE" },
     ]))
     render(<ResultsLivePage />)
-    expect(await screen.findByText("1 stocks with four qualified quarters")).toBeInTheDocument()
+    expect(await screen.findByText(/1 \\/ 2 stocks with four qualified quarters/)).toBeInTheDocument()
     const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
     expect(within(coverage).getByText("Strong 1")).toBeInTheDocument()
     expect(within(coverage).getByText(/0 peer-ranked · 1 own-trend/)).toBeInTheDocument()
@@ -125,7 +125,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
       {...fact(date,"EPS_DILUTED",String(5+j)),securityId:stock.securityId,id:stock.securityId+date+"eps",sourceRecordId:stock.securityId+date,unit:"INR_PER_SHARE"},
     ])))
     render(<ResultsLivePage />)
-    expect(await screen.findByText("223 stocks with four qualified quarters")).toBeInTheDocument()
+    expect(await screen.findByText(/223 \\/ 223 stocks with four qualified quarters/)).toBeInTheDocument()
     const coverage=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
     expect(within(coverage).getByText(/223 peer-ranked · 0 own-trend/)).toBeInTheDocument()
     expect(within(coverage).getByText("Not rated 0")).toBeInTheDocument()
