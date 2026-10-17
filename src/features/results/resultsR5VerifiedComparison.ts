@@ -39,7 +39,7 @@ export function buildVerifiedR5ComparisonRows(
   for(const item of sources){
     const key=item.securityId+"|"+item.periodEnd
     if(accepted.has(key)){ poisoned.add(key); continue }
-    if(item.approval!==APPROVAL || item.scope!=="STANDALONE" ||
+    if(item.approval!==APPROVAL || !["STANDALONE","CONSOLIDATED"].includes(item.scope) ||
        !item.sourceRecordId || !/^[0-9a-f-]{36}$/i.test(item.securityId))continue
     const start=canonicalStart(item.periodEnd)
     if(!start || item.periodEnd<"2024-09-30" || item.periodEnd>"2025-09-30")continue
