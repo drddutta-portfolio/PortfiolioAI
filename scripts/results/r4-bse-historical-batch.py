@@ -158,7 +158,7 @@ def financial_row(lines, labels, metric):
     return found[0]
 
 def extract(raw, symbol, issuer, period, expected_cin=None):
-    if not raw.startswith(b"%PDF") or len(raw)>12_000_000:
+    if not raw.startswith(b"%PDF") or len(raw)>32_000_000:
         raise ValueError("PDF_BYTES_INVALID")
     pdf=fitz.open(stream=raw,filetype="pdf")
     if not 1<=len(pdf)<=100:
@@ -341,7 +341,7 @@ def retained_original(bse,client,filename):
         except Exception as error:
             code=getattr(error,"response",{}).get("Error",{}).get("Code")
             if code not in ("404","NoSuchKey","NotFound"):raise
-    raw,origin=bse.retrieve_original_pdf(filename)
+    raw,origin=bse.retrieve_original_pdf(filename,max_bytes=32_000_000)
     if client:
         key=PREFIX+"evidence/original_version="+sha(raw)+"/issuer-original.pdf"
         immutable_put(client,key,raw)

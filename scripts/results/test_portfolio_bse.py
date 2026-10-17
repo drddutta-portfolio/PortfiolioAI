@@ -166,6 +166,18 @@ class PortfolioBseTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "TOO_LARGE"):
             instance.retrieve_original_pdf(PDF, max_bytes=1024)
 
+    def test_explicit_large_original_stays_bounded(self):
+        instance,fake=adapter()
+        body=b"%PDF-1.4"+b"a"*12_000_001
+        fake.session=FakeSession(body=body)
+        with self.assertRaisesRegex(RuntimeError,"TOO_LARGE"):
+            instance.retrieve_original_pdf(PDF)
+        fake.session=FakeSession(body=body)
+        raw,_=instance.retrieve_original_pdf(PDF,max_bytes=32_000_000)
+        self.assertEqual(raw,body)
+        with self.assertRaisesRegex(ValueError,"SIZE_LIMIT"):
+            instance.retrieve_original_pdf(PDF,max_bytes=32_000_001)
+
     def test_unverified_scrip_lookup(self):
         instance, _ = adapter()
         found = instance.get_scrip_candidate("HDFCBANK")

@@ -212,7 +212,7 @@ class PortfolioBSE:
         """
         if not isinstance(attachment_name, str) or not _PDF_NAME.fullmatch(attachment_name):
             raise ValueError("INVALID_BSE_ATTACHMENT_NAME")
-        if not isinstance(max_bytes, int) or not 1024 <= max_bytes <= 12_000_000:
+        if not isinstance(max_bytes, int) or not 1024 <= max_bytes <= 32_000_000:
             raise ValueError("INVALID_PDF_SIZE_LIMIT")
         for folder in ("AttachHis", "AttachLive"):
             url = f"{_BSE_PDF_BASE}/{folder}/{attachment_name}"

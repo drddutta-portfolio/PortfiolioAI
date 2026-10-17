@@ -39,6 +39,21 @@ def main():
                                 pages.append(metadata)
                             item["financial_pages"]=pages
                     except Exception as error:item["read_status"]=type(error).__name__
+                    proof_key=batch.PREFIX+"ocr-replay-v1/original_version="+item.get("sha256","")+"/parser_revision=quarter-group-v2/period_end="+period+"/proof.json"
+                    try:
+                        proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=proof_key)["Body"].read())
+                        item["ocr_status"]="TRIO_PRESENT" if proof.get("parsed") else "REJECTED"
+                        detail=str(proof.get("rejection",""))
+                        try:
+                            reasons=json.loads(detail.split(":",1)[1])
+                            categories=Counter()
+                            for reason,n in reasons.items():categories[reason.split(":")[0]]+=n
+                            item["ocr_reject_categories"]=dict(categories)
+                        except (ValueError,IndexError,AttributeError):
+                            item["ocr_reject_categories"]={detail.split(":")[0]:1} if detail else {}
+                    except Exception as error:
+                        code=getattr(error,"response",{}).get("Error",{}).get("Code")
+                        item["ocr_status"]="NO_PROOF" if code in ("404","NoSuchKey","NotFound") else type(error).__name__
                     sources.append(item)
                 value={"contract":"RESULTS_R4_PRIVATE_GAP_DIAGNOSTIC_V1","diagnostic_only":True,
                     "canonical_promotion_performed":False,"symbol":symbol,"isin":isin,"security_id":str(sid),"period_end":period,

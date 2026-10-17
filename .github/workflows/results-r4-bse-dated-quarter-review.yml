@@ -1,4 +1,4 @@
-name: Results R4 Full Backlog Signed Statement Review
+name: Results R4 Full Backlog Signed Statement Recovery
 on:
   workflow_dispatch:
   push:
@@ -35,11 +35,48 @@ jobs:
           python scripts/results/test_r4_bse_historical_batch.py -v
           python scripts/results/test_r4_issuer_name.py -v
           python scripts/results/test_r4_private_inventory.py -v
+          python scripts/results/test_portfolio_bse.py -v
       - name: Review every assigned missing quarter from full original PDFs without financial promotion
         run: python scripts/results/r4-bse-dated-quarter-review.py --shard ${{ matrix.shard }}
       # Compact issuer financial evidence stays private in Development R2/DB.
       # Original NSE HTML is not retained; no public financial artifact uploads.
 
 # Recheck every slot using actual quarter-group headings rather than financial-page titles.
-
-# Full-backlog replay with explicit vertically split dates and three-month headings.
+  qualify:
+    needs: review
+    if: success() && github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_DATED_PDF_ACK: EXPLICIT_QUARTER_ORIGINAL_REPLAY
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install pinned original-source verifier
+        run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Verify original replay and protected selection contracts
+        run: |
+          python scripts/results/test_r4_bse_dated_proof.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Process the entire remaining backlog from the refreshed source inventory
+        run: python scripts/results/r4-bse-dated-quarter-promote.py
+      - name: Independent original-file replay and full-cohort protected selection
+        run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Full source-qualified eight-quarter readback
+        if: always()
+        run: |
+          mkdir -p tmp/results-r4
+          python scripts/results/r4-eight-quarter-readback.py > tmp/results-r4/full-backlog-readback.json
+          python - <<'PY'
+          import json
+          a=json.load(open('tmp/results-r4/full-backlog-readback.json'))
+          print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
+          PY
+      # No public financial artifacts; evidence and diagnostics stay private.

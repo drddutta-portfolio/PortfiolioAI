@@ -33,7 +33,8 @@ def main():
                 identity={"header":header,"listing":listing,"issuer_name":legal,"bse_scrip_code":scrip}
                 for period in periods:
                     sources.extend(inventory.get((symbol,period),{}).get("sources",[]))
-                windows=list(WINDOWS)
+                windows=list(WINDOWS)+[batch.WINDOWS[p][1:] for p in periods]
+                windows=list(dict.fromkeys(windows))
                 if symbol=="BDL":windows.append(("2025-06-01","2025-08-31"))
                 for start,end in windows:
                     try:
