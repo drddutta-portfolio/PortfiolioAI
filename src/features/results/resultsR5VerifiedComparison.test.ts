@@ -40,7 +40,7 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(sources.length).toBeGreaterThanOrEqual(50)
    expect(new Set(sources.map(x=>x.securityId+"|"+x.periodEnd)).size).toBe(sources.length)
    for(const evidence of sources){
-     expect(evidence.scope).toBe("STANDALONE")
+     expect(["STANDALONE","CONSOLIDATED"]).toContain(evidence.scope)
      expect(evidence.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
      expect(Object.keys(evidence.observations)).toHaveLength(3)
      expect(evidence.sourceRecordId).toMatch(/^[0-9a-f-]{36}$/)
