@@ -587,7 +587,7 @@ def r5_verified_scope_continuity(facts):
     poison that scope; never use a convenient alternative to evade conflicts.
     This is NOT selection admission and cannot be used as an R5 grade itself.
     """
-    groups=defaultdict(set);versions=defaultdict(set)
+    groups=defaultdict(set);versions=defaultdict(set);proof_rows=defaultdict(dict)
     for r in facts:
         symbol=r["symbol"]
         period=str(r["period_end"]);scope=r["consolidation_scope"]
@@ -595,6 +595,12 @@ def r5_verified_scope_continuity(facts):
         rid=str(r["source_record_id"])
         groups[(symbol,period,scope,rid)].add(metric)
         versions[(symbol,period,scope,metric)].add(Decimal(str(r["numeric_value"])))
+        # Every candidate observation here has just passed independent R2
+        # retained-source SHA, issuer identity and fact/manifest replay.
+        # Only row identifiers, not financial values, enter the R5 manifest.
+        proof_rows[(symbol,period,scope,rid)][metric]=dict(
+            id=str(r["id"]),securityId=str(r["security_id"]),
+            sourceRecordId=rid)
     scopes=defaultdict(set)
     for (symbol,period,scope,rid),metric_codes in groups.items():
         required=(BANK_REQUIRED if symbol in BANKS else
@@ -626,7 +632,40 @@ def r5_verified_scope_continuity(facts):
           source_original_scope_evidence=matched,
           evidence="R2_REPLAYED_ORIGINALS_ONLY",
           decision="R5_REQUIRES_SEPARATE_CANONICAL_SELECTION_REVIEW" if matched else "NO_PROVEN_SAME_SCOPE_SOURCE_PAIR"))
+    # Optional, separately scoped R5 *comparison-only* original-source
+    # evidence. Canonical R4 selections remain exactly as they were.
+    # Restrict to issuers actually having an independently verified
+    # same-scope comparison pair; exclude failing candidate ICEMAKE Sep.
+    allowed_symbols={c["symbol"] for c in candidates
+                     if "STANDALONE" in c["source_original_scope_evidence"]}
+    comparison_proofs=[]
+    for (symbol,period,scope,rid),codes in sorted(groups.items()):
+        if symbol not in allowed_symbols or scope!="STANDALONE":continue
+        if not "2024-09-30"<=period<="2025-09-30":continue
+        needed=(BANK_REQUIRED if symbol in BANKS else
+                INSURANCE_REQUIRED if symbol in INSURERS else OTHER_REQUIRED)
+        if not needed.issubset(codes):continue
+        if any(len(versions[(symbol,period,scope,m)])>1 for m in needed):continue
+        proof=proof_rows[(symbol,period,scope,rid)]
+        if not needed.issubset(proof):continue
+        security_ids={proof[m]["securityId"] for m in needed}
+        if len(security_ids)!=1:continue
+        comparison_proofs.append(dict(
+            symbol=symbol,periodEnd=period,scope=scope,
+            securityId=security_ids.pop(),sourceRecordId=rid,
+            observations={metric:proof[metric]["id"] for metric in sorted(needed)},
+            approval="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+        ))
+    # For competing original filings, admission requires an exact, uniquely
+    # reproducible trio: do not silently pick between different documents.
+    by_period=defaultdict(list)
+    for item in comparison_proofs:
+        by_period[(item["securityId"],item["periodEnd"])].append(item)
+    comparison_proofs=[rows[0] for _,rows in sorted(by_period.items())
+                       if len(rows)==1]
     return {"contract":"R5_SOURCE_HASH_VERIFIED_HISTORICAL_SCOPE_AUDIT_V1",
+            "comparison_only_original_proofs":comparison_proofs,
+            "comparison_only_original_proof_count":len(comparison_proofs),
             "historical_pairs_checked":len(targets),
             "pairs_with_verified_same_scope_originals":sum(bool(x["source_original_scope_evidence"]) for x in candidates),
             "candidate_rows":candidates,
