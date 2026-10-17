@@ -7,6 +7,7 @@ on:
       - .github/workflows/results-r4-nse-lineage-recovery.yml
 permissions:
   contents: read
+  actions: write
 concurrency:
   group: results-r4-nse-lineage-recovery-development
   cancel-in-progress: false
@@ -89,6 +90,11 @@ jobs:
         run: |
           mkdir -p tmp/results-r4
           python scripts/results/r4-verify-quarterly.py --apply
+      - name: Recalculate R5 historical grades after independent issuer-lineage recovery
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run results-r5-g-live-census.yml --ref PortfolioAI-Development
       - name: Exact 262 x eight-quarter readback
         if: always()
         run: |
