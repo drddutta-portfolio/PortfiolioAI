@@ -106,6 +106,21 @@ class GeometryTest(unittest.TestCase):
         with self.assertRaises(ValueError):number(ws(['1','324']))
         with self.assertRaises(ValueError):number(ws(['|']))
 
+    def test_grid_attached_profit_labels_keep_the_reported_amount(self):
+        doc,p=fixture(label="7|Net profit for the period/year")
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"132.4")
+
+    def test_bank_ordinary_pbt_checks_total_period_profit_without_replacing_it(self):
+        doc,p=fixture()
+        for y,label,value in [(250,"1|Interest earned","1,000"),(280,"4|Interest expended","500"),(310,"11 |Profit from Ordinary Activities before tax","1,500"),(340,"12 |Tax expense","176")]:
+            p.insert_text((25,y),label,fontsize=10)
+            for x in (475,625,775):p.insert_text((x,y),value,fontsize=10)
+        out=extract_page(p,1,"2024-09-30",bank=True,allow_comparative=True)
+        self.assertEqual(out["facts"]["NET_INTEREST_INCOME_QUARTER"]["value"],"50")
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"132.4")
+        self.assertEqual(out["arithmetic_validation"]["difference_crore"],"0.0")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)

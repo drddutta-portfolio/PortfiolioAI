@@ -53,7 +53,7 @@ def main():
                         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
                         for page_no,page_text in enumerate(audit['pages'],1):
                             if not re.search(r'diluted',page_text,re.I) or not re.search(r'revenue|interest earned|premium',page_text,re.I):continue
-                            key=batch.PREFIX+'ocr-dated-page-batch-v2/original_version='+digest+'/page='+str(page_no)+'/proof.json'
+                            key=batch.PREFIX+'ocr-dated-page-batch-v3/original_version='+digest+'/page='+str(page_no)+'/proof.json'
                             proof=cached(client,key,lambda:run_with_timeout(extract_dated_periods,(raw,page_no,tuple(batch.WINDOWS),symbol in batch.BANKS,symbol in batch.INSURERS),240))
                             if 'result' not in proof:raise ValueError(proof['rejection'])
                             for period in periods:

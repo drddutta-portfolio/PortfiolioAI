@@ -121,6 +121,11 @@ def number(words):
     return Decimal(text.replace(",","").replace("(","-").replace(")","")),text
 
 def clean_label(text):
+    # Table ruling glyphs are layout, not part of the metric's name. This
+    # never changes the independently extracted numeric cell.
+    text=re.sub(r"[|¦\[\]]"," ",text)
+    text=re.sub(r"^[^A-Za-z0-9]+","",text)
+    text=re.sub(r"^\d{1,2}[.)]?(?=[A-Za-z])","",text)
     return re.sub(r"^\s*(?:(?:\d+|[ivx]+)[.)]?\s+|\(?[a-z]\s*[)|]\s*|-\s*)","",text,flags=re.I).strip()
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False):
@@ -200,7 +205,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^interest\s+earned\b",label,re.I):metric="INTEREST_EARNED"
             elif re.match(r"^interest\s+expended\b",label,re.I):metric="INTEREST_EXPENDED"
             elif re.match(r"^(?:net\s+)?premiums?\s+earned\b",label,re.I):metric="NET_PREMIUM_EARNED_QUARTER"
-            elif re.match(r"^profit\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
+            elif re.match(r"^profit\s*(?:/\s*\(?loss\)?|\(loss\))?\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
+            elif allow_comparative and bank and re.match(r"^profit\s+from\s+ordinary\s+activities\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
             elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
@@ -210,7 +216,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
             if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","TAX_EARLIER_YEARS","EPS_DILUTED") and re.search(r"continuing|discontinued",label,re.I):continue
-            if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling",label,re.I):continue
+            if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling|before\s+tax",label,re.I):continue
             if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",label,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
