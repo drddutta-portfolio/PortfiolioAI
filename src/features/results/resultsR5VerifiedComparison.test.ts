@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest"
+import pinnedProof from "./resultsR5ComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
@@ -32,6 +33,19 @@ const rows=quarters.flatMap((q,i)=>[...fixture("STANDALONE",q,i),...fixture("CON
 const calibration:R5IndustryCalibrations=new Map()
 
 describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
+ it("contains uniquely identified replay-verified original trios without financial numbers",()=>{
+   expect(pinnedProof.contract).toBe("R5_INDEPENDENT_ORIGINAL_COMPARISON_PROOF_V1")
+   expect(pinnedProof.environment).toBe("Development")
+   const sources=pinnedProof.approvedSources
+   expect(sources.length).toBeGreaterThanOrEqual(50)
+   expect(new Set(sources.map(x=>x.securityId+"|"+x.periodEnd)).size).toBe(sources.length)
+   for(const evidence of sources){
+     expect(evidence.scope).toBe("STANDALONE")
+     expect(evidence.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+     expect(Object.keys(evidence.observations)).toHaveLength(3)
+     expect(evidence.sourceRecordId).toMatch(/^[0-9a-f-]{36}$/)
+   }
+ })
  it("scores from an independently verified coherent standalone history while R4 remains untouched",()=>{
    const gradedBefore=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,rows)
    expect(gradedBefore.status).toBe("UNAVAILABLE")
