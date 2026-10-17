@@ -1,3 +1,9 @@
+## R4 independently verified recovery — 17 October 2026, 23:44 IST (18:14 UTC)
+
+**PARTIAL: 2,008 / 2,096 source-qualified company-quarters across 262 equities. Historical R4 gaps: 81 → 70; deferred R3 gaps: 18 unchanged.** Exact BSE/NSE same-statement evidence qualified LG Electronics India’s March 2025 quarter. Independent replay checked 3,976 sources, selected three new facts, preserved all 6,074 existing decisions and found zero protected-selection conflicts. Aggregate unresolved slots: 79 missing and 9 conflicting. The full 71-slot same-statement pass completed; the eight-shard alternative-layout OCR sweep continues through the remaining originals. Full architecture/type/lint/build/source-regression validation passed. No UI changes were made by this recovery. R4 remains incomplete until the remaining historical quarters have qualifying originals. [Recovery evidence and active run](PortfolioAI_RESULTS_R4_FULL_BACKLOG_RECOVERY_2026-10-17.md).
+
+---
+
 ## R4 full-backlog recovery — 17 October 2026, 08:14 UTC readback
 
 **PARTIAL: 2,007 / 2,096 source-qualified company-quarters across 262 equities. Historical gaps: 81 → 71; deferred R3 gaps: 18 unchanged.** The latest independent qualification created three decisions, preserved 6,071 existing decisions and found zero protected-selection conflicts. A complete 75-slot pass ran after the initial six recoveries. Full-backlog signed-statement and eight-shard dated-OCR recovery continue with private original retention, per-original isolation and independent source replay; successful workflow execution does not mean every gap is resolved. No UI, schema/migration, Auth/RLS, holdings, main or Production changes are part of this R4 recovery. [Full recovery record](PortfolioAI_RESULTS_R4_FULL_BACKLOG_RECOVERY_2026-10-17.md).

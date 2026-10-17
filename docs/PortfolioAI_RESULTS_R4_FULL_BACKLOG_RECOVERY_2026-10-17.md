@@ -2,7 +2,7 @@
 
 Status: PARTIAL. The historical backlog is not complete.
 
-The independent Development eight-quarter readback at 08:14 UTC verified 2,007 of 2,096 company-quarter slots across 262 equities. Historical R4 gaps fell from 81 to 71 during this recovery. The 18 deferred R3 slots remain separate. The aggregate unresolved classification is 80 missing and 9 conflicting slots. No existing accepted decision was replaced; the latest qualification created three decisions and preserved 6,071 existing decisions.
+The independent Development eight-quarter readback at 23:44 IST (18:14 UTC) verified 2,008 of 2,096 company-quarter slots across 262 equities. Historical R4 gaps fell from 81 to 70 during this recovery. The 18 deferred R3 slots remain separate. The aggregate unresolved classification is 79 missing and 9 conflicting slots. The latest qualification selected LG Electronics India’s March 2025 quarter, created three decisions, preserved all 6,074 existing decisions and found zero protected-selection conflicts.
 
 ## Completed full-cohort work
 
@@ -21,6 +21,16 @@ A separately bounded eight-shard OCR sweep processes every remaining historical 
 The ten-minute controller now includes signed-statement and dated-OCR recovery in its source rotation. Monitoring does not mean making fresh provider calls every ten minutes: source retries retain cooldowns, cached originals and duplicate-run checks. Original PDF/OCR text, financial traces and per-issuer diagnostics are not uploaded as public workflow artifacts.
 
 Restated comparatives, pro-forma/carve-out statements, contradictory full trios and unresolved identity/date/unit/scope evidence stay unresolved. There is no annual-minus-YTD reconstruction, zero substitution, issuer-vote selection, automatic latest-value override, or share/EPS rebasing. An actual reported quarter must be proven before a gap closes.
+
+## Original-scope proof and full-backlog retry — 17 October 2026
+
+The recovery now tries Tesseract table and sparse-text segmentation modes (6 and 11), as well as the default mode, against recorded approved pairs of rendering resolutions. Dates and financial cells must still match independently, with the same profit/tax equality. Failed originals remain isolated; parser-versioned private caches and per-run audit identifiers show attempted work even when coverage does not improve.
+
+A new, narrowly typed scope proof handles an original PDF table whose reporting scope is omitted. It requires an independent original NSE filing with the exact issuer/ISIN, scope, current-quarter trio, common board date, and the same explicit note naming the requested historical quarter. Historical figures come solely from the original dated BSE PDF cells. Both originals and their hashes remain private in Development R2; a separate source verifier replays the proof before selection. Synthetic exact-original tests cover altered financial cells, wrong issuer, unrelated notes, restatement and undeclared proof rejection.
+
+Equal-valued additional filings now preserve accepted observation IDs. Contradictory financial values still quarantine the quarter, and the transaction-wide protected-selection guard remains in place. The ten-minute controller includes the same-statement review/qualification pass in its source rotation.
+
+Validation: [full application and source checks](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/39056948817) passed architecture, TypeScript, application/edge lint, build, financial replay/retry regressions and whitespace checks. The [same-statement full-backlog run](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/39056662341) attempted all 71 historical slots and ingested one three-metric candidate; the independent verifier then replayed 3,976 immutable sources, selected the LG Electronics India March 2025 trio and confirmed the 2,008/2,096 coverage above. The [eight-shard OCR sweep](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/39054527921) continues across the entire backlog. No UI files were changed by this recovery.
 
 ## Authority and scope
 
