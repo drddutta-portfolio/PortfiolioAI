@@ -143,7 +143,7 @@ class IsolationTest(unittest.TestCase):
              patch.object(batch,"immutable_put") as put:
             result,origin,reused=batch.retained_original(bse,client,"fixture.pdf")
         self.assertEqual(result,raw);self.assertFalse(reused)
-        bse.retrieve_original_pdf.assert_called_once_with("fixture.pdf")
+        bse.retrieve_original_pdf.assert_called_once_with("fixture.pdf",max_bytes=32_000_000)
         client.get_object.assert_not_called()
         keys=[call.args[1] for call in put.call_args_list]
         self.assertTrue(any("original_version="+batch.sha(raw) in key for key in keys))
