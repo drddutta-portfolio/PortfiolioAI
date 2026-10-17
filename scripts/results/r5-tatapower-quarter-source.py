@@ -80,8 +80,30 @@ def inspect_one(period,url,pages):
                          ("QUARTER","ENDED","MONTHS","SEP","DEC","JUN","2024",
                           "2023","CRORE","PROFIT","DILUTED","REVENUE","CONSOLIDATED"))]
                 if safe:tokens.append({"y":round(y,1),"tokens":safe[:20]})
+            candidate_headers=list(dated_headers(lines))
+            filtered=[]
+            from r4_pdf_geometry import row_text
+            import re
+            for idx,header_y,dates in candidate_headers:
+                if len(dates)<3:continue
+                centers=[(d[1]+d[2])/2 for d in dates]
+                if not (centers[0]<centers[1]<centers[2]):continue
+                left=centers[0]-(centers[1]-centers[0])/2
+                right=(centers[0]+centers[1])/2
+                matches=[]
+                for yy,ws in lines[idx+1:]:
+                    label=row_text([w for w in ws if (w[0]+w[2])/2<left])
+                    if not re.search(r'revenue|profit|tax|diluted|earnings|loss',label,re.I):continue
+                    number_words=[w for w in ws if left<=(w[0]+w[2])/2<right]
+                    count=sum(bool(re.fullmatch(r'\\(?-?[0-9,]+(?:\\.[0-9]+)?\\)?',str(w[4]))) for w in number_words)
+                    matches.append({"label":re.sub(r'[^A-Za-z ]','',label)[:95],
+                                    "first_quarter_numeric_token_count":count,"row_y":round(yy,1)})
+                filtered.append({"periods":[d[0] for d in dates[:6]],
+                     "first_x":round(centers[0],1),"second_x":round(centers[1],1),
+                     "financial_row_diagnostics":matches[:30]})
             metadata.append({"page_zero_index":page_index,"label_coordinates":tokens[:15],
-              "parsed_date_headers":sum(1 for _ in dated_headers(lines))})
+              "parsed_date_headers":len(candidate_headers),
+              "column_financial_labels":filtered[:3]})
         return {"period":period,"status":"SOURCE_UNQUALIFIED","original_sha256":hashlib.sha256(raw).hexdigest(),
                 "qualified_consolidated_tables":len(candidates),"rejects":rejections,
                 "diagnostic_nonfinancial_labels":metadata}
