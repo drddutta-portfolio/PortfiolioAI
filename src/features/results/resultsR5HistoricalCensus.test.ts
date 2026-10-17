@@ -65,6 +65,7 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     }
     const banks=new Set("AUBANK AXISBANK BANDHANBNK BANKBARODA BANKINDIA CANBK FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK RBLBANK SBIN UNIONBANK".split(" "))
     const classifications:Record<string,number>={}
+    const existingQualifiedTrendFallbacks: {symbol:string;quarter:string;proposedGrade:string}[]=[]
     const byQuarter:Record<string,unknown>={}
     const overall={qualified:0,rated:0,notRated:0}
     for(const end of QUARTERS){
@@ -105,6 +106,15 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
                 prior=priorQuarter(prior)
               }
               const reason=assessment.explanation
+              // Run the already-approved issuer-only trajectory contract
+              // against the *same* selected originals as a counterfactual.
+              // No industry peers or unqualified sources are introduced.
+              if(reason.startsWith("Comparable, same-filing")){
+                const trend=gradeQuarterR5(own,security.securityId,end,security.sector,security.industry,new Map())
+                if(trend.basis==="COMPANY_TREND" && trend.status!=="UNAVAILABLE"){
+                  existingQualifiedTrendFallbacks.push({symbol:security.symbol,quarter:end,proposedGrade:trend.status})
+                }
+              }
               const action=reason.startsWith("Industry is unavailable")?"MODEL_NOT_SUPPORTED":
                 reason.startsWith("Comparable, same-filing")?"RECONCILE_ADJACENT_QUARTER_AND_SOURCE_COMPATIBILITY":
                 historicalChecks.slice(0,3).some(check=>!check.topSelected||!check.profitSelected)?
@@ -149,6 +159,7 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
         count:historicalExceptions.length,
         supportedModelUnratedCount:modelSupportedHistoricalExceptions.length,
         supportedModelActions:groupedActions,
+        eligibleAlreadyApprovedCompanyTrendFallbacks:existingQualifiedTrendFallbacks,
         unmodeledCount:historicalExceptions.length-modelSupportedHistoricalExceptions.length,
         actionCounts:classifications,
         rows:historicalExceptions,
@@ -165,7 +176,9 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     console.log("R5_HISTORICAL_GRADE_CENSUS",JSON.stringify({...report,historicalExceptions:{...report.historicalExceptions,rowsOmittedFromLogs:true,rows:undefined}}))
     console.log("R5_HISTORICAL_FAILURES",JSON.stringify({
       supportedModelUnratedCount:modelSupportedHistoricalExceptions.length,
-      supportedModelActions:groupedActions,unmodeledCount:historicalExceptions.length-modelSupportedHistoricalExceptions.length,
+      supportedModelActions:groupedActions,
+      eligibleAlreadyApprovedCompanyTrendFallbacks:existingQualifiedTrendFallbacks,
+      unmodeledCount:historicalExceptions.length-modelSupportedHistoricalExceptions.length,
       historicalAllQualifiedUnrated:historicalExceptions.length,
       examples:modelSupportedHistoricalExceptions.slice(0,22).map(x=>({symbol:x.symbol,quarter:x.quarter,action:x.action})),
     }))
