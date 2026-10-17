@@ -1,0 +1,68 @@
+import { describe, it, expect } from "vitest"
+import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
+import type { ResultsSourceObservation } from "./resultsSourceRepository"
+import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
+
+const sid="11111111-1111-4111-8111-111111111111"
+const quarters=["2024-09-30","2024-12-31","2025-03-31","2025-06-30"]
+const start=(date:string)=>new Date(Date.UTC(Number(date.slice(0,4)),Number(date.slice(5,7))-3,1)).toISOString().slice(0,10)
+function fixture(scope:"STANDALONE"|"CONSOLIDATED",quarter:string,index:number):ResultsSourceObservation[]{
+  const company=scope==="STANDALONE"?"r5-original":"canonical-original"
+  const values=[String(100+index*15),String(20+index*5),String(2+index)]
+  return ["OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"].map((code,i)=>({
+    id:company+"-"+quarter+"-"+code,securityId:sid,code,value:values[i]!,
+    unit:code==="EPS_DILUTED"?"INR_PER_SHARE":"INR_CRORE",
+    periodStart:start(quarter),periodEnd:quarter,currency:"INR",scope,
+    source:"COMPANY_EXCHANGE_FILING",sourceRecordId:company+"-"+quarter,
+    publishedAt:null,retrievedAt:"2026-10-17T00:00:00Z",
+    selected:scope==="CONSOLIDATED",
+  }))
+}
+const proof=quarters.map(q=>{
+  const originals=fixture("STANDALONE",q,quarters.indexOf(q))
+  return {
+    symbol:"MOCK", securityId:sid,periodEnd:q,scope:"STANDALONE",
+    sourceRecordId:"r5-original-"+q,
+    observations:Object.fromEntries(originals.map(r=>[r.code,r.id])),
+    approval:"R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+  } satisfies VerifiedR5Source
+})
+const rows=quarters.flatMap((q,i)=>[...fixture("STANDALONE",q,i),...fixture("CONSOLIDATED",q,i)])
+const calibration:R5IndustryCalibrations=new Map()
+
+describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
+ it("scores from an independently verified coherent standalone history while R4 remains untouched",()=>{
+   const gradedBefore=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,rows)
+   expect(gradedBefore.status).toBe("UNAVAILABLE")
+   const alternative=buildVerifiedR5ComparisonRows(rows,proof)
+   expect(alternative).not.toBe(rows)
+   expect(rows.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(12)
+   expect(alternative.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(0)
+   expect(alternative.filter(r=>r.selected&&r.scope==="STANDALONE")).toHaveLength(12)
+   const graded=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,alternative)
+   expect(graded.status).toBe("STRONG")
+   expect(graded.basis).toBe("COMPANY_TREND")
+   expect(graded.explanation).toContain("canonical Results filing selections are untouched")
+ })
+ it("fails closed when any verified original hash-bound ID or scope is different",()=>{
+   const altered=proof.map(x=>x.periodEnd==="2025-03-31"?
+      {...x,observations:{...x.observations,NET_PROFIT_QUARTER:"unverified-foreign-observation"}}:x)
+   const other=buildVerifiedR5ComparisonRows(rows,altered)
+   expect(other.filter(r=>r.selected&&r.periodEnd==="2025-03-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
+   expect(gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,other).status).toBe("UNAVAILABLE")
+ })
+ it("poisons duplicated or incorrectly labelled proofs instead of choosing one",()=>{
+   const duplicates=[...proof,proof[2]!]
+   const other=buildVerifiedR5ComparisonRows(rows,duplicates)
+   expect(other.filter(r=>r.selected&&r.periodEnd==="2025-03-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
+   const invalid=proof.map(x=>({...x,approval:"UNVERIFIED_ISSUER"}))
+   expect(buildVerifiedR5ComparisonRows(rows,invalid)).toBe(rows)
+ })
+ it("does not change existing accepted ratings or require any fresh provider download",()=>{
+   const coherent=quarters.flatMap((q,i)=>fixture("STANDALONE",q,i).map(r=>({...r,selected:true})))
+   const alt=buildVerifiedR5ComparisonRows(coherent,proof)
+   const grade=gradeR5WithVerifiedOriginal(coherent,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,alt)
+   expect(grade.status).toBe("STRONG")
+   expect(grade.explanation).not.toContain("canonical Results filing selections are untouched")
+ })
+})
