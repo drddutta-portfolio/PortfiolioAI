@@ -10,6 +10,7 @@ on:
       - scripts/results/r4-verify-quarterly.py
 permissions:
   contents: read
+  actions: write
 concurrency:
   group: results-r4-2025-nse-original-dev
   cancel-in-progress: false
@@ -63,6 +64,13 @@ jobs:
         env:
           RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
         run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Trigger the exact live R5 grading census after source recovery
+        if: matrix.group == 1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run results-r5-g-live-census.yml --ref PortfolioAI-Development
       - name: Read back 262 x 8 qualified source trios
         if: always()
         run: |
