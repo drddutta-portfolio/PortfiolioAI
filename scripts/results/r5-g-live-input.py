@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Read-only 262-equity Development input for the ACTUAL R5 TypeScript grader.
 
+Recompute after canonical classification recovery: newer missing-industry decisions
+must flow through the same canonical enrichment view, never UI-side inference.
+
 The JSON is transient to the private GitHub Actions runner. Do not upload this
 source fact input as an artifact. Only the derived grade census is retained.
 """
