@@ -42,6 +42,7 @@ jobs:
           python scripts/results/test_r4_nse_failure_isolation.py -v
           python scripts/results/test_r4_nse_issuer_bridge.py -v
           python scripts/results/test_r4_issuer_rename.py -v
+          python scripts/results/test_r4_krn_correction.py -v
           python scripts/results/test_r5_legacy_2024_xbrl.py -v
           node scripts/results/test_r4_workflow_identity.mjs
           python -m py_compile scripts/results/r4-recovery-monitor.py scripts/results/r4-nse-lineage-batch.py scripts/results/r4-bse-historical-batch.py scripts/results/r4-ocr-retained-batch.py scripts/results/r4-trendlyne-history.py
