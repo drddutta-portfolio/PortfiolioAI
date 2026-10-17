@@ -7,7 +7,7 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * Each historical quarter uses ONLY its own and earlier qualified financials
  * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V5"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V6"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 export interface ResultsQuarterGrade {
   readonly status: R5Grade
@@ -68,6 +68,10 @@ const normalized = (value: string | null) =>
 const groupKey = (sector: string | null, industry: string | null) =>
   normalized(sector) + "::" + normalized(industry)
 const bankIndustry = (industry: string) => /\bBANKS?\b/.test(industry)
+const NON_BANK_FINANCIAL_TREND = /^(NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY)$/
+function financialOperatingTrendOnly(sector: string | null, industry: string | null): boolean {
+  return normalized(sector) === "FINANCIAL SERVICES" && NON_BANK_FINANCIAL_TREND.test(normalized(industry))
+}
 
 /** Unknown, unreviewed or incompatible business-model groups remain ungraded. */
 function modelFor(sector: string | null, industry: string | null):
@@ -75,10 +79,11 @@ function modelFor(sector: string | null, industry: string | null):
   const s = normalized(sector), i = normalized(industry)
   if (!s || !i || s === "UNCLASSIFIED" || i === "UNCLASSIFIED") return null
   if (s === "BANKING") return bankIndustry(i) ? "NET_INTEREST_INCOME_QUARTER" : null
-  // Cash-operating financial platforms can use their OWN revenue/PAT trends,
-  // never a bank NII contract or cross-industry peer percentile.
+  // These explicitly reviewed NON-BANK finance businesses have source-backed
+  // issuer-specific operating Revenue/PAT trends. This is NOT a prudential or
+  // credit-quality grade. No peer percentiles may be inferred for this group.
   if (s === "FINANCIAL SERVICES") {
-    return /^(FINANCIAL TECHNOLOGY \(FINTECH\)|INTERNET SOFTWARE & SERVICES|DEPOSITORIES, CLEARING HOUSES AND OTHER INTERMEDIARIES|STOCKBROKING & ALLIED|FINTECH \/ INSURANCE BROKERAGE & PLATFORM)$/.test(i)
+    return /^(FINANCIAL TECHNOLOGY \(FINTECH\)|INTERNET SOFTWARE & SERVICES|DEPOSITORIES, CLEARING HOUSES AND OTHER INTERMEDIARIES|STOCKBROKING & ALLIED|FINTECH \/ INSURANCE BROKERAGE & PLATFORM|NON BANKING FINANCIAL COMPANY \(NBFC\)|ASSET MANAGEMENT COMPANY|ASSET MANAGEMENT COS\.|INVESTMENT COMPANY|FINANCIAL INSTITUTIONS|HOUSING FINANCE COMPANY)$/.test(i)
       ? "OPERATING_REVENUE_QUARTER" : null
   }
   if (s === "FINANCE" ||
@@ -156,7 +161,7 @@ export function buildIndustryR5Calibrations(
   for (const [securityId, peer] of profiles) {
     if (!peer) continue
     const topCode = modelFor(peer.sector, peer.industry)
-    if (!topCode) continue
+    if (!topCode || financialOperatingTrendOnly(peer.sector,peer.industry)) continue
     const key = groupKey(peer.sector, peer.industry)
     const bucket = grouped.get(key) ?? { topCode, top: [], profit: [], issuers: new Set<string>() }
     const ownRows = observations.filter(r => r.securityId === securityId)
@@ -291,6 +296,13 @@ export function gradeQuarterR5(
   const topCode = modelFor(sector, industry)
   if (!comparisonEndsThrough(end).length) return fail(group, "Historical quarter is outside the approved R5 grading calendar.")
   if (!topCode) return fail(group, "Industry is unavailable or its financial-statement model is not supported.")
+  if (financialOperatingTrendOnly(sector,industry)) {
+    const trend=gradeCompanyTrajectory(observations,securityId,end,topCode,group)
+    return trend.status === "UNAVAILABLE" ? trend : {
+      ...trend,
+      explanation: "LIMITED NON-BANK FINANCIAL OPERATING TREND: issuer-only Revenue/PAT comparison. Funding cost, asset quality, AUM, capital, NIM, ROA and prudential strength are NOT assessed. No bank-style investment or peer rating. " + trend.explanation,
+    }
+  }
   const calibration = calibrations.get(end + "|" + groupKey(sector,industry)) ??
     (end === LATEST_FROZEN_GRADE_QUARTER ? calibrations.get(groupKey(sector,industry)) : undefined)
   if (!calibration || calibration.topCode !== topCode) {
