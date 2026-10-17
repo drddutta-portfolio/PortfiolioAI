@@ -20,6 +20,13 @@ class RenameTest(unittest.TestCase):
     def test_arbitrary_document_url_is_not_authority(self):
         with self.assertRaises(ValueError):verify_rename_pdf(authority(),"ETERNAL","https://example.com/rename.pdf")
 
+    def test_separately_pinned_official_exchange_notice_is_valid_authority(self):
+        alternate=RULES["ETERNAL"]["alternate_urls"][0]
+        self.assertEqual(verify_rename_pdf(authority(),"ETERNAL",alternate).source_url,alternate)
+        raw=authority("CEMPRO",day="September 17, 2025")
+        proof=verify_rename_pdf(raw,"CEMPRO",RULES["CEMPRO"]["url"])
+        self.assertEqual(proof.old_symbol,"ITDCEM")
+
     def test_missing_old_legal_name_rejected(self):
         raw=authority("ALIVUS",old_name="Different Life Sciences",day="January 20, 2025")
         with self.assertRaises(ValueError):verify_rename_pdf(raw,"ALIVUS",RULES["ALIVUS"]["url"])
