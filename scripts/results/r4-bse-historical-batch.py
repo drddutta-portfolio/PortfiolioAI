@@ -374,6 +374,9 @@ def persist(db,client,row,period,source,raw,parsed,publication):
         "ocr_independent_checks":parsed.get("ocr_independent_checks"),
         "ocr_proof_r2_key":parsed.get("ocr_proof_r2_key"),
     }
+    if parsed.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1":
+        manifest.update({key:parsed[key] for key in ("first_column_period","selected_column_period","selected_column_index","issuer_identity_evidence_r2_key","issuer_identity_evidence_sha256","source_reporting_basis")})
+        manifest["historical_eps_reporting_basis"]="AS_REPORTED_IN_SELECTED_FILING_COMPARABILITY_UNPROVEN"
     manifestbytes=canonical(manifest)
     manifesthash=sha(manifestbytes)
     key=root+f"source_version={manifesthash}/manifest.json"
@@ -600,4 +603,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
 

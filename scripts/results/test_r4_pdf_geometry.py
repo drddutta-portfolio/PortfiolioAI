@@ -53,6 +53,17 @@ class GeometryTest(unittest.TestCase):
         p.insert_text((25,70),"Rs in Mn",fontsize=10)
         self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["unit"],"INR_MILLION")
 
+    def test_component_operation_rows_do_not_replace_whole_company_profit(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.insert_text((25,240),"Profit for the period from discontinued operations",fontsize=10)
+        p.insert_text((25,260),"Diluted EPS from continuing operations",fontsize=10)
+        for x in (475,625,775):
+            p.insert_text((x,240),"999",fontsize=10)
+            p.insert_text((x,260),"999",fontsize=10)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"212.7")
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)

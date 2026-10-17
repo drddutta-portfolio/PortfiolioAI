@@ -205,6 +205,15 @@ def check_manifest(record,manifest):
         original=manifest.get("original_sha256_retained")
         original_key=manifest.get("original_r2_key")
         period=manifest.get("period_end")
+        if manifest.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1":
+            proofhash=manifest.get("issuer_identity_evidence_sha256")
+            if (manifest.get("selected_column_period")!=period
+                or type(manifest.get("selected_column_index")) is not int
+                or not 0<=manifest["selected_column_index"]<=2
+                or not re.fullmatch(r"[a-f0-9]{64}",str(proofhash or ""))
+                or manifest.get("issuer_identity_evidence_r2_key")!=PREFIX+"bse-dated-identity/sha256="+str(proofhash)+"/proof.json"
+                or manifest.get("source_reporting_basis") not in ("AS_FILED_OWN_QUARTER","LATER_FILING_REPORTED_COMPARATIVE")):
+                return "DATED_PDF_COLUMN_OR_IDENTITY_PROOF_UNPROVEN"
         if manifest.get("parser_revision")=="PDF_OCR_DOUBLE_RENDER_V1":
             proof=manifest.get("ocr_independent_checks")
             try:
@@ -233,9 +242,9 @@ def check_manifest(record,manifest):
             or "/original_version="+original+"/issuer-original.pdf" not in original_key
             or manifest.get("original_pdf_retained") is not True
             or manifest.get("reporting_currency")!="INR"
-            or manifest.get("first_column_period")!=period
+            or (manifest.get("first_column_period")!=period and manifest.get("parser_revision")!="PDF_WORD_COORDINATES_DATED_COLUMN_V1")
             or manifest.get("original_unit") not in ("INR_LAKH","INR_CRORE","INR_MILLION")
-            or manifest.get("historical_eps_reporting_basis")!="AS_FILED_NOT_RETROSPECTIVELY_ADJUSTED"
+            or manifest.get("historical_eps_reporting_basis")!=("AS_REPORTED_IN_SELECTED_FILING_COMPARABILITY_UNPROVEN" if manifest.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1" else "AS_FILED_NOT_RETROSPECTIVELY_ADJUSTED")
             or manifest.get("historical_share_adjustment_authorized") is not False
             or not isinstance(manifest.get("financial_page"),int)
             or not 1<=manifest["financial_page"]<=40):
@@ -384,7 +393,9 @@ def check_fact(r,m):
             divisor={"INR_LAKH":Decimal(100),"INR_MILLION":Decimal(10),"INR_CRORE":Decimal(1),"INR_PER_SHARE":Decimal(1)}.get(f.get("original_unit"))
             if divisor is None or original/divisor!=Decimal(str(f["value"])):
                 return "BSE_BATCH_ORIGINAL_ROW_VALUE_MISMATCH"
-        if (f.get("page")!=m.get("financial_page") or f.get("column_index")!=0
+        if (f.get("page")!=m.get("financial_page")
+            or f.get("column_index")!=(m.get("selected_column_index") if m.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1" else 0)
+            or (m.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1" and f.get("column_period")!=m.get("period_end"))
             or f.get("original_unit") not in ("INR_LAKH","INR_CRORE","INR_MILLION","INR_PER_SHARE")
             or not isinstance(f.get("evidence_line"),str)
             or not 5<len(f["evidence_line"])<=800):
@@ -653,6 +664,14 @@ def verify(db,s3,apply):
                         error="R2_RETAINED_ORIGINAL_PDF_HASH_MISMATCH"
                 except Exception:
                     error="R2_RETAINED_ORIGINAL_PDF_UNAVAILABLE"
+            if not error and document.get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1" and document.get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1":
+                try:
+                    from r4_bse_dated_proof import validate_original
+                    proof=s3.get_object(Bucket=BUCKET,Key=document["issuer_identity_evidence_r2_key"])["Body"].read()
+                    if sha(proof)!=document["issuer_identity_evidence_sha256"]:raise ValueError("DATED_IDENTITY_HASH_MISMATCH")
+                    validate_original(original_bytes,document,json.loads(proof))
+                except Exception as exc:
+                    error="DATED_PDF_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__
             if not error and document.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"):
                 try:
                     original_bytes=s3.get_object(
@@ -718,6 +737,7 @@ def verify(db,s3,apply):
                         "original_share_basis":bool(
                             r["metric_code"]=="EPS_DILUTED" and
                             (r["raw_payload"].get("historical_identity_link") or r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1")),
+                        "dated_bse":bool(r["raw_payload"].get("parser_revision")=="PDF_WORD_COORDINATES_DATED_COLUMN_V1"),
                         "general_bse_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"),
                         "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
@@ -728,7 +748,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean,dated_bse boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -758,6 +778,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.krn_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; KRN_ISSUER_CORRECTION_AND_NSE_ACK_2025_07_10; ORIGINAL_AND_REVISED_XBRL_HASH_PINNED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.dated_bse THEN
+                                 'RESULTS_R4_BSE_EXPLICIT_DATED_QUARTER_COLUMN_ORIGINAL_REPLAYED; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.general_bse_eps THEN
                                  'RESULTS_R4_BSE_ORIGINAL_PDF_R2_SOURCE_RECONCILED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_RETROSPECTIVE_SPLIT_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_V1_4_AUTHORITY'
                                WHEN p.nse_bridge_eps THEN
@@ -826,4 +848,5 @@ def main():
     with open("tmp/results-r4/readback.json","w") as f:json.dump(result,f,indent=2,sort_keys=True)
     print(json.dumps(result,sort_keys=True))
 if __name__=="__main__":main()
+
 
