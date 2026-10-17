@@ -7,6 +7,8 @@ on:
       - .github/workflows/results-r5-g-live-census.yml
       - scripts/results/r5-g-live-input.py
       - src/features/results/resultsR5GLiveCensus.test.ts
+      - src/features/results/resultsR5HistoricalCensus.test.ts
+      - src/features/results/ResultsReferenceLivePage.tsx
       - src/features/results/quarterlyR5Classification.ts
       - src/features/results/quarterlyR5.ts
 permissions:
@@ -47,9 +49,9 @@ jobs:
       - name: Build private, transient canonical source-selection census
         run: python scripts/results/r5-g-live-input.py
       - name: Execute actual R5 engine and derive current Strong/Mixed/Weak/Not Rated
-        run: npx vitest run src/features/results/resultsR5GLiveCensus.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/quarterlyR5.test.ts
+        run: npx vitest run src/features/results/resultsR5GLiveCensus.test.ts src/features/results/resultsR5HistoricalCensus.test.ts src/features/results/quarterlyR5Classification.test.ts src/features/results/quarterlyR5.test.ts
       - name: Grade audit and source contract lint
-        run: npx eslint src/features/results/resultsR5GLiveCensus.test.ts
+        run: npx eslint src/features/results/resultsR5GLiveCensus.test.ts src/features/results/resultsR5HistoricalCensus.test.ts src/features/results/quarterlyR5Classification.ts src/features/results/ResultsReferenceLivePage.tsx
       - name: Compile current Results UI
         run: npm run build
       - name: Publish derived summary only; never raw issuer source inputs
@@ -57,7 +59,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: results-r5-g-derived-grade-census
-          path: tmp/results-r5-g/grade-census.json
+          path: |
+            tmp/results-r5-g/grade-census.json
+            tmp/results-r5-g/historical-grade-census.json
           if-no-files-found: warn
           retention-days: 14
       - name: Verify git integrity
