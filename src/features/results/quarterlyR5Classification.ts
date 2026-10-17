@@ -3,12 +3,11 @@ import { compareQuarterMetric } from "./quarterlyR5"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 
 /**
- * R5-C current-display operating signal. The ONLY calibration cohort is
- * source-selected Sep 2025–Jun 2026 data within the exact reviewed
- * (sector, industry) pair. No sector-wide thresholds or adjacent-industry
- * substitutes are permitted.
+ * R5 rolling historical operating performance (no investment action).
+ * Each historical quarter uses ONLY its own and earlier qualified financials
+ * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_INDUSTRY_AND_COMPANY_TREND_20261015_V3"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V4"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 export interface ResultsQuarterGrade {
   readonly status: R5Grade
@@ -38,7 +37,30 @@ export interface R5IndustryCalibration {
 }
 export type R5IndustryCalibrations = ReadonlyMap<string, R5IndustryCalibration>
 
-const ENDS = ["2025-12-31", "2026-03-31", "2026-06-30"] as const
+const FIRST_GRADED_QUARTER = "2025-03-31"
+const FIRST_COMPARISON_QUARTER = "2024-12-31"
+const LATEST_FROZEN_GRADE_QUARTER = "2026-06-30"
+
+/** Previous real calendar-quarter end; always fails closed on invalid dates. */
+function previousQuarterEnd(end: string): string | null {
+  const found = /^(\\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
+  if (!found) return null
+  const year = Number(found[1]), month = Number(found[2])
+  if (new Date(Date.UTC(year, month, 0)).toISOString().slice(0, 10) !== end) return null
+  return new Date(Date.UTC(year, month - 3, 0)).toISOString().slice(0, 10)
+}
+
+/** Up to three eligible two-quarter comparisons, all <= the grade date. */
+function comparisonEndsThrough(end: string): readonly string[] {
+  if (end < FIRST_GRADED_QUARTER || !previousQuarterEnd(end)) return []
+  const latestToOldest: string[] = []
+  let cursor: string | null = end
+  while (cursor && cursor >= FIRST_COMPARISON_QUARTER && latestToOldest.length < 3) {
+    latestToOldest.push(cursor)
+    cursor = previousQuarterEnd(cursor)
+  }
+  return latestToOldest.reverse()
+}
 const MIN_PAIRS = 12
 const MIN_ISSUERS = 4
 const normalized = (value: string | null) =>
@@ -83,11 +105,7 @@ function comparable(
   const top = compareQuarterMetric(observations, securityId, end, topCode)
   const profit = compareQuarterMetric(observations, securityId, end, "NET_PROFIT_QUARTER")
   if (!top.current || !profit.current || top.qoq === null || profit.qoq === null) return null
-  const previous = ({
-    "2025-12-31": "2025-09-30",
-    "2026-03-31": "2025-12-31",
-    "2026-06-30": "2026-03-31",
-  } as Record<string, string>)[end]
+  const previous = previousQuarterEnd(end)
   if (!previous) return null
   const pair = observations.filter(r => r.securityId === securityId && r.selected &&
     (r.periodEnd === previous || r.periodEnd === end) &&
@@ -124,6 +142,7 @@ function quantile(sorted: readonly Decimal[], p: string): string {
 export function buildIndustryR5Calibrations(
   observations: readonly ResultsSourceObservation[],
   peers: readonly R5IndustryPeer[],
+  end: string = LATEST_FROZEN_GRADE_QUARTER,
 ): R5IndustryCalibrations {
   const profiles = new Map<string, R5IndustryPeer | null>()
   for (const peer of peers) {
@@ -141,8 +160,8 @@ export function buildIndustryR5Calibrations(
     const key = groupKey(peer.sector, peer.industry)
     const bucket = grouped.get(key) ?? { topCode, top: [], profit: [], issuers: new Set<string>() }
     const ownRows = observations.filter(r => r.securityId === securityId)
-    for (const end of ENDS) {
-      const pair = comparable(ownRows, securityId, end, topCode)
+    for (const quarter of comparisonEndsThrough(end)) {
+      const pair = comparable(ownRows, securityId, quarter, topCode)
       if (!pair) continue
       bucket.top.push(pair.top)
       bucket.profit.push(pair.profit)
@@ -165,6 +184,25 @@ export function buildIndustryR5Calibrations(
   return result
 }
 
+/** Computes period-specific peer calibrations once per update. Older grades
+ * NEVER read future-quarter peers; the current frozen June 2026 group keeps
+ * the original bare group-key mapping for existing R5 clients/tests.
+ */
+export function buildRollingIndustryR5Calibrations(
+  observations: readonly ResultsSourceObservation[],
+  peers: readonly R5IndustryPeer[],
+  quarters: readonly string[],
+): R5IndustryCalibrations {
+  const combined = new Map<string,R5IndustryCalibration>()
+  for (const end of new Set(quarters)) {
+    for (const [key,calibration] of buildIndustryR5Calibrations(observations,peers,end)) {
+      combined.set(end + "|" + key,calibration)
+      if (end === LATEST_FROZEN_GRADE_QUARTER) combined.set(key,calibration)
+    }
+  }
+  return combined
+}
+
 /** Directional verification can compare an issuer's PAT loss-to-profit turn
  * even when a QoQ percentage is mathematically undefined due to <=0 PAT
  * baseline. Every quarter still must contain one matching original, identity,
@@ -176,11 +214,7 @@ function directionalComparison(
   end: string,
   topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
 ): { top: Decimal; profit: Decimal; currentProfit: Decimal } | null {
-  const previous = ({
-    "2025-12-31": "2025-09-30",
-    "2026-03-31": "2025-12-31",
-    "2026-06-30": "2026-03-31",
-  } as Record<string, string>)[end]
+  const previous = previousQuarterEnd(end)
   if (!previous) return null
   const read = (date: string, code: string) => compareQuarterMetric(rows, securityId, date, code).current
   const top = read(end,topCode), profit = read(end,"NET_PROFIT_QUARTER")
@@ -213,10 +247,10 @@ function gradeCompanyTrajectory(
   topCode: "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER",
   group: string,
 ): ResultsQuarterGrade {
-  if (!ENDS.includes(end as (typeof ENDS)[number])) {
-    return fail(group, "No qualified preceding quarter exists inside the approved four-quarter R5 window.")
+  if (end < FIRST_GRADED_QUARTER || !previousQuarterEnd(end)) {
+    return fail(group, "Historical quarter is outside the approved R5 grading calendar.")
   }
-  const pairs = ENDS.filter(date => date <= end)
+  const pairs = comparisonEndsThrough(end)
     .map(date => directionalComparison(observations, securityId, date, topCode))
     .filter((pair): pair is NonNullable<typeof pair> => pair !== null)
   const current = directionalComparison(observations, securityId, end, topCode)
@@ -255,8 +289,10 @@ export function gradeQuarterR5(
 ): ResultsQuarterGrade {
   const group = (normalized(sector) || "UNCLASSIFIED") + " / " + (normalized(industry) || "UNCLASSIFIED")
   const topCode = modelFor(sector, industry)
+  if (!comparisonEndsThrough(end).length) return fail(group, "Historical quarter is outside the approved R5 grading calendar.")
   if (!topCode) return fail(group, "Industry is unavailable or its financial-statement model is not supported.")
-  const calibration = calibrations.get(groupKey(sector,industry))
+  const calibration = calibrations.get(end + "|" + groupKey(sector,industry)) ??
+    (end === LATEST_FROZEN_GRADE_QUARTER ? calibrations.get(groupKey(sector,industry)) : undefined)
   if (!calibration || calibration.topCode !== topCode) {
     return gradeCompanyTrajectory(observations, securityId, end, topCode, group)
   }
