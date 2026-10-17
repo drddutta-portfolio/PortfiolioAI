@@ -89,7 +89,7 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
               const top=banks.has(security.symbol)?"NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
               const historicalChecks=[] as {quarter:string;topSelected:boolean;profitSelected:boolean;
                 sameFilingAndScope:boolean;topQoQStatus:string;profitQoQStatus:string}[]
-              let prior=end
+              let prior:string=end
               for(let index=0;index<4;index++){
                 const quarter=prior
                 const primary=compareQuarterMetric(own,security.securityId,quarter,top)
@@ -132,6 +132,8 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
       overall.notRated+=qualifiedCounts.unrated
     }
     historicalExceptions.sort((a,b)=>a.quarter.localeCompare(b.quarter)||a.symbol.localeCompare(b.symbol))
+    const modelSupportedHistoricalExceptions=historicalExceptions.filter(row=>row.action!=="MODEL_NOT_SUPPORTED")
+    const groupedActions=Object.fromEntries(Object.entries(classifications).filter(([key])=>key!=="MODEL_NOT_SUPPORTED"))
     const historicalQualifiedUnrated=["2025-03-31","2025-06-30","2025-09-30"].reduce((n,q)=>{
       const row=byQuarter[q] as {qualified:{unrated:number}}
       return n+row.qualified.unrated
@@ -144,7 +146,11 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
       engineVersion:RESULTS_GRADING_VERSION,
       overall,byQuarter,
       historicalExceptions:{
-        count:historicalExceptions.length,actionCounts:classifications,
+        count:historicalExceptions.length,
+        supportedModelUnratedCount:modelSupportedHistoricalExceptions.length,
+        supportedModelActions:groupedActions,
+        unmodeledCount:historicalExceptions.length-modelSupportedHistoricalExceptions.length,
+        actionCounts:classifications,
         rows:historicalExceptions,
         note:"Exact engine grade failures among source-qualified issuer company-quarters in three newly enabled historical columns; does not equal the arithmetic remainder of a prior fixed 637-slot cohort.",
       },
@@ -157,6 +163,11 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     mkdirSync("tmp/results-r5-g",{recursive:true})
     writeFileSync("tmp/results-r5-g/historical-grade-census.json",JSON.stringify(report,null,2))
     console.log("R5_HISTORICAL_GRADE_CENSUS",JSON.stringify({...report,historicalExceptions:{...report.historicalExceptions,rowsOmittedFromLogs:true,rows:undefined}}))
-    console.log("R5_HISTORICAL_FAILURES",JSON.stringify({count:historicalExceptions.length,actions:classifications,examples:historicalExceptions.slice(0,12).map(x=>({symbol:x.symbol,quarter:x.quarter,action:x.action}))}))
+    console.log("R5_HISTORICAL_FAILURES",JSON.stringify({
+      supportedModelUnratedCount:modelSupportedHistoricalExceptions.length,
+      supportedModelActions:groupedActions,unmodeledCount:historicalExceptions.length-modelSupportedHistoricalExceptions.length,
+      historicalAllQualifiedUnrated:historicalExceptions.length,
+      examples:modelSupportedHistoricalExceptions.slice(0,22).map(x=>({symbol:x.symbol,quarter:x.quarter,action:x.action})),
+    }))
   })
 })
