@@ -80,7 +80,7 @@ jobs:
              'sourceJob':'R2_ORIGINAL_REPLAY_AND_ISSUER_IDENTITY_VERIFIED_20261017',
              'approvedSources':originals}
           out=Path('src/features/results/resultsR5ComparisonProof.json')
-          out.write_text(json.dumps(o,sort_keys=True,indent=2)+'\\n')
+          out.write_text(json.dumps(o,sort_keys=True,indent=2)+'\n')
           print('R5_COMPARISON_ONLY_VERIFIED_IDENTITIES',len(originals))
           PY
           if ! git diff --quiet -- src/features/results/resultsR5ComparisonProof.json; then
