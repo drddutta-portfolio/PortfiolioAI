@@ -51,6 +51,7 @@ export function buildVerifiedR5ComparisonRows(
     let valid=true
     for(const code of needs){
       const expected=item.observations[code]
+      if(!expected){valid=false;break}
       const row=byId.get(expected)
       if(!row || row.securityId!==item.securityId || row.periodEnd!==item.periodEnd ||
          row.periodStart!==start || row.code!==code || row.scope!==item.scope ||
