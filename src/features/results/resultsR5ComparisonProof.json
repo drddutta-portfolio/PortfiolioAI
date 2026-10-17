@@ -159,6 +159,45 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "eaecef03-4ce7-4159-98db-6be442f62608",
+        "NET_PROFIT_QUARTER": "15967857-a9ea-457e-97ca-5cdb4046df1f",
+        "OPERATING_REVENUE_QUARTER": "9f2871ba-0c4f-45ee-846e-5ccefb137c92"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "0451a0ce-963e-4d08-acb1-e46c113fc102",
+      "sourceRecordId": "8a112585-5fc6-4e4b-877d-bd90674cfebb",
+      "symbol": "LGEINDIA"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "ae95d73c-0fb0-4cdf-972a-8970255b2b45",
+        "NET_PROFIT_QUARTER": "d9f79c4f-d536-4a6c-85d6-d46cd9e072e8",
+        "OPERATING_REVENUE_QUARTER": "0201603d-10a1-4f98-811a-7a850748e520"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "0451a0ce-963e-4d08-acb1-e46c113fc102",
+      "sourceRecordId": "fe7a58d1-77df-4062-8695-c707d4dcf456",
+      "symbol": "LGEINDIA"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "2288cee9-bcb1-4a95-b8a1-d46eb1190a50",
+        "NET_PROFIT_QUARTER": "b12080b7-a7c5-481b-9127-18cf0243cc8a",
+        "OPERATING_REVENUE_QUARTER": "4b5a7fba-9e12-4bcd-8159-08f3d84a237b"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "0451a0ce-963e-4d08-acb1-e46c113fc102",
+      "sourceRecordId": "a0c81d77-aa8a-4281-af72-8a18a3110a27",
+      "symbol": "LGEINDIA"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "524eb2a2-0407-4f44-97bc-64af88f38c63",
         "NET_PROFIT_QUARTER": "7c1fadfb-e82d-4301-bc9f-25a899e2f5c3",
         "OPERATING_REVENUE_QUARTER": "23cfa6f9-61a6-4480-b9b8-97e66f482fdf"
