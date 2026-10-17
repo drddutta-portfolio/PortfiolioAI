@@ -338,7 +338,7 @@ export function ResultsLivePage() {
   const [scanBusy, setScanBusy] = useState(false)
   const [scanError, setScanError] = useState<string | null>(null)
   const [evidenceRevision, setEvidenceRevision] = useState(0)
-  const lastEvidenceRequestAt = useRef(Date.now())
+  const lastEvidenceRequestAt = useRef(0)
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<PositionFilter>("ALL")
   const [industry, setIndustry] = useState("ALL")
@@ -360,6 +360,7 @@ export function ResultsLivePage() {
   // foreground resume after inactivity. Derived QoQ/YoY and grades useMemo
   // recalculates automatically when any selected financial evidence changes.
   useEffect(() => {
+    lastEvidenceRequestAt.current = Date.now()
     const refresh = () => {
       if (!shouldRefreshResultsEvidence(
         Date.now() - lastEvidenceRequestAt.current, document.visibilityState === "visible",
