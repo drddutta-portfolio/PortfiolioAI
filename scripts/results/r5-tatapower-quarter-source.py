@@ -59,8 +59,32 @@ def inspect_one(period,url,pages):
             reason=str(exc).split(":",1)[0]
             rejections[reason]=rejections.get(reason,0)+1
     if len(candidates)!=1:
+        # Published source columns are often visually positioned, but PDF
+        # text glyphs may split date tokens. Export ONLY labels/date fragments
+        # and their geometry, not financial amounts, for a bounded diagnosis.
+        from r4_pdf_geometry import rows_for, dated_headers
+        metadata=[]
+        for page_index in (7,14,18):
+            if page_index>=len(pdf):continue
+            page=pdf[page_index]
+            lines=rows_for(page)
+            tokens=[]
+            for y,words in lines:
+                content=" ".join(str(w[4]) for w in words)
+                if not any(word in content.upper() for word in
+                    ("QUARTER ENDED","MONTHS ENDED","30-SEP","30 SEP","31-DEC",
+                     "31 DEC","REVENUE FROM OPERATIONS","PROFIT FOR THE PERIOD",
+                     "DILUTED","CRORE","CONSOLIDATED")):continue
+                safe=[(str(w[4])[:18],round(w[0],1)) for w in words if
+                      any(k in str(w[4]).upper() for k in
+                         ("QUARTER","ENDED","MONTHS","SEP","DEC","JUN","2024",
+                          "2023","CRORE","PROFIT","DILUTED","REVENUE","CONSOLIDATED"))]
+                if safe:tokens.append({"y":round(y,1),"tokens":safe[:20]})
+            metadata.append({"page_zero_index":page_index,"label_coordinates":tokens[:15],
+              "parsed_date_headers":sum(1 for _ in dated_headers(lines))})
         return {"period":period,"status":"SOURCE_UNQUALIFIED","original_sha256":hashlib.sha256(raw).hexdigest(),
-                "qualified_consolidated_tables":len(candidates),"rejects":rejections}
+                "qualified_consolidated_tables":len(candidates),"rejects":rejections,
+                "diagnostic_nonfinancial_labels":metadata}
     result=candidates[0]
     if len(result["facts"])!=3 or any(x["column_period"]!=period for x in result["facts"].values()):
         raise RuntimeError("IMPROPER_PERIOD_FACT_TRIO")
