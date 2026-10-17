@@ -104,7 +104,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     const cell=row?.querySelector('button[aria-label*="Q1 FY27"]')
     expect(cell).toHaveClass("ref-strong")
     expect(cell?.getAttribute("aria-label")).toContain("COMPANY_TREND")
-    expect(screen.getByText(/Method: Company trend/)).toBeInTheDocument()
+    expect(screen.getByText(/QoQ evidence · Company trend/)).toBeInTheDocument()
     expect(screen.getAllByText("Strong").length).toBeGreaterThan(0)
   })
 
