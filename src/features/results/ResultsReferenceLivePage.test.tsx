@@ -158,9 +158,9 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(q1).not.toBeNull()
     expect(q1?.textContent).toContain("Rev ")
     expect(q1?.textContent).not.toContain("NII ")
-    expect(q1?.textContent).toContain("Not Rated")
+    expect(q1?.textContent).toContain("Strong")
     const panel=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
-    expect(within(panel).getByText("Not rated 1")).toBeInTheDocument()
+    expect(within(panel).getByText("Strong 1")).toBeInTheDocument()
   })
 
 })
