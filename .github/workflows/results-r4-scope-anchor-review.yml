@@ -37,4 +37,4 @@ jobs:
         run: python scripts/results/r4-scope-anchor-review.py --shard ${{ matrix.shard }}
       # No source bytes, issuer diagnostics or financial rows are published.
 
-# Review split-date headers and all accepted current integrated filing contracts.
+# Retain explicit same-document reporting-scope references for independent review.

@@ -76,7 +76,7 @@ def main():
                                 for period in periods:
                                     try:
                                         historical=extract_page(page,page_no,period,symbol in batch.BANKS,symbol in batch.INSURERS,allow_comparative=True,scope_hint=scope)
-                                        results[period].append({'parsed':historical,'current_pdf_trio':first,'current_anchor':anchor,'original_sha256':source['original_sha256'],'original_r2_key':source['original_r2_key'],'source_url':source['source_url'],'review_basis_flags':flags,'page_layout_review_required':page.rect.width>1000 or page.rect.height>1500})
+                                        results[period].append({'parsed':historical,'current_pdf_trio':first,'current_anchor':anchor,'original_sha256':source['original_sha256'],'original_r2_key':source['original_r2_key'],'source_url':source['source_url'],'review_basis_flags':flags,'page_layout_review_required':page.rect.width>1000 or page.rect.height>1500,'document_scope_excerpts':[{'page':pi+1,'text':txt[max(0,match.start()-100):match.end()+220]} for pi,pdfpage in enumerate(list(pdf)[:40]) for txt in [pdfpage.get_text('text')] for match in list(re.finditer(r'\b(?:standalone|consolidated)\b',txt,re.I))[:4]][:16]})
                                         counts['matched_historical_candidates']+=1
                                     except ValueError as e:rejects[str(e).split(':')[0]]+=1
                     except Exception as e:rejects[str(e).split(':')[0] if isinstance(e,ValueError) else type(e).__name__]+=1
