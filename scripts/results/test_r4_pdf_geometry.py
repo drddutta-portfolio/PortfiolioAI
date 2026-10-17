@@ -19,6 +19,29 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def starred_eps(self,footnote=True):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        p.add_redact_annot(fitz.Rect(450,206,850,225),fill=(1,1,1));p.apply_redactions()
+        for x,value in ((475,'7.43*'),(625,'37.81*'),(775,'11.88*')):p.insert_text((x,220),value,fontsize=10)
+        if footnote:p.insert_text((25,280),'* Not Annualised',fontsize=10)
+        return doc,p
+
+    def test_explicit_nonannualised_eps_footnote_preserves_printed_cell(self):
+        doc,p=self.starred_eps()
+        result=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(result['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(result['facts']['EPS_DILUTED']['original_value'],'11.88*')
+
+    def test_attached_eps_marker_without_explicit_footnote_is_rejected(self):
+        doc,p=self.starred_eps(False)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_eps_footnote_does_not_authorize_annotated_revenue(self):
+        doc,p=self.starred_eps()
+        p.add_redact_annot(fitz.Rect(760,146,850,166),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((775,160),'7,586*',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def test_financial_title_year_does_not_override_real_quarter_group(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         p.insert_text((450,85),"FINANCIAL RESULTS FOR THE QUARTER AND YEAR ENDED",fontsize=10)
@@ -228,4 +251,3 @@ class NumericFootnoteTest(unittest.TestCase):
             with self.assertRaises(ValueError):number([(i*20,1,i*20+10,10,x) for i,x in enumerate(tokens)])
 
 if __name__=="__main__":unittest.main()
-

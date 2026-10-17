@@ -44,6 +44,10 @@ def main():
                             page_key=batch.PREFIX+'private-original-review/sha256='+digest+'/page='+str(page_no+1)+'/words.json'
                             page_data=batch.canonical({'encoding':'ZLIB_BASE64','sha256':batch.sha(native),'data':base64.b64encode(zlib.compress(native)).decode('ascii')})
                             batch.immutable_put(client,page_key,page_data);pages.append({'page':page_no+1,'r2_key':page_key,'sha256':batch.sha(page_data),'encoded_bytes':len(page_data)})
+                            preview=page.get_pixmap(dpi=110,alpha=False).tobytes('jpeg',jpg_quality=65)
+                            image_key=batch.PREFIX+'private-original-review/sha256='+digest+'/page='+str(page_no+1)+'/preview.json'
+                            image_payload=batch.canonical({'contract':'PRIVATE_ORIGINAL_PAGE_PREVIEW_V1','original_sha256':digest,'page':page_no+1,'image_sha256':batch.sha(preview),'encoding':'JPEG_BASE64','data':base64.b64encode(preview).decode('ascii')})
+                            batch.immutable_put(client,image_key,image_payload)
                     outcome.update(review_r2_key=key,review_sha256=batch.sha(encoded),original_bytes=len(raw));counts['originals_available']+=1
                     outcome['native_review_pages']=pages
                 except Exception as error:

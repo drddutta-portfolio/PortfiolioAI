@@ -130,12 +130,15 @@ def dated_headers(rows):
         last=max(i for i,yy,d in complete if abs(yy-y)<=28)
         yield last,rows[last][0],merged
 
-def number(words):
+def number(words,allow_annualisation_marker=False):
     text=row_text([w for w in words if str(w[4]) not in ("|","¦","*","†","‡")]).strip()
+    original=text
+    if allow_annualisation_marker and re.fullmatch(r"\(?-?[\d,]+(?:\.\d+)?\)?\*",text):
+        text=text[:-1]
     # Joining split decimal glyphs would invent punctuation. Keep for OCR review.
     if not CELL.fullmatch(text):raise ValueError("CORRUPT_OR_MISSING_NUMERIC_CELL:"+text[:60])
     if text.startswith("(")!=text.endswith(")"):raise ValueError("UNBALANCED_NUMERIC_CELL")
-    return Decimal(text.replace(",","").replace("(","-").replace(")","")),text
+    return Decimal(text.replace(",","").replace("(","-").replace(")","")),original
 
 def clean_label(text):
     # Table ruling glyphs are layout, not part of the metric's name. This
@@ -147,6 +150,7 @@ def clean_label(text):
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None):
     rows=rows_for(page)
+    annualisation_marker=any(re.fullmatch(r"\*\s*not\s+annuali[sz]ed[.]?",row_text(ws).strip(),re.I) for _,ws in rows)
     # A successful page must contain the same explicit revenue row used below.
     # Reject covers/notes before the expensive split-date geometry search.
     if allow_comparative:
@@ -266,13 +270,14 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",context,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
-            value,original=number(cell)
+            annotated_eps=allow_comparative and metric=="EPS_DILUTED" and annualisation_marker
+            value,original=number(cell,allow_annualisation_marker=annotated_eps)
             # Prove that this is a table row with another value in the next column.
             if allow_comparative:
                 other=1 if column==0 else column-1
                 other_left=(centers[other-1]+centers[other])/2 if other else first_left
                 other_right=(centers[other]+centers[other+1])/2
-                number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right])
+                number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right],allow_annualisation_marker=annotated_eps)
             else:
                 next_right=(second+third)/2
                 number([w for w in ws if right<=(w[0]+w[2])/2<next_right])
@@ -311,4 +316,3 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]],scope_hint_used=scope_hint_used)
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
-

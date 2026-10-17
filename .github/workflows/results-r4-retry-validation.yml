@@ -70,3 +70,5 @@ jobs:
 
 # Verify private same-statement scope proofs and stable accepted source identities.
 # Recheck clean source-file EOFs after all replay regressions passed.
+
+# Recheck explicit EPS annotation provenance and private original-page review isolation.

@@ -36,3 +36,5 @@ jobs:
       # No original, image, financial trace or encoded payload is logged or uploaded as a public artifact.
 
 # Review all remaining issuers in four independent shards; private originals and coordinates only.
+
+# Include private original-page previews for visual confirmation of source extraction defects.

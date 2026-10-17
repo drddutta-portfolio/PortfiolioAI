@@ -54,3 +54,5 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
       # Financial rows, originals and rejection traces stay in private Development storage.
+
+# Retry the complete remaining cohort after explicit nonannualised EPS annotation support.
