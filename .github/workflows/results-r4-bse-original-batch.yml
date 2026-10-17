@@ -25,7 +25,7 @@ jobs:
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       RESULTS_R4_USE_FRESH_TRENDLYNE_LINKS: '1'
-      RESULTS_R4_FORCE_FRESH: ${{ github.event_name == 'push' && '1' || '0' }}
+      RESULTS_R4_FORCE_FRESH: '0'
       RESULTS_R4_BSE_BATCH_ACK: 2024_2025_BSE_ORIGINAL_EVIDENCE
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +75,7 @@ jobs:
           [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
           [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
       - name: Install pinned verifier
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6' 'requests==2.32.5' 'mthrottle==0.0.2'
       - name: Independent R2 source integrity and protected selections
         run: |
           mkdir -p tmp/results-r4
@@ -104,3 +104,5 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
       # Originals, per-company traces and readbacks stay in private Development storage.
+
+# Fresh owner-requested pulls are retained; this verification retry reuses original bytes.
