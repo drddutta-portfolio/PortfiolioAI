@@ -78,3 +78,5 @@ jobs:
       # All originals, OCR text, financial proofs and rejection diagnostics remain private.
 # Replay native group labels, grid-bordered date years and batched approved-resolution financial cells.
 # Reprocess every slot with layout-only border removal and explicit bank PBT labels; immutable page proof revision v3.
+
+# Reuse private full-document scans; refresh page proofs for explicit native currency labels.

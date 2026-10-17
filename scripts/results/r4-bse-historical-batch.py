@@ -96,6 +96,7 @@ def first_quarter_header(lines, period):
     raise ValueError("FIRST_QUARTER_COLUMN_UNPROVEN")
 
 def issuer_identity(name, cover):
+    if exact_legal_identity(name,cover[:7000]):return True
     a=name_tokens(name)
     b=name_tokens(cover[:3500])
     if len(a)<2:

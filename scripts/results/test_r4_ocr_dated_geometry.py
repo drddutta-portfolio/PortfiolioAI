@@ -59,6 +59,22 @@ class DatedOCRTest(unittest.TestCase):
         self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'11.88')
         self.assertEqual(parsed['column_index'],2)
 
+    def test_native_unit_metadata_never_supplies_numbers_or_scope(self):
+        from unittest.mock import patch
+        from r4_ocr_geometry import OCRPage
+        from r4_ocr_dated_geometry import GroupHeaderOCRPage
+        doc=fitz.open();page=doc.new_page()
+        page.insert_text((20,50),'Standalone financial results')
+        page.insert_text((20,70),'Rs. in Lakhs except EPS 345.67')
+        page.insert_text((20,100),'Revenue from operations 900')
+        wrapper=GroupHeaderOCRPage.__new__(GroupHeaderOCRPage);wrapper.page=page
+        with patch.object(OCRPage,'get_text',return_value=[]):
+            words=wrapper.get_text('words')
+        tokens=[w[4] for w in words]
+        self.assertIn('Rs.',tokens);self.assertIn('Lakhs',tokens)
+        self.assertNotIn('345.67',tokens);self.assertNotIn('900',tokens)
+        self.assertNotIn('Standalone',tokens);self.assertNotIn('EPS',tokens)
+
     def test_modified_document_basis_proof_is_rejected(self):
         m=deepcopy(self.manifest);m['ocr_document_text_sha256']='0'*64
         with self.assertRaisesRegex(ValueError,'FULL_DOCUMENT_REPLAY_MISMATCH'):validate_original(self.raw,m,self.identity)
