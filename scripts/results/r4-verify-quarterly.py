@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import date,datetime
 from decimal import Decimal, InvalidOperation
 from urllib.parse import urlparse
+from r4_issuer_name import explicit_legal_name
 import boto3, psycopg
 from botocore.config import Config
 from psycopg.rows import dict_row
@@ -223,8 +224,9 @@ def check_manifest(record,manifest):
             or not re.fullmatch(url_path,u.path,re.I) or u.query or u.fragment
             or not re.fullmatch(r"[0-9]{6}",str(manifest.get("bse_scrip_code","")))
             or not isinstance(manifest.get("issuer_name"),str)
-            or len([x for x in re.findall(r"[A-Z]{3,}",manifest["issuer_name"].upper())
+            or (len([x for x in re.findall(r"[A-Z]{3,}",manifest["issuer_name"].upper())
                     if x not in {"LTD","LIMITED","INDIA","THE","COMPANY","PRIVATE"}])<2
+                and not explicit_legal_name(manifest["issuer_name"]))
             or manifest.get("source_identity_proof")!="CANONICAL_BSE_SCRIP_ISIN_AND_CONTIGUOUS_ISSUER_NAME"
             or not re.fullmatch(r"[0-9a-f]{64}",str(original or ""))
             or not isinstance(original_key,str) or not original_key.startswith(PREFIX)
