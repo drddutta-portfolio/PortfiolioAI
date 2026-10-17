@@ -39,7 +39,7 @@ jobs:
           [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || { echo WRONG_DEV_R2; exit 1; }
           for k in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY; do test -n "${!k:-}"; done
       - name: Install pinned official XBRL and archive dependencies
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6'
       - name: Run 2025 original source and R4 selection tests
         shell: bash
         run: |
