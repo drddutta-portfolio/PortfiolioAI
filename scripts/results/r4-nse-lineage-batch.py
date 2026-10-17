@@ -36,11 +36,17 @@ def load_rename_authority(client,session,symbol):
         raw=client.get_object(Bucket=batch.BUCKET,Key=reference["r2_key"])["Body"].read()
         if batch.sha(raw)!=reference["sha256"]:raise ValueError("RENAME_AUTHORITY_HASH_MISMATCH")
     else:
-        response=session.get(rule["url"],timeout=35);response.raise_for_status();raw=response.content
-        parsed=verify_rename_pdf(raw,symbol,rule["url"])
+        parsed=None;last_error=None
+        for source_url in [rule["url"],*rule.get("alternate_urls",[])]:
+            try:
+                response=session.get(source_url,timeout=35);response.raise_for_status();raw=response.content
+                parsed=verify_rename_pdf(raw,symbol,source_url)
+                break
+            except (ValueError,requests.RequestException) as error:last_error=error
+        if parsed is None:raise last_error or ValueError("QUALIFIED_OFFICIAL_RENAME_DOCUMENT_REQUIRED")
         original_key=batch.PREFIX+"evidence/original_version="+parsed.sha256+"/issuer-rename.pdf"
         batch.immutable_put(client,original_key,raw)
-        reference={"source_url":rule["url"],"r2_key":original_key,"sha256":parsed.sha256}
+        reference={"source_url":parsed.source_url,"r2_key":original_key,"sha256":parsed.sha256}
         batch.immutable_put(client,key,batch.canonical(reference))
     return verify_rename_pdf(raw,symbol,reference["source_url"]),reference
 
