@@ -1,0 +1,39 @@
+name: Results R5 Tata Power Official 2024 Original Diagnostic
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-tatapower-original-probe.yml
+      - scripts/results/r5-tatapower-quarter-source.py
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-tatapower-original-diagnostic-development
+  cancel-in-progress: true
+jobs:
+  independent-issuer-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install constrained parser and official-source downloader
+        run: python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+      - name: Confirm Development-only and compile fail-closed source diagnostic
+        run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          python -m py_compile scripts/results/r5-tatapower-quarter-source.py
+          python -m py_compile scripts/results/r4_pdf_geometry.py
+      - name: Download and inspect independently identified Tata Power 2024 original PDFs
+        run: python scripts/results/r5-tatapower-quarter-source.py
+      - name: Preserve public nonfinancial diagnostic only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-tatapower-original-issuer-diagnostic
+          path: tmp/results-r5/tatapower-issuer-diagnostic.json
+          if-no-files-found: warn
+          retention-days: 14
