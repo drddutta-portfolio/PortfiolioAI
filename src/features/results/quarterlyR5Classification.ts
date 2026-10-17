@@ -43,7 +43,7 @@ const LATEST_FROZEN_GRADE_QUARTER = "2026-06-30"
 
 /** Previous real calendar-quarter end; always fails closed on invalid dates. */
 function previousQuarterEnd(end: string): string | null {
-  const found = /^(\\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
+  const found = /^(\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
   if (!found) return null
   const year = Number(found[1]), month = Number(found[2])
   if (new Date(Date.UTC(year, month, 0)).toISOString().slice(0, 10) !== end) return null
