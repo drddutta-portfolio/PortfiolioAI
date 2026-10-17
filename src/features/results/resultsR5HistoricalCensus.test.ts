@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest"
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs"
 import {
-  buildRollingIndustryR5Calibrations, gradeQuarterR5, RESULTS_GRADING_VERSION,
+  buildRollingIndustryR5Calibrations, RESULTS_GRADING_VERSION,
   type R5IndustryPeer,
 } from "./quarterlyR5Classification"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import { compareQuarterMetric } from "./quarterlyR5"
+import { gradeR5WithVerifiedOriginal as gradeQuarterR5 } from "./resultsR5VerifiedComparison"
 
 interface Security extends R5IndustryPeer { readonly symbol: string }
 interface Input {
