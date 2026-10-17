@@ -3,7 +3,7 @@ import { createPortal } from "react-dom"
 import { usePortfolioView } from "../portfolio/usePortfolioView"
 import { financialClass, formatMoney, formatQuantity } from "../portfolio/format"
 import type { PortfolioPosition } from "../portfolio/types"
-import { buildIndustryR5Calibrations, gradeQuarterR5 } from "./quarterlyR5Classification"
+import { buildRollingIndustryR5Calibrations, gradeQuarterR5 } from "./quarterlyR5Classification"
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
 import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparisons } from "./quarterlyR5"
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
@@ -464,7 +464,7 @@ export function ResultsLivePage() {
     }
   }
 
-  const industryCalibrations = useMemo(() => buildIndustryR5Calibrations(observations, entries.map((e) => ({securityId:e.position.securityId, sector:e.position.sector, industry:e.position.industry}))), [observations, entries])
+  const industryCalibrations = useMemo(() => buildRollingIndustryR5Calibrations(observations, entries.map((e) => ({securityId:e.position.securityId, sector:e.position.sector, industry:e.position.industry})), periods.map(p => p.end)), [observations, entries, periods])
   const sourceCompanyCount = new Set(observations.map((r) => r.securityId)).size
   const sourceQuarterCount = new Set(observations.map((r) => r.securityId + "|" + r.periodEnd)).size
   const industries = useMemo(() => [...new Set(entries.map((e) => e.position.industry ?? "Unclassified"))].sort(), [entries])
