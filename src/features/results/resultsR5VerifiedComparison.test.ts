@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import pinnedProof from "./resultsR5ComparisonProof.json"
+import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
@@ -45,6 +46,22 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
      expect(evidence.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
      expect(Object.keys(evidence.observations)).toHaveLength(3)
      expect(evidence.sourceRecordId).toMatch(/^[0-9a-f-]{36}$/)
+   }
+ })
+ it("retains exact SHA-verified Federal Bank two-quarter R5-only original without an R4 selection mutation",()=>{
+   expect(federalOriginal.contract).toBe("R5_FEDERAL_SIGNED_ISSUER_ORIGINAL_TWO_QUARTERS_V1")
+   expect(federalOriginal.environment).toBe("Development")
+   expect(federalOriginal.scope).toBe("CONSOLIDATED")
+   expect(federalOriginal.sourceOriginalSHA256).toMatch(/^[0-9a-f]{64}$/)
+   expect(federalOriginal.approvedSources).toHaveLength(2)
+   expect(federalOriginal.approvedSources.map(x=>x.periodEnd).sort()).toEqual(["2024-09-30","2024-12-31"])
+   expect(new Set(federalOriginal.approvedSources.map(x=>x.sourceRecordId)).size).toBe(1)
+   for(const original of federalOriginal.approvedSources){
+     expect(original.symbol).toBe("FEDERALBNK")
+     expect(original.scope).toBe("CONSOLIDATED")
+     expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+     expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_INTEREST_INCOME_QUARTER","NET_PROFIT_QUARTER"])
+     for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
    }
  })
  it("scores from an independently verified coherent standalone history while R4 remains untouched",()=>{
