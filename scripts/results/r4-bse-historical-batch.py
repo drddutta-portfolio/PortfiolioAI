@@ -28,6 +28,7 @@ from botocore.config import Config
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from portfolio_bse import PortfolioBSE
 from r4_pdf_geometry import extract_page
+from r4_issuer_name import explicit_legal_name,exact_legal_identity
 
 REF = "lrgpjimipfkyoqbpsqzz"
 BUCKET = "portfolioai-history-dev"
@@ -66,7 +67,7 @@ def verified_issuer(bse, scrip, isin):
     if len(matches)!=1:
         raise ValueError("BSE_LISTING_IDENTITY_NOT_UNIQUE")
     name=matches[0].get("Issuer_Name")
-    if not isinstance(name,str) or len(name_tokens(name))<2:
+    if not isinstance(name,str) or (len(name_tokens(name))<2 and not explicit_legal_name(name)):
         raise ValueError("BSE_VERIFIED_LEGAL_NAME_MISSING")
     return name
 
@@ -98,7 +99,7 @@ def issuer_identity(name, cover):
     a=name_tokens(name)
     b=name_tokens(cover[:3500])
     if len(a)<2:
-        return False
+        return exact_legal_identity(name,cover[:7000])
     # Contiguous legal-name prefix, no loose unordered company-name guessing.
     return any(b[i:i+len(a)]==a for i in range(len(b)-len(a)+1))
 
