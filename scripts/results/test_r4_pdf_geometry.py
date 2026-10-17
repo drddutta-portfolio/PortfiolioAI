@@ -3,13 +3,13 @@ import fitz
 from decimal import Decimal
 from r4_pdf_geometry import extract_page,iso_date
 
-def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for the period/year (5•6)",note=False):
+def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for the period/year (5•6)",note=False,third="30.09.2023"):
     doc=fitz.open();p=doc.new_page(width=1000,height=850)
     p.insert_text((25,30),"NATCO PHARMA LIMITED",fontsize=10)
     p.insert_text((25,50),"Consolidated financial results",fontsize=10)
     p.insert_text((25,70),"Amounts in INR millions",fontsize=10)
     p.insert_text((460,100),"Quarter ended" if quarter else "Year ended",fontsize=10)
-    for i,date in enumerate([first,"30.06.2024","30.09.2023"]):p.insert_text((450+i*150,125),date,fontsize=10)
+    for i,date in enumerate([first,"30.06.2024",third]):p.insert_text((450+i*150,125),date,fontsize=10)
     for y,label,values in [(160,"Revenue from operations",["4,748","13,711","7,586"]),
                            (190,label,[profit,"6,765","2,127"]),
                            (220,"(b) Diluted",["7.43","37.81","11.88"])]:
@@ -19,6 +19,23 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_exact_prior_year_quarter_uses_its_physical_column(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)
+        self.assertEqual(parsed["column_index"],2)
+        self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"212.7")
+        self.assertEqual(parsed["facts"]["EPS_DILUTED"]["value"],"11.88")
+        self.assertEqual(parsed["first_column_period"],"2025-09-30")
+        self.assertEqual(parsed["selected_column_period"],"2024-09-30")
+
+    def test_comparative_annual_heading_is_not_a_quarter(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.insert_text((760,100),"Year ended",fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True)
+
+    def test_dated_mode_supports_exact_profit_loss_label_without_guessing_sign(self):
+        doc,p=fixture(label="Profit / (loss) for the period",profit="(1,324)")
+        self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["facts"]["NET_PROFIT_QUARTER"]["value"],"-132.4")
     def test_numeric_formula_in_label_is_not_a_financial_cell(self):
         doc,p=fixture()
         out=extract_page(p,1,"2024-09-30")
