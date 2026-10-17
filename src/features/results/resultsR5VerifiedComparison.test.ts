@@ -37,7 +37,8 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(pinnedProof.contract).toBe("R5_INDEPENDENT_ORIGINAL_COMPARISON_PROOF_V1")
    expect(pinnedProof.environment).toBe("Development")
    const sources=pinnedProof.approvedSources
-   expect(sources.length).toBeGreaterThanOrEqual(50)
+   expect(sources.length).toBeGreaterThanOrEqual(100)
+   expect(sources.some(x=>x.scope==="CONSOLIDATED")).toBe(true)
    expect(new Set(sources.map(x=>x.securityId+"|"+x.periodEnd)).size).toBe(sources.length)
    for(const evidence of sources){
      expect(["STANDALONE","CONSOLIDATED"]).toContain(evidence.scope)
