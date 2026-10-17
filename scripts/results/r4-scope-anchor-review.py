@@ -5,7 +5,8 @@ import argparse,importlib.util,json,os,re
 from collections import Counter,defaultdict
 from decimal import Decimal
 from pathlib import Path
-import fitz,psycopg
+import fitz,psycopg,requests
+from r4_scope_bridge import make_bridge,extract_with_scope_bridge,original_origin
 from r4_pdf_geometry import extract_page
 from r4_recovery_queue import task_id
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'));batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
@@ -16,7 +17,8 @@ def main():
     if not 0<=a.shard<4:raise RuntimeError('INVALID_SHARD')
     url=os.environ['SUPABASE_DB_URL']
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
-    client=batch.r2_client();counts=Counter()
+    client=batch.r2_client();counts=Counter();nse_sources={}
+    session=requests.Session();session.headers.update({'User-Agent':'Mozilla/5.0','Accept-Language':'en-IN,en;q=0.8'})
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
         for symbol,isin,sid,_name,periods in cohort:
@@ -77,6 +79,27 @@ def main():
                                     try:
                                         historical=extract_page(page,page_no,period,symbol in batch.BANKS,symbol in batch.INSURERS,allow_comparative=True,scope_hint=scope)
                                         results[period].append({'parsed':historical,'current_pdf_trio':first,'current_anchor':anchor,'original_sha256':source['original_sha256'],'original_r2_key':source['original_r2_key'],'source_url':source['source_url'],'review_basis_flags':flags,'page_layout_review_required':page.rect.width>1000 or page.rect.height>1500,'document_scope_excerpts':[{'page':pi+1,'text':txt[max(0,match.start()-100):match.end()+220]} for pi,pdfpage in enumerate(list(pdf)[:40]) for txt in [pdfpage.get_text('text')] for match in list(re.finditer(r'\b(?:standalone|consolidated)\b',txt,re.I))[:4]][:16]})
+                                        candidate=results[period][-1]
+                                        try:
+                                            nse_url=anchor['metadata']['issuer_filing_url']
+                                            if nse_url not in nse_sources:
+                                                if not original_origin(nse_url):raise ValueError('SCOPE_BRIDGE_UNAPPROVED_CURRENT_ORIGIN')
+                                                response=session.get(nse_url,timeout=35);response.raise_for_status()
+                                                if not original_origin(response.url):raise ValueError('SCOPE_BRIDGE_REDIRECT_ORIGIN_UNPROVEN')
+                                                nse_sources[nse_url]=response.content
+                                            nse_raw=nse_sources[nse_url];bridge=make_bridge(nse_raw,nse_url,anchor['metadata']['period_end'])
+                                            verified,evidence=extract_with_scope_bridge(pdf,page_no,period,symbol,isin,identity['issuer_name'],bridge,symbol in batch.BANKS,symbol in batch.INSURERS)
+                                            if verified['scope']!=scope or verified['facts']!=historical['facts']:raise ValueError('SCOPE_BRIDGE_ANCHOR_DECLARATION_MISMATCH')
+                                            original_key=batch.PREFIX+'scope-bridge-nse-original/sha256='+bridge['nse_original_sha256']+'/original.html'
+                                            batch.immutable_put(client,original_key,nse_raw)
+                                            proof={'contract':bridge['contract'],'symbol':symbol,'isin':isin,'period_end':period,'bse_original_sha256':source['original_sha256'],'bse_source_url':source['source_url'],'financial_page':page_no,'bridge':bridge,'review_evidence':evidence,'current_anchor_source_record_id':anchor['source_record_id'],'current_anchor_payload_hash':anchor['payload_hash'],'nse_original_r2_key':original_key}
+                                            proof_raw=batch.canonical(proof);proof_hash=batch.sha(proof_raw)
+                                            proof_key=batch.PREFIX+'scope-bridge-proof/sha256='+proof_hash+'/proof.json';batch.immutable_put(client,proof_key,proof_raw)
+                                            candidate['scope_bridge_proof']={'r2_key':proof_key,'sha256':proof_hash,'evidence':evidence}
+                                            counts['independently_supported_scope_candidates']+=1
+                                        except Exception as error:
+                                            code=str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__
+                                            candidate['scope_bridge_rejection']=code;rejects[code]+=1
                                         counts['matched_historical_candidates']+=1
                                     except ValueError as e:rejects[str(e).split(':')[0]]+=1
                     except Exception as e:rejects[str(e).split(':')[0] if isinstance(e,ValueError) else type(e).__name__]+=1
