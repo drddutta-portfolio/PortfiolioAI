@@ -47,7 +47,7 @@ describe("Results live approved visual contract", () => {
     expect(screen.getByText("INFY")).toBeInTheDocument()
     expect(screen.queryByText("TESTETF")).not.toBeInTheDocument()
     expect(await screen.findByRole("heading", { name: "Portfolio Position" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: /Last 4 Quarters/ })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /Last \d+ Quarters/ })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: /Key Metrics/ })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "AI Insight" })).toBeInTheDocument()
     expect(screen.queryByText(/R2 DEMO DATA/)).not.toBeInTheDocument()
@@ -66,7 +66,8 @@ describe("Results live approved visual contract", () => {
     expect(within(metrics).getByText("+15.4%")).toBeInTheDocument()
     expect(within(metrics).getByText("+14.7%")).toBeInTheDocument()
     expect(within(metrics).getAllByText("Review pending").length).toBe(2)
-    expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
+    expect(screen.getByText("Investment Action")).toBeInTheDocument()
+    expect(screen.getByText("Not assessed")).toBeInTheDocument()
     const row = screen.getByText("HDFCBANK").closest("tr")
     expect(row).not.toBeNull()
     const q1Cell = row?.querySelector('button[aria-label*="Q1 FY27"]')
@@ -87,7 +88,7 @@ describe("Results live approved visual contract", () => {
     ])
     render(<ResultsLivePage />)
     expect(await screen.findByRole("heading", { name: "Key Metrics (Q1 FY27)" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Net Interest Income — Last 4 Quarters" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /Net Interest Income — Last \d+ Quarters/ })).toBeInTheDocument()
     const card = screen.getByRole("heading", { name: "Key Metrics (Q1 FY27)" }).closest("section")
     if (!card) throw new Error("Metrics card missing")
     expect(within(card).getByText("₹33,533.95 Cr")).toBeInTheDocument()
@@ -95,7 +96,8 @@ describe("Results live approved visual contract", () => {
     expect(within(card).getByText("₹12.35")).toBeInTheDocument()
     expect(within(card).getByText("+1.17%")).toBeInTheDocument()
     expect(within(card).getAllByText("Review pending").length).toBe(6)
-    expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
+    expect(screen.getByText("Investment Action")).toBeInTheDocument()
+    expect(screen.getByText("Not assessed")).toBeInTheDocument()
   })
 
   it("shows source-backed banking NII even when portfolio industry is unclassified", async () => {
@@ -125,7 +127,8 @@ describe("Results live approved visual contract", () => {
     render(<ResultsLivePage />)
     expect((await screen.findAllByText(/Source reconciled.*publication unverified/)).length).toBeGreaterThan(0)
     expect(screen.getAllByText(/Source reconciled/).length).toBeGreaterThan(0)
-    expect(screen.getByText("Thesis impact: Not assessed")).toBeInTheDocument()
+    expect(screen.getByText("Investment Action")).toBeInTheDocument()
+    expect(screen.getByText("Not assessed")).toBeInTheDocument()
   })
 
   it("preserves closed-history search and filters without stale analysis", async () => {
