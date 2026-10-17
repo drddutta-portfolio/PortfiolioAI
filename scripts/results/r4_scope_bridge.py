@@ -12,7 +12,7 @@ from datetime import date
 from decimal import Decimal
 from urllib.parse import urlparse
 
-from r4_dated_columns import extract_tables, tables_from_html, unique, dateval
+from r4_dated_columns import extract_tables, parse_html, unique, dateval
 from r4_issuer_name import exact_legal_identity
 from r4_pdf_geometry import extract_page
 
@@ -68,13 +68,11 @@ def extract_with_scope_bridge(pdf, page_no, period, symbol, isin, legal, bridge,
     if not raw or hashlib.sha256(raw).hexdigest() != bridge.get('nse_original_sha256'):
         raise ValueError('SCOPE_BRIDGE_NSE_ORIGINAL_HASH_MISMATCH')
     html = raw.decode('utf-8-sig')
-    tables = tables_from_html(html)
+    nse_text,tables = parse_html(html)
     if (unique(tables,'description of presentation currency') != 'INR'
             or not exact_legal_identity(legal,unique(tables,'name of company') or '')):
         raise ValueError('SCOPE_BRIDGE_EXACT_ISSUER_OR_CURRENCY_UNPROVEN')
     nse = extract_tables(tables,symbol,isin,bridge['current_period'],bank,insurer)
-    from bs4 import BeautifulSoup
-    nse_text = BeautifulSoup(html,'html.parser').get_text(' ',strip=True)
     pdf_text = ' '.join(page.get_text('text') for page in list(pdf)[:40])
     if not exact_legal_identity(legal,' '.join(page.get_text('text') for page in list(pdf)[:3])):
         raise ValueError('SCOPE_BRIDGE_PDF_EXACT_ISSUER_UNPROVEN')

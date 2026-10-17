@@ -35,21 +35,59 @@ def fields(table,label):
 def unique(tables,label):
     found={v.strip() for table in tables for v in fields(table,label) if v.strip()}
     return next(iter(found)) if len(found)==1 else None
+def parse_html(html):
+    """Canonical table/text extraction using the standard HTML parser.
+
+    Preserve document table order, direct row ownership, expanded colspans and
+    descendant cell text, including nested tables. No script/style text is data.
+    """
+    from html.parser import HTMLParser
+    class Reader(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack=[];self.tables=[];self.text=[];self.hidden=0
+        def cell_end(self,table):
+            if table['cell'] is not None:
+                value=re.sub(r"\s+"," ",' '.join(table['cell'])).strip()
+                if table['row'] is not None:table['row'].extend([value]*table['span'])
+                table['cell']=None
+        def row_end(self,table):
+            self.cell_end(table)
+            if table['row']:table['rows'].append(table['row'])
+            table['row']=None
+        def handle_starttag(self,tag,attrs):
+            if tag in ('script','style','template'):self.hidden+=1;return
+            if self.hidden:return
+            if tag=='table':
+                table={'rows':[],'row':None,'cell':None,'span':1}
+                self.stack.append(table);self.tables.append(table)
+            elif self.stack and tag=='tr':
+                self.row_end(self.stack[-1]);self.stack[-1]['row']=[]
+            elif self.stack and tag in ('td','th'):
+                table=self.stack[-1];self.cell_end(table)
+                if table['row'] is None:return
+                try:span=int(dict(attrs).get('colspan','1'))
+                except (TypeError,ValueError):raise ValueError('DATED_COLUMN_SPAN_BOUND') from None
+                if not 1<=span<=32:raise ValueError('DATED_COLUMN_SPAN_BOUND')
+                table['cell']=[];table['span']=span
+        def handle_endtag(self,tag):
+            if tag in ('script','style','template'):
+                self.hidden=max(0,self.hidden-1);return
+            if self.hidden or not self.stack:return
+            if tag in ('td','th'):self.cell_end(self.stack[-1])
+            elif tag=='tr':self.row_end(self.stack[-1])
+            elif tag=='table':self.row_end(self.stack.pop())
+        def handle_data(self,data):
+            if self.hidden:return
+            self.text.append(data)
+            for table in self.stack:
+                if table['cell'] is not None:table['cell'].append(data)
+    reader=Reader();reader.feed(html);reader.close()
+    while reader.stack:reader.row_end(reader.stack.pop())
+    return re.sub(r"\s+"," ",' '.join(reader.text)).strip(),[t['rows'] for t in reader.tables if t['rows']]
+
 def tables_from_html(html):
-    from bs4 import BeautifulSoup
-    soup=BeautifulSoup(html,"html.parser");tables=[]
-    for table in soup.find_all("table"):
-        rows=[]
-        for tr in table.find_all("tr"):
-            if tr.find_parent("table") is not table:continue
-            cells=[]
-            for cell in tr.find_all(["td","th"],recursive=False):
-                span=int(cell.get("colspan",1))
-                if not 1<=span<=32:raise ValueError("DATED_COLUMN_SPAN_BOUND")
-                cells.extend([re.sub(r"\s+"," ",cell.get_text(" ",strip=True))]*span)
-            if cells:rows.append(cells)
-        if rows:tables.append(rows)
-    return tables
+    return parse_html(html)[1]
 
 def extract_tables(tables,symbol,isin,period,bank=False,insurer=False):
     if period not in PERIODS:raise ValueError("DATED_COLUMN_OUTSIDE_HISTORICAL_WINDOW")
@@ -105,3 +143,4 @@ def extract_tables(tables,symbol,isin,period,bank=False,insurer=False):
 
 def extract(html,symbol,isin,period,bank=False,insurer=False):
     return extract_tables(tables_from_html(html),symbol,isin,period,bank,insurer)
+

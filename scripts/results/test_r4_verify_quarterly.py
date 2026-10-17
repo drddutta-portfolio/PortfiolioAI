@@ -103,4 +103,33 @@ class R4Tests(unittest.TestCase):
   record["payload_hash"]=m.sha(m.canonical_bytes(record["raw_payload"]))
   self.assertIsNone(m.check_manifest(record,src))
   self.assertEqual(m.check_manifest(record,{**src,"period_end":"2026-03-31"}),"SOURCE_MANIFEST_MISMATCH")
+
+class ExistingSelectionIdentityTests(unittest.TestCase):
+ def fixture(self,new_eps=1):
+  core=["OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"]
+  rows=[]
+  for source in ("a-new","z-accepted"):
+   for metric in core:
+    fact=row(metric,new_eps if source=="a-new" and metric=="EPS_DILUTED" else 1,source)
+    fact["id"]=source+"-"+metric;rows.append(fact)
+  prior={("security","2026-06-30","CONSOLIDATED",metric):"z-accepted-"+metric for metric in core}
+  return rows,prior
+ def test_equal_new_filing_preserves_accepted_record_identity(self):
+  rows,prior=self.fixture()
+  chosen,errors,_=m.select_quarters(rows,prior)
+  self.assertEqual({x["source_record_id"] for x in chosen},{"z-accepted"})
+  self.assertFalse(errors)
+ def test_real_value_conflict_remains_quarantined(self):
+  rows,prior=self.fixture(new_eps=2)
+  chosen,errors,_=m.select_quarters(rows,prior)
+  self.assertFalse(chosen);self.assertEqual(errors["CONFLICTING_SAME_SCOPE_FILING_VALUES"],1)
+ def test_validated_source_can_complete_a_partial_existing_selection(self):
+  rows,prior=self.fixture();prior.pop(("security","2026-06-30","CONSOLIDATED","EPS_DILUTED"))
+  chosen,_,_=m.select_quarters(rows,prior)
+  self.assertEqual({x["source_record_id"] for x in chosen},{"z-accepted"})
+ def test_other_company_choice_cannot_influence_source_rank(self):
+  rows,prior=self.fixture();other={("another-security",*key[1:]):value for key,value in prior.items()}
+  chosen,_,_=m.select_quarters(rows,other)
+  self.assertEqual({x["source_record_id"] for x in chosen},{"a-new"})
+
 if __name__=="__main__":unittest.main()

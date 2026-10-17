@@ -26,6 +26,8 @@ def validate_original(raw,manifest,identity):
     if (identity.get('original_sha256')!=manifest['original_sha256_retained']
         or identity.get('source_url')!=manifest['issuer_filing_url']):
         raise ValueError('DATED_PDF_IDENTITY_ORIGINAL_LINK_MISMATCH')
+    if manifest.get('scope_evidence_basis') is not None and manifest.get('parser_revision')!=REVISION:
+        raise ValueError('DATED_PDF_SCOPE_BRIDGE_PROOF_UNPROVEN')
     page=manifest['financial_page'];period=manifest['period_end']
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         if not 1<=page<=min(40,len(pdf)):raise ValueError('DATED_PDF_PAGE_INVALID')
@@ -42,7 +44,14 @@ def validate_original(raw,manifest,identity):
         else:
             if not exact_legal_identity(legal,' '.join(p.get_text('text') for p in list(pdf)[:3])):
                 raise ValueError('DATED_PDF_COMPLETE_LEGAL_NAME_UNPROVEN')
-            parsed=extract_page(pdf[page-1],page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',allow_comparative=True)
+            if manifest.get('scope_evidence_basis') is not None:
+                from r4_scope_bridge import CONTRACT,extract_with_scope_bridge
+                if manifest['scope_evidence_basis']!=CONTRACT or not isinstance(identity.get('scope_bridge'),dict):
+                    raise ValueError('DATED_PDF_SCOPE_BRIDGE_PROOF_UNPROVEN')
+                parsed,_=extract_with_scope_bridge(pdf,page,period,manifest['symbol'],isin,legal,identity['scope_bridge'],manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH')
+            else:
+                if identity.get('scope_bridge') is not None:raise ValueError('DATED_PDF_UNDECLARED_SCOPE_BRIDGE')
+                parsed=extract_page(pdf[page-1],page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',allow_comparative=True)
         # A restated comparative may describe a different business perimeter.
         # Those statements remain review evidence, never an automatic gap fill.
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):

@@ -52,6 +52,8 @@ jobs:
           python scripts/results/test_r4_issuer_name.py -v
           python scripts/results/test_r4_private_inventory.py -v
           python scripts/results/test_r4_dated_columns.py -v
+          python scripts/results/test_r4_scope_bridge.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r5_legacy_2024_xbrl.py -v
           node scripts/results/test_r4_workflow_identity.mjs
           python -m py_compile scripts/results/r4-recovery-monitor.py scripts/results/r4-nse-lineage-batch.py scripts/results/r4-bse-historical-batch.py scripts/results/r4-ocr-retained-batch.py scripts/results/r4-trendlyne-history.py
@@ -65,3 +67,5 @@ jobs:
 # Reprocess every slot with layout-only border removal and explicit bank PBT labels; immutable page proof revision v3.
 
 # Validate alternate table layouts and immutable original replay on this Development head.
+
+# Verify private same-statement scope proofs and stable accepted source identities.

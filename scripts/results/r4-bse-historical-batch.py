@@ -378,6 +378,7 @@ def persist(db,client,row,period,source,raw,parsed,publication):
     if parsed.get("parser_revision") in ("PDF_WORD_COORDINATES_DATED_COLUMN_V1","PDF_OCR_EXPLICIT_DATED_COLUMN_V1"):
         manifest.update({key:parsed[key] for key in ("first_column_period","selected_column_period","selected_column_index","issuer_identity_evidence_r2_key","issuer_identity_evidence_sha256","source_reporting_basis")})
         manifest["historical_eps_reporting_basis"]="AS_REPORTED_IN_SELECTED_FILING_COMPARABILITY_UNPROVEN"
+        if parsed.get("scope_evidence_basis") is not None:manifest["scope_evidence_basis"]=parsed["scope_evidence_basis"]
         if parsed.get("parser_revision")=="PDF_OCR_EXPLICIT_DATED_COLUMN_V1":
             manifest.update({key:parsed[key] for key in ("ocr_document_text_sha256","ocr_document_audit_r2_key")})
             manifest["ocr_render_dpi"]=parsed.get("ocr_render_dpi",[300,450])

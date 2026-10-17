@@ -201,6 +201,8 @@ def check_manifest(record,manifest):
             or manifest.get("reporting_currency")!="INR"):
             return "UNQUALIFIED_2024_COMPACT_ORIGINAL"
     if contract=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1":
+        if manifest.get("scope_evidence_basis") is not None and (manifest.get("scope_evidence_basis")!="NSE_ORIGINAL_SAME_STATEMENT_SCOPE_V1" or manifest.get("parser_revision")!="PDF_WORD_COORDINATES_DATED_COLUMN_V1"):
+            return "DATED_PDF_SCOPE_EVIDENCE_BASIS_UNPROVEN"
         # Generalized original-source contract: never trust a ticker lookup alone,
         # a metric snapshot, or a Trendlyne search snippet as a BSE issuer filing.
         url_path=r"/xml-data/corpfiling/(?:AttachHis|AttachLive)/[0-9a-f-]{36}\.pdf"
@@ -696,7 +698,8 @@ def r5_verified_scope_continuity(facts):
             "candidate_rows":candidates,
             "source_admission_performed":False,"repository_selection_overwrite":False}
 
-def select_quarters(rows):
+def select_quarters(rows,existing_choices=None):
+    existing_choices=existing_choices or {}
     groups=defaultdict(lambda:defaultdict(list))
     for r in rows: groups[(r["security_id"],str(r["period_end"]))][r["consolidation_scope"]].append(r)
     chosen=[]; blocked=Counter();selected_quarters=defaultdict(set)
@@ -723,7 +726,18 @@ def select_quarters(rows):
             complete=[v for v in by_record.values() if core.issubset({a["metric_code"] for a in v})]
             if not complete:
                 continue
-            source=min(complete,key=lambda v:str(v[0]["source_record_id"]))
+            def preference(version):
+                matches=conflicts=0
+                for fact in version:
+                    key=(str(security),period,scope,fact["metric_code"])
+                    previous=existing_choices.get(key)
+                    if previous is None:continue
+                    if str(fact.get("id"))==previous:matches+=1
+                    else:conflicts+=1
+                # Equal-valued validated originals must not churn accepted IDs.
+                # Real value conflicts were quarantined above, before this rank.
+                return (bool(conflicts),-matches,str(version[0]["source_record_id"]))
+            source=min(complete,key=preference)
             chosen.extend(source)
             selected_quarters[security].add(period)
             if scope=="STANDALONE" and "CONSOLIDATED" in scopes:
@@ -845,7 +859,13 @@ def verify(db,s3,apply):
         facts,exide_corrected=qualify_exide_correction(facts,s3)
         from r4_krn_correction import qualify as qualify_krn_correction
         facts,krn_corrected=qualify_krn_correction(facts,s3)
-        selections,blocked,quarters=select_quarters(facts);invalid.update(blocked)
+        with conn.cursor() as cur:
+            cur.execute("""SELECT security_id,metric_code,period_end,consolidation_scope,selected_observation_id
+              FROM public.fundamental_observation_decisions WHERE period_type='QUARTER'
+                AND period_end=ANY(%s::date[])""",(list(QUARTERS),))
+            prior_rows=cur.fetchall()
+        existing_choices={(str(r["security_id"]),str(r["period_end"]),r["consolidation_scope"],r["metric_code"]):str(r["selected_observation_id"]) for r in prior_rows}
+        selections,blocked,quarters=select_quarters(facts,existing_choices);invalid.update(blocked)
         if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
         if krn_corrected:invalid["KRN_CORRECTED_XBRL_SUPPORTED_BY_ISSUER_AND_EXCHANGE_ACK"]+=1
         inserted=unchanged=protected=0

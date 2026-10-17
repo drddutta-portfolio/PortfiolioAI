@@ -39,6 +39,20 @@ class ScopeBridgeOriginalTests(unittest.TestCase):
         self.assertEqual(out['facts']['EPS_DILUTED']['value'],'11.88')
         self.assertEqual(evidence['scope'],'CONSOLIDATED')
         with self.assertRaises(ValueError):extract_with_scope_bridge(doc,1,'2024-12-31','NATCOPHARM','INE987654321','NATCO PHARMA LIMITED',bridge)
+    def test_full_independent_bse_replay_pins_the_bridge_and_historical_cells(self):
+        from r4_bse_dated_proof import validate_original,REVISION
+        from r4_scope_bridge import CONTRACT
+        doc,bridge=example();raw=doc.tobytes();digest=hashlib.sha256(raw).hexdigest()
+        parsed,_=extract_with_scope_bridge(doc,1,'2024-09-30','NATCOPHARM','INE987654321','NATCO PHARMA LIMITED',bridge)
+        url='https://www.bseindia.com/xml-data/corpfiling/AttachHis/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee.pdf'
+        manifest={'symbol':'NATCOPHARM','isin':'INE987654321','issuer_name':'NATCO PHARMA LIMITED','bse_scrip_code':'123456','original_sha256_retained':digest,'issuer_filing_url':url,'financial_page':1,'period_end':'2024-09-30','consolidation_scope':'CONSOLIDATED','original_unit':parsed['unit'],'first_column_period':'2025-09-30','selected_column_period':'2024-09-30','selected_column_index':2,'source_reporting_basis':'LATER_FILING_REPORTED_COMPARATIVE','facts':parsed['facts'],'parser_revision':REVISION,'scope_evidence_basis':CONTRACT}
+        proof={'header':{'SecurityCode':'123456','ISIN':manifest['isin']},'listing':{'SCRIP_CD':'123456','ISIN_NUMBER':manifest['isin'],'Issuer_Name':manifest['issuer_name']},'issuer_name':manifest['issuer_name'],'bse_scrip_code':'123456','original_sha256':digest,'source_url':url,'scope_bridge':bridge}
+        self.assertEqual(validate_original(raw,manifest,proof)['facts']['EPS_DILUTED']['value'],'11.88')
+        bad=deepcopy(manifest);bad['facts']['EPS_DILUTED']['value']='99'
+        with self.assertRaisesRegex(ValueError,'FACT_MISMATCH'):validate_original(raw,bad,proof)
+        missing=deepcopy(proof);missing.pop('scope_bridge')
+        with self.assertRaisesRegex(ValueError,'SCOPE_BRIDGE_PROOF'):validate_original(raw,manifest,missing)
+
     def test_current_trio_disagreement_rejects_scope_inference(self):
         doc,bridge=example(revenue='475.8')
         with self.assertRaisesRegex(ValueError,'CURRENT_TRIO_MISMATCH'):extract_with_scope_bridge(doc,1,'2024-09-30','NATCOPHARM','INE987654321','NATCO PHARMA LIMITED',bridge)
