@@ -133,6 +133,15 @@ function quarterCellLabel(allRows: readonly ResultsSourceObservation[], entry: E
   return (LABELS[primary.code] ?? "Metric") + " " + formattedValue(primary)
 }
 
+function unratedExplanation(explanation: string, hasObservations: boolean): string {
+  if (!hasObservations) return "Quarterly filing is not yet available"
+  if (explanation.startsWith("Industry is unavailable")) return "Reviewed industry or grading methodology needed"
+  if (explanation.includes("fewer than two source-coherent")) return "Additional qualified prior-quarter comparisons needed"
+  if (explanation.includes("same-filing Revenue/NII")) return "Adjacent-quarter filing or accounting-scope reconciliation needed"
+  if (explanation.includes("outside the approved R5")) return "Quarter not yet eligible for historical grading"
+  return "Financial evidence needs review"
+}
+
 function statusName(status: string) {
   if (status === "STRONG") return "Strong"
   if (status === "WEAK") return "Weak"
@@ -146,7 +155,9 @@ function StatusDot({ status, pending = false }: { readonly status: string; reado
 
 function PreviewCard({ preview, calibrations }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations }) {
   const { entry, period, observations } = preview
-  const grade = resultStatus(preview.history, entry, period.end, calibrations)
+  const assessment = gradeQuarterR5(preview.history, entry.position.securityId, period.end,
+    entry.position.sector, entry.position.industry, calibrations)
+  const grade = assessment.status
   const topCode = entry.position.symbol === "STARHEALTH" ? "NET_PREMIUM_EARNED_QUARTER" :
     (isBank(entry.position.industry) || hasBankMetrics(observations)) ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER"
   const mainComparison = compareQuarterMetric(preview.history, entry.position.securityId, period.end, topCode)
@@ -164,6 +175,9 @@ function PreviewCard({ preview, calibrations }: { readonly preview: Preview; rea
       {mainComparison.qoq !== null && <small>{LABELS[topCode]} QoQ: {mainComparison.qoq}%</small>}
       {mainComparison.yoy !== null && <small>{LABELS[topCode]} YoY: {mainComparison.yoy}%</small>}
       {patComparison.yoy !== null && <small>PAT YoY: {patComparison.yoy}%</small>}
+      {grade === "UNAVAILABLE" && <small>Why Not Rated: {unratedExplanation(assessment.explanation,observations.length>0)}</small>}
+      {grade !== "UNAVAILABLE" && assessment.basis === "COMPANY_TREND" &&
+        <small>Company-only trend, not an industry peer or investment rating.</small>}
       <small>{observations.some((row) => !row.selected) ? "Unselected evidence remains under review." : observations.some((row) => row.originalShareBasis) ? "Reported pre-split EPS is not adjusted. Do not compare EPS across a share split." : "Source figures reconciled for current display. Publication timing and performance grading are separate."}</small>
     </div>,
     document.body,
@@ -591,7 +605,7 @@ export function ResultsLivePage() {
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
                 type="button" aria-pressed={active}
-                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis}
+                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis + (status === "UNAVAILABLE" ? "; " + unratedExplanation(outcome.explanation,rows.length>0) : "")}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
