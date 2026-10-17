@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs"
 import { buildIndustryR5Calibrations, gradeQuarterR5, RESULTS_GRADING_VERSION,
-  type R5Grade, type R5IndustryPeer } from "./quarterlyR5Classification"
+  type R5IndustryPeer } from "./quarterlyR5Classification"
 import { compareQuarterMetric } from "./quarterlyR5"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 
