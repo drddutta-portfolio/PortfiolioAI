@@ -8,7 +8,7 @@ on:
       - scripts/results/r4-verify-quarterly.py
       - scripts/results/test_r5_original_scope_proof.py
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: r5-original-scope-proof-development
   cancel-in-progress: true
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -62,6 +62,34 @@ jobs:
             'source_admission_performed':proof['source_admission_performed'],
             'no_db_writes':True},sort_keys=True))
           PY
+      - name: Commit comparison-only original evidence identities after verified R2 replay
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('tmp/results-r4/readback.json'))
+          proof=r['r5_verified_scope_proof']
+          assert r['mode']=='DRY_RUN' and r['created_decisions']==0
+          assert proof['pairs_with_verified_same_scope_originals']==23
+          originals=proof['comparison_only_original_proofs']
+          assert len(originals)>=50
+          assert all(x['scope']=='STANDALONE' and len(x['observations'])==3 for x in originals)
+          o={'contract':'R5_INDEPENDENT_ORIGINAL_COMPARISON_PROOF_V1',
+             'environment':'Development',
+             'sourceJob':'R2_ORIGINAL_REPLAY_AND_ISSUER_IDENTITY_VERIFIED_20261017',
+             'approvedSources':originals}
+          out=Path('src/features/results/resultsR5ComparisonProof.json')
+          out.write_text(json.dumps(o,sort_keys=True,indent=2)+'\\n')
+          print('R5_COMPARISON_ONLY_VERIFIED_IDENTITIES',len(originals))
+          PY
+          if ! git diff --quiet -- src/features/results/resultsR5ComparisonProof.json; then
+            git config user.name "portfolioai-r5-proof-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/features/results/resultsR5ComparisonProof.json
+            git commit -m "data(results): pin R2-verified standalone R5 comparison identities without replacing canonical selections"
+            git push origin HEAD:PortfolioAI-Development
+          fi
       - name: Store proof summary (no financial figures)
         if: always()
         uses: actions/upload-artifact@v4
