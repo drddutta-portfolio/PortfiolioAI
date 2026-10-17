@@ -489,9 +489,12 @@ export function ResultsLivePage() {
   }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew])
 
   const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
+  // Latest stored quarter is useful even while its original-source selection
+  // is pending; otherwise the detail card incorrectly defaults to an empty
+  // rolling quarter despite genuine earlier observations for this company.
   const newestObservation = suggestedEntry
-    ? observations.filter((r) => r.securityId === suggestedEntry.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))
-        .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))[0]
+    ? observations.filter((r) => r.securityId === suggestedEntry.position.securityId && periods.some((p) => p.end === r.periodEnd))
+        .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd) || Number(b.selected) - Number(a.selected))[0]
     : null
   const effectiveSelection = collapsed || loadingEvidence ? null : selection ?? (suggestedEntry && periods[0]
     ? { securityId: suggestedEntry.position.securityId, periodEnd: newestObservation?.periodEnd ?? periods[0].end }
