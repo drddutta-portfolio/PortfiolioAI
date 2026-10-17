@@ -30,8 +30,10 @@ def main():
                     AND raw_payload->'request'->>'tool'=%s
                     AND raw_payload->'request'->'args'=%s::jsonb
                     AND coalesce(raw_payload->'request'->>'securityId','')=%s
-                    AND retrieved_at>=current_date ORDER BY retrieved_at DESC LIMIT 1""",
-                    (tool,json.dumps(args),security or ""))
+                    AND retrieved_at>=current_date
+                    AND (%s=false OR raw_payload->>'fresh_request'='true')
+                  ORDER BY retrieved_at DESC LIMIT 1""",
+                    (tool,json.dumps(args),security or "",os.getenv("RESULTS_R4_FRESH_RETRY")=="1"))
                 cached=cur.fetchone()
             db.rollback()
             if cached and os.getenv("RESULTS_R4_FORCE_FRESH")!="1":
@@ -56,7 +58,7 @@ def main():
             metadata={"contract":"RESULTS_R4_TRENDLYNE_HISTORY_REVIEW_V2",
                 "request":body,"provider_run_id":result["runId"],"r2_key":key,"sha256":digest,
                 "canonical_promotion_performed":False,"original_source_qualification_required":True,
-                "fresh_request":os.getenv("RESULTS_R4_FORCE_FRESH")=="1"}
+                "fresh_request":os.getenv("RESULTS_R4_FORCE_FRESH")=="1" or os.getenv("RESULTS_R4_FRESH_RETRY")=="1"}
             encoded=batch.canonical(metadata)
             with db.cursor() as cur:
                 cur.execute("""INSERT INTO data_source_records
