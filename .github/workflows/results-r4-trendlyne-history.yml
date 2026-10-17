@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 95
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     env:
@@ -26,7 +26,8 @@ jobs:
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
-      RESULTS_R4_FORCE_FRESH: ${{ github.event_name == 'push' && '1' || '0' }}
+      RESULTS_R4_FORCE_FRESH: '0'
+      RESULTS_R4_FRESH_RETRY: ${{ github.event_name == 'push' && '1' || '0' }}
       RESULTS_R4_TRENDLYNE_MODE: HISTORICAL
       RESULTS_R4_TRENDLYNE_SHARD: ${{ matrix.shard }}
     steps:
