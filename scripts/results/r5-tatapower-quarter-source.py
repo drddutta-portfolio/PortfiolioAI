@@ -95,7 +95,7 @@ def inspect_one(period,url,pages):
                     label=row_text([w for w in ws if (w[0]+w[2])/2<left])
                     if not re.search(r'revenue|profit|tax|diluted|earnings|loss',label,re.I):continue
                     number_words=[w for w in ws if left<=(w[0]+w[2])/2<right]
-                    count=sum(bool(re.fullmatch(r'\\(?-?[0-9,]+(?:\\.[0-9]+)?\\)?',str(w[4]))) for w in number_words)
+                    count=sum(bool(re.fullmatch(r'\(?-?[0-9,]+(?:\.[0-9]+)?\)?',str(w[4]))) for w in number_words)
                     matches.append({"label":re.sub(r'[^A-Za-z ]','',label)[:95],
                                     "first_quarter_numeric_token_count":count,"row_y":round(yy,1)})
                 filtered.append({"periods":[d[0] for d in dates[:6]],
