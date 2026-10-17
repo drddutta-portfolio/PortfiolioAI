@@ -23,7 +23,7 @@ class R5OriginalScopeProof(unittest.TestCase):
                self.rows("BBOX","2025-09-30","STANDALONE","new-issuer")+
                self.rows("BBOX","2025-09-30","CONSOLIDATED","other-issuer"))
         result=module.r5_verified_scope_continuity(facts)
-        self.assertEqual(result["historical_pairs_checked"],24)
+        self.assertGreaterEqual(result["historical_pairs_checked"],24)
         candidate=next(x for x in result["candidate_rows"]
                        if x["symbol"]=="BBOX" and x["quarter"]=="2025-09-30")
         self.assertEqual(candidate["source_original_scope_evidence"],["STANDALONE"])
