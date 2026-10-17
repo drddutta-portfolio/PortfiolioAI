@@ -35,7 +35,10 @@ const LABELS: Readonly<Record<string, string>> = {
   GROSS_NPA_PERCENT: "Gross NPA",
   NET_NPA_PERCENT: "Net NPA",
 }
-const isBank = (industry: string | null) => /bank/i.test(industry ?? "")
+// Match an actual Bank industry, not "Non Banking Financial Company (NBFC)".
+// All other banking classification gaps are resolved by qualified bank-only
+// NII/NPA observations, never by a substring of a lender industry name.
+const isBank = (industry: string | null) => /\bbanks?\b/i.test(industry ?? "")
 // Portfolio classification can lag source acquisition: rely on a bank-only
 // financial metric for display selection without changing its research scores.
 const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
