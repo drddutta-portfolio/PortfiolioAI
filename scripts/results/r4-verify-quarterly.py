@@ -655,9 +655,18 @@ def r5_verified_scope_continuity(facts):
     # quarters already selected but alternating accounting scopes. Build
     # both SAME-SCOPE verified alternatives; don't choose based on grades.
     # Every selected original has been individually replayed against R2.
+    # Current R5 exception issuers (as of 17 October 2026), evidence-driven
+    # expansion only. Each scope still requires independently R2 SHA-replayed
+    # original filings; none is admitted to canonical R4 selections.
     scope_history_issuers={
-        "CGPOWER","NATIONALUM","CHOLAFIN","JIOFIN","ICEMAKE",
-        "MOTHERSON","SHARDACROP","FEDERALBNK","MANKIND","LGEINDIA",
+        "360ONE","AVANTIFEED","AWHCL","BDL","BLUSPRING",
+        "CGPOWER","CHOLAFIN","COFORGE","CPPLUS","DDEVPLSTIK",
+        "EBGNG","FEDERALBNK","GMBREW","GROWW","HEXT",
+        "ICEMAKE","IGL","IKS","ITCHOTELS","JASH",
+        "JIOFIN","LENSKART","LGEINDIA","MANKIND","MFSL",
+        "MOTHERSON","NATIONALUM","PINELABS","SANSERA","SHARDACROP",
+        "SSWL","STARHEALTH","SYRMA","TATACAP","TATAPOWER",
+        "TMCV","TMPV","UTLSOLAR","VENTIVE",
     }
     allowed_scopes={(c["symbol"],scope) for c in candidates
                     for scope in c["source_original_scope_evidence"]}
