@@ -1,0 +1,179 @@
+{
+  "contract": "RESULTS_R5_EXACT_ISIN_SECONDARY_CLASSIFICATION_EVIDENCE_V1",
+  "evidenceAsOf": "2026-10-17",
+  "environment": "PortfolioAI-Development",
+  "sourceProvider": "PatternsRadar public NSE-derived classification presentation",
+  "sourceAuthority": "REVIEWED_SECONDARY_NOT_EXCHANGE_ORIGINAL",
+  "policy": "ONLY_IF_CANONICAL_ATTRIBUTE_MISSING;DO_NOT_REPLACE_SECTOR;EXACT_SYMBOL_AND_ISIN;NOT_HISTORICAL_POINT_IN_TIME",
+  "caveat": "Secondary public NSE-derived taxonomy cross-referenced with current issuer stock pages. Original NSE quote JSON blocked HTTP 403. The exact industry labels describe current issuer businesses; do not claim these labels were point-in-time classifications at the historical grade date.",
+  "rows": [
+    {
+      "symbol": "ADANIPORTS",
+      "isin": "INE742F01042",
+      "sector": "Services",
+      "industry": "Port & Port services",
+      "basicIndustry": "Transport Infrastructure",
+      "evidenceUrl": "https://patternsradar.com/s/ADANIPORTS"
+    },
+    {
+      "symbol": "ARVINDFASN",
+      "isin": "INE955V01021",
+      "sector": "Consumer Services",
+      "industry": "Retailing",
+      "basicIndustry": "Speciality Retail",
+      "evidenceUrl": "https://patternsradar.com/s/ARVINDFASN"
+    },
+    {
+      "symbol": "ASHOKA",
+      "isin": "INE442H01029",
+      "sector": "Construction",
+      "industry": "Civil Construction",
+      "basicIndustry": "Civil Construction",
+      "evidenceUrl": "https://patternsradar.com/s/ASHOKA"
+    },
+    {
+      "symbol": "ASTERDM",
+      "isin": "INE914M01019",
+      "sector": "Healthcare",
+      "industry": "Hospital",
+      "basicIndustry": "Hospital",
+      "evidenceUrl": "https://patternsradar.com/s/ASTERDM"
+    },
+    {
+      "symbol": "AURIONPRO",
+      "isin": "INE132H01018",
+      "sector": "Information Technology",
+      "industry": "Computers - Software & Consulting",
+      "basicIndustry": "Computers - Software & Consulting",
+      "evidenceUrl": "https://patternsradar.com/s/AURIONPRO"
+    },
+    {
+      "symbol": "AVANTIFEED",
+      "isin": "INE871C01038",
+      "sector": "Fast Moving Consumer Goods",
+      "industry": "Animal Feed",
+      "basicIndustry": "Animal Feed",
+      "evidenceUrl": "https://patternsradar.com/s/AVANTIFEED"
+    },
+    {
+      "symbol": "BANKINDIA",
+      "isin": "INE084A01016",
+      "sector": "Banking",
+      "industry": "Public Sector Bank",
+      "basicIndustry": "Public Sector Bank",
+      "evidenceUrl": "https://patternsradar.com/s/BANKINDIA"
+    },
+    {
+      "symbol": "BDL",
+      "isin": "INE171Z01026",
+      "sector": "Defence",
+      "industry": "Aerospace & Defense",
+      "basicIndustry": "Aerospace & Defense",
+      "evidenceUrl": "https://patternsradar.com/s/BDL"
+    },
+    {
+      "symbol": "CANBK",
+      "isin": "INE476A01022",
+      "sector": "Financial Services",
+      "industry": "Public Sector Bank",
+      "basicIndustry": "Public Sector Bank",
+      "evidenceUrl": "https://patternsradar.com/s/CANBK"
+    },
+    {
+      "symbol": "CARBORUNIV",
+      "isin": "INE120A01034",
+      "sector": "Capital Goods",
+      "industry": "Industrial Products",
+      "basicIndustry": "Abrasives & Bearings",
+      "evidenceUrl": "https://patternsradar.com/s/CARBORUNIV"
+    },
+    {
+      "symbol": "CDSL",
+      "isin": "INE736A01011",
+      "sector": "Financial Services",
+      "industry": "Depositories, Clearing Houses and Other Intermediaries",
+      "basicIndustry": "Depositories Clearing Houses and Other Intermediaries",
+      "evidenceUrl": "https://patternsradar.com/s/CDSL"
+    },
+    {
+      "symbol": "COFORGE",
+      "isin": "INE591G01025",
+      "sector": "Information Technology",
+      "industry": "Computers - Software & Consulting",
+      "basicIndustry": "Computers - Software & Consulting",
+      "evidenceUrl": "https://patternsradar.com/s/COFORGE"
+    },
+    {
+      "symbol": "DRREDDY",
+      "isin": "INE089A01031",
+      "sector": "Healthcare",
+      "industry": "Pharmaceuticals",
+      "basicIndustry": "Pharmaceuticals",
+      "evidenceUrl": "https://patternsradar.com/s/DRREDDY"
+    },
+    {
+      "symbol": "ENGINERSIN",
+      "isin": "INE510A01028",
+      "sector": "Construction",
+      "industry": "Civil Construction",
+      "basicIndustry": "Civil Construction",
+      "evidenceUrl": "https://patternsradar.com/s/ENGINERSIN"
+    },
+    {
+      "symbol": "HINDPETRO",
+      "isin": "INE094A01015",
+      "sector": "Oil Gas & Consumable Fuels",
+      "industry": "Refineries/Petro-Products",
+      "basicIndustry": "Refineries & Marketing",
+      "evidenceUrl": "https://patternsradar.com/s/HINDPETRO"
+    },
+    {
+      "symbol": "IRB",
+      "isin": "INE821I01022",
+      "sector": "Construction",
+      "industry": "Civil Construction",
+      "basicIndustry": "Civil Construction",
+      "evidenceUrl": "https://patternsradar.com/s/IRB"
+    },
+    {
+      "symbol": "JWL",
+      "isin": "INE209L01016",
+      "sector": "Capital Goods",
+      "industry": "Industrial Manufacturing",
+      "basicIndustry": "Railway Wagons",
+      "evidenceUrl": "https://patternsradar.com/s/JWL"
+    },
+    {
+      "symbol": "LODHA",
+      "isin": "INE670K01029",
+      "sector": "Realty",
+      "industry": "Residential Commercial Projects",
+      "basicIndustry": "Residential Commercial Projects",
+      "evidenceUrl": "https://patternsradar.com/s/LODHA"
+    },
+    {
+      "symbol": "SANSERA",
+      "isin": "INE953O01021",
+      "sector": "Automobile and Auto Components",
+      "industry": "Auto Components",
+      "basicIndustry": "Auto Components & Equipments",
+      "evidenceUrl": "https://patternsradar.com/s/SANSERA"
+    },
+    {
+      "symbol": "TECHM",
+      "isin": "INE669C01036",
+      "sector": "Information Technology",
+      "industry": "Computers - Software & Consulting",
+      "basicIndustry": "Computers - Software & Consulting",
+      "evidenceUrl": "https://patternsradar.com/s/TECHM"
+    },
+    {
+      "symbol": "VMART",
+      "isin": "INE665J01013",
+      "sector": "Consumer Services",
+      "industry": "Retailing",
+      "basicIndustry": "Diversified Retail",
+      "evidenceUrl": "https://patternsradar.com/s/VMART"
+    }
+  ]
+}
