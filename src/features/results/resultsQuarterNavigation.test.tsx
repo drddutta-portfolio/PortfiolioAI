@@ -94,9 +94,10 @@ describe("Results rolling-quarter navigator", () => {
     expect(screen.getByText(/Why Not Rated: Quarterly filing is not yet available/)).toBeInTheDocument()
     fireEvent.mouseLeave(cell)
     expect(screen.queryByRole("tooltip")).toBeNull()
-    // The complete assessment reason is shown only after explicitly
-    // selecting the quarter; it must not appear as a second hover tooltip.
+    // With no source observations, selecting the quarter must not fabricate
+    // a detailed source-qualified assessment. The single hover explanation
+    // above is the only available grade evidence.
     fireEvent.click(cell)
-    expect(screen.getByText("Why this quarterly grade?")).toBeInTheDocument()
+    expect(screen.queryByText("Why this quarterly grade?")).toBeNull()
   })
 })
