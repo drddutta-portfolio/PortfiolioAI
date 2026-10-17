@@ -33,6 +33,17 @@ def main():
                         proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=obj['Key'])['Body'].read())
                         if not proof.get('rejection'):continue
                         pages.setdefault(int(m[1]),{})[m[2]]=proof['rejection']
+                    # Revisit the current batch caches as well as the legacy
+                    # per-period cache; a negative result remains diagnosable.
+                    for version in ('v3','v4'):
+                        batchprefix=batch.PREFIX+'ocr-dated-page-batch-'+version+'/original_version='+digest+'/'
+                        listed=client.list_objects_v2(Bucket=batch.BUCKET,Prefix=batchprefix,MaxKeys=200)
+                        for obj in listed.get('Contents',[]):
+                            m=re.search(r'/page=(\d+)/proof.json$',obj['Key'])
+                            if not m:continue
+                            proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=obj['Key'])['Body'].read())
+                            for period,entry in proof.get('result',{}).items():
+                                if period in periods and entry.get('rejection'):pages.setdefault(int(m[1]),{})[period]=entry['rejection']
                     if not pages:continue
                     raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
                     if batch.sha(raw)!=digest:raise ValueError('ORIGINAL_HASH_MISMATCH')
@@ -44,6 +55,9 @@ def main():
                                 headers=[(y,ws) for y,ws in rows if re.search(r'quarter|ended|year|month|lakhs?|crores?|millions?|INR|Rs\b|₹|financial|standalone|consolidated|20\d{2}',row_text(ws),re.I)][:24]
                             else:headers=rows[max(0,revenue-24):revenue]
                             value={'contract':'RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1','diagnostic_only':True,'symbol':symbol,'isin':isin,'security_id':str(sid),'page':page_no,'source_url':source['source_url'],'original_sha256':digest,'rejections':rejections,'date_header_candidates':[{'row':i,'y':y,'dates':d} for i,y,d in dated_headers(rows)],'rows':[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in headers],'labels_without_amounts':[re.sub(r'[\d.,()+−-]+',' ',row_text(ws))[:220] for _,ws in rows[(revenue or 0):] if re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I)][:32]}
+                            # Full numeric rows remain private Development evidence;
+                            # these single-render diagnostics never become facts.
+                            value['metric_row_geometry']=[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in rows[(revenue or 0):] if re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I)][:32]
                             native_page=pdf[page_no-1]
                             value['native_fonts']=[{'xref':f[0],'type':f[2],'name':f[3],'encoding':f[5]} for f in native_page.get_fonts(full=True)]
                             unit_spans=[]
