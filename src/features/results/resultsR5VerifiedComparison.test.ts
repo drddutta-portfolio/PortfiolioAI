@@ -27,7 +27,8 @@ const proof=quarters.map(q=>{
     approval:"R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
   } satisfies VerifiedR5Source
 })
-const rows=quarters.flatMap((q,i)=>[...fixture("STANDALONE",q,i),...fixture("CONSOLIDATED",q,i)])
+const rows=quarters.flatMap((q,i)=>[...fixture("STANDALONE",q,i),...fixture("CONSOLIDATED",q,i)]
+   .map(r=>({...r,selected:r.scope===(i%2===0?"STANDALONE":"CONSOLIDATED")})))
 const calibration:R5IndustryCalibrations=new Map()
 
 describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
@@ -36,7 +37,7 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(gradedBefore.status).toBe("UNAVAILABLE")
    const alternative=buildVerifiedR5ComparisonRows(rows,proof)
    expect(alternative).not.toBe(rows)
-   expect(rows.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(12)
+   expect(rows.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(6)
    expect(alternative.filter(r=>r.selected&&r.scope==="CONSOLIDATED")).toHaveLength(0)
    expect(alternative.filter(r=>r.selected&&r.scope==="STANDALONE")).toHaveLength(12)
    const graded=gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,alternative)
@@ -45,16 +46,16 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(graded.explanation).toContain("canonical Results filing selections are untouched")
  })
  it("fails closed when any verified original hash-bound ID or scope is different",()=>{
-   const altered=proof.map(x=>x.periodEnd==="2025-03-31"?
+   const altered=proof.map(x=>x.periodEnd==="2024-12-31"?
       {...x,observations:{...x.observations,NET_PROFIT_QUARTER:"unverified-foreign-observation"}}:x)
    const other=buildVerifiedR5ComparisonRows(rows,altered)
-   expect(other.filter(r=>r.selected&&r.periodEnd==="2025-03-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
+   expect(other.filter(r=>r.selected&&r.periodEnd==="2024-12-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
    expect(gradeR5WithVerifiedOriginal(rows,sid,"2025-06-30","Capital Goods","Industrial Products",calibration,other).status).toBe("UNAVAILABLE")
  })
  it("poisons duplicated or incorrectly labelled proofs instead of choosing one",()=>{
-   const duplicates=[...proof,proof[2]!]
+   const duplicates=[...proof,proof[1]!]
    const other=buildVerifiedR5ComparisonRows(rows,duplicates)
-   expect(other.filter(r=>r.selected&&r.periodEnd==="2025-03-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
+   expect(other.filter(r=>r.selected&&r.periodEnd==="2024-12-31"&&r.scope==="CONSOLIDATED")).toHaveLength(3)
    const invalid=proof.map(x=>({...x,approval:"UNVERIFIED_ISSUER"}))
    expect(buildVerifiedR5ComparisonRows(rows,invalid)).toBe(rows)
  })
