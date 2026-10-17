@@ -32,6 +32,14 @@ def fixture(period="30.09.2024",issuer="COMPUTER AGE MANAGEMENT SERVICES LIMITED
     ])
 
 class BseOriginalTest(unittest.TestCase):
+    def test_single_word_legal_issuer_requires_exact_complete_name(self):
+        from unittest.mock import MagicMock
+        bse=MagicMock();bse._bse.listSecurities.return_value=[{"SCRIP_CD":"532541","ISIN_NUMBER":"FIXTURE","Issuer_Name":"Coforge Limited"}]
+        self.assertEqual(batch.verified_issuer(bse,"532541","FIXTURE"),"Coforge Limited")
+        parsed=batch.extract(fixture(issuer="COFORGE LIMITED"),"COFORGE","Coforge Limited","2024-09-30")
+        self.assertEqual(parsed["facts"]["NET_PROFIT_QUARTER"]["value"],"10.00")
+        with self.assertRaises(ValueError):batch.extract(fixture(issuer="OTHER COFORGE TECHNOLOGIES LIMITED"),"COFORGE","Coforge Limited","2024-09-30")
+
     def test_exact_listing_resolves_placeholder_ticker_name(self):
         from unittest.mock import MagicMock
         bse=MagicMock()
