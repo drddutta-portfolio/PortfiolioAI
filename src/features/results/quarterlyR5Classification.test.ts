@@ -243,4 +243,35 @@ describe("R5 exact-industry quarterly operating signal", () => {
     expect(grade(rows.map(r=>r.periodEnd==="2024-12-31"&&r.code==="NET_PROFIT_QUARTER"?{...r,sourceRecordId:"other-original"}:r)).status).toBe("UNAVAILABLE")
   })
 
+  it("uses the pre-approved own-company trend, never peer percentiles, if a calibrated group's PAT baseline cannot support a growth percentage",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const revenues=[100,112,126,140]
+    const profits=[-4,2,-2,7]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(revenues[i])),
+      fact(date,"NET_PROFIT_QUARTER",String(profits[i])),
+    ])
+    const result=gradeQuarterR5(rows,"s1","2026-06-30","Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals"))
+    expect(result.basis).toBe("COMPANY_TREND")
+    expect(result.status).not.toBe("UNAVAILABLE")
+    expect(result.sampleSize).toBeGreaterThanOrEqual(2)
+    expect(result.explanation).toContain("no peer percentile assigned")
+    expect(result.explanation).toContain("NOT an industry percentile")
+  })
+  it("does not allow a peer-comparison fallback to evade missing-source or one-comparison requirements",()=>{
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const rows=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(110+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(i%2===0?-5:5)),
+    ])
+    const withoutBaseline=rows.filter(row=>row.periodEnd!=="2025-12-31")
+    const graded=(data:readonly ResultsSourceObservation[])=>gradeQuarterR5(data,"s1","2026-06-30","Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals"))
+    expect(graded(withoutBaseline).status).toBe("UNAVAILABLE")
+    const inconsistent=rows.map(row=>row.periodEnd==="2026-03-31"&&row.code==="NET_PROFIT_QUARTER"?
+      {...row,sourceRecordId:"unrelated-issuer-document"}:row)
+    expect(graded(inconsistent).status).toBe("UNAVAILABLE")
+    expect(graded(rows.map(row=>row.periodEnd==="2026-06-30"&&row.code==="NET_PROFIT_QUARTER"?
+      {...row,selected:false}:row)).status).toBe("UNAVAILABLE")
+  })
+
 })
