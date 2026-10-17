@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
-  buildIndustryR5Calibrations, gradeQuarterR5, RESULTS_GRADING_VERSION,
+  buildIndustryR5Calibrations, buildRollingIndustryR5Calibrations, gradeQuarterR5, RESULTS_GRADING_VERSION,
   type R5IndustryCalibrations,
 } from "./quarterlyR5Classification"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -184,6 +184,63 @@ describe("R5 exact-industry quarterly operating signal", () => {
     }
     expect(graded(rows,"Financial Services","NBFC").status).toBe("UNAVAILABLE")
     expect(graded(rows,"Energy","Solar Mining").status).toBe("UNAVAILABLE")
+  })
+
+  it("grades March, June and September 2025 using only earlier source-coherent company evidence",()=>{
+    const dates=["2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30"]
+    const rows=dates.flatMap((q,i)=>[
+      fact(q,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(q,"NET_PROFIT_QUARTER",String(20+i*5)),
+    ])
+    for(const end of ["2025-03-31","2025-06-30","2025-09-30"]){
+      const grade=gradeQuarterR5(rows,"s1",end,"Capital Goods","Industrial Products",new Map())
+      expect(grade.status).toBe("STRONG")
+      expect(grade.basis).toBe("COMPANY_TREND")
+      expect(grade.sampleSize).toBeGreaterThanOrEqual(2)
+      expect(grade.sampleSize).toBeLessThanOrEqual(3)
+    }
+    const older=gradeQuarterR5(rows,"s1","2024-12-31","Capital Goods","Industrial Products",new Map())
+    expect(older.status).toBe("UNAVAILABLE")
+    expect(gradeQuarterR5(rows,"s1","2025-03-30","Capital Goods","Industrial Products",new Map()).status).toBe("UNAVAILABLE")
+  })
+
+  it("never calibrates a historical quarter using future reports or future peer distributions",()=>{
+    const dates=["2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    const peers=[0,1,2,3].map(i=>({securityId:"issuer"+i,sector:"Capital Goods",industry:"Industrial Products"}))
+    const make=(leak:boolean)=>peers.flatMap((p,i)=>dates.flatMap((q,j)=>{
+      const future=j>=5
+      const sourceId=p.securityId+q
+      const rev=String(future&&leak?999999+i*100:100+i*5+j*7)
+      const pat=String(future&&leak?9999+i*50:30+i*3+j*2)
+      return [
+        {...fact(q,"OPERATING_REVENUE_QUARTER",rev),securityId:p.securityId,id:sourceId+"top",sourceRecordId:sourceId},
+        {...fact(q,"NET_PROFIT_QUARTER",pat),securityId:p.securityId,id:sourceId+"pat",sourceRecordId:sourceId},
+      ]
+    }))
+    const a=make(false), b=make(true)
+    const historicalEnd="2025-09-30"
+    const ca=buildIndustryR5Calibrations(a,peers,historicalEnd)
+    const cb=buildIndustryR5Calibrations(b,peers,historicalEnd)
+    expect([...ca]).toEqual([...cb])
+    expect(ca.size).toBe(1)
+    const rolling=buildRollingIndustryR5Calibrations(b,peers,["2025-09-30","2026-06-30"])
+    expect(rolling.get("2025-09-30|CAPITAL GOODS::INDUSTRIAL PRODUCTS")).toEqual(ca.get("CAPITAL GOODS::INDUSTRIAL PRODUCTS"))
+    const grade=gradeQuarterR5(a,peers[0]!.securityId,historicalEnd,"Capital Goods","Industrial Products",rolling)
+    expect(grade.basis).toBe("INDUSTRY_PEER")
+    expect(grade.sampleSize).toBe(12)
+  })
+
+  it("fails closed when an older source or quarter is absent, conflicted or not selected",()=>{
+    const dates=["2024-09-30","2024-12-31","2025-03-31"]
+    const rows=dates.flatMap((q,i)=>[
+      fact(q,"OPERATING_REVENUE_QUARTER",String(100+i*10)),
+      fact(q,"NET_PROFIT_QUARTER",String(10+i*4)),
+    ])
+    const grade=(data:readonly ResultsSourceObservation[])=>gradeQuarterR5(data,"s1","2025-03-31","Capital Goods","Industrial Products",new Map())
+    expect(grade(rows).status).toBe("STRONG")
+    expect(grade(rows.filter(r=>r.periodEnd!=="2024-09-30")).status).toBe("UNAVAILABLE")
+    expect(grade(rows.map(r=>r.periodEnd==="2024-12-31"&&r.code==="NET_PROFIT_QUARTER"?{...r,selected:false}:r)).status).toBe("UNAVAILABLE")
+    expect(grade(rows.map(r=>r.periodEnd==="2024-12-31"&&r.code==="NET_PROFIT_QUARTER"?{...r,sourceRecordId:"other-original"}:r)).status).toBe("UNAVAILABLE")
   })
 
 })
