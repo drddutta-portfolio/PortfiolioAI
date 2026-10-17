@@ -55,38 +55,66 @@ def number(words):
 def clean_label(text):
     return re.sub(r"^\s*(?:(?:\d+|[ivx]+)[.)]?\s+|\(?[a-z]\s*[)|]\s*|-\s*)","",text,flags=re.I).strip()
 
-def extract_page(page,page_no,period,bank=False,insurer=False):
+def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False):
     rows=rows_for(page)
     for header_index,(y,words) in enumerate(rows):
         dates=date_cells(words)
-        if len(dates)<3 or dates[0][0]!=period:continue
+        if len(dates)<3:continue
+        matching=[i for i,d in enumerate(dates[:3]) if d[0]==period]
+        if allow_comparative:
+            if len(matching)!=1:continue
+            column=matching[0]
+        else:
+            if dates[0][0]!=period:continue
+            column=0
         first=(dates[0][1]+dates[0][2])/2
         second=(dates[1][1]+dates[1][2])/2
         third=(dates[2][1]+dates[2][2])/2
         gap=second-first
         if gap<=10:continue
-        left=first-gap/2;right=(first+second)/2
+        first_left=first-gap/2
+        left=first_left;right=(first+second)/2
         near=[(yy,ws) for yy,ws in rows[:header_index] if y-yy<55]
         quarter_words=[w for _,ws in near for w in ws if re.fullmatch(r"quarters?",str(w[4]),re.I)]
-        if not any(left<=w[0]<=third for w in quarter_words):continue
-        if any(re.search(r"year|half|nine|six",str(w[4]),re.I)
-               for _,ws in near for w in ws if left<=w[0]<first):continue
+        if allow_comparative:
+            group_right=third+(third-second)/2
+            if not any(first_left<=(w[0]+w[2])/2<=group_right for w in quarter_words):continue
+            if any(re.fullmatch(r"years?|half|nine|six",str(w[4]),re.I)
+                   for _,ws in near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
+            centers=[(d[1]+d[2])/2 for d in dates]
+            center=centers[column]
+            left=(centers[column-1]+center)/2 if column else first_left
+            right=(center+centers[column+1])/2 if column+1<len(centers) else center+(center-centers[column-1])/2
+        else:
+            if not any(left<=w[0]<=third for w in quarter_words):continue
+            if any(re.search(r"year|half|nine|six",str(w[4]),re.I)
+                   for _,ws in near for w in ws if left<=w[0]<first):continue
         header=" ".join(row_text(ws) for _,ws in rows[:header_index])
         upper=header.upper()
         if "FINANCIAL" not in upper:continue
-        scopes={s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",upper)}
+        scope_header=upper
+        if allow_comparative:
+            titles=[]
+            for i,(yy,ws) in enumerate(rows[:header_index]):
+                if y-yy>180 or not re.search(r"\bfinancial\b",row_text(ws),re.I):continue
+                title=" ".join(row_text(r[1]) for r in rows[max(0,i-1):min(header_index,i+2)])
+                if len({s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",title,re.I)})==1:titles.append(title)
+            if not titles:continue
+            scope_header=titles[-1].upper()
+        scopes={s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",scope_header)}
         if len(scopes)!=1:continue
         scope=next(iter(scopes))
         units=[]
         for regex,unit,divisor in [(r"\b(?:LAKHS?|LACS?)\b","INR_LAKH",100),
                                     (r"\bMILLIONS?\b","INR_MILLION",10),
                                     (r"\bCRORES?\b","INR_CRORE",1)]:
-            if re.search(regex,upper):units.append((unit,Decimal(divisor)))
+            unit_header=(" ".join(row_text(ws) for yy,ws in rows[:header_index] if y-yy<180).upper() if allow_comparative else upper)
+            if re.search(regex,unit_header):units.append((unit,Decimal(divisor)))
         if len(units)!=1:continue
         unit,divisor=units[0]
         found={}
         for yy,ws in rows[header_index+1:]:
-            label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<left]))
+            label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)]))
             if not label:continue
             metric=None
             if re.match(r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b",label,re.I):metric="OPERATING_REVENUE_QUARTER"
@@ -98,19 +126,26 @@ def extract_page(page,page_no,period,bank=False,insurer=False):
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
             elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?)?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
+            elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
             value,original=number(cell)
             # Prove that this is a table row with another value in the next column.
-            next_right=(second+third)/2
-            number([w for w in ws if right<=(w[0]+w[2])/2<next_right])
+            if allow_comparative:
+                other=1 if column==0 else column-1
+                other_left=(centers[other-1]+centers[other])/2 if other else first_left
+                other_right=(centers[other]+centers[other+1])/2
+                number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right])
+            else:
+                next_right=(second+third)/2
+                number([w for w in ws if right<=(w[0]+w[2])/2<next_right])
             fact={"value":str(value if metric=="EPS_DILUTED" else value/divisor),
                 "unit":"INR_PER_SHARE" if metric=="EPS_DILUTED" else "INR_CRORE",
                 "original_unit":"INR_PER_SHARE" if metric=="EPS_DILUTED" else unit,
                 "original_value":original,"evidence_line":row_text(ws)[:800],
-                "page":page_no,"column_index":0,"column_bounds":[left,right],
+                "page":page_no,"column_index":column,"column_bounds":[left,right],
                 "row_y":yy,"column_period":period,"extraction_method":"PDF_WORD_COORDINATES_V3"}
             if metric in found and found[metric]["value"]!=fact["value"]:
                 raise ValueError("CONFLICTING_GEOMETRIC_ROWS:"+metric)
@@ -134,8 +169,10 @@ def extract_page(page,page_no,period,bank=False,insurer=False):
                         raise ValueError("PROFIT_TAX_RECONCILIATION_FAILED")
                     arithmetic={"contract":"PBT_MINUS_TAX_EQUALS_PAT","difference_crore":str(difference),
                         "pbt":found["PROFIT_BEFORE_TAX"],"tax_crore":str(tax)}
-            return {"scope":scope,"page":page_no,"unit":unit,"first_column_period":period,
+            result={"scope":scope,"page":page_no,"unit":unit,"first_column_period":dates[0][0],
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
                 "arithmetic_validation":arithmetic,
                 "parser_revision":"PDF_WORD_COORDINATES_V3"}
+            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column)
+            return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
