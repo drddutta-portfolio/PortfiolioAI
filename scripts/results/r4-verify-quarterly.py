@@ -5,6 +5,8 @@ time, adjust historical share basis or change any investment research score."""
 import argparse, hashlib, json, os, re
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from threading import BoundedSemaphore
+SOURCE_REPLAY_SLOTS=BoundedSemaphore(2)
 from datetime import date,datetime
 from decimal import Decimal, InvalidOperation
 from urllib.parse import urlparse
@@ -215,7 +217,9 @@ def check_manifest(record,manifest):
                 or manifest.get("source_reporting_basis") not in ("AS_FILED_OWN_QUARTER","LATER_FILING_REPORTED_COMPARATIVE")):
                 return "DATED_PDF_COLUMN_OR_IDENTITY_PROOF_UNPROVEN"
         if manifest.get("parser_revision")=="PDF_OCR_EXPLICIT_DATED_COLUMN_V1":
-            if (not re.fullmatch(r"[a-f0-9]{64}",str(manifest.get("ocr_document_text_sha256","")))
+            if (manifest.get("ocr_render_dpi",[300,450]) not in ([300,450],[200,400],[350,500])
+                or manifest.get("ocr_header_basis","RENDERED_HEADERS_ONLY") not in ("RENDERED_HEADERS_ONLY","ORIGINAL_NATIVE_GROUP_LABELS_WHEN_AVAILABLE_WITH_RENDERED_FACT_CELLS")
+                or not re.fullmatch(r"[a-f0-9]{64}",str(manifest.get("ocr_document_text_sha256","")))
                 or manifest.get("ocr_document_audit_r2_key")!=PREFIX+"ocr-dated-document-v1/original_version="+str(original)+"/audit.json"):
                 return "DATED_OCR_DOCUMENT_AUDIT_UNPROVEN"
         if manifest.get("parser_revision")=="PDF_OCR_DOUBLE_RENDER_V1":
@@ -769,7 +773,11 @@ def verify(db,s3,apply):
                     from r4_bse_dated_proof import validate_original
                     proof=s3.get_object(Bucket=BUCKET,Key=document["issuer_identity_evidence_r2_key"])["Body"].read()
                     if sha(proof)!=document["issuer_identity_evidence_sha256"]:raise ValueError("DATED_IDENTITY_HASH_MISMATCH")
-                    validate_original(original_bytes,document,json.loads(proof))
+                    from r4_recovery_queue import run_with_timeout
+                    # Native PDF/OCR engines run in isolated processes, with
+                    # bounded parallel memory use and a per-original deadline.
+                    with SOURCE_REPLAY_SLOTS:
+                        run_with_timeout(validate_original,(original_bytes,document,json.loads(proof)),480)
                 except Exception as exc:
                     error="DATED_PDF_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__
             if not error and document.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"):

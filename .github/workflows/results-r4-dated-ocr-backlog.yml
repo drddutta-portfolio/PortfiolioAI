@@ -7,7 +7,7 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-dated-ocr-backlog-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   recover:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -40,7 +40,7 @@ jobs:
           python scripts/results/test_r4_pdf_geometry.py -v
           python scripts/results/test_r4_recovery_queue.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
-      - name: Attempt every assigned historical gap without stopping at a failed original
+      - name: Batch every target quarter per original page and preserve every failed attempt
         run: python scripts/results/r4-ocr-dated-backlog.py --shard ${{ matrix.shard }}
   verify:
     needs: recover
@@ -76,3 +76,4 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
       # All originals, OCR text, financial proofs and rejection diagnostics remain private.
+# Replay native group labels, grid-bordered date years and batched approved-resolution financial cells.

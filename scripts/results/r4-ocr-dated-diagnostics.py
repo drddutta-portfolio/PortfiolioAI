@@ -43,7 +43,7 @@ def main():
                             if revenue is None:
                                 headers=[(y,ws) for y,ws in rows if re.search(r'quarter|ended|year|month|lakhs?|crores?|millions?|INR|Rs\b|₹|financial|standalone|consolidated|20\d{2}',row_text(ws),re.I)][:24]
                             else:headers=rows[max(0,revenue-24):revenue]
-                            value={'contract':'RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1','diagnostic_only':True,'symbol':symbol,'isin':isin,'security_id':str(sid),'page':page_no,'source_url':source['source_url'],'original_sha256':digest,'rejections':rejections,'date_header_candidates':[{'row':i,'y':y,'dates':d} for i,y,d in dated_headers(rows)],'rows':[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in headers]}
+                            value={'contract':'RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1','diagnostic_only':True,'symbol':symbol,'isin':isin,'security_id':str(sid),'page':page_no,'source_url':source['source_url'],'original_sha256':digest,'rejections':rejections,'date_header_candidates':[{'row':i,'y':y,'dates':d} for i,y,d in dated_headers(rows)],'rows':[{'y':y,'words':[[w[0],w[2],w[4]] for w in ws]} for y,ws in headers],'labels_without_amounts':[re.sub(r'[\d.,()+−-]+',' ',row_text(ws))[:220] for _,ws in rows[(revenue or 0):] if re.search(r'profit|tax|diluted|revenue|interest|premium',row_text(ws),re.I)][:32]}
                             encoded=batch.canonical(value);sha=batch.sha(encoded)
                             batch.immutable_put(client,batch.PREFIX+'ocr-header-diagnostics/sha256='+sha+'/diagnostic.json',encoded)
                             with db.cursor() as cur:

@@ -35,8 +35,8 @@ def validate_original(raw,manifest,identity):
             audit=audit_document(raw)
             if audit['text_sha256']!=manifest.get('ocr_document_text_sha256'):
                 raise ValueError('DATED_OCR_FULL_DOCUMENT_REPLAY_MISMATCH')
-            parsed,checks=extract_dated_page(raw,page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH')
-            if not all(exact_legal_identity(legal,checks[k]) for k in ('issuer_text_300','issuer_text_450')):
+            parsed,checks=extract_dated_page(raw,page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',manifest.get('ocr_render_dpi',(300,450)))
+            if not all(exact_legal_identity(legal,checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                 raise ValueError('DATED_OCR_DOUBLE_LEGAL_NAME_UNPROVEN')
             text+=' '+' '.join(audit['pages'])
         else:

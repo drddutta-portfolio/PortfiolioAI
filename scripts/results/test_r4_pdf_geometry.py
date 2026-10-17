@@ -1,7 +1,7 @@
 import unittest
 import fitz
 from decimal import Decimal
-from r4_pdf_geometry import extract_page,iso_date
+from r4_pdf_geometry import extract_page,iso_date,number
 
 def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for the period/year (5•6)",note=False,third="30.09.2023"):
     doc=fitz.open();p=doc.new_page(width=1000,height=850)
@@ -81,6 +81,30 @@ class GeometryTest(unittest.TestCase):
         out=extract_page(p,1,"2024-09-30",allow_comparative=True)
         self.assertEqual(out["arithmetic_validation"]["tax_crore"],"17.6")
         self.assertEqual(out["arithmetic_validation"]["difference_crore"],"0.0")
+
+    def test_split_year_with_table_border_remains_a_printed_year(self):
+        doc,p=fixture(first="30 September",third="30 September")
+        p.add_redact_annot(fitz.Rect(595,112,710,130),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((600,125),"30 June",fontsize=10)
+        for x,year in [(450,"2025"),(600,"|2025"),(750,"2024")]:p.insert_text((x,140),year,fontsize=10)
+        self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["column_index"],2)
+
+    def test_rs_comma_mn_unit_is_explicit(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.add_redact_annot(fitz.Rect(20,55,250,74),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,70),"Rs, in Mn",fontsize=10)
+        self.assertEqual(extract_page(p,1,"2024-09-30",allow_comparative=True)["unit"],"INR_MILLION")
+
+    def test_compact_quarter_and_year_group_tokens_do_not_authorize_annual_cell(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.insert_text((760,100),"Yearended",fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True)
+
+    def test_table_borders_are_not_part_of_the_numeric_cell(self):
+        def ws(values):return [(0,0,1,1,v) for v in values]
+        self.assertEqual(number(ws(['|','1,324','|']))[0],Decimal('1324'))
+        with self.assertRaises(ValueError):number(ws(['1','324']))
+        with self.assertRaises(ValueError):number(ws(['|']))
 
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")

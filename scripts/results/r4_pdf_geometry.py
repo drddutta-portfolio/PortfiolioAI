@@ -91,8 +91,8 @@ def dated_headers(rows):
         for j,(yy,ws) in enumerate(rows):
             if not 2.5<yy-y<=28:continue
             for w in ws:
-                if re.fullmatch(r"20\d{2}",str(w[4])) and x0-8<=(w[0]+w[2])/2<=x2+8:
-                    years.append((j,yy,str(w[4]),w))
+                if re.fullmatch(r"20\d{2}",str(w[4]).strip("|¦[]()")) and x0-8<=(w[0]+w[2])/2<=x2+8:
+                    years.append((j,yy,str(w[4]).strip("|¦[]()"),w))
         if len(years)!=1:continue
         j,yy,year,w=years[0];parsed=iso_date(raw+" "+year)
         if parsed:complete.append((j,yy,(parsed,min(x0,w[0]),max(x2,w[2]))))
@@ -114,7 +114,7 @@ def dated_headers(rows):
         yield last,rows[last][0],merged
 
 def number(words):
-    text=row_text(words).strip()
+    text=row_text([w for w in words if str(w[4]) not in ("|","¦")]).strip()
     # Joining split decimal glyphs would invent punctuation. Keep for OCR review.
     if not CELL.fullmatch(text):raise ValueError("CORRUPT_OR_MISSING_NUMERIC_CELL:"+text[:60])
     if text.startswith("(")!=text.endswith(")"):raise ValueError("UNBALANCED_NUMERIC_CELL")
@@ -142,21 +142,21 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         if gap<=10:continue
         first_left=first-gap/2
         left=first_left;right=(first+second)/2
-        near=[(yy,ws) for yy,ws in rows[:header_index] if y-yy<55]
+        near=[(yy,ws) for yy,ws in rows[:header_index] if y-yy<(100 if allow_comparative else 55)]
         quarter_words=[w for _,ws in near for w in ws if re.fullmatch(r"quarters?",str(w[4]),re.I)]
         if allow_comparative:
             group_right=third+(third-second)/2
             # Financial-page titles often say "quarter and year ended".
             # Only actual column-group headings prove quarter/annual scope.
             group_near=[(yy,ws) for yy,ws in near if not re.search(r"financial|statements?|results",row_text(ws),re.I)]
-            group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"quarters?|qtrs?",str(w[4]).strip("‘’\""),re.I)]
+            group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"(?:quarters?|qtrs?)(?:ended)?",str(w[4]).strip("‘’\""),re.I)]
             three_months=[]
             for _,ws in group_near:
                 for a,b in zip(ws,ws[1:]):
                     if re.fullmatch(r"3|three",str(a[4]),re.I) and re.fullmatch(r"months?",str(b[4]),re.I) and 0<=b[0]-a[2]<20:
                         three_months.append(a)
             if not any(first_left<=(w[0]+w[2])/2<=group_right for w in group_quarters+three_months):continue
-            if any(re.fullmatch(r"years?(?:[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I)
+            if any(re.fullmatch(r"years?(?:ended|[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I)
                    for _,ws in group_near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
             centers=[(d[1]+d[2])/2 for d in dates]
             center=centers[column]
@@ -187,7 +187,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                                     (r"\bCRORES?\b","INR_CRORE",1)]:
             unit_header=(" ".join(row_text(ws) for yy,ws in rows[:header_index] if y-yy<180).upper() if allow_comparative else upper)
             if re.search(regex,unit_header):units.append((unit,Decimal(divisor)))
-        if allow_comparative and not units and re.search(r"\b(?:INR|Rs\.?)\s+(?:in\s+)?Mn\b",unit_header,re.I):
+        if allow_comparative and not units and re.search(r"\b(?:INR|Rs[.,]?)\s+(?:in\s+)?Mn\b",unit_header,re.I):
             units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
@@ -256,6 +256,6 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
                 "arithmetic_validation":arithmetic,
                 "parser_revision":"PDF_WORD_COORDINATES_V3"}
-            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column)
+            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]])
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")

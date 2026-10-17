@@ -24,6 +24,41 @@ class DatedOCRTest(unittest.TestCase):
         self.assertEqual(out['facts']['NET_PROFIT_QUARTER']['value'],'212.7')
         self.assertEqual(out['facts']['EPS_DILUTED']['value'],'11.88')
         self.assertEqual(len(self.checks['fingerprint']),64)
+    def test_one_render_pair_checks_all_quarters_and_does_not_invent_absent_periods(self):
+        from unittest.mock import patch
+        from r4_ocr_geometry import OCRPage
+        from r4_ocr_dated_geometry import extract_dated_periods
+        with patch('r4_ocr_dated_geometry.GroupHeaderOCRPage',wraps=__import__('r4_ocr_dated_geometry').GroupHeaderOCRPage) as render:
+            result=extract_dated_periods(self.raw,1,('2024-09-30','2024-12-31','2025-03-31','2025-06-30'))
+        self.assertEqual(render.call_count,2)
+        self.assertEqual(result['2024-09-30']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(result['2024-12-31']['rejection'],'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS')
+
+    def test_identical_resolution_pair_cannot_supply_independent_proof(self):
+        with self.assertRaisesRegex(ValueError,'UNAPPROVED'):
+            extract_dated_page(self.raw,1,'2024-09-30',render_dpi=(300,300))
+
+    def test_original_group_labels_can_supply_a_heading_omitted_by_ocr(self):
+        from unittest.mock import patch
+        from r4_ocr_geometry import OCRPage
+        original=OCRPage.get_text
+        def omitted(obj,kind="text",**kwargs):
+            result=original(obj,kind,**kwargs)
+            if kind=="words":return [w for w in result if not (85<w[1]<105 and str(w[4]).lower() in ('quarter','ended'))]
+            return result
+        # The original PDF's own quarter label remains the authority;
+        # rendered date and monetary cells still require independent agreement.
+        doc,page=fixture(first='30.09.2025',third='30.09.2024')
+        for y,label,value in [(250,'Profit before tax','2,303'),(280,'Total tax expense','176')]:
+            page.insert_text((25,y),label,fontsize=10)
+            for x in (475,625,775):page.insert_text((x,y),value,fontsize=10)
+        with patch.object(OCRPage,'get_text',omitted):
+            from r4_ocr_dated_geometry import GroupHeaderOCRPage
+            from r4_pdf_geometry import extract_page
+            parsed=extract_page(GroupHeaderOCRPage(page,300),1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(parsed['column_index'],2)
+
     def test_modified_document_basis_proof_is_rejected(self):
         m=deepcopy(self.manifest);m['ocr_document_text_sha256']='0'*64
         with self.assertRaisesRegex(ValueError,'FULL_DOCUMENT_REPLAY_MISMATCH'):validate_original(self.raw,m,self.identity)

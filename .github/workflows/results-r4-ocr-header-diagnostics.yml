@@ -36,3 +36,4 @@ jobs:
       - name: Privately retain rejected header geometry without financial promotion
         run: python scripts/results/r4-ocr-dated-diagnostics.py --shard ${{ matrix.shard }}
       # No source bytes, issuer diagnostics or financial rows are published.
+# Replay native group labels, grid-bordered date years and batched approved-resolution financial cells.

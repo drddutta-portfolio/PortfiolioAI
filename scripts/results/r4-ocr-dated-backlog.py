@@ -3,7 +3,7 @@ import argparse,importlib.util,json,os,re
 from collections import Counter,defaultdict
 from pathlib import Path
 import psycopg
-from r4_ocr_dated_geometry import audit_document,extract_dated_page,REVISION
+from r4_ocr_dated_geometry import audit_document,extract_dated_periods,REVISION
 from r4_issuer_name import exact_legal_identity
 from r4_recovery_queue import task_id,run_with_timeout
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'));batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
@@ -35,7 +35,9 @@ def main():
                 if not row:raise ValueError('PRIVATE_SOURCE_INVENTORY_MISSING')
                 review,digest=row
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('REVIEW_HASH_MISMATCH')
-                identity=review['bse_identity'];legal=identity['issuer_name']
+                identity=review.get('bse_identity')
+                if not isinstance(identity,dict):raise ValueError('CANONICAL_BSE_IDENTITY_UNAVAILABLE')
+                legal=identity['issuer_name']
                 originals={s['original_sha256']:s for s in review.get('all_sources',[])}
                 for digest,source in originals.items():
                     try:
@@ -51,13 +53,15 @@ def main():
                         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
                         for page_no,page_text in enumerate(audit['pages'],1):
                             if not re.search(r'diluted',page_text,re.I) or not re.search(r'revenue|interest earned|premium',page_text,re.I):continue
+                            key=batch.PREFIX+'ocr-dated-page-batch-v2/original_version='+digest+'/page='+str(page_no)+'/proof.json'
+                            proof=cached(client,key,lambda:run_with_timeout(extract_dated_periods,(raw,page_no,tuple(batch.WINDOWS),symbol in batch.BANKS,symbol in batch.INSURERS),240))
+                            if 'result' not in proof:raise ValueError(proof['rejection'])
                             for period in periods:
                                 try:
-                                    key=batch.PREFIX+'ocr-dated-page-v1/original_version='+digest+'/page='+str(page_no)+'/period_end='+period+'/proof.json'
-                                    proof=cached(client,key,lambda:run_with_timeout(extract_dated_page,(raw,page_no,period,symbol in batch.BANKS,symbol in batch.INSURERS),90))
-                                    if 'result' not in proof:raise ValueError(proof['rejection'])
-                                    parsed,checks=proof['result']
-                                    if not all(exact_legal_identity(legal,checks[k]) for k in ('issuer_text_300','issuer_text_450')):raise ValueError('DOUBLE_LEGAL_NAME_UNPROVEN')
+                                    response=proof['result'][period]
+                                    if response.get('rejection'):raise ValueError(response['rejection'])
+                                    parsed,checks=response['parsed'],response['checks']
+                                    if not all(exact_legal_identity(legal,checks[k]) for k in ('issuer_text_first','issuer_text_second')):raise ValueError('DOUBLE_LEGAL_NAME_UNPROVEN')
                                     if parsed['first_column_period']!=period and re.search(r'\b(?:restated|recast)\b',text,re.I):raise ValueError('RESTATED_COMPARATIVE_REVIEW_REQUIRED')
                                     vector=tuple(sorted((k,v['value'],v['unit']) for k,v in parsed['facts'].items()))
                                     parsed.update(original_r2_key=source['original_r2_key'],selected_column_index=parsed['column_index'],ocr_document_audit_r2_key=auditkey,ocr_document_text_sha256=audit['text_sha256'],source_reporting_basis='AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE')
