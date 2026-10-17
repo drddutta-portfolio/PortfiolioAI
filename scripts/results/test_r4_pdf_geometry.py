@@ -121,6 +121,19 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(out["facts"]["NET_PROFIT_QUARTER"]["value"],"132.4")
         self.assertEqual(out["arithmetic_validation"]["difference_crore"],"0.0")
 
+    def test_unlabelled_scope_requires_a_separately_proven_hint(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        p.add_redact_annot(fitz.Rect(20,35,250,54),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,50),"Quarterly financial results",fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True)
+        out=extract_page(p,1,"2024-09-30",allow_comparative=True,scope_hint="STANDALONE")
+        self.assertTrue(out["scope_hint_used"])
+        self.assertEqual(out["facts"]["EPS_DILUTED"]["value"],"11.88")
+
+    def test_hint_cannot_override_an_explicit_reporting_scope(self):
+        doc,p=fixture(first="30.09.2025",third="30.09.2024")
+        with self.assertRaises(ValueError):extract_page(p,1,"2024-09-30",allow_comparative=True,scope_hint="STANDALONE")
+
     def test_exact_prior_year_quarter_uses_its_physical_column(self):
         doc,p=fixture(first="30.09.2025",third="30.09.2024")
         parsed=extract_page(p,1,"2024-09-30",allow_comparative=True)

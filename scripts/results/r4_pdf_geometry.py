@@ -128,7 +128,7 @@ def clean_label(text):
     text=re.sub(r"^\d{1,2}[.)]?(?=[A-Za-z])","",text)
     return re.sub(r"^\s*(?:(?:\d+|[ivx]+)[.)]?\s+|\(?[a-z]\s*[)|]\s*|-\s*)","",text,flags=re.I).strip()
 
-def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False):
+def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None):
     rows=rows_for(page)
     headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
@@ -181,11 +181,17 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 if y-yy>180 or not re.search(r"\bfinancial\b",row_text(ws),re.I):continue
                 title=" ".join(row_text(r[1]) for r in rows[max(0,i-1):min(header_index,i+2)])
                 if len({s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",title,re.I)})==1:titles.append(title)
+            if not titles and scope_hint in ("STANDALONE","CONSOLIDATED"):
+                titles=[row_text(ws) for yy,ws in rows[:header_index] if y-yy<180 and re.search(r"\bfinancial\b",row_text(ws),re.I)]
             if not titles:continue
             scope_header=titles[-1].upper()
         scopes={s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",scope_header)}
+        scope_hint_used=False
+        if not scopes and allow_comparative and scope_hint in ("STANDALONE","CONSOLIDATED"):
+            scopes={scope_hint};scope_hint_used=True
         if len(scopes)!=1:continue
         scope=next(iter(scopes))
+        if scope_hint is not None and scope!=scope_hint:continue
         units=[]
         for regex,unit,divisor in [(r"\b(?:LAKHS?|LACS?)\b","INR_LAKH",100),
                                     (r"\bMILLIONS?\b","INR_MILLION",10),
@@ -262,6 +268,6 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
                 "arithmetic_validation":arithmetic,
                 "parser_revision":"PDF_WORD_COORDINATES_V3"}
-            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]])
+            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]],scope_hint_used=scope_hint_used)
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
