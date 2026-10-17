@@ -442,6 +442,31 @@ def candidates(db):
         if missing:out.append((symbol,isin,sid,name,missing))
     return out
 
+def fresh_trendlyne_bse_sources(db,client,sid,period):
+    """Use fresh provider citations only as discovery; never import their figures."""
+    with db.cursor() as cur:
+        cur.execute("""SELECT raw_payload->>'r2_key',raw_payload->>'sha256'
+          FROM data_source_records WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'
+            AND raw_payload->>'fresh_request'='true'
+            AND raw_payload->'request'->>'tool'='get_document_search_results'
+            AND raw_payload->'request'->>'securityId'=%s
+            AND position(%s in (raw_payload->'request'->'args'->>'query'))>0
+            AND retrieved_at>=now()-interval '24 hours'
+          ORDER BY retrieved_at DESC LIMIT 16""",(str(sid),period))
+        captures=cur.fetchall()
+    db.rollback()
+    found={}
+    pattern=re.compile(r"https://www\.bseindia\.com/xml-data/corpfiling/(?:AttachHis|AttachLive)/"
+        r"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.pdf)\b",re.I)
+    for key,digest in captures:
+        raw=client.get_object(Bucket=BUCKET,Key=key)["Body"].read()
+        if sha(raw)!=digest:raise RuntimeError("TRENDLYNE_CAPTURE_HASH_MISMATCH")
+        result=json.loads(raw).get("result")
+        for filename in pattern.findall(json.dumps(result).replace(r"\/","/")):
+            found.setdefault(filename.lower(),{"attachment_name":filename,"title":"financial results original cited in fresh provider discovery",
+                "published_at":None,"discovery_capture_r2_key":key})
+    return list(found.values())[:20]
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--apply",action="store_true")
@@ -492,6 +517,14 @@ def main():
                                 0 if re.search(r"(?:unaudited|audited)\s+(?:standalone|consolidated)|financial results|board meeting outcome",str(src.get("title","")),re.I) else 1
                             )
                             ordered=sorted(discovery["results"],key=priority)
+                            if os.getenv("RESULTS_R4_USE_FRESH_TRENDLYNE_LINKS")=="1":
+                                try:extra=fresh_trendlyne_bse_sources(db,client,sid,period)
+                                except Exception:
+                                    db.rollback();extra=[];counts["fresh_trendlyne_link_read_failed"]+=1
+                                counts["fresh_trendlyne_original_links"]+=len(extra)
+                                seen=set()
+                                ordered=[src for src in extra+ordered if src.get("attachment_name")
+                                    and not (src["attachment_name"] in seen or seen.add(src["attachment_name"]))]
                             for attempt,src in enumerate(ordered):
                                 if attempt>=args.max_pdfs_per_quarter:break
                                 if not src.get("attachment_name"):continue
