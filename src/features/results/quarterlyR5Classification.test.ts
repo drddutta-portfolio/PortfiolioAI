@@ -274,6 +274,33 @@ describe("R5 exact-industry quarterly operating signal", () => {
       {...row,selected:false}:row)).status).toBe("UNAVAILABLE")
   })
 
+  it("grades insurance only with its own verified original operating metric and two historical comparisons",()=>{
+    const dates=["2024-09-30","2024-12-31","2025-03-31","2025-06-30"]
+    const premium=dates.flatMap((date,i)=>[
+      fact(date,"NET_PREMIUM_EARNED_QUARTER",String(100+i*20),"STANDALONE"),
+      fact(date,"NET_PROFIT_QUARTER",String(20+i*5),"STANDALONE"),
+    ])
+    const insurance=gradeQuarterR5(premium,"s1","2025-06-30","Financial Services","General Insurance",new Map())
+    expect(insurance.status).toBe("STRONG")
+    expect(insurance.basis).toBe("COMPANY_TREND")
+    expect(insurance.supportingMetrics).toContain("NET_PREMIUM_EARNED_QUARTER")
+    expect(insurance.explanation).toContain("underwriting quality are NOT assessed")
+    const revenueOnly=premium.map(r=>r.code==="NET_PREMIUM_EARNED_QUARTER"
+      ? {...r,code:"OPERATING_REVENUE_QUARTER"}:r)
+    expect(gradeQuarterR5(revenueOnly,"s1","2025-06-30","Financial Services","General Insurance",new Map()).status).toBe("UNAVAILABLE")
+    const incoherent=premium.map(r=>r.periodEnd==="2025-03-31"&&r.code==="NET_PROFIT_QUARTER"
+      ? {...r,sourceRecordId:"other-original"}:r)
+    expect(gradeQuarterR5(incoherent,"s1","2025-06-30","Financial Services","General Insurance",new Map()).status).toBe("UNAVAILABLE")
+    const life=dates.flatMap((date,i)=>[
+      fact(date,"OPERATING_REVENUE_QUARTER",String(200+i*10)),
+      fact(date,"NET_PROFIT_QUARTER",String(30+i*3)),
+    ])
+    const lifeGrade=gradeQuarterR5(life,"s1","2025-06-30","Financial Services","Life Insurance",new Map())
+    expect(lifeGrade.status).toBe("STRONG")
+    expect(lifeGrade.explanation).toContain("solvency")
+    expect(lifeGrade.explanation).toContain("No insurer-strength, peer or investment rating")
+  })
+
   it("supports evidence-only Revenue/PAT company trends for explicitly reviewed non-bank finance without bank-NII proxies",()=>{
     const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
     const rows=dates.flatMap((date,i)=>[
@@ -293,7 +320,7 @@ describe("R5 exact-industry quarterly operating signal", () => {
     const incomplete=rows.filter(r=>r.periodEnd!=="2025-12-31")
     expect(graded(incomplete,"Financial Services","Non Banking Financial Company (NBFC)").status).toBe("UNAVAILABLE")
     expect(graded(rows,"Financial Services","General Insurance").status).toBe("UNAVAILABLE")
-    expect(graded(rows,"Financial Services","Life Insurance").status).toBe("UNAVAILABLE")
+    expect(graded(rows,"Financial Services","Life Insurance").status).toBe("STRONG")
     expect(graded(rows,"Financial Services","Unknown Lender").status).toBe("UNAVAILABLE")
   })
 
