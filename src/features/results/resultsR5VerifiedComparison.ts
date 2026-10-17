@@ -31,12 +31,14 @@ function canonicalStart(end:string):string|null {
 export function buildVerifiedR5ComparisonRows(
   rows:readonly ResultsSourceObservation[],
   sources:readonly VerifiedR5Source[]=manifest.approvedSources,
+  scope?: "CONSOLIDATED"|"STANDALONE",
 ):readonly ResultsSourceObservation[] {
   if (!sources.length) return rows
   const byId=new Map(rows.map(row=>[row.id,row]))
   const accepted=new Map<string,ReadonlySet<string>>()
   const poisoned=new Set<string>()
   for(const item of sources){
+    if(scope && item.scope!==scope)continue
     const key=item.securityId+"|"+item.periodEnd
     if(accepted.has(key)){ poisoned.add(key); continue }
     if(item.approval!==APPROVAL || !["STANDALONE","CONSOLIDATED"].includes(item.scope) ||
@@ -77,25 +79,42 @@ export function buildVerifiedR5ComparisonRows(
   return changed?shifted:rows
 }
 
-const cached=new WeakMap<readonly ResultsSourceObservation[],readonly ResultsSourceObservation[]>()
-function candidateRows(rows:readonly ResultsSourceObservation[]):readonly ResultsSourceObservation[] {
-  const existing=cached.get(rows)
+const cached=new WeakMap<readonly ResultsSourceObservation[], Map<string,readonly ResultsSourceObservation[]>>()
+function candidateRows(
+  rows:readonly ResultsSourceObservation[],
+  scope:"CONSOLIDATED"|"STANDALONE",
+):readonly ResultsSourceObservation[] {
+  let variants=cached.get(rows)
+  if(!variants){variants=new Map();cached.set(rows,variants)}
+  const existing=variants.get(scope)
   if(existing)return existing
-  const computed=buildVerifiedR5ComparisonRows(rows)
-  cached.set(rows,computed)
+  const computed=buildVerifiedR5ComparisonRows(rows,manifest.approvedSources,scope)
+  variants.set(scope,computed)
   return computed
 }
 
 export function gradeR5WithVerifiedOriginal(
   rows:readonly ResultsSourceObservation[], securityId:string,end:string,
   sector:string|null,industry:string|null,calibrations:R5IndustryCalibrations,
-  comparisonRows:readonly ResultsSourceObservation[]=candidateRows(rows),
+  comparisonRows?:readonly ResultsSourceObservation[],
 ):ResultsQuarterGrade {
   const canonical=gradeQuarterR5(rows,securityId,end,sector,industry,calibrations)
-  if(canonical.status!=="UNAVAILABLE" || comparisonRows===rows)return canonical
-  const alternative=gradeQuarterR5(comparisonRows,securityId,end,sector,industry,calibrations)
-  if(alternative.status==="UNAVAILABLE")return canonical
-  return {...alternative, explanation:
-    "R5 comparison-only: exact R2-hash-verified standalone issuer originals; canonical Results filing selections are untouched. " +
-    alternative.explanation}
+  if(canonical.status!=="UNAVAILABLE")return canonical
+  // The source policy is predetermined: try Consolidated before Standalone,
+  // independent of which grade (Strong/Mixed/Weak) the data would produce.
+  // Each candidate's individual financial observations are R2-hash-verified,
+  // unique per scope, and must still pass R5's source-coherence contract.
+  const variants=comparisonRows?[comparisonRows]:[
+    candidateRows(rows,"CONSOLIDATED"),candidateRows(rows,"STANDALONE"),
+  ]
+  for(const variant of variants){
+    if(variant===rows)continue
+    const alternative=gradeQuarterR5(variant,securityId,end,sector,industry,calibrations)
+    if(alternative.status==="UNAVAILABLE")continue
+    const scope=variants.length===1?"verified comparison":variant===variants[0]?"Consolidated":"Standalone"
+    return {...alternative, explanation:
+      "R5 comparison-only ("+scope+"): exact R2-hash-verified issuer originals; canonical Results filing selections are untouched. " +
+      alternative.explanation}
+  }
+  return canonical
 }
