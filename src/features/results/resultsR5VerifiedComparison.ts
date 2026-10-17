@@ -21,7 +21,7 @@ const APPROVAL = "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
 const unitFor = (code:string) => code === "EPS_DILUTED" ? "INR_PER_SHARE" : "INR_CRORE"
 
 function canonicalStart(end:string):string|null {
-  const match=/^(\\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
+  const match=/^(\d{4})-(03|06|09|12)-(30|31)$/.exec(end)
   if(!match) return null
   const y=Number(match[1]),m=Number(match[2])
   if(new Date(Date.UTC(y,m,0)).toISOString().slice(0,10)!==end) return null
@@ -56,7 +56,7 @@ export function buildVerifiedR5ComparisonRows(
          row.periodStart!==start || row.code!==code || row.scope!==item.scope ||
          row.sourceRecordId!==item.sourceRecordId || row.source!=="COMPANY_EXCHANGE_FILING" ||
          row.currency!=="INR" || row.unit!==unitFor(code) ||
-         !/^-?\\d+(?:\\.\\d+)?$/.test(row.value)){valid=false;break}
+         !/^-?\d+(?:\.\d+)?$/.test(row.value)){valid=false;break}
       proof.add(row.id)
     }
     if(valid && proof.size===3)accepted.set(key,proof)
