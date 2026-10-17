@@ -621,6 +621,10 @@ def r5_verified_scope_continuity(facts):
         ("MGL","2025-09-30"),("MOTHERSON","2025-09-30"),
         ("NCC","2025-09-30"),("PERSISTENT","2025-06-30"),
         ("SHARDACROP","2025-09-30"),("SYRMA","2025-09-30"),
+        # Further live-R5 model-supported but source-incompatible issuers
+        ("CGCL","2025-09-30"),("CHOLAFIN","2025-06-30"),
+        ("HDFCAMC","2025-09-30"),("IREDA","2025-03-31"),
+        ("NATIONALUM","2025-03-31"),
     )
     previous={"2025-03-31":"2024-12-31","2025-06-30":"2025-03-31",
               "2025-09-30":"2025-06-30"}
@@ -636,11 +640,11 @@ def r5_verified_scope_continuity(facts):
     # evidence. Canonical R4 selections remain exactly as they were.
     # Restrict to issuers actually having an independently verified
     # same-scope comparison pair; exclude failing candidate ICEMAKE Sep.
-    allowed_symbols={c["symbol"] for c in candidates
-                     if "STANDALONE" in c["source_original_scope_evidence"]}
+    allowed_scopes={(c["symbol"],scope) for c in candidates
+                    for scope in c["source_original_scope_evidence"]}
     comparison_proofs=[]
     for (symbol,period,scope,rid),codes in sorted(groups.items()):
-        if symbol not in allowed_symbols or scope!="STANDALONE":continue
+        if (symbol,scope) not in allowed_scopes:continue
         if not "2024-09-30"<=period<="2025-09-30":continue
         needed=(BANK_REQUIRED if symbol in BANKS else
                 INSURANCE_REQUIRED if symbol in INSURERS else OTHER_REQUIRED)
