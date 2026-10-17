@@ -55,3 +55,4 @@ jobs:
         run: git diff HEAD^ HEAD --check
 # Includes isolated native OCR timeout and continuation regressions.
 # Includes transient failed-pass retry cooldown regressions.
+# Recheck full source replay after EOF integrity and acquisition dependency repairs.

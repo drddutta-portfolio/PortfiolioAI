@@ -48,7 +48,7 @@ def main():
                             raw=client.get_object(Bucket=batch.BUCKET,Key=source["original_r2_key"])["Body"].read()
                             if batch.sha(raw)!=digest:raise RuntimeError("IMMUTABLE_ORIGINAL_MISMATCH")
                             counts["retained_originals_read"]+=1
-                            proof_key=batch.PREFIX+"ocr-replay-v1/original_version="+digest+"/period_end="+period+"/proof.json"
+                            proof_key=batch.PREFIX+"ocr-replay-v1/original_version="+digest+"/parser_revision=quarter-group-v2/period_end="+period+"/proof.json"
                             try:
                                 try:
                                     proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=proof_key)["Body"].read())

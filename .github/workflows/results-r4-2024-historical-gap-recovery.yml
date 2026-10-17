@@ -41,7 +41,7 @@ jobs:
           [[ "$CLOUDFLARE_R2_BUCKET" == portfolioai-history-dev ]] || exit 1
           for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY; do test -n "${!name:-}" || exit 1; done
       - name: Install pinned source dependencies
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5'
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6'
       - name: Verify source parsing and R4 regression tests
         run: |
           python scripts/results/test_r5_legacy_2024_xbrl.py -v
@@ -75,14 +75,4 @@ jobs:
           x=json.load(open('tmp/results-r4/2024-after-recovery.json'))
           print(json.dumps({k:x[k] for k in ('equities','total_slots','displayed_four_quarter_complete_equities','status_counts','status')},sort_keys=True))
           PY
-      - name: Retain original-source and exceptions report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-r4-2024-historical-gap-development
-          path: |
-            tmp/results-r4/2024-historical-recovery.json
-            tmp/results-r4/readback.json
-            tmp/results-r4/eight-quarter-readback.json
-          retention-days: 21
-          if-no-files-found: warn
+      # Detailed financial diagnostics remain private; aggregate readback only.

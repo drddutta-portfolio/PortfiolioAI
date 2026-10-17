@@ -35,8 +35,10 @@ def extract_ocr(raw,period,bank=False,insurer=False):
         if len(native.strip())>200 and not re.search(r"financial results|revenue from operations|interest earned",native,re.I):
             continue
         try:
-            first=extract_page(OCRPage(page,300),index+1,period,bank,insurer)
-            second=extract_page(OCRPage(page,450),index+1,period,bank,insurer)
+            first=extract_page(OCRPage(page,300),index+1,period,bank,insurer,allow_comparative=True)
+            if first["column_index"]!=0:raise ValueError("OCR_NONFIRST_COLUMN_REQUIRES_SEPARATE_PROOF")
+            second=extract_page(OCRPage(page,450),index+1,period,bank,insurer,allow_comparative=True)
+            if second["column_index"]!=0:raise ValueError("OCR_NONFIRST_COLUMN_REQUIRES_SEPARATE_PROOF")
             digest=agree(first,second)
             first["ocr_independent_checks"]={
                 "contract":"DOUBLE_RENDER_AND_PBT_MINUS_TAX_OCR_V1","render_dpi":[300,450],

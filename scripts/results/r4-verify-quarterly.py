@@ -848,5 +848,3 @@ def main():
     with open("tmp/results-r4/readback.json","w") as f:json.dump(result,f,indent=2,sort_keys=True)
     print(json.dumps(result,sort_keys=True))
 if __name__=="__main__":main()
-
-
