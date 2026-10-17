@@ -323,7 +323,14 @@ def immutable_put(client,key,raw):
 def retained_original(bse,client,filename):
     """Reuse immutable original bytes even when a previous parser rejected them."""
     index_key=PREFIX+"bse-source-cache/"+filename+".json"
-    if client:
+    fresh=os.getenv("RESULTS_R4_FORCE_FRESH")=="1"
+    if fresh:
+        run=os.getenv("GITHUB_RUN_ID","")
+        attempt=os.getenv("GITHUB_RUN_ATTEMPT","")
+        if not re.fullmatch(r"[0-9]+",run) or not re.fullmatch(r"[0-9]+",attempt):
+            raise RuntimeError("FRESH_CAPTURE_RUN_ID_REQUIRED")
+        index_key=PREFIX+"bse-fresh-source-captures/run="+run+"/attempt="+attempt+"/"+filename+".json"
+    if client and not fresh:
         try:
             origin=json.loads(client.get_object(Bucket=BUCKET,Key=index_key)["Body"].read())
             raw=client.get_object(Bucket=BUCKET,Key=origin["original_r2_key"])["Body"].read()
@@ -545,7 +552,10 @@ def main():
                 checkpoint.parent.mkdir(parents=True,exist_ok=True)
                 checkpoint.write_text(json.dumps({"in_progress":True,
                     "counts":dict(counts),"companies":outcomes},default=str),encoding="utf-8")
-                print("R4_BSE_BATCH_PROGRESS="+json.dumps({"symbol":symbol,"counts":dict(counts)}),flush=True)
+                if client:
+                    trace=checkpoint.read_bytes()
+                    immutable_put(client,PREFIX+"private-recovery-traces/sha256="+sha(trace)+"/bse.json",trace)
+                print("R4_BSE_BATCH_PROGRESS="+json.dumps({"companies_processed":len(outcomes),"counts":dict(counts)}),flush=True)
                 time.sleep(.3)
     result={"mode":"APPLY" if args.apply else "DRY_RUN","shard_index":args.shard_index,
             "companies_checked":len(outcomes),"counts":dict(counts),"companies":outcomes,
