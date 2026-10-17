@@ -49,6 +49,12 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
     expect(data.environment).toBe("Development")
     expect(data.noProviderCalls).toBe(true)
     expect(data.cohort).toHaveLength(262)
+    // Classification is read from the same canonical enrichment view as the
+    // live Results UI. Source-backed secondary recoveries cannot be replaced
+    // with local symbol-based grade labels, and missing classifications fail
+    // the 262-equity R5 final acceptance contract.
+    const classified=data.cohort.filter(c=>c.sector?.trim()&&c.industry?.trim())
+    expect(classified).toHaveLength(262)
     const calibrations=buildRollingIndustryR5Calibrations(data.observations,data.cohort,QUARTERS)
     const selectedById=new Map(data.cohort.map(s=>[s.securityId,data.observations.filter(o=>o.securityId===s.securityId)]))
     // Preserve each individual qualified-but-unrated historical case. The
