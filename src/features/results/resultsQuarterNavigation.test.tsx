@@ -93,8 +93,9 @@ describe("Results rolling-quarter navigator", () => {
     expect(screen.getByText("SAMPLE — Q1 FY27")).toBeInTheDocument()
     fireEvent.mouseLeave(cell)
     expect(screen.queryByRole("tooltip")).toBeNull()
-    // The complete assessment reason belongs to the selected result, not a
-    // second hovering browser tooltip.
+    // The complete assessment reason is shown only after explicitly
+    // selecting the quarter; it must not appear as a second hover tooltip.
+    fireEvent.click(cell)
     expect(screen.getByText("Why this quarterly grade?")).toBeInTheDocument()
   })
 })
