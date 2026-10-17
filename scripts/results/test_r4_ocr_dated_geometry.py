@@ -1,0 +1,33 @@
+import hashlib,unittest
+from copy import deepcopy
+import fitz
+from test_r4_pdf_geometry import fixture
+from r4_ocr_dated_geometry import audit_document,extract_dated_page,REVISION
+from r4_bse_dated_proof import validate_original
+
+class DatedOCRTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        doc,page=fixture(first='30.09.2025',third='30.09.2024')
+        for y,label,value in [(250,'Profit before tax','2,303'),(280,'Total tax expense','176')]:
+            page.insert_text((25,y),label,fontsize=10)
+            for x in (475,625,775):page.insert_text((x,y),value,fontsize=10)
+        image=fitz.open();p=image.new_page(width=page.rect.width,height=page.rect.height)
+        p.insert_image(p.rect,stream=page.get_pixmap(dpi=200).tobytes('png'));cls.raw=image.tobytes()
+        cls.audit=audit_document(cls.raw);cls.parsed,cls.checks=extract_dated_page(cls.raw,1,'2024-09-30')
+        sha=hashlib.sha256(cls.raw).hexdigest();url='https://www.bseindia.com/xml-data/corpfiling/AttachHis/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee.pdf'
+        cls.manifest={'parser_revision':REVISION,'symbol':'NATCOPHARM','isin':'INE987654321','issuer_name':'NATCO PHARMA LIMITED','bse_scrip_code':'123456','original_sha256_retained':sha,'issuer_filing_url':url,'financial_page':1,'period_end':'2024-09-30','consolidation_scope':'CONSOLIDATED','original_unit':cls.parsed['unit'],'first_column_period':'2025-09-30','selected_column_period':'2024-09-30','selected_column_index':2,'source_reporting_basis':'LATER_FILING_REPORTED_COMPARATIVE','facts':cls.parsed['facts'],'ocr_document_text_sha256':cls.audit['text_sha256']}
+        cls.identity={'header':{'SecurityCode':'123456','ISIN':cls.manifest['isin']},'listing':{'SCRIP_CD':'123456','ISIN_NUMBER':cls.manifest['isin'],'Issuer_Name':cls.manifest['issuer_name']},'issuer_name':cls.manifest['issuer_name'],'bse_scrip_code':'123456','original_sha256':sha,'source_url':url}
+    def test_prior_year_quarter_is_double_rendered_and_independently_replayed(self):
+        out=validate_original(self.raw,self.manifest,self.identity)
+        self.assertEqual(out['column_index'],2)
+        self.assertEqual(out['facts']['NET_PROFIT_QUARTER']['value'],'212.7')
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertEqual(len(self.checks['fingerprint']),64)
+    def test_modified_document_basis_proof_is_rejected(self):
+        m=deepcopy(self.manifest);m['ocr_document_text_sha256']='0'*64
+        with self.assertRaisesRegex(ValueError,'FULL_DOCUMENT_REPLAY_MISMATCH'):validate_original(self.raw,m,self.identity)
+    def test_modified_ocr_financial_value_is_rejected(self):
+        m=deepcopy(self.manifest);m['facts']['EPS_DILUTED']['value']='99'
+        with self.assertRaisesRegex(ValueError,'FACT_MISMATCH'):validate_original(self.raw,m,self.identity)
+if __name__=='__main__':unittest.main()

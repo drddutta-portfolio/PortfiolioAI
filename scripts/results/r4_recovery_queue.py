@@ -6,6 +6,8 @@ import multiprocessing
 SOURCES=("results-r4-nse-lineage-recovery.yml",
          "results-r4-historical-recovery-v3.yml",
          "results-r4-retained-ocr-recovery.yml",
+         "results-r4-bse-dated-quarter-review.yml",
+         "results-r4-dated-ocr-backlog.yml",
          "results-r4-trendlyne-history.yml")
 
 def task_id(security,tool,period,args):

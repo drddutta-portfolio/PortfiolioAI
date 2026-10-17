@@ -28,13 +28,23 @@ def validate_original(raw,manifest,identity):
         raise ValueError('DATED_PDF_IDENTITY_ORIGINAL_LINK_MISMATCH')
     page=manifest['financial_page'];period=manifest['period_end']
     with fitz.open(stream=raw,filetype='pdf') as pdf:
-        if not exact_legal_identity(legal,' '.join(p.get_text('text') for p in list(pdf)[:3])):
-            raise ValueError('DATED_PDF_COMPLETE_LEGAL_NAME_UNPROVEN')
         if not 1<=page<=min(40,len(pdf)):raise ValueError('DATED_PDF_PAGE_INVALID')
-        parsed=extract_page(pdf[page-1],page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',allow_comparative=True)
+        text=' '.join(p.get_text('text') for p in list(pdf)[:40])
+        if manifest.get('parser_revision')=='PDF_OCR_EXPLICIT_DATED_COLUMN_V1':
+            from r4_ocr_dated_geometry import audit_document,extract_dated_page
+            audit=audit_document(raw)
+            if audit['text_sha256']!=manifest.get('ocr_document_text_sha256'):
+                raise ValueError('DATED_OCR_FULL_DOCUMENT_REPLAY_MISMATCH')
+            parsed,checks=extract_dated_page(raw,page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH')
+            if not all(exact_legal_identity(legal,checks[k]) for k in ('issuer_text_300','issuer_text_450')):
+                raise ValueError('DATED_OCR_DOUBLE_LEGAL_NAME_UNPROVEN')
+            text+=' '+' '.join(audit['pages'])
+        else:
+            if not exact_legal_identity(legal,' '.join(p.get_text('text') for p in list(pdf)[:3])):
+                raise ValueError('DATED_PDF_COMPLETE_LEGAL_NAME_UNPROVEN')
+            parsed=extract_page(pdf[page-1],page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',allow_comparative=True)
         # A restated comparative may describe a different business perimeter.
         # Those statements remain review evidence, never an automatic gap fill.
-        text=' '.join(p.get_text('text') for p in list(pdf)[:40])
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):
             raise ValueError('DATED_PDF_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
         if parsed['first_column_period']!=period and re.search(r'\b(?:restated|recast)\b',text,re.I):

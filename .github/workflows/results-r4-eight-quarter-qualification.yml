@@ -43,7 +43,10 @@ jobs:
           test -n "$CLOUDFLARE_R2_ACCESS_KEY_ID"
           test -n "$CLOUDFLARE_R2_SECRET_ACCESS_KEY"
       - name: Install pinned verifier and readback dependencies
-        run: python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
       - name: Run source qualification and eight-quarter readback regression tests
         run: |
           python scripts/results/test_r4_verify_quarterly.py -v
