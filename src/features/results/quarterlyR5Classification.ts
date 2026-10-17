@@ -7,7 +7,7 @@ import type { ResultsSourceObservation } from "./resultsSourceRepository"
  * Each historical quarter uses ONLY its own and earlier qualified financials
  * and period-specific exact-industry peers. No future-quarter threshold leakage.
  */
-export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V8"
+export const RESULTS_GRADING_VERSION = "R5_ROLLING_HISTORICAL_20261017_V9"
 export type R5Grade = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
 type OperatingMetric = "NET_INTEREST_INCOME_QUARTER" | "OPERATING_REVENUE_QUARTER" | "NET_PREMIUM_EARNED_QUARTER"
 export interface ResultsQuarterGrade {
@@ -99,6 +99,12 @@ function modelFor(sector: string | null, industry: string | null):
   if (s === "DEFENCE" && !/AEROSPACE|DEFEN[CS]E/.test(i)) return null
   // Renewable power generation is eligible for an OWN-company Revenue/PAT
   // directional contract; it is never compared to oil/gas issuer percentiles.
+  // Existing canonical Energy sector can coexist with independently selected
+  // Heavy Electrical Equipment industry (e.g. generator manufacturer).
+  // Approved industry-level operating contract does not infer energy-utility
+  // margins, power generation, or a substitute V1-4 industry assignment.
+  if (s === "ENERGY" && i === "HEAVY ELECTRICAL EQUIPMENT")
+    return "OPERATING_REVENUE_QUARTER"
   if (s === "ENERGY" && !/^(?:GAS|OIL|REFINERIES|PETRO-PRODUCTS|POWER GENERATION)$/.test(i)) return null
   return "OPERATING_REVENUE_QUARTER"
 }
