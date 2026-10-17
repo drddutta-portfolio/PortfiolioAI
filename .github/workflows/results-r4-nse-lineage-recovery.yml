@@ -100,3 +100,5 @@ jobs:
 # Independently replay source-pinned official issuer rename notices before admission.
 
 # Replay privately retained, verified issuer-rename authorities.
+
+# Replay full remaining cohort with complete legal-name and exchange-notice proofs.
