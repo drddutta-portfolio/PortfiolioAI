@@ -1,0 +1,54 @@
+name: Results R5 Federal 2024 Consolidated Evidence Replay
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-federal-comparison-replay.yml
+      - scripts/results/r5-federal-quarter-comparison.py
+permissions:
+  contents: write
+concurrency:
+  group: results-r5-federal-source-proof-dev
+  cancel-in-progress: false
+jobs:
+  issuer-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require Development and pinned original-source dependencies
+        run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]]
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+          python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+      - name: Replay R2 original and qualify Federal Bank Sept and Dec 2024 evidence only
+        run: |
+          python scripts/results/r5-federal-quarter-comparison.py
+          git diff --check
+      - name: Pin verified comparison-only observation IDs without changing R4 decisions
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- src/features/results/resultsR5FederalOriginalComparisonProof.json; then
+            git config user.name "portfolioai-r5-source-proof"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/features/results/resultsR5FederalOriginalComparisonProof.json
+            git commit -m "data(results-r5): pin immutable Federal Bank FY25 historical comparison originals"
+            git fetch origin PortfolioAI-Development
+            git rebase origin/PortfolioAI-Development
+            git push origin HEAD:PortfolioAI-Development
+          fi
