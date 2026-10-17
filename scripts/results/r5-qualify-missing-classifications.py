@@ -29,7 +29,7 @@ KIND = "RESULTS_R5_NSE_CLASSIFICATION_V1"
 QUOTEPREFIX = "https://www.nseindia.com/get-quotes/equity?symbol="
 ISO_RE = re.compile(r"^[A-Z0-9]{12}$")
 SYM_RE = re.compile(r"^[A-Z0-9&._-]+$")
-SAFE_LABEL = re.compile(r"^[^\\x00-\\x1f<>]{3,120}$")
+SAFE_LABEL = re.compile(r"^[^\x00-\x1f<>]{3,120}$")
 
 QUERY = """
  SELECT DISTINCT s.id::text,s.symbol,s.isin,e.sector,e.industry
