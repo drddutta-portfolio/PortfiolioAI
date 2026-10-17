@@ -47,6 +47,8 @@ jobs:
       - name: Verify code and deterministic regression suites
         run: |
           python -m py_compile scripts/results/r4-bse-historical-batch.py scripts/results/r4-verify-quarterly.py scripts/results/r4-eight-quarter-readback.py
+          python scripts/results/test_r4_private_inventory.py -v
+          python scripts/results/test_r4_nse_failure_isolation.py -v
           python scripts/results/test_r4_pdf_geometry.py -v
           python scripts/results/test_r4_bse_historical_batch.py -v
           python scripts/results/test_portfolio_bse.py -v
@@ -58,31 +60,8 @@ jobs:
           sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
           tesseract --version
           python scripts/results/test_r4_ocr_geometry.py -v
-      - name: Resolve latest completed BSE source inventory
-        id: inventory
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          source_run=$(gh api 'repos/drddutta-portfolio/PortfiolioAI/actions/workflows/results-r4-historical-recovery-v3.yml/runs?branch=PortfolioAI-Development&status=completed&per_page=20' --jq '[.workflow_runs[] | select(.conclusion == "success")][0].id')
-          [[ "$source_run" =~ ^[0-9]+$ ]] || exit 1
-          echo "run_id=$source_run" >> "$GITHUB_OUTPUT"
-      - name: Read retained original references from all completed source shards
-        uses: actions/download-artifact@v4
-        with:
-          pattern: r4-bse-original-shard-*
-          run-id: ${{ steps.inventory.outputs.run_id }}
-          github-token: ${{ github.token }}
-          path: tmp/results-r4/retained-source-inventory
       - name: Recover all assigned unresolved quarters from retained originals
-        run: python scripts/results/r4-ocr-retained-batch.py --shard ${{ matrix.shard }} --reports tmp/results-r4/retained-source-inventory
-      - name: Retain per-company originals and rejection diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-ocr-original-shard-${{ matrix.shard }}
-          path: tmp/results-r4/ocr-shard-${{ matrix.shard }}.json
-          if-no-files-found: warn
-          retention-days: 21
+        run: python scripts/results/r4-ocr-retained-batch.py --shard ${{ matrix.shard }} --reports private-r2
   verify:
     needs: recover
     if: always()
@@ -119,14 +98,4 @@ jobs:
           a=json.load(open('tmp/results-r4/bse-after-readback.json'))
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
-      - name: Retain acceptance and exceptions
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: r4-ocr-independent-readback
-          path: |
-            tmp/results-r4/readback.json
-            tmp/results-r4/eight-quarter-readback.json
-            tmp/results-r4/bse-after-readback.json
-          if-no-files-found: warn
-          retention-days: 21
+      # Detailed diagnostics and source proofs remain private in Development R2/DB.
