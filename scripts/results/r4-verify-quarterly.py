@@ -701,8 +701,11 @@ def verify(db,s3,apply):
             if reason:invalid[reason]+=1;continue
             facts.append(r)
         facts,exide_corrected=qualify_exide_correction(facts,s3)
+        from r4_krn_correction import qualify as qualify_krn_correction
+        facts,krn_corrected=qualify_krn_correction(facts,s3)
         selections,blocked,quarters=select_quarters(facts);invalid.update(blocked)
         if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
+        if krn_corrected:invalid["KRN_CORRECTED_XBRL_SUPPORTED_BY_ISSUER_AND_EXCHANGE_ACK"]+=1
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -716,12 +719,14 @@ def verify(db,s3,apply):
                         "general_bse_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_BSE_ORIGINAL_PDF_REPLAY_V1"),
                         "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
-                            exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE)
+                            exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE),
+                        "krn_correction":bool(krn_corrected and r["symbol"]=="KRN"
+                            and str(r["period_end"])=="2025-03-31" and r["consolidation_scope"]=="CONSOLIDATED")
                         } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -749,6 +754,8 @@ def verify(db,s3,apply):
                                'EVIDENCE_PRIORITY',now(),NULL,
                                CASE WHEN p.issuer_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.krn_correction THEN
+                                 'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; KRN_ISSUER_CORRECTION_AND_NSE_ACK_2025_07_10; ORIGINAL_AND_REVISED_XBRL_HASH_PINNED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.general_bse_eps THEN
                                  'RESULTS_R4_BSE_ORIGINAL_PDF_R2_SOURCE_RECONCILED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_RETROSPECTIVE_SPLIT_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_V1_4_AUTHORITY'
                                WHEN p.nse_bridge_eps THEN
