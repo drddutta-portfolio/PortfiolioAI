@@ -135,4 +135,32 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(screen.queryByText("MOCK222")).not.toBeInTheDocument()
   })
 
+  it("counts a financial NBFC's qualified Revenue/PAT/EPS quarters without misrouting it to bank NII",async()=>{
+    const nbfc={...bank,securityId:"nbfc",symbol:"CGCL",
+      company:"Lending company",sector:"Financial Services",
+      industry:"Non Banking Financial Company (NBFC)"}
+    mock.usePortfolio.mockReturnValue({
+      portfolio:{...portfolio,openPositions:[nbfc],closedPositions:[]},
+      isLoading:false,error:null,
+    })
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    const dates=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]
+    mock.load.mockResolvedValue(dates.flatMap((date,i)=>
+      [
+        {...fact(date,"OPERATING_REVENUE_QUARTER",String(100+i*20)),unit:"INR_CRORE"},
+        {...fact(date,"NET_PROFIT_QUARTER",String(20+i*5)),unit:"INR_CRORE"},
+        {...fact(date,"EPS_DILUTED",String(2+i)),unit:"INR_PER_SHARE"},
+      ].map(row=>({...row,securityId:"nbfc",id:"nbfc"+row.id}))))
+    render(<ResultsLivePage />)
+    expect(await screen.findByText(/1 \/ 1 stocks with four qualified quarters/)).toBeInTheDocument()
+    const row=screen.getByText("CGCL").closest("tr")
+    const q1=row?.querySelector('button[aria-label*="Q1 FY27"]')
+    expect(q1).not.toBeNull()
+    expect(q1?.textContent).toContain("Rev ")
+    expect(q1?.textContent).not.toContain("NII ")
+    expect(q1?.textContent).toContain("Not Rated")
+    const panel=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
+    expect(within(panel).getByText("Not rated 1")).toBeInTheDocument()
+  })
+
 })
