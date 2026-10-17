@@ -9,7 +9,8 @@ import re
 
 DATE=re.compile(r"\b\d{1,2}[./-]\d{1,2}[./-](?:20\d{2}|\d{2})\b|"
     r"\b\d{1,2}[- ](?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[- ,]+20\d{2}\b|"
-    r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},?\s*20\d{2}\b",re.I)
+    r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},?\s*20\d{2}\b|"
+    r"\b\d{1,2}\s*(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*20\d{2}\b",re.I)
 CELL=re.compile(r"\(?-?(?:\d+|\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})*,\d{3})(?:\.\d+)?\)?")
 
 def iso_date(text):
@@ -17,7 +18,7 @@ def iso_date(text):
     text=re.sub(r"\s+"," ",text)
     for fmt in ("%d.%m.%Y","%d-%m-%Y","%d/%m/%Y","%d.%m.%y","%d-%m-%y",
                 "%d/%m/%y","%d %B %Y","%d-%B-%Y","%d %b %Y","%d-%b-%Y",
-                "%B %d %Y"):
+                "%B %d %Y","%d%b%Y","%d%B%Y","%d %b%Y","%d %B%Y"):
         try:return datetime.strptime(text,fmt).date().isoformat()
         except ValueError:pass
     return None
@@ -129,6 +130,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
+            if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling",label,re.I):continue
+            if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",label,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
             value,original=number(cell)
