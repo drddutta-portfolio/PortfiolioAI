@@ -27,7 +27,7 @@ const basis=()=>({INDUSTRY_PEER:0,COMPANY_TREND:0,UNAVAILABLE:0})
 /** Same four-current-quarter coherence predicate as the source-backed UI. */
 function currentFour(own:readonly ResultsSourceObservation[],equity:Equity):boolean{
   const selected=own.filter(x=>x.selected&&x.source==="COMPANY_EXCHANGE_FILING")
-  const bank=/bank/i.test(equity.industry??"") ||
+  const bank=/\bbanks?\b/i.test(equity.industry??"") ||
     selected.some(x=>x.code==="NET_INTEREST_INCOME_QUARTER"||x.code==="GROSS_NPA_PERCENT"||x.code==="NET_NPA_PERCENT")
   const top=equity.symbol==="STARHEALTH"?"NET_PREMIUM_EARNED_QUARTER":
     bank?"NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
