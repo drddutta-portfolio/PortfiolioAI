@@ -88,7 +88,8 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
           if(assessment.status==="UNAVAILABLE") {
             qualifiedCounts.unrated++
             if(end==="2025-03-31"||end==="2025-06-30"||end==="2025-09-30"){
-              const top=banks.has(security.symbol)?"NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
+              const top=security.symbol==="STARHEALTH"?"NET_PREMIUM_EARNED_QUARTER":
+                banks.has(security.symbol)?"NET_INTEREST_INCOME_QUARTER":"OPERATING_REVENUE_QUARTER"
               const historicalChecks=[] as {quarter:string;topSelected:boolean;profitSelected:boolean;
                 sameFilingAndScope:boolean;topQoQStatus:string;profitQoQStatus:string}[]
               let prior:string=end
