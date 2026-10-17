@@ -191,5 +191,14 @@ class GeometryTest(unittest.TestCase):
         self.assertEqual(iso_date("September 30,2024"),"2024-09-30")
         self.assertEqual(iso_date("30Sep2024"),"2024-09-30")
 
+class NumericFootnoteTest(unittest.TestCase):
+    def test_separate_footnote_markers_do_not_change_the_number(self):
+        from r4_pdf_geometry import number
+        self.assertEqual(number([(1,1,20,10,'(0.20)'),(22,1,25,10,'*')]),(Decimal('-0.20'),'(0.20)'))
+    def test_missing_decimal_and_split_digits_remain_rejected(self):
+        from r4_pdf_geometry import number
+        for tokens in [('12','34'),('*',),('1.2','3')]:
+            with self.assertRaises(ValueError):number([(i*20,1,i*20+10,10,x) for i,x in enumerate(tokens)])
+
 if __name__=="__main__":unittest.main()
 

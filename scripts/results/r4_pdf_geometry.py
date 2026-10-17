@@ -131,7 +131,7 @@ def dated_headers(rows):
         yield last,rows[last][0],merged
 
 def number(words):
-    text=row_text([w for w in words if str(w[4]) not in ("|","¦")]).strip()
+    text=row_text([w for w in words if str(w[4]) not in ("|","¦","*","†","‡")]).strip()
     # Joining split decimal glyphs would invent punctuation. Keep for OCR review.
     if not CELL.fullmatch(text):raise ValueError("CORRUPT_OR_MISSING_NUMERIC_CELL:"+text[:60])
     if text.startswith("(")!=text.endswith(")"):raise ValueError("UNBALANCED_NUMERIC_CELL")
