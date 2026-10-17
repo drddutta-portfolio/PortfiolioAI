@@ -106,3 +106,5 @@ jobs:
       # Originals, per-company traces and readbacks stay in private Development storage.
 
 # Fresh owner-requested pulls are retained; this verification retry reuses original bytes.
+
+# Replay full remaining cohort with complete legal-name and exchange-notice proofs.
