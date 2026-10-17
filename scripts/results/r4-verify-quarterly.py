@@ -579,6 +579,59 @@ def qualify_exide_correction(facts,s3):
         and r["consolidation_scope"]=="CONSOLIDATED"
         and str(r["source_record_id"])==EXIDE_OLD_SOURCE)],True
 
+def r5_verified_scope_continuity(facts):
+    """R5 read-only evidence audit over R4 R2-validated original-source facts.
+
+    A complete Revenue/NII, PAT and EPS trio must come from one original in
+    each scope and reporting quarter. Conflicting numbers in the same scope
+    poison that scope; never use a convenient alternative to evade conflicts.
+    This is NOT selection admission and cannot be used as an R5 grade itself.
+    """
+    groups=defaultdict(set);versions=defaultdict(set)
+    for r in facts:
+        symbol=r["symbol"]
+        period=str(r["period_end"]);scope=r["consolidation_scope"]
+        metric=r["metric_code"]
+        rid=str(r["source_record_id"])
+        groups[(symbol,period,scope,rid)].add(metric)
+        versions[(symbol,period,scope,metric)].add(Decimal(str(r["numeric_value"])))
+    scopes=defaultdict(set)
+    for (symbol,period,scope,rid),metric_codes in groups.items():
+        required=(BANK_REQUIRED if symbol in BANKS else
+                  INSURANCE_REQUIRED if symbol in INSURERS else OTHER_REQUIRED)
+        if not required.issubset(metric_codes):continue
+        if any(len(versions[(symbol,period,scope,m)])>1 for m in required):continue
+        scopes[(symbol,period)].add(scope)
+    targets=(
+        ("BBOX","2025-09-30"),("CAMS","2025-09-30"),
+        ("DEEPINDS","2025-03-31"),("DEEPINDS","2025-06-30"),("DEEPINDS","2025-09-30"),
+        ("DHARMAJ","2025-03-31"),
+        ("ICEMAKE","2025-06-30"),("ICEMAKE","2025-09-30"),
+        ("IDFCFIRSTB","2025-09-30"),("IONEXCHANG","2025-03-31"),
+        ("IPL","2025-03-31"),("IPL","2025-06-30"),
+        ("ITCHOTELS","2025-03-31"),("JYOTHYLAB","2025-06-30"),
+        ("KOTAKBANK","2025-09-30"),
+        ("LT","2025-03-31"),("LT","2025-06-30"),("LT","2025-09-30"),
+        ("MGL","2025-09-30"),("MOTHERSON","2025-09-30"),
+        ("NCC","2025-09-30"),("PERSISTENT","2025-06-30"),
+        ("SHARDACROP","2025-09-30"),("SYRMA","2025-09-30"),
+    )
+    previous={"2025-03-31":"2024-12-31","2025-06-30":"2025-03-31",
+              "2025-09-30":"2025-06-30"}
+    candidates=[]
+    for symbol,end in targets:
+        earlier=previous[end]
+        matched=sorted(scopes[(symbol,end)] & scopes[(symbol,earlier)])
+        candidates.append(dict(symbol=symbol,quarter=end,previous=earlier,
+          source_original_scope_evidence=matched,
+          evidence="R2_REPLAYED_ORIGINALS_ONLY",
+          decision="R5_REQUIRES_SEPARATE_CANONICAL_SELECTION_REVIEW" if matched else "NO_PROVEN_SAME_SCOPE_SOURCE_PAIR"))
+    return {"contract":"R5_SOURCE_HASH_VERIFIED_HISTORICAL_SCOPE_AUDIT_V1",
+            "historical_pairs_checked":len(targets),
+            "pairs_with_verified_same_scope_originals":sum(bool(x["source_original_scope_evidence"]) for x in candidates),
+            "candidate_rows":candidates,
+            "source_admission_performed":False,"repository_selection_overwrite":False}
+
 def select_quarters(rows):
     groups=defaultdict(lambda:defaultdict(list))
     for r in rows: groups[(r["security_id"],str(r["period_end"]))][r["consolidation_scope"]].append(r)
@@ -797,6 +850,10 @@ def verify(db,s3,apply):
                     else:
                         conn.commit()
         else:conn.rollback()
+    r5_scope_proof=None
+    if os.getenv("RESULTS_R5_SOURCE_PROOF_READBACK")=="1":
+        if apply:raise RuntimeError("R5_R2_SOURCE_PROOF_MUST_BE_READ_ONLY")
+        r5_scope_proof=r5_verified_scope_continuity(facts)
     report={"mode":"APPLY" if apply else "DRY_RUN",
             "source_observations":len(observations),"r2_sources_checked":len(cache),
             "qualified_fact_rows":len(facts),"selected_candidate_facts":len(selections),
@@ -809,6 +866,8 @@ def verify(db,s3,apply):
             "unchanged_decisions":unchanged,"conflicting_existing_decisions":protected,
             "exceptions":dict(sorted(invalid.items())),
             "publication_precision":"UNKNOWN; only current display, never historical point-in-time"}
+    if r5_scope_proof is not None:
+        report["r5_verified_scope_proof"]=r5_scope_proof
     if protected:raise RuntimeError("R4_PRIOR_SELECTION_CONFLICT_ROLLED_BACK:"+json.dumps(report))
     if observations and not facts:
         raise RuntimeError("R4_ZERO_VALID_SOURCES_FAIL_CLOSED:"+json.dumps(report["exceptions"]))
