@@ -123,12 +123,29 @@ def main():
                 if not identity:
                     blocked.append({"symbol":symbol,"reason":"EXACT_PROVIDER_IDENTITY_UNRESOLVED","periods":periods});continue
                 pid=identity[0]
+                # Provider discovery uses the exact primary issuer name where
+                # available; a ticker placeholder is not a financial authority.
+                with db.cursor() as cur:
+                    cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records
+                      WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1'
+                        AND raw_payload->>'security_id'=%s
+                      ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),))
+                    primary=cur.fetchone()
+                db.rollback()
+                if primary and batch.sha(batch.canonical(primary[0]))==primary[1]:
+                    issuer=primary[0].get("bse_identity") or {}
+                    if (issuer.get("header",{}).get("ISIN")==isin
+                        and issuer.get("listing",{}).get("ISIN_NUMBER")==isin
+                        and isinstance(issuer.get("issuer_name"),str)):
+                        name=issuer["issuer_name"]
                 planned.append((str(sid),symbol,None,"get_stock_parameter_values",
                     {"stock_codes":[symbol],"parameters":wanted}))
                 for period in periods:
-                    query=(f"Only {name} ({symbol}), Trendlyne stock ID {pid}, ISIN {isin}: signed consolidated quarterly financial results for the three months ended {period}. "
-                           "Revenue from operations, profit after tax for the period, diluted EPS, original units, exact dated quarter column and official BSE/NSE/issuer filing URL. "
-                           "Exclude unrelated companies, annual and cumulative period figures.")
+                    query=(f"Only {name} ({symbol}), Trendlyne stock ID {pid}, ISIN {isin}: find original signed financial statements for the three months ended {period}. "
+                           "Search the original results season, issuer financial-results archives, offer-document financial annexures and later signed exact-quarter comparative columns. "
+                           "Provide revenue from operations, profit after tax for the period, diluted EPS, original currency/units, standalone or consolidated scope, the exact dated quarter column, and official BSE/NSE/issuer filing URLs. "
+                           "Exclude annual, half-year, YTD, inferred/subtracted quarters, adjusted EPS, presentations and unrelated issuers. "
+                           "If this quarter is not separately reported, state that explicitly and cite the closest original statement; do not substitute another period.")
                     planned.append((str(sid),symbol,period,"get_document_search_results",{"query":query}))
             shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
             identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]

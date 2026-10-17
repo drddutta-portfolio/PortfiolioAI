@@ -49,3 +49,4 @@ jobs:
       - name: Collect every assigned request and defer individual failures
         run: python scripts/results/r4-trendlyne-history.py
       # Detailed captures and retry traces are retained privately in Development R2.
+# Exact legal issuer names and original reporting windows for every remaining dated quarter.
