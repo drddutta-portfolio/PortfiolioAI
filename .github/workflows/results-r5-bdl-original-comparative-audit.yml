@@ -1,0 +1,64 @@
+name: Results R5 BDL 2025 Original Comparative Quarter Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-bdl-original-comparative-audit.yml
+permissions:
+  contents: read
+jobs:
+  verify-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: 
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Guard Development and render official issuer signed table only
+        run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from urllib.parse import urlparse
+          import requests,fitz
+          url='https://www.bdl-india.in/sites/default/files/BDL_2025_26_Q1_Financial_Results.pdf'
+          r=requests.get(url,timeout=55,headers={'User-Agent':'Mozilla/5.0 (PortfolioAI Results original source audit)'})
+          r.raise_for_status()
+          if urlparse(r.url).hostname not in ('bdl-india.in','www.bdl-india.in'):
+              raise RuntimeError('NOT_ORIGINAL_ISSUER_HOST')
+          raw=r.content
+          if not raw.startswith(b'%PDF') or not 50000<len(raw)<12000000:
+              raise RuntimeError('INVALID_ORIGINAL_PDF')
+          p=fitz.open(stream=raw,filetype='pdf')
+          if not 4<=len(p)<=12:raise RuntimeError('SOURCE_DOCUMENT_LENGTH_CHANGED')
+          cover=p[0].get_text('text').upper()
+          table=p[1].get_text('text').upper()
+          for word in ('BHARAT DYNAMICS','L24292TG1970GOI001353','BDL'):
+              if word not in cover:raise RuntimeError('CIN_OR_EXCHANGE_IDENTITY_UNPROVEN')
+          for word in ('STANDALONE','2025','REVENUE','PROFIT'):
+              if word not in table:raise RuntimeError('COMPARATIVE_FINANCIAL_PAGE_UNPROVEN')
+          d=hashlib.sha256(raw).hexdigest()
+          out=Path('tmp/results-r5/bdl-original');out.mkdir(parents=True,exist_ok=True)
+          p[1].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False).save(str(out/'BDL-2025-06-original-p1.png'))
+          (out/'source-identity.json').write_text(json.dumps({
+              'issuer':'BDL','isin':'INE171Z01026','sha256':d,'pages':len(p),
+              'sourceUrl':url,'page':1,'historicalComparative':'2025-03-31',
+              'status':'PENDING_VISUAL_NUMERIC_APPROVAL','financialFactsIngested':0},indent=2))
+          print('R5_BDL_ORIGINAL_SOURCE',json.dumps({
+              'issuer':'BDL','sha256':d,'pages':len(p),
+              'comparativePeriod':'2025-03-31','originalVerified':True,'factsIngested':0}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-r5-bdl-comparative-original-visual-review
+          path: tmp/results-r5/bdl-original/*
+          if-no-files-found: warn
+          retention-days: 1
