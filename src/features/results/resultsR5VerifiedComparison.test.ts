@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import pinnedProof from "./resultsR5ComparisonProof.json"
 import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
+import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
@@ -46,6 +47,21 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
      expect(evidence.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
      expect(Object.keys(evidence.observations)).toHaveLength(3)
      expect(evidence.sourceRecordId).toMatch(/^[0-9a-f-]{36}$/)
+   }
+ })
+ it("pins two independently source-reviewed Tata Power consolidated 2024 trios without replacing R4",()=>{
+   expect(tataOriginal.contract).toBe("R5_TATAPOWER_SIGNED_ISSUER_2024_CONSOLIDATED_V1")
+   expect(tataOriginal.environment).toBe("Development")
+   expect(tataOriginal.approvedSources).toHaveLength(2)
+   expect(tataOriginal.approvedSources.map(s=>s.periodEnd).sort()).toEqual(["2024-09-30","2024-12-31"])
+   for(const source of tataOriginal.approvedSources){
+     expect(source.symbol).toBe("TATAPOWER")
+     expect(source.securityId).toMatch(/^[a-f0-9-]{36}$/)
+     expect(source.scope).toBe("CONSOLIDATED")
+     expect(source.sourceRecordId).toMatch(/^[a-f0-9-]{36}$/)
+     expect(source.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+     expect(Object.keys(source.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
+     expect(new Set(Object.values(source.observations)).size).toBe(3)
    }
  })
  it("retains exact SHA-verified Federal Bank two-quarter R5-only original without an R4 selection mutation",()=>{
