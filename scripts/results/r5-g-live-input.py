@@ -126,9 +126,21 @@ def extract(db_url):
                 or bdl_proof["approvedSources"][0]["scope"]!="STANDALONE"
                 or bdl_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
                 raise RuntimeError("BDL_ORIGINAL_SOURCE_IDENTITY_MISMATCH")
+            gmbrew_proof=json.loads(
+                Path("src/features/results/resultsR5GMBREWOriginalComparisonProof.json").read_text())
+            if gmbrew_proof.get("contract")!="R5_GMBREW_SIGNED_2025_MARCH_ORIGINAL_V1" or gmbrew_proof.get("environment")!="Development":
+                raise RuntimeError("GMBREW_SOURCE_PROOF_CONTRACT_UNRECOGNIZED")
+            if gmbrew_proof["approvedSources"] and (
+                len(gmbrew_proof["approvedSources"])!=1
+                or gmbrew_proof["approvedSources"][0]["symbol"]!="GMBREW"
+                or gmbrew_proof["approvedSources"][0]["periodEnd"]!="2025-03-31"
+                or gmbrew_proof["approvedSources"][0]["scope"]!="STANDALONE"
+                or gmbrew_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
+                raise RuntimeError("GMBREW_SIGNED_SOURCE_IDENTITY_UNQUALIFIED")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
-                                   *tata_proof["approvedSources"],*bdl_proof["approvedSources"]]
+                                   *tata_proof["approvedSources"],*bdl_proof["approvedSources"],
+                                   *gmbrew_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
             missing=sorted(desired-already)
