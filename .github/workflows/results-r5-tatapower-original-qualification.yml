@@ -1,0 +1,40 @@
+name: Results R5 Tata Power 2024 Original Source Qualification
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-tatapower-original-qualification.yml
+      - scripts/results/r5-tatapower-quarter-source.py
+permissions:
+  contents: read
+concurrency:
+  group: results-r5-tatapower-original-development
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fail closed outside Development branch
+        run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+      - name: Analyze exact issuer-original financial tables with bounded extraction
+        run: |
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python scripts/results/r5-tatapower-quarter-source.py
+      - name: Publish diagnostic metadata only; no unqualified financial figures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-tatapower-source-qualification
+          path: tmp/results-r5/tatapower-issuer-diagnostic.json
+          if-no-files-found: warn
+          retention-days: 14
