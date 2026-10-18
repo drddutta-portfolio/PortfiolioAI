@@ -1,0 +1,56 @@
+name: Results R5 GMBREW March 2025 Original SHA and Table Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-gmbrew-signed-original-audit.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Confirm Development-only signed issuer source identity and bounded original table
+        run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from urllib.parse import urlparse
+          import requests,fitz
+          url='https://gmbreweries.com/images/4th%20Quarterly%20Financial%20Statement%2024-25.pdf'
+          r=requests.get(url,timeout=50,headers={'User-Agent':'Mozilla/5.0 (PortfolioAI issuer audit)'})
+          r.raise_for_status()
+          if urlparse(r.url).hostname not in ('gmbreweries.com','www.gmbreweries.com'):raise RuntimeError('NON_ISSUER_DOMAIN')
+          data=r.content
+          if not data.startswith(b'%PDF') or not 15000<len(data)<12000000:raise RuntimeError('ORIGINAL_BYTES_INVALID')
+          p=fitz.open(stream=data,filetype='pdf')
+          if not 8<=len(p)<=30:raise RuntimeError('ORIGINAL_PAGE_COUNT_INVALID')
+          signed=p[0].get_text('text').upper()
+          if 'GMBREW' not in signed or 'APRIL' not in signed:raise RuntimeError('NOT_SIGNED_2025_MARCH_ISSUER')
+          table=p[2].get_text('text').upper()
+          for v in ('FINANCIAL RESULTS','2025','REVENUE','PROFIT'):
+              if v not in table:raise RuntimeError('TABLE_NOT_PROVEN:'+v)
+          digest=hashlib.sha256(data).hexdigest()
+          out=Path('tmp/results-r5/gmbrew-original');out.mkdir(parents=True,exist_ok=True)
+          p[2].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False).save(str(out/'GMBREW-2025-03-signed-p2.png'))
+          (out/'original-meta.json').write_text(json.dumps({'symbol':'GMBREW','isin':'INE075D01018','period':'2025-03-31','url':url,'sha256':digest,'page':2,'status':'ORIGINAL_TABLE_VISUAL_REVIEW_REQUIRED','factsAdmitted':0},indent=2))
+          print('R5_GMBREW_ISSUER_ORIGINAL',json.dumps({'symbol':'GMBREW','SHA256':digest,'pages':len(p),'page':2,'factsAdmitted':0}))
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-gmbrew-pinned-original-review
+          path: tmp/results-r5/gmbrew-original/*
+          if-no-files-found: warn
+          retention-days: 1
