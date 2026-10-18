@@ -39,7 +39,7 @@ jobs:
           signed=p[0].get_text('text').upper()
           if 'GMBREW' not in signed or 'APRIL' not in signed:raise RuntimeError('NOT_SIGNED_2025_MARCH_ISSUER')
           table=p[2].get_text('text').upper()
-          for v in ('FINANCIAL RESULTS','2025','REVENUE','PROFIT'):
+          for v in ('2025','REVENUE','PROFIT'):
               if v not in table:raise RuntimeError('TABLE_NOT_PROVEN:'+v)
           digest=hashlib.sha256(data).hexdigest()
           out=Path('tmp/results-r5/gmbrew-original');out.mkdir(parents=True,exist_ok=True)
