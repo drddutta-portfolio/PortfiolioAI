@@ -103,8 +103,21 @@ def extract(db_url):
                     or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
                     for p in issuer_proof["approvedSources"])):
                 raise RuntimeError("FEDERAL_R5_SOURCE_PROOF_IS_NOT_EXACT_VERIFIED_LOCK")
+            tata_proof=json.loads(
+                Path("src/features/results/resultsR5TataPowerOriginalComparisonProof.json").read_text())
+            if (tata_proof.get("contract")!="R5_TATAPOWER_SIGNED_ISSUER_2024_CONSOLIDATED_V1"
+                    or tata_proof.get("environment")!="Development"):
+                raise RuntimeError("UNQUALIFIED_TATAPOWER_R5_SOURCE_PROOF")
+            if tata_proof["approvedSources"]:
+                if (len(tata_proof["approvedSources"])!=2
+                    or {p["periodEnd"] for p in tata_proof["approvedSources"]}!={"2024-09-30","2024-12-31"}
+                    or any(p["symbol"]!="TATAPOWER" or p["scope"]!="CONSOLIDATED"
+                      or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
+                      for p in tata_proof["approvedSources"])):
+                    raise RuntimeError("TATA_R5_SIGNED_ORIGINAL_IDENTITY_CONTRACT")
             desired=set(
-                oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"]]
+                oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
+                                   *tata_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
             missing=sorted(desired-already)
