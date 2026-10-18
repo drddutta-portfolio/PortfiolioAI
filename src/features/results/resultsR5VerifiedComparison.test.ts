@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import pinnedProof from "./resultsR5ComparisonProof.json"
 import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
 import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
+import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import type { R5IndustryCalibrations } from "./quarterlyR5Classification"
@@ -48,6 +49,19 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
      expect(Object.keys(evidence.observations)).toHaveLength(3)
      expect(evidence.sourceRecordId).toMatch(/^[0-9a-f-]{36}$/)
    }
+ })
+ it("pins GMBREW 2025 March standalone original with exact issuer SHA and three historical facts",()=>{
+   expect(gmbrewOriginal.contract).toBe("R5_GMBREW_SIGNED_2025_MARCH_ORIGINAL_V1")
+   expect(gmbrewOriginal.environment).toBe("Development")
+   expect(gmbrewOriginal.signedOriginalSHA256).toMatch(/^[0-9a-f]{64}$/)
+   expect(gmbrewOriginal.approvedSources).toHaveLength(1)
+   const original=gmbrewOriginal.approvedSources[0]!
+   expect(original.symbol).toBe("GMBREW")
+   expect(original.periodEnd).toBe("2025-03-31")
+   expect(original.scope).toBe("STANDALONE")
+   expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+   expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
+   for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
  })
  it("pins two independently source-reviewed Tata Power consolidated 2024 trios without replacing R4",()=>{
    expect(tataOriginal.contract).toBe("R5_TATAPOWER_SIGNED_ISSUER_2024_CONSOLIDATED_V1")
