@@ -1,0 +1,67 @@
+name: Results R5 Tata Power Signed Original Table Visual Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-tatapower-original-visual-audit.yml
+permissions:
+  contents: read
+jobs:
+  read-original-table:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify Development-only scope
+        run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+      - name: Render only pinned issuer-original 2024 statement pages for numeric-column visual verification
+        run: |
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          import fitz,requests
+          from urllib.parse import urlparse
+          root='https://www.tatapower.com/company-financials/quarterly-reports/fy2024---2025/'
+          sources={
+            '2024-09-30':(
+              'consolidated-and-standalone-financial-results-for-the-quarter-and-half-year-ended-30th-september-2024.pdf',
+              'd04f36345f5ee6d94a19ba99385bf30a5937e5d37f862c019903681c4ba1c4bc',[7,18]),
+            '2024-12-31':(
+              'consolidated-and-standalone-financial-results-for-the-quarter-and-nine-months-ended-31st-december-2024.pdf',
+              'eadab3f13b927c614814c1cb2ee4b4f9e0b13fe73268f0646cc6a9efc420bc33',[7,14]),
+          }
+          out=Path('tmp/results-r5/tata-visual');out.mkdir(parents=True,exist_ok=True)
+          report=[]
+          for period,(name,expected,pages) in sources.items():
+            resp=requests.get(root+name,timeout=55,headers={'User-Agent':'Mozilla/5.0 (PortfolioAI Results Development audit)'})
+            resp.raise_for_status()
+            if urlparse(resp.url).hostname!='www.tatapower.com':raise RuntimeError('ISSUER_HOST_CHANGED')
+            payload=resp.content
+            digest=hashlib.sha256(payload).hexdigest()
+            if digest!=expected or not payload.startswith(b'%PDF'):raise RuntimeError('SOURCE_HASH_NOT_PINNED')
+            doc=fitz.open(stream=payload,filetype='pdf')
+            for page in pages:
+              if page>=len(doc):raise RuntimeError('PAGE_OUT_OF_SOURCE_BOUNDS')
+              image=doc[page].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False)
+              image.save(str(out/f'{period}-p{page}.png'))
+            report.append({'period':period,'sha256':digest,'pages':pages,'renderedFromOriginal':True})
+          (out/'source-identity.json').write_text(json.dumps(report,indent=2))
+          print('TATAPOWER_VISUAL_ORIGINAL_READY',json.dumps(report))
+          PY
+      - name: Retain exact source table images for bounded visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-tatapower-pinned-original-table-views
+          path: tmp/results-r5/tata-visual/*
+          if-no-files-found: warn
+          retention-days: 1
