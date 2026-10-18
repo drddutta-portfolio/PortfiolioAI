@@ -15,6 +15,7 @@ on:
       - src/features/results/resultsR5ComparisonProof.json
       - src/features/results/resultsR5FederalOriginalComparisonProof.json
       - src/features/results/resultsR5TataPowerOriginalComparisonProof.json
+      - src/features/results/resultsR5BDLOriginalComparisonProof.json
       - src/features/results/ResultsReferenceLivePage.tsx
       - src/features/results/quarterlyR5Classification.ts
       - src/features/results/quarterlyR5.ts
