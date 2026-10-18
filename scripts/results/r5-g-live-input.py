@@ -115,9 +115,20 @@ def extract(db_url):
                       or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
                       for p in tata_proof["approvedSources"])):
                     raise RuntimeError("TATA_R5_SIGNED_ORIGINAL_IDENTITY_CONTRACT")
+            bdl_proof=json.loads(
+                Path("src/features/results/resultsR5BDLOriginalComparisonProof.json").read_text())
+            if bdl_proof.get("contract")!="R5_BDL_SIGNED_2025_Q4_COMPARATIVE_ORIGINAL_V1" or bdl_proof.get("environment")!="Development":
+                raise RuntimeError("BDL_COMPARATIVE_R5_PROOF_CONTRACT_UNRECOGNIZED")
+            if bdl_proof["approvedSources"] and (
+                len(bdl_proof["approvedSources"])!=1
+                or bdl_proof["approvedSources"][0]["symbol"]!="BDL"
+                or bdl_proof["approvedSources"][0]["periodEnd"]!="2025-03-31"
+                or bdl_proof["approvedSources"][0]["scope"]!="STANDALONE"
+                or bdl_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
+                raise RuntimeError("BDL_ORIGINAL_SOURCE_IDENTITY_MISMATCH")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
-                                   *tata_proof["approvedSources"]]
+                                   *tata_proof["approvedSources"],*bdl_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
             missing=sorted(desired-already)
