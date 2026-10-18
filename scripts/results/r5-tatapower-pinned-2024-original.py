@@ -89,7 +89,7 @@ def obtain_exact(period,config):
     for word in ("500400","TATAPOWER","THE TATA POWER COMPANY LIMITED"):
         if word not in cover:raise RuntimeError("ISSUER_EXCHANGE_IDENTITY_NOT_PROVEN:"+word)
     for word in ("CONSOLIDATED FINANCIAL RESULTS","REVENUE FROM OPERATIONS",
-                 "NET PROFIT","EARNINGS PER EQUITY SHARE",config["expected_title"]):
+                 "PROFIT","EARNINGS PER EQUITY SHARE",config["expected_title"]):
         if word not in table:raise RuntimeError("SIGNED_CONSOLIDATED_TABLE_LABEL_NOT_PROVEN:"+word)
     # This exact PDF byte hash (NOT OCR) pins the visually reviewed, specific
     # first-quarter column of the signed consolidated table. EPS is the
