@@ -3,6 +3,7 @@ import { gradeQuarterR5, type ResultsQuarterGrade, type R5IndustryCalibrations }
 import manifest from "./resultsR5ComparisonProof.json"
 import federalSource from "./resultsR5FederalOriginalComparisonProof.json"
 import tataPowerSource from "./resultsR5TataPowerOriginalComparisonProof.json"
+import bdlSource from "./resultsR5BDLOriginalComparisonProof.json"
 
 /**
  * Independently R2-replayed original filings admitted for R5 COMPARISON ONLY.
@@ -22,7 +23,7 @@ const CORE = ["NET_PROFIT_QUARTER", "EPS_DILUTED"] as const
 const APPROVAL = "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
 const unitFor = (code:string) => code === "EPS_DILUTED" ? "INR_PER_SHARE" : "INR_CRORE"
 const independentlyVerifiedOriginals:readonly VerifiedR5Source[] = [
-  ...manifest.approvedSources, ...federalSource.approvedSources, ...tataPowerSource.approvedSources,
+  ...manifest.approvedSources, ...federalSource.approvedSources, ...tataPowerSource.approvedSources, ...bdlSource.approvedSources,
 ]
 
 function canonicalStart(end:string):string|null {
