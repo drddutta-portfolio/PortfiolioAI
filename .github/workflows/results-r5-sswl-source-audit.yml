@@ -1,0 +1,59 @@
+name: Results R5 SSWL 2024 Signed Consolidated Original Table Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-sswl-source-audit.yml
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact issuer host and signed PDF source on Development only
+        run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from urllib.parse import urlparse
+          import fitz,requests
+          url='https://sswlindia.com/investor-docs/FR_SSWL_31_12_2024.pdf'
+          r=requests.get(url,timeout=55,headers={'User-Agent':'Mozilla/5.0 (PortfolioAI Development issuer source audit)'})
+          r.raise_for_status()
+          if urlparse(r.url).hostname not in ('sswlindia.com','www.sswlindia.com','sswlindia.in','www.sswlindia.in'):
+              raise RuntimeError('NOT_ORIGINAL_SSWL_DOMAIN')
+          b=r.content
+          if not b.startswith(b'%PDF') or not 15000<len(b)<18000000:
+              raise RuntimeError('INVALID_SSWL_ORIGINAL_PDF')
+          d=fitz.open(stream=b,filetype='pdf')
+          if not 4<=len(d)<=18:raise RuntimeError('UNEXPECTED_PAGE_COUNT')
+          cover=d[0].get_text('text').upper()
+          if 'STEEL STRIPS' not in cover or '2024' not in cover:
+              raise RuntimeError('ISSUER_EXCHANGE_IDENTITY_UNQUALIFIED')
+          output=Path('tmp/results-r5/sswl-original');output.mkdir(parents=True,exist_ok=True)
+          for page in (1,2):
+            d[page].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False).save(str(output/('SSWL-Dec2024-p'+str(page)+'.png')))
+          summary={'issuer':'SSWL','isin':'INE802C01033','source':url,
+                   'sha256':hashlib.sha256(b).hexdigest(),'pages':len(d),
+                   'candidateQuarters':['2024-09-30','2024-12-31'],'factsAdmitted':0}
+          (output/'original-meta.json').write_text(json.dumps(summary,indent=2))
+          print('R5_SSWL_ORIGINAL_TABLE_SOURCE',json.dumps(summary))
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-r5-sswl-original-source-table-views
+          path: tmp/results-r5/sswl-original/*
+          if-no-files-found: warn
+          retention-days: 1
