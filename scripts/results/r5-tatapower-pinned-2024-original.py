@@ -168,11 +168,13 @@ def main():
             with db.cursor() as cur:
                 cur.execute("""SELECT id FROM public.securities WHERE symbol=%s AND isin=%s AND asset_class='EQUITY'""",(SYMBOL,ISIN))
                 sid=cur.fetchone()[0]
-                cur.execute("""SELECT count(*) FROM public.fundamental_observations
+                cur.execute("""SELECT metric_code,numeric_value FROM public.fundamental_observations
                  WHERE security_id=%s AND period_end=%s AND consolidation_scope='CONSOLIDATED'
-                 AND evidence_status='AVAILABLE' AND metric_code=ANY(%s)
-                 AND numeric_value != ALL(%s::numeric[])""",
-                  (sid,period,list(figures),[Decimal(x) for x in (config["revenue"],config["pat"],config["eps"])]))
+                 AND evidence_status='AVAILABLE' AND metric_code=ANY(%s::text[])""",
+                  (sid,period,list(figures)))
+                for old_code,old_value in cur.fetchall():
+                    if Decimal(old_value)!=Decimal(figures[old_code][0]):
+                        raise RuntimeError("DIFFERENT_SAME_SCOPE_ORIGINAL_VALUE_REQUIRES_INDEPENDENT_REVIEW")
                 # Selected R4 periods and other scope originals are not changed
                 # under any circumstances. Numeric values are source-validated.
                 cur.execute("""INSERT INTO public.data_source_records
