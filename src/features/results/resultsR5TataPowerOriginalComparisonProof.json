@@ -1,0 +1,9 @@
+{
+  "contract": "R5_TATAPOWER_SIGNED_ISSUER_2024_CONSOLIDATED_V1",
+  "environment": "Development",
+  "signedOriginals": [
+    "2024-09-30",
+    "2024-12-31"
+  ],
+  "approvedSources": []
+}
