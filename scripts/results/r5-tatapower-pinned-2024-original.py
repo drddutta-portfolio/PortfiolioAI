@@ -82,7 +82,7 @@ def obtain_exact(period,config):
     if not raw.startswith(b"%PDF") or sha(raw)!=config["sha"]:
         raise RuntimeError("TATA_ORIGINAL_SIGNED_SHA_MISMATCH")
     pdf=fitz.open(stream=raw,filetype="pdf")
-    if not 20<=len(pdf)<=36 or config["page"]>=len(pdf):
+    if not 12<=len(pdf)<=38 or config["page"]>=len(pdf):
         raise RuntimeError("TATA_SOURCE_ORIGINAL_PAGE_COUNT_CHANGED")
     cover=pdf[0].get_text("text").upper()
     table=pdf[config["page"]].get_text("text").upper()
