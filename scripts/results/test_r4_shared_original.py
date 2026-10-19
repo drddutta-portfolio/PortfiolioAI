@@ -140,3 +140,9 @@ class ReviewedIssuerImageIdentity(VisualOriginalReviewTests):
         source['payload_hash']=hashlib.sha256(json.dumps(source['raw_payload'],separators=(',',':'),sort_keys=True).encode()).hexdigest()
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('RESTATED_COMPARATIVE_MUST_STAY_EXCLUDED')):
             self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
+class ReviewedCoverScope(VisualOriginalReviewTests):
+    def test_visual_quarter_review_cannot_override_missing_signed_cover_scope(self):
+        raw,source,rows,p=self.reviewed();p['required_cover_scope']='audited standalone financial results'
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
+            with self.assertRaisesRegex(ValueError,'COVER_SCOPE_UNPROVEN'):qualify(raw,source,rows)
