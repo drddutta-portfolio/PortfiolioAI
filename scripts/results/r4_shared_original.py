@@ -132,7 +132,7 @@ def qualify(raw,source,observations):
                 if parsed['scope']!=profile.get('scope','CONSOLIDATED'):continue
                 if parsed['first_column_period']!=period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
                 vectors.append(parsed['facts'])
-            if not vectors and profile.get('ocr_page'):
+            if not vectors and profile.get('ocr_page') and not visual_review:
                 try:
                     rendered=rendered_cache.get(period)
                     if rendered is None:rendered=rendered_facts(raw,profile['ocr_page'],period)
