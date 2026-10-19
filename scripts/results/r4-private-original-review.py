@@ -73,6 +73,7 @@ def main():
                             db.rollback()
                             outcome['shared_replay']=qualify(raw,source['shared_source'],observations)
                             counts['independently_replayed_facts']+=len(outcome['shared_replay']['eligible_observation_ids'])
+                            if not outcome['shared_replay']['eligible_observation_ids']:outcome['rendered_review_pages']=rendered_review_words(raw,source['shared_source'],client)
                         except Exception as error:
                             db.rollback()
                             outcome['shared_replay_rejection']=str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__
@@ -84,6 +85,11 @@ def main():
                     pages=[]
                     with fitz.open(stream=raw,filetype='pdf') as pdf:
                         for page_no in range(min(len(pdf),40)):
+                            if source.get('shared_review'):
+                                from r4_shared_original import context
+                                profile,_,_=context(source['shared_source'])
+                                financial=profile.get('ocr_page',8)
+                                if page_no+1 not in {1,2,3,financial}:continue
                             page=pdf[page_no];text=page.get_text('text')
                             if not source.get('shared_review') and (not re.search(r'diluted',text,re.I) or not re.search(r'revenue|interest earned|premium',text,re.I)):continue
                             native=batch.canonical({'contract':'PRIVATE_ORIGINAL_PAGE_WORDS_V1','original_sha256':digest,'page':page_no+1,'width':page.rect.width,'height':page.rect.height,'words':page.get_text('words')})
