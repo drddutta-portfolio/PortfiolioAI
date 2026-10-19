@@ -79,6 +79,12 @@ PROFILES={
             'NET_PROFIT_QUARTER':{'value':'60.46','unit':'INR_CRORE'},
             'EPS_DILUTED':{'value':'26.47','unit':'INR_PER_SHARE'}}}}},
 
+ 'R5_SIGNED_JASH_2024_ORIGINAL_COMPARATIVE_V1':{
+  'symbol':'JASH','isin':'INE039O01029','legal':'JASH ENGINEERING LIMITED',
+  'identity_marker':'jashindia.com','ocr_page':3,
+  'originals':{'2024-12-31':('74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148','https://jashindia.com/wp-content/uploads/2025/02/Outcome-JASH-Q3.pdf')},
+  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False},
+
 }
 
 def context(source):
