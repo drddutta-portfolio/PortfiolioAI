@@ -3448,6 +3448,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "74973275-c3be-44bc-8c24-3749d34ae005",
+        "NET_PROFIT_QUARTER": "f8587b77-2142-4237-b141-20c1385a5dd7",
+        "OPERATING_REVENUE_QUARTER": "5dd1e519-70f5-4fcb-8fff-d68311231945"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "ec24a599-8ce8-42af-99c4-aae80f715132",
+      "sourceRecordId": "df6ef144-f89b-40a9-9d77-700eb610e7b0",
+      "symbol": "GMBREW"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "ea5ac2bb-2e71-418c-9c5c-8ead55760114",
         "NET_PROFIT_QUARTER": "bc09d689-f574-45e3-bd1d-d9161cf37866",
         "OPERATING_REVENUE_QUARTER": "e5d2f294-d25d-4ccc-bd4a-184e510692cc"
