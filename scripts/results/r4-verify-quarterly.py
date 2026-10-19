@@ -372,6 +372,8 @@ def check_manifest(record,manifest):
     return None
 
 def check_fact(r,m):
+    if m.get("contract")=="RESULTS_R4_SHARED_ISSUER_ORIGINAL_REPLAY_V1":
+        return None if str(r["id"]) in m["eligible_observation_ids"] else "SHARED_ORIGINAL_COMPLETE_TRIO_UNPROVEN"
     if r["symbol"]!=m.get("symbol") or r["isin"]!=m.get("isin"):return "SECURITY_IDENTITY_MISMATCH"
     if str(r["period_end"])!=m.get("period_end") or str(r["period_start"])!=m.get("period_start"):return "OBS_PERIOD_MISMATCH"
     if r["consolidation_scope"]!=m.get("consolidation_scope"):return "OBS_SCOPE_MISMATCH"
@@ -766,7 +768,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def verify(db,s3,apply):
@@ -778,8 +780,21 @@ def verify(db,s3,apply):
         # Bound R2 reads without making any concurrent database writes. S3
         # clients support concurrent GET; each source is fetched at most once.
         by_id={str(r["source_record_id"]):r for r in observations}
+        shared_groups=defaultdict(list)
+        for row in observations:shared_groups[str(row["source_record_id"])].append(row)
         def check_one(pair):
             k,r=pair
+            from r4_shared_original import PROFILES,context as shared_context,qualify as qualify_shared
+            if r["raw_payload"].get("contract") in PROFILES:
+                try:
+                    _,_,original_key=shared_context(r)
+                    original=s3.get_object(Bucket=BUCKET,Key=original_key)["Body"].read()
+                    from r4_recovery_queue import run_with_timeout
+                    with SOURCE_REPLAY_SLOTS:
+                        document=run_with_timeout(qualify_shared,(original,r,shared_groups[k]),120)
+                    return k,(document,None)
+                except Exception as exc:
+                    return k,(None,"SHARED_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__)
             raw=r["raw_payload"];pointer=raw.get("r2_key") if isinstance(raw,dict) else None
             expected=raw.get("r2_manifest_sha256") if isinstance(raw,dict) else None
             document=None;error=None
