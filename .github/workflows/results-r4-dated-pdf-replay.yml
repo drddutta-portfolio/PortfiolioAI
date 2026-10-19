@@ -7,12 +7,16 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-dated-pdf-replay-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   recover:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: {shard: [0, 1, 2, 3]}
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
@@ -25,26 +29,51 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - name: Install pinned original-source dependencies
+      - name: Install pinned independent original replay dependencies
         run: |
           python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
           sudo apt-get update -qq
           sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
-      - name: Verify source replay and existing selection protections
+      - name: Verify independent recovery and source regressions
         run: |
+          python scripts/results/test_r4_recovery_queue.py -v
           python scripts/results/test_r4_pdf_geometry.py -v
           python scripts/results/test_r4_bse_dated_proof.py -v
           python scripts/results/test_r4_shared_original.py -v
-          python scripts/results/test_r4_bse_historical_batch.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Recover every assigned issuer without blocking other workers
+        run: python scripts/results/r4-bse-dated-quarter-promote.py --shard ${{ matrix.shard }} --shards 4
+  verify:
+    needs: recover
+    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_DATED_PDF_ACK: EXPLICIT_QUARTER_ORIGINAL_REPLAY
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install pinned independent original replay dependencies
+        run: |
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+      - name: Recheck original replay and protected selection before applying
+        run: |
+          python scripts/results/test_r4_bse_dated_proof.py -v
+          python scripts/results/test_r4_shared_original.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
-          python -m py_compile scripts/results/r4-bse-dated-quarter-promote.py scripts/results/r4-verify-quarterly.py
-      - name: Attempt every unresolved historical quarter independently
-        run: python scripts/results/r4-bse-dated-quarter-promote.py
-      - name: Independently reopen original PDFs and preserve accepted selections
-        if: success()
+      - name: Independently reopen originals and preserve accepted selections
         run: python scripts/results/r4-verify-quarterly.py --apply
-      - name: Full eight-quarter readback
+      - name: Reconcile the entire eight-quarter cohort
         if: always()
         run: |
           mkdir -p tmp/results-r4
@@ -54,9 +83,4 @@ jobs:
           a=json.load(open('tmp/results-r4/dated-pdf-readback.json'))
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
-      # Financial rows, originals and rejection traces stay in private Development storage.
-
-# Retry the complete remaining cohort after explicit nonannualised EPS annotation support.
-# Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.
-# Replay all remaining quarters after preserving physically split printed dates and decimals.
-# Independently verify existing issuer-original observations before canonical R4 selection.
+      # Originals, table cells, proofs and issuer rejection traces remain private.
