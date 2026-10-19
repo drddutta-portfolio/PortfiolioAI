@@ -137,9 +137,21 @@ def extract(db_url):
                 or gmbrew_proof["approvedSources"][0]["scope"]!="STANDALONE"
                 or gmbrew_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
                 raise RuntimeError("GMBREW_SIGNED_SOURCE_IDENTITY_UNQUALIFIED")
+            sswl_proof=json.loads(Path("src/features/results/resultsR5SSWLOriginalComparisonProof.json").read_text())
+            if (sswl_proof.get("contract")!="R5_SSWL_SIGNED_2024_COMPARATIVE_ORIGINAL_V1"
+                or sswl_proof.get("environment")!="Development"
+                or sswl_proof.get("originalSHA256")!="558de3ec82d9c0a11a3f0e6be14e50ca21629ed7c53fc68f04e1e156439a0df9"):
+                raise RuntimeError("SSWL_R5_PROOF_SHA_CONTRACT")
+            if sswl_proof["approvedSources"] and (
+                len(sswl_proof["approvedSources"])!=2
+                or {p["periodEnd"] for p in sswl_proof["approvedSources"]}!={"2024-09-30","2024-12-31"}
+                or any(p["symbol"]!="SSWL" or p["scope"]!="CONSOLIDATED"
+                   or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
+                   for p in sswl_proof["approvedSources"])):
+                raise RuntimeError("SSWL_SOURCE_IDENTITY_NOT_ACCEPTED")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
-                                   *tata_proof["approvedSources"],*bdl_proof["approvedSources"],
+                                   *sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
                                    *gmbrew_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
