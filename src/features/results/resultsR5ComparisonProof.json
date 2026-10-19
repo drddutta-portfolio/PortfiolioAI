@@ -1407,6 +1407,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "c8b05bcf-6640-499b-831e-5093fefcfd49",
+        "NET_PROFIT_QUARTER": "eafaf227-8517-4e47-9ce1-f50db6404b04",
+        "OPERATING_REVENUE_QUARTER": "8cc55677-fe20-42d8-b660-c627c5925350"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "789ebcb4-126c-4f14-89a0-06752536fbec",
+      "sourceRecordId": "8c34007f-653c-4adc-91de-1f035bfeec7a",
+      "symbol": "SSWL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "cc1b8745-6095-40ad-88ab-a5e1aad3c5fd",
         "NET_PROFIT_QUARTER": "a3df6d97-312b-4d2d-b6d8-dde498513fe3",
         "OPERATING_REVENUE_QUARTER": "8318c252-b261-4dfe-a2dd-0d1272036c37"
@@ -3587,6 +3600,32 @@
       "securityId": "f396294a-84ac-4b09-acdc-986d39e17ba6",
       "sourceRecordId": "63be16e3-c36f-44b0-873a-f4e2ee81d513",
       "symbol": "BDL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "b54c5313-7932-4cea-8e72-cf17c65faa1f",
+        "NET_PROFIT_QUARTER": "282105d1-8792-4a1f-a784-9be491e6050b",
+        "OPERATING_REVENUE_QUARTER": "f69b737e-6702-472b-82d8-2fbef8f658bb"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "fa19b88f-9974-443d-a500-33dcd990a7ad",
+      "sourceRecordId": "698d6631-ea4a-4a74-b5fe-3b3a61d6e331",
+      "symbol": "TATAPOWER"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "d753c909-4b04-4f9e-a957-b8b54905546a",
+        "NET_PROFIT_QUARTER": "7bb6a8c9-259f-4d32-8d96-f354446b50cd",
+        "OPERATING_REVENUE_QUARTER": "274ab3e5-2ce0-48ce-94b4-ada49321ffb0"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "fa19b88f-9974-443d-a500-33dcd990a7ad",
+      "sourceRecordId": "ca8962df-3f20-4d07-88b6-dde6d5d5862d",
+      "symbol": "TATAPOWER"
     },
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
