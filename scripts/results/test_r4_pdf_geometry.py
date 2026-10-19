@@ -19,6 +19,23 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_split_numeric_date_keeps_first_physical_quarter(self):
+        from r4_pdf_geometry import dated_headers
+        def w(x,t):return (x,10,x+len(t)*2,12,t)
+        rows=[(11,[w(100,'3'),w(103,'1.03.'),w(114,'20'),w(119,'26'),w(150,'31.12.2025'),w(200,'31.03.2025'),w(250,'31.03.20'),w(267,'25')])]
+        dates=list(dated_headers(rows))[0][2]
+        self.assertEqual([d[0] for d in dates],['2026-03-31','2025-12-31','2025-03-31','2025-03-31'])
+
+    def test_adjacent_decimal_fragments_preserve_all_printed_characters(self):
+        words=[(100,10,110,12,'235'),(111,10,120,12,'.16')]
+        value,original=number(words)
+        self.assertEqual(value,Decimal('235.16'))
+        self.assertEqual(original,'235 .16')
+
+    def test_separated_numbers_and_missing_decimal_are_not_joined(self):
+        for words in ([(100,10,110,12,'235'),(120,10,130,12,'.16')],[(100,10,110,12,'235'),(111,10,120,12,'16')]):
+            with self.assertRaises(ValueError):number(words)
+
     def auxiliary_tax_fixture(self,total=True):
         doc,p=fixture(first='30.09.2025',third='30.09.2024')
         rows=[(300,'Profit before tax','3,000'),(325,'Current tax','800'),(350,'Deferred tax','73'),(375,'Current tax expense relating to previous year','-')]

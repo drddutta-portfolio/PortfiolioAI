@@ -73,3 +73,4 @@ jobs:
 
 # Recheck explicit EPS annotation provenance and private original-page review isolation.
 # Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.
+# Replay all remaining quarters after preserving physically split printed dates and decimals.

@@ -65,7 +65,28 @@ def dated_headers(rows):
         for w in words:
             spans.append((offset,offset+len(str(w[4])),w));offset+=len(str(w[4]))+1
         occupied=[]
+        # PDF text layers may split a printed numeric date into adjacent glyph
+        # runs. Rejoin only tightly adjacent runs, retaining every printed digit
+        # and separator. This also prevents a split four-digit year being read
+        # as a different two-digit year or shifting the physical columns.
+        used=set()
+        for start in range(len(words)):
+            if start in used:continue
+            joined='';parts=[]
+            for stop in range(start,min(start+7,len(words))):
+                word=words[stop];token=str(word[4])
+                if not re.fullmatch(r'[0-9./-]+',token):break
+                if parts and not -0.5<=word[0]-parts[-1][2]<=2.0:break
+                joined+=token;parts.append(word)
+                if len(joined)>10:break
+                if len(parts)>1 and re.fullmatch(r'\d{1,2}[./-]\d{1,2}[./-]20\d{2}',joined):
+                    parsed=iso_date(joined)
+                    if parsed:
+                        complete.append((index,y,(parsed,min(w[0] for w in parts),max(w[2] for w in parts))))
+                        occupied.append((spans[start][0],spans[stop][1]));used.update(range(start,stop+1))
+                    break
         for match in list(DATE.finditer(text))+list(SHORT_MONTH_DATE.finditer(text)):
+            if any(a<match.end() and b>match.start() for a,b in occupied):continue
             raw=match.group();parsed=iso_date(raw)
             if parsed is None:
                 for fmt in ("%d-%b-%y","%d-%B-%y"):
@@ -131,11 +152,20 @@ def dated_headers(rows):
         yield last,rows[last][0],merged
 
 def number(words,allow_annualisation_marker=False):
-    text=row_text([w for w in words if str(w[4]) not in ("|","¦","*","†","‡")]).strip()
+    words=[w for w in words if str(w[4]) not in ("|","¦","*","†","‡")]
+    text=row_text(words).strip()
     original=text
     if allow_annualisation_marker and re.fullmatch(r"\(?-?[\d,]+(?:\.\d+)?\)?\*",text):
         text=text[:-1]
-    # Joining split decimal glyphs would invent punctuation. Keep for OCR review.
+    # A printed decimal point may be split into a separate PDF word. Preserve
+    # the original text and join only adjacent numeric glyphs within this cell;
+    # never supply a missing decimal point or join separated numbers.
+    if not CELL.fullmatch(text) and len(words)>1:
+        joined=''.join(str(w[4]) for w in words)
+        if ('.' in joined and CELL.fullmatch(joined)
+            and all(re.fullmatch(r'[0-9,().-]+',str(w[4])) for w in words)
+            and all(-0.5<=b[0]-a[2]<=2.0 for a,b in zip(words,words[1:]))):
+            text=joined
     if not CELL.fullmatch(text):raise ValueError("CORRUPT_OR_MISSING_NUMERIC_CELL:"+text[:60])
     if text.startswith("(")!=text.endswith(")"):raise ValueError("UNBALANCED_NUMERIC_CELL")
     return Decimal(text.replace(",","").replace("(","-").replace(")","")),original
