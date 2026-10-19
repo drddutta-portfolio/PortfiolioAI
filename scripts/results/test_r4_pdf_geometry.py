@@ -332,3 +332,17 @@ class RegulatoryEPS(unittest.TestCase):
         doc,p=fixture()
         p.insert_text((25,205),'Earnings per equity share Before Net Movement in Regulatory Deferral Balances',fontsize=8)
         with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+class UnitCaptionBelowDates(unittest.TestCase):
+    def test_caption_before_first_financial_row_proves_units(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,55,350,75),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((450,145),'INR crores',fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['unit'],'INR_CRORE')
+
+    def test_note_below_first_financial_row_cannot_supply_missing_unit(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,55,350,75),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,175),'INR crores',fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
