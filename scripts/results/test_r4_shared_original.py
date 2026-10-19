@@ -85,3 +85,33 @@ class RenderedIssuerIdentityTests(unittest.TestCase):
             self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
             rendered['scope']='CONSOLIDATED'
             self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
+class VisualOriginalReviewTests(unittest.TestCase):
+    def reviewed(self):
+        import fitz
+        raw,source,rows,p=sample()
+        with fitz.open(stream=raw,filetype='pdf') as pdf:
+            image=pdf[0].get_pixmap(dpi=110,alpha=False).tobytes('jpeg',jpg_quality=65)
+        facts={r['metric_code']:{'value':r['numeric_value'],'unit':r['unit']} for r in rows}
+        p['visual_reviews']={'2024-09-30':{'page':1,'dpi':110,'jpeg_quality':65,
+            'image_sha256':hashlib.sha256(image).hexdigest(),'scope':'CONSOLIDATED','facts':facts}}
+        return raw,source,rows,p
+
+    def test_independent_visual_review_reopens_exact_inspected_original_image(self):
+        raw,source,rows,p=self.reviewed()
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('CORRUPT_NATIVE_TEXT')):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+            rows[0]['numeric_value']='999'
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
+    def test_changed_page_image_cannot_reuse_a_visual_review(self):
+        raw,source,rows,p=self.reviewed()
+        p['visual_reviews']['2024-09-30']['image_sha256']='0'*64
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
+            with self.assertRaisesRegex(ValueError,'IMAGE_CHANGED'):qualify(raw,source,rows)
+
+    def test_visual_review_cannot_change_reporting_scope(self):
+        raw,source,rows,p=self.reviewed()
+        p['visual_reviews']['2024-09-30']['scope']='STANDALONE'
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
+            with self.assertRaisesRegex(ValueError,'SCOPE_MISMATCH'):qualify(raw,source,rows)
