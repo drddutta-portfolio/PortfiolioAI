@@ -28,14 +28,14 @@ def main():
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('PRIVATE_INVENTORY_HASH_MISMATCH')
                 for source in review.get('all_sources',[]):sources[source['original_sha256']]=source
             with db.cursor() as cur:
-                cur.execute("SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1') AND raw_payload->>'isin'=%s",(isin,))
+                cur.execute("SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1') AND raw_payload->>'isin'=%s",(isin,))
                 shared=cur.fetchall()
             db.rollback()
             if shared_only:sources={}
             for payload,payload_hash in shared:
                 if batch.sha(batch.canonical(payload))!=payload_hash:raise ValueError('SHARED_INVENTORY_HASH_MISMATCH')
-                digest=payload.get('sourceOriginalSHA256') or payload.get('signedOriginalSHA256')
-                key=payload.get('originalR2Key')
+                digest=payload.get('sourceOriginalSHA256') or payload.get('signedOriginalSHA256') or payload.get('sha256')
+                key=payload.get('originalR2Key') or payload.get('r2OriginalKey')
                 if not digest or not key or not re.fullmatch(r'[0-9a-f]{64}',digest) or not key.startswith(batch.PREFIX):continue
                 sources[digest]={'original_sha256':digest,'original_r2_key':key,'source_url':payload.get('sourceUrl'),'shared_review':True}
             if shared_only and not sources:continue
