@@ -36,7 +36,16 @@ PROFILES={
    'eps_basis':'AFTER_NET_MOVEMENT_IN_REGULATORY_DEFERRAL_BALANCES',
    'facts':{'OPERATING_REVENUE_QUARTER':{'value':'15697.67','unit':'INR_CRORE'},
             'NET_PROFIT_QUARTER':{'value':'1093.08','unit':'INR_CRORE'},
-            'EPS_DILUTED':{'value':'2.90','unit':'INR_PER_SHARE'}}}}},
+            'EPS_DILUTED':{'value':'2.90','unit':'INR_PER_SHARE'}}},
+   '2024-12-31':{
+   'page':8,'dpi':110,'jpeg_quality':65,
+   'image_sha256':'b6f28e9ae9107fd55039899a1467e5c39e51fad7878497705df6c6da3e7c807c',
+   'scope':'CONSOLIDATED','unit':'INR_CRORE',
+   'quarter_group':'Quarter ended','column':'31-Dec-24',
+   'eps_basis':'AFTER_NET_MOVEMENT_IN_REGULATORY_DEFERRAL_BALANCES',
+   'facts':{'OPERATING_REVENUE_QUARTER':{'value':'15391.06','unit':'INR_CRORE'},
+            'NET_PROFIT_QUARTER':{'value':'1187.54','unit':'INR_CRORE'},
+            'EPS_DILUTED':{'value':'3.22','unit':'INR_PER_SHARE'}}}}},
  'R5_SIGNED_SSWL_2024_ORIGINAL_COMPARATIVE_V1':{
   'symbol':'SSWL','isin':'INE802C01033','legal':'STEEL STRIPS WHEELS LIMITED',
   'identity_marker':'L27107PB1985PLC006159','ocr_page':3,
