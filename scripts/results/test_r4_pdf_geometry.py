@@ -310,7 +310,6 @@ class NumericFootnoteTest(unittest.TestCase):
         for tokens in [('12','34'),('*',),('1.2','3')]:
             with self.assertRaises(ValueError):number([(i*20,1,i*20+10,10,x) for i,x in enumerate(tokens)])
 
-if __name__=="__main__":unittest.main()
 
 class RegulatoryEPS(unittest.TestCase):
     def test_explicit_before_after_regulatory_subgroups_select_after(self):
@@ -356,3 +355,5 @@ class ParenthesizedLossLabel(unittest.TestCase):
     def test_component_parenthesized_loss_cannot_supply_total_pat(self):
         doc,p=fixture(label='9 Profit(Loss) for the period from discontinued operations')
         with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+if __name__=='__main__':unittest.main()
