@@ -47,7 +47,7 @@ def main():
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('PRIVATE_INVENTORY_HASH_MISMATCH')
                 for source in review.get('all_sources',[]):sources[source['original_sha256']]=source
             with db.cursor() as cur:
-                cur.execute("SELECT raw_payload,payload_hash,id,source_url FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1') AND raw_payload->>'isin'=%s",(isin,))
+                cur.execute("SELECT raw_payload,payload_hash,id,source_url FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_JASH_SIGNED_DEC2024_COMPARATIVE_V1') AND raw_payload->>'isin'=%s",(isin,))
                 shared=cur.fetchall()
             db.rollback()
             if shared_only:sources={}
