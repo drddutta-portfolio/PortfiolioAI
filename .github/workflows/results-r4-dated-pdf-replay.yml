@@ -84,3 +84,5 @@ jobs:
           print(json.dumps({k:a[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
       # Originals, table cells, proofs and issuer rejection traces remain private.
+
+# Resume the full cohort with repaired unit captions and printed Profit(Loss) labels; cached originals remain immutable.
