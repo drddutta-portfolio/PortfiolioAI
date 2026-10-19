@@ -1,4 +1,5 @@
 name: Results R5 SSWL 2024 Signed Consolidated Original Table Audit
+# R5 43-case continuation: rerun pinned issuer-source audit prior to approving values
 on:
   workflow_dispatch:
   push:
