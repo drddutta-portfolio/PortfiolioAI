@@ -25,7 +25,18 @@ PROFILES={
   'originals':{
    '2024-09-30':('d04f36345f5ee6d94a19ba99385bf30a5937e5d37f862c019903681c4ba1c4bc','https://www.tatapower.com/company-financials/quarterly-reports/fy2024---2025/consolidated-and-standalone-financial-results-for-the-quarter-and-half-year-ended-30th-september-2024.pdf'),
    '2024-12-31':('eadab3f13b927c614814c1cb2ee4b4f9e0b13fe73268f0646cc6a9efc420bc33','https://www.tatapower.com/company-financials/quarterly-reports/fy2024---2025/consolidated-and-standalone-financial-results-for-the-quarter-and-nine-months-ended-31st-december-2024.pdf')},
-  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False,'ocr_page':8},
+  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False,'ocr_page':8,
+  # Independent visual review of the original page, 19-Oct-2026. This is
+  # an image-pinned human review, never a claim of successful OCR.
+  'visual_reviews':{'2024-09-30':{
+   'page':8,'dpi':110,'jpeg_quality':65,
+   'image_sha256':'6672443c954eab3071a48c4f3f10b2a1aedd69256a8bb686e8ecb712bc1f597f',
+   'scope':'CONSOLIDATED','unit':'INR_CRORE',
+   'quarter_group':'Quarter ended','column':'30-Sep-24',
+   'eps_basis':'AFTER_NET_MOVEMENT_IN_REGULATORY_DEFERRAL_BALANCES',
+   'facts':{'OPERATING_REVENUE_QUARTER':{'value':'15697.67','unit':'INR_CRORE'},
+            'NET_PROFIT_QUARTER':{'value':'1093.08','unit':'INR_CRORE'},
+            'EPS_DILUTED':{'value':'2.90','unit':'INR_PER_SHARE'}}}}},
  'R5_SIGNED_SSWL_2024_ORIGINAL_COMPARATIVE_V1':{
   'symbol':'SSWL','isin':'INE802C01033','legal':'STEEL STRIPS WHEELS LIMITED',
   'identity_marker':'L27107PB1985PLC006159','ocr_page':3,
@@ -65,6 +76,18 @@ def rendered_facts(raw,page_no,period):
         return parsed
     raise ValueError('SHARED_ORIGINAL_APPROVED_RENDER_MODES_UNPROVEN')
 
+def reviewed_original_facts(pdf,review,period):
+    """Reopen exactly the independently inspected signed statement image.
+
+    Exact PDF SHA is checked by the caller. The full original-page image must
+    also reproduce the independently viewed image byte for byte. Date, scope,
+    crore units and the after-regulatory EPS row were visually inspected.
+    """
+    if not 1<=review['page']<=len(pdf):raise ValueError('VISUAL_REVIEW_PAGE_UNPROVEN')
+    preview=pdf[review['page']-1].get_pixmap(dpi=review['dpi'],alpha=False).tobytes('jpeg',jpg_quality=review['jpeg_quality'])
+    if hashlib.sha256(preview).hexdigest()!=review['image_sha256']:raise ValueError('VISUAL_REVIEW_IMAGE_CHANGED')
+    return {'scope':review['scope'],'first_column_period':period,'facts':review['facts']}
+
 def qualify(raw,source,observations):
     profile,digest,_=context(source)
     if not raw.startswith(b'%PDF') or hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('SHARED_ORIGINAL_HASH_MISMATCH')
@@ -93,6 +116,7 @@ def qualify(raw,source,observations):
             required={'NET_INTEREST_INCOME_QUARTER' if profile['bank'] else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
             if len(rows)!=3 or {r['metric_code'] for r in rows}!=required:continue
             vectors=[]
+            visual_review=profile.get('visual_reviews',{}).get(period)
             for i,page in enumerate(pdf):
                 try:parsed=extract_page(page,i+1,period,bank=profile['bank'],allow_comparative=True)
                 except ValueError:continue
@@ -106,6 +130,10 @@ def qualify(raw,source,observations):
                     if rendered['scope']==profile.get('scope','CONSOLIDATED') and (rendered['first_column_period']==period or not re.search(r'\\b(?:restated|recast)\\b',text,re.I)):
                         vectors.append(rendered['facts'])
                 except ValueError:pass
+            if visual_review:
+                reviewed=reviewed_original_facts(pdf,visual_review,period)
+                if reviewed['scope']!=profile.get('scope','CONSOLIDATED'):raise ValueError('VISUAL_REVIEW_SCOPE_MISMATCH')
+                vectors=[reviewed['facts']]
             distinct={tuple(sorted((k,v['value'],v['unit']) for k,v in facts.items())) for facts in vectors}
             if len(distinct)!=1:continue
             facts=vectors[0]
