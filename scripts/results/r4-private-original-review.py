@@ -7,6 +7,25 @@ import psycopg, fitz
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
+
+def rendered_review_words(raw,source,client):
+    from r4_shared_original import context
+    from r4_ocr_dated_geometry import render_page
+    profile,digest,_=context(source)
+    page_no=profile.get('ocr_page')
+    if page_no is None:return []
+    reviews=[]
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        if len(pdf)>40 or not 1<=page_no<=len(pdf):raise ValueError('PRIVATE_RENDER_PAGE_BOUND')
+        for dpi in (300,450):
+            page=render_page(pdf[page_no-1],dpi,6)
+            native=batch.canonical({'contract':'PRIVATE_RENDERED_PAGE_WORDS_V1','original_sha256':digest,'page':page_no,'dpi':dpi,'segmentation_mode':6,'words':page.get_text('words')})
+            envelope=batch.canonical({'encoding':'ZLIB_BASE64','sha256':batch.sha(native),'data':base64.b64encode(zlib.compress(native)).decode('ascii')})
+            key=batch.PREFIX+'private-original-review/sha256='+digest+'/page='+str(page_no)+'/ocr-review/sha256='+batch.sha(envelope)+'/words.json'
+            batch.immutable_put(client,key,envelope)
+            reviews.append({'dpi':dpi,'page':page_no,'r2_key':key,'sha256':batch.sha(envelope)})
+    return reviews
+
 def main():
     url=os.environ['SUPABASE_DB_URL']
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:
@@ -57,6 +76,8 @@ def main():
                         except Exception as error:
                             db.rollback()
                             outcome['shared_replay_rejection']=str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__
+                            try:outcome['rendered_review_pages']=rendered_review_words(raw,source['shared_source'],client)
+                            except Exception as diagnostic_error:outcome['rendered_review_rejection']=type(diagnostic_error).__name__
                     encoded=batch.canonical({'contract':'PRIVATE_ORIGINAL_REVIEW_TRANSPORT_V1','original_sha256':digest,'original_base64':base64.b64encode(raw).decode('ascii')})
                     key=batch.PREFIX+'private-original-review/sha256='+digest+'/original.json'
                     batch.immutable_put(client,key,encoded)
