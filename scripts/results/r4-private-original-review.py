@@ -28,16 +28,16 @@ def main():
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('PRIVATE_INVENTORY_HASH_MISMATCH')
                 for source in review.get('all_sources',[]):sources[source['original_sha256']]=source
             with db.cursor() as cur:
-                cur.execute("SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1') AND raw_payload->>'isin'=%s",(isin,))
+                cur.execute("SELECT raw_payload,payload_hash,id,source_url FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1') AND raw_payload->>'isin'=%s",(isin,))
                 shared=cur.fetchall()
             db.rollback()
             if shared_only:sources={}
-            for payload,payload_hash in shared:
+            for payload,payload_hash,source_id,source_url in shared:
                 if batch.sha(batch.canonical(payload))!=payload_hash:raise ValueError('SHARED_INVENTORY_HASH_MISMATCH')
                 digest=payload.get('sourceOriginalSHA256') or payload.get('signedOriginalSHA256') or payload.get('sha256')
                 key=payload.get('originalR2Key') or payload.get('r2OriginalKey')
                 if not digest or not key or not re.fullmatch(r'[0-9a-f]{64}',digest) or not key.startswith(batch.PREFIX):continue
-                sources[digest]={'original_sha256':digest,'original_r2_key':key,'source_url':payload.get('sourceUrl'),'shared_review':True}
+                sources[digest]={'original_sha256':digest,'original_r2_key':key,'source_url':payload.get('sourceUrl'),'shared_review':True,'shared_source':{'source_record_id':str(source_id),'source_url':source_url,'payload_hash':payload_hash,'raw_payload':payload}}
             if shared_only and not sources:continue
             for digest,source in sources.items():
                 outcome={'original_sha256':digest,'source_url':source['source_url']}
@@ -45,6 +45,18 @@ def main():
                     raw=client.get_object(Bucket=batch.BUCKET,Key=source['original_r2_key'])['Body'].read()
                     if batch.sha(raw)!=digest or not raw.startswith(b'%PDF'):raise ValueError('ORIGINAL_HASH_MISMATCH')
                     if len(raw)>32_000_000:raise ValueError('ORIGINAL_REVIEW_SIZE_BOUND')
+                    if source.get('shared_source'):
+                        try:
+                            from r4_shared_original import qualify
+                            with db.cursor() as cur:
+                                cur.execute("SELECT o.id,o.source_record_id,o.period_start,o.period_end,o.currency,o.consolidation_scope,o.evidence_status,o.metric_code,o.numeric_value,o.unit,s.symbol,s.isin FROM fundamental_observations o JOIN securities s ON s.id=o.security_id WHERE o.source_record_id=%s AND o.period_type='QUARTER' AND o.metric_code IN ('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED')",(source['shared_source']['source_record_id'],))
+                                observations=[dict(zip([c.name for c in cur.description],r)) for r in cur.fetchall()]
+                            db.rollback()
+                            outcome['shared_replay']=qualify(raw,source['shared_source'],observations)
+                            counts['independently_replayed_facts']+=len(outcome['shared_replay']['eligible_observation_ids'])
+                        except Exception as error:
+                            db.rollback()
+                            outcome['shared_replay_rejection']=str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__
                     encoded=batch.canonical({'contract':'PRIVATE_ORIGINAL_REVIEW_TRANSPORT_V1','original_sha256':digest,'original_base64':base64.b64encode(raw).decode('ascii')})
                     key=batch.PREFIX+'private-original-review/sha256='+digest+'/original.json'
                     batch.immutable_put(client,key,encoded)
