@@ -15,6 +15,11 @@ def task_id(security,tool,period,args):
     body=json.dumps([str(security),tool,period,args],sort_keys=True,separators=(",",":"))
     return hashlib.sha256(body.encode()).hexdigest()
 
+
+def native_shard_for(security,shards=1):
+    if not 1<=shards<=16:raise ValueError("INVALID_NATIVE_SHARD_COUNT")
+    return int(task_id(security,"NATIVE_DATED_ORIGINAL",None,{}),16)%shards
+
 def attempt_all(items,process,on_error,on_result):
     """A failed item is checkpointed before proceeding to the next item."""
     for item in items:
