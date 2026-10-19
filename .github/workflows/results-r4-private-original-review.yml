@@ -39,3 +39,5 @@ jobs:
 # Review all remaining issuers in four independent shards; private originals and coordinates only.
 
 # Include private original-page previews for visual confirmation of source extraction defects.
+
+# Refresh the private review corpus with newly retained signed issuer originals.
