@@ -19,6 +19,24 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def wrapped_bank_eps(self,gap=12):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        p.add_redact_annot(fitz.Rect(20,205,900,225),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,220),'(b) Diluted EPS (before and after extraordinary',fontsize=10)
+        p.insert_text((25,220+gap),'items)',fontsize=10)
+        for x,value in ((475,'7.43'),(625,'37.81'),(775,'11.88')):p.insert_text((x,220+gap),value,fontsize=10)
+        return doc,p
+
+    def test_wrapped_bank_eps_keeps_explicit_row_label_and_cells(self):
+        doc,p=self.wrapped_bank_eps()
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'11.88')
+        self.assertIn('Diluted EPS',out['facts']['EPS_DILUTED']['evidence_line'])
+
+    def test_distant_eps_heading_cannot_label_unrelated_items(self):
+        doc,p=self.wrapped_bank_eps(gap=30)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def test_split_numeric_date_keeps_first_physical_quarter(self):
         from r4_pdf_geometry import dated_headers
         def w(x,t):return (x,10,x+len(t)*2,12,t)
