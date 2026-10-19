@@ -58,9 +58,12 @@ def context(source):
 def rendered_facts(raw,page_no,period):
     """Two independent renders must prove the same dated core cells."""
     from r4_ocr_dated_geometry import extract_dated_page
-    parsed,checks=extract_dated_page(raw,page_no,period,render_dpi=(300,450),segmentation_mode=6)
-    parsed['_rendered_issuer_texts']=[checks['issuer_text_first'],checks['issuer_text_second']]
-    return parsed
+    for mode in (6,3,11):
+        try:parsed,checks=extract_dated_page(raw,page_no,period,render_dpi=(300,450),segmentation_mode=mode)
+        except ValueError:continue
+        parsed['_rendered_issuer_texts']=[checks['issuer_text_first'],checks['issuer_text_second']]
+        return parsed
+    raise ValueError('SHARED_ORIGINAL_APPROVED_RENDER_MODES_UNPROVEN')
 
 def qualify(raw,source,observations):
     profile,digest,_=context(source)
