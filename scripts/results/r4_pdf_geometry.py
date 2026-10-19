@@ -252,10 +252,17 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         scope=next(iter(scopes))
         if scope_hint is not None and scope!=scope_hint:continue
         units=[]
+        unit_rows=rows[:header_index]
+        if allow_comparative:
+            # A unit caption may sit below the dates but above the first amount.
+            # Stop at the first financial row; never borrow a unit from a note.
+            for yy,ws in rows[header_index:]:
+                if yy-y>35 or re.match(revenue_pattern,clean_label(row_text(ws)),re.I):break
+                unit_rows=unit_rows+[(yy,ws)]
         for regex,unit,divisor in [(r"\b(?:LAKHS?|LACS?)\b","INR_LAKH",100),
                                     (r"\bMILLIONS?\b","INR_MILLION",10),
                                     (r"\bCRORES?\b","INR_CRORE",1)]:
-            unit_header=(" ".join(row_text(ws) for yy,ws in rows[:header_index] if y-yy<180).upper() if allow_comparative else upper)
+            unit_header=(" ".join(row_text(ws) for yy,ws in unit_rows if y-yy<180).upper() if allow_comparative else upper)
             if re.search(regex,unit_header):units.append((unit,Decimal(divisor)))
         if allow_comparative and not units and re.search(r"\b(?:INR|Rs[.,]?)\s+(?:in\s+)?Mn\b",unit_header,re.I):
             units.append(("INR_MILLION",Decimal(10)))
