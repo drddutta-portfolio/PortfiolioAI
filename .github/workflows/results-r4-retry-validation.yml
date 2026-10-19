@@ -76,3 +76,4 @@ jobs:
 # Recheck explicit total tax with unavailable auxiliary adjustments and exact multi-quarter source notes.
 # Replay all remaining quarters after preserving physically split printed dates and decimals.
 # Independently verify existing issuer-original observations before canonical R4 selection.
+# Verify exact wrapped bank EPS labels alongside preserved date and decimal glyphs.
