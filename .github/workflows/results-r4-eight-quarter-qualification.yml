@@ -53,6 +53,8 @@ jobs:
         run: |
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
+          python -m unittest discover -s scripts/results -p test_r4_pdf_geometry.py -v
+          python -m unittest discover -s scripts/results -p test_r4_shared_original.py -v
       - name: Replay retained originals for every remaining historical slot
         env:
           RESULTS_R4_DATED_PDF_ACK: EXPLICIT_QUARTER_ORIGINAL_REPLAY
@@ -81,14 +83,4 @@ jobs:
               "potential_yoy_pairs_not_final_comparability","status_counts","status")}
           print(json.dumps(summary,sort_keys=True))
           PY
-      - name: Retain R4 exceptions and protected source evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-r4-eight-quarter-dev-evidence
-          path: |
-            tmp/results-r4/eight-quarter-readback.json
-            tmp/results-r4/eight-quarter-source-verification.log
-            tmp/results-r4/readback.json
-          retention-days: 21
-          if-no-files-found: warn
+      # Financial readbacks and source traces stay in private Development storage.
