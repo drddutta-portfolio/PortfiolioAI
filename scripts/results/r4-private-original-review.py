@@ -14,6 +14,7 @@ def main():
     client=batch.r2_client();counts=Counter();index=[]
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
+        shared_only=os.getenv('RESULTS_R4_REVIEW_SHARED_ONLY')=='1'
         shard=int(os.getenv('RESULTS_R4_REVIEW_SHARD','0'))
         if shard not in range(4):raise RuntimeError('INVALID_REVIEW_SHARD')
         for symbol,isin,sid,_name,periods in cohort:
@@ -26,6 +27,18 @@ def main():
             for review,digest in reviews:
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('PRIVATE_INVENTORY_HASH_MISMATCH')
                 for source in review.get('all_sources',[]):sources[source['original_sha256']]=source
+            with db.cursor() as cur:
+                cur.execute("SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind IN ('RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1') AND raw_payload->>'isin'=%s",(isin,))
+                shared=cur.fetchall()
+            db.rollback()
+            if shared_only:sources={}
+            for payload,payload_hash in shared:
+                if batch.sha(batch.canonical(payload))!=payload_hash:raise ValueError('SHARED_INVENTORY_HASH_MISMATCH')
+                digest=payload.get('sourceOriginalSHA256') or payload.get('signedOriginalSHA256')
+                key=payload.get('originalR2Key')
+                if not digest or not key or not re.fullmatch(r'[0-9a-f]{64}',digest) or not key.startswith(batch.PREFIX):continue
+                sources[digest]={'original_sha256':digest,'original_r2_key':key,'source_url':payload.get('sourceUrl'),'shared_review':True}
+            if shared_only and not sources:continue
             for digest,source in sources.items():
                 outcome={'original_sha256':digest,'source_url':source['source_url']}
                 try:
@@ -39,7 +52,7 @@ def main():
                     with fitz.open(stream=raw,filetype='pdf') as pdf:
                         for page_no in range(min(len(pdf),40)):
                             page=pdf[page_no];text=page.get_text('text')
-                            if not re.search(r'diluted',text,re.I) or not re.search(r'revenue|interest earned|premium',text,re.I):continue
+                            if not source.get('shared_review') and (not re.search(r'diluted',text,re.I) or not re.search(r'revenue|interest earned|premium',text,re.I)):continue
                             native=batch.canonical({'contract':'PRIVATE_ORIGINAL_PAGE_WORDS_V1','original_sha256':digest,'page':page_no+1,'width':page.rect.width,'height':page.rect.height,'words':page.get_text('words')})
                             page_key=batch.PREFIX+'private-original-review/sha256='+digest+'/page='+str(page_no+1)+'/words.json'
                             page_data=batch.canonical({'encoding':'ZLIB_BASE64','sha256':batch.sha(native),'data':base64.b64encode(zlib.compress(native)).decode('ascii')})
