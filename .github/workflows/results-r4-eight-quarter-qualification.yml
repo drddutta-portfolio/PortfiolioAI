@@ -55,10 +55,6 @@ jobs:
           python scripts/results/test_r4_eight_quarter_readback.py -v
           python -m unittest discover -s scripts/results -p test_r4_pdf_geometry.py -v
           python -m unittest discover -s scripts/results -p test_r4_shared_original.py -v
-      - name: Replay retained originals for every remaining historical slot
-        env:
-          RESULTS_R4_DATED_PDF_ACK: EXPLICIT_QUARTER_ORIGINAL_REPLAY
-        run: python scripts/results/r4-bse-dated-quarter-promote.py
       - name: Verify immutable Development R2 source evidence across eight quarters
         env:
           RESULTS_R4_EIGHT_QUARTER_SELECTION: "1"
@@ -84,3 +80,4 @@ jobs:
           print(json.dumps(summary,sort_keys=True))
           PY
       # Financial readbacks and source traces stay in private Development storage.
+      # Acquisition runs in the four-worker replay workflow; this job only independently qualifies sources.
