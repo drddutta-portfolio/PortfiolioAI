@@ -3,6 +3,7 @@ import pinnedProof from "./resultsR5ComparisonProof.json"
 import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
 import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
 import sswlOriginal from "./resultsR5SSWLOriginalComparisonProof.json"
+import jashOriginal from "./resultsR5JASHOriginalComparisonProof.json"
 import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -63,6 +64,20 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
    expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
    for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
+ })
+ it("requires two source-hash-locked 2024 JASH consolidated historical trios and no R4 overwrite",()=>{
+   expect(jashOriginal.contract).toBe("R5_JASH_SIGNED_2024_COMPARATIVE_ORIGINAL_V1")
+   expect(jashOriginal.environment).toBe("Development")
+   expect(jashOriginal.originalSHA256).toBe("74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148")
+   expect(jashOriginal.approvedSources).toHaveLength(2)
+   expect(jashOriginal.approvedSources.map(x=>x.periodEnd).sort()).toEqual(["2024-09-30","2024-12-31"])
+   expect(new Set(jashOriginal.approvedSources.map(x=>x.sourceRecordId)).size).toBe(1)
+   for(const x of jashOriginal.approvedSources){
+      expect(x.symbol).toBe("JASH")
+      expect(x.scope).toBe("CONSOLIDATED")
+      expect(x.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+      expect(Object.keys(x.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
+   }
  })
  it("requires two signed SSWL original comparable 2024 consolidated quarters and no R4 mutation",()=>{
    expect(sswlOriginal.contract).toBe("R5_SSWL_SIGNED_2024_COMPARATIVE_ORIGINAL_V1")
