@@ -4,12 +4,26 @@ import unittest
 import re
 import time
 
-from r4_recovery_queue import run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed,observe_completed
+from r4_recovery_queue import native_shard_for,run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed,observe_completed
 
 spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("r4-recovery-monitor.py"))
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_native_partition_covers_every_security_once(self):
+        securities=[str(i) for i in range(262)]
+        groups=[{s for s in securities if native_shard_for(s,4)==n} for n in range(4)]
+        self.assertEqual(set.union(*groups),set(securities))
+        self.assertEqual(sum(map(len,groups)),262)
+        self.assertTrue(all(groups))
+        for i,one in enumerate(groups):
+            for two in groups[i+1:]:self.assertFalse(one&two)
+
+    def test_legacy_unsharded_native_call_and_invalid_counts(self):
+        self.assertEqual(native_shard_for("issuer",1),0)
+        for invalid in (0,-1,17):
+            with self.assertRaises(ValueError):native_shard_for("issuer",invalid)
+
     def test_partial_provider_pass_retries_without_waiting_a_day(self):
         state={};source=SOURCES[-1];dispatched(state,source,100)
         observe_completed(state,source,{"id":1,"conclusion":"failure"},200)
