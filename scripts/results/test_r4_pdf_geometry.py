@@ -311,3 +311,24 @@ class NumericFootnoteTest(unittest.TestCase):
             with self.assertRaises(ValueError):number([(i*20,1,i*20+10,10,x) for i,x in enumerate(tokens)])
 
 if __name__=="__main__":unittest.main()
+
+class RegulatoryEPS(unittest.TestCase):
+    def test_explicit_before_after_regulatory_subgroups_select_after(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,205,900,230),fill=(1,1,1));p.apply_redactions()
+        for y,label,values in [
+            (220,'Earnings per equity share',None),
+            (240,'(i) Before Net Movement in Regulatory Deferral Balances',None),
+            (260,'Diluted',['3.68','3.89','2.93']),
+            (280,'(ii) After Net Movement in Regulatory Deferral Balances',None),
+            (300,'Diluted',['2.90','3.03','2.74'])]:
+            p.insert_text((25,y),label,fontsize=10)
+            if values:
+                for i,v in enumerate(values):p.insert_text((475+i*150,y),v,fontsize=10)
+        parsed=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'2.90')
+
+    def test_before_regulatory_alone_cannot_supply_total_eps(self):
+        doc,p=fixture()
+        p.insert_text((25,205),'Earnings per equity share Before Net Movement in Regulatory Deferral Balances',fontsize=8)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
