@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import pinnedProof from "./resultsR5ComparisonProof.json"
 import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
 import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
+import sswlOriginal from "./resultsR5SSWLOriginalComparisonProof.json"
 import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -62,6 +63,20 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
    expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
    for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
+ })
+ it("requires two signed SSWL original comparable 2024 consolidated quarters and no R4 mutation",()=>{
+   expect(sswlOriginal.contract).toBe("R5_SSWL_SIGNED_2024_COMPARATIVE_ORIGINAL_V1")
+   expect(sswlOriginal.environment).toBe("Development")
+   expect(sswlOriginal.originalSHA256).toBe("558de3ec82d9c0a11a3f0e6be14e50ca21629ed7c53fc68f04e1e156439a0df9")
+   expect(sswlOriginal.approvedSources).toHaveLength(2)
+   expect(sswlOriginal.approvedSources.map(s=>s.periodEnd).sort()).toEqual(["2024-09-30","2024-12-31"])
+   expect(new Set(sswlOriginal.approvedSources.map(s=>s.sourceRecordId)).size).toBe(1)
+   for(const source of sswlOriginal.approvedSources){
+     expect(source.symbol).toBe("SSWL")
+     expect(source.scope).toBe("CONSOLIDATED")
+     expect(source.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+     expect(Object.keys(source.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
+   }
  })
  it("pins two independently source-reviewed Tata Power consolidated 2024 trios without replacing R4",()=>{
    expect(tataOriginal.contract).toBe("R5_TATAPOWER_SIGNED_ISSUER_2024_CONSOLIDATED_V1")
