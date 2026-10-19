@@ -265,6 +265,19 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         table_rows=rows[header_index+1:]
         for row_index,(yy,ws) in enumerate(table_rows):
             label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)]))
+            preceding_evidence=''
+            # Some bank statements place the figures on the second line of
+            # "Diluted EPS (before and after extraordinary / items)". Require
+            # that exact continuation, a nearby label-only preceding line,
+            # and no intervening financial cell before associating the label.
+            if allow_comparative and row_index and re.fullmatch(r'items[.)]*',label,re.I):
+                previous_y,previous_words=table_rows[row_index-1]
+                previous_label=clean_label(row_text([w for w in previous_words if (w[0]+w[2])/2<first_left]))
+                if (2.5<yy-previous_y<=16 and re.match(r'^diluted\s+eps\b',previous_label,re.I)
+                    and re.search(r'before\s+and\s+after\s+extraordinary',previous_label,re.I)
+                    and not any((w[0]+w[2])/2>=first_left for w in previous_words)):
+                    label=previous_label+' '+label
+                    preceding_evidence=row_text(previous_words)+' || '
             if not label:continue
             if allow_comparative:
                 if re.search(r"\bearnings?\s+per\s+(?:equity\s+)?share\b",label,re.I):
@@ -318,7 +331,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             fact={"value":str(value if metric=="EPS_DILUTED" else value/divisor),
                 "unit":"INR_PER_SHARE" if metric=="EPS_DILUTED" else "INR_CRORE",
                 "original_unit":"INR_PER_SHARE" if metric=="EPS_DILUTED" else unit,
-                "original_value":original,"evidence_line":row_text(ws)[:800],
+                "original_value":original,"evidence_line":(preceding_evidence+row_text(ws))[:800],
                 "page":page_no,"column_index":column,"column_bounds":[left,right],
                 "row_y":yy,"column_period":period,"extraction_method":"PDF_WORD_COORDINATES_V3"}
             if metric in found and found[metric]["value"]!=fact["value"]:
