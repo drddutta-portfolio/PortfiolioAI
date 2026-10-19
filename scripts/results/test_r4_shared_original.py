@@ -121,3 +121,22 @@ class ReviewedImageReplayEfficiency(VisualOriginalReviewTests):
         raw,source,rows,p=self.reviewed();p['ocr_page']=1
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('UNNECESSARY_OCR')):
             self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+
+class ReviewedIssuerImageIdentity(VisualOriginalReviewTests):
+    def test_inspected_exact_issuer_page_can_prove_image_backed_legal_identity(self):
+        raw,source,rows,p=self.reviewed();p['ocr_page']=1
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.exact_legal_identity',return_value=False),patch('r4_shared_original.extract_page',side_effect=ValueError('IMAGE_BACKED')),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('UNNECESSARY_OCR')):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+
+    def test_restated_comparative_stays_excluded_before_ocr(self):
+        import fitz
+        raw,source,rows,p=sample();p['ocr_page']=1
+        with fitz.open(stream=raw,filetype='pdf') as pdf:
+            pdf[0].insert_text((25,340),'Previous period figures have been restated',fontsize=10)
+            raw=pdf.tobytes()
+        digest=hashlib.sha256(raw).hexdigest()
+        p['originals']={'2024-12-31':(digest,source['source_url'])}
+        source['raw_payload']['sourceOriginalSHA256']=digest
+        source['payload_hash']=hashlib.sha256(json.dumps(source['raw_payload'],separators=(',',':'),sort_keys=True).encode()).hexdigest()
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('RESTATED_COMPARATIVE_MUST_STAY_EXCLUDED')):
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
