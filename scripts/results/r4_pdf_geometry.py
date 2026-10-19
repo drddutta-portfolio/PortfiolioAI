@@ -288,6 +288,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                         following_label=clean_label(row_text([w for w in following if (w[0]+w[2])/2<first_left]))
                         if re.match(r"^(?:basic|diluted)\b",following_label,re.I) or re.search(r"earnings?\s+per",following_label,re.I):break
                         eps_context+=" "+following_label
+                elif eps_context and re.match(r"^(?:\(?[ivx]+\)?[.)]?\s*)?(?:before|after)\s+net\s+movement\s+in\s+regulatory\s+deferral\s+balances\b",label,re.I):
+                    eps_context=label;eps_group_started=False
                 elif eps_context and eps_group_started and re.match(r"^(?:[a-c]\s*[.)]\s*)?(?:from\s+|for\s+)?(?:continuing|discontinued)\b",label,re.I):
                     eps_context=label;eps_group_started=False
                 if re.match(r"^(?:basic|diluted)\b",label,re.I):eps_group_started=True
@@ -311,7 +313,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             component=bool(re.search(r"\bcontinuing\b",context,re.I)) != bool(re.search(r"\bdiscontinued\b",context,re.I))
             if allow_comparative and metric in ("NET_PROFIT_QUARTER","PROFIT_BEFORE_TAX","TAX_EXPENSE","CURRENT_TAX","DEFERRED_TAX","TAX_EARLIER_YEARS","EPS_DILUTED") and component:continue
             if allow_comparative and metric=="NET_PROFIT_QUARTER" and re.search(r"attributable|owners|non[ -]?controlling|before\s+tax",label,re.I):continue
-            if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary",context,re.I):continue
+            if allow_comparative and metric=="EPS_DILUTED" and re.search(r"adjusted|cash|normali[sz]ed|before extraordinary|before\s+net\s+movement\s+in\s+regulatory\s+deferral",context,re.I):continue
             cell=[w for w in ws if left<=(w[0]+w[2])/2<right]
             if not cell:continue # A heading without a same-row financial cell.
             if allow_comparative and metric in ('CURRENT_TAX','DEFERRED_TAX','TAX_EARLIER_YEARS') and row_text(cell).strip() in ('-','—','–'):
