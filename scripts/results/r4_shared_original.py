@@ -65,7 +65,19 @@ PROFILES={
   'symbol':'GMBREW','isin':'INE075D01018','legal':'G M BREWERIES LIMITED',
   'identity_marker':'L15500MH1981PLC025809','ocr_page':3,'scope':'STANDALONE',
   'originals':{'2025-03-31':('a44eb86f04bf11939963e6d3325feb6b0f5045b6c9846bc4ea49495bce941ca3','https://gmbreweries.com/images/4th%20Quarterly%20Financial%20Statement%2024-25.pdf')},
-  'periods':{'2025-03-31':'2025-01-01'},'bank':False},
+  'periods':{'2025-03-31':'2025-01-01'},'bank':False,
+  'required_cover_scope':'audited standalone financial results',
+  # Quarter values, lakh caption, Basic & Diluted EPS and issuer identity
+  # inspected on the signed original; standalone scope is explicit on cover p1.
+  'visual_reviews':{'2025-03-31':{
+   'page':3,'dpi':110,'jpeg_quality':65,
+   'image_sha256':'23f0b18ff23c8eb1a069dbd36ad7410e6e46e15ccfc0c0e3150d772989fae8b1',
+   'scope':'STANDALONE','unit':'INR_LAKH',
+   'quarter_group':'Quarter Ended','column':'31.03.2025',
+   'issuer_reported_balancing_quarter_note':6,
+   'facts':{'OPERATING_REVENUE_QUARTER':{'value':'663.13','unit':'INR_CRORE'},
+            'NET_PROFIT_QUARTER':{'value':'60.46','unit':'INR_CRORE'},
+            'EPS_DILUTED':{'value':'26.47','unit':'INR_PER_SHARE'}}}}},
 
 }
 
@@ -122,6 +134,7 @@ def qualify(raw,source,observations):
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         if len(pdf)>40:raise ValueError('SHARED_ORIGINAL_PAGE_BOUND')
         cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
+        if profile.get('required_cover_scope') and profile['required_cover_scope'] not in re.sub(r'\s+',' ',cover).casefold():raise ValueError('SHARED_ORIGINAL_COVER_SCOPE_UNPROVEN')
         identity_ok=exact_legal_identity(profile['legal'],cover) and profile['identity_marker'] in cover
         if not identity_ok:
             for reviewed_period,review in profile.get('visual_reviews',{}).items():
