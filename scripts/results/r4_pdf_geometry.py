@@ -312,7 +312,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
             elif allow_comparative and re.match(r"^tax\s+(?:relating to|in respect of)\s+earlier\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
-            elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?)?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
+            elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?|\s*\(loss\))?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
             if not metric:continue
