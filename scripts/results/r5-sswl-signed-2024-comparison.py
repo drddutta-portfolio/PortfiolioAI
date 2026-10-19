@@ -86,8 +86,10 @@ def main():
   # The signed, visually reviewed page has OCR-fragmented text glyphs;
   # do not claim that text search independently proves the financial numbers.
   # Exact SHA256 locks the bytes to the inspected issuer original.
-  if len(signed)<100 or not any(label in signed for label in ("STEEL STRIPS","CONSOLIDATED","WHEELS")):
-   raise RuntimeError("SSWL_PINNED_SIGNED_PAGE_NOT_RECOGNIZABLE")
+  # This signed page has non-extractable text (image-backed statement).
+  # The EXACT immutable SHA-256, seven-page count, approved original URL,
+  # independent visual review and verified row/column amounts are the
+  # proof. Text extraction is NOT used as identity or numeric evidence.
   root="portfolioai-results/development/v1/quarterly/security_id="+ISIN+"/period_end=2024-12-31/original_version="+SHA+"/"
   key=root+"issuer-original.pdf"
   manifest={"contract":"R5_SIGNED_SSWL_2024_ORIGINAL_COMPARATIVE_V1",
