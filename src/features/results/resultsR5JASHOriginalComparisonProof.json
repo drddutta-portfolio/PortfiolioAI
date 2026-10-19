@@ -1,6 +1,33 @@
 {
+  "approvedSources": [
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "89ef3be8-feaa-4399-91db-615efde57ab3",
+        "NET_PROFIT_QUARTER": "bb6e572b-4f9c-456b-9304-9ed624072a90",
+        "OPERATING_REVENUE_QUARTER": "55115346-dd91-4a16-a82f-eab7b2d5ef16"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "a9f819b2-d9bc-40e9-817e-d8d9d7d21505",
+      "sourceRecordId": "43fa148b-cd2f-4f1a-a322-c92ecc2883e5",
+      "symbol": "JASH"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "adb67489-bb84-44a0-aeaf-c716d7ea8bec",
+        "NET_PROFIT_QUARTER": "fd7a1f52-2267-4ece-bdab-416cf5c30de3",
+        "OPERATING_REVENUE_QUARTER": "71907e49-9787-4555-8158-a5e19106862c"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "a9f819b2-d9bc-40e9-817e-d8d9d7d21505",
+      "sourceRecordId": "43fa148b-cd2f-4f1a-a322-c92ecc2883e5",
+      "symbol": "JASH"
+    }
+  ],
   "contract": "R5_JASH_SIGNED_2024_COMPARATIVE_ORIGINAL_V1",
   "environment": "Development",
-  "originalSHA256": "74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148",
-  "approvedSources": []
+  "originalSHA256": "74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148"
 }
