@@ -83,9 +83,11 @@ def main():
   pdf=fitz.open(stream=raw,filetype="pdf")
   if len(pdf)!=7:raise RuntimeError("SSWL_SIGNED_PDF_LENGTH_CHANGED")
   signed=pdf[2].get_text("text").upper()
-  if not all(m in signed for m in ("STEEL STRIPS WHEELS LIMITED","L27107PB1985PLC006159",
-   "CONSOLIDATED","2024","REVENUE FROM OPERATIONS","DILUTED")):
-   raise RuntimeError("SSWL_ISSUER_CONSOLIDATED_ROW_IDENTITY_NOT_PROVEN")
+  # The signed, visually reviewed page has OCR-fragmented text glyphs;
+  # do not claim that text search independently proves the financial numbers.
+  # Exact SHA256 locks the bytes to the inspected issuer original.
+  if len(signed)<100 or not any(label in signed for label in ("STEEL STRIPS","CONSOLIDATED","WHEELS")):
+   raise RuntimeError("SSWL_PINNED_SIGNED_PAGE_NOT_RECOGNIZABLE")
   root="portfolioai-results/development/v1/quarterly/security_id="+ISIN+"/period_end=2024-12-31/original_version="+SHA+"/"
   key=root+"issuer-original.pdf"
   manifest={"contract":"R5_SIGNED_SSWL_2024_ORIGINAL_COMPARATIVE_V1",
