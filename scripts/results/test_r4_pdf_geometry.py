@@ -346,3 +346,13 @@ class UnitCaptionBelowDates(unittest.TestCase):
         p.add_redact_annot(fitz.Rect(20,55,350,75),fill=(1,1,1));p.apply_redactions()
         p.insert_text((25,175),'INR crores',fontsize=10)
         with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+class ParenthesizedLossLabel(unittest.TestCase):
+    def test_parenthesized_loss_is_total_period_pat(self):
+        doc,p=fixture(label='9 Profit(Loss) for the period (7 - 8)')
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+
+    def test_component_parenthesized_loss_cannot_supply_total_pat(self):
+        doc,p=fixture(label='9 Profit(Loss) for the period from discontinued operations')
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
