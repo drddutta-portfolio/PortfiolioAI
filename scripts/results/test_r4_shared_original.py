@@ -115,3 +115,9 @@ class VisualOriginalReviewTests(unittest.TestCase):
         p['visual_reviews']['2024-09-30']['scope']='STANDALONE'
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
             with self.assertRaisesRegex(ValueError,'SCOPE_MISMATCH'):qualify(raw,source,rows)
+
+class ReviewedImageReplayEfficiency(VisualOriginalReviewTests):
+    def test_reviewed_image_does_not_wait_on_unusable_whole_page_ocr(self):
+        raw,source,rows,p=self.reviewed();p['ocr_page']=1
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('UNNECESSARY_OCR')):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
