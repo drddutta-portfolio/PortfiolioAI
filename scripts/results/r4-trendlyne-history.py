@@ -2,6 +2,7 @@
 """Fresh authenticated historical MCP discovery; immutable review evidence only."""
 import hashlib,json,os,urllib.request,urllib.error,sys
 from pathlib import Path
+from datetime import date
 import psycopg
 from r4_recovery_queue import task_id,attempt_all
 sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -141,11 +142,12 @@ def main():
                 planned.append((str(sid),symbol,None,"get_stock_parameter_values",
                     {"stock_codes":[symbol],"parameters":wanted}))
                 for period in periods:
-                    query=(f"Only {name} ({symbol}), Trendlyne stock ID {pid}, ISIN {isin}: find original signed financial statements for the three months ended {period}. "
-                           "Search the original results season, issuer financial-results archives, offer-document financial annexures and later signed exact-quarter comparative columns. "
-                           "Provide revenue from operations, profit after tax for the period, diluted EPS, original currency/units, standalone or consolidated scope, the exact dated quarter column, and official BSE/NSE/issuer filing URLs. "
-                           "Exclude annual, half-year, YTD, inferred/subtracted quarters, adjusted EPS, presentations and unrelated issuers. "
-                           "If this quarter is not separately reported, state that explicitly and cite the closest original statement; do not substitute another period.")
+                    # This API performs vector search, not instruction following.
+                    # Long prompts drown out issuer/date terms and retrieve
+                    # unrelated recent filings. Keep one financial-statement topic.
+                    quarter=date.fromisoformat(period).strftime("%d %B %Y")
+                    query=(f"{name} ({symbol}) quarterly financial results for the three months ended {quarter}: "
+                           "revenue, profit after tax, diluted EPS.")
                     planned.append((str(sid),symbol,period,"get_document_search_results",{"query":query}))
             shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
             identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]
