@@ -50,7 +50,17 @@ PROFILES={
   'symbol':'SSWL','isin':'INE802C01033','legal':'STEEL STRIPS WHEELS LIMITED',
   'identity_marker':'L27107PB1985PLC006159','ocr_page':3,
   'originals':{'2024-12-31':('558de3ec82d9c0a11a3f0e6be14e50ca21629ed7c53fc68f04e1e156439a0df9','https://sswlindia.com/investor-docs/FR_SSWL_31_12_2024.pdf')},
-  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False},
+  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False,
+  # Signed current-quarter column independently inspected 19-Oct-2026.
+  # September comparative stays excluded while restatement policy is pending.
+  'visual_reviews':{'2024-12-31':{
+   'page':3,'dpi':110,'jpeg_quality':65,
+   'image_sha256':'9e6dc43c4b2daa4ab33b279c86c4370d2bd7674e3d46f0dddbae5b55ef4b393a',
+   'scope':'CONSOLIDATED','unit':'INR_LAKH',
+   'quarter_group':'Quarter ended','column':'31st December 2024',
+   'facts':{'OPERATING_REVENUE_QUARTER':{'value':'1074.6780','unit':'INR_CRORE'},
+            'NET_PROFIT_QUARTER':{'value':'47.7122','unit':'INR_CRORE'},
+            'EPS_DILUTED':{'value':'3.04','unit':'INR_PER_SHARE'}}}}},
  'R5_GMBREW_SIGNED_ISSUER_Q4FY25_VISUAL_ORIGINAL_V1':{
   'symbol':'GMBREW','isin':'INE075D01018','legal':'G M BREWERIES LIMITED',
   'identity_marker':'L15500MH1981PLC025809','ocr_page':3,'scope':'STANDALONE',
@@ -113,6 +123,12 @@ def qualify(raw,source,observations):
         if len(pdf)>40:raise ValueError('SHARED_ORIGINAL_PAGE_BOUND')
         cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
         identity_ok=exact_legal_identity(profile['legal'],cover) and profile['identity_marker'] in cover
+        if not identity_ok:
+            for reviewed_period,review in profile.get('visual_reviews',{}).items():
+                if reviewed_period in groups:
+                    reviewed_original_facts(pdf,review,reviewed_period)
+                    identity_ok=True
+                    break
         if not identity_ok and profile.get('ocr_page') and groups:
             first_period=sorted(groups)[-1]
             rendered_cache[first_period]=rendered_facts(raw,profile['ocr_page'],first_period)
@@ -121,7 +137,9 @@ def qualify(raw,source,observations):
         if not identity_ok:raise ValueError('SHARED_ORIGINAL_ISSUER_UNPROVEN')
         text=' '.join(p.get_text('text') for p in pdf)
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('SHARED_ORIGINAL_BUSINESS_BASIS_UNPROVEN')
+        original_period=next(p for p,(d,u) in profile['originals'].items() if d==digest and u==source['source_url'])
         for period,rows in groups.items():
+            if period!=original_period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
             required={'NET_INTEREST_INCOME_QUARTER' if profile['bank'] else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
             if len(rows)!=3 or {r['metric_code'] for r in rows}!=required:continue
             vectors=[]
