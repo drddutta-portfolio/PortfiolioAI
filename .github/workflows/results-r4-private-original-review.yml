@@ -30,7 +30,10 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Install existing pinned private-source dependencies
-        run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+        run: |
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
       - name: Prepare every remaining issuer original for private page review
         run: python scripts/results/r4-private-original-review.py
       # Original bytes and the review index remain private in Development R2.
