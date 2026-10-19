@@ -461,9 +461,10 @@ def fresh_trendlyne_bse_sources(db,client,sid,period):
             AND raw_payload->>'fresh_request'='true'
             AND raw_payload->'request'->>'tool'='get_document_search_results'
             AND raw_payload->'request'->>'securityId'=%s
-            AND position(%s in (raw_payload->'request'->'args'->>'query'))>0
+            AND (position(%s in (raw_payload->'request'->'args'->>'query'))>0
+                 OR position(%s in (raw_payload->'request'->'args'->>'query'))>0)
             AND retrieved_at>=now()-interval '24 hours'
-          ORDER BY retrieved_at DESC LIMIT 16""",(str(sid),period))
+          ORDER BY retrieved_at DESC LIMIT 16""",(str(sid),period,date.fromisoformat(period).strftime('%d %B %Y')))
         captures=cur.fetchall()
     db.rollback()
     found={}
