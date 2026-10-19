@@ -56,3 +56,32 @@ class RenderedOriginalTests(unittest.TestCase):
         raw,source,rows,p=sample();p['ocr_page']=1
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',side_effect=ValueError('OCR_DISAGREEMENT')):
             self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
+class RenderedIssuerIdentityTests(unittest.TestCase):
+    def test_both_original_renders_must_prove_issuer_and_registry_marker(self):
+        raw,source,rows,p=sample();p['ocr_page']=1;p['identity_marker']='NOTONCOVER'
+        facts={r['metric_code']:{'value':r['numeric_value'],'unit':r['unit']} for r in rows}
+        parsed={'scope':'CONSOLIDATED','first_column_period':'2024-09-30','facts':facts,
+            '_rendered_issuer_texts':['NATCO PHARMA LIMITED NOTONCOVER']*2}
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.rendered_facts',return_value=parsed):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+            parsed['_rendered_issuer_texts'][1]='OTHER COMPANY LIMITED NOTONCOVER'
+            with self.assertRaisesRegex(ValueError,'ISSUER_UNPROVEN'):qualify(raw,source,rows)
+
+    def test_rendered_name_without_registry_marker_is_insufficient(self):
+        raw,source,rows,p=sample();p['ocr_page']=1;p['identity_marker']='NOTONCOVER'
+        parsed={'_rendered_issuer_texts':['NATCO PHARMA LIMITED']*2}
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.rendered_facts',return_value=parsed):
+            with self.assertRaisesRegex(ValueError,'ISSUER_UNPROVEN'):qualify(raw,source,rows)
+
+    def test_standalone_profile_requires_standalone_observations_and_table(self):
+        raw,source,rows,p=sample();p['scope']='STANDALONE';p['ocr_page']=1
+        source['raw_payload']['scope']='STANDALONE'
+        source['payload_hash']=hashlib.sha256(json.dumps(source['raw_payload'],separators=(',',':'),sort_keys=True).encode()).hexdigest()
+        for r in rows:r['consolidation_scope']='STANDALONE'
+        facts={r['metric_code']:{'value':r['numeric_value'],'unit':r['unit']} for r in rows}
+        rendered={'scope':'STANDALONE','first_column_period':'2024-09-30','facts':facts}
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',return_value=rendered):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+            rendered['scope']='CONSOLIDATED'
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
