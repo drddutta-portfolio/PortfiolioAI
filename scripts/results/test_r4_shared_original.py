@@ -41,3 +41,18 @@ class SharedOriginalTests(unittest.TestCase):
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),self.assertRaisesRegex(ValueError,'PAYLOAD_HASH'):context(source)
 
 if __name__=='__main__':unittest.main()
+
+class RenderedOriginalTests(unittest.TestCase):
+    def test_failed_native_requires_independent_render_and_exact_existing_cells(self):
+        raw,source,rows,p=sample();p['ocr_page']=1
+        facts={r['metric_code']:{'value':r['numeric_value'],'unit':r['unit']} for r in rows}
+        rendered={'scope':'CONSOLIDATED','first_column_period':'2024-09-30','facts':facts}
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',return_value=rendered):
+            self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+            rows[0]['numeric_value']='999'
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
+    def test_render_disagreement_cannot_be_approved_by_existing_values(self):
+        raw,source,rows,p=sample();p['ocr_page']=1
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.extract_page',side_effect=ValueError('UNREADABLE')),patch('r4_shared_original.rendered_facts',side_effect=ValueError('OCR_DISAGREEMENT')):
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
