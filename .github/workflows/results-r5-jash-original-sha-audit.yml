@@ -1,0 +1,29 @@
+name: R5 JASH original source SHA audit
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-jash-original-sha-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          python -m pip install 'requests==2.32.5' 'pymupdf==1.26.6'
+          python - <<'PY'
+          import requests,fitz,hashlib,json
+          from urllib.parse import urlparse
+          u="https://jashindia.com/wp-content/uploads/2025/02/Outcome-JASH-Q3.pdf"
+          r=requests.get(u,timeout=55);r.raise_for_status()
+          if urlparse(r.url).hostname not in ("jashindia.com","www.jashindia.com"):raise RuntimeError("ISSUER_HOST_CHANGED")
+          b=r.content;p=fitz.open(stream=b,filetype='pdf')
+          if len(p)!=7:raise RuntimeError("ISSUER_PDF_LENGTH_CHANGED")
+          print("R5_JASH_SIGNED_ORIGINAL_IDENTITY",json.dumps({"sha256":hashlib.sha256(b).hexdigest(),"pages":len(p),"page5_text_length":len(p[5].get_text()),"quarterLabels":["2024-09-30","2024-12-31"],"issuer":"JASH","scope":"CONSOLIDATED"}))
+          PY
