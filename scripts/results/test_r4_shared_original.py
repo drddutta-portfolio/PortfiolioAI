@@ -40,7 +40,6 @@ class SharedOriginalTests(unittest.TestCase):
         raw,source,rows,p=sample();source['raw_payload']['extra']='changed'
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),self.assertRaisesRegex(ValueError,'PAYLOAD_HASH'):context(source)
 
-if __name__=='__main__':unittest.main()
 
 class RenderedOriginalTests(unittest.TestCase):
     def test_failed_native_requires_independent_render_and_exact_existing_cells(self):
@@ -146,3 +145,5 @@ class ReviewedCoverScope(VisualOriginalReviewTests):
         raw,source,rows,p=self.reviewed();p['required_cover_scope']='audited standalone financial results'
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
             with self.assertRaisesRegex(ValueError,'COVER_SCOPE_UNPROVEN'):qualify(raw,source,rows)
+
+if __name__=='__main__':unittest.main()
