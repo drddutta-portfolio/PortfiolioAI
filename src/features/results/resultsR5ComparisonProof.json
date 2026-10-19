@@ -1225,6 +1225,32 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "02b099d3-46f0-45f5-bac8-3945ab2df748",
+        "NET_INTEREST_INCOME_QUARTER": "fe52a5ad-6415-46f5-aecb-4af72e145c92",
+        "NET_PROFIT_QUARTER": "fee47bfb-e887-4ae4-8b64-52217baa0d2e"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "e6080dc4-9abe-412f-94e7-23609c51bf76",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "a698268f-06cf-4e31-8093-7a6c90797660",
+        "NET_INTEREST_INCOME_QUARTER": "5107043d-7d7d-498c-826f-a4b696bc7263",
+        "NET_PROFIT_QUARTER": "5fe493f8-0749-41eb-a874-157d5967a2d2"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "sourceRecordId": "e6080dc4-9abe-412f-94e7-23609c51bf76",
+      "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "3237a9c5-962d-4ae3-bac4-617f19ac3710",
         "NET_INTEREST_INCOME_QUARTER": "9366f61b-d8ea-4e4b-822d-eca5d63179ea",
         "NET_PROFIT_QUARTER": "518c9686-3e38-47f4-90e9-8b4fca2f0fcb"
@@ -3054,6 +3080,32 @@
       "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
       "sourceRecordId": "49d29229-a32a-4e65-9a6e-54afface4aad",
       "symbol": "CHOLAFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "34f61a09-11d1-4ddb-8d0f-acee668d5022",
+        "NET_PROFIT_QUARTER": "064074b7-2fa2-4e4b-9456-c4e65e487327",
+        "OPERATING_REVENUE_QUARTER": "80100ced-e913-4d0a-8b73-4f634bd6a0c9"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "d8c32eab-90ce-4202-9d44-6534d4d13e5e",
+      "sourceRecordId": "bcbe9818-4efc-41f4-9de8-e1ab82c84b1c",
+      "symbol": "ITCHOTELS"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "943f746f-d31f-4729-ae26-453006c84a01",
+        "NET_PROFIT_QUARTER": "2e162590-3823-4b79-9c9d-8e8329dbb03c",
+        "OPERATING_REVENUE_QUARTER": "c30a6108-c241-4730-b8a9-223a0e389ccd"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "d8c32eab-90ce-4202-9d44-6534d4d13e5e",
+      "sourceRecordId": "6f4899b1-e094-4972-9ec6-9085df298ed8",
+      "symbol": "ITCHOTELS"
     },
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
