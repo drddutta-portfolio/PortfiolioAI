@@ -149,9 +149,21 @@ def extract(db_url):
                    or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
                    for p in sswl_proof["approvedSources"])):
                 raise RuntimeError("SSWL_SOURCE_IDENTITY_NOT_ACCEPTED")
+            jash_proof=json.loads(Path("src/features/results/resultsR5JASHOriginalComparisonProof.json").read_text())
+            if (jash_proof.get("contract")!="R5_JASH_SIGNED_2024_COMPARATIVE_ORIGINAL_V1"
+                or jash_proof.get("environment")!="Development"
+                or jash_proof.get("originalSHA256")!="74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148"):
+                raise RuntimeError("JASH_ORIGINAL_PROOF_CONTRACT_INVALID")
+            if jash_proof["approvedSources"] and (
+                len(jash_proof["approvedSources"])!=2
+                or {p["periodEnd"] for p in jash_proof["approvedSources"]}!={"2024-09-30","2024-12-31"}
+                or any(p["symbol"]!="JASH" or p["scope"]!="CONSOLIDATED"
+                   or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
+                   for p in jash_proof["approvedSources"])):
+                raise RuntimeError("JASH_ORIGINAL_PROOF_QUARTER_SCOPE_INVALID")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
-                                   *sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
+                                   *jash_proof["approvedSources"],*sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
                                    *gmbrew_proof["approvedSources"]]
                 for oid in source["observations"].values())
             already={row["id"] for row in observations}
