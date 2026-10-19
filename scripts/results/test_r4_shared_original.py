@@ -1,0 +1,43 @@
+import hashlib,json,unittest
+from copy import deepcopy
+from unittest.mock import patch
+from test_r4_pdf_geometry import fixture
+from r4_pdf_geometry import extract_page
+from r4_shared_original import PROFILES,context,qualify
+
+def sample():
+    doc,page=fixture(first='30.09.2025',third='30.09.2024')
+    page.insert_text((25,300),'Issuer identity marker 123456',fontsize=10)
+    raw=doc.tobytes();digest=hashlib.sha256(raw).hexdigest();url='https://issuer.example/original.pdf'
+    profile={'symbol':'NATCOPHARM','isin':'INE987654321','legal':'NATCO PHARMA LIMITED','identity_marker':'123456','bank':False,'originals':{'2024-09-30':(digest,url)},'periods':{'2024-09-30':'2024-07-01'}}
+    payload={'contract':'TEST_ORIGINAL','issuer':profile['symbol'],'isin':profile['isin'],'scope':'CONSOLIDATED','sourceUrl':url,'sourceOriginalSHA256':digest}
+    source={'source_record_id':'source','raw_payload':payload,'source_url':url,'payload_hash':hashlib.sha256(json.dumps(payload,separators=(',',':'),sort_keys=True).encode()).hexdigest()}
+    facts=extract_page(page,1,'2024-09-30',allow_comparative=True)['facts']
+    rows=[{'id':metric,'symbol':profile['symbol'],'isin':profile['isin'],'source_record_id':'source','period_end':'2024-09-30','period_start':'2024-07-01','currency':'INR','consolidation_scope':'CONSOLIDATED','evidence_status':'AVAILABLE','metric_code':metric,'numeric_value':fact['value'],'unit':fact['unit']} for metric,fact in facts.items()]
+    return raw,source,rows,profile
+
+class SharedOriginalTests(unittest.TestCase):
+    def test_existing_complete_trio_requires_actual_original_replay(self):
+        raw,source,rows,p=sample()
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):self.assertEqual(len(qualify(raw,source,rows)['eligible_observation_ids']),3)
+    def test_changed_observation_does_not_admit_any_of_the_trio(self):
+        raw,source,rows,p=sample();rows[0]['numeric_value']='999'
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+    def test_partial_trio_is_not_admitted(self):
+        raw,source,rows,p=sample()
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):self.assertEqual(qualify(raw,source,rows[:2])['eligible_observation_ids'],[])
+    def test_changed_original_hash_is_rejected(self):
+        raw,source,rows,p=sample()
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),self.assertRaisesRegex(ValueError,'HASH_MISMATCH'):qualify(raw+b'changed',source,rows)
+    def test_wrong_company_or_period_cannot_reuse_a_proof(self):
+        for field,value in [('isin','WRONG'),('period_end','2024-12-31'),('source_record_id','other-source')]:
+            raw,source,rows,p=sample();rows[0][field]=value
+            with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),self.assertRaises(ValueError):qualify(raw,source,rows)
+    def test_unsupported_review_contract_is_not_authority(self):
+        raw,source,rows,p=sample()
+        with self.assertRaisesRegex(ValueError,'UNSUPPORTED'):context(source)
+    def test_mutated_payload_is_rejected(self):
+        raw,source,rows,p=sample();source['raw_payload']['extra']='changed'
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),self.assertRaisesRegex(ValueError,'PAYLOAD_HASH'):context(source)
+
+if __name__=='__main__':unittest.main()
