@@ -9,7 +9,7 @@ permissions:
   id-token: write
 concurrency:
   group: results-r4-trendlyne-historical-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   history:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 95
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 4
       matrix:
         shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     env:
@@ -54,3 +54,9 @@ jobs:
 # Revisit the entire unresolved cohort with exact-quarter issuer-original discovery; preserve same-day captures.
 
 # Use the provider's focused semantic-search contract, retaining exact issuer/date qualification downstream.
+
+  recover-originals:
+    needs: history
+    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    uses: ./.github/workflows/results-r4-bse-dated-quarter-review.yml
+    secrets: inherit
