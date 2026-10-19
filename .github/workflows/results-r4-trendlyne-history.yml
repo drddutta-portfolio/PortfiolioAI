@@ -52,3 +52,5 @@ jobs:
 # Exact legal issuer names and original reporting windows for every remaining dated quarter.
 
 # Revisit the entire unresolved cohort with exact-quarter issuer-original discovery; preserve same-day captures.
+
+# Use the provider's focused semantic-search contract, retaining exact issuer/date qualification downstream.
