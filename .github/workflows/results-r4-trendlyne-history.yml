@@ -50,3 +50,5 @@ jobs:
         run: python scripts/results/r4-trendlyne-history.py
       # Detailed captures and retry traces are retained privately in Development R2.
 # Exact legal issuer names and original reporting windows for every remaining dated quarter.
+
+# Revisit the entire unresolved cohort with exact-quarter issuer-original discovery; preserve same-day captures.
