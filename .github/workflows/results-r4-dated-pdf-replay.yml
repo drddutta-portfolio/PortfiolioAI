@@ -1,9 +1,7 @@
 name: Results R4 Full Backlog Original PDF Replay
 on:
   workflow_dispatch:
-  push:
-    branches: [PortfolioAI-Development]
-    paths: [.github/workflows/results-r4-dated-pdf-replay.yml]
+  workflow_call:
 permissions: {contents: read}
 concurrency:
   group: results-r4-dated-pdf-replay-development
