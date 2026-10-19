@@ -3,17 +3,19 @@
 Ingestion creates immutable observations. Only the separate independent full
 cohort verifier may create selections. Failures never block the next slot.
 """
-import importlib.util,json,os
+import argparse,importlib.util,json,os
 from collections import Counter,defaultdict
 from pathlib import Path
 import fitz,psycopg
 from r4_pdf_geometry import extract_page
 from r4_bse_dated_proof import replay_document,REVISION
-from r4_recovery_queue import run_with_timeout
+from r4_recovery_queue import run_with_timeout,native_shard_for
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
 def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--shard',type=int,default=0);parser.add_argument('--shards',type=int,default=1);args=parser.parse_args()
+    if not 1<=args.shards<=16 or not 0<=args.shard<args.shards:raise RuntimeError('INVALID_NATIVE_SHARD')
     if os.environ.get('RESULTS_R4_DATED_PDF_ACK')!='EXPLICIT_QUARTER_ORIGINAL_REPLAY':raise RuntimeError('WRITES_NOT_AUTHORIZED')
     url=os.environ['SUPABASE_DB_URL']
     if batch.REF not in url or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
@@ -22,9 +24,10 @@ def main():
     with psycopg.connect(url) as db:
         cohort=batch.candidates(db);db.rollback()
         for symbol,isin,sid,_name,periods in cohort:
+            if native_shard_for(sid,args.shards)!=args.shard:continue
             replayed={}
             for period in periods:
-                outcome={'contract':'RESULTS_R4_BSE_DATED_PROMOTION_AUDIT_V1','symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'rejections':{},'originals_replayed':0,'observations_inserted':0,'workflow_run_id':os.getenv('GITHUB_RUN_ID'),'workflow_run_attempt':os.getenv('GITHUB_RUN_ATTEMPT'),'source_commit':os.getenv('GITHUB_SHA'),'parser_engine':engine}
+                outcome={'contract':'RESULTS_R4_BSE_DATED_PROMOTION_AUDIT_V1','shard':args.shard,'shards':args.shards,'symbol':symbol,'isin':isin,'security_id':str(sid),'period_end':period,'rejections':{},'originals_replayed':0,'observations_inserted':0,'workflow_run_id':os.getenv('GITHUB_RUN_ID'),'workflow_run_attempt':os.getenv('GITHUB_RUN_ATTEMPT'),'source_commit':os.getenv('GITHUB_SHA'),'parser_engine':engine}
                 rejects=Counter();grouped=defaultdict(list)
                 try:
                     with db.cursor() as cur:
