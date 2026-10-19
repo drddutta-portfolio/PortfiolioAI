@@ -25,7 +25,7 @@ PROFILES={
   'originals':{
    '2024-09-30':('d04f36345f5ee6d94a19ba99385bf30a5937e5d37f862c019903681c4ba1c4bc','https://www.tatapower.com/company-financials/quarterly-reports/fy2024---2025/consolidated-and-standalone-financial-results-for-the-quarter-and-half-year-ended-30th-september-2024.pdf'),
    '2024-12-31':('eadab3f13b927c614814c1cb2ee4b4f9e0b13fe73268f0646cc6a9efc420bc33','https://www.tatapower.com/company-financials/quarterly-reports/fy2024---2025/consolidated-and-standalone-financial-results-for-the-quarter-and-nine-months-ended-31st-december-2024.pdf')},
-  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False},
+  'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False,'ocr_page':8},
 }
 
 def context(source):
@@ -43,6 +43,12 @@ def context(source):
     if hashlib.sha256(json.dumps(payload,separators=(',',':'),sort_keys=True).encode()).hexdigest()!=source['payload_hash']:
         raise ValueError('SHARED_ORIGINAL_PAYLOAD_HASH_MISMATCH')
     return profile,digest,key
+
+def rendered_facts(raw,page_no,period):
+    """Two independent renders must prove the same dated core cells."""
+    from r4_ocr_dated_geometry import extract_dated_page
+    parsed,_=extract_dated_page(raw,page_no,period,render_dpi=(300,450),segmentation_mode=6)
+    return parsed
 
 def qualify(raw,source,observations):
     profile,digest,_=context(source)
@@ -72,6 +78,12 @@ def qualify(raw,source,observations):
                 if parsed['scope']!='CONSOLIDATED':continue
                 if parsed['first_column_period']!=period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
                 vectors.append(parsed['facts'])
+            if not vectors and profile.get('ocr_page'):
+                try:
+                    rendered=rendered_facts(raw,profile['ocr_page'],period)
+                    if rendered['scope']=='CONSOLIDATED' and (rendered['first_column_period']==period or not re.search(r'\\b(?:restated|recast)\\b',text,re.I)):
+                        vectors.append(rendered['facts'])
+                except ValueError:pass
             distinct={tuple(sorted((k,v['value'],v['unit']) for k,v in facts.items())) for facts in vectors}
             if len(distinct)!=1:continue
             facts=vectors[0]
