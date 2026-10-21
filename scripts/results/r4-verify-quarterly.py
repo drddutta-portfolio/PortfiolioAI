@@ -793,9 +793,17 @@ def verify(db,s3,apply):
                         or sha(canonical_bytes(payload))!=r["payload_hash"]):
                         raise ValueError("OFFICIAL_SOURCE_POINTER_OR_HASH_UNPROVEN")
                     original=s3.get_object(Bucket=BUCKET,Key=payload["original_r2_key"])["Body"].read()
+                    identity_raw=None
+                    bridge=payload.get("isin_bridge")
+                    if bridge is not None:
+                        identity_sha=bridge.get("sha256")
+                        if (not re.fullmatch(r"[0-9a-f]{64}",str(identity_sha))
+                            or bridge.get("r2_key")!=PREFIX+"issuer-identity/sha256="+identity_sha+"/split.pdf"):
+                            raise ValueError("OFFICIAL_ISIN_BRIDGE_POINTER_UNPROVEN")
+                        identity_raw=s3.get_object(Bucket=BUCKET,Key=bridge["r2_key"])["Body"].read()
                     from r4_recovery_queue import run_with_timeout
                     with SOURCE_REPLAY_SLOTS:
-                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k]),480)
+                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k],identity_raw),480)
                     return k,(document,None)
                 except Exception as exc:
                     return k,(None,"OFFICIAL_ISSUER_REPLAY_FAILED_"+type(exc).__name__)
