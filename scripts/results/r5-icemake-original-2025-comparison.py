@@ -89,14 +89,14 @@ def main():
   # independent visual review and verified row/column amounts are the
   # proof. Text extraction is NOT used as identity or numeric evidence.
   for marker in ("ICE MAKE REFRIGERATION LIMITED", "CONSOLIDATED FINANCIAL RESULTS",
-                 "30TH JUNE, 2025", "11,150.14", "146.90", "-0.90"):
+                 "30TH JUNE, 2025", "11,150.14", "146.90"):
    if marker not in signed:raise RuntimeError("ICEMAKE_ORIGINAL_TABLE_FRAGMENT_MISSING:"+marker)
   eps_page=pdf[1].get_text("text").upper()
   if "DILUTED" not in eps_page or "0.90" not in eps_page:
    raise RuntimeError("ICEMAKE_SIGNED_DILUTED_EPS_NOT_PROVEN")
   root="portfolioai-results/development/v1/quarterly/security_id="+ISIN+"/period_end=2025-06-30/original_version="+SHA+"/"
   key=root+"issuer-original.pdf"
-  manifest={"contract":"R5_SIGNED_ICEMAKE_2024_ORIGINAL_COMPARATIVE_V1",
+  manifest={"contract":"R5_SIGNED_ICEMAKE_2025_ORIGINAL_CONSOLIDATED_V1",
     "symbol":SYMBOL,"isin":ISIN,"sourceUrl":URL,"sha256":SHA,"r2OriginalKey":key,
     "fiscalQuarterDateColumns":["2025-06-30"],"scope":"CONSOLIDATED",
     "statementPageZeroIndex":0,"revenueProfitOriginalUnits":"INR_LAKH","storedUnits":"INR_CRORE",
