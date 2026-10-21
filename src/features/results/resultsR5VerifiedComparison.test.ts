@@ -71,11 +71,13 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
     expect(nalcoOriginal.environment).toBe("Development")
     expect(nalcoOriginal.originalSHA256).toBe("7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9")
     expect(nalcoOriginal.approvedSources).toHaveLength(1)
-    expect(nalcoOriginal.approvedSources[0].periodEnd).toBe("2024-09-30")
-    expect(nalcoOriginal.approvedSources[0].symbol).toBe("NATIONALUM")
-    expect(nalcoOriginal.approvedSources[0].scope).toBe("CONSOLIDATED")
-    expect(nalcoOriginal.approvedSources[0].approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
-    expect(Object.keys(nalcoOriginal.approvedSources[0].observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
+    const source = nalcoOriginal.approvedSources[0]!
+
+    expect(source.periodEnd).toBe("2024-09-30")
+    expect(source.symbol).toBe("NATIONALUM")
+    expect(source.scope).toBe("CONSOLIDATED")
+    expect(source.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+    expect(Object.keys(source.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
  })
  it("requires two source-hash-locked 2024 JASH consolidated historical trios and no R4 overwrite",()=>{
    expect(jashOriginal.contract).toBe("R5_JASH_SIGNED_2024_COMPARATIVE_ORIGINAL_V1")
