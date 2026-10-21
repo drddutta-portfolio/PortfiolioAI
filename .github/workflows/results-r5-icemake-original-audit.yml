@@ -1,0 +1,41 @@
+name: Results R5 ICEMAKE June 2025 Signed Consolidated Original Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r5-icemake-original-audit.yml]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import requests,fitz,hashlib,json
+          from urllib.parse import urlparse
+          u="https://www.icemakeindia.com/wp-content/uploads/2025/08/Financial-Results-the-quarter-ended-June-30-2025.pdf"
+          r=requests.get(u,timeout=45,headers={'User-Agent':'Mozilla/5.0 (PortfolioAI source audit)'})
+          r.raise_for_status()
+          if urlparse(r.url).hostname not in ('www.icemakeindia.com','icemakeindia.com'):raise RuntimeError('SOURCE_HOST_MISMATCH')
+          b=r.content
+          if not b.startswith(b'%PDF'):raise RuntimeError('ORIGINAL_IS_NOT_PDF')
+          p=fitz.open(stream=b,filetype='pdf')
+          if len(p)!=8:raise RuntimeError('PAGE_COUNT_NOT_VERIFIED')
+          t=p[0].get_text('text').upper()
+          eps=p[1].get_text('text').upper()
+          for k in ('ICE MAKE REFRIGERATION LIMITED','CONSOLIDATED FINANCIAL RESULTS','30TH JUNE, 2025','11,150.14','146.90'):
+           if k not in t:raise RuntimeError('CONSOLIDATED_FIRST_COLUMN_MISSING:'+k)
+          if 'DILUTED' not in eps or '0.90' not in eps:raise RuntimeError('EPS_FIRST_COLUMN_MISSING')
+          print('R5_ICEMAKE_JUNE2025_CONSOLIDATED_ORIGINAL',json.dumps({'symbol':'ICEMAKE','isin':'INE520Y01019','scope':'CONSOLIDATED','end':'2025-06-30','sha256':hashlib.sha256(b).hexdigest(),'pages':len(p),'quarterRevenueLakh':'11150.14','quarterLossLakh':'-146.90','dilutedEPS':'-0.90','financialObservationsInserted':0}))
+          PY
