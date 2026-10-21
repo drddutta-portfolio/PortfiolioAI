@@ -1,4 +1,4 @@
-name: Results R5 CHOLAFIN December 2024 Official Consolidated Original Audit
+name: Results R5 CHOLAFIN December 2024 Official Standalone Original Audit
 on:
   workflow_dispatch:
   push:
@@ -27,7 +27,7 @@ jobs:
           import fitz,requests,hashlib,json
           from urllib.parse import urlparse
           from pathlib import Path
-          u="https://files.cholamandalam.com/corporate/Financials_Dec2024_be5d6dd603.pdf"
+          u="https://files.cholamandalam.com/Financials_Dec2024_be5d6dd603.pdf"
           r=requests.get(u,timeout=50,headers={"User-Agent":"Mozilla/5.0 (PortfolioAI Results original issuer filing audit)"})
           r.raise_for_status()
           if urlparse(r.url).hostname!="files.cholamandalam.com":raise RuntimeError("EXCHANGE_FILING_HOST_CHANGED")
@@ -41,19 +41,19 @@ jobs:
           for marker in ("6,709.21","1,086.53","12.89"):
               if marker not in text:raise RuntimeError("ORIGINAL_COLUMN_FIGURE_NOT_FOUND:"+marker)
           d=hashlib.sha256(b).hexdigest()
-          p=Path("tmp/results-r5/nalco-sept-original");p.mkdir(parents=True,exist_ok=True)
+          p=Path("tmp/results-r5/cholafin-dec-original");p.mkdir(parents=True,exist_ok=True)
           pdf[0].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False).save(str(p/"CHOLAFIN-Dec2024-standalone.png"))
-          evidence={"symbol":"CHOLAFIN","isin":"INE139A01034","quarter":"2024-12-31",
-            "scope":"STANDALONE","sourceUrl":u,"sha256":d,"page":11,"pages":len(pdf),
-            "originalRevenueCrore":"4001.48","originalProfitCrore":"1045.97",
+          evidence={"symbol":"CHOLAFIN","isin":"INE121A01024","quarter":"2024-12-31",
+            "scope":"STANDALONE","sourceUrl":u,"sha256":d,"page":0,"pages":len(pdf),
+            "originalRevenueCrore":"6709.21","originalProfitCrore":"1086.53",
             "originalEPSDiluted":"12.89","financialFactsAdmitted":0}
           (p/"verified-identity.json").write_text(json.dumps(evidence,indent=2))
-          print("R5_CHOLAFIN_SEP2024_SIGNED_CONSOLIDATED_ORIGINAL",json.dumps(evidence))
+          print("R5_CHOLAFIN_DEC2024_SIGNED_STANDALONE_ORIGINAL",json.dumps(evidence))
           PY
       - if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r5-nalco-sep-2024-original-table
+          name: r5-cholafin-dec-2024-original-table
           path: tmp/results-r5/nalco-sept-original/*
           if-no-files-found: warn
           retention-days: 2
