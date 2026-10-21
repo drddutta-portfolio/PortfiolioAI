@@ -70,6 +70,17 @@ class OfficialIssuerReplay(unittest.TestCase):
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'AUDIT_ORIGINAL'):o.qualify(raw,source,rows)
 
+    def test_reported_other_isin_cannot_be_silently_rebound_to_current_security(self):
+        import fitz
+        raw,source,rows,profile,audit,fake=self.sample()
+        with fitz.open(stream=raw,filetype='pdf') as pdf:
+            pdf[0].insert_text((25,520),'Equity ISIN INE111A01011',fontsize=10);raw=pdf.tobytes()
+        digest=o.sha(raw);source['raw_payload']['original_sha256']=digest
+        source['raw_payload']['original_r2_key']=o.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
+        source['payload_hash']=o.sha(o.canonical(source['raw_payload']));audit['original_sha256']=digest
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaisesRegex(ValueError,'ISIN_REQUIRES_EXPLICIT_BRIDGE'):o.qualify(raw,source,rows)
+
 class OfficialSourceTransport(unittest.TestCase):
     class Response:
         def __init__(self,body=b'',status=200,location=None):
