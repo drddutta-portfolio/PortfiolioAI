@@ -120,6 +120,7 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     if not all(exact_legal_identity(profile['legal'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                         raise ValueError('OFFICIAL_RENDERED_ISSUER_IDENTITY_UNPROVEN')
                 else:
+                    if not exact_legal_identity(profile['legal'],texts[n-1]):continue
                     parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
                 if restated and parsed['first_column_period']!=period:continue
                 candidates.append(parsed)
