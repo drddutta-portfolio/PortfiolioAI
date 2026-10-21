@@ -4,6 +4,7 @@ import federalOriginal from "./resultsR5FederalOriginalComparisonProof.json"
 import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
 import sswlOriginal from "./resultsR5SSWLOriginalComparisonProof.json"
 import jashOriginal from "./resultsR5JASHOriginalComparisonProof.json"
+import nalcoOriginal from "./resultsR5NATIONALUMOriginalComparisonProof.json"
 import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -64,6 +65,17 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
    expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
    for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
+ })
+ it("pins NALCO 2024 September signed Consolidated revenue PAT EPS, R5 comparison only",()=>{
+    expect(nalcoOriginal.contract).toBe("R5_NATIONALUM_SIGNED_2024_CONSOLIDATED_ORIGINAL_V1")
+    expect(nalcoOriginal.environment).toBe("Development")
+    expect(nalcoOriginal.originalSHA256).toBe("7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9")
+    expect(nalcoOriginal.approvedSources).toHaveLength(1)
+    expect(nalcoOriginal.approvedSources[0].periodEnd).toBe("2024-09-30")
+    expect(nalcoOriginal.approvedSources[0].symbol).toBe("NATIONALUM")
+    expect(nalcoOriginal.approvedSources[0].scope).toBe("CONSOLIDATED")
+    expect(nalcoOriginal.approvedSources[0].approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+    expect(Object.keys(nalcoOriginal.approvedSources[0].observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
  })
  it("requires two source-hash-locked 2024 JASH consolidated historical trios and no R4 overwrite",()=>{
    expect(jashOriginal.contract).toBe("R5_JASH_SIGNED_2024_COMPARATIVE_ORIGINAL_V1")
