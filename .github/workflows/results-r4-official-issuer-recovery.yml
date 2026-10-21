@@ -1,0 +1,72 @@
+name: Results R4 Official Issuer Historical Recovery
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-official-issuer-recovery.yml]
+permissions: {contents: read}
+concurrency:
+  group: results-r4-official-issuer-development
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: {shard: [0, 1, 2, 3]}
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install existing pinned source-replay dependencies
+        run: |
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+      - name: Verify official original qualification regressions
+        run: python -m unittest discover -s scripts/results -p test_r4_official_issuer.py -v
+      - name: Collect every assigned issuer and isolate failed originals
+        run: python scripts/results/r4-official-issuer-recovery.py --shard ${{ matrix.shard }}
+      # Originals, rendered pages and financial traces remain private in R2.
+  verify:
+    needs: collect
+    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned independent verifier
+        run: |
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+      - name: Reopen originals and preserve accepted selections
+        run: python scripts/results/r4-verify-quarterly.py --apply
+      - name: Independently reconcile all 262 equities and eight quarters
+        if: always()
+        run: |
+          python scripts/results/r4-eight-quarter-readback.py > /tmp/r4-official-readback.json
+          python - <<'PY'
+          import json
+          report=json.load(open('/tmp/r4-official-readback.json'))
+          print(json.dumps({k:report[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
+          PY
