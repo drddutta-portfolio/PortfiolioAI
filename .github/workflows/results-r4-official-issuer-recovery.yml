@@ -8,7 +8,7 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-official-issuer-development
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   collect:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
