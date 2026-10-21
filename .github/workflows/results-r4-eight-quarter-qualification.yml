@@ -9,6 +9,8 @@ on:
       - scripts/results/r4-eight-quarter-readback.py
       - scripts/results/test_r4_eight_quarter_readback.py
       - scripts/results/r4-verify-quarterly.py
+      - scripts/results/r4_bdl_correction.py
+      - scripts/results/test_r4_bdl_correction.py
       - scripts/results/r4_pdf_geometry.py
       - scripts/results/r4-bse-dated-quarter-promote.py
 
@@ -51,6 +53,7 @@ jobs:
           sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
       - name: Run source qualification and eight-quarter readback regression tests
         run: |
+          python -m unittest discover -s scripts/results -p test_r4_bdl_correction.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
           python -m unittest discover -s scripts/results -p test_r4_pdf_geometry.py -v
