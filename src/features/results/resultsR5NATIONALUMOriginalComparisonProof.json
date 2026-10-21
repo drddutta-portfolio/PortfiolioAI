@@ -1,6 +1,20 @@
 {
+  "approvedSources": [
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "8351fd56-5e7f-44d7-b2a4-59a1d8fdb190",
+        "NET_PROFIT_QUARTER": "bda79654-9e05-48a8-95ac-a07d4d794db1",
+        "OPERATING_REVENUE_QUARTER": "faa8697f-e23a-457d-bcfd-8864924d7d98"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "2bbdbd06-792b-472d-99f5-15ad7ed91b04",
+      "sourceRecordId": "0e5f1ed9-fcf5-48c6-b067-9a26a65b4041",
+      "symbol": "NATIONALUM"
+    }
+  ],
   "contract": "R5_NATIONALUM_SIGNED_2024_CONSOLIDATED_ORIGINAL_V1",
   "environment": "Development",
-  "originalSHA256": "7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9",
-  "approvedSources": []
+  "originalSHA256": "7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9"
 }
