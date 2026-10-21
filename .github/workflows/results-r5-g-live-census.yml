@@ -17,6 +17,7 @@ on:
       - src/features/results/resultsR5TataPowerOriginalComparisonProof.json
       - src/features/results/resultsR5SSWLOriginalComparisonProof.json
       - src/features/results/resultsR5JASHOriginalComparisonProof.json
+      - src/features/results/resultsR5NATIONALUMOriginalComparisonProof.json
       - src/features/results/resultsR5BDLOriginalComparisonProof.json
       - src/features/results/resultsR5GMBREWOriginalComparisonProof.json
       - src/features/results/ResultsReferenceLivePage.tsx
