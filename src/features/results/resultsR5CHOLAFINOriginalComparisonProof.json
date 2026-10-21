@@ -1,6 +1,20 @@
 {
+  "approvedSources": [
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "cf954822-b8b6-42a5-b820-711503914792",
+        "NET_PROFIT_QUARTER": "bfb678f3-1be6-4283-bdab-99596abb44b1",
+        "OPERATING_REVENUE_QUARTER": "828a96dc-e236-4832-99a6-c2a639e431a3"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
+      "sourceRecordId": "33961a16-abf7-4fed-b26d-724e22898061",
+      "symbol": "CHOLAFIN"
+    }
+  ],
   "contract": "R5_CHOLAFIN_SIGNED_2024_STANDALONE_ORIGINAL_V1",
   "environment": "Development",
-  "originalSHA256": "6882e169027075032ece7ca0323025c2a873e4d29389e422cfe02989ff3e8476",
-  "approvedSources": []
+  "originalSHA256": "6882e169027075032ece7ca0323025c2a873e4d29389e422cfe02989ff3e8476"
 }
