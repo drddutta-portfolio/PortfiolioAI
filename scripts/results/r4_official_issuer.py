@@ -4,9 +4,11 @@ One acquisition adapter for the unresolved cohort. URLs discover evidence; they
 never supply numbers. Canonical observations and protected decisions stay the
 financial authority. No annual/YTD reconstruction or share adjustment.
 """
-import hashlib,json,re
+import hashlib,json,re,html
 from decimal import Decimal
-from urllib.parse import urlparse
+from collections import Counter
+from html.parser import HTMLParser
+from urllib.parse import urlparse,urljoin
 import fitz
 from r4_issuer_name import exact_legal_identity
 from r4_pdf_geometry import extract_page
@@ -90,6 +92,54 @@ def approved_url(symbol,url):
     if u.hostname=='nsearchives.nseindia.com' and url not in profile['originals']:
         raise ValueError('UNLISTED_NSE_ISSUER_ORIGINAL')
     return profile
+
+class Links(HTMLParser):
+    def __init__(self):super().__init__();self.links=[];self.current=None
+    def handle_starttag(self,tag,attrs):
+        if tag=='a':self.current=[dict(attrs).get('href',''),'']
+    def handle_data(self,data):
+        if self.current:self.current[1]+=data+' '
+    def handle_endtag(self,tag):
+        if tag=='a' and self.current:self.links.append(tuple(self.current));self.current=None
+
+def get(session,symbol,url,limit):
+    # Validate every redirect before issuing its request; do not follow an
+    # issuer page into a provider, external object host or unrelated document.
+    for _ in range(5):
+        approved_url(symbol,url)
+        with session.get(url,timeout=(15,45),allow_redirects=False,stream=True) as response:
+            if response.status_code in (301,302,303,307,308):
+                url=urljoin(url,response.headers['Location']);continue
+            response.raise_for_status();parts=[];size=0
+            for part in response.iter_content(65536):
+                size+=len(part)
+                if size>limit:raise ValueError('OFFICIAL_RESPONSE_SIZE_BOUND')
+                parts.append(part)
+            return b''.join(parts),url
+    raise ValueError('OFFICIAL_REDIRECT_BOUND')
+
+def discover(session,symbol):
+    profile=ISSUERS[symbol];urls={u:100 for u in profile['originals']};errors=Counter()
+    for page in profile['pages']:
+        try:
+            raw,origin=get(session,symbol,page,4_000_000);text=raw.decode('utf-8',errors='replace')
+            parser=Links();parser.feed(text)
+            links=parser.links+[(u,'') for u in re.findall(r'https?[^\s"<>]+?\.pdf(?:\?[^\s"<>]*)?',html.unescape(text).replace('\\/','/'),re.I)]
+            for target,label in links:
+                url=urljoin(origin,html.unescape(target)).split('#')[0];u=urlparse(url)
+                if not u.path.lower().endswith('.pdf'):continue
+                try:approved_url(symbol,url)
+                except ValueError:
+                    errors['UNAPPROVED_DISCOVERY_LINK_SKIPPED']+=1
+                    continue
+                hint=(url+' '+label).lower()
+                if re.search(r'presentation|transcript|annual.report|press.release|newspaper|policy|governance|shareholding|credit.rating',hint):continue
+                if not re.search(r'financial|result|outcome|quarter|q[1-4]|qr/|ufr',hint):continue
+                score=10*bool(re.search(r'2024|2025|fy25|fy26|2024.25|2025.26',hint))+3*bool(re.search(r'financial|result|outcome',hint))
+                urls[url]=max(score,urls.get(url,0))
+        except Exception as error:errors['DISCOVERY_'+type(error).__name__]+=1
+    return sorted(urls,key=lambda u:(-urls[u],u))[:20],errors
+
 
 def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None):
     """Replays explicit dated cells, with document-wide business-basis checks."""
