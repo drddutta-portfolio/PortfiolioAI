@@ -4,7 +4,7 @@ R5 review labels alone confer no R4 authority. Exact retained PDF bytes, issuer
 identity, dated native columns and every existing core observation must replay.
 """
 import hashlib,json,re
-from collections import defaultdict
+from collections import defaultdict,Counter
 from decimal import Decimal
 from datetime import date
 import fitz
@@ -139,7 +139,7 @@ def qualify(raw,source,observations):
         if period not in profile['periods'] or str(row['period_start'])!=profile['periods'][period]:raise ValueError('SHARED_ORIGINAL_QUARTER_MISMATCH')
         if row['currency']!='INR' or row['consolidation_scope']!=profile.get('scope','CONSOLIDATED') or row['evidence_status']!='AVAILABLE':raise ValueError('SHARED_ORIGINAL_OBSERVATION_CONTEXT_MISMATCH')
         groups[period].append(row)
-    eligible=[];rendered_cache={}
+    eligible=[];rendered_cache={};diagnostics=Counter()
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         if len(pdf)>40:raise ValueError('SHARED_ORIGINAL_PAGE_BOUND')
         cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
@@ -161,7 +161,9 @@ def qualify(raw,source,observations):
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('SHARED_ORIGINAL_BUSINESS_BASIS_UNPROVEN')
         original_period=next(p for p,(d,u) in profile['originals'].items() if d==digest and u==source['source_url'])
         for period,rows in groups.items():
-            if period in profile.get('blocked_comparatives',{}):continue
+            if period in profile.get('blocked_comparatives',{}):
+                diagnostics['EXPLICIT_SOURCE_RESTATED_COMPARATIVE_BLOCKED']+=1
+                continue
             if period!=original_period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
             required={'NET_INTEREST_INCOME_QUARTER' if profile['bank'] else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
             if len(rows)!=3 or {r['metric_code'] for r in rows}!=required:continue
@@ -169,7 +171,9 @@ def qualify(raw,source,observations):
             visual_review=profile.get('visual_reviews',{}).get(period)
             for i,page in enumerate(pdf):
                 try:parsed=extract_page(page,i+1,period,bank=profile['bank'],allow_comparative=True)
-                except ValueError:continue
+                except ValueError as error:
+                    diagnostics[str(error).split(':')[0]]+=1
+                    continue
                 if parsed['scope']!=profile.get('scope','CONSOLIDATED'):continue
                 if parsed['first_column_period']!=period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
                 vectors.append(parsed['facts'])
@@ -179,17 +183,21 @@ def qualify(raw,source,observations):
                     if rendered is None:rendered=rendered_facts(raw,profile['ocr_page'],period)
                     if rendered['scope']==profile.get('scope','CONSOLIDATED') and (rendered['first_column_period']==period or not re.search(r'\\b(?:restated|recast)\\b',text,re.I)):
                         vectors.append(rendered['facts'])
-                except ValueError:pass
+                except ValueError as error:diagnostics[str(error).split(':')[0]]+=1
             if visual_review:
                 reviewed=reviewed_original_facts(pdf,visual_review,period)
                 if reviewed['scope']!=profile.get('scope','CONSOLIDATED'):raise ValueError('VISUAL_REVIEW_SCOPE_MISMATCH')
                 vectors=[reviewed['facts']]
             distinct={tuple(sorted((k,v['value'],v['unit']) for k,v in facts.items())) for facts in vectors}
-            if len(distinct)!=1:continue
+            if len(distinct)!=1:
+                diagnostics['NO_UNIQUE_ORIGINAL_FACT_VECTOR']+=1
+                continue
             facts=vectors[0]
-            if any(r['unit']!=facts[r['metric_code']]['unit'] or Decimal(str(r['numeric_value']))!=Decimal(facts[r['metric_code']]['value']) for r in rows):continue
+            if any(r['unit']!=facts[r['metric_code']]['unit'] or Decimal(str(r['numeric_value']))!=Decimal(facts[r['metric_code']]['value']) for r in rows):
+                diagnostics['EXISTING_OBSERVATIONS_DIFFER_FROM_ORIGINAL']+=1
+                continue
             eligible.extend(str(r['id']) for r in rows)
-    return {'contract':CONTRACT,'eligible_observation_ids':sorted(eligible),'original_sha256':digest}
+    return {'contract':CONTRACT,'eligible_observation_ids':sorted(eligible),'original_sha256':digest,'diagnostics':dict(sorted(diagnostics.items()))}
 
 def replay(source,observations,client,bucket):
     _,_,key=context(source)
