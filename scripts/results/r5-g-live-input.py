@@ -185,8 +185,21 @@ def extract(db_url):
                 or chola_proof["approvedSources"][0]["scope"]!="STANDALONE"
                 or chola_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
                 raise RuntimeError("CHOLA_2024_SOURCE_IDENTITY_MISMATCH")
+            icemake_proof=json.loads(Path("src/features/results/resultsR5ICEMAKEOriginalComparisonProof.json").read_text())
+            if (icemake_proof.get("contract")!="R5_ICEMAKE_SIGNED_2025_CONSOLIDATED_ORIGINAL_V1"
+                or icemake_proof.get("environment")!="Development"
+                or icemake_proof.get("originalSHA256")!="496fa0108c00af4551d1e5d85944a1cb19e0627e930361a029176a3b3b790975"):
+                raise RuntimeError("ICEMAKE_ORIGINAL_PROOF_CONTRACT_UNRECOGNIZED")
+            if icemake_proof["approvedSources"] and (
+                len(icemake_proof["approvedSources"])!=1
+                or icemake_proof["approvedSources"][0]["symbol"]!="ICEMAKE"
+                or icemake_proof["approvedSources"][0]["periodEnd"]!="2025-06-30"
+                or icemake_proof["approvedSources"][0]["scope"]!="CONSOLIDATED"
+                or icemake_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
+                raise RuntimeError("ICEMAKE_VERIFIED_ORIGINAL_IDENTITY_MISMATCH")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
+                                   *icemake_proof["approvedSources"],
                                    *chola_proof["approvedSources"],
                                    *nalco_proof["approvedSources"],
                                    *jash_proof["approvedSources"],*sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
