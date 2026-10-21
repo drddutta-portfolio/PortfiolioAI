@@ -6,7 +6,7 @@ import {
 } from "./quarterlyR5Classification"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import { compareQuarterMetric } from "./quarterlyR5"
-import { gradeR5WithVerifiedOriginal as gradeQuarterR5 } from "./resultsR5VerifiedComparison"
+import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal as gradeQuarterR5 } from "./resultsR5VerifiedComparison"
 
 interface Security extends R5IndustryPeer { readonly symbol: string }
 interface Input {
@@ -83,6 +83,20 @@ describe.skipIf(!process.env.RESULTS_R5_G_INPUT)("live R5 historical 7-quarter a
       for(const security of data.cohort){
         const own=selectedById.get(security.securityId)!
         const assessment=gradeQuarterR5(own,security.securityId,end,security.sector,security.industry,calibrations)
+        // Non-numeric, read-only scope trace for exact historically blocked issuers.
+        // No alternate proof is promoted into canonical R4 selections.
+        if(end==="2025-09-30" && ["SHARDACROP","MOTHERSON","CGPOWER"].includes(security.symbol)){
+          const trace=(["CONSOLIDATED","STANDALONE"] as const).map(scope=>{
+            const alternate=buildVerifiedR5ComparisonRows(own,undefined,scope)
+            const assessed=gradeQuarterR5(own,security.securityId,end,security.sector,security.industry,calibrations,alternate)
+            const periods=["2025-03-31","2025-06-30","2025-09-30"]
+            return {scope,grade:assessed.status,changed:alternate!==own,
+              periods:periods.map(period=>({period,selected:alternate.filter(row=>row.selected&&row.periodEnd===period&&
+                ["OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"].includes(row.code))
+                .map(row=>({code:row.code,scope:row.scope,source:row.sourceRecordId})).sort((a,b)=>a.code.localeCompare(b.code))}))}
+          })
+          console.log("R5_VERIFIED_SCOPE_TRACE "+JSON.stringify({symbol:security.symbol,quarter:end,canonical:assessment.status,trace}))
+        }
         expect(assessment.policyVersion).toBe(RESULTS_GRADING_VERSION)
         counts[assessment.status]++
         basis[assessment.basis]++
