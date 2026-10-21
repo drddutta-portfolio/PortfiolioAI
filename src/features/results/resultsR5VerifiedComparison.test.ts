@@ -6,6 +6,7 @@ import sswlOriginal from "./resultsR5SSWLOriginalComparisonProof.json"
 import jashOriginal from "./resultsR5JASHOriginalComparisonProof.json"
 import nalcoOriginal from "./resultsR5NATIONALUMOriginalComparisonProof.json"
 import cholaOriginal from "./resultsR5CHOLAFINOriginalComparisonProof.json"
+import icemakeOriginal from "./resultsR5ICEMAKEOriginalComparisonProof.json"
 import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -66,6 +67,18 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
    expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
    for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
+ })
+ it("pins ICEMAKE June 2025 consolidated loss from original without replacing canonical standalone choice",()=>{
+   expect(icemakeOriginal.contract).toBe("R5_ICEMAKE_SIGNED_2025_CONSOLIDATED_ORIGINAL_V1")
+   expect(icemakeOriginal.environment).toBe("Development")
+   expect(icemakeOriginal.originalSHA256).toBe("496fa0108c00af4551d1e5d85944a1cb19e0627e930361a029176a3b3b790975")
+   expect(icemakeOriginal.approvedSources).toHaveLength(1)
+   const source=icemakeOriginal.approvedSources[0]!
+   expect(source.symbol).toBe("ICEMAKE")
+   expect(source.periodEnd).toBe("2025-06-30")
+   expect(source.scope).toBe("CONSOLIDATED")
+   expect(source.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+   expect(Object.keys(source.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
  })
  it("pins source-original CHOLAFIN 2024 Dec standalone quarter for exact R5 comparison without R4 overwrite",()=>{
     expect(cholaOriginal.contract).toBe("R5_CHOLAFIN_SIGNED_2024_STANDALONE_ORIGINAL_V1")
