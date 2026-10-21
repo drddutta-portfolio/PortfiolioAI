@@ -30,6 +30,30 @@ class R5OriginalScopeProof(unittest.TestCase):
         self.assertFalse(result["source_admission_performed"])
         self.assertFalse(result["repository_selection_overwrite"])
 
+    def test_identical_replayed_originals_corroborate_same_scope(self):
+        facts=(self.rows("ITCHOTELS","2024-12-31","STANDALONE","prior")+
+               self.rows("ITCHOTELS","2025-03-31","STANDALONE","same-b")+
+               self.rows("ITCHOTELS","2025-03-31","STANDALONE","same-a"))
+        result=module.r5_verified_scope_continuity(facts)
+        matched=[p for p in result["comparison_only_original_proofs"]
+                 if p["symbol"]=="ITCHOTELS" and p["periodEnd"]=="2025-03-31"
+                 and p["scope"]=="STANDALONE"]
+        self.assertEqual(len(matched),1)
+        self.assertEqual(matched[0]["sourceRecordId"],"same-a")
+        self.assertEqual(set(matched[0]["observations"]),module.OTHER_REQUIRED)
+        self.assertEqual(result["equivalent_original_copies_collapsed"],1)
+        self.assertFalse(result["source_admission_performed"])
+        self.assertFalse(result["repository_selection_overwrite"])
+
+    def test_conflicting_originals_never_collapse(self):
+        facts=(self.rows("SHARDACROP","2025-03-31","STANDALONE","doc-a",pat=10)+
+               self.rows("SHARDACROP","2025-03-31","STANDALONE","doc-b",pat=11))
+        result=module.r5_verified_scope_continuity(facts)
+        self.assertFalse(any(p["symbol"]=="SHARDACROP" and
+            p["periodEnd"]=="2025-03-31" and p["scope"]=="STANDALONE"
+            for p in result["comparison_only_original_proofs"]))
+        self.assertEqual(result["equivalent_original_copies_collapsed"],0)
+
     def test_refuses_conflicting_same_scope_issuer_values(self):
         facts=(self.rows("CAMS","2025-06-30","STANDALONE","doc-a",pat=10)+
                self.rows("CAMS","2025-06-30","STANDALONE","doc-b",pat=11)+

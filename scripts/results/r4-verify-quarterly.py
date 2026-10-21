@@ -699,9 +699,31 @@ def r5_verified_scope_continuity(facts):
     by_period_scope=defaultdict(list)
     for item in comparison_proofs:
         by_period_scope[(item["securityId"],item["periodEnd"],item["scope"])].append(item)
-    comparison_proofs=[rows[0] for _,rows in sorted(by_period_scope.items())
-                       if len(rows)==1]
+    # R5-only corroboration: two independently R2-SHA-replayed originals
+    # with identical required metric values are equivalent evidence, not
+    # a reason to suppress an otherwise coherent comparison. Conflicting
+    # values were excluded by the strict versions guard above.
+    equivalent_original_copies_collapsed=0
+    unique_proofs=[]
+    for (security_id,period,scope),rows in sorted(by_period_scope.items()):
+        if len(rows)==1:
+            unique_proofs.append(rows[0])
+            continue
+        symbol=rows[0]["symbol"]
+        needed=(BANK_REQUIRED if symbol in BANKS else
+                INSURANCE_REQUIRED if symbol in INSURERS else OTHER_REQUIRED)
+        if any(row["symbol"]!=symbol or row["securityId"]!=security_id or
+               set(row["observations"])!=needed for row in rows):
+            continue
+        if any(len(versions[(symbol,period,scope,metric)])!=1 for metric in needed):
+            continue
+        # Deterministic source ID ordering is NOT original-publication dating.
+        # Use one complete filing; never mix financial lines from two sources.
+        unique_proofs.append(min(rows,key=lambda row:row["sourceRecordId"]))
+        equivalent_original_copies_collapsed+=len(rows)-1
+    comparison_proofs=unique_proofs
     return {"contract":"R5_SOURCE_HASH_VERIFIED_HISTORICAL_SCOPE_AUDIT_V1",
+            "equivalent_original_copies_collapsed":equivalent_original_copies_collapsed,
             "comparison_only_original_proofs":comparison_proofs,
             "comparison_only_original_proof_count":len(comparison_proofs),
             "historical_pairs_checked":len(targets),
