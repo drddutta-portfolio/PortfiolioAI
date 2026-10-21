@@ -141,11 +141,25 @@ class RecoveryTest(unittest.TestCase):
         self.assertEqual(point["state"],"WAITING_FOR_SOURCE_RETRY_WINDOW")
         self.assertEqual(point["trendlyne_dispatch"],"PAUSED_PENDING_APPROVED_WORKFLOW_AUTH_DEPLOYMENT")
 
-    def test_monitor_waits_for_collector(self):
+    def test_one_active_source_does_not_stall_other_collectors(self):
+        def request(path,payload=None):
+            if payload is not None:return None
+            return {"workflow_runs":[{"id":1,"status":"in_progress"}]} if SOURCES[0] in path else {"workflow_runs":[]}
+        point=monitor.check_once(self.report(),{},100,request)
+        self.assertEqual(point["dispatched_source"],SOURCES[1])
+        self.assertEqual(point["active_runs"],[1])
+
+    def test_monitor_bounds_concurrent_sources_without_duplicate_dispatches(self):
         def request(path,payload=None):
             self.assertIsNone(payload)
-            return {"workflow_runs":[{"id":1,"status":"in_progress"}]} if SOURCES[0] in path else {"workflow_runs":[]}
+            return {"workflow_runs":[{"id":1,"status":"in_progress"}]} if any(s in path for s in SOURCES[:2]) else {"workflow_runs":[]}
         self.assertEqual(monitor.check_once(self.report(),{},100,request)["state"],"COLLECTORS_RUNNING")
+
+    def test_source_queue_skips_only_active_source_within_concurrency_limit(self):
+        runs={s:[] for s in SOURCES};runs[SOURCES[0]]=[{"status":"queued"}]
+        self.assertEqual(next_source(100,{},runs),SOURCES[1])
+        runs[SOURCES[1]]=[{"status":"in_progress"}]
+        self.assertIsNone(next_source(100,{},runs))
 
     def test_historical_completion_does_not_require_deferred_r3(self):
         point=monitor.check_once(self.report(0),{},100,lambda *args:self.fail("unexpected dispatch"))
