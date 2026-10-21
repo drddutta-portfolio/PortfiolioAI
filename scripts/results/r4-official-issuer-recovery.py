@@ -5,12 +5,18 @@ from datetime import datetime,timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlparse
-import requests,psycopg
-from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,approved_url,extract_original,canonical,sha,discover
+from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,approved_url,extract_original,canonical,sha,discover,get
 from r4_recovery_queue import run_with_timeout
 
-spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
-batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
+def load_runtime():
+    spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    return module
+
+def download_original(session,symbol,url):
+    raw,final_url=get(session,symbol,url,32_000_000)
+    if not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_ORIGINAL_NOT_PDF')
+    return raw,final_url
 
 def extract_all(raw,symbol,periods):
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
@@ -73,6 +79,9 @@ def checkpoint(db,client,outcome,counts,shard):
     db.commit()
 
 def main():
+    global batch
+    import requests,psycopg
+    batch=load_runtime()
     parser=argparse.ArgumentParser();parser.add_argument('--shard',type=int,required=True);args=parser.parse_args()
     if args.shard not in range(4):raise RuntimeError('INVALID_SHARD')
     if os.getenv('GITHUB_REPOSITORY')!='drddutta-portfolio/PortfiolioAI' or os.getenv('GITHUB_REF')!='refs/heads/PortfolioAI-Development':
@@ -102,8 +111,7 @@ def main():
                     rejects['ISSUER_TIME_BUDGET_RESUME_NEXT_PASS']+=1
                     break
                 try:
-                    raw,final_url=get(session,symbol,url,32_000_000)
-                    if not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_ORIGINAL_NOT_PDF')
+                    raw,final_url=download_original(session,symbol,url)
                     digest=sha(raw);batch.immutable_put(client,batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf',raw)
                     counts['originals_retained']+=1
                     cachekey=batch.PREFIX+'official-issuer-replays/symbol='+symbol+'/engine='+engine+'/original='+digest+'/periods='+sha(canonical(periods))+'/proof.json'
@@ -117,6 +125,7 @@ def main():
                         for parsed in parsed_options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed)
                 except Exception as error:
                     db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
+                    if isinstance(error,(NameError,AttributeError,TypeError)):counts['programming_failures']+=1
                 finally:
                     counts['originals_attempted']+=1
                     attempted+=1
@@ -135,5 +144,7 @@ def main():
                 ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING""",(os.environ['GITHUB_RUN_ID']+':'+str(args.shard),digest,encoded.decode()))
         db.commit()
     print('R4_OFFICIAL_ORIGINAL_FINAL',json.dumps(dict(counts)),flush=True)
+    if counts.get('programming_failures'):raise RuntimeError('OFFICIAL_COLLECTOR_PROGRAMMING_ERRORS_CHECKPOINTED')
 
 if __name__=='__main__':main()
+
