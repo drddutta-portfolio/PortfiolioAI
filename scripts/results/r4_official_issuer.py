@@ -197,6 +197,11 @@ def qualify(raw,source,observations):
     if not re.fullmatch(r'[0-9a-f]{64}',str(digest)) or sha(raw)!=digest:raise ValueError('OFFICIAL_ORIGINAL_HASH_MISMATCH')
     if payload.get('original_r2_key')!=PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf':
         raise ValueError('OFFICIAL_ORIGINAL_REFERENCE_UNPROVEN')
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
+        reported=set(re.findall(r'\bISIN(?:\s+(?:CODE|NO\.?))?\s*[:\-]?\s*(IN[A-Z0-9]{10})\b',cover,re.I))
+        if {x.upper() for x in reported}-{payload['isin']}:
+            raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
     period=payload['period_end'];recorded=payload['parsed']
     options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'))
     matching=[x for x in options if x['scope']==recorded['scope']]
@@ -213,3 +218,4 @@ def qualify(raw,source,observations):
             or Decimal(str(row['numeric_value']))!=Decimal(facts[row['metric_code']]['value'])):
             raise ValueError('OFFICIAL_OBSERVATION_CONTEXT_OR_VALUE_MISMATCH')
     return {'contract':'RESULTS_R4_SHARED_ISSUER_ORIGINAL_REPLAY_V1','eligible_observation_ids':sorted(str(r['id']) for r in observations)}
+
