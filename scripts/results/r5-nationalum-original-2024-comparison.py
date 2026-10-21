@@ -17,7 +17,7 @@ from botocore.config import Config
 REF="lrgpjimipfkyoqbpsqzz";BUCKET="portfolioai-history-dev"
 SYMBOL="NATIONALUM";ISIN="INE139A01034"
 SOURCE="COMPANY_EXCHANGE_FILING"
-KIND="RESULTS_R5_NATIONALUM_SIGNED_DEC2024_COMPARATIVE_V1"
+KIND="RESULTS_R5_NATIONALUM_SIGNED_SEP2024_CONSOLIDATED_V1"
 URL="https://nsearchives.nseindia.com/corporate/LetterOutcomeSept2024Results_13112024163859.pdf"
 SHA="7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9"
 APPROVAL="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
@@ -153,7 +153,7 @@ def main():
      scope="CONSOLIDATED",sourceRecordId=str(srcid),observations=recorded,approval=APPROVAL))
   db.commit()
  out=Path("src/features/results/resultsR5NATIONALUMOriginalComparisonProof.json")
- out.write_text(json.dumps({"contract":"R5_NATIONALUM_SIGNED_2024_COMPARATIVE_ORIGINAL_V1",
+ out.write_text(json.dumps({"contract":"R5_NATIONALUM_SIGNED_2024_CONSOLIDATED_ORIGINAL_V1",
    "environment":"Development","originalSHA256":SHA,"approvedSources":sorted(proof,key=lambda x:x["periodEnd"])},
   sort_keys=True,indent=2)+"\n")
  print("R5_NATIONALUM_SIGNED_ORIGINAL_2024",json.dumps({"originalSHA":SHA,
