@@ -6,54 +6,11 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlparse
 import requests,psycopg
-from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,approved_url,extract_original,canonical,sha
+from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,approved_url,extract_original,canonical,sha,discover
 from r4_recovery_queue import run_with_timeout
 
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
-
-class Links(HTMLParser):
-    def __init__(self):super().__init__();self.links=[];self.current=None
-    def handle_starttag(self,tag,attrs):
-        if tag=='a':self.current=[dict(attrs).get('href',''),'']
-    def handle_data(self,data):
-        if self.current:self.current[1]+=data+' '
-    def handle_endtag(self,tag):
-        if tag=='a' and self.current:self.links.append(tuple(self.current));self.current=None
-
-def get(session,symbol,url,limit):
-    # Validate every redirect before issuing its request; do not follow an
-    # issuer page into a provider, external object host or unrelated document.
-    for _ in range(5):
-        approved_url(symbol,url)
-        with session.get(url,timeout=(15,45),allow_redirects=False,stream=True) as response:
-            if response.status_code in (301,302,303,307,308):
-                url=urljoin(url,response.headers['Location']);continue
-            response.raise_for_status();parts=[];size=0
-            for part in response.iter_content(65536):
-                size+=len(part)
-                if size>limit:raise ValueError('OFFICIAL_RESPONSE_SIZE_BOUND')
-                parts.append(part)
-            return b''.join(parts),url
-    raise ValueError('OFFICIAL_REDIRECT_BOUND')
-
-def discover(session,symbol):
-    profile=ISSUERS[symbol];urls={u:100 for u in profile['originals']};errors=Counter()
-    for page in profile['pages']:
-        try:
-            raw,origin=get(session,symbol,page,4_000_000);text=raw.decode('utf-8',errors='replace')
-            parser=Links();parser.feed(text)
-            links=parser.links+[(u,'') for u in re.findall(r'https?[^\s"<>]+?\.pdf(?:\?[^\s"<>]*)?',html.unescape(text).replace('\\/','/'),re.I)]
-            for target,label in links:
-                url=urljoin(origin,html.unescape(target)).split('#')[0];u=urlparse(url)
-                if not u.path.lower().endswith('.pdf'):continue
-                approved_url(symbol,url);hint=(url+' '+label).lower()
-                if re.search(r'presentation|transcript|annual.report|press.release|newspaper|policy|governance|shareholding|credit.rating',hint):continue
-                if not re.search(r'financial|result|outcome|quarter|q[1-4]|qr/|ufr',hint):continue
-                score=10*bool(re.search(r'2024|2025|fy25|fy26|2024.25|2025.26',hint))+3*bool(re.search(r'financial|result|outcome',hint))
-                urls[url]=max(score,urls.get(url,0))
-        except Exception as error:errors['DISCOVERY_'+type(error).__name__]+=1
-    return sorted(urls,key=lambda u:(-urls[u],u))[:20],errors
 
 def extract_all(raw,symbol,periods):
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
@@ -103,6 +60,18 @@ def persist(db,client,row,period,url,raw,parsed):
             inserted+=int(cur.fetchone() is not None)
     db.commit();return inserted
 
+def checkpoint(db,client,outcome,counts,shard):
+    report={'contract':'RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1','workflow_run_id':os.environ['GITHUB_RUN_ID'],
+        'source_commit':os.environ['GITHUB_SHA'],'counts':dict(counts),'issuers':[outcome]}
+    encoded=canonical(report);digest=sha(encoded)
+    batch.immutable_put(client,batch.PREFIX+'official-issuer-audits/sha256='+digest+'/audit.json',encoded)
+    external=':'.join((os.environ['GITHUB_RUN_ID'],str(shard),outcome['symbol'],str(outcome.get('original_urls_attempted',0))))
+    with db.cursor() as cur:
+        cur.execute("""INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot)
+            VALUES('COMPANY_EXCHANGE_FILING','RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1',%s,%s,%s::jsonb,'{"retention":"STRUCTURED_OPERATIONAL_AUDIT; ORIGINALS_PRIVATE_R2"}'::jsonb)
+            ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING""",(external,digest,encoded.decode()))
+    db.commit()
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--shard',type=int,required=True);args=parser.parse_args()
     if args.shard not in range(4):raise RuntimeError('INVALID_SHARD')
@@ -151,6 +120,9 @@ def main():
                 finally:
                     counts['originals_attempted']+=1
                     attempted+=1
+                    outcome.update(rejections=dict(rejects),original_urls_attempted=attempted,
+                        original_urls_discovered=len(urls),next_offset=(offset+attempted)%len(urls) if urls else 0)
+                    checkpoint(db,client,outcome,counts,args.shard)
                     print('R4_OFFICIAL_ORIGINAL_PROGRESS',json.dumps(dict(counts)),flush=True)
             outcome['rejections']=dict(rejects);outcome['original_urls_attempted']=attempted
             outcome['original_urls_discovered']=len(urls);outcome['next_offset']=(offset+attempted)%len(urls) if urls else 0
