@@ -1901,6 +1901,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "dc8d751f-b5b3-4a40-b926-ec24afb1a6b7",
+        "NET_PROFIT_QUARTER": "72175411-861a-4330-93db-94059ce0f6ec",
+        "OPERATING_REVENUE_QUARTER": "bc8a8fa2-504f-48e7-8944-99ca797fbeda"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "9d28c14f-9035-4028-a8d7-128886031b00",
+      "sourceRecordId": "34551f5e-2e83-4468-9b79-5119854abe3f",
+      "symbol": "MOTHERSON"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "44ed5c09-4cec-4b15-bc40-2a317ef343be",
         "NET_PROFIT_QUARTER": "0e92e677-92d4-4cf5-939b-5f88616aa97c",
         "OPERATING_REVENUE_QUARTER": "9528ce54-0747-4b8b-885e-06b4b794213d"
@@ -2169,6 +2182,19 @@
       "scope": "CONSOLIDATED",
       "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
       "sourceRecordId": "f3bf559b-6fad-4d3d-bd4c-3a8af2fc87d6",
+      "symbol": "SHARDACROP"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "503e27d5-5bf3-42ef-b85f-55d125c44567",
+        "NET_PROFIT_QUARTER": "aa529be6-1fdb-4cec-bb4d-bec362f962ea",
+        "OPERATING_REVENUE_QUARTER": "6e20944d-89c6-48ac-bd82-a3d62d735565"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "a40ecb86-108c-4bbf-80cf-c721eaa34c56",
+      "sourceRecordId": "0df3a03f-cdd1-4c62-b68e-54bfd859b4fe",
       "symbol": "SHARDACROP"
     },
     {
@@ -2494,6 +2520,19 @@
       "scope": "STANDALONE",
       "securityId": "b40264b4-289d-4919-82d0-0ecb815eca5b",
       "sourceRecordId": "36ef0512-c0bb-4e60-8aa3-c0a5114dbda9",
+      "symbol": "VENTIVE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "0c3f8871-d4c3-4609-afc1-e5a57b3d00a4",
+        "NET_PROFIT_QUARTER": "651d7e78-2cb7-4759-aefd-0e9018c957e8",
+        "OPERATING_REVENUE_QUARTER": "f013b2c7-fffa-464e-a53c-1e8358477217"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "b40264b4-289d-4919-82d0-0ecb815eca5b",
+      "sourceRecordId": "71ba586c-904f-403f-a41f-cc91ffe03c3d",
       "symbol": "VENTIVE"
     },
     {
@@ -3149,6 +3188,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "6772bcd4-77dc-42af-965f-17bb2e667934",
+        "NET_PROFIT_QUARTER": "5bc9798a-7112-4aa8-8e1d-eb4d2cc45b67",
+        "OPERATING_REVENUE_QUARTER": "68b29a0a-c02e-4064-b794-eea1dab0a8dc"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "d8c32eab-90ce-4202-9d44-6534d4d13e5e",
+      "sourceRecordId": "25ec548f-8034-40e1-a4fe-063f0a96ed1f",
+      "symbol": "ITCHOTELS"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "3f4c0aaf-4a37-4d01-b122-b89944ae70a5",
         "NET_PROFIT_QUARTER": "d628dbf0-999c-4958-b7f3-e9d80c343c3f",
         "OPERATING_REVENUE_QUARTER": "2ef03039-6e20-4e9c-b5a0-ac45cda02b55"
@@ -3612,6 +3664,32 @@
       "scope": "STANDALONE",
       "securityId": "f396294a-84ac-4b09-acdc-986d39e17ba6",
       "sourceRecordId": "63be16e3-c36f-44b0-873a-f4e2ee81d513",
+      "symbol": "BDL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "cc55b150-c0ff-4333-a3db-ede1485d69a9",
+        "NET_PROFIT_QUARTER": "2fcabe19-f00a-4a84-8533-33b3b33a28b8",
+        "OPERATING_REVENUE_QUARTER": "10eff6b9-c8c5-4b38-8b97-ef9a73faf1b4"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "f396294a-84ac-4b09-acdc-986d39e17ba6",
+      "sourceRecordId": "59195a01-8245-46ce-99f4-a1269a228473",
+      "symbol": "BDL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "c9ffeb00-caf9-4ed6-b3ea-a21d61fb0588",
+        "NET_PROFIT_QUARTER": "c12850f9-6318-4eca-962a-09d13c752c07",
+        "OPERATING_REVENUE_QUARTER": "cff432f0-8429-49c4-937f-29f678ccfdf7"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "f396294a-84ac-4b09-acdc-986d39e17ba6",
+      "sourceRecordId": "1e28000d-74f5-4c98-b680-bad2c3bcb34f",
       "symbol": "BDL"
     },
     {
