@@ -18,6 +18,10 @@ KIND='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
 PREFIX='portfolioai-results/development/v1/quarterly/'
 BUCKET='portfolioai-history-dev'
 PERIODS={'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01','2025-03-31':'2025-01-01','2025-06-30':'2025-04-01'}
+SPLIT_AUTHORITIES={'COFORGE':{'url':'https://www.msei.in/SX-Content/Circulars/2025/June/Circular-17281.pdf',
+    'old_isin':'INE591G01017','current_isin':'INE591G01025','ex_date':'2025-06-04',
+    'circular':'MSE/LIST/17281/2025','date_text':'JUNE 04, 2025',
+    'row':'COFORGE COFORGE LIMITED INE591G01017 INE591G01025 SUB-DIVISION FROM RS. 10/- TO RS. 2/-'}}
 
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
 def sha(raw):return hashlib.sha256(raw).hexdigest()
@@ -37,8 +41,10 @@ ISSUERS={
           'pages':['https://www.syrmasgs.com/investor-relations/43-2/','https://syrmasgs.com/financial-information/'],'originals':[]},
  'SSWL':{'legal':'STEEL STRIPS WHEELS LIMITED','hosts':['sswlindia.com','www.sswlindia.com','sswlindia.in','www.sswlindia.in'],
          'pages':['https://sswlindia.com/investors/quarterly-annual-financial-results'],'originals':[]},
- 'STARHEALTH':{'legal':'STAR HEALTH AND ALLIED INSURANCE COMPANY LIMITED','hosts':['www.starhealth.in','starhealth.in'],
-               'pages':['https://www.starhealth.in/investors/disclosures/'],'originals':[]},
+ 'STARHEALTH':{'legal':'STAR HEALTH AND ALLIED INSURANCE COMPANY LIMITED','hosts':['www.starhealth.in','starhealth.in','nsearchives.nseindia.com','www.bseindia.com'],
+               'pages':['https://www.starhealth.in/investors/disclosures/'],
+               'originals':['https://nsearchives.nseindia.com/corporate/BoardMeetingoutcome29102024_29102024183837.pdf',
+                            'https://www.bseindia.com/xml-data/corpfiling/AttachHis/38b751f3-1e7e-412c-9680-a3b80d0fcb27.pdf']},
  'TATACAP':{'legal':'TATA CAPITAL LIMITED','hosts':['www.tatacapital.com','tatacapital.com'],
             'pages':['https://www.tatacapital.com/about-us/investor-information-and-financials.html'],'originals':[]},
  'VENTIVE':{'legal':'VENTIVE HOSPITALITY LIMITED','hosts':['www.ventivehospitality.com','ventivehospitality.com'],
@@ -56,7 +62,8 @@ ISSUERS={
  'BLUSPRING':{'legal':'BLUSPRING ENTERPRISES LIMITED','hosts':['www.bluspring.com','bluspring.com'],
               'pages':['https://www.bluspring.com/for-investors/'],'originals':[]},
  'COFORGE':{'legal':'COFORGE LIMITED','hosts':['investors.coforge.com','www.coforge.com'],
-            'pages':['https://investors.coforge.com/quarter-reports'],'originals':[]},
+            'pages':['https://investors.coforge.com/quarter-reports'],
+            'originals':['https://investors.coforge.com/hubfs/Result-Q4FY2025.pdf?hsLang=en']},
  'CPPLUS':{'legal':'ADITYA INFOTECH LIMITED','hosts':['www.adityagroup.com','adityagroup.com'],
            'pages':['https://www.adityagroup.com/financial-results'],'originals':[]},
  'EBGNG':{'legal':'ELLENBARRIE INDUSTRIAL GASES LIMITED','hosts':['ellenbarrie.com','www.ellenbarrie.com'],
@@ -70,7 +77,9 @@ ISSUERS={
         'pages':['https://www.iglonline.net/financial'],
         'originals':['https://nsearchives.nseindia.com/corporate/IGL1_27012025192310_IntegratedUFR31122024.pdf']},
  'DDEVPLSTIK':{'legal':'DDEV PLASTIKS INDUSTRIES LIMITED','hosts':['www.ddevgroup.in','ddevgroup.in'],
-              'pages':['https://www.ddevgroup.in/financial-reporting'],'originals':[]},
+              'pages':['https://www.ddevgroup.in/financial-reporting'],
+              'originals':['https://www.ddevgroup.in/public/assets/pdf/Investor/Financial-Reporting/Quarterly-Results/Results/Q2-FY-2024-25.pdf',
+                           'https://www.ddevgroup.in/assets/pdf/Investor/Financial-Reporting/Quarterly-Results/Results/Q2-FY-2024-25.pdf']},
  'MANKIND':{'legal':'MANKIND PHARMA LIMITED','hosts':['www.mankindpharma.com','mankindpharma.com'],
             'pages':['https://www.mankindpharma.com/investors-relations/financials/'],'originals':[]},
  'LGEINDIA':{'legal':'LG ELECTRONICS INDIA LIMITED','hosts':['www.lg.com'],
@@ -91,6 +100,10 @@ def approved_url(symbol,url):
         or u.port not in (None,443) or u.fragment):raise ValueError('OFFICIAL_ISSUER_URL_UNAPPROVED')
     if u.hostname=='nsearchives.nseindia.com' and url not in profile['originals']:
         raise ValueError('UNLISTED_NSE_ISSUER_ORIGINAL')
+    if u.hostname=='www.bseindia.com':
+        if (not re.fullmatch(r'/xml-data/corpfiling/(?:AttachHis|AttachLive)/[0-9a-f-]{36}\.pdf',u.path,re.I)
+            or u.query or not any(urlparse(seed).path.rsplit('/',1)[-1]==u.path.rsplit('/',1)[-1] for seed in profile['originals'])):
+            raise ValueError('UNLISTED_BSE_ISSUER_ORIGINAL')
     return profile
 
 class Links(HTMLParser):
@@ -189,7 +202,22 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                 'method':method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'})
         return out
 
-def qualify(raw,source,observations):
+def split_reference(raw,symbol):
+    authority=SPLIT_AUTHORITIES.get(symbol)
+    if authority is None or not raw.startswith(b'%PDF') or len(raw)>2_000_000:raise ValueError('OFFICIAL_SPLIT_AUTHORITY_UNPROVEN')
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        if not 1<=len(pdf)<=3:raise ValueError('OFFICIAL_SPLIT_AUTHORITY_PAGE_BOUND')
+        text=' '.join(p.get_text('text') for p in pdf)
+    compact=lambda value:re.sub(r'[^A-Z0-9]','',value.upper())
+    text=compact(text)
+    if not all(compact(value) in text for value in (authority['circular'],authority['date_text'],authority['row'],'METROPOLITAN STOCK EXCHANGE OF INDIA LIMITED')):
+        raise ValueError('OFFICIAL_SPLIT_AUTHORITY_CONTEXT_UNPROVEN')
+    digest=sha(raw)
+    return {'contract':'RESULTS_R4_OFFICIAL_EXCHANGE_SHARE_IDENTITY_V1','symbol':symbol,
+        'old_isin':authority['old_isin'],'current_isin':authority['current_isin'],'ex_date':authority['ex_date'],
+        'source_url':authority['url'],'sha256':digest,'r2_key':PREFIX+'issuer-identity/sha256='+digest+'/split.pdf'}
+
+def qualify(raw,source,observations,identity_raw=None):
     payload=source['raw_payload'];symbol=payload.get('symbol');approved_url(symbol,source['source_url'])
     if (payload.get('contract')!=CONTRACT or payload.get('sourceUrl')!=source['source_url']
         or sha(canonical(payload))!=source['payload_hash']):raise ValueError('OFFICIAL_SOURCE_PAYLOAD_UNPROVEN')
@@ -200,8 +228,14 @@ def qualify(raw,source,observations):
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
         reported=set(re.findall(r'\bISIN(?:\s+(?:CODE|NO\.?))?\s*[:\-]?\s*(IN[A-Z0-9]{10})\b',cover,re.I))
-        if {x.upper() for x in reported}-{payload['isin']}:
-            raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
+        reported={x.upper() for x in reported}
+        bridge=payload.get('isin_bridge')
+        if bridge is not None:
+            if identity_raw is None or bridge!=split_reference(identity_raw,symbol):raise ValueError('OFFICIAL_SPLIT_ORIGINAL_REPLAY_UNPROVEN')
+        if reported-{payload['isin']}:
+            if (bridge is None or reported!={bridge['old_isin']} or payload['isin']!=bridge['current_isin']
+                or payload['period_end']>=bridge['ex_date']):
+                raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
     period=payload['period_end'];recorded=payload['parsed']
     options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'))
     matching=[x for x in options if x['scope']==recorded['scope']]
