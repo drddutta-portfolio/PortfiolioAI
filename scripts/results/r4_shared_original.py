@@ -82,6 +82,8 @@ PROFILES={
  'R5_SIGNED_JASH_2024_ORIGINAL_COMPARATIVE_V1':{
   'symbol':'JASH','isin':'INE039O01029','legal':'JASH ENGINEERING LIMITED',
   'identity_marker':'jashindia.com','ocr_page':6,
+  # Note 5 on original page 7 explicitly rebases comparative EPS for the split.
+  'blocked_comparatives':{'2024-09-30':'ISSUER_RESTATED_SPLIT_EPS_POLICY_PENDING'},
   'originals':{'2024-12-31':('74de4acdeb0554f3f81a3162828307f408165adb11b8d727fe44cec08baf1148','https://jashindia.com/wp-content/uploads/2025/02/Outcome-JASH-Q3.pdf')},
   'periods':{'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01'},'bank':False},
 
@@ -105,12 +107,13 @@ def context(source):
 
 def rendered_facts(raw,page_no,period):
     """Two independent renders must prove the same dated core cells."""
-    from r4_ocr_dated_geometry import extract_dated_page
+    from r4_ocr_dated_geometry import extract_dated_page,RENDER_PAIRS
     for mode in (6,3,11):
-        try:parsed,checks=extract_dated_page(raw,page_no,period,render_dpi=(300,450),segmentation_mode=mode)
-        except ValueError:continue
-        parsed['_rendered_issuer_texts']=[checks['issuer_text_first'],checks['issuer_text_second']]
-        return parsed
+        for pair in RENDER_PAIRS:
+            try:parsed,checks=extract_dated_page(raw,page_no,period,render_dpi=pair,segmentation_mode=mode)
+            except ValueError:continue
+            parsed['_rendered_issuer_texts']=[checks['issuer_text_first'],checks['issuer_text_second']]
+            return parsed
     raise ValueError('SHARED_ORIGINAL_APPROVED_RENDER_MODES_UNPROVEN')
 
 def reviewed_original_facts(pdf,review,period):
@@ -158,6 +161,7 @@ def qualify(raw,source,observations):
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):raise ValueError('SHARED_ORIGINAL_BUSINESS_BASIS_UNPROVEN')
         original_period=next(p for p,(d,u) in profile['originals'].items() if d==digest and u==source['source_url'])
         for period,rows in groups.items():
+            if period in profile.get('blocked_comparatives',{}):continue
             if period!=original_period and re.search(r'\b(?:restated|recast)\b',text,re.I):continue
             required={'NET_INTEREST_INCOME_QUARTER' if profile['bank'] else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
             if len(rows)!=3 or {r['metric_code'] for r in rows}!=required:continue
