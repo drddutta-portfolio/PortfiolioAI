@@ -1,6 +1,20 @@
 {
+  "approvedSources": [
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "17ae4729-1c2a-47e2-8231-1d79c54d7bf9",
+        "NET_PROFIT_QUARTER": "3e3fec7d-1a9d-4c51-b65a-5e8978d146ee",
+        "OPERATING_REVENUE_QUARTER": "c2578882-5607-4c98-a5b9-ae803b637482"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "sourceRecordId": "2d4a37c3-d2a5-494b-94ba-b7f975972e11",
+      "symbol": "ICEMAKE"
+    }
+  ],
   "contract": "R5_ICEMAKE_SIGNED_2025_CONSOLIDATED_ORIGINAL_V1",
   "environment": "Development",
-  "originalSHA256": "496fa0108c00af4551d1e5d85944a1cb19e0627e930361a029176a3b3b790975",
-  "approvedSources": []
+  "originalSHA256": "496fa0108c00af4551d1e5d85944a1cb19e0627e930361a029176a3b3b790975"
 }
