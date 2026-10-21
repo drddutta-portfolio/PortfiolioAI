@@ -883,6 +883,8 @@ def verify(db,s3,apply):
         facts,exide_corrected=qualify_exide_correction(facts,s3)
         from r4_krn_correction import qualify as qualify_krn_correction
         facts,krn_corrected=qualify_krn_correction(facts,s3)
+        from r4_bdl_correction import qualify as qualify_bdl_correction
+        facts,bdl_corrected=qualify_bdl_correction(facts,s3)
         with conn.cursor() as cur:
             cur.execute("""SELECT security_id,metric_code,period_end,consolidation_scope,selected_observation_id
               FROM public.fundamental_observation_decisions WHERE period_type='QUARTER'
@@ -892,6 +894,7 @@ def verify(db,s3,apply):
         selections,blocked,quarters=select_quarters(facts,existing_choices);invalid.update(blocked)
         if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
         if krn_corrected:invalid["KRN_CORRECTED_XBRL_SUPPORTED_BY_ISSUER_AND_EXCHANGE_ACK"]+=1
+        if bdl_corrected:invalid["BDL_XML_TAX_SIGN_RECONCILED_TO_SIGNED_STATEMENT"]+=1
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -907,13 +910,15 @@ def verify(db,s3,apply):
                         "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE),
+                        "bdl_correction":bool(bdl_corrected and r["symbol"]=="BDL"
+                            and str(r["period_end"])=="2025-03-31" and r["consolidation_scope"]=="STANDALONE"),
                         "krn_correction":bool(krn_corrected and r["symbol"]=="KRN"
                             and str(r["period_end"])=="2025-03-31" and r["consolidation_scope"]=="CONSOLIDATED")
                         } for r in selections]
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean,dated_bse boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -941,6 +946,8 @@ def verify(db,s3,apply):
                                'EVIDENCE_PRIORITY',now(),NULL,
                                CASE WHEN p.issuer_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.bdl_correction THEN
+                                 'RESULTS_R4_BDL_SIGNED_STANDALONE_STATEMENT_RECONCILIATION; ORIGINAL_AND_REVISED_XML_AND_INSPECTED_STATEMENT_IMAGE_HASH_PINNED; OLD_XML_DEFERRED_TAX_SIGN_DISAGREES_WITH_SIGNED_TOTAL_TAX_AND_PAT; ORIGINALS_PRESERVED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.krn_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; KRN_ISSUER_CORRECTION_AND_NSE_ACK_2025_07_10; ORIGINAL_AND_REVISED_XBRL_HASH_PINNED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.dated_bse THEN
