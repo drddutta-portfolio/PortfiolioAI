@@ -6,6 +6,7 @@ import tataPowerSource from "./resultsR5TataPowerOriginalComparisonProof.json"
 import sswlSource from "./resultsR5SSWLOriginalComparisonProof.json"
 import jashSource from "./resultsR5JASHOriginalComparisonProof.json"
 import nalcoSource from "./resultsR5NATIONALUMOriginalComparisonProof.json"
+import cholaSource from "./resultsR5CHOLAFINOriginalComparisonProof.json"
 import bdlSource from "./resultsR5BDLOriginalComparisonProof.json"
 import gmbrewSource from "./resultsR5GMBREWOriginalComparisonProof.json"
 
@@ -27,7 +28,7 @@ const CORE = ["NET_PROFIT_QUARTER", "EPS_DILUTED"] as const
 const APPROVAL = "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
 const unitFor = (code:string) => code === "EPS_DILUTED" ? "INR_PER_SHARE" : "INR_CRORE"
 const independentlyVerifiedOriginals:readonly VerifiedR5Source[] = [
-  ...manifest.approvedSources, ...federalSource.approvedSources, ...tataPowerSource.approvedSources, ...sswlSource.approvedSources, ...jashSource.approvedSources, ...nalcoSource.approvedSources, ...bdlSource.approvedSources, ...gmbrewSource.approvedSources,
+  ...manifest.approvedSources, ...federalSource.approvedSources, ...tataPowerSource.approvedSources, ...sswlSource.approvedSources, ...jashSource.approvedSources, ...nalcoSource.approvedSources, ...cholaSource.approvedSources, ...bdlSource.approvedSources, ...gmbrewSource.approvedSources,
 ]
 
 function canonicalStart(end:string):string|null {
