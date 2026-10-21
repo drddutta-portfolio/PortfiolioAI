@@ -42,8 +42,10 @@ ISSUERS={
              'originals':['https://www.utlsolarfujiyama.com/wp-content/uploads/Investor%20Relations/financials/Financial%20Results_Q2.pdf']},
  'GROWW':{'legal':'BILLIONBRAINS GARAGE VENTURES LIMITED','hosts':['groww.in','resources.groww.in'],
           'pages':['https://groww.in/investor-relations'],'originals':[]},
- 'HEXT':{'legal':'HEXAWARE TECHNOLOGIES LIMITED','hosts':['hexaware.com','www.hexaware.com','cdn.hexaware.com'],
-         'pages':['https://hexaware.com/investors/quarterly-results/','https://hexaware.com/financials-reports/'],'originals':[]},
+ 'HEXT':{'legal':'HEXAWARE TECHNOLOGIES LIMITED','hosts':['hexaware.com','www.hexaware.com','cdn.hexaware.com','www.bseindia.com'],
+         'pages':['https://hexaware.com/investors/quarterly-results/','https://hexaware.com/financials-reports/'],
+         'originals':['https://www.bseindia.com/xml-data/corpfiling/AttachHis/2e5e187a-25a8-422a-98f9-ec55074852dd.pdf',
+                      'https://www.bseindia.com/xml-data/corpfiling/AttachHis/2c4df461-9b0f-426d-8f60-d257761facd0.pdf']},
  'SANSERA':{'legal':'SANSERA ENGINEERING LIMITED','hosts':['sansera.in','www.sansera.in'],
             'pages':['https://sansera.in/financial_reports','https://sansera.in/all_years/2024-2025','https://sansera.in/all_quarters/q4'],
             'originals':['https://sansera.in/wp-content/uploads/2025/05/Outcome-of-Board-meeting-Q4FY25.pdf','https://sansera.in/wp-content/uploads/2024/11/Outcome-of-Board-Meeting-Q2FY25.pdf']},
@@ -192,7 +194,9 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
         text=native+' '+' '.join(audit['pages'])
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):
             raise ValueError('OFFICIAL_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
-        restated=bool(re.search(r'\b(?:restated|recast)\b',text,re.I))
+        restated=bool(re.search(r'\b(?:restated|recast)\b',text,re.I)
+            or (re.search(r'retrospective',text,re.I) and re.search(r'share\s+split|split\s+and\s+bonus|bonus\s+shares',text,re.I))
+            or (re.search(r'regrouped|reclassifi',text,re.I) and re.search(r'from\s+["“]?Revenue\s+from\s+Operations["”]?\s+to\s+["“]?Other\s+Income',text,re.I)))
         pages=[page_no] if page_no else range(1,len(pdf)+1)
         for n in pages:
             if not 1<=n<=len(pdf):raise ValueError('OFFICIAL_FINANCIAL_PAGE_UNPROVEN')

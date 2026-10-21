@@ -70,6 +70,15 @@ class OfficialIssuerReplay(unittest.TestCase):
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'AUDIT_ORIGINAL'):o.qualify(raw,source,rows)
 
+    def test_retrospective_share_basis_or_reclassified_revenue_requires_policy_decision(self):
+        for note in ('EPS adjusted to consider the retrospective impact of the share split and bonus',
+                     'Company regrouped interest income from "Revenue from Operations" to "Other Income"'):
+            pdf,page=fixture(first='30.09.2025',third='30.09.2024');raw=pdf.tobytes();pdf.close()
+            audit={'original_sha256':o.sha(raw),'text_sha256':'a'*64,'pages':[note]}
+            fake=types.SimpleNamespace(audit_document=lambda raw,**kwargs:audit,extract_dated_page=None)
+            with patch.dict(o.ISSUERS,{'TEST':{'legal':'NATCO PHARMA LIMITED'}}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+                with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):o.extract_original(raw,'TEST','2024-09-30')
+
     def test_scanned_cover_identity_can_be_read_from_full_original_audit(self):
         import fitz
         table,page=fixture(first='30.09.2024',third='30.09.2023')
