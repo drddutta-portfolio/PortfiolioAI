@@ -173,8 +173,21 @@ def extract(db_url):
                 or nalco_proof["approvedSources"][0]["scope"]!="CONSOLIDATED"
                 or nalco_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
                 raise RuntimeError("NATIONALUM_ORIGINAL_SOURCE_IDENTITY_MISMATCH")
+            chola_proof=json.loads(Path("src/features/results/resultsR5CHOLAFINOriginalComparisonProof.json").read_text())
+            if (chola_proof.get("contract")!="R5_CHOLAFIN_SIGNED_2024_STANDALONE_ORIGINAL_V1"
+                or chola_proof.get("environment")!="Development"
+                or chola_proof.get("originalSHA256")!="6882e169027075032ece7ca0323025c2a873e4d29389e422cfe02989ff3e8476"):
+                raise RuntimeError("CHOLA_2024_SOURCE_PROOF_CONTRACT_INVALID")
+            if chola_proof["approvedSources"] and (
+                len(chola_proof["approvedSources"])!=1
+                or chola_proof["approvedSources"][0]["symbol"]!="CHOLAFIN"
+                or chola_proof["approvedSources"][0]["periodEnd"]!="2024-12-31"
+                or chola_proof["approvedSources"][0]["scope"]!="STANDALONE"
+                or chola_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
+                raise RuntimeError("CHOLA_2024_SOURCE_IDENTITY_MISMATCH")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
+                                   *chola_proof["approvedSources"],
                                    *nalco_proof["approvedSources"],
                                    *jash_proof["approvedSources"],*sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
                                    *gmbrew_proof["approvedSources"]]
