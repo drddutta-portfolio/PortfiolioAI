@@ -146,4 +146,33 @@ class ReviewedCoverScope(VisualOriginalReviewTests):
         with patch.dict(PROFILES,{'TEST_ORIGINAL':p}):
             with self.assertRaisesRegex(ValueError,'COVER_SCOPE_UNPROVEN'):qualify(raw,source,rows)
 
+class RenderPairRecovery(unittest.TestCase):
+    def test_bad_first_render_pair_does_not_block_other_approved_pairs(self):
+        import sys,types
+        from unittest.mock import Mock
+        from r4_shared_original import rendered_facts
+        extractor=Mock(side_effect=[ValueError('DAMAGED_HEADER'),({'facts':{}},{'issuer_text_first':'ISSUER','issuer_text_second':'ISSUER'})])
+        module=types.SimpleNamespace(RENDER_PAIRS=((300,450),(200,400),(350,500)),extract_dated_page=extractor)
+        with patch.dict(sys.modules,{'r4_ocr_dated_geometry':module}):
+            result=rendered_facts(b'original',6,'2024-12-31')
+        self.assertEqual(result['_rendered_issuer_texts'],['ISSUER','ISSUER'])
+        self.assertEqual(extractor.call_args_list[1].kwargs['render_dpi'],(200,400))
+
+    def test_all_failed_pairs_remain_unqualified(self):
+        import sys,types
+        from unittest.mock import Mock
+        from r4_shared_original import rendered_facts
+        extractor=Mock(side_effect=ValueError('NO_PROVEN_TABLE'))
+        module=types.SimpleNamespace(RENDER_PAIRS=((300,450),(200,400),(350,500)),extract_dated_page=extractor)
+        with patch.dict(sys.modules,{'r4_ocr_dated_geometry':module}):
+            with self.assertRaisesRegex(ValueError,'UNPROVEN'):rendered_facts(b'original',6,'2024-12-31')
+        self.assertEqual(extractor.call_count,9)
+
+    def test_exact_source_comparative_warning_cannot_be_lost_by_native_ocr(self):
+        raw,source,rows,p=sample();p['ocr_page']=1
+        p['blocked_comparatives']={'2024-09-30':'RESTATED_COMPARATIVE'}
+        with patch.dict(PROFILES,{'TEST_ORIGINAL':p}),patch('r4_shared_original.rendered_facts',side_effect=AssertionError('BLOCKED_COMPARATIVE')):
+            self.assertEqual(qualify(raw,source,rows)['eligible_observation_ids'],[])
+
 if __name__=='__main__':unittest.main()
+
