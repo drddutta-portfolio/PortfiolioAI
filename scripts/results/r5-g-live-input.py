@@ -161,8 +161,21 @@ def extract(db_url):
                    or p["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
                    for p in jash_proof["approvedSources"])):
                 raise RuntimeError("JASH_ORIGINAL_PROOF_QUARTER_SCOPE_INVALID")
+            nalco_proof=json.loads(Path("src/features/results/resultsR5NATIONALUMOriginalComparisonProof.json").read_text())
+            if (nalco_proof.get("contract")!="R5_NATIONALUM_SIGNED_2024_CONSOLIDATED_ORIGINAL_V1"
+                or nalco_proof.get("environment")!="Development"
+                or nalco_proof.get("originalSHA256")!="7790c4058aaa501783a620204126115e2b4d54a617c9d40c1d76f9edfd9935a9"):
+                raise RuntimeError("NATIONALUM_SIGNED_Q2FY25_PROOF_CONTRACT_INVALID")
+            if nalco_proof["approvedSources"] and (
+                len(nalco_proof["approvedSources"])!=1
+                or nalco_proof["approvedSources"][0]["symbol"]!="NATIONALUM"
+                or nalco_proof["approvedSources"][0]["periodEnd"]!="2024-09-30"
+                or nalco_proof["approvedSources"][0]["scope"]!="CONSOLIDATED"
+                or nalco_proof["approvedSources"][0]["approval"]!="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"):
+                raise RuntimeError("NATIONALUM_ORIGINAL_SOURCE_IDENTITY_MISMATCH")
             desired=set(
                 oid for source in [*proof["approvedSources"],*issuer_proof["approvedSources"],
+                                   *nalco_proof["approvedSources"],
                                    *jash_proof["approvedSources"],*sswl_proof["approvedSources"],*tata_proof["approvedSources"],*bdl_proof["approvedSources"],
                                    *gmbrew_proof["approvedSources"]]
                 for oid in source["observations"].values())
