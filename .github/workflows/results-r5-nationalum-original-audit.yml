@@ -1,0 +1,59 @@
+name: Results R5 NALCO September 2024 Official Consolidated Original Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-r5-nationalum-original-audit.yml
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require Development exact issuer original
+        run: |
+          test "$GITHUB_REPOSITORY" = "drddutta-portfolio/PortfiolioAI"
+          test "$GITHUB_REF" = "refs/heads/PortfolioAI-Development"
+          python -m pip install --disable-pip-version-check 'pymupdf==1.26.6' 'requests==2.32.5'
+          python - <<'PY'
+          import fitz,requests,hashlib,json
+          from urllib.parse import urlparse
+          from pathlib import Path
+          u="https://nsearchives.nseindia.com/corporate/LetterOutcomeSept2024Results_13112024163859.pdf"
+          r=requests.get(u,timeout=50,headers={"User-Agent":"Mozilla/5.0 (PortfolioAI Results original issuer filing audit)"})
+          r.raise_for_status()
+          if urlparse(r.url).hostname!="nsearchives.nseindia.com":raise RuntimeError("EXCHANGE_FILING_HOST_CHANGED")
+          b=r.content
+          if not b.startswith(b"%PDF"):raise RuntimeError("NOT_AN_EXCHANGE_PDF")
+          pdf=fitz.open(stream=b,filetype="pdf")
+          if len(pdf)!=16:raise RuntimeError("ORIGINAL_PAGE_COUNT_MISMATCH")
+          text=pdf[11].get_text("text").upper()
+          for marker in ("NATIONAL ALUMINIUM","CONSOLIDATED FINANCIAL RESULTS","SEPTEMBER 30, 2024","REVENUE FROM OPERATIONS"):
+              if marker not in text:raise RuntimeError("ORIGINAL_PERIOD_SCOPE_NOT_PROVEN:"+marker)
+          for marker in ("4,001.48","1,045.97","5.70"):
+              if marker not in text:raise RuntimeError("ORIGINAL_COLUMN_FIGURE_NOT_FOUND:"+marker)
+          d=hashlib.sha256(b).hexdigest()
+          p=Path("tmp/results-r5/nalco-sept-original");p.mkdir(parents=True,exist_ok=True)
+          pdf[11].get_pixmap(matrix=fitz.Matrix(2,2),alpha=False).save(str(p/"NALCO-Sep2024-consolidated.png"))
+          evidence={"symbol":"NATIONALUM","isin":"INE139A01034","quarter":"2024-09-30",
+            "scope":"CONSOLIDATED","sourceUrl":u,"sha256":d,"page":11,"pages":len(pdf),
+            "originalRevenueCrore":"4001.48","originalProfitCrore":"1045.97",
+            "originalEPSDiluted":"5.70","financialFactsAdmitted":0}
+          (p/"verified-identity.json").write_text(json.dumps(evidence,indent=2))
+          print("R5_NALCO_SEP2024_SIGNED_CONSOLIDATED_ORIGINAL",json.dumps(evidence))
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-nalco-sep-2024-original-table
+          path: tmp/results-r5/nalco-sept-original/*
+          if-no-files-found: warn
+          retention-days: 2
