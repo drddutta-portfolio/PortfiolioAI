@@ -38,9 +38,6 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
             point["active_runs"].extend(r["id"] for r in rows if r["status"]!="completed")
         except Exception as error:
             point["errors"].append({"source":source,"stage":"INSPECT","reason":type(error).__name__})
-    if point["active_runs"]:
-        point["state"]="COLLECTORS_RUNNING"
-        return point
     if not allow_trendlyne:
         runs.pop("results-r4-trendlyne-history.yml",None)
         point["trendlyne_dispatch"]="PAUSED_PENDING_APPROVED_WORKFLOW_AUTH_DEPLOYMENT"
@@ -56,7 +53,7 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
         except Exception as error:
             dispatch_failed(state,source,now)
             point["errors"].append({"source":source,"stage":"DISPATCH","reason":type(error).__name__})
-    point["state"]="WAITING_FOR_SOURCE_RETRY_WINDOW"
+    point["state"]="COLLECTORS_RUNNING" if point["active_runs"] else "WAITING_FOR_SOURCE_RETRY_WINDOW"
     return point
 
 def main():
