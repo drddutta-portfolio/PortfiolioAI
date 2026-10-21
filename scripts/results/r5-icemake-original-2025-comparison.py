@@ -100,7 +100,7 @@ def main():
     "symbol":SYMBOL,"isin":ISIN,"sourceUrl":URL,"sha256":SHA,"r2OriginalKey":key,
     "fiscalQuarterDateColumns":["2025-06-30"],"scope":"CONSOLIDATED",
     "statementPageZeroIndex":0,"revenueProfitOriginalUnits":"INR_LAKH","storedUnits":"INR_CRORE",
-    "values":PERIODS,"publishedOnOriginal":"2025-08-07",
+    "values":PERIODS,"originalPublicationPrecision":"UNKNOWN",
     "r5Only":True,"r4DecisionsModified":False}
   metadata=compact(manifest)
   metakey=root+"manifest-"+digest(metadata)+".json"
