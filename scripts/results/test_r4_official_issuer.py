@@ -70,4 +70,40 @@ class OfficialIssuerReplay(unittest.TestCase):
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'AUDIT_ORIGINAL'):o.qualify(raw,source,rows)
 
+class OfficialSourceTransport(unittest.TestCase):
+    class Response:
+        def __init__(self,body=b'',status=200,location=None):
+            self.body=body;self.status_code=status;self.headers={'Location':location} if location else {}
+        def __enter__(self):return self
+        def __exit__(self,*args):return False
+        def raise_for_status(self):
+            if self.status_code>=400:raise OSError('HTTP_FAILURE')
+        def iter_content(self,size):yield self.body
+
+    def test_foreign_first_pdf_does_not_hide_later_official_statement(self):
+        body=b'<a href="https://other.example/results.pdf">Results 2024</a><a href="/results-2024.pdf">Financial results 2024</a>'
+        profile={'hosts':['issuer.example'],'pages':['https://issuer.example/investors'],'originals':[]}
+        session=types.SimpleNamespace(get=lambda *args,**kwargs:self.Response(body))
+        with patch.dict(o.ISSUERS,{'TEST':profile}):urls,errors=o.discover(session,'TEST')
+        self.assertEqual(urls,['https://issuer.example/results-2024.pdf'])
+        self.assertGreaterEqual(errors['UNAPPROVED_DISCOVERY_LINK_SKIPPED'],1)
+
+    def test_unapproved_redirect_is_rejected_before_outbound_request(self):
+        calls=[]
+        def get(url,**kwargs):calls.append(url);return self.Response(status=302,location='https://other.example/results.pdf')
+        with patch.dict(o.ISSUERS,{'TEST':{'hosts':['issuer.example'],'originals':[]}}):
+            with self.assertRaises(ValueError):o.get(types.SimpleNamespace(get=get),'TEST','https://issuer.example/results.pdf',1000)
+        self.assertEqual(calls,['https://issuer.example/results.pdf'])
+
+    def test_failed_discovery_page_does_not_block_next_page(self):
+        def get(url,**kwargs):return self.Response(status=503) if url.endswith('/bad') else self.Response(b'<a href="/quarter-2024.pdf">Quarter results</a>')
+        profile={'hosts':['issuer.example'],'pages':['https://issuer.example/bad','https://issuer.example/good'],'originals':[]}
+        with patch.dict(o.ISSUERS,{'TEST':profile}):urls,errors=o.discover(types.SimpleNamespace(get=get),'TEST')
+        self.assertEqual(urls,['https://issuer.example/quarter-2024.pdf']);self.assertEqual(errors['DISCOVERY_OSError'],1)
+
+    def test_response_size_bound_cannot_be_silently_exceeded(self):
+        session=types.SimpleNamespace(get=lambda *args,**kwargs:self.Response(b'x'*101))
+        with patch.dict(o.ISSUERS,{'TEST':{'hosts':['issuer.example'],'originals':[]}}):
+            with self.assertRaisesRegex(ValueError,'SIZE_BOUND'):o.get(session,'TEST','https://issuer.example/results.pdf',100)
+
 if __name__=='__main__':unittest.main()
