@@ -110,7 +110,14 @@ def main():
         payload={'contract':'RESULTS_R4_PRIVATE_ORIGINAL_REVIEW_INDEX_V1','workflow_run_id':os.getenv('GITHUB_RUN_ID'),'shard':shard,'source_commit':os.getenv('GITHUB_SHA'),'counts':dict(counts),'issuers':index}
         raw=batch.canonical(payload);digest=batch.sha(raw);key=batch.PREFIX+'private-original-review/index/sha256='+digest+'/index.json'
         batch.immutable_put(client,key,raw)
-        metadata=batch.canonical({'contract':payload['contract'],'workflow_run_id':payload['workflow_run_id'],'source_commit':payload['source_commit'],'counts':dict(counts),'r2_key':key,'sha256':digest})
+        # Small operational metadata only; original bytes, images, coordinates and
+        # financial values remain exclusively in private R2.
+        diagnostics=[{'symbol':entry['symbol'],'original_sha256':source['original_sha256'],
+            'rejection':source.get('shared_replay_rejection',source.get('rejection')),
+            'eligible_facts':len(source.get('shared_replay',{}).get('eligible_observation_ids',[])),
+            'parser_diagnostics':source.get('shared_replay',{}).get('diagnostics',{})}
+            for entry in index for source in entry['sources'] if source.get('shared_replay') or source.get('shared_replay_rejection')]
+        metadata=batch.canonical({'source_diagnostics':diagnostics,'contract':payload['contract'],'workflow_run_id':payload['workflow_run_id'],'source_commit':payload['source_commit'],'counts':dict(counts),'r2_key':key,'sha256':digest})
         with db.cursor() as cur:
             cur.execute("INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot) VALUES('COMPANY_EXCHANGE_FILING','RESULTS_R4_PRIVATE_ORIGINAL_REVIEW_INDEX_V1',%s,%s,%s::jsonb,'{\"retention\":\"PRIVATE_DEVELOPMENT_REVIEW_ONLY\"}'::jsonb) ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING",(payload['workflow_run_id'],batch.sha(metadata),metadata.decode()))
         db.commit()
