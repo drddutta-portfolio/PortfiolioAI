@@ -9,6 +9,7 @@ SOURCES=("results-r4-nse-lineage-recovery.yml",
          "results-r4-bse-dated-quarter-review.yml",
          "results-r4-dated-ocr-backlog.yml",
          "results-r4-scope-anchor-review.yml",
+         "results-r4-official-issuer-recovery.yml",
          "results-r4-trendlyne-history.yml")
 
 def task_id(security,tool,period,args):
@@ -61,12 +62,13 @@ def run_with_timeout(operation,args,timeout):
 
 def next_source(now,state,runs):
     """Rotate through all sources even when a preceding source made no progress."""
-    if any(r.get("status")!="completed" for rows in runs.values() for r in rows):
-        return None
+    active={source for source,rows in runs.items() if any(r.get("status")!="completed" for r in rows)}
+    # One slow source must not monopolize recovery; bound total source overlap.
+    if len(active)>=2:return None
     due=[]
     for index,source in enumerate(SOURCES):
         entry=state.get(source,{})
-        if now>=entry.get("not_before",0) and source in runs:
+        if now>=entry.get("not_before",0) and source in runs and source not in active:
             due.append((entry.get("last_dispatched",0),index,source))
     return min(due)[2] if due else None
 
