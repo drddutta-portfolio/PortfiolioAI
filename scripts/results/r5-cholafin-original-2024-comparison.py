@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Qualify one CHOLAFIN December-2024 standalone quarter from exact exchange-retained 31-Jan-2025 original PDF.
 
-Exchange source PDF page 11 independently verified: original INR crore figures,
+Official issuer PDF page 0 independently verified: original INR crore figures,
 EPS diluted rupees. Exact SHA and page label pinned. R5-only comparison source;
 canonical R4 evidence choices are never changed.
 """
@@ -17,12 +17,12 @@ from botocore.config import Config
 REF="lrgpjimipfkyoqbpsqzz";BUCKET="portfolioai-history-dev"
 SYMBOL="CHOLAFIN";ISIN="INE121A01024"
 SOURCE="COMPANY_EXCHANGE_FILING"
-KIND="RESULTS_R5_CHOLAFIN_SIGNED_SEP2024_STANDALONE_V1"
+KIND="RESULTS_R5_CHOLAFIN_SIGNED_DEC2024_STANDALONE_V1"
 URL="https://files.cholamandalam.com/Financials_Dec2024_be5d6dd603.pdf"
 SHA="6882e169027075032ece7ca0323025c2a873e4d29389e422cfe02989ff3e8476"
 APPROVAL="R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION"
-# One explicit unaudited quarter column in the official NSE archived filing.
-# Reconciled visually with original PDF: p11 column 30-Sep-2024, INR crore.
+# One exact standalone quarter column in the official issuer financial filing.
+# Reconciled visually with original PDF: p0 column 31-Dec-2024, INR crore.
 PERIODS={
  "2024-12-31":{"start":"2024-10-01","revenue_crore":"6709.21",
    "pat_crore":"1086.53","diluted_eps":"12.89","column":0},
