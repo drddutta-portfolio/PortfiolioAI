@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlparse
-from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,approved_url,extract_original,canonical,sha,discover,get
+from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,SPLIT_AUTHORITIES,split_reference,approved_url,extract_original,canonical,sha,discover,get,resume_issuer_order
 from r4_recovery_queue import run_with_timeout
 
 def load_runtime():
@@ -14,13 +14,33 @@ def load_runtime():
     return module
 
 def download_original(session,symbol,url):
+    approved_url(symbol,url)
+    if urlparse(url).hostname=='www.bseindia.com':
+        with batch.PortfolioBSE() as bse:
+            raw,origin=bse.retrieve_original_pdf(urlparse(url).path.rsplit('/',1)[-1],max_bytes=32_000_000)
+        approved_url(symbol,origin['source_url'])
+        return raw,origin['source_url']
     raw,final_url=get(session,symbol,url,32_000_000)
     if not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_ORIGINAL_NOT_PDF')
     return raw,final_url
 
+def retain_split_authority(session,client,symbol):
+    authority=SPLIT_AUTHORITIES[symbol]
+    with session.get(authority['url'],timeout=(15,45),allow_redirects=False,stream=True) as response:
+        response.raise_for_status()
+        if response.status_code!=200:raise ValueError('OFFICIAL_SPLIT_AUTHORITY_REDIRECT_UNAPPROVED')
+        parts=[];size=0
+        for chunk in response.iter_content(65536):
+            size+=len(chunk)
+            if size>2_000_000:raise ValueError('OFFICIAL_SPLIT_AUTHORITY_SIZE_BOUND')
+            parts.append(chunk)
+    raw=b''.join(parts);reference=split_reference(raw,symbol)
+    batch.immutable_put(client,reference['r2_key'],raw)
+    return reference
+
 def extract_all(raw,symbol,periods):
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
-    audit=audit_document(raw);out={p:[] for p in periods};rejects=Counter()
+    audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter()
     for period in periods:
         try:out[period]=extract_original(raw,symbol,period,document_audit=audit)
         except ValueError as error:rejects[str(error).split(':')[0]]+=1
@@ -39,13 +59,14 @@ def extract_all(raw,symbol,periods):
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}
 
-def persist(db,client,row,period,url,raw,parsed):
+def persist(db,client,row,period,url,raw,parsed,identity_bridge=None):
     symbol,isin,sid,_name,_periods=row;digest=sha(raw)
     original_key=batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
     batch.immutable_put(client,original_key,raw)
     payload={'contract':CONTRACT,'symbol':symbol,'isin':isin,'sourceUrl':url,'original_sha256':digest,
         'original_r2_key':original_key,'period_end':period,'parsed':parsed,
         'authority':'CURRENT_DISPLAY_ONLY; NO_POINT_IN_TIME_OR_SHARE_REBASING_AUTHORITY'}
+    if identity_bridge is not None:payload['isin_bridge']=identity_bridge
     encoded=canonical(payload);version=sha(encoded);external=':'.join((symbol,period,parsed['scope'],digest))
     batch.immutable_put(client,batch.PREFIX+'official-issuer-manifests/sha256='+version+'/manifest.json',encoded)
     with db.cursor() as cur:
@@ -68,7 +89,7 @@ def persist(db,client,row,period,url,raw,parsed):
 
 def checkpoint(db,client,outcome,counts,shard):
     report={'contract':'RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1','workflow_run_id':os.environ['GITHUB_RUN_ID'],
-        'source_commit':os.environ['GITHUB_SHA'],'counts':dict(counts),'issuers':[outcome]}
+        'source_commit':os.environ['GITHUB_SHA'],'shard':shard,'counts':dict(counts),'issuers':[outcome]}
     encoded=canonical(report);digest=sha(encoded)
     batch.immutable_put(client,batch.PREFIX+'official-issuer-audits/sha256='+digest+'/audit.json',encoded)
     external=':'.join((os.environ['GITHUB_RUN_ID'],str(shard),outcome['symbol'],str(outcome.get('original_urls_attempted',0))))
@@ -91,19 +112,28 @@ def main():
     engine=sha(b'\0'.join(Path(__file__).with_name(n).read_bytes() for n in ('r4_official_issuer.py','r4_pdf_geometry.py','r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')))
     with psycopg.connect(os.environ['SUPABASE_DB_URL']) as db,requests.Session() as session:
         session.headers['User-Agent']='Mozilla/5.0'
-        cohort=batch.candidates(db);db.rollback()
+        cohort=[row for row in batch.candidates(db) if row[2].int%4==args.shard];db.rollback()
+        with db.cursor() as cur:
+            cur.execute("""SELECT raw_payload->'issuers'->-1->>'symbol' FROM data_source_records
+                WHERE record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND raw_payload->>'shard'=%s
+                ORDER BY retrieved_at DESC LIMIT 1""",(str(args.shard),));last=cur.fetchone()
+        db.rollback();cohort=resume_issuer_order(cohort,last[0] if last else None)
         for row in cohort:
             symbol,isin,sid,_name,periods=row
             if int(sid.int)%4!=args.shard:continue
-            outcome={'symbol':symbol,'security_id':str(sid),'periods':periods,'counts':{},'rejections':{}}
+            outcome={'symbol':symbol,'security_id':str(sid),'periods':periods,'parser_engine':engine,'counts':{},'rejections':{}}
             rejects=Counter()
             if symbol not in ISSUERS:
                 outcome['rejections']={'OFFICIAL_DISCOVERY_PAGE_NOT_CONFIGURED':1};audit_rows.append(outcome);continue
+            identity_bridge=None
+            if symbol in SPLIT_AUTHORITIES:
+                try:identity_bridge=retain_split_authority(session,client,symbol)
+                except Exception as error:rejects['SPLIT_AUTHORITY_'+type(error).__name__]+=1
             urls,discovery_errors=discover(session,symbol);rejects.update(discovery_errors)
             with db.cursor() as cur:
                 cur.execute("""SELECT x->>'next_offset' FROM data_source_records d CROSS JOIN LATERAL jsonb_array_elements(d.raw_payload->'issuers') x
-                    WHERE d.record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND x->>'symbol'=%s
-                    ORDER BY d.retrieved_at DESC LIMIT 1""",(symbol,));previous=cur.fetchone()
+                    WHERE d.record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND x->>'symbol'=%s AND x->>'parser_engine'=%s
+                    ORDER BY d.retrieved_at DESC LIMIT 1""",(symbol,engine));previous=cur.fetchone()
             db.rollback();offset=int(previous[0] or 0)%len(urls) if previous and urls else 0
             ordered=urls[offset:]+urls[:offset];started=time.monotonic();attempted=0
             for url in ordered:
@@ -118,11 +148,11 @@ def main():
                     try:proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cachekey)['Body'].read())
                     except Exception as error:
                         if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
-                        proof=run_with_timeout(extract_all,(raw,symbol,periods),180)
+                        proof=run_with_timeout(extract_all,(raw,symbol,periods),480)
                         batch.immutable_put(client,cachekey,canonical(proof))
                     rejects.update(proof['rejections'])
                     for period,parsed_options in proof['periods'].items():
-                        for parsed in parsed_options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed)
+                        for parsed in parsed_options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed,identity_bridge)
                 except Exception as error:
                     db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
                     if isinstance(error,(NameError,AttributeError,TypeError)):counts['programming_failures']+=1
@@ -136,7 +166,7 @@ def main():
             outcome['rejections']=dict(rejects);outcome['original_urls_attempted']=attempted
             outcome['original_urls_discovered']=len(urls);outcome['next_offset']=(offset+attempted)%len(urls) if urls else 0
             audit_rows.append(outcome);counts['issuers_attempted']+=1
-        report={'contract':'RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1','workflow_run_id':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'counts':dict(counts),'issuers':audit_rows}
+        report={'contract':'RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1','workflow_run_id':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'shard':args.shard,'counts':dict(counts),'issuers':audit_rows}
         encoded=canonical(report);digest=sha(encoded);key=batch.PREFIX+'official-issuer-audits/sha256='+digest+'/audit.json';batch.immutable_put(client,key,encoded)
         with db.cursor() as cur:
             cur.execute("""INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot)
@@ -147,4 +177,3 @@ def main():
     if counts.get('programming_failures'):raise RuntimeError('OFFICIAL_COLLECTOR_PROGRAMMING_ERRORS_CHECKPOINTED')
 
 if __name__=='__main__':main()
-

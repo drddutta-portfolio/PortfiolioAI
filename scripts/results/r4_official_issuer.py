@@ -26,6 +26,14 @@ SPLIT_AUTHORITIES={'COFORGE':{'url':'https://www.msei.in/SX-Content/Circulars/20
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
 def sha(raw):return hashlib.sha256(raw).hexdigest()
 
+def resume_issuer_order(items,last_symbol):
+    """A resumed shard gives the issuer after its last checkpoint first turn."""
+    ordered=list(items)
+    positions=[i for i,row in enumerate(ordered) if row[0]==last_symbol]
+    if len(positions)!=1:return ordered
+    start=positions[0]+1
+    return ordered[start:]+ordered[:start]
+
 # Closed official discovery pages, never arbitrary provider-returned hosts.
 # More issuer pages may be added after checking the issuer's own disclosures.
 ISSUERS={
@@ -46,7 +54,11 @@ ISSUERS={
                'originals':['https://nsearchives.nseindia.com/corporate/BoardMeetingoutcome29102024_29102024183837.pdf',
                             'https://www.bseindia.com/xml-data/corpfiling/AttachHis/38b751f3-1e7e-412c-9680-a3b80d0fcb27.pdf']},
  'TATACAP':{'legal':'TATA CAPITAL LIMITED','hosts':['www.tatacapital.com','tatacapital.com'],
-            'pages':['https://www.tatacapital.com/about-us/investor-information-and-financials.html'],'originals':[]},
+            'pages':['https://www.tatacapital.com/about-us/investor-information-and-financials.html'],
+            'originals':['https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/results-sep-2024-2-signed.pdf',
+                         'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/tcl-outcome-of-board-meeting-06-02-2025-signed.pdf',
+                         'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/financials-march-2025-signed.pdf',
+                         'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/audited-standalone-and-consolidated-financial-results-for-the-quarter-ended-june-30-2025.pdf']},
  'VENTIVE':{'legal':'VENTIVE HOSPITALITY LIMITED','hosts':['www.ventivehospitality.com','ventivehospitality.com'],
             'pages':['https://www.ventivehospitality.com/financial-results/','https://www.ventivehospitality.com/investor-relations/'],'originals':[]},
  # Post-demerger names are intentionally exact: the predecessor group's
@@ -89,7 +101,9 @@ ISSUERS={
  'PINELABS':{'legal':'PINE LABS LIMITED','hosts':['www.pinelabs.com','pinelabs.com'],
              'pages':['https://www.pinelabs.com/investor-relations/corporate-announcements'],'originals':[]},
  'ICICIAMC':{'legal':'ICICI PRUDENTIAL ASSET MANAGEMENT COMPANY LIMITED','hosts':['www.icicipruamc.com'],
-             'pages':['https://www.icicipruamc.com/investor-relations'],'originals':[]},
+             'pages':['https://www.icicipruamc.com/blob/investor-relations/Disclosures.html'],
+             'originals':['https://www.icicipruamc.com/blob/investor-relations/IR_Documents/Outcome%20of%20Board%20Meeting%20held%20on%20January%2014,%202026.pdf',
+                          'https://www.icicipruamc.com/blob/investor-relations/IR_Documents/Unaudited_financial_results_for_the_quarter_ended_June_30_2026.pdf']},
 }
 
 def approved_url(symbol,url):
@@ -160,16 +174,17 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
     if period not in PERIODS or not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_QUARTER_OR_PDF_UNPROVEN')
     bank=False;insurer=symbol=='STARHEALTH';candidates=[]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
-        if not 1<=len(pdf)<=40:raise ValueError('OFFICIAL_DOCUMENT_PAGE_BOUND')
+        if not 1<=len(pdf)<=120:raise ValueError('OFFICIAL_DOCUMENT_PAGE_BOUND')
         texts=[p.get_text('text') for p in pdf]
         native=' '.join(texts)
-        if not exact_legal_identity(profile['legal'],' '.join(texts[:3])):
-            raise ValueError('OFFICIAL_COMPLETE_ISSUER_IDENTITY_UNPROVEN')
         # Always scan the complete retained original independently at 150 DPI.
         # Notes and demerger warnings can be image-backed even in a native table.
         from r4_ocr_dated_geometry import audit_document,extract_dated_page
-        audit=document_audit if document_audit is not None else audit_document(raw)
+        audit=document_audit if document_audit is not None else audit_document(raw,max_pages=120)
         if audit['original_sha256']!=sha(raw):raise ValueError('OFFICIAL_DOCUMENT_AUDIT_ORIGINAL_MISMATCH')
+        if (not exact_legal_identity(profile['legal'],' '.join(texts[:3]))
+            and not exact_legal_identity(profile['legal'],' '.join(audit['pages'][:3]))):
+            raise ValueError('OFFICIAL_COMPLETE_ISSUER_IDENTITY_UNPROVEN')
         text=native+' '+' '.join(audit['pages'])
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):
             raise ValueError('OFFICIAL_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
@@ -252,4 +267,3 @@ def qualify(raw,source,observations,identity_raw=None):
             or Decimal(str(row['numeric_value']))!=Decimal(facts[row['metric_code']]['value'])):
             raise ValueError('OFFICIAL_OBSERVATION_CONTEXT_OR_VALUE_MISMATCH')
     return {'contract':'RESULTS_R4_SHARED_ISSUER_ORIGINAL_REPLAY_V1','eligible_observation_ids':sorted(str(r['id']) for r in observations)}
-

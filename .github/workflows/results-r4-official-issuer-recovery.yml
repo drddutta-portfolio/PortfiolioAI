@@ -36,6 +36,7 @@ jobs:
       - name: Verify official original qualification regressions
         run: |
           python -m unittest discover -s scripts/results -p test_r4_official_issuer.py -v
+          python -m unittest discover -s scripts/results -p test_r4_official_document_audit.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_collector.py -v
       - name: Collect every assigned issuer and isolate failed originals
         run: python scripts/results/r4-official-issuer-recovery.py --shard ${{ matrix.shard }}

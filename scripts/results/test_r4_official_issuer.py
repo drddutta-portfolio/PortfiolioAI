@@ -9,7 +9,7 @@ class OfficialIssuerReplay(unittest.TestCase):
         raw=pdf.tobytes();pdf.close();digest=o.sha(raw)
         profile={'legal':'NATCO PHARMA LIMITED','hosts':['issuer.example'],'pages':[],'originals':[]}
         audit={'original_sha256':digest,'text_sha256':'a'*64,'pages':['Complete original statement notes']}
-        fake=types.SimpleNamespace(audit_document=lambda raw:audit,extract_dated_page=None)
+        fake=types.SimpleNamespace(audit_document=lambda raw,**kwargs:audit,extract_dated_page=None)
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             parsed=o.extract_original(raw,'TEST','2024-09-30')[0]
         payload={'contract':o.CONTRACT,'symbol':'TEST','isin':'ISIN','sourceUrl':'https://issuer.example/q.pdf',
@@ -60,7 +60,7 @@ class OfficialIssuerReplay(unittest.TestCase):
     def test_restated_later_comparative_does_not_become_own_quarter(self):
         pdf,page=fixture(first='30.09.2025',third='30.09.2024');raw=pdf.tobytes();pdf.close()
         audit={'original_sha256':o.sha(raw),'text_sha256':'a'*64,'pages':['The comparative was restated']}
-        fake=types.SimpleNamespace(audit_document=lambda raw:audit,extract_dated_page=None)
+        fake=types.SimpleNamespace(audit_document=lambda raw,**kwargs:audit,extract_dated_page=None)
         profile={'legal':'NATCO PHARMA LIMITED'}
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):o.extract_original(raw,'TEST','2024-09-30')
@@ -69,6 +69,20 @@ class OfficialIssuerReplay(unittest.TestCase):
         raw,source,rows,profile,audit,fake=self.sample();audit['original_sha256']='0'*64
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'AUDIT_ORIGINAL'):o.qualify(raw,source,rows)
+
+    def test_scanned_cover_identity_can_be_read_from_full_original_audit(self):
+        import fitz
+        table,page=fixture(first='30.09.2024',third='30.09.2023')
+        with fitz.open() as pdf:
+            for _ in range(3):pdf.new_page()
+            pdf.insert_pdf(table);raw=pdf.tobytes()
+        table.close()
+        audit={'original_sha256':o.sha(raw),'text_sha256':'a'*64,'pages':['NATCO PHARMA LIMITED','Auditor report','Original cover','Financial table']}
+        fake=types.SimpleNamespace(audit_document=lambda raw,**kwargs:audit,extract_dated_page=None)
+        with patch.dict(o.ISSUERS,{'TEST':{'legal':'NATCO PHARMA LIMITED'}}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            self.assertEqual(len(o.extract_original(raw,'TEST','2024-09-30')),1)
+            audit['pages'][0]='OTHER COMPANY LIMITED'
+            with self.assertRaisesRegex(ValueError,'IDENTITY_UNPROVEN'):o.extract_original(raw,'TEST','2024-09-30')
 
     def test_reported_other_isin_cannot_be_silently_rebound_to_current_security(self):
         import fitz
@@ -82,6 +96,12 @@ class OfficialIssuerReplay(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'ISIN_REQUIRES_EXPLICIT_BRIDGE'):o.qualify(raw,source,rows)
 
 class OfficialSourceTransport(unittest.TestCase):
+    def test_resume_advances_to_other_issuers_after_an_interrupted_original(self):
+        rows=[('A',1),('B',2),('C',3)]
+        self.assertEqual(o.resume_issuer_order(rows,'B'),[('C',3),('A',1),('B',2)])
+        self.assertEqual(o.resume_issuer_order(rows,'C'),rows)
+        self.assertEqual(o.resume_issuer_order(rows,'REMOVED'),rows)
+
     class Response:
         def __init__(self,body=b'',status=200,location=None):
             self.body=body;self.status_code=status;self.headers={'Location':location} if location else {}
@@ -116,5 +136,40 @@ class OfficialSourceTransport(unittest.TestCase):
         session=types.SimpleNamespace(get=lambda *args,**kwargs:self.Response(b'x'*101))
         with patch.dict(o.ISSUERS,{'TEST':{'hosts':['issuer.example'],'originals':[]}}):
             with self.assertRaisesRegex(ValueError,'SIZE_BOUND'):o.get(session,'TEST','https://issuer.example/results.pdf',100)
+
+class OriginalShareIdentity(unittest.TestCase):
+    sample=OfficialIssuerReplay.sample
+    def notice(self,authority):
+        import fitz
+        with fitz.open() as pdf:
+            page=pdf.new_page(width=1200,height=800)
+            for y,line in enumerate([authority['circular'],authority['date_text'],authority['row'],'METROPOLITAN STOCK EXCHANGE OF INDIA LIMITED']):
+                page.insert_text((25,40+y*25),line,fontsize=9)
+            return pdf.tobytes()
+
+    def test_exact_exchange_original_binds_old_and_new_identity_without_rebasing_eps(self):
+        import fitz
+        raw,source,rows,profile,audit,fake=self.sample()
+        old='INE111A01011';new='INE222A01011'
+        authority={'url':'https://www.msei.in/exact.pdf','old_isin':old,'current_isin':new,'ex_date':'2025-06-04',
+            'circular':'TEST/1','date_text':'JUNE 04, 2025','row':'TEST NATCO PHARMA LIMITED '+old+' '+new+' SUB-DIVISION FROM RS. 10/- TO RS. 2/-'}
+        with fitz.open(stream=raw,filetype='pdf') as pdf:
+            pdf[0].insert_text((25,520),'Equity ISIN '+old,fontsize=10);raw=pdf.tobytes()
+        digest=o.sha(raw);source['raw_payload'].update(isin=new,original_sha256=digest,original_r2_key=o.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf')
+        for row in rows:row['isin']=new
+        audit['original_sha256']=digest;notice=self.notice(authority)
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(o.SPLIT_AUTHORITIES,{'TEST':authority}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            source['raw_payload']['isin_bridge']=o.split_reference(notice,'TEST');source['payload_hash']=o.sha(o.canonical(source['raw_payload']))
+            before=copy.deepcopy(rows)
+            self.assertEqual(len(o.qualify(raw,source,rows,notice)['eligible_observation_ids']),3)
+            self.assertEqual(rows,before)
+            with self.assertRaisesRegex(ValueError,'SPLIT_ORIGINAL_REPLAY'):o.qualify(raw,source,rows)
+
+    def test_different_original_notice_cannot_supply_identity(self):
+        authority=o.SPLIT_AUTHORITIES['COFORGE'];notice=self.notice(authority)
+        self.assertEqual(o.split_reference(notice,'COFORGE')['old_isin'],'INE591G01017')
+        for field,value in [('date_text','JUNE 05, 2025'),('row',authority['row'].replace('INE591G01017','INE000A01011'))]:
+            wrong={**authority,field:value}
+            with self.assertRaisesRegex(ValueError,'CONTEXT_UNPROVEN'):o.split_reference(self.notice(wrong),'COFORGE')
 
 if __name__=='__main__':unittest.main()

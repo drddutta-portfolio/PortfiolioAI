@@ -39,3 +39,9 @@ Canonical financial observations and decisions remain `fundamental_observations`
 All work targets `PortfolioAI-Development`, Development Supabase and the Development R2 bucket. No UI changes, schema/migrations, Auth/RLS changes, holdings/transaction edits, `main` updates or Production changes are part of this recovery. Concurrent R5 work is preserved when updating shared verifier code.
 
 Remaining work: finish the running full-backlog OCR/source sweeps, inspect every rejection, recover additional explicitly supported quarters, rerun the complete protected selection/readback, and record the verified final count. Do not label R4 complete merely because a workflow exits successfully.
+
+### R4 source verification — 2026-10-21
+
+Independent Development qualification [run 39558035721](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/39558035721) verified 2,019 / 2,096 company-quarter slots: 59 unresolved historical R4 slots and 18 separately deferred R3 slots. Status remains PARTIAL. BDL March 2025 was reconciled against the signed statement and JASH December 2024 qualified from its own original. A successful collection workflow does not establish R4 completion.
+
+The official-issuer collector now isolates originals, checkpoints each attempt and resumes after the last issuer so slow issuers cannot starve later work. Trendlyne concurrency is reduced to two after observed HTTP 429 responses; retained successful captures remain reusable. The fixed Results UI is unchanged. See the [official-original recovery contract](PortfolioAI_RESULTS_R4_OFFICIAL_ISSUER_RECOVERY_2026-10-21.md).

@@ -7,9 +7,10 @@ from r4_pdf_geometry import extract_page,rows_for,row_text,date_cells
 REVISION='PDF_OCR_EXPLICIT_DATED_COLUMN_V1'
 RENDER_PAIRS=((300,450),(200,400),(350,500))
 
-def audit_document(raw):
+def audit_document(raw,max_pages=40):
+    if max_pages not in (40,120):raise ValueError('UNAPPROVED_DOCUMENT_AUDIT_PAGE_BOUND')
     with fitz.open(stream=raw,filetype='pdf') as pdf:
-        if not 1<=len(pdf)<=40:raise ValueError('OCR_DATED_DOCUMENT_PAGE_BOUND')
+        if not 1<=len(pdf)<=max_pages:raise ValueError('OCR_DATED_DOCUMENT_PAGE_BOUND')
         pages=[OCRPage(page,150).get_text('text') for page in pdf]
     text='\n'.join(pages)
     return {'original_sha256':hashlib.sha256(raw).hexdigest(),'dpi':150,'pages':pages,'text_sha256':hashlib.sha256(text.encode()).hexdigest()}

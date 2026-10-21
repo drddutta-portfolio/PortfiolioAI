@@ -11,6 +11,8 @@ on:
       - scripts/results/r4-verify-quarterly.py
       - scripts/results/r4_official_issuer.py
       - scripts/results/test_r4_official_issuer.py
+      - scripts/results/test_r4_official_document_audit.py
+      - scripts/results/r4_ocr_dated_geometry.py
       - scripts/results/r4_shared_original.py
       - scripts/results/r4_bdl_correction.py
       - scripts/results/test_r4_bdl_correction.py
@@ -57,6 +59,8 @@ jobs:
       - name: Run source qualification and eight-quarter readback regression tests
         run: |
           python -m unittest discover -s scripts/results -p test_r4_official_issuer.py -v
+          python -m unittest discover -s scripts/results -p test_r4_official_document_audit.py -v
+          python -m unittest discover -s scripts/results -p test_r4_official_collector.py -v
           python -m unittest discover -s scripts/results -p test_r4_bdl_correction.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
