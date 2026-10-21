@@ -5,6 +5,7 @@ import tataOriginal from "./resultsR5TataPowerOriginalComparisonProof.json"
 import sswlOriginal from "./resultsR5SSWLOriginalComparisonProof.json"
 import jashOriginal from "./resultsR5JASHOriginalComparisonProof.json"
 import nalcoOriginal from "./resultsR5NATIONALUMOriginalComparisonProof.json"
+import cholaOriginal from "./resultsR5CHOLAFINOriginalComparisonProof.json"
 import gmbrewOriginal from "./resultsR5GMBREWOriginalComparisonProof.json"
 import { buildVerifiedR5ComparisonRows, gradeR5WithVerifiedOriginal, type VerifiedR5Source } from "./resultsR5VerifiedComparison"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -65,6 +66,18 @@ describe("R5 cryptographically source-pinned comparison-only evidence",()=>{
    expect(original.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
    expect(Object.keys(original.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
    for(const id of Object.values(original.observations))expect(id).toMatch(/^[0-9a-f-]{36}$/)
+ })
+ it("pins source-original CHOLAFIN 2024 Dec standalone quarter for exact R5 comparison without R4 overwrite",()=>{
+    expect(cholaOriginal.contract).toBe("R5_CHOLAFIN_SIGNED_2024_STANDALONE_ORIGINAL_V1")
+    expect(cholaOriginal.environment).toBe("Development")
+    expect(cholaOriginal.originalSHA256).toBe("6882e169027075032ece7ca0323025c2a873e4d29389e422cfe02989ff3e8476")
+    expect(cholaOriginal.approvedSources).toHaveLength(1)
+    const quarter=cholaOriginal.approvedSources[0]!
+    expect(quarter.symbol).toBe("CHOLAFIN")
+    expect(quarter.periodEnd).toBe("2024-12-31")
+    expect(quarter.scope).toBe("STANDALONE")
+    expect(quarter.approval).toBe("R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION")
+    expect(Object.keys(quarter.observations).sort()).toEqual(["EPS_DILUTED","NET_PROFIT_QUARTER","OPERATING_REVENUE_QUARTER"])
  })
  it("pins NALCO 2024 September signed Consolidated revenue PAT EPS, R5 comparison only",()=>{
     expect(nalcoOriginal.contract).toBe("R5_NATIONALUM_SIGNED_2024_CONSOLIDATED_ORIGINAL_V1")
