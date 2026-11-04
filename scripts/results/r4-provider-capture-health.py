@@ -24,6 +24,26 @@ def classify(value):
     if isinstance(value,list):return 'EMPTY_RESULT_LIST' if not value else 'RESULT_LIST_REQUIRES_SOURCE_REVIEW'
     return 'MISSING_OR_UNRECOGNIZED_RESULT'
 
+def require_usable_result(value):
+    status=classify(value)
+    if status in ('PROVIDER_AUTH_ERROR_TEXT','PROVIDER_ERROR_TEXT','PROVIDER_ERROR_ENVELOPE','MISSING_OR_UNRECOGNIZED_RESULT'):
+        raise RuntimeError(status)
+    return value
+
+def error_hints(value):
+    if isinstance(value,str):
+        try:value=json.loads(value)
+        except ValueError:pass
+    text=str(value.get('message','') if isinstance(value,dict) else value).lower()
+    patterns={'AUTHENTICATION':r'auth|token|credential|login|password|api.?key|username',
+        'QUOTA':r'quota|daily|monthly|rate.?limit|credit|limit exceeded',
+        'ARGUMENT_CONTRACT':r'argument|required|schema|parameter|input|validation',
+        'INSTRUMENT_IDENTITY':r'stock|symbol|isin|instrument',
+        'ENTITLEMENT':r'subscription|upgrade|premium|permission|access denied|plan',
+        'PROVIDER_AVAILABILITY':r'internal|server|unavailable|temporar|try again|maintenance',
+        'UNSUPPORTED_CONTRACT':r'unsupported|not supported|not found|unknown|invalid'}
+    return [key for key,pattern in patterns.items() if re.search(pattern,text)]
+
 def main():
     import boto3,psycopg
     if (os.environ.get('GITHUB_REPOSITORY')!='drddutta-portfolio/PortfiolioAI'
@@ -52,7 +72,7 @@ def main():
         # Only structural key names and a closed status code are public.
         known=('data','error','isError','success','status','message','content','result','tools')
         keys=[k for k in known if isinstance(decoded,dict) and k in decoded]
-        print('R4_PROVIDER_CAPTURE_HEALTH',json.dumps({'tool':metadata['request']['tool'],'status':status,'known_envelope_keys':keys}),flush=True)
+        print('R4_PROVIDER_CAPTURE_HEALTH',json.dumps({'tool':metadata['request']['tool'],'status':status,'known_envelope_keys':keys,'error_hints':error_hints(value) if status.startswith('PROVIDER_') else []}),flush=True)
     print('R4_PROVIDER_CAPTURE_HEALTH_TOTALS',json.dumps(counts,sort_keys=True),flush=True)
 
 if __name__=='__main__':main()

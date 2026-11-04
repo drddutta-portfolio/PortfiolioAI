@@ -1,3 +1,4 @@
+import { readR4ProviderToolResult } from "./r4-provider-result.ts"
 import { validR4WorkflowClaims } from "./r4-workflow-claims.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
@@ -62,16 +63,8 @@ class Client {
   }
   async call(name:string,args:Record<string,unknown>){
     if(!this.session) await this.init()
-    const result=await this.post({jsonrpc:"2.0",id:this.next++,method:"tools/call",params:{name,arguments:args}}) as {
-      content?:{type:string;text?:string}[], structuredContent?:{result?:string}
-    }
-    const text=result?.structuredContent?.result??result?.content?.find(x=>x.type==="text")?.text
-    if(typeof text!=="string") throw new Error("PROVIDER_RESULT_MISSING")
-    const n=text.trim().toLowerCase()
-    if(n.startsWith("unknown tool:")||n.includes("tool not found")||n.includes("method not found")) {
-      throw new Error("PROVIDER_TOOL_CONTRACT_ERROR")
-    }
-    return text
+    const result=await this.post({jsonrpc:"2.0",id:this.next++,method:"tools/call",params:{name,arguments:args}})
+    return readR4ProviderToolResult(result)
   }
 }
 

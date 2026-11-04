@@ -7,6 +7,8 @@ import psycopg
 from r4_recovery_queue import task_id,attempt_all
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import importlib.util
+health_spec=importlib.util.spec_from_file_location("r4_provider_health",Path(__file__).with_name("r4-provider-capture-health.py"))
+health=importlib.util.module_from_spec(health_spec);health_spec.loader.exec_module(health)
 spec=importlib.util.spec_from_file_location("batch",Path(__file__).with_name("r4-bse-historical-batch.py"))
 batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
 
@@ -40,7 +42,7 @@ def main():
             if cached and os.getenv("RESULTS_R4_FORCE_FRESH")!="1":
                 data=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cached[0])["Body"].read())
                 print("R4_TRENDLYNE_REUSED",tool,flush=True)
-                return data["result"]
+                return health.require_usable_result(data["result"])
             if fresh_calls>=40:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
             fresh_calls+=1
             request=urllib.request.Request("https://"+batch.REF+".supabase.co/functions/v1/discover-trendlyne-capabilities",
@@ -70,7 +72,7 @@ def main():
                    '{"review_only":true,"retention":"IMMUTABLE_R2"}'))
             db.commit()
             print("R4_TRENDLYNE_CAPTURE",json.dumps({"tool":tool,"bytes":len(raw),"canonical_facts":0}),flush=True)
-            return result["result"]
+            return health.require_usable_result(result["result"])
         with db.cursor() as cur:
             cur.execute("""SELECT raw_payload->>'r2_key' key FROM data_source_records
               WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'

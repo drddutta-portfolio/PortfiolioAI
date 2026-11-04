@@ -30,4 +30,4 @@ jobs:
       - name: Inspect retained response envelopes without logging source content
         run: python scripts/results/r4-provider-capture-health.py
 
-# Accept the established Development credential's full endpoint URL or exact account ID.
+# Report only closed provider-error hints; raw messages remain private.
