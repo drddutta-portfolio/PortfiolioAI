@@ -66,3 +66,5 @@ jobs:
     if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     secrets: inherit
+
+# Owner-requested fresh full-cohort retry: 5 November 2026 (IST); preserve quota gates.
