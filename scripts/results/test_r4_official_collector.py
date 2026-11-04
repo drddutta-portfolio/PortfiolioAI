@@ -4,11 +4,38 @@ from pathlib import Path
 from unittest import TestCase,main
 from unittest.mock import patch
 import types
+import tempfile
+import fitz
 
 spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).with_name('r4-official-issuer-recovery.py'))
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_collector_change_invalidates_cached_negative_replays(self):
+        names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
+            'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')
+        with tempfile.TemporaryDirectory() as directory:
+            for name in names:(Path(directory)/name).write_text('original')
+            original=collector.replay_engine(directory)
+            self.assertEqual(original,collector.replay_engine(directory))
+            (Path(directory)/names[0]).write_text('repaired collector')
+            self.assertNotEqual(original,collector.replay_engine(directory))
+
+    def test_native_table_labels_survive_failed_low_resolution_locator(self):
+        from unittest.mock import Mock
+        with fitz.open() as pdf:
+            pdf.new_page().insert_text((40,40),'Revenue from operations and diluted earnings per share')
+            raw=pdf.tobytes()
+        period='2024-09-30'
+        replay=Mock(return_value={period:{'rejection':'INDEPENDENT_RENDER_DISAGREEMENT'}})
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':['unreadable audit label']}), \
+             patch('r4_ocr_dated_geometry.extract_dated_periods',replay), \
+             patch.object(collector,'extract_original',side_effect=ValueError('NATIVE_TABLE_UNPROVEN')):
+            proof=collector.extract_all(raw,'JASH',[period])
+        replay.assert_called_once_with(raw,1,[period],False,False)
+        self.assertEqual(proof['periods'][period],[])
+        self.assertEqual(proof['rejections']['INDEPENDENT_RENDER_DISAGREEMENT'],1)
+
     def session(self,raw):
         class Response:
             status_code=200

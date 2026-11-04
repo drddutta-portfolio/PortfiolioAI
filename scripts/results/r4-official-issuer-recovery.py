@@ -13,6 +13,12 @@ def load_runtime():
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module
 
+def replay_engine(directory=None):
+    root=Path(directory) if directory is not None else Path(__file__).parent
+    names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
+        'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')
+    return sha(b'\0'.join((root/name).read_bytes() for name in names))
+
 def download_original(session,symbol,url):
     approved_url(symbol,url)
     if urlparse(url).hostname=='www.bseindia.com':
@@ -39,14 +45,21 @@ def retain_split_authority(session,client,symbol):
     return reference
 
 def extract_all(raw,symbol,periods):
+    import fitz
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
     audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter()
     for period in periods:
         try:out[period]=extract_original(raw,symbol,period,document_audit=audit)
         except ValueError as error:rejects[str(error).split(':')[0]]+=1
     pending=[p for p in periods if not out[p]]
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        native_pages=[page.get_text('text') for page in pdf]
     for n,text in enumerate(audit['pages'],1):
         if not pending:break
+        # The low-resolution audit locates candidates; it is not financial
+        # qualification. Native labels can locate a table when audit OCR loses
+        # a label. All figures still require independent paired-render replay.
+        text=text+' '+native_pages[n-1]
         if not re.search('diluted',text,re.I) or not re.search(r'revenue|premium.*earned',text,re.I):continue
         proofs=extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH')
         for period in pending[:]:
@@ -109,7 +122,7 @@ def main():
         raise RuntimeError('DEVELOPMENT_BRANCH_REQUIRED')
     if batch.REF not in os.environ['SUPABASE_DB_URL'] or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
     client=batch.r2_client();counts=Counter();audit_rows=[]
-    engine=sha(b'\0'.join(Path(__file__).with_name(n).read_bytes() for n in ('r4_official_issuer.py','r4_pdf_geometry.py','r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')))
+    engine=replay_engine()
     with psycopg.connect(os.environ['SUPABASE_DB_URL']) as db,requests.Session() as session:
         session.headers['User-Agent']='Mozilla/5.0'
         cohort=[row for row in batch.candidates(db) if row[2].int%4==args.shard];db.rollback()

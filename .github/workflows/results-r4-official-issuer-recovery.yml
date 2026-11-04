@@ -73,3 +73,4 @@ jobs:
           report=json.load(open('/tmp/r4-official-readback.json'))
           print(json.dumps({k:report[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
+# Retry originals with collector-aware replay keys and native table location hints.
