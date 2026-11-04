@@ -4,6 +4,47 @@ from test_r4_pdf_geometry import fixture
 import r4_official_issuer as o
 
 class OfficialIssuerReplay(unittest.TestCase):
+    def annexure_sample(self):
+        import fitz
+        statutory,_=fixture(profit='1,324')
+        statutory[0].insert_text((25,280),'Independent Auditor Review Report',fontsize=10)
+        proforma,_=fixture(profit='9,999')
+        with fitz.open() as pdf:
+            cover=pdf.new_page(width=1000,height=850)
+            for y,line in enumerate(['NATCO PHARMA LIMITED',
+                'Financial Results enclosed as Annexure - I; and',
+                'Proforma Financial Information enclosed as Annexure - II.']):
+                cover.insert_text((25,40+y*25),line,fontsize=10)
+            pdf.insert_pdf(statutory)
+            divider=pdf.new_page(width=1000,height=850)
+            divider.insert_text((25,40),'Annexure II\nStatement of Proforma Financial Information',fontsize=10)
+            pdf.insert_pdf(proforma)
+            texts=[page.get_text('text') for page in pdf];raw=pdf.tobytes()
+        statutory.close();proforma.close()
+        audit={'original_sha256':o.sha(raw),'text_sha256':'a'*64,'pages':texts[:]}
+        fake=types.SimpleNamespace(audit_document=lambda raw,**kwargs:audit,extract_dated_page=None)
+        return raw,audit,fake
+
+    def test_mixed_issuer_filing_selects_only_the_proven_statutory_annexure(self):
+        raw,audit,fake=self.annexure_sample()
+        with patch.dict(o.ISSUERS,{'LENSKART':{'legal':'NATCO PHARMA LIMITED'}}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            result=o.extract_original(raw,'LENSKART','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)[0]
+            self.assertEqual(result['page'],2)
+            self.assertEqual(result['statutory_section_pages'],[2])
+            self.assertEqual(result['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+            self.assertTrue(result['comparison_basis_unproven'])
+            with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):
+                o.extract_original(raw,'LENSKART','2024-09-30',page_no=4,basis_policy=o.CURRENT_DISPLAY_POLICY)
+
+    def test_uncorroborated_annexure_boundary_and_legacy_policy_remain_rejected(self):
+        raw,audit,fake=self.annexure_sample()
+        with patch.dict(o.ISSUERS,{'LENSKART':{'legal':'NATCO PHARMA LIMITED'}}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaisesRegex(ValueError,'REVIEW_REQUIRED'):
+                o.extract_original(raw,'LENSKART','2024-09-30')
+            audit['pages'][2]='Unreadable divider'
+            with self.assertRaisesRegex(ValueError,'BOUNDARY_UNPROVEN'):
+                o.extract_original(raw,'LENSKART','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)
+
     def restated_sample(self):
         raw,source,rows,profile,audit,fake=self.sample()
         pdf,page=fixture(first='30.09.2025',third='30.09.2024');raw=pdf.tobytes();pdf.close()
@@ -42,6 +83,14 @@ class OfficialIssuerReplay(unittest.TestCase):
             audit['pages']=['Pro-forma carve-out statement']
             with self.assertRaisesRegex(ValueError,'CARVEOUT'):
                 o.extract_original(raw,'TEST','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)
+
+    def test_issuer_reported_demerger_comparative_always_retains_basis_guard(self):
+        raw,source,rows,profile,audit,fake=self.restated_sample()
+        audit['pages']=['Comparative results give effect to the scheme of demerger.']
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            parsed=o.extract_original(raw,'TEST','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)[0]
+        self.assertTrue(parsed['comparison_basis_unproven'])
+        self.assertEqual(parsed['source_reporting_basis'],'ISSUER_RESTATED_COMPARATIVE')
 
     def sample(self):
         pdf,page=fixture(first='30.09.2024',third='30.09.2023')

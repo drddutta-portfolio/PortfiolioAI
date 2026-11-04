@@ -6,7 +6,7 @@ The owner authorized engineering judgment: “Proceed as you think it is correct
 
 For current display, accept explicitly dated quarterly figures published by the exact issuer in an official filing, including issuer-restated or recast comparatives and reported split/bonus adjustments. The existing exact issuer, original hash, quarter, consolidation scope, unit and complete revenue/PAT/diluted-EPS evidence requirements remain mandatory. Financial amounts come from the filing; PortfolioAI does not infer adjustments, reconstruct quarters from annual/YTD totals, copy predecessor segment results or invent missing data. Original observations and protected selections remain immutable. Conflicting versions still require source-specific correction evidence; this is not a latest-filing-wins rule.
 
-Proforma and carveout documents remain review-only under this adapter. Prelisting or demerger status alone does not prove that a quarter is inapplicable. Missing or unproven histories remain explicit.
+Proforma and carveout figures remain review-only. The closed Lenskart filing format may supply only statutory Annexure I results when both native text and independent full-original OCR identify the same Annexure II divider, the cover identifies both annexures, and the statutory section contains the exact legal issuer and independent auditor without proforma/carveout text. All other mixed formats remain rejected. Prelisting or demerger status alone does not prove that a quarter is inapplicable. Missing or unproven histories remain explicit.
 
 ## Provenance and compatibility
 
@@ -27,3 +27,9 @@ Changes use existing data source records, fundamental observations, protected se
 Local validation: 88 Python regressions; 34 focused TypeScript tests; strict targeted TypeScript and ESLint checks; Python compilation; whitespace checks. Full repository CI, Development deployment and live independent source qualification are required after rollout.
 
 R4 is not declared complete by this policy change. The last confirmed inventory has 56 historical R4 gaps and 18 separately deferred R3 gaps. Collection success is not financial completeness; only an independent full-cohort readback may establish the resulting coverage.
+
+## Verified issuer discovery and section boundaries
+
+The collector recognizes Groww's quarterly-results and announcements pages, Lenskart's assets.lenskart.com, Pine Labs' plcorp-cdn.pinelabs.com and Vedanta Aluminium's exact d1rbiogke1jwo5.cloudfront.net distribution linked by its own investor page. Exact official filing seeds are recorded in the issuer registry. These are closed host additions; every redirect still requires issuer-specific approval.
+
+Issuer-reported demerger/common-control comparatives also retain the comparison-basis guard under the authorized policy. No predecessor segment is copied. Statutory section page boundaries enter the independently replayed manifest; proforma pages cannot supply accepted figures. Local validation now passes 91 Python regressions, including rejection of an uncorroborated annexure divider and of a proforma page within the same retained original.

@@ -42,7 +42,8 @@ ISSUERS={
              'pages':['https://www.utlsolarfujiyama.com/investor-relations/','https://www.utlsolarfujiyama.com/investor-relations/financials/'],
              'originals':['https://www.utlsolarfujiyama.com/wp-content/uploads/Investor%20Relations/financials/Financial%20Results_Q2.pdf']},
  'GROWW':{'legal':'BILLIONBRAINS GARAGE VENTURES LIMITED','hosts':['groww.in','resources.groww.in'],
-          'pages':['https://groww.in/investor-relations'],'originals':[]},
+          'pages':['https://groww.in/investor-relations/performance/quarterly-results','https://groww.in/investor-relations/announcements'],
+          'originals':['https://resources.groww.in/web-assets/media-library/2025/11/Q2%20FY26%20Financial%20Results.pdf','https://resources.groww.in/web-assets/media-library/2026/4/Q4%20FY26%20Financial%20Results.pdf']},
  'HEXT':{'legal':'HEXAWARE TECHNOLOGIES LIMITED','hosts':['hexaware.com','www.hexaware.com','cdn.hexaware.com','www.bseindia.com'],
          'pages':['https://hexaware.com/investors/quarterly-results/','https://hexaware.com/financials-reports/'],
          'originals':['https://www.bseindia.com/xml-data/corpfiling/AttachHis/2e5e187a-25a8-422a-98f9-ec55074852dd.pdf',
@@ -74,8 +75,9 @@ ISSUERS={
          'pages':['https://cv.tatamotors.com/investors'],'originals':[]},
  'TMPV':{'legal':'TATA MOTORS PASSENGER VEHICLES LIMITED','hosts':['www.tatamotors.com','tatamotors.com'],
          'pages':['https://www.tatamotors.com/investors/'],'originals':[]},
- 'VAML':{'legal':'VEDANTA ALUMINIUM METAL LIMITED','hosts':['vedantaaluminium.com','www.vedantaaluminium.com'],
-         'pages':['https://vedantaaluminium.com/investors/results-and-reports/'],'originals':[]},
+ 'VAML':{'legal':'VEDANTA ALUMINIUM METAL LIMITED','hosts':['vedantaaluminium.com','www.vedantaaluminium.com','d1rbiogke1jwo5.cloudfront.net'],
+         'pages':['https://vedantaaluminium.com/investors/results-and-reports/'],
+         'originals':['https://d1rbiogke1jwo5.cloudfront.net/wp-content/uploads/2026/07/Consolidated-Financials.pdf','https://d1rbiogke1jwo5.cloudfront.net/wp-content/uploads/2026/10/Consolidated-Financials.pdf']},
  'AWHCL':{'legal':'ANTONY WASTE HANDLING CELL LIMITED','hosts':['www.antony-waste.com','antony-waste.com'],
           'pages':['https://www.antony-waste.com/investors/financial/quarterly-financial-report/'],'originals':[]},
  'BLUSPRING':{'legal':'BLUSPRING ENTERPRISES LIMITED','hosts':['www.bluspring.com','bluspring.com'],
@@ -103,9 +105,10 @@ ISSUERS={
             'pages':['https://www.mankindpharma.com/investors-relations/financials/'],'originals':[]},
  'LGEINDIA':{'legal':'LG ELECTRONICS INDIA LIMITED','hosts':['www.lg.com'],
              'pages':[], 'originals':['https://www.lg.com/content/dam/lge/in/migration/lginvestorrelations/IRPdf/2026/QR/LGEIL-Q3FY26-Financials.pdf']},
- 'LENSKART':{'legal':'LENSKART SOLUTIONS LIMITED','hosts':['www.lenskart.com','static.lenskart.com'],
-             'pages':['https://www.lenskart.com/corporate/investorrelations'],'originals':[]},
- 'PINELABS':{'legal':'PINE LABS LIMITED','hosts':['www.pinelabs.com','pinelabs.com'],
+ 'LENSKART':{'legal':'LENSKART SOLUTIONS LIMITED','hosts':['www.lenskart.com','static.lenskart.com','assets.lenskart.com'],
+             'pages':['https://www.lenskart.com/corporate/investorrelations'],
+             'originals':['https://assets.lenskart.com/documents/2026/02/11/Reg30-SEIntimation.pdf']},
+ 'PINELABS':{'legal':'PINE LABS LIMITED','hosts':['www.pinelabs.com','pinelabs.com','plcorp-cdn.pinelabs.com'],
              'pages':['https://www.pinelabs.com/investor-relations/corporate-announcements'],'originals':[]},
  'ICICIAMC':{'legal':'ICICI PRUDENTIAL ASSET MANAGEMENT COMPANY LIMITED','hosts':['www.icicipruamc.com'],
              'pages':['https://www.icicipruamc.com/blob/investor-relations/Disclosures.html'],
@@ -174,6 +177,33 @@ def discover(session,symbol):
         except Exception as error:errors['DISCOVERY_'+type(error).__name__]+=1
     return sorted(urls,key=lambda u:(-urls[u],u))[:20],errors
 
+def statutory_annexure_pages(symbol,texts,audit_pages,basis_policy):
+    """Closed Lenskart filing format: statutory Annexure I, proforma Annexure II.
+
+    Both native text and full-original OCR must independently locate the same
+    standalone Annexure II divider. No proforma/carveout page enters the scope.
+    """
+    if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='LENSKART':
+        raise ValueError('OFFICIAL_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
+    cover=texts[0]
+    if re.search(r'\bcarve[ -]?out\b',cover,re.I):
+        raise ValueError('OFFICIAL_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
+    if not (re.search(r'financial\s+results.*?enclosed\s+as\s+Annexure\s*[-–]?\s*I\b',cover,re.I|re.S)
+        and re.search(r'proforma\s+financial\s+information.*?enclosed\s+as\s+Annexure\s*[-–]?\s*II\b',cover,re.I|re.S)):
+        raise ValueError('OFFICIAL_STATUTORY_ANNEXURE_COVER_UNPROVEN')
+    def dividers(pages):
+        return [i for i,t in enumerate(pages) if i>0 and re.match(
+            r'^\s*Annexure\s*[-–]?\s*II\b\s*Statement\s+of\s+Proforma\s+Financial\s+Information',t,re.I)]
+    native=dividers(texts);rendered=dividers(audit_pages)
+    if len(native)!=1 or native!=rendered or native[0]<2:
+        raise ValueError('OFFICIAL_STATUTORY_ANNEXURE_BOUNDARY_UNPROVEN')
+    boundary=native[0];section=' '.join(texts[1:boundary]+audit_pages[1:boundary])
+    if (not exact_legal_identity(ISSUERS[symbol]['legal'],section)
+        or not re.search(r'independent\s+auditor',section,re.I)
+        or re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',section,re.I)):
+        raise ValueError('OFFICIAL_STATUTORY_ANNEXURE_CONTENT_UNPROVEN')
+    return set(range(2,boundary+1)),section
+
 
 def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None,basis_policy=None):
     """Replays explicit dated cells, with document-wide business-basis checks."""
@@ -194,14 +224,17 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             and not exact_legal_identity(profile['legal'],' '.join(audit['pages'][:3]))):
             raise ValueError('OFFICIAL_COMPLETE_ISSUER_IDENTITY_UNPROVEN')
         text=native+' '+' '.join(audit['pages'])
+        section_pages=None
         if re.search(r'\b(?:pro[ -]?forma|carve[ -]?out)\b',text,re.I):
-            raise ValueError('OFFICIAL_PROFORMA_OR_CARVEOUT_REVIEW_REQUIRED')
+            section_pages,text=statutory_annexure_pages(symbol,texts,audit['pages'],basis_policy)
         restated=bool(re.search(r'\b(?:restated|recast)\b',text,re.I)
             or (re.search(r'retrospective',text,re.I) and re.search(r'share\s+split|split\s+and\s+bonus|bonus\s+shares',text,re.I))
             or (re.search(r'regrouped|reclassifi',text,re.I) and re.search(r'from\s+["“]?Revenue\s+from\s+Operations["”]?\s+to\s+["“]?Other\s+Income',text,re.I)))
+        reorganized=bool(re.search(r'\b(?:demerger|demerged|common[ -]control)\b',text,re.I))
         pages=[page_no] if page_no else range(1,len(pdf)+1)
         for n in pages:
             if not 1<=n<=len(pdf):raise ValueError('OFFICIAL_FINANCIAL_PAGE_UNPROVEN')
+            if section_pages is not None and n not in section_pages:continue
             try:
                 if method=='OCR':
                     parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
@@ -226,8 +259,10 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             result={**parsed,'document_audit_text_sha256':audit['text_sha256'],
                 'method':method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
             if basis_policy is not None:
-                result.update(basis_policy=basis_policy,comparison_basis_unproven=restated)
-                if restated and parsed['first_column_period']!=period:
+                result.update(basis_policy=basis_policy,comparison_basis_unproven=restated or reorganized)
+                if section_pages is not None:
+                    result.update(statutory_section_pages=sorted(section_pages),comparison_basis_unproven=True)
+                if (restated or reorganized) and parsed['first_column_period']!=period:
                     result['source_reporting_basis']='ISSUER_RESTATED_COMPARATIVE'
             out.append(result)
         return out
