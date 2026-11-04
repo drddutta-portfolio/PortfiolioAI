@@ -14,8 +14,6 @@ from decimal import Decimal
 import json
 import os
 
-import psycopg
-
 EXPECTED_REF = "lrgpjimipfkyoqbpsqzz"
 PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
 HISTORICAL = ("2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30")
@@ -55,6 +53,7 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
     core = required_for(symbol)
     groups = defaultdict(set)
     share_basis_warning = False
+    reporting_basis_warning = False
     for r in selections:
         if r["metric_code"] in core and field_eligible(r):
             key = (str(r["source_record_id"]), r["consolidation_scope"])
@@ -62,6 +61,8 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
             if ("REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED" in (r.get("notes") or "")
                 or "HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN" in (r.get("notes") or "")):
                 share_basis_warning = True
+            if "ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN" in (r.get("notes") or ""):
+                reporting_basis_warning = True
     complete_groups = [key for key, metrics in groups.items() if core.issubset(metrics)]
     if complete_groups:
         scopes = {scope for _source, scope in complete_groups}
@@ -69,7 +70,8 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
         return {"status": "QUALIFIED", "reason": "SAME_SOURCE_SAME_SCOPE_CORE_TRIO",
                 "complete_source_count": len(complete_groups),
                 "preferred_scope": preferred_scope,
-                "historical_eps_share_basis_guard": share_basis_warning}
+                "historical_eps_share_basis_guard": share_basis_warning,
+                "reporting_basis_comparability_guard": reporting_basis_warning}
     if selections:
         return {"status": "PARTIAL_SELECTED", "reason": "SELECTED_FACTS_NOT_ONE_QUALIFIED_SOURCE",
                 "selected_fact_count": len(selections)}
@@ -100,6 +102,7 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
 def readback(db_url: str) -> dict:
     if EXPECTED_REF not in db_url:
         raise RuntimeError("NOT_DEVELOPMENT_DATABASE")
+    import psycopg
     with psycopg.connect(db_url, options="-c default_transaction_read_only=on") as db:
         with db.cursor() as cur:
             cur.execute("""
@@ -182,6 +185,9 @@ def readback(db_url: str) -> dict:
     for symbol, period, baseline, now, old in same_source_period_yoy_candidates:
         if now["preferred_scope"] != old["preferred_scope"]:
             pair_reasons["CROSS_PERIOD_SCOPE_MISMATCH"] += 1
+        elif (now.get("reporting_basis_comparability_guard", False)
+              or old.get("reporting_basis_comparability_guard", False)):
+            pair_reasons["ISSUER_RESTATED_REPORTING_BASIS_UNPROVEN"] += 1
         elif (now.get("historical_eps_share_basis_guard", False)
               or old.get("historical_eps_share_basis_guard", False)):
             pair_reasons["PRE_SPLIT_EPS_BASIS_NOT_ADJUSTED"] += 1

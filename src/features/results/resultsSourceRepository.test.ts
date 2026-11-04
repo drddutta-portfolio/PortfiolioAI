@@ -26,7 +26,7 @@ describe("R3 existing-source reuse", () => {
         order: () => chain,
         range: (start: number, end: number) => {
           if (table === "fundamental_observation_decisions") {
-            return Promise.resolve({ data: [{ selected_observation_id: "obs1" }], error: null })
+            return Promise.resolve({ data: [{ selected_observation_id: "obs1", notes: "ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN" }], error: null })
           }
           return Promise.resolve({ data: observations.slice(start, end + 1), error: null })
         },
@@ -37,6 +37,8 @@ describe("R3 existing-source reuse", () => {
     expect(rows).toHaveLength(701)
     expect(rows.filter((row) => row.selected).map((row) => row.id)).toEqual(["obs1"])
     expect(rows[700]?.value).toBe("701")
+    expect(rows.find(row=>row.id==="obs1")?.reportingBasisUnproven).toBe(true)
+    expect(rows[700]?.reportingBasisUnproven).toBe(false)
     expect(db.from).toHaveBeenCalledWith("fundamental_observations")
   })
 

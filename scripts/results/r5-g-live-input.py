@@ -11,8 +11,6 @@ import json
 import os
 from pathlib import Path
 
-import psycopg
-
 PORTFOLIO = "6193a4aa-3235-4057-bddc-209fcf443fc2"
 PROJECT_REF = "lrgpjimipfkyoqbpsqzz"
 PERIODS = ("2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30",
@@ -35,12 +33,14 @@ def selected_fact(row, selected=True):
         publishedAt=published.isoformat() if published else None,
         retrievedAt=retrieved.isoformat() if retrieved else "",
         selected=selected,
+        reportingBasisUnproven="ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN" in (notes or ""),
         originalShareBasis="REPORTED_PRE_SPLIT_EPS_NOT_ADJUSTED" in (notes or "")
         or "HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN" in (notes or ""),
     )
 
 
 def extract(db_url):
+    import psycopg
     if PROJECT_REF not in db_url:
         raise RuntimeError("R5_G_REQUIRES_DEVELOPMENT_DATABASE")
     with psycopg.connect(db_url, options="-c default_transaction_read_only=on") as db:

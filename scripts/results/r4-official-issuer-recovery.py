@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlparse
-from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,SPLIT_AUTHORITIES,split_reference,approved_url,extract_original,canonical,sha,discover,get,resume_issuer_order
+from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,SPLIT_AUTHORITIES,CURRENT_DISPLAY_POLICY,split_reference,approved_url,extract_original,canonical,sha,discover,get,resume_issuer_order
 from r4_recovery_queue import run_with_timeout
 
 def load_runtime():
@@ -13,11 +13,15 @@ def load_runtime():
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module
 
+def active_basis_policy():
+    # Enable only after the Development app's comparison guard is deployed.
+    return CURRENT_DISPLAY_POLICY if os.environ.get('RESULTS_R4_RESTATED_DISPLAY_READY')=='1' else None
+
 def replay_engine(directory=None):
     root=Path(directory) if directory is not None else Path(__file__).parent
     names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
         'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')
-    return sha(b'\0'.join((root/name).read_bytes() for name in names))
+    return sha(b'\0'.join((root/name).read_bytes() for name in names)+b'\0'+(active_basis_policy() or 'LEGACY_ORIGINAL_ONLY').encode())
 
 def download_original(session,symbol,url):
     approved_url(symbol,url)
@@ -47,9 +51,9 @@ def retain_split_authority(session,client,symbol):
 def extract_all(raw,symbol,periods):
     import fitz
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
-    audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter()
+    audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter();policy=active_basis_policy()
     for period in periods:
-        try:out[period]=extract_original(raw,symbol,period,document_audit=audit)
+        try:out[period]=extract_original(raw,symbol,period,document_audit=audit,basis_policy=policy)
         except ValueError as error:rejects[str(error).split(':')[0]]+=1
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
@@ -67,7 +71,7 @@ def extract_all(raw,symbol,periods):
             if proof.get('rejection'):rejects[proof['rejection']]+=1;continue
             parsed=proof['parsed']
             try:
-                out[period]=extract_original(raw,symbol,period,'OCR',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit)
+                out[period]=extract_original(raw,symbol,period,'OCR',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
                 if out[period]:pending.remove(period)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}

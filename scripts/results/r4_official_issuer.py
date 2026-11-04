@@ -15,6 +15,7 @@ from r4_pdf_geometry import extract_page
 
 CONTRACT='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
 KIND='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
+CURRENT_DISPLAY_POLICY='ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1'
 PREFIX='portfolioai-results/development/v1/quarterly/'
 BUCKET='portfolioai-history-dev'
 PERIODS={'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01','2025-03-31':'2025-01-01','2025-06-30':'2025-04-01'}
@@ -174,9 +175,10 @@ def discover(session,symbol):
     return sorted(urls,key=lambda u:(-urls[u],u))[:20],errors
 
 
-def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None):
+def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None,basis_policy=None):
     """Replays explicit dated cells, with document-wide business-basis checks."""
     profile=ISSUERS[symbol]
+    if basis_policy not in (None,CURRENT_DISPLAY_POLICY):raise ValueError('OFFICIAL_REPORTING_BASIS_POLICY_UNAPPROVED')
     if period not in PERIODS or not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_QUARTER_OR_PDF_UNPROVEN')
     bank=False;insurer=symbol=='STARHEALTH';candidates=[]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
@@ -208,7 +210,7 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                 else:
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
                     parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
-                if restated and parsed['first_column_period']!=period:continue
+                if restated and parsed['first_column_period']!=period and basis_policy is None:continue
                 candidates.append(parsed)
             except ValueError:continue
         if not candidates:raise ValueError('OFFICIAL_EXPLICIT_QUARTER_TRIO_UNPROVEN')
@@ -221,8 +223,13 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             vectors={tuple(sorted((k,Decimal(v['value']),v['unit']) for k,v in x['facts'].items())) for x in items}
             if len(vectors)!=1:raise ValueError('OFFICIAL_CONFLICTING_SAME_SCOPE_TABLES')
             parsed=sorted(items,key=lambda x:x['page'])[0]
-            out.append({**parsed,'document_audit_text_sha256':audit['text_sha256'],
-                'method':method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'})
+            result={**parsed,'document_audit_text_sha256':audit['text_sha256'],
+                'method':method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
+            if basis_policy is not None:
+                result.update(basis_policy=basis_policy,comparison_basis_unproven=restated)
+                if restated and parsed['first_column_period']!=period:
+                    result['source_reporting_basis']='ISSUER_RESTATED_COMPARATIVE'
+            out.append(result)
         return out
 
 def split_reference(raw,symbol):
@@ -260,7 +267,7 @@ def qualify(raw,source,observations,identity_raw=None):
                 or payload['period_end']>=bridge['ex_date']):
                 raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
     period=payload['period_end'];recorded=payload['parsed']
-    options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'))
+    options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'),basis_policy=recorded.get('basis_policy'))
     matching=[x for x in options if x['scope']==recorded['scope']]
     if len(matching)!=1 or matching[0]!=recorded:raise ValueError('OFFICIAL_ORIGINAL_REPLAY_CHANGED')
     facts=recorded['facts'];required={'NET_PREMIUM_EARNED_QUARTER' if symbol=='STARHEALTH' else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}

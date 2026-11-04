@@ -1,5 +1,5 @@
 import Decimal from "decimal.js"
-import { compareQuarterMetric } from "./quarterlyR5"
+import { compareQuarterMetric, hasComparableReportingBasis } from "./quarterlyR5"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 
 /**
@@ -238,6 +238,7 @@ function directionalComparison(
   const top = read(end,topCode), profit = read(end,"NET_PROFIT_QUARTER")
   const beforeTop = read(previous,topCode), beforeProfit = read(previous,"NET_PROFIT_QUARTER")
   if (!top || !profit || !beforeTop || !beforeProfit) return null
+  if (!hasComparableReportingBasis(top, profit, beforeTop, beforeProfit)) return null
   const matching = (a: ResultsSourceObservation, b: ResultsSourceObservation) =>
     Boolean(a.sourceRecordId && a.sourceRecordId === b.sourceRecordId && a.scope === b.scope)
   if (!matching(top,profit) || !matching(beforeTop,beforeProfit) ||

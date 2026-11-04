@@ -36,6 +36,14 @@ function graded(
   return gradeQuarterR5(rows,"s1","2026-06-30",sector,industry,calibrated??new Map())
 }
 describe("R5 exact-industry quarterly operating signal", () => {
+  it("blocks both peer grades and the directional fallback across an unproven restatement basis", () => {
+    const rows=[...history("OPERATING_REVENUE_QUARTER","130","110","145","120"),
+      fact("2025-12-31","OPERATING_REVENUE_QUARTER","100"),fact("2025-12-31","NET_PROFIT_QUARTER","100")]
+    expect(graded(rows,"Pharma","Pharmaceuticals").status).toBe("STRONG")
+    const guarded=rows.map(r=>({...r,reportingBasisUnproven:r.periodEnd==="2026-06-30"}))
+    expect(graded(guarded,"Pharma","Pharmaceuticals").status).toBe("UNAVAILABLE")
+    expect(graded(guarded,"Pharma","Pharmaceuticals",policy("Pharma","Pharmaceuticals")).status).toBe("UNAVAILABLE")
+  })
   it("returns Strong only when IT revenue and PAT meet calibrated exact-industry bounds",()=>{
     const rows=history("OPERATING_REVENUE_QUARTER","114","100","125","100")
     const a=graded(rows,"Information Technology","Computers - Software & Consulting",

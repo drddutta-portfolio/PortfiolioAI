@@ -956,6 +956,8 @@ def verify(db,s3,apply):
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE),
                         "official_issuer":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"),
+                        "restated_basis":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"
+                            and r["raw_payload"].get("parsed",{}).get("comparison_basis_unproven") is True),
                         "bdl_correction":bool(bdl_corrected and r["symbol"]=="BDL"
                             and str(r["period_end"])=="2025-03-31" and r["consolidation_scope"]=="STANDALONE"),
                         "krn_correction":bool(krn_corrected and r["symbol"]=="KRN"
@@ -964,7 +966,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -992,6 +994,8 @@ def verify(db,s3,apply):
                                'EVIDENCE_PRIORITY',now(),NULL,
                                CASE WHEN p.issuer_correction THEN
                                  'RESULTS_R4_CURRENT_DISPLAY_R2_SOURCE_RECONCILED; EXIDE_OFFICIAL_NSE_CORRECTION_2026_02_17; CORRECTED_QUARTER_EPS_2.29; ORIGINAL_CORRECTION_R2_HASH_CHECKED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.restated_basis THEN
+                                 'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.official_issuer THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.bdl_correction THEN

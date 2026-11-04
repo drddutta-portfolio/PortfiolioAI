@@ -74,12 +74,20 @@ function selectedFact(
   return candidates.length === 1 && qualified(candidates[0]!, code, end) ? candidates[0]! : null
 }
 
+/** Shared by percentage and directional comparisons; display stays available. */
+export function hasComparableReportingBasis(...rows: readonly ResultsSourceObservation[]): boolean {
+  return rows.every(row => !row.reportingBasisUnproven)
+}
+
 function percentage(
   current: ResultsSourceObservation | null,
   baseline: ResultsSourceObservation | null,
 ): { value: string | null; limitation: string | null } {
   if (!current) return { value: null, limitation: "Current quarter has no uniquely qualified R4 selection" }
   if (!baseline) return { value: null, limitation: "Comparison quarter has no uniquely qualified R4 selection" }
+  if (!hasComparableReportingBasis(current, baseline)) {
+    return { value: null, limitation: "Issuer-restated figures require verified matching reporting bases before comparison" }
+  }
   if (current.scope !== baseline.scope || current.unit !== baseline.unit || current.currency !== baseline.currency) {
     return { value: null, limitation: "Accounting scope, reporting units or currency differ" }
   }

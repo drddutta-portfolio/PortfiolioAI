@@ -18,6 +18,12 @@ def row(metric,source="a",scope="CONSOLIDATED",value="1",**kwargs):
     }
 
 class EightQuarterReadbackTests(unittest.TestCase):
+    def test_restated_display_qualifies_but_reporting_basis_comparison_is_guarded(self):
+        rows=[row(x,notes='ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN') for x in m.required_for('RELIANCE')]
+        result=m.classify('RELIANCE',rows,[])
+        self.assertEqual(result['status'],'QUALIFIED')
+        self.assertTrue(result['reporting_basis_comparability_guard'])
+
     def test_four_display_and_four_prior_year_only(self):
         self.assertEqual(len(m.PERIODS),8)
         self.assertEqual(len(set(m.PERIODS)),8)

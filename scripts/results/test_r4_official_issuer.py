@@ -4,6 +4,45 @@ from test_r4_pdf_geometry import fixture
 import r4_official_issuer as o
 
 class OfficialIssuerReplay(unittest.TestCase):
+    def restated_sample(self):
+        raw,source,rows,profile,audit,fake=self.sample()
+        pdf,page=fixture(first='30.09.2025',third='30.09.2024');raw=pdf.tobytes();pdf.close()
+        audit.update(original_sha256=o.sha(raw),pages=['EPS adjusted for the retrospective impact of the share split and bonus'])
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            parsed=o.extract_original(raw,'TEST','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)[0]
+        payload=source['raw_payload'];payload.update(original_sha256=o.sha(raw),
+            original_r2_key=o.PREFIX+'evidence/original_version='+o.sha(raw)+'/issuer-original.pdf',parsed=parsed)
+        source['payload_hash']=o.sha(o.canonical(payload))
+        for row in rows:row['numeric_value']=parsed['facts'][row['metric_code']]['value']
+        return raw,source,rows,profile,audit,fake
+
+    def test_approved_restated_quarter_is_exact_issuer_reported_value_not_rebased(self):
+        raw,source,rows,profile,audit,fake=self.restated_sample()
+        parsed=source['raw_payload']['parsed']
+        self.assertEqual(parsed['source_reporting_basis'],'ISSUER_RESTATED_COMPARATIVE')
+        self.assertTrue(parsed['comparison_basis_unproven'])
+        self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'11.88')
+        before=copy.deepcopy(rows)
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            self.assertEqual(len(o.qualify(raw,source,rows)['eligible_observation_ids']),3)
+        self.assertEqual(rows,before)
+
+    def test_restated_comparison_guard_cannot_be_removed_from_manifest(self):
+        raw,source,rows,profile,audit,fake=self.restated_sample()
+        source['raw_payload']['parsed']['comparison_basis_unproven']=False
+        source['payload_hash']=o.sha(o.canonical(source['raw_payload']))
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaisesRegex(ValueError,'REPLAY_CHANGED'):o.qualify(raw,source,rows)
+
+    def test_approved_restated_policy_does_not_admit_proforma_or_unknown_policy(self):
+        raw,source,rows,profile,audit,fake=self.restated_sample()
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaisesRegex(ValueError,'POLICY_UNAPPROVED'):
+                o.extract_original(raw,'TEST','2024-09-30',basis_policy='ANYTHING')
+            audit['pages']=['Pro-forma carve-out statement']
+            with self.assertRaisesRegex(ValueError,'CARVEOUT'):
+                o.extract_original(raw,'TEST','2024-09-30',basis_policy=o.CURRENT_DISPLAY_POLICY)
+
     def sample(self):
         pdf,page=fixture(first='30.09.2024',third='30.09.2023')
         raw=pdf.tobytes();pdf.close();digest=o.sha(raw)

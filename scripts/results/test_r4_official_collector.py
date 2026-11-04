@@ -11,6 +11,14 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_restated_acquisition_requires_app_guard_and_invalidates_legacy_cache(self):
+        with patch.dict(collector.os.environ,{},clear=True):
+            self.assertIsNone(collector.active_basis_policy())
+            legacy=collector.replay_engine()
+        with patch.dict(collector.os.environ,{'RESULTS_R4_RESTATED_DISPLAY_READY':'1'},clear=True):
+            self.assertEqual(collector.active_basis_policy(),collector.CURRENT_DISPLAY_POLICY)
+            self.assertNotEqual(legacy,collector.replay_engine())
+
     def test_collector_change_invalidates_cached_negative_replays(self):
         names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
             'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')

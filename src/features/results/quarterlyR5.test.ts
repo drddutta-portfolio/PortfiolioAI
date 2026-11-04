@@ -12,6 +12,16 @@ function row(periodEnd: string, value: string, code = "OPERATING_REVENUE_QUARTER
     retrievedAt: "2026-10-15T00:00:00Z", selected: true }
 }
 describe("Results R5 source-qualified period comparisons", () => {
+  it("keeps issuer-restated figures visible while blocking unverified cross-period growth", () => {
+    for (const guarded of ["2026-06-30", "2026-03-31", "2025-06-30"]) {
+      const rows=[row("2026-06-30","120"),row("2026-03-31","100"),row("2025-06-30","80")]
+        .map(r=>({...r,reportingBasisUnproven:r.periodEnd===guarded}))
+      const result=compareQuarterMetric(rows,"security-1","2026-06-30","OPERATING_REVENUE_QUARTER")
+      expect(result.current?.value).toBe("120")
+      if(guarded!=="2025-06-30") expect(result.qoq).toBeNull()
+      if(guarded!=="2026-03-31") expect(result.yoy).toBeNull()
+    }
+  })
   it("calculates exact QoQ and YoY with matching quarters and half-up rounding", () => {
     const rows = [row("2026-06-30", "120"), row("2026-03-31", "100"), row("2025-06-30", "80")]
     const result = compareQuarterMetric(rows, "security-1", "2026-06-30", "OPERATING_REVENUE_QUARTER")
