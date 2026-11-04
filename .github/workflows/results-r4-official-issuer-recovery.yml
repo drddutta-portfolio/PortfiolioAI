@@ -8,7 +8,7 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-official-issuer-development
-  cancel-in-progress: ${{ github.event_name == 'push' }}
+  cancel-in-progress: ${{ github.event_name == 'push' && github.workflow == 'Results R4 Official Issuer Historical Recovery' }}
 jobs:
   collect:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -83,3 +83,5 @@ jobs:
 # Collector and qualifier implementation: 50789395edbbcea2028aaf94170177e7b6663377.
 
 # Resume all remaining issuers with independently rendered adjacent-page proofs and repaired original seeds.
+
+# Bind verified retained BSE originals to the same owner-approved guarded issuer replay.

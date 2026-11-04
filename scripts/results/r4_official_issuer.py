@@ -345,14 +345,70 @@ def split_reference(raw,symbol):
         'old_isin':authority['old_isin'],'current_isin':authority['current_isin'],'ex_date':authority['ex_date'],
         'source_url':authority['url'],'sha256':digest,'r2_key':PREFIX+'issuer-identity/sha256='+digest+'/split.pdf'}
 
-def qualify(raw,source,observations,identity_raw=None):
-    payload=source['raw_payload'];symbol=payload.get('symbol');approved_url(symbol,source['source_url'])
+def bse_inventory_sources(review,review_hash,symbol,isin,security_id):
+    """Bind retained exchange originals to an exact, hash-checked issuer review.
+
+    The inventory supplies discovery/identity only. Quarter amounts still come
+    exclusively from independently replaying the complete retained original.
+    """
+    if sha(canonical(review))!=review_hash:raise ValueError('OFFICIAL_BSE_REVIEW_HASH_UNPROVEN')
+    profile=ISSUERS.get(symbol)
+    if (profile is None or not re.fullmatch(r'[0-9a-f-]{36}',str(security_id),re.I)
+        or review.get('contract')!='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1'
+        or review.get('symbol')!=symbol or review.get('isin')!=isin
+        or str(review.get('security_id'))!=str(security_id) or review.get('period_end') not in PERIODS):
+        raise ValueError('OFFICIAL_BSE_REVIEW_CONTEXT_UNPROVEN')
+    identity=review.get('bse_identity') or {};header=identity.get('header') or {};listing=identity.get('listing') or {}
+    code=str(identity.get('bse_scrip_code',''))
+    if (not re.fullmatch(r'[0-9]{6}',code) or str(header.get('SecurityCode'))!=code
+        or str(listing.get('SCRIP_CD'))!=code or header.get('ISIN')!=isin or listing.get('ISIN_NUMBER')!=isin
+        or not exact_legal_identity(profile['legal'],identity.get('issuer_name',''))
+        or not exact_legal_identity(profile['legal'],listing.get('Issuer_Name',''))):
+        raise ValueError('OFFICIAL_BSE_CANONICAL_IDENTITY_UNPROVEN')
+    reference={'sha256':review_hash,'r2_key':PREFIX+'bse-dated-pdf-review/sha256='+review_hash+'/capture.json'}
+    candidate_hashes={item.get('original_sha256') for item in review.get('candidates',[]) if isinstance(item,dict)}
+    sources={}
+    for source in review.get('all_sources',[]):
+        url=source.get('source_url','');u=urlparse(url);digest=source.get('original_sha256','')
+        if (u.scheme!='https' or u.hostname!='www.bseindia.com' or u.username or u.password
+            or u.port not in (None,443) or u.query or u.fragment
+            or not re.fullmatch(r'/xml-data/corpfiling/(?:AttachHis|AttachLive)/[0-9a-f-]{36}\.pdf',u.path,re.I)
+            or not re.fullmatch(r'[0-9a-f]{64}',digest)
+            or source.get('original_r2_key')!=PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'):
+            continue
+        sources[url]={'source_url':url,'original_sha256':digest,'original_r2_key':source['original_r2_key'],
+            'bse_identity_reference':reference,'candidate_priority':0 if digest in candidate_hashes else 1}
+    return sources
+
+
+def validate_bse_inventory_reference(payload,source_url,observations,review_raw):
+    reference=payload.get('bse_identity_reference') or {};digest=reference.get('sha256','')
+    if (not re.fullmatch(r'[0-9a-f]{64}',digest) or review_raw is None or sha(review_raw)!=digest
+        or reference.get('r2_key')!=PREFIX+'bse-dated-pdf-review/sha256='+digest+'/capture.json'):
+        raise ValueError('OFFICIAL_BSE_IDENTITY_REFERENCE_UNPROVEN')
+    review=json.loads(review_raw)
+    sources=bse_inventory_sources(review,digest,payload['symbol'],payload['isin'],payload.get('security_id'))
+    original=sources.get(source_url)
+    if (original is None or original['original_sha256']!=payload['original_sha256']
+        or original['original_r2_key']!=payload['original_r2_key']
+        or any(str(row.get('security_id'))!=str(payload.get('security_id')) for row in observations)):
+        raise ValueError('OFFICIAL_BSE_ORIGINAL_BINDING_UNPROVEN')
+
+
+def qualify(raw,source,observations,identity_raw=None,bse_identity_raw=None):
+    payload=source['raw_payload'];symbol=payload.get('symbol')
     if (payload.get('contract')!=CONTRACT or payload.get('sourceUrl')!=source['source_url']
         or sha(canonical(payload))!=source['payload_hash']):raise ValueError('OFFICIAL_SOURCE_PAYLOAD_UNPROVEN')
     digest=payload.get('original_sha256')
     if not re.fullmatch(r'[0-9a-f]{64}',str(digest)) or sha(raw)!=digest:raise ValueError('OFFICIAL_ORIGINAL_HASH_MISMATCH')
     if payload.get('original_r2_key')!=PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf':
         raise ValueError('OFFICIAL_ORIGINAL_REFERENCE_UNPROVEN')
+    if payload.get('bse_identity_reference') is not None:
+        if payload.get('parsed',{}).get('basis_policy')!=CURRENT_DISPLAY_POLICY:
+            raise ValueError('OFFICIAL_BSE_REPORTING_POLICY_UNPROVEN')
+        validate_bse_inventory_reference(payload,source['source_url'],observations,bse_identity_raw)
+    else:
+        approved_url(symbol,source['source_url'])
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         cover=' '.join(p.get_text('text') for p in list(pdf)[:3])
         reported=set(re.findall(r'\bISIN(?:\s+(?:CODE|NO\.?))?\s*[:\-]?\s*(IN[A-Z0-9]{10})\b',cover,re.I))

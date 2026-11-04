@@ -207,4 +207,3 @@ def main():
         print("R4_TRENDLYNE_EXACT_QUARTER_RESPONSE","retained_privately",flush=True)
 
 if __name__=="__main__":main()
-

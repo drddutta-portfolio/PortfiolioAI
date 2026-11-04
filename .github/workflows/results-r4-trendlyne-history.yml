@@ -71,5 +71,5 @@ jobs:
 
 # Owner-requested fresh full-cohort retry: 5 November 2026 (IST); preserve quota gates.
 
-# Owner confirmed the Development MCP secret was updated on 5 November 2026 (IST).
-# Retry retained provider errors with one worker and at least sixty seconds between fresh calls.
+# Resume after credential update on the unified verified-BSE original replay revision.
+# Reuse successful retained requests; retry retained errors with sixty-second fresh-call pacing.

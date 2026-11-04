@@ -2,12 +2,16 @@ name: Results R4 Full Backlog Signed Statement Recovery
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bse-dated-quarter-review.yml]
 permissions: {contents: read}
 concurrency:
   group: results-r4-bse-dated-quarter-review-development
   cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   review:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
@@ -47,4 +51,10 @@ jobs:
     needs: review
     if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-dated-pdf-replay.yml
+    secrets: inherit
+
+  official-issuer-originals:
+    needs: review
+    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     secrets: inherit

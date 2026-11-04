@@ -260,6 +260,87 @@ class OfficialIssuerReplay(unittest.TestCase):
         with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
             with self.assertRaisesRegex(ValueError,'ISIN_REQUIRES_EXPLICIT_BRIDGE'):o.qualify(raw,source,rows)
 
+class BSEInventoryReplay(unittest.TestCase):
+    sample=OfficialIssuerReplay.sample
+    restated_sample=OfficialIssuerReplay.restated_sample
+
+    def bse_sample(self):
+        raw,source,rows,profile,audit,fake=self.restated_sample()
+        sid='11111111-1111-4111-8111-111111111111'
+        url='https://www.bseindia.com/xml-data/corpfiling/AttachHis/22222222-2222-4222-8222-222222222222.pdf'
+        review={'contract':'RESULTS_R4_BSE_DATED_PDF_REVIEW_V1','symbol':'TEST','isin':'ISIN','security_id':sid,
+            'period_end':'2024-12-31','bse_identity':{'issuer_name':profile['legal'],'bse_scrip_code':'123456',
+                'header':{'SecurityCode':'123456','ISIN':'ISIN'},
+                'listing':{'SCRIP_CD':'123456','ISIN_NUMBER':'ISIN','Issuer_Name':profile['legal']}},
+            'all_sources':[{'source_url':url,'original_sha256':o.sha(raw),
+                'original_r2_key':source['raw_payload']['original_r2_key']}]}
+        for row in rows:row['security_id']=sid
+        source['source_url']=url;source['raw_payload'].update(sourceUrl=url,security_id=sid)
+        return raw,source,rows,profile,audit,fake,review
+
+    def bind(self,source,review):
+        proof=o.canonical(review);digest=o.sha(proof)
+        source['raw_payload']['bse_identity_reference']={'sha256':digest,
+            'r2_key':o.PREFIX+'bse-dated-pdf-review/sha256='+digest+'/capture.json'}
+        source['payload_hash']=o.sha(o.canonical(source['raw_payload']))
+        return proof
+
+    def test_full_original_replay_accepts_exact_attested_bse_without_host_widening(self):
+        raw,source,rows,profile,audit,fake,review=self.bse_sample();proof=self.bind(source,review)
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaises(ValueError):o.approved_url('TEST',source['source_url'])
+            result=o.qualify(raw,source,rows,bse_identity_raw=proof)
+            self.assertEqual(len(result['eligible_observation_ids']),3)
+            self.assertTrue(source['raw_payload']['parsed']['comparison_basis_unproven'])
+            # The inventory's December slot is discovery only: September is
+            # proven independently by the original table, never by that label.
+            self.assertEqual(source['raw_payload']['period_end'],'2024-09-30')
+
+    def test_unattested_and_missing_or_changed_review_bytes_remain_rejected(self):
+        for changed in ('missing','bytes','remove_reference'):
+            raw,source,rows,profile,audit,fake,review=self.bse_sample();proof=self.bind(source,review)
+            if changed=='missing':proof=None
+            elif changed=='bytes':proof+=b'changed'
+            else:
+                source['raw_payload'].pop('bse_identity_reference')
+                source['payload_hash']=o.sha(o.canonical(source['raw_payload']))
+            with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+                with self.assertRaises(ValueError):o.qualify(raw,source,rows,bse_identity_raw=proof)
+
+    def test_inventory_candidate_only_prioritizes_original_and_never_supplies_numbers(self):
+        raw,source,rows,profile,audit,fake,review=self.bse_sample()
+        review['candidates']=[{'original_sha256':o.sha(raw),'parsed':{'facts':{'EPS_DILUTED':{'value':'999'}}}}]
+        proof=self.bind(source,review)
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            inventory=o.bse_inventory_sources(review,o.sha(proof),'TEST','ISIN',source['raw_payload']['security_id'])
+            self.assertEqual(inventory[source['source_url']]['candidate_priority'],0)
+            self.assertEqual(len(o.qualify(raw,source,rows,bse_identity_raw=proof)['eligible_observation_ids']),3)
+            self.assertEqual(source['raw_payload']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
+
+    def test_review_identity_source_host_hash_and_r2_pointer_are_bound(self):
+        for changed in ('issuer','isin','symbol','security','code','url','hash','key'):
+            raw,source,rows,profile,audit,fake,review=self.bse_sample()
+            if changed=='issuer':review['bse_identity']['listing']['Issuer_Name']='OTHER COMPANY LIMITED'
+            elif changed=='isin':review['bse_identity']['header']['ISIN']='OTHER'
+            elif changed=='symbol':review['symbol']='OTHER'
+            elif changed=='security':review['security_id']='33333333-3333-4333-8333-333333333333'
+            elif changed=='code':review['bse_identity']['listing']['SCRIP_CD']='999999'
+            elif changed=='url':review['all_sources'][0]['source_url']='https://other.example/result.pdf'
+            elif changed=='hash':review['all_sources'][0]['original_sha256']='0'*64
+            else:review['all_sources'][0]['original_r2_key']=o.PREFIX+'other-file.pdf'
+            proof=self.bind(source,review)
+            with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+                with self.assertRaises(ValueError):o.qualify(raw,source,rows,bse_identity_raw=proof)
+
+    def test_attestation_cannot_remove_basis_guard_or_rebind_observation_security(self):
+        for changed in ('guard','security'):
+            raw,source,rows,profile,audit,fake,review=self.bse_sample();proof=self.bind(source,review)
+            if changed=='guard':source['raw_payload']['parsed']['comparison_basis_unproven']=False
+            else:rows[0]['security_id']='33333333-3333-4333-8333-333333333333'
+            source['payload_hash']=o.sha(o.canonical(source['raw_payload']))
+            with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+                with self.assertRaises(ValueError):o.qualify(raw,source,rows,bse_identity_raw=proof)
+
 class OfficialSourceTransport(unittest.TestCase):
     def test_resume_advances_to_other_issuers_after_an_interrupted_original(self):
         rows=[('A',1),('B',2),('C',3)]

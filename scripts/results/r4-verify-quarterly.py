@@ -823,9 +823,17 @@ def verify(db,s3,apply):
                             or bridge.get("r2_key")!=PREFIX+"issuer-identity/sha256="+identity_sha+"/split.pdf"):
                             raise ValueError("OFFICIAL_ISIN_BRIDGE_POINTER_UNPROVEN")
                         identity_raw=s3.get_object(Bucket=BUCKET,Key=bridge["r2_key"])["Body"].read()
+                    bse_identity_raw=None
+                    bse_reference=payload.get('bse_identity_reference')
+                    if bse_reference is not None:
+                        bse_sha=bse_reference.get('sha256')
+                        if (not re.fullmatch(r'[0-9a-f]{64}',str(bse_sha))
+                            or bse_reference.get('r2_key')!=PREFIX+'bse-dated-pdf-review/sha256='+bse_sha+'/capture.json'):
+                            raise ValueError('OFFICIAL_BSE_IDENTITY_POINTER_UNPROVEN')
+                        bse_identity_raw=s3.get_object(Bucket=BUCKET,Key=bse_reference['r2_key'])['Body'].read()
                     from r4_recovery_queue import run_with_timeout
                     with SOURCE_REPLAY_SLOTS:
-                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k],identity_raw),480)
+                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k],identity_raw,bse_identity_raw),480)
                     return k,(document,None)
                 except Exception as exc:
                     return k,(None,"OFFICIAL_ISSUER_REPLAY_FAILED_"+type(exc).__name__)

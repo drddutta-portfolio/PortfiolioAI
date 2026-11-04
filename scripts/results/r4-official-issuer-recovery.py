@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlparse
-from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,SPLIT_AUTHORITIES,CURRENT_DISPLAY_POLICY,split_reference,approved_url,extract_original,canonical,sha,discover,get,resume_issuer_order
+from r4_official_issuer import CONTRACT,KIND,ISSUERS,PERIODS,SPLIT_AUTHORITIES,CURRENT_DISPLAY_POLICY,split_reference,approved_url,extract_original,canonical,sha,discover,get,resume_issuer_order,bse_inventory_sources
 from r4_recovery_queue import run_with_timeout
 
 def load_runtime():
@@ -90,7 +90,7 @@ def extract_all(raw,symbol,periods):
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}
 
-def persist(db,client,row,period,url,raw,parsed,identity_bridge=None):
+def persist(db,client,row,period,url,raw,parsed,identity_bridge=None,bse_identity_reference=None):
     symbol,isin,sid,_name,_periods=row;digest=sha(raw)
     original_key=batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
     batch.immutable_put(client,original_key,raw)
@@ -98,6 +98,8 @@ def persist(db,client,row,period,url,raw,parsed,identity_bridge=None):
         'original_r2_key':original_key,'period_end':period,'parsed':parsed,
         'authority':'CURRENT_DISPLAY_ONLY; NO_POINT_IN_TIME_OR_SHARE_REBASING_AUTHORITY'}
     if identity_bridge is not None:payload['isin_bridge']=identity_bridge
+    if bse_identity_reference is not None:
+        payload.update(security_id=str(sid),bse_identity_reference=bse_identity_reference)
     encoded=canonical(payload);version=sha(encoded);external=':'.join((symbol,period,parsed['scope'],digest))
     batch.immutable_put(client,batch.PREFIX+'official-issuer-manifests/sha256='+version+'/manifest.json',encoded)
     with db.cursor() as cur:
@@ -161,6 +163,20 @@ def main():
                 try:identity_bridge=retain_split_authority(session,client,symbol)
                 except Exception as error:rejects['SPLIT_AUTHORITY_'+type(error).__name__]+=1
             urls,discovery_errors=discover(session,symbol);rejects.update(discovery_errors)
+            retained={}
+            if active_basis_policy()==CURRENT_DISPLAY_POLICY:
+                with db.cursor() as cur:
+                    cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records
+                        WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s
+                        ORDER BY retrieved_at DESC LIMIT 16""",(str(sid),));reviews=cur.fetchall()
+                db.rollback()
+                for review,review_hash in reviews:
+                    try:
+                        for url,original in bse_inventory_sources(review,review_hash,symbol,isin,str(sid)).items():
+                            if url not in retained or original['candidate_priority']<retained[url]['candidate_priority']:
+                                retained[url]=original
+                    except (ValueError,TypeError,KeyError):rejects['BSE_IDENTITY_INVENTORY_REJECTED']+=1
+                urls=sorted(retained,key=lambda url:(retained[url]['candidate_priority'],url))+[url for url in urls if url not in retained]
             with db.cursor() as cur:
                 cur.execute("""SELECT x->>'next_offset' FROM data_source_records d CROSS JOIN LATERAL jsonb_array_elements(d.raw_payload->'issuers') x
                     WHERE d.record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND x->>'symbol'=%s AND x->>'parser_engine'=%s
@@ -172,7 +188,14 @@ def main():
                     rejects['ISSUER_TIME_BUDGET_RESUME_NEXT_PASS']+=1
                     break
                 try:
-                    raw,final_url=download_original(session,symbol,url)
+                    bse_reference=None
+                    if url in retained:
+                        original=retained[url]
+                        raw=client.get_object(Bucket=batch.BUCKET,Key=original['original_r2_key'])['Body'].read()
+                        if sha(raw)!=original['original_sha256']:raise ValueError('OFFICIAL_BSE_RETAINED_HASH_MISMATCH')
+                        final_url=url;bse_reference=original['bse_identity_reference']
+                    else:
+                        raw,final_url=download_original(session,symbol,url)
                     digest=sha(raw);batch.immutable_put(client,batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf',raw)
                     counts['originals_retained']+=1
                     cachekey=batch.PREFIX+'official-issuer-replays/symbol='+symbol+'/engine='+engine+'/original='+digest+'/periods='+sha(canonical(periods))+'/proof.json'
@@ -183,7 +206,7 @@ def main():
                         batch.immutable_put(client,cachekey,canonical(proof))
                     rejects.update(proof['rejections'])
                     for period,parsed_options in proof['periods'].items():
-                        for parsed in parsed_options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed,identity_bridge)
+                        for parsed in parsed_options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed,identity_bridge,bse_reference)
                 except Exception as error:
                     db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
                     if isinstance(error,(NameError,AttributeError,TypeError)):counts['programming_failures']+=1
