@@ -19,6 +19,7 @@ jobs:
       max-parallel: 4
       matrix: {shard: [0, 1, 2, 3]}
     env:
+      RESULTS_R4_RESTATED_DISPLAY_READY: '1'
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
@@ -38,6 +39,7 @@ jobs:
           python -m unittest discover -s scripts/results -p test_r4_official_issuer.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_document_audit.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_collector.py -v
+          python -m unittest discover -s scripts/results -p test_r4_reporting_basis_export.py -v
       - name: Collect every assigned issuer and isolate failed originals
         run: python scripts/results/r4-official-issuer-recovery.py --shard ${{ matrix.shard }}
       # Originals, rendered pages and financial traces remain private in R2.
@@ -74,3 +76,4 @@ jobs:
           print(json.dumps({k:report[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
           PY
 # Retry originals with collector-aware replay keys and native table location hints.
+# Guarded Development app READY: 86e7a0aa56cb35757758df0c415ebcf7e98ec687, dpl_AJnpSiZZ78NULcFffUkpfDSMQHeb.
