@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fresh authenticated historical MCP discovery; immutable review evidence only."""
-import hashlib,json,os,urllib.request,urllib.error,sys
+import hashlib,json,os,time,urllib.request,urllib.error,sys
 from pathlib import Path
 from datetime import date
 import psycopg
@@ -41,10 +41,16 @@ def main():
             db.rollback()
             if cached and os.getenv("RESULTS_R4_FORCE_FRESH")!="1":
                 data=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cached[0])["Body"].read())
-                print("R4_TRENDLYNE_REUSED",tool,flush=True)
-                return health.require_usable_result(data["result"])
+                try:reused=health.require_usable_result(data["result"])
+                except RuntimeError:
+                    print("R4_TRENDLYNE_RETAINED_ERROR_RETRY_FRESH",tool,flush=True)
+                else:
+                    print("R4_TRENDLYNE_REUSED",tool,flush=True)
+                    return reused
             if fresh_calls>=40:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
             fresh_calls+=1
+            print("R4_TRENDLYNE_PACING",json.dumps({"minimum_fresh_call_spacing_seconds":60}),flush=True)
+            time.sleep(60)
             request=urllib.request.Request("https://"+batch.REF+".supabase.co/functions/v1/discover-trendlyne-capabilities",
                 data=json.dumps(body).encode(),headers={"Authorization":"Bearer "+oidc(),
                 "content-type":"application/json","x-portfolioai-r4":"history"})
@@ -201,3 +207,4 @@ def main():
         print("R4_TRENDLYNE_EXACT_QUARTER_RESPONSE","retained_privately",flush=True)
 
 if __name__=="__main__":main()
+
