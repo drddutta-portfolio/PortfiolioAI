@@ -2,6 +2,12 @@ import importlib.util,pathlib,unittest
 spec=importlib.util.spec_from_file_location('health',pathlib.Path(__file__).with_name('r4-provider-capture-health.py'))
 h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
 class HealthTest(unittest.TestCase):
+    def test_existing_r2_endpoint_and_bare_account_both_use_exact_development_host(self):
+        account='ced17d24f4b380721e58a08c9e9273e4'
+        url='https://'+account+'.r2.cloudflarestorage.com'
+        self.assertEqual(h.r2_endpoint(url+'/'),url)
+        self.assertEqual(h.r2_endpoint(account),url)
+        with self.assertRaises(RuntimeError):h.r2_endpoint('https://foreign.example')
     def test_embedded_tool_errors_are_not_success(self):
         for value in ({'isError':True},{'error':'blocked'},{'success':False},'{"status":"error","message":"blocked"}'):
             self.assertEqual(h.classify(value),'PROVIDER_ERROR_ENVELOPE')

@@ -29,3 +29,5 @@ jobs:
         run: python -m unittest discover -s scripts/results -p test_r4_provider_capture_health.py -v
       - name: Inspect retained response envelopes without logging source content
         run: python scripts/results/r4-provider-capture-health.py
+
+# Accept the established Development credential's full endpoint URL or exact account ID.

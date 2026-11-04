@@ -1,6 +1,13 @@
 """Read-only health audit; never emit provider text or financial values."""
 import hashlib,json,os,re
 
+def r2_endpoint(value):
+    value=value.strip().rstrip('/')
+    endpoint=value if value.startswith('https://') else 'https://'+value+'.r2.cloudflarestorage.com'
+    if endpoint!='https://ced17d24f4b380721e58a08c9e9273e4.r2.cloudflarestorage.com':
+        raise RuntimeError('DEVELOPMENT_R2_ENDPOINT_REQUIRED')
+    return endpoint
+
 def classify(value):
     if isinstance(value,str):
         try:return classify(json.loads(value))
@@ -24,7 +31,7 @@ def main():
         or 'lrgpjimipfkyoqbpsqzz' not in os.environ['SUPABASE_DB_URL']
         or os.environ['CLOUDFLARE_R2_BUCKET']!='portfolioai-history-dev'):
         raise RuntimeError('DEVELOPMENT_ONLY')
-    client=boto3.client('s3',endpoint_url='https://'+os.environ['CLOUDFLARE_R2_ACCOUNT_ID']+'.r2.cloudflarestorage.com',
+    client=boto3.client('s3',endpoint_url=r2_endpoint(os.environ['CLOUDFLARE_R2_ACCOUNT_ID']),
         aws_access_key_id=os.environ['CLOUDFLARE_R2_ACCESS_KEY_ID'],aws_secret_access_key=os.environ['CLOUDFLARE_R2_SECRET_ACCESS_KEY'],region_name='auto')
     with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
         with db.cursor() as cur:
