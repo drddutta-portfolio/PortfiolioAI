@@ -36,6 +36,7 @@ jobs:
           sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
       - name: Verify official original qualification regressions
         run: |
+          python -m unittest discover -s scripts/results -p test_r4_pdf_geometry.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_issuer.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_document_audit.py -v
           python -m unittest discover -s scripts/results -p test_r4_official_collector.py -v
@@ -77,3 +78,6 @@ jobs:
           PY
 # Retry originals with collector-aware replay keys and native table location hints.
 # Guarded Development app READY: 86e7a0aa56cb35757758df0c415ebcf7e98ec687, dpl_AJnpSiZZ78NULcFffUkpfDSMQHeb.
+
+# Resume checkpointed shards with verified issuer assets and adjacent statutory tables.
+# Collector and qualifier implementation: 50789395edbbcea2028aaf94170177e7b6663377.
