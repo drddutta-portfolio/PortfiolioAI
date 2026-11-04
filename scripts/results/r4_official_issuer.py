@@ -62,7 +62,9 @@ ISSUERS={
                             'https://www.bseindia.com/xml-data/corpfiling/AttachHis/38b751f3-1e7e-412c-9680-a3b80d0fcb27.pdf']},
  'TATACAP':{'legal':'TATA CAPITAL LIMITED','hosts':['www.tatacapital.com','tatacapital.com'],
             'pages':['https://www.tatacapital.com/about-us/investor-information-and-financials.html'],
-            'originals':['https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/results-sep-2024-2-signed.pdf',
+            'originals':['https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/stock-exchange-intimation-financial-results-submission-december-11-2025.pdf',
+                         'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/financials/tcl/TCLFinancialsLODRsigned.pdf',
+                         'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/results-sep-2024-2-signed.pdf',
                          'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/tcl-outcome-of-board-meeting-06-02-2025-signed.pdf',
                          'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/financials-march-2025-signed.pdf',
                          'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/audited-standalone-and-consolidated-financial-results-for-the-quarter-ended-june-30-2025.pdf']},
@@ -205,6 +207,29 @@ def statutory_annexure_pages(symbol,texts,audit_pages,basis_policy):
     return set(range(2,boundary+1)),section
 
 
+def extract_statutory_continuation(pdf,symbol,period,start,allowed_pages=None):
+    """Two adjacent issuer pages must each independently prove their columns."""
+    if symbol!='TATACAP' or not 1<=start<len(pdf):
+        raise ValueError('OFFICIAL_CONTINUATION_NOT_APPROVED')
+    parts=[]
+    for n,metrics in ((start,('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER')),
+                      (start+1,('EPS_DILUTED',))):
+        if allowed_pages is not None and n not in allowed_pages:
+            raise ValueError('OFFICIAL_CONTINUATION_OUTSIDE_STATUTORY_SECTION')
+        page=pdf[n-1]
+        if not exact_legal_identity(ISSUERS[symbol]['legal'],page.get_text('text')):
+            raise ValueError('OFFICIAL_CONTINUATION_ISSUER_UNPROVEN')
+        parts.append(extract_page(page,n,period,allow_comparative=True,required_metrics=metrics))
+    first,second=parts
+    for field in ('scope','unit','first_column_period','header_periods','column_index','selected_column_period'):
+        if first.get(field)!=second.get(field) or first.get(field) is None:
+            raise ValueError('OFFICIAL_CONTINUATION_HEADER_MISMATCH')
+    return {**first,'facts':{**first['facts'],**second['facts']},
+        'continuation_pages':[start,start+1],
+        'continuation_header_evidence':second['header_evidence'],
+        'parser_revision':'PDF_ADJACENT_EXPLICIT_HEADER_CONTINUATION_V1'}
+
+
 def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None,basis_policy=None):
     """Replays explicit dated cells, with document-wide business-basis checks."""
     profile=ISSUERS[symbol]
@@ -240,9 +265,15 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
                     if not all(exact_legal_identity(profile['legal'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                         raise ValueError('OFFICIAL_RENDERED_ISSUER_IDENTITY_UNPROVEN')
+                elif method=='NATIVE_CONTINUATION':
+                    if basis_policy!=CURRENT_DISPLAY_POLICY:continue
+                    parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)
                 else:
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
-                    parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
+                    try:parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
+                    except ValueError:
+                        if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise
+                        parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)
                 if restated and parsed['first_column_period']!=period and basis_policy is None:continue
                 candidates.append(parsed)
             except ValueError:continue
@@ -257,7 +288,7 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             if len(vectors)!=1:raise ValueError('OFFICIAL_CONFLICTING_SAME_SCOPE_TABLES')
             parsed=sorted(items,key=lambda x:x['page'])[0]
             result={**parsed,'document_audit_text_sha256':audit['text_sha256'],
-                'method':method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
+                'method':'NATIVE_CONTINUATION' if parsed.get('continuation_pages') else method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
             if basis_policy is not None:
                 result.update(basis_policy=basis_policy,comparison_basis_unproven=restated or reorganized)
                 if section_pages is not None:

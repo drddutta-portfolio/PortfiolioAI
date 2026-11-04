@@ -178,7 +178,10 @@ def clean_label(text):
     text=re.sub(r"^\d{1,2}[.)]?(?=[A-Za-z])","",text)
     return re.sub(r"^\s*(?:(?:\d+|[ivx]+)[.)]?\s+|\(?[a-z]\s*[)|]\s*|-\s*)","",text,flags=re.I).strip()
 
-def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None):
+def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None):
+    if required_metrics is not None and (not allow_comparative or tuple(required_metrics) not in (
+        ('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER'),('EPS_DILUTED',))):
+        raise ValueError('UNAPPROVED_CONTINUATION_METRIC_SET')
     rows=rows_for(page)
     annualisation_marker=any(re.fullmatch(r"\*\s*not\s+annuali[sz]ed[.]?",row_text(ws).strip(),re.I) for _,ws in rows)
     # A successful page must contain the same explicit revenue row used below.
@@ -187,7 +190,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         revenue_pattern=(r"^interest\s+earned\b" if bank else
                          r"^(?:net\s+)?premiums?\s+earned\b" if insurer else
                          r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b")
-        if not any(re.match(revenue_pattern,clean_label(row_text(ws)),re.I) for _,ws in rows):
+        if required_metrics!=('EPS_DILUTED',) and not any(re.match(revenue_pattern,clean_label(row_text(ws)),re.I) for _,ws in rows):
             raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
     headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
@@ -352,10 +355,10 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             found[revenue]={**earned,"value":str(Decimal(earned["value"])-Decimal(spent["value"])),
                 "component_values":[earned["original_value"],spent["original_value"]],
                 "evidence_line":(earned["evidence_line"]+" || "+spent["evidence_line"])[:800]}
-        required=(revenue,"NET_PROFIT_QUARTER","EPS_DILUTED")
+        required=tuple(required_metrics) if required_metrics is not None else (revenue,"NET_PROFIT_QUARTER","EPS_DILUTED")
         if all(k in found for k in required):
             arithmetic=None
-            if "PROFIT_BEFORE_TAX" in found:
+            if "PROFIT_BEFORE_TAX" in found and "NET_PROFIT_QUARTER" in found:
                 tax=(Decimal(found["TAX_EXPENSE"]["value"]) if "TAX_EXPENSE" in found else
                      Decimal(found["CURRENT_TAX"]["value"])+Decimal(found["DEFERRED_TAX"]["value"])+(Decimal(found["TAX_EARLIER_YEARS"]["value"]) if "TAX_EARLIER_YEARS" in found else Decimal(0))
                      if "CURRENT_TAX" in found and "DEFERRED_TAX" in found and not unavailable_tax_components else None)

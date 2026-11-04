@@ -4,6 +4,44 @@ from test_r4_pdf_geometry import fixture
 import r4_official_issuer as o
 
 class OfficialIssuerReplay(unittest.TestCase):
+    def continuation_sample(self,other_period=False,other_scope=False,other_issuer=False):
+        import fitz
+        first,_=fixture()
+        first[0].add_redact_annot(fitz.Rect(20,205,950,230),fill=(1,1,1));first[0].apply_redactions()
+        second,_=fixture(first='31.12.2024' if other_period else '30.09.2024')
+        second[0].add_redact_annot(fitz.Rect(20,145,950,200),fill=(1,1,1));second[0].apply_redactions()
+        if other_scope:
+            second[0].add_redact_annot(fitz.Rect(20,35,400,55),fill=(1,1,1));second[0].apply_redactions()
+            second[0].insert_text((25,50),'Standalone financial results',fontsize=10)
+        if other_issuer:
+            second[0].add_redact_annot(fitz.Rect(20,15,400,35),fill=(1,1,1));second[0].apply_redactions()
+            second[0].insert_text((25,30),'OTHER COMPANY LIMITED',fontsize=10)
+        with fitz.open() as pdf:
+            pdf.insert_pdf(first);pdf.insert_pdf(second);raw=pdf.tobytes();texts=[p.get_text('text') for p in pdf]
+        first.close();second.close()
+        audit={'original_sha256':o.sha(raw),'text_sha256':'b'*64,'pages':texts}
+        return raw,audit
+
+    def test_adjacent_statutory_pages_require_independent_matching_headers(self):
+        raw,audit=self.continuation_sample()
+        with patch.dict(o.ISSUERS,{'TATACAP':{'legal':'NATCO PHARMA LIMITED'}}):
+            result=o.extract_original(raw,'TATACAP','2024-09-30',document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)[0]
+            self.assertEqual(result['method'],'NATIVE_CONTINUATION')
+            self.assertEqual(result['continuation_pages'],[1,2])
+            self.assertEqual(result['facts']['EPS_DILUTED']['page'],2)
+            self.assertEqual(result['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+            replay=o.extract_original(raw,'TATACAP','2024-09-30',method=result['method'],page_no=1,document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)[0]
+            self.assertEqual(result,replay)
+            with self.assertRaises(ValueError):
+                o.extract_original(raw,'TATACAP','2024-09-30',document_audit=audit)
+
+    def test_continuation_cannot_borrow_eps_from_another_period_scope_or_issuer(self):
+        for changes in ({'other_period':True},{'other_scope':True},{'other_issuer':True}):
+            raw,audit=self.continuation_sample(**changes)
+            with patch.dict(o.ISSUERS,{'TATACAP':{'legal':'NATCO PHARMA LIMITED'}}):
+                with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):
+                    o.extract_original(raw,'TATACAP','2024-09-30',document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)
+
     def annexure_sample(self):
         import fitz
         statutory,_=fixture(profit='1,324')
