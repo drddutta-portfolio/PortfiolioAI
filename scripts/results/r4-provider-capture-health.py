@@ -27,6 +27,7 @@ def classify(value):
 def require_usable_result(value):
     status=classify(value)
     if status in ('PROVIDER_AUTH_ERROR_TEXT','PROVIDER_ERROR_TEXT','PROVIDER_ERROR_ENVELOPE','MISSING_OR_UNRECOGNIZED_RESULT'):
+        if 'QUOTA' in error_hints(value):raise RuntimeError('PROVIDER_QUOTA_ERROR')
         raise RuntimeError(status)
     return value
 
@@ -37,6 +38,9 @@ def error_hints(value):
     text=str(value.get('message','') if isinstance(value,dict) else value).lower()
     patterns={'AUTHENTICATION':r'auth|token|credential|login|password|api.?key|username',
         'QUOTA':r'quota|daily|monthly|rate.?limit|credit|limit exceeded',
+        'SHORT_WINDOW_LIMIT':r'rate.?limit|per.minute|per.second|too many|minute|second',
+        'DAILY_LIMIT':r'daily|per.day|today',
+        'MONTHLY_LIMIT':r'monthly|per.month|calendar.month',
         'ARGUMENT_CONTRACT':r'argument|required|schema|parameter|input|validation',
         'INSTRUMENT_IDENTITY':r'stock|symbol|isin|instrument',
         'ENTITLEMENT':r'subscription|upgrade|premium|permission|access denied|plan',

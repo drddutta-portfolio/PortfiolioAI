@@ -7,6 +7,8 @@ class HealthTest(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'PROVIDER_ERROR_ENVELOPE'):h.require_usable_result(value)
         self.assertEqual(h.error_hints(value),['AUTHENTICATION','UNSUPPORTED_CONTRACT'])
         self.assertEqual(h.require_usable_result({'data':[]} ),{'data':[]})
+        with self.assertRaisesRegex(RuntimeError,'PROVIDER_QUOTA_ERROR'):
+            h.require_usable_result('{"status":"error","message":"Daily quota exceeded"}')
     def test_existing_r2_endpoint_and_bare_account_both_use_exact_development_host(self):
         account='ced17d24f4b380721e58a08c9e9273e4'
         url='https://'+account+'.r2.cloudflarestorage.com'

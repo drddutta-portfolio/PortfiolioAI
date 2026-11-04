@@ -13,3 +13,6 @@ test('retain successful original response for private source review',()=>{
 test('reject missing and unknown tool results',()=>{
   for(const value of [null,{},text('Unknown tool: absent')]) assert.throws(()=>read(value),/PROVIDER_/);
 });
+test('distinguish upstream quota rejection from successful provider results',()=>{
+  assert.throws(()=>read(text('{"status":"error","message":"API quota exceeded"}')),/PROVIDER_QUOTA_ERROR/);
+});

@@ -14,6 +14,9 @@ export function readR4ProviderToolResult(value: unknown): string {
   if (decoded && typeof decoded === 'object' && !Array.isArray(decoded)) {
     const envelope = decoded as Record<string, unknown>
     if (envelope.error || envelope.isError === true || envelope.success === false || ['error','failed','failure'].includes(String(envelope.status ?? '').toLowerCase())) {
+      if (/quota|daily|monthly|rate.?limit|credit|limit exceeded/i.test(String(envelope.message ?? envelope.error ?? ''))) {
+        throw new Error('PROVIDER_QUOTA_ERROR')
+      }
       throw new Error('PROVIDER_TOOL_RESULT_ERROR')
     }
   }
