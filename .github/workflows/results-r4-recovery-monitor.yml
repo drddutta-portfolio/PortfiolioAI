@@ -52,3 +52,4 @@ jobs:
           path: tmp/results-r4/monitor-checkpoints.json
           retention-days: 21
 # Retry transient partial passes without treating one failure as cohort completion.
+# Owner-requested recovery renewal: 4 November 2026; retain all source and quota gates.
