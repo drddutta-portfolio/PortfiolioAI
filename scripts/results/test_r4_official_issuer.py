@@ -42,6 +42,36 @@ class OfficialIssuerReplay(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):
                     o.extract_original(raw,'TATACAP','2024-09-30',document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)
 
+    def test_rendered_continuation_requires_accounting_equality_and_exact_eps_agreement(self):
+        import fitz
+        import r4_ocr_dated_geometry as dated
+        raw,audit=self.continuation_sample()
+        with fitz.open(stream=raw,filetype='pdf') as pdf:
+            page=pdf[0]
+            for y,label,values in ((300,'Profit before tax',('2,000','7,000','3,000')),
+                                   (330,'Total tax expense',('676','235','873'))):
+                page.insert_text((25,y),label,fontsize=10)
+                for x,value in zip((475,625,775),values):page.insert_text((x,y),value,fontsize=10)
+            # Native fixture words stand in for independent rendered word sets;
+            # the production path always creates each approved-resolution render.
+            with patch.dict(o.ISSUERS,{'TATACAP':{'legal':'NATCO PHARMA LIMITED'}}),patch.object(dated,'validate_page_layout'),patch.object(dated,'render_page',side_effect=lambda page,dpi,mode:page):
+                result=o.extract_ocr_statutory_continuation(pdf,'TATACAP','2024-09-30',1,(300,450),3)
+                self.assertEqual(result['facts']['EPS_DILUTED']['value'],'7.43')
+                self.assertEqual(result['facts']['EPS_DILUTED']['page'],2)
+                self.assertEqual(result['arithmetic_validation']['difference_crore'],'0.0')
+                original=o.extract_statutory_continuation;calls=[]
+                def altered(*args,**kwargs):
+                    value=original(*args,**kwargs);calls.append(1)
+                    if len(calls)==2:value['facts']['EPS_DILUTED']['value']='99'
+                    return value
+                with patch.object(o,'extract_statutory_continuation',side_effect=altered):
+                    with self.assertRaisesRegex(ValueError,'CELLS_DISAGREE'):
+                        o.extract_ocr_statutory_continuation(pdf,'TATACAP','2024-09-30',1,(300,450),3)
+        raw,audit=self.continuation_sample()
+        with fitz.open(stream=raw,filetype='pdf') as pdf,patch.dict(o.ISSUERS,{'TATACAP':{'legal':'NATCO PHARMA LIMITED'}}),patch.object(dated,'validate_page_layout'),patch.object(dated,'render_page',side_effect=lambda page,dpi,mode:page):
+            with self.assertRaisesRegex(ValueError,'PROFIT_TAX_RECONCILIATION'):
+                o.extract_ocr_statutory_continuation(pdf,'TATACAP','2024-09-30',1,(300,450),3)
+
     def annexure_sample(self):
         import fitz
         statutory,_=fixture(profit='1,324')

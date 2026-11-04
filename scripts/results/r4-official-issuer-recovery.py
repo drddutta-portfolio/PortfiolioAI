@@ -58,6 +58,20 @@ def extract_all(raw,symbol,periods):
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         native_pages=[page.get_text('text') for page in pdf]
+    # A split statutory table needs two separately rendered, repeated headers.
+    # Only label text locates it; no audit/native numeric value supplies OCR facts.
+    if symbol=='TATACAP' and policy==CURRENT_DISPLAY_POLICY:
+        for index in range(len(native_pages)-1):
+            if not pending:break
+            first=native_pages[index]+' '+audit['pages'][index]
+            following=native_pages[index+1]+' '+audit['pages'][index+1]
+            if not re.search(r'revenue.*operations',first,re.I|re.S) or not re.search(r'diluted',following,re.I):continue
+            for period in pending[:]:
+                for pair in ((300,450),(200,400)):
+                    try:
+                        out[period]=extract_original(raw,symbol,period,'OCR_CONTINUATION',index+1,pair,3,audit,basis_policy=policy)
+                        if out[period]:pending.remove(period);break
+                    except ValueError as error:rejects[str(error).split(':')[0]]+=1
     for n,text in enumerate(audit['pages'],1):
         if not pending:break
         # The low-resolution audit locates candidates; it is not financial

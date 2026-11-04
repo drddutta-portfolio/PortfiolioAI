@@ -92,7 +92,7 @@ ISSUERS={
            'pages':['https://www.adityagroup.com/financial-results','https://www.adityagroup.com/stock-exchange-submissions'],
            'originals':['https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_as_on_September_30_2025.pdf',
                         'https://www.adityagroup.com/assets_web/images/stock_exchange_submissions/Board_Meeting_Outcome_February_12_2026.pdf',
-                        'https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_for_quarter_and_financial_year_ended_March_31_2026.pdf']}},
+                        'https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_for_quarter_and_financial_year_ended_March_31_2026.pdf']},
  'EBGNG':{'legal':'ELLENBARRIE INDUSTRIAL GASES LIMITED','hosts':['ellenbarrie.com','www.ellenbarrie.com'],
           'pages':['https://ellenbarrie.com/investors/'],'originals':[]},
  'IKS':{'legal':'INVENTURUS KNOWLEDGE SOLUTIONS LIMITED','hosts':['ikshealth.com','www.ikshealth.com'],
@@ -211,7 +211,7 @@ def statutory_annexure_pages(symbol,texts,audit_pages,basis_policy):
     return set(range(2,boundary+1)),section
 
 
-def extract_statutory_continuation(pdf,symbol,period,start,allowed_pages=None):
+def extract_statutory_continuation(pdf,symbol,period,start,allowed_pages=None,page_views=None):
     """Two adjacent issuer pages must each independently prove their columns."""
     if symbol!='TATACAP' or not 1<=start<len(pdf):
         raise ValueError('OFFICIAL_CONTINUATION_NOT_APPROVED')
@@ -220,7 +220,7 @@ def extract_statutory_continuation(pdf,symbol,period,start,allowed_pages=None):
                       (start+1,('EPS_DILUTED',))):
         if allowed_pages is not None and n not in allowed_pages:
             raise ValueError('OFFICIAL_CONTINUATION_OUTSIDE_STATUTORY_SECTION')
-        page=pdf[n-1]
+        page=page_views[n] if page_views is not None else pdf[n-1]
         if not exact_legal_identity(ISSUERS[symbol]['legal'],page.get_text('text')):
             raise ValueError('OFFICIAL_CONTINUATION_ISSUER_UNPROVEN')
         parts.append(extract_page(page,n,period,allow_comparative=True,required_metrics=metrics))
@@ -232,6 +232,31 @@ def extract_statutory_continuation(pdf,symbol,period,start,allowed_pages=None):
         'continuation_pages':[start,start+1],
         'continuation_header_evidence':second['header_evidence'],
         'parser_revision':'PDF_ADJACENT_EXPLICIT_HEADER_CONTINUATION_V1'}
+
+
+def extract_ocr_statutory_continuation(pdf,symbol,period,start,pair,segmentation_mode,allowed_pages=None):
+    from r4_ocr_dated_geometry import RENDER_PAIRS,render_page,validate_page_layout
+    from r4_ocr_geometry import agree
+    pair=tuple(pair)
+    if pair not in RENDER_PAIRS or segmentation_mode not in (3,6,11):
+        raise ValueError('OFFICIAL_CONTINUATION_RENDER_UNAPPROVED')
+    if symbol!='TATACAP' or not 1<=start<len(pdf):
+        raise ValueError('OFFICIAL_CONTINUATION_NOT_APPROVED')
+    proofs=[]
+    for dpi in pair:
+        views={}
+        for n in (start,start+1):
+            validate_page_layout(pdf[n-1]);views[n]=render_page(pdf[n-1],dpi,segmentation_mode)
+        proofs.append(extract_statutory_continuation(pdf,symbol,period,start,allowed_pages,views))
+    first,second=proofs
+    if any(first[k]!=second[k] for k in ('header_periods','first_column_period','column_index','selected_column_period')):
+        raise ValueError('OFFICIAL_CONTINUATION_RENDER_HEADER_MISMATCH')
+    agree(first,second) # Complete trio AND independent PBT-minus-tax reconciliation.
+    for fact in first['facts'].values():
+        fact['extraction_method']='OCR_DOUBLE_RENDER_ADJACENT_STATUTORY_TABLE_V1'
+    first.update(ocr_render_dpi=list(pair),ocr_segmentation_mode=segmentation_mode,
+        parser_revision='PDF_OCR_ADJACENT_EXPLICIT_HEADER_CONTINUATION_V1')
+    return first
 
 
 def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None,basis_policy=None):
@@ -269,6 +294,9 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
                     if not all(exact_legal_identity(profile['legal'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                         raise ValueError('OFFICIAL_RENDERED_ISSUER_IDENTITY_UNPROVEN')
+                elif method=='OCR_CONTINUATION':
+                    if basis_policy!=CURRENT_DISPLAY_POLICY:continue
+                    parsed=extract_ocr_statutory_continuation(pdf,symbol,period,n,render_pair,segmentation_mode,section_pages)
                 elif method=='NATIVE_CONTINUATION':
                     if basis_policy!=CURRENT_DISPLAY_POLICY:continue
                     parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)
@@ -292,7 +320,7 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             if len(vectors)!=1:raise ValueError('OFFICIAL_CONFLICTING_SAME_SCOPE_TABLES')
             parsed=sorted(items,key=lambda x:x['page'])[0]
             result={**parsed,'document_audit_text_sha256':audit['text_sha256'],
-                'method':'NATIVE_CONTINUATION' if parsed.get('continuation_pages') else method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
+                'method':('OCR_CONTINUATION' if parsed.get('ocr_render_dpi') else 'NATIVE_CONTINUATION') if parsed.get('continuation_pages') else method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
             if basis_policy is not None:
                 result.update(basis_policy=basis_policy,comparison_basis_unproven=restated or reorganized)
                 if section_pages is not None:

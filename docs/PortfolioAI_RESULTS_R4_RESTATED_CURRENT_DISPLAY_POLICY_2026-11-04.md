@@ -37,3 +37,9 @@ Issuer-reported demerger/common-control comparatives also retain the comparison-
 ## Adjacent statutory table continuation
 
 Under the authorized policy, Tata Capital native statements may supply an explicit revenue/PAT page followed immediately by an explicit diluted-EPS page. Both pages must independently establish the exact legal issuer, financial reporting scope, printed quarter column sequence, selected column and units. Each numeric row retains its actual original page and coordinates. Missing headers, other issuers, different quarters/scopes and nonadjacent pages remain rejected. No missing financial number is reconstructed. Legacy replay does not enable this path. The complete retained original and both page proofs are replayed by the same independent qualifier. Local validation passes 93 Python regressions, including negative cross-period, cross-scope and cross-issuer continuation cases.
+
+## Independently rendered continuation — 5 November 2026 (IST)
+
+The same closed Tata Capital adjacent-page contract now supports scanned statements: two approved independent render resolutions must each recover the complete financial trio across independently matching page headers. Both renders must also prove PBT minus tax equals PAT. Any differing financial cell, quarter sequence, issuer, scope or unit is rejected. Native/full-audit text locates candidate adjacent pages and supplies no rendered financial values. The source collector tries both approved render pairs within its existing per-original timeout. Canonical qualification reopens the retained original and repeats the same extraction; legacy manifests retain their previous replay behavior.
+
+All 94 focused Python regressions pass. The new regression proves exact EPS agreement and rejection when independent profit/tax reconciliation is absent. No UI or database schema change.
