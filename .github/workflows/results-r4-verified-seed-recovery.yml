@@ -1,0 +1,16 @@
+name: Results R4 Verified Issuer Seed Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-verified-seed-recovery.yml]
+permissions: {contents: read}
+jobs:
+  recover:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
+    with:
+      target_symbols: SANSERA,SSWL
+    secrets: inherit
+# Reuse the full guarded collector and independent verifier for newly verified original URLs.
+# The normal recovery continues to cover the entire unresolved cohort without this target filter.

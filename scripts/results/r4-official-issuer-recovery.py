@@ -118,6 +118,12 @@ def prioritize_originals(symbol,discovered,retained):
     remaining=sorted((u for u in retained if u not in candidates))
     return list(dict.fromkeys(candidates+[u for u in pinned if u in discovered]+remaining+list(discovered)))
 
+def target_cohort(cohort,configured):
+    if not configured.strip():return list(cohort)
+    targets=set(configured.split(','))
+    if not 1<=len(targets)<=4 or not targets.issubset(ISSUERS):raise ValueError('UNAPPROVED_TARGET_ISSUERS')
+    return [row for row in cohort if row[0] in targets]
+
 def persist(db,client,row,period,url,raw,parsed,identity_bridge=None,bse_identity_reference=None):
     symbol,isin,sid,_name,_periods=row;digest=sha(raw)
     original_key=batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
@@ -173,7 +179,7 @@ def main():
     engine=replay_engine()
     with psycopg.connect(os.environ['SUPABASE_DB_URL']) as db,requests.Session() as session:
         session.headers['User-Agent']='Mozilla/5.0'
-        cohort=[row for row in batch.candidates(db) if row[2].int%4==args.shard];db.rollback()
+        cohort=[row for row in target_cohort(batch.candidates(db),os.getenv('RESULTS_R4_TARGET_SYMBOLS','')) if row[2].int%4==args.shard];db.rollback()
         with db.cursor() as cur:
             cur.execute("""SELECT raw_payload->'issuers'->-1->>'symbol' FROM data_source_records
                 WHERE record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND raw_payload->>'shard'=%s

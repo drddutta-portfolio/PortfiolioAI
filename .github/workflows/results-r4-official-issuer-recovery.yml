@@ -2,12 +2,17 @@ name: Results R4 Official Issuer Historical Recovery
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      target_symbols:
+        type: string
+        required: false
+        default: ''
   push:
     branches: [PortfolioAI-Development]
     paths: [.github/workflows/results-r4-official-issuer-recovery.yml]
 permissions: {contents: read}
 concurrency:
-  group: results-r4-official-issuer-development-v2
+  group: ${{ inputs.target_symbols != '' && format('results-r4-official-issuer-targeted-{0}', inputs.target_symbols) || 'results-r4-official-issuer-development-v2' }}
   cancel-in-progress: false
 jobs:
   collect:
@@ -20,6 +25,7 @@ jobs:
       matrix: {shard: [0, 1, 2, 3]}
     env:
       RESULTS_R4_RESTATED_DISPLAY_READY: '1'
+      RESULTS_R4_TARGET_SYMBOLS: ${{ inputs.target_symbols || '' }}
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
       CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}

@@ -11,6 +11,17 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_unconfigured_recovery_still_covers_every_issuer(self):
+        rows=[('SANSERA',),('SSWL',),('JASH',)]
+        self.assertEqual(collector.target_cohort(rows,''),rows)
+
+    def test_verified_targets_do_not_change_normal_cohort_or_invent_closed_gaps(self):
+        rows=[('SANSERA',),('SSWL',),('JASH',)]
+        self.assertEqual(collector.target_cohort(rows,'SANSERA,SSWL'),rows[:2])
+        self.assertEqual(collector.target_cohort(rows,'IGL'),[])
+        with self.assertRaisesRegex(ValueError,'UNAPPROVED_TARGET_ISSUERS'):
+            collector.target_cohort(rows,'UNKNOWN')
+
     def identity_original(self,text):
         with fitz.open() as pdf:
             pdf.new_page().insert_text((40,40),text)
