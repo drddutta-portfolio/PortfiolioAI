@@ -1,5 +1,5 @@
 """Private retained-original layout evidence; never emits financial amounts."""
-import hashlib,importlib.util,json,os,re
+import argparse,hashlib,importlib.util,json,os,re
 from collections import Counter
 from pathlib import Path
 import fitz
@@ -43,8 +43,9 @@ def page_layout(page,page_no,periods):
         'labels':labels[:45],'parse_status':statuses}
 
 def main():
-    import psycopg
-    from r4_official_issuer import bse_inventory_sources
+    import psycopg,requests
+    from r4_official_issuer import bse_inventory_sources,ISSUERS,get
+    parser=argparse.ArgumentParser();parser.add_argument('--symbol');parser.add_argument('--issuer-seeds',action='store_true');args=parser.parse_args()
     spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))
     batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
     if (os.environ.get('GITHUB_REPOSITORY')!='drddutta-portfolio/PortfiolioAI'
@@ -54,6 +55,7 @@ def main():
     counts=Counter();client=batch.r2_client();engine=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     with psycopg.connect(os.environ['SUPABASE_DB_URL']) as db:
         cohort=batch.candidates(db);db.rollback()
+        if args.symbol:cohort=[row for row in cohort if row[0]==args.symbol]
         for symbol,isin,sid,_name,periods in cohort:
             with db.cursor() as cur:
                 cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records
@@ -68,6 +70,17 @@ def main():
                     for url,source in bse_inventory_sources(review,digest,symbol,isin,str(sid)).items():
                         if url not in sources or source['candidate_priority']<sources[url]['candidate_priority']:sources[url]=source
                 except (ValueError,KeyError,TypeError):counts['identity_inventories_rejected']+=1
+            if args.issuer_seeds:
+                session=requests.Session();session.headers['User-Agent']='Mozilla/5.0'
+                for url in ISSUERS.get(symbol,{}).get('originals',[])[:2]:
+                    try:
+                        raw,final=get(session,symbol,url,32_000_000)
+                        if not raw.startswith(b'%PDF'):raise ValueError('ORIGINAL_PDF_REQUIRED')
+                        digest=batch.sha(raw);key=batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
+                        batch.immutable_put(client,key,raw)
+                        sources[final]={'source_url':final,'original_sha256':digest,'original_r2_key':key,'candidate_priority':-1}
+                    except Exception as error:counts['seed_failure_'+type(error).__name__]+=1
+                session.close()
             ordered=sorted(sources,key=lambda url:(sources[url]['candidate_priority'],url))[:6]
             for url in ordered:
                 source=sources[url]
