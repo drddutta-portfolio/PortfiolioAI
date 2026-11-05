@@ -74,9 +74,10 @@ ISSUERS={
             'originals':['https://www.ventivehospitality.com/wp-content/uploads/2024/07/Board-Meeting-outcome-13.11.2025.pdf']},
  # Post-demerger names are intentionally exact: the predecessor group's
  # financials cannot automatically become the successor entity's history.
- 'TMCV':{'legal':'TATA MOTORS LIMITED','hosts':['cv.tatamotors.com'],
-         'pages':['https://cv.tatamotors.com/investors'],'originals':[]},
- 'TMPV':{'legal':'TATA MOTORS PASSENGER VEHICLES LIMITED','hosts':['www.tatamotors.com','tatamotors.com'],
+ 'TMCV':{'legal':'TATA MOTORS LIMITED','cin':'L29102MH2024PLC427506','hosts':['cv.tatamotors.com'],
+         'pages':['https://cv.tatamotors.com/investors'],
+         'originals':['https://cv.tatamotors.com/assets/cv/files/2026-01/TML%20conso%20final%20results_Dec%202025.pdf']},
+ 'TMPV':{'legal':'TATA MOTORS PASSENGER VEHICLES LIMITED','cin':'L28920MH1945PLC004520','hosts':['www.tatamotors.com','tatamotors.com'],
          'pages':['https://www.tatamotors.com/investors/'],'originals':[]},
  'VAML':{'legal':'VEDANTA ALUMINIUM METAL LIMITED','hosts':['vedantaaluminium.com','www.vedantaaluminium.com','d1rbiogke1jwo5.cloudfront.net'],
          'pages':['https://vedantaaluminium.com/investors/results-and-reports/'],
@@ -298,6 +299,8 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
                     if not all(exact_legal_identity(profile['legal'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                         raise ValueError('OFFICIAL_RENDERED_ISSUER_IDENTITY_UNPROVEN')
+                    if profile.get('cin') and not all(exact_cin(profile['cin'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
+                        raise ValueError('OFFICIAL_RENDERED_LEGAL_ENTITY_CIN_UNPROVEN')
                 elif method=='OCR_CONTINUATION':
                     if basis_policy!=CURRENT_DISPLAY_POLICY:continue
                     parsed=extract_ocr_statutory_continuation(pdf,symbol,period,n,render_pair,segmentation_mode,section_pages)
@@ -306,6 +309,7 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)
                 else:
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
+                    if profile.get('cin') and not exact_cin(profile['cin'],texts[n-1]):continue
                     try:parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
                     except ValueError:
                         if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise
@@ -333,6 +337,13 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     result['source_reporting_basis']='ISSUER_RESTATED_COMPARATIVE'
             out.append(result)
         return out
+
+def exact_cin(cin,text):
+    """Names reused across Tata legal entities cannot substitute for their CIN.
+
+    Whitespace in a printed identifier may wrap; no character is corrected.
+    """
+    return bool(re.search(r'(?<![A-Z0-9])'+r'\s*'.join(re.escape(c) for c in cin)+r'(?![A-Z0-9])',text.upper()))
 
 def split_reference(raw,symbol):
     authority=SPLIT_AUTHORITIES.get(symbol)

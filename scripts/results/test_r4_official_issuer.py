@@ -4,6 +4,28 @@ from test_r4_pdf_geometry import fixture
 import r4_official_issuer as o
 
 class OfficialIssuerReplay(unittest.TestCase):
+    def test_tata_legal_entities_have_distinct_fixed_cins(self):
+        self.assertEqual(o.ISSUERS['TMCV']['cin'],'L29102MH2024PLC427506')
+        self.assertEqual(o.ISSUERS['TMPV']['cin'],'L28920MH1945PLC004520')
+        self.assertFalse(o.exact_cin(o.ISSUERS['TMCV']['cin'],'CIN: L28920MH1945PLC004520'))
+        self.assertTrue(o.exact_cin(o.ISSUERS['TMCV']['cin'],'CIN: L29102MH2024PLC42 7506'))
+
+    def test_same_name_predecessor_financial_page_cannot_supply_successor_values(self):
+        import fitz
+        for cin,accepted in (('L28920MH1945PLC004520',False),('L29102MH2024PLC427506',True)):
+            with self.subTest(cin=cin):
+                pdf,page=fixture()
+                page.add_redact_annot(fitz.Rect(20,15,400,35),fill=(1,1,1));page.apply_redactions()
+                page.insert_text((25,30),'TATA MOTORS LIMITED',fontsize=10)
+                page.insert_text((25,280),'CIN: '+cin,fontsize=10)
+                raw=pdf.tobytes();texts=[p.get_text('text') for p in pdf]
+                audit={'original_sha256':o.sha(raw),'text_sha256':'b'*64,'pages':texts}
+                if accepted:
+                    self.assertEqual(len(o.extract_original(raw,'TMCV','2024-09-30',document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)),1)
+                else:
+                    with self.assertRaisesRegex(ValueError,'TRIO_UNPROVEN'):
+                        o.extract_original(raw,'TMCV','2024-09-30',document_audit=audit,basis_policy=o.CURRENT_DISPLAY_POLICY)
+
     def continuation_sample(self,other_period=False,other_scope=False,other_issuer=False):
         import fitz
         first,_=fixture()
