@@ -1,0 +1,13 @@
+# R4 legacy insurance catalog recovery
+
+The older NSE financial-result endpoint separates insurance filings from equities. Querying STARHEALTH under equities returned no rows. The actual index=insurance catalog returns the December 2024 quarterly original, uses periodEnd rather than toDate, and the original XML uses NSESymbol rather than Symbol.
+
+The R4-local adapter queries only this approved insurer in the insurance catalog, retains the complete original catalog row, and adds an explicit parser alias for periodEnd. Other issuers continue through the unchanged ordinary provider. A dedicated insurance cache key prevents the previously cached empty equities result from hiding insurance records. Deferred R3 and ordinary R5 acquisition are not changed.
+
+The original is https://nsearchives.nseindia.com/corporate/xbrl/GI_117901_1363602_28012025065616.xml . Its exact current ISIN, scrip code, company legal name, standalone scope, currency and OneD quarter context all match the retained BSE identity and catalog. All three numeric facts pass independent original replay locally. No database completion is claimed until the normal selector succeeds.
+
+The alternate NSESymbol field is admitted only for STARHEALTH with the preserved insurance catalog record, explicit matching XML ISIN/name/scope/currency, and both BSE identity endpoints. Conflicting Symbol and NSESymbol fields are rejected. Cumulative, annual, other-period, other-issuer, external-host and conflicting-date records are rejected. The September 2024 original remains unlocated; no YTD subtraction or inferred values are used.
+
+At 19:38 UTC the independent full-cohort audit verified TMPV selections, 2,036/2,096 total qualified quarters, 42 remaining historical R4 gaps and 18 deferred R3 gaps. TMPV original as-filed business comparability is explicitly guarded for all twelve metrics. R4 remains partial. No UI, schema, RLS, holdings, transactions, main or Production changes.
+
+The shared Results source repository and live R5 audit input now propagate a canonical quarter's reporting-basis warning to comparison-only alternative observations for that same issuer and quarter, across scopes. This closes an alternate-source bypass discovered when the automatic R5 proof exporter added the recovered TMPV originals. It does not select alternatives, change values or rebase EPS; other issuers and quarters remain unaffected. Source-only warnings cannot create a new canonical selection. Regression coverage verifies the app and live audit agree and that an unrelated quarter/issuer stays unguarded. No component, page, styling or layout is edited.

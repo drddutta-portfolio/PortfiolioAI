@@ -17,6 +17,8 @@ afterEach(() => { vi.clearAllMocks() })
 describe("R3 existing-source reuse", () => {
   it("pages beyond the first Supabase response instead of discarding real quarterly rows", async () => {
     const observations = Array.from({ length: 701 }, (_, i) => makeRow(i))
+    observations[2] = { ...makeRow(2), consolidation_scope: "CONSOLIDATED" }
+    observations[700] = { ...makeRow(700), period_end: "2026-03-31" }
     db.from.mockImplementation((table: string) => {
       const chain = {
         select: () => chain,
@@ -26,7 +28,7 @@ describe("R3 existing-source reuse", () => {
         order: () => chain,
         range: (start: number, end: number) => {
           if (table === "fundamental_observation_decisions") {
-            return Promise.resolve({ data: [{ selected_observation_id: "obs1", notes: "ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN" }], error: null })
+            return Promise.resolve({ data: [{ security_id: "held", period_end: "2026-06-30", selected_observation_id: "obs1", notes: "ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN" }], error: null })
           }
           return Promise.resolve({ data: observations.slice(start, end + 1), error: null })
         },
@@ -38,6 +40,8 @@ describe("R3 existing-source reuse", () => {
     expect(rows.filter((row) => row.selected).map((row) => row.id)).toEqual(["obs1"])
     expect(rows[700]?.value).toBe("701")
     expect(rows.find(row=>row.id==="obs1")?.reportingBasisUnproven).toBe(true)
+    expect(rows.find(row=>row.id==="obs2")?.selected).toBe(false)
+    expect(rows.find(row=>row.id==="obs2")?.reportingBasisUnproven).toBe(true)
     expect(rows[700]?.reportingBasisUnproven).toBe(false)
     expect(db.from).toHaveBeenCalledWith("fundamental_observations")
   })

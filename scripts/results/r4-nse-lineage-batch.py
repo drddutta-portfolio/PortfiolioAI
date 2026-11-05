@@ -14,6 +14,9 @@ def load(name,file):
     m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 batch=load("batch","r4-bse-historical-batch.py")
 legacy=load("legacy","r5-legacy-2024-xbrl.py")
+from r4_nse_insurance_catalog import list_filings as insurance_list_filings
+ordinary_legacy_list_filings=legacy.list_filings
+legacy.list_filings=lambda session,symbol:insurance_list_filings(session,symbol,ordinary_legacy_list_filings)
 integrated=load("integrated","r3-legacy-2025-xbrl.py")
 legacy.PERIODS={p:values[0] for p,values in batch.WINDOWS.items()}
 # R4-local discovery only; ordinary/deferred R3 acquisition is unchanged.
@@ -158,7 +161,8 @@ def main():
                     year,provider=pair
                     if not any(p.startswith(year) for p in missing):return {"status":"NO_TARGET_PERIODS"}
                     day=datetime.now(timezone.utc).date().isoformat()
-                    catalog_key=batch.PREFIX+f"nse-catalog-v2/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
+                    catalog_kind="nse-insurance-catalog-v1" if symbol=="STARHEALTH" and year=="2024" else "nse-catalog-v2"
+                    catalog_key=batch.PREFIX+f"{catalog_kind}/symbol={symbol}/window={year}/retrieved_date={day}/records.json"
                     records=get_json(client,catalog_key)
                     if records is None:
                         records=provider.list_filings(session,symbol)

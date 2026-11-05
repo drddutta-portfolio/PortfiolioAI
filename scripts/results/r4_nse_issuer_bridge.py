@@ -67,6 +67,18 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=Non
         return next(iter(values),None)
     code=unique("ScripCode")
     original_symbol=unique("Symbol")
+    insurance_symbol=unique("NSESymbol") if symbol=="STARHEALTH" else None
+    if original_symbol and insurance_symbol and original_symbol!=insurance_symbol:
+        raise ValueError("CONFLICTING_ORIGINAL_ISSUER_SYMBOL_FIELDS")
+    if insurance_symbol and not original_symbol:
+        from r4_nse_insurance_catalog import verify_record
+        verify_record(metadata,symbol)
+        if (unique("ISIN")!=isin
+            or legal_key(unique("NameOfTheCompany"))!=legal_key(catalog_issuer_name(metadata))
+            or unique("NatureOfReportStandaloneConsolidated")!={"Consolidated":"Consolidated","Non-Consolidated":"Standalone"}.get(metadata.get("consolidated"))
+            or unique("DescriptionOfPresentationCurrency")!="INR"):
+            raise ValueError("ORIGINAL_INSURANCE_ISSUER_SCOPE_OR_CURRENCY_UNPROVEN")
+    original_symbol=original_symbol or insurance_symbol
     if rename is not None:
         from r4_issuer_rename import RenameProof,RULES
         from datetime import datetime

@@ -54,6 +54,7 @@ jobs:
           python scripts/results/test_portfolio_bse.py -v
           python scripts/results/test_r4_nse_issuer_bridge.py -v
           python scripts/results/test_r4_issuer_rename.py -v
+          python scripts/results/test_r4_nse_insurance_catalog.py -v
           python scripts/results/test_r5_legacy_2024_xbrl.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
           python scripts/results/test_r4_eight_quarter_readback.py -v
@@ -116,3 +117,4 @@ jobs:
 # Replay full remaining cohort with complete legal-name and exchange-notice proofs.
 # TMPV historical filings require the pinned NSE CML70875 rename and an unproven business-comparability guard.
 # Reuse the exact security-bound IGL exchange spelling check for original XML identity.
+# The legacy insurer catalog uses index=insurance, periodEnd and the explicit NSESymbol XML field.

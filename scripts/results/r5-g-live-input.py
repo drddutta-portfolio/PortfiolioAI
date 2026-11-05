@@ -39,6 +39,14 @@ def selected_fact(row, selected=True):
     )
 
 
+def propagate_reporting_basis_guards(observations):
+    """A comparison-only alternative cannot evade its canonical quarter guard."""
+    guarded={(r["securityId"],r["periodEnd"]) for r in observations
+             if r.get("selected") and r.get("reportingBasisUnproven")}
+    return [{**r,"reportingBasisUnproven":bool(r.get("reportingBasisUnproven")
+             or (r["securityId"],r["periodEnd"]) in guarded)} for r in observations]
+
+
 def extract(db_url):
     import psycopg
     if PROJECT_REF not in db_url:
@@ -226,6 +234,7 @@ def extract(db_url):
                 if {row["id"] for row in alternatives}!=set(missing):
                     raise RuntimeError("R5_VERIFIED_ORIGINAL_IDENTITY_MISSING_OR_CHANGED")
                 observations.extend(alternatives)
+    observations=propagate_reporting_basis_guards(observations)
     if len(set(row["id"] for row in observations)) != len(observations):
         raise RuntimeError("DUPLICATE_SELECTED_OBSERVATION_ID")
     return {
