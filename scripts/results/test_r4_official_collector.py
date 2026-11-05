@@ -11,6 +11,37 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def identity_original(self,text):
+        with fitz.open() as pdf:
+            pdf.new_page().insert_text((40,40),text)
+            return pdf.tobytes()
+
+    def test_native_identity_prefilter_does_not_render_or_qualify(self):
+        raw=self.identity_original('JASH ENGINEERING LIMITED')
+        with patch('r4_ocr_geometry.OCRPage',side_effect=AssertionError('unneeded OCR')):
+            self.assertIsNone(collector.preflight_identity(raw,'JASH'))
+
+    def test_scanned_identity_uses_same_exact_cover_guard(self):
+        raw=self.identity_original('Unreadable cover')
+        with patch('r4_ocr_geometry.OCRPage') as render:
+            render.return_value.get_text.return_value='JASH ENGINEERING LIMITED'
+            self.assertIsNone(collector.preflight_identity(raw,'JASH'))
+            render.assert_called_once()
+
+    def test_wrong_issuer_cannot_start_full_audit(self):
+        raw=self.identity_original('UNRELATED COMPANY LIMITED')
+        with patch('r4_ocr_geometry.OCRPage') as render,patch('r4_ocr_dated_geometry.audit_document') as audit:
+            render.return_value.get_text.return_value='UNRELATED COMPANY LIMITED'
+            with self.assertRaisesRegex(ValueError,'COMPLETE_ISSUER_IDENTITY_UNPROVEN'):
+                collector.extract_all(raw,'JASH',['2024-09-30'])
+            audit.assert_not_called()
+
+    def test_candidate_and_pinned_originals_precede_unproven_inventory_without_dropping_urls(self):
+        pinned=collector.ISSUERS['JASH']['originals'][0]
+        discovered=[pinned,'discovered']
+        retained={'unknown':{'candidate_priority':1},'native-candidate':{'candidate_priority':0}}
+        self.assertEqual(collector.prioritize_originals('JASH',discovered,retained),
+                         ['native-candidate',pinned,'unknown','discovered'])
     def test_restated_acquisition_requires_app_guard_and_invalidates_legacy_cache(self):
         with patch.dict(collector.os.environ,{},clear=True):
             self.assertIsNone(collector.active_basis_policy())
@@ -32,7 +63,9 @@ class CollectorTransportIntegration(TestCase):
     def test_native_table_labels_survive_failed_low_resolution_locator(self):
         from unittest.mock import Mock
         with fitz.open() as pdf:
-            pdf.new_page().insert_text((40,40),'Revenue from operations and diluted earnings per share')
+            page=pdf.new_page()
+            page.insert_text((40,40),'JASH ENGINEERING LIMITED')
+            page.insert_text((40,70),'Revenue from operations and diluted earnings per share')
             raw=pdf.tobytes()
         period='2024-09-30'
         replay=Mock(return_value={period:{'rejection':'INDEPENDENT_RENDER_DISAGREEMENT'}})

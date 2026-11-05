@@ -64,12 +64,6 @@ jobs:
     uses: ./.github/workflows/results-r4-bse-dated-quarter-review.yml
     secrets: inherit
 
-  official-issuer-originals:
-    needs: history
-    if: always() && !cancelled() && github.ref == 'refs/heads/PortfolioAI-Development'
-    uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
-    secrets: inherit
-
 # Owner-requested fresh full-cohort retry: 5 November 2026 (IST); preserve quota gates.
 
 # Resume after credential update on the unified verified-BSE original replay revision.
@@ -77,3 +71,6 @@ jobs:
 
 # One paced full-cohort job reuses successful same-day captures; provider errors retry independently.
 # Single-batch fresh-call cap is 100; provider-wide 1,000/day and 10,000/month gates remain authoritative.
+
+# The BSE recovery chain already invokes official issuer replay after its review.
+# Keep one official replay per provider batch to avoid duplicate concurrency queues.

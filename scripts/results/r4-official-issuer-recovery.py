@@ -51,6 +51,7 @@ def retain_split_authority(session,client,symbol):
 def extract_all(raw,symbol,periods):
     import fitz
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
+    preflight_identity(raw,symbol)
     audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter();policy=active_basis_policy()
     for period in periods:
         try:out[period]=extract_original(raw,symbol,period,document_audit=audit,basis_policy=policy)
@@ -89,6 +90,33 @@ def extract_all(raw,symbol,periods):
                 if out[period]:pending.remove(period)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}
+
+def preflight_identity(raw,symbol):
+    """Reject unrelated originals before expensive full-document financial replay.
+
+    This repeats the qualifier's exact first-three-page identity condition.
+    Passing only permits a full audit; it never qualifies any financial fact.
+    """
+    import fitz
+    from r4_issuer_name import exact_legal_identity
+    from r4_ocr_geometry import OCRPage
+    with fitz.open(stream=raw,filetype='pdf') as pdf:
+        if not 1<=len(pdf)<=120:raise ValueError('OFFICIAL_DOCUMENT_PAGE_BOUND')
+        pages=[pdf[i] for i in range(min(3,len(pdf)))]
+        if exact_legal_identity(ISSUERS[symbol]['legal'],' '.join(p.get_text('text') for p in pages)):return
+        if exact_legal_identity(ISSUERS[symbol]['legal'],' '.join(OCRPage(p,150).get_text('text') for p in pages)):return
+    raise ValueError('OFFICIAL_COMPLETE_ISSUER_IDENTITY_UNPROVEN')
+
+def prioritize_originals(symbol,discovered,retained):
+    """Known table candidates and pinned originals precede other inventory.
+
+    Preserve every URL and the existing checkpoint rotation; metadata only
+    changes attempt order and never supplies a financial value.
+    """
+    pinned=ISSUERS[symbol]['originals']
+    candidates=sorted((u for u in retained if retained[u]['candidate_priority']==0))
+    remaining=sorted((u for u in retained if u not in candidates))
+    return list(dict.fromkeys(candidates+[u for u in pinned if u in discovered]+remaining+list(discovered)))
 
 def persist(db,client,row,period,url,raw,parsed,identity_bridge=None,bse_identity_reference=None):
     symbol,isin,sid,_name,_periods=row;digest=sha(raw)
@@ -180,7 +208,7 @@ def main():
                                 retained[url]=original
                     except ValueError as error:rejects[str(error).split(':')[0]]+=1
                     except (TypeError,KeyError):rejects['BSE_IDENTITY_INVENTORY_REJECTED']+=1
-                urls=sorted(retained,key=lambda url:(retained[url]['candidate_priority'],url))+[url for url in urls if url not in retained]
+                urls=prioritize_originals(symbol,urls,retained)
             with db.cursor() as cur:
                 cur.execute("""SELECT x->>'next_offset' FROM data_source_records d CROSS JOIN LATERAL jsonb_array_elements(d.raw_payload->'issuers') x
                     WHERE d.record_kind='RESULTS_R4_OFFICIAL_ISSUER_COLLECTION_AUDIT_V1' AND x->>'symbol'=%s AND x->>'parser_engine'=%s
