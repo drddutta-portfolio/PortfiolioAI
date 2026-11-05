@@ -3383,6 +3383,110 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "4ece1516-c8f5-4c8e-9166-8918b73a2049",
+        "NET_PROFIT_QUARTER": "006b73e9-78c1-484c-b828-c101d80173df",
+        "OPERATING_REVENUE_QUARTER": "99264f44-8013-4101-a5b1-46db935fbd14"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "eefefd83-286f-4180-9589-ab360d5b00ae",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "27461efc-be9c-44be-bee6-a052be10f72e",
+        "NET_PROFIT_QUARTER": "b398f811-b01d-4534-a298-e9f9c7638399",
+        "OPERATING_REVENUE_QUARTER": "a607d28f-13bf-4c8f-9a96-50452f84f7e0"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "7cd274c2-d0f4-4e72-ba25-8a2c583f7647",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "1fbf112f-7ceb-4230-a098-9ec5b5cc0b14",
+        "NET_PROFIT_QUARTER": "f6fce604-9670-4aec-8333-7b0999f9af08",
+        "OPERATING_REVENUE_QUARTER": "c8d1a30c-8efe-4710-8ac6-f1ace5e1ef44"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "33567053-13a4-4941-8b60-59f753a49c90",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "843f9cc6-012f-4973-b719-677ea66d1c47",
+        "NET_PROFIT_QUARTER": "d2da402b-4c1a-48d2-811e-a9d744fcd517",
+        "OPERATING_REVENUE_QUARTER": "5abadaf2-a959-44fd-925a-208e20208719"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "6864eed0-e2a7-469d-9b0d-7063e6eb69de",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "964413d7-47b0-4f9e-a527-2a13ae62852c",
+        "NET_PROFIT_QUARTER": "accff952-8418-47c3-b0a9-fcfb581c5d48",
+        "OPERATING_REVENUE_QUARTER": "f0de40cc-d88b-4a56-b66f-222f0940c8df"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "879c7001-e31a-49df-b676-912173373664",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "45f0fd70-df88-494d-9f28-b7f1eee7cf67",
+        "NET_PROFIT_QUARTER": "b18ecd92-e6f0-43fa-aa4a-41553292c2fc",
+        "OPERATING_REVENUE_QUARTER": "19147541-571d-4dff-969f-a63f98183a71"
+      },
+      "periodEnd": "2025-03-31",
+      "scope": "STANDALONE",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "e6917ed2-0cfc-413c-be46-9a081c91e93b",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "3357bf42-6ccb-497d-9c55-c4a749f51480",
+        "NET_PROFIT_QUARTER": "4ac094b8-66a8-4e3a-9c19-25b06d8ebeae",
+        "OPERATING_REVENUE_QUARTER": "4e09f68a-92aa-40a8-860b-931d7b017e10"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "81127145-a509-43e5-9848-31ce31d6bb3e",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "4008574c-3855-4709-ba9b-88375701601f",
+        "NET_PROFIT_QUARTER": "aa77c175-dd08-4bea-85d4-99865bf6033b",
+        "OPERATING_REVENUE_QUARTER": "69c66db5-2077-414c-99b3-6d28afb8928e"
+      },
+      "periodEnd": "2025-06-30",
+      "scope": "STANDALONE",
+      "securityId": "dfc85654-351b-477d-8362-6babb6bfb337",
+      "sourceRecordId": "0f49deaf-d9aa-4243-a51e-8cf3be3451a3",
+      "symbol": "TMPV"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "296087a6-e679-45d4-86ef-5cac45835123",
         "NET_PROFIT_QUARTER": "1734e7d1-aa8d-4ccf-b5e3-d480e902a4f5",
         "OPERATING_REVENUE_QUARTER": "a0b7194b-4caa-4cf1-bf6d-854f5160a309"
