@@ -117,9 +117,10 @@ def prioritize_originals(symbol,discovered,retained):
     changes attempt order and never supplies a financial value.
     """
     pinned=ISSUERS[symbol]['originals']
+    verified=[u for u in ISSUERS[symbol].get('verified_originals',[]) if u in pinned and u in discovered]
     candidates=sorted((u for u in retained if retained[u]['candidate_priority']==0))
     remaining=sorted((u for u in retained if u not in candidates))
-    return list(dict.fromkeys(candidates+[u for u in pinned if u in discovered]+remaining+list(discovered)))
+    return list(dict.fromkeys(verified+candidates+[u for u in pinned if u in discovered]+remaining+list(discovered)))
 
 def target_cohort(cohort,configured):
     if not configured.strip():return list(cohort)

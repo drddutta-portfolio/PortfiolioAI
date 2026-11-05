@@ -3,9 +3,28 @@ import unittest
 from unittest.mock import patch
 from types import SimpleNamespace
 from test_r4_pdf_geometry import fixture
-from r4_ocr_dated_geometry import HeaderRegionOCRPage,LabelRegionOCRPage
+from r4_ocr_dated_geometry import HeaderRegionOCRPage,LabelRegionOCRPage,audit_document,_cached_document_audit
 
 class HeaderRegionTest(unittest.TestCase):
+    def test_original_audit_cache_is_exact_bounded_and_isolated_from_mutation(self):
+        doc,page=fixture();raw=doc.tobytes()
+        _cached_document_audit.cache_clear()
+        with patch('r4_ocr_dated_geometry.OCRPage') as render:
+            render.return_value.get_text.return_value='Unchanged original audit'
+            first=audit_document(raw,40)
+            first['pages'][0]='tampered by a consumer'
+            again=audit_document(raw,40)
+            self.assertEqual(again['pages'],['Unchanged original audit'])
+            self.assertEqual(render.call_count,1)
+            audit_document(raw,120)
+            self.assertEqual(render.call_count,2)
+            page.insert_text((25,330),'Different original bytes')
+            audit_document(doc.tobytes(),40)
+            self.assertEqual(render.call_count,3)
+            with self.assertRaisesRegex(ValueError,'UNAPPROVED_DOCUMENT_AUDIT_PAGE_BOUND'):
+                audit_document(raw,500)
+        _cached_document_audit.cache_clear()
+
     def base(self):
         doc,page=fixture()
         return doc,SimpleNamespace(page=page,get_text=page.get_text)

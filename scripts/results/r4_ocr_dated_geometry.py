@@ -1,5 +1,6 @@
 """Dated comparative OCR: full-document basis scan plus two financial renders."""
-import hashlib,re
+import hashlib,re,copy
+from functools import lru_cache
 import fitz
 from r4_ocr_geometry import OCRPage,agree
 from r4_ocr_cli import TableOCRPage
@@ -9,6 +10,13 @@ RENDER_PAIRS=((300,450),(200,400),(350,500))
 
 def audit_document(raw,max_pages=40):
     if max_pages not in (40,120):raise ValueError('UNAPPROVED_DOCUMENT_AUDIT_PAGE_BOUND')
+    # Repeated receipts for the same immutable original need the same audit.
+    # Cache only within this process, keyed by exact bytes AND page bound.
+    # A fresh copy prevents a receipt consumer from changing cached evidence.
+    return copy.deepcopy(_cached_document_audit(bytes(raw),max_pages))
+
+@lru_cache(maxsize=8)
+def _cached_document_audit(raw,max_pages):
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         if not 1<=len(pdf)<=max_pages:raise ValueError('OCR_DATED_DOCUMENT_PAGE_BOUND')
         pages=[OCRPage(page,150).get_text('text') for page in pdf]

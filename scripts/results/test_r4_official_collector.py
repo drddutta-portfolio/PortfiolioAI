@@ -11,6 +11,16 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_locally_verified_original_is_tried_before_unproven_candidates(self):
+        profile={'originals':['https://issuer.example/proven.pdf','https://issuer.example/other.pdf'],
+                 'verified_originals':['https://issuer.example/proven.pdf','https://issuer.example/not-pinned.pdf']}
+        retained={'https://issuer.example/bse.pdf':{'candidate_priority':0}}
+        discovered=profile['originals']+['https://issuer.example/not-pinned.pdf']
+        with patch.dict(collector.ISSUERS,{'TEST':profile}):
+            urls=collector.prioritize_originals('TEST',discovered,retained)
+        self.assertEqual(urls[:2],['https://issuer.example/proven.pdf','https://issuer.example/bse.pdf'])
+        self.assertEqual(len(urls),len(set(urls)))
+
     def test_statutory_title_regions_require_same_explicit_method_on_replay(self):
         from unittest.mock import Mock
         with fitz.open() as pdf:
