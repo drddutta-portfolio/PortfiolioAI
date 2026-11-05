@@ -7,18 +7,20 @@ from datetime import datetime
 from decimal import Decimal
 import re
 
+DAY=r'\d{1,2}(?:st|nd|rd|th)?'
 DATE=re.compile(r"\b\d{1,2}[./-]\d{1,2}[./-](?:20\d{2}|\d{2})\b|"
-    r"\b\d{1,2}[- ](?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[- ,]+20\d{2}\b|"
-    r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},?\s*20\d{2}\b|"
-    r"\b\d{1,2}\s*(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*20\d{2}\b",re.I)
+    r"\b"+DAY+r"[- ](?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[- ,]+20\d{2}\b|"
+    r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December) "+DAY+r",?\s*20\d{2}\b|"
+    r"\b"+DAY+r"\s*(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*20\d{2}\b",re.I)
 CELL=re.compile(r"\(?-?(?:\d+|\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})*,\d{3})(?:\.\d+)?\)?")
 
 def iso_date(text):
+    text=re.sub(r'(?<=\d)(?:st|nd|rd|th)(?=\s|[-,./]|$|'+MONTH+r')','',text,flags=re.I)
     text=re.sub(r",\s*", " ",text.strip())
     text=re.sub(r"\s+"," ",text)
     for fmt in ("%d.%m.%Y","%d-%m-%Y","%d/%m/%Y","%d.%m.%y","%d-%m-%y",
                 "%d/%m/%y","%d %B %Y","%d-%B-%Y","%d %b %Y","%d-%b-%Y",
-                "%B %d %Y","%d%b%Y","%d%B%Y","%d %b%Y","%d %B%Y"):
+                "%B %d %Y","%d%b%Y","%d%B%Y","%d %b%Y","%d %B%Y","%d-%b-%y","%d-%B-%y"):
         try:return datetime.strptime(text,fmt).date().isoformat()
         except ValueError:pass
     return None
@@ -47,9 +49,9 @@ def date_cells(words):
     return out
 
 MONTH=r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
-PARTIAL_DATE=re.compile(r"\b(?:\d{1,2}[- ]"+MONTH+r"|"+MONTH+r" \d{1,2}),?\b",re.I)
-UNKNOWN_NAMED_DATE=re.compile(r"\b\d{1,2} [A-Za-z]{3,12} 20\d{2}\b")
-SHORT_MONTH_DATE=re.compile(r"\b\d{1,2}-"+MONTH+r"-\d{2}\b",re.I)
+PARTIAL_DATE=re.compile(r"\b(?:"+DAY+r"[- ]"+MONTH+r"|"+MONTH+r" "+DAY+r"),?\b",re.I)
+UNKNOWN_NAMED_DATE=re.compile(r"\b"+DAY+r" [A-Za-z]{3,12} 20\d{2}\b",re.I)
+SHORT_MONTH_DATE=re.compile(r"\b"+DAY+r"-"+MONTH+r"-\d{2}\b",re.I)
 
 def dated_headers(rows):
     """Join explicitly printed date parts only within the same physical column.
@@ -119,7 +121,7 @@ def dated_headers(rows):
                 if not 2.5<yy-y<=28:continue
                 selected=[v for v in next_ws if w[0]-8<=(v[0]+v[2])/2<=w[2]+8]
                 printed=row_text(selected).strip(" |[]()")
-                m=re.fullmatch(r"(\d{1,2}),?\s*(20\d{2})",printed)
+                m=re.fullmatch(r"(\d{1,2})(?:st|nd|rd|th)?,?\s*(20\d{2})",printed,re.I)
                 if not m:continue
                 parsed=iso_date(month+" "+m[1]+" "+m[2])
                 if parsed:matches.append((j,yy,(parsed,min(w[0],min(v[0] for v in selected)),max(w[2],max(v[2] for v in selected)))))
@@ -187,10 +189,21 @@ def previous_year_quarter_heading(group_rows,centers,index):
     left=(centers[index-1]+centers[index])/2 if index else centers[0]-(centers[1]-centers[0])/2
     right=(centers[index]+centers[index+1])/2 if index+1<len(centers) else centers[index]+(centers[index]-centers[index-1])/2
     text=' '.join(row_text([w for w in ws if left<=(w[0]+w[2])/2<right]) for _,ws in group_rows)
-    text=re.sub(r'\s+',' ',text).strip()
+    text=re.sub(r'[^A-Za-z0-9]+',' ',text).strip()
     return (len(re.findall(r'\byears?\b',text,re.I))==1
         and not re.search(r'\byear\s+ended\b|\b(?:six|nine|6|9|half)\b',text,re.I)
         and bool(re.search(r'\bcorresponding\s+(?:quarter|(?:3|three)\s+months?)\s+ended\s+(?:in\s+)?(?:the\s+)?previous\s+year\b',text,re.I)))
+
+def statutory_profit_loss_title(text):
+    return bool(re.search(r'\bstatements?\s+of\s+(?:standalone|consolidated)\s+profit\s+(?:and|&)\s+loss\b',text,re.I))
+
+def statutory_metric_label(text):
+    # An unreadable row-number glyph before an explicit table separator is
+    # decoration, not part of the financial label. Never turn it into a row
+    # reference: printed_rows still comes from the untouched original words.
+    metric=r'(?:profit|net|revenue|income|tax|current|deferred|diluted|basic|share|total|interest)\b'
+    text=re.sub(r'^\s*(?:(?:[IVXRL1!‘’]\s*){1,4}|\d{1,2}\s*)[|¦\]_.]+\s*(?='+metric+r')','',text,flags=re.I)
+    return clean_label(text)
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None):
     if required_metrics is not None and (not allow_comparative or tuple(required_metrics) not in (
@@ -279,12 +292,13 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                    for _,ws in near for w in ws if left<=w[0]<first):continue
         header=" ".join(row_text(ws) for _,ws in rows[:header_index])
         upper=header.upper()
-        if "FINANCIAL" not in upper:continue
+        statutory_title_used='FINANCIAL' not in upper and allow_comparative and statutory_profit_loss_title(header)
+        if 'FINANCIAL' not in upper and not statutory_title_used:continue
         scope_header=upper
         if allow_comparative:
             titles=[]
             for i,(yy,ws) in enumerate(rows[:header_index]):
-                if y-yy>180 or not re.search(r"\bfinancial\b",row_text(ws),re.I):continue
+                if y-yy>180 or not (re.search(r"\bfinancial\b",row_text(ws),re.I) or statutory_profit_loss_title(row_text(ws))):continue
                 title=" ".join(row_text(r[1]) for r in rows[max(0,i-1):min(header_index,i+2)])
                 if len({s for s in ("CONSOLIDATED","STANDALONE") if re.search(r"\b"+s+r"\b",title,re.I)})==1:titles.append(title)
             if not titles and scope_hint in ("STANDALONE","CONSOLIDATED"):
@@ -315,14 +329,22 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
-        found={};printed_rows={};last_metric=None;unavailable_tax_components=set();eps_context="";eps_group_started=False
+        found={};printed_rows={};last_metric=None;unavailable_tax_components=set();auxiliary_tax_errors=[];eps_context="";eps_group_started=False
         table_rows=rows[header_index+1:]
         for row_index,(yy,ws) in enumerate(table_rows):
             printed_label=row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)])
-            label=clean_label(printed_label)
+            label=statutory_metric_label(printed_label) if statutory_title_used else clean_label(printed_label)
             row_match=re.match(r'^\s*(\d{1,2}|[IVXivx]{1,5})[.)]?\s+',printed_label)
             row_code=row_match[1].upper() if row_match else None
             preceding_evidence=''
+            if statutory_title_used and row_index and re.match(r'^items\s*\(',label,re.I):
+                prior_y,prior_words=table_rows[row_index-1]
+                prior_printed=row_text([w for w in prior_words if (w[0]+w[2])/2<first_left])
+                prior_label=statutory_metric_label(prior_printed)
+                if (2.5<yy-prior_y<=16
+                    and re.match(r'^profit(?:\s*/\s*\(?loss\)?)?\s+before\s+tax\s+after\s+exceptional$',prior_label,re.I)
+                    and not any((w[0]+w[2])/2>=first_left for w in prior_words)):
+                    label=prior_label+' '+label;preceding_evidence=row_text(prior_words)+' || '
             # Equity-accounted associate earnings may print their amount on
             # a separate "net of tax" line. Bind only this explicit nearby
             # label-only continuation; never borrow another financial row.
@@ -399,13 +421,26 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 unavailable_tax_components.add(metric)
                 continue # An unavailable auxiliary component is not a reported zero.
             annotated_eps=allow_comparative and metric=="EPS_DILUTED" and annualisation_marker
-            value,original=number(cell,allow_annualisation_marker=annotated_eps)
+            try:value,original=number(cell,allow_annualisation_marker=annotated_eps)
+            except ValueError as error:
+                if not (allow_comparative and metric in ('CURRENT_TAX','DEFERRED_TAX','TAX_EARLIER_YEARS')):raise
+                unavailable_tax_components.add(metric);auxiliary_tax_errors.append((metric,error));continue
             # Prove that this is a table row with another value in the next column.
             if allow_comparative:
-                other=1 if column==0 else column-1
-                other_left=(centers[other-1]+centers[other])/2 if other else first_left
-                other_right=(centers[other]+centers[other+1])/2
-                number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right],allow_annualisation_marker=annotated_eps)
+                adjacent=1 if column==0 else column-1
+                other_columns=[adjacent]+[i for i in range(quarter_columns) if i not in (column,adjacent)]
+                last_error=None
+                for other in other_columns:
+                    other_left=(centers[other-1]+centers[other])/2 if other else first_left
+                    other_right=(centers[other]+centers[other+1])/2 if other+1<len(centers) else centers[other]+(centers[other]-centers[other-1])/2
+                    try:
+                        number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right],allow_annualisation_marker=annotated_eps)
+                        break
+                    except ValueError as error:last_error=error
+                else:
+                    if metric in ('CURRENT_TAX','DEFERRED_TAX','TAX_EARLIER_YEARS'):
+                        unavailable_tax_components.add(metric);auxiliary_tax_errors.append((metric,last_error));continue
+                    raise last_error
             else:
                 next_right=(second+third)/2
                 number([w for w in ws if right<=(w[0]+w[2])/2<next_right])
@@ -453,6 +488,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                         raise ValueError("PROFIT_TAX_RECONCILIATION_FAILED")
                     arithmetic={"contract":"PBT_MINUS_TAX_EQUALS_PAT","difference_crore":str(difference),
                         "pbt":found["PROFIT_BEFORE_TAX"],"tax_crore":str(tax)}
+            if auxiliary_tax_errors and ('TAX_EXPENSE' not in found or arithmetic is None):
+                raise auxiliary_tax_errors[0][1]
             result={"scope":scope,"page":page_no,"unit":unit,"first_column_period":dates[0][0],
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
                 "arithmetic_validation":arithmetic,
@@ -460,5 +497,9 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             if allow_comparative:
                 result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:quarter_columns]],scope_hint_used=scope_hint_used)
                 if quarter_columns==2:result.update(quarter_group_contract='TWO_EXPLICIT_QUARTER_COLUMNS_BEFORE_CUMULATIVE_V1')
+            if auxiliary_tax_errors:
+                result['unavailable_tax_component_evidence']=[{'metric':metric,'status':str(error).split(':')[0],
+                    'authority':'NOT_USED; EXPLICIT_TOTAL_TAX_AND_PBT_MINUS_TAX_EQUALS_PAT_REQUIRED'} for metric,error in auxiliary_tax_errors]
+            if statutory_title_used:result['financial_title_basis']='EXPLICIT_STATEMENT_STANDALONE_OR_CONSOLIDATED_PROFIT_AND_LOSS'
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")

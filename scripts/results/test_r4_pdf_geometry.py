@@ -1,7 +1,7 @@
 import unittest
 import fitz
 from decimal import Decimal
-from r4_pdf_geometry import extract_page,iso_date,number
+from r4_pdf_geometry import extract_page,iso_date,number,statutory_metric_label
 
 def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for the period/year (5•6)",note=False,third="30.09.2023"):
     doc=fitz.open();p=doc.new_page(width=1000,height=850)
@@ -19,6 +19,84 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_statutory_row_decoration_does_not_change_financial_label_or_values(self):
+        self.assertEqual(statutory_metric_label('vr |Profit/(loss) before tax'),'Profit/(loss) before tax')
+        self.assertEqual(statutory_metric_label('V1 |Profit/(loss) before tax'),'Profit/(loss) before tax')
+        self.assertEqual(statutory_metric_label('V! |Profit/(loss) before tax'),'Profit/(loss) before tax')
+        self.assertEqual(statutory_metric_label('1__|Revenue from operations'),'Revenue from operations')
+        self.assertEqual(statutory_metric_label('Unrelated Profit before tax'),'Unrelated Profit before tax')
+        self.assertEqual(statutory_metric_label('Pre|Profit for the period'),'Pre Profit for the period')
+
+    def test_explicit_ordinal_days_preserve_calendar_dates(self):
+        for value in ('30th September 2024','September 30th, 2024','30thSeptember2024','30th-Sep-24'):
+            with self.subTest(value=value):self.assertEqual(iso_date(value),'2024-09-30')
+        self.assertIsNone(iso_date('31st April 2024'))
+        self.assertIsNone(iso_date('3oth September 2024'))
+
+    def test_ordinal_dates_in_explicit_quarter_columns(self):
+        doc,p=fixture(first='30th September 2024',third='30th September 2023')
+        self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['facts']['EPS_DILUTED']['value'],'7.43')
+
+    def test_statutory_profit_and_loss_title_has_explicit_scope_and_quarter(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,35,400,55),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,50),'Statement of Consolidated Profit and Loss',fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['scope'],'CONSOLIDATED')
+        self.assertEqual(out['financial_title_basis'],'EXPLICIT_STATEMENT_STANDALONE_OR_CONSOLIDATED_PROFIT_AND_LOSS')
+
+    def test_statutory_annual_table_is_not_a_quarter(self):
+        doc,p=fixture(quarter=False)
+        p.add_redact_annot(fitz.Rect(20,35,400,55),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,50),'Statement of Consolidated Profit and Loss',fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_layout_punctuation_in_corresponding_quarter_heading_is_not_annual(self):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        for y,text in ((85,'Corresponding 3'),(100,'months ended in the'),(112,': previous year')):
+            p.insert_text((730,y),text,fontsize=8)
+        self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['column_index'],2)
+
+    def test_unreadable_tax_component_requires_explicit_total_and_accounting_equality(self):
+        doc,p=self.associate_statement()
+        p.insert_text((25,265),'Current tax',fontsize=10)
+        for x,value in ((475,'unreadable'),(625,'1235'),(775,'1873')):p.insert_text((x,265),value,fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['arithmetic_validation']['difference_crore'],'0.0')
+        self.assertEqual(out['unavailable_tax_component_evidence'][0]['metric'],'CURRENT_TAX')
+        p.add_redact_annot(fitz.Rect(20,238,950,253),fill=(1,1,1));p.apply_redactions()
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):
+            extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_corrupt_required_pat_is_never_replaced_by_tax_reconciliation(self):
+        doc,p=self.associate_statement()
+        p.add_redact_annot(fitz.Rect(465,268,525,284),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((475,280),'unreadable',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):
+            extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_corrupt_unselected_quarter_does_not_poison_another_complete_quarter(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(610,176,675,195),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((625,190),'unreadable',fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+
+    def test_all_other_quarter_cells_corrupt_still_rejects_table_row(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(610,176,900,195),fill=(1,1,1));p.apply_redactions()
+        for x in (625,775):p.insert_text((x,190),'unreadable',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):
+            extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_an_annual_cell_cannot_replace_the_second_quarter_row_proof(self):
+        doc,p=fixture(first='31.12.2025',third='31.12.2025')
+        p.insert_text((750,100),'Year to date',fontsize=10)
+        p.add_redact_annot(fitz.Rect(610,176,675,195),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((625,190),'unreadable',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):
+            extract_page(p,1,'2025-12-31',allow_comparative=True)
+
     def test_skewed_financial_title_year_is_not_an_annual_group_header(self):
         doc,p=fixture(first='30.09.2025',third='30.09.2024')
         title='Financial results for the quarter'
