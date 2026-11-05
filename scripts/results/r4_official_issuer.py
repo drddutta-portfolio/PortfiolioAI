@@ -10,7 +10,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from urllib.parse import urlparse,urljoin
 import fitz
-from r4_issuer_name import exact_legal_identity
+from r4_issuer_name import exact_legal_identity,words as issuer_name_words
 from r4_pdf_geometry import extract_page
 
 CONTRACT='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
@@ -18,6 +18,7 @@ KIND='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
 CURRENT_DISPLAY_POLICY='ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1'
 PREFIX='portfolioai-results/development/v1/quarterly/'
 BUCKET='portfolioai-history-dev'
+BSE_DISPLAY_ALIASES={'IGL':{'isin':'INE203G01027','scrip_code':'532514','name':'Indraprashtha Gas Ltd.'}}
 PERIODS={'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01','2025-03-31':'2025-01-01','2025-06-30':'2025-04-01'}
 SPLIT_AUTHORITIES={'COFORGE':{'url':'https://www.msei.in/SX-Content/Circulars/2025/June/Circular-17281.pdf',
     'old_isin':'INE591G01017','current_isin':'INE591G01025','ex_date':'2025-06-04',
@@ -93,8 +94,11 @@ ISSUERS={
            'originals':['https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_as_on_September_30_2025.pdf',
                         'https://www.adityagroup.com/assets_web/images/stock_exchange_submissions/Board_Meeting_Outcome_February_12_2026.pdf',
                         'https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_for_quarter_and_financial_year_ended_March_31_2026.pdf']},
- 'EBGNG':{'legal':'ELLENBARRIE INDUSTRIAL GASES LIMITED','hosts':['ellenbarrie.com','www.ellenbarrie.com'],
-          'pages':['https://ellenbarrie.com/investors/'],'originals':[]},
+ 'EBGNG':{'legal':'GNG ELECTRONICS LIMITED','hosts':['www.electronicsbazaar.com','electronicsbazaar.com','nsearchives.nseindia.com'],
+          'pages':['https://www.electronicsbazaar.com/investor'],
+          'originals':['https://www.electronicsbazaar.com/media/investor/j/BM_Outcome.pdf',
+                       'https://nsearchives.nseindia.com/corporate/GNGNSE_27112025105923_Intimation_of_Financial_Results_Q2FY26_in_machine_readble_form.pdf',
+                       'https://nsearchives.nseindia.com/corporate/GNGNSE_05052026160027_BM_Outcome_Final.pdf']},
  'IKS':{'legal':'INVENTURUS KNOWLEDGE SOLUTIONS LIMITED','hosts':['ikshealth.com','www.ikshealth.com'],
         'pages':['https://ikshealth.com/investor-relations/'],'originals':[]},
  'JASH':{'legal':'JASH ENGINEERING LIMITED','hosts':['jashindia.com','www.jashindia.com'],
@@ -345,6 +349,13 @@ def split_reference(raw,symbol):
         'old_isin':authority['old_isin'],'current_isin':authority['current_isin'],'ex_date':authority['ex_date'],
         'source_url':authority['url'],'sha256':digest,'r2_key':PREFIX+'issuer-identity/sha256='+digest+'/split.pdf'}
 
+def bse_display_identity(symbol,isin,code,name):
+    if exact_legal_identity(ISSUERS[symbol]['legal'],name):return True
+    alias=BSE_DISPLAY_ALIASES.get(symbol)
+    return bool(alias and alias['isin']==isin and alias['scrip_code']==code
+        and issuer_name_words(alias['name'])==issuer_name_words(name))
+
+
 def bse_inventory_sources(review,review_hash,symbol,isin,security_id):
     """Bind retained exchange originals to an exact, hash-checked issuer review.
 
@@ -362,8 +373,8 @@ def bse_inventory_sources(review,review_hash,symbol,isin,security_id):
     code=str(identity.get('bse_scrip_code',''))
     if (not re.fullmatch(r'[0-9]{6}',code) or str(header.get('SecurityCode'))!=code
         or str(listing.get('SCRIP_CD'))!=code or header.get('ISIN')!=isin or listing.get('ISIN_NUMBER')!=isin
-        or not exact_legal_identity(profile['legal'],identity.get('issuer_name',''))
-        or not exact_legal_identity(profile['legal'],listing.get('Issuer_Name',''))):
+        or not bse_display_identity(symbol,isin,code,identity.get('issuer_name',''))
+        or not bse_display_identity(symbol,isin,code,listing.get('Issuer_Name',''))):
         raise ValueError('OFFICIAL_BSE_CANONICAL_IDENTITY_UNPROVEN')
     reference={'sha256':review_hash,'r2_key':PREFIX+'bse-dated-pdf-review/sha256='+review_hash+'/capture.json'}
     candidate_hashes={item.get('original_sha256') for item in review.get('candidates',[]) if isinstance(item,dict)}

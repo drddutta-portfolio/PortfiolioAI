@@ -168,6 +168,9 @@ def main():
                 with db.cursor() as cur:
                     cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records
                         WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s
+                          AND jsonb_typeof(raw_payload->'bse_identity')='object'
+                          AND CASE WHEN jsonb_typeof(raw_payload->'all_sources')='array'
+                              THEN jsonb_array_length(raw_payload->'all_sources') ELSE 0 END>0
                         ORDER BY retrieved_at DESC LIMIT 16""",(str(sid),));reviews=cur.fetchall()
                 db.rollback()
                 for review,review_hash in reviews:
@@ -175,7 +178,8 @@ def main():
                         for url,original in bse_inventory_sources(review,review_hash,symbol,isin,str(sid)).items():
                             if url not in retained or original['candidate_priority']<retained[url]['candidate_priority']:
                                 retained[url]=original
-                    except (ValueError,TypeError,KeyError):rejects['BSE_IDENTITY_INVENTORY_REJECTED']+=1
+                    except ValueError as error:rejects[str(error).split(':')[0]]+=1
+                    except (TypeError,KeyError):rejects['BSE_IDENTITY_INVENTORY_REJECTED']+=1
                 urls=sorted(retained,key=lambda url:(retained[url]['candidate_priority'],url))+[url for url in urls if url not in retained]
             with db.cursor() as cur:
                 cur.execute("""SELECT x->>'next_offset' FROM data_source_records d CROSS JOIN LATERAL jsonb_array_elements(d.raw_payload->'issuers') x

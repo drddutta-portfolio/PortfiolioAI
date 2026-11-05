@@ -8,7 +8,7 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-bse-dated-quarter-review-development
-  cancel-in-progress: ${{ github.event_name == 'push' }}
+  cancel-in-progress: false
 jobs:
   review:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -49,12 +49,14 @@ jobs:
 # Recheck every slot using actual quarter-group headings rather than financial-page titles.
   qualify:
     needs: review
-    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    if: always() && !cancelled() && github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-dated-pdf-replay.yml
     secrets: inherit
 
   official-issuer-originals:
     needs: review
-    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    if: always() && !cancelled() && github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     secrets: inherit
+
+# Cancellation must not start follow-up collection; valid active passes finish before queued repairs.

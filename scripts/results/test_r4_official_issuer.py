@@ -264,6 +264,19 @@ class BSEInventoryReplay(unittest.TestCase):
     sample=OfficialIssuerReplay.sample
     restated_sample=OfficialIssuerReplay.restated_sample
 
+    def test_canonical_ebgng_identity_excludes_the_unrelated_issuer(self):
+        self.assertTrue(o.bse_display_identity('EBGNG','INE18JU01028','544455','GNG Electronics Limited'))
+        self.assertFalse(o.bse_display_identity('EBGNG','INE18JU01028','544455','Ellenbarrie Industrial Gases Limited'))
+        with self.assertRaises(ValueError):o.approved_url('EBGNG','https://ellenbarrie.com/results.pdf')
+
+    def test_closed_bse_display_typo_requires_exact_igl_security_and_scrip(self):
+        alias='Indraprashtha Gas Ltd.'
+        self.assertTrue(o.bse_display_identity('IGL','INE203G01027','532514',alias))
+        self.assertFalse(o.bse_display_identity('IGL','OTHER','532514',alias))
+        self.assertFalse(o.bse_display_identity('IGL','INE203G01027','999999',alias))
+        self.assertFalse(o.bse_display_identity('IGL','INE203G01027','532514',alias+' Other Company'))
+        self.assertFalse(o.exact_legal_identity(o.ISSUERS['IGL']['legal'],alias))
+
     def bse_sample(self):
         raw,source,rows,profile,audit,fake=self.restated_sample()
         sid='11111111-1111-4111-8111-111111111111'

@@ -17,6 +17,12 @@ def task_id(security,tool,period,args):
     return hashlib.sha256(body.encode()).hexdigest()
 
 
+def select_task_shard(identified,shard,shards=16):
+    """Keep every task exactly once in either a single batch or bounded shards."""
+    if not 1<=shards<=16 or not 0<=shard<shards:raise ValueError("INVALID_TASK_SHARD")
+    return sorted((key,item) for key,item in identified if int(key,16)%shards==shard)
+
+
 def native_shard_for(security,shards=1):
     if not 1<=shards<=16:raise ValueError("INVALID_NATIVE_SHARD_COUNT")
     return int(task_id(security,"NATIVE_DATED_ORIGINAL",None,{}),16)%shards

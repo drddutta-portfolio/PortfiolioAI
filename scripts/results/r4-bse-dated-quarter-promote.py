@@ -31,7 +31,7 @@ def main():
                 rejects=Counter();grouped=defaultdict(list)
                 try:
                     with db.cursor() as cur:
-                        cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s AND raw_payload->>'period_end'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),period));row=cur.fetchone()
+                        cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND jsonb_typeof(raw_payload->'bse_identity')='object' AND CASE WHEN jsonb_typeof(raw_payload->'all_sources')='array' THEN jsonb_array_length(raw_payload->'all_sources') ELSE 0 END>0 AND raw_payload->>'security_id'=%s AND raw_payload->>'period_end'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),period));row=cur.fetchone()
                     db.rollback()
                     if not row:raise ValueError('PRIVATE_SOURCE_INVENTORY_NOT_AVAILABLE')
                     review,reviewhash=row

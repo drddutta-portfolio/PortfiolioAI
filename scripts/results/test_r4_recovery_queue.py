@@ -4,12 +4,22 @@ import unittest
 import re
 import time
 
-from r4_recovery_queue import native_shard_for,run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed,observe_completed
+from r4_recovery_queue import select_task_shard,native_shard_for,run_with_timeout,SOURCES,attempt_all,task_id,next_source,dispatched,dispatch_failed,observe_completed
 
 spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("r4-recovery-monitor.py"))
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_single_provider_batch_and_legacy_shards_preserve_all_tasks_once(self):
+        tasks=[(task_id(str(i),"DOCUMENT",None,{}),i) for i in range(100)]
+        for shards in (1,16):
+            groups=[select_task_shard(tasks,shard,shards) for shard in range(shards)]
+            combined=[item for group in groups for item in group]
+            self.assertEqual(sorted(combined),sorted(tasks))
+            self.assertEqual(len({key for key,_ in combined}),len(tasks))
+        for shard,shards in ((0,0),(0,17),(1,1),(-1,16)):
+            with self.assertRaises(ValueError):select_task_shard(tasks,shard,shards)
+
     def test_native_partition_covers_every_security_once(self):
         securities=[str(i) for i in range(262)]
         groups=[{s for s in securities if native_shard_for(s,4)==n} for n in range(4)]

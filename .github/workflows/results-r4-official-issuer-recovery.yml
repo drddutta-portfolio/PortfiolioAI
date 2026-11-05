@@ -8,7 +8,7 @@ on:
 permissions: {contents: read}
 concurrency:
   group: results-r4-official-issuer-development
-  cancel-in-progress: ${{ github.event_name == 'push' && github.workflow == 'Results R4 Official Issuer Historical Recovery' }}
+  cancel-in-progress: false
 jobs:
   collect:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -46,7 +46,7 @@ jobs:
       # Originals, rendered pages and financial traces remain private in R2.
   verify:
     needs: collect
-    if: always() && github.ref == 'refs/heads/PortfolioAI-Development'
+    if: always() && !cancelled() && github.ref == 'refs/heads/PortfolioAI-Development'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     env:
@@ -85,3 +85,5 @@ jobs:
 # Resume all remaining issuers with independently rendered adjacent-page proofs and repaired original seeds.
 
 # Bind verified retained BSE originals to the same owner-approved guarded issuer replay.
+
+# Cancellation must not start follow-up collection; valid active passes finish before queued repairs.

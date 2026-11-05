@@ -37,7 +37,7 @@ def main():
                         AND o.metric_code=ANY(%s::text[])
                       GROUP BY d.id HAVING count(DISTINCT o.metric_code)=3 ORDER BY d.id LIMIT 16""",(sid,sorted(CURRENT),sorted(core)))
                     rows=cur.fetchall()
-                    cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),));review_row=cur.fetchone()
+                    cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND jsonb_typeof(raw_payload->'bse_identity')='object' AND CASE WHEN jsonb_typeof(raw_payload->'all_sources')='array' THEN jsonb_array_length(raw_payload->'all_sources') ELSE 0 END>0 AND raw_payload->>'security_id'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),));review_row=cur.fetchone()
                 db.rollback()
                 for aid,digest,metadata,facts in rows:
                     if batch.sha(batch.canonical(metadata))!=digest:raise ValueError('CURRENT_ANCHOR_RECORD_HASH_MISMATCH')

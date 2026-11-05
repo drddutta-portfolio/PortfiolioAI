@@ -4,7 +4,7 @@ import hashlib,json,os,time,urllib.request,urllib.error,sys
 from pathlib import Path
 from datetime import date
 import psycopg
-from r4_recovery_queue import task_id,attempt_all
+from r4_recovery_queue import task_id,attempt_all,select_task_shard
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import importlib.util
 health_spec=importlib.util.spec_from_file_location("r4_provider_health",Path(__file__).with_name("r4-provider-capture-health.py"))
@@ -23,6 +23,9 @@ def main():
     client=batch.r2_client()
     with psycopg.connect(url,autocommit=False) as db:
         fresh_calls=0
+        shards=int(os.getenv('RESULTS_R4_TRENDLYNE_SHARDS','16'))
+        if shards not in (1,16):raise RuntimeError('INVALID_PROVIDER_SHARD_COUNT')
+        fresh_limit=100 if shards==1 else 40
         def call(request_id,tool,args,security=None):
             nonlocal fresh_calls
             body={"tool":tool,"args":args,"requestId":request_id}
@@ -47,7 +50,7 @@ def main():
                 else:
                     print("R4_TRENDLYNE_REUSED",tool,flush=True)
                     return reused
-            if fresh_calls>=40:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
+            if fresh_calls>=fresh_limit:raise RuntimeError("PROVIDER_PER_RUN_FRESH_CALL_BUDGET_DEFERRED")
             fresh_calls+=1
             print("R4_TRENDLYNE_PACING",json.dumps({"minimum_fresh_call_spacing_seconds":60}),flush=True)
             time.sleep(60)
@@ -157,9 +160,9 @@ def main():
                     query=(f"{name} ({symbol}) quarterly financial results for the three months ended {quarter}: "
                            "revenue, profit after tax, diluted EPS.")
                     planned.append((str(sid),symbol,period,"get_document_search_results",{"query":query}))
-            shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"));shards=16
+            shard=int(os.getenv("RESULTS_R4_TRENDLYNE_SHARD","0"))
             identified=[(task_id(p[0],p[3],p[2],p[4]),p) for p in planned]
-            selected=sorted((key,p) for key,p in identified if int(key,16)%shards==shard)
+            selected=select_task_shard(identified,shard,shards)
             print("R4_TRENDLYNE_PLAN",json.dumps({"shard":shard,"planned_all":len(planned),"planned_shard":len(selected),"identity_blocked":len(blocked),"fresh":os.getenv("RESULTS_R4_FORCE_FRESH")=="1"}),flush=True)
             outcomes=[]
             def process(task):
