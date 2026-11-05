@@ -8,6 +8,20 @@ from r4_pdf_geometry import rows_for,row_text,dated_headers,extract_page,clean_l
 def label_without_amounts(text):
     return re.sub(r'\s+',' ',re.sub(r'[0-9][0-9,.()+%/\-]*',' ',text)).strip()[:240]
 
+def failure_metadata(error):
+    code=str(error).split(':')[0]
+    result={'status':code,'metric':None}
+    trace=error.__traceback__
+    while trace:
+        if trace.tb_frame.f_code.co_name=='extract_page':
+            context=trace.tb_frame.f_locals
+            metric=context.get('metric')
+            if isinstance(metric,str) and re.fullmatch(r'[A-Z_]+',metric):result['metric']=metric
+            if isinstance(context.get('label'),str):result['row_label']=label_without_amounts(context['label'])
+            if isinstance(context.get('yy'),(int,float)):result['row_y']=round(context['yy'],2)
+        trace=trace.tb_next
+    return result
+
 def header_words(rows,index,header_index,header_y,dates):
     out=[]
     for word in rows[index][1]:
@@ -34,9 +48,7 @@ def page_layout(page,page_no,periods):
             parsed=extract_page(page,page_no,period,allow_comparative=True)
             statuses[period]={'status':'NATIVE_TRIO_LOCATED','scope':parsed['scope'],'column':parsed['column_index']}
         except ValueError as error:
-            code=str(error).split(':')[0]
-            metric=str(error).split(':')[1] if code=='CONFLICTING_GEOMETRIC_ROWS' else None
-            statuses[period]={'status':code,'metric':metric}
+            statuses[period]=failure_metadata(error)
     return {'page':page_no,'width':round(page.rect.width,2),'height':round(page.rect.height,2),
         'header_periods':[item[0] for item in dates],
         'headers':[{'y':round(rows[i][0],2),'words':header_words(rows,i,index,yy,dates)} for i in range(max(0,index-14),index+1)],

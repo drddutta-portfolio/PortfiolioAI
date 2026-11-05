@@ -90,3 +90,4 @@ jobs:
 
 # Replay final printed PBT only with explicit associate-row formula and reported-amount reconciliation.
 # Prioritize known financial originals, reject unrelated issuers early, and exclude anti-dilution prose from EPS rows.
+# Verify corresponding three-month headings and separate quarter/YTD groups using physical columns.

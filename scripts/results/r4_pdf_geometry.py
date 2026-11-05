@@ -178,6 +178,20 @@ def clean_label(text):
     text=re.sub(r"^\d{1,2}[.)]?(?=[A-Za-z])","",text)
     return re.sub(r"^\s*(?:(?:\d+|[ivx]+)[.)]?\s+|\(?[a-z]\s*[)|]\s*|-\s*)","",text,flags=re.I).strip()
 
+def previous_year_quarter_heading(group_rows,centers,index):
+    """An explicit corresponding three-month heading is still a quarter.
+
+    Bind the phrase to one physical column. A previous-year label alone,
+    a six/nine-month label, or a year-ended label supplies no such proof.
+    """
+    left=(centers[index-1]+centers[index])/2 if index else centers[0]-(centers[1]-centers[0])/2
+    right=(centers[index]+centers[index+1])/2 if index+1<len(centers) else centers[index]+(centers[index]-centers[index-1])/2
+    text=' '.join(row_text([w for w in ws if left<=(w[0]+w[2])/2<right]) for _,ws in group_rows)
+    text=re.sub(r'\s+',' ',text).strip()
+    return (len(re.findall(r'\byears?\b',text,re.I))==1
+        and not re.search(r'\byear\s+ended\b|\b(?:six|nine|6|9|half)\b',text,re.I)
+        and bool(re.search(r'\bcorresponding\s+(?:quarter|(?:3|three)\s+months?)\s+ended\s+(?:in\s+)?(?:the\s+)?previous\s+year\b',text,re.I)))
+
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None):
     if required_metrics is not None and (not allow_comparative or tuple(required_metrics) not in (
         ('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER'),('EPS_DILUTED',))):
@@ -195,11 +209,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
     headers=dated_headers(rows) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
         if len(dates)<3 or dates[0][0] is None:continue
-        matching=[i for i,d in enumerate(dates[:3]) if d[0]==period]
-        if allow_comparative:
-            if len(matching)!=1:continue
-            column=matching[0]
-        else:
+        if not allow_comparative:
             if dates[0][0]!=period:continue
             column=0
         first=(dates[0][1]+dates[0][2])/2
@@ -212,6 +222,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         near=[(yy,ws) for yy,ws in rows[:header_index] if y-yy<(100 if allow_comparative else 55)]
         quarter_words=[w for _,ws in near for w in ws if re.fullmatch(r"quarters?",str(w[4]),re.I)]
         if allow_comparative:
+            centers=[(d[1]+d[2])/2 for d in dates]
             group_right=third+(third-second)/2
             # Financial-page titles often say "quarter and year ended".
             # Only actual column-group headings prove quarter/annual scope.
@@ -223,9 +234,29 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                     if re.fullmatch(r"3|three",str(a[4]),re.I) and re.fullmatch(r"months?",str(b[4]),re.I) and 0<=b[0]-a[2]<20:
                         three_months.append(a)
             if not any(first_left<=(w[0]+w[2])/2<=group_right for w in group_quarters+three_months):continue
-            if any(re.fullmatch(r"years?(?:ended|[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I)
-                   for _,ws in group_near for w in ws if first_left<=(w[0]+w[2])/2<=group_right):continue
-            centers=[(d[1]+d[2])/2 for d in dates]
+            cumulative=[]
+            for _,ws in group_near:
+                for w in ws:
+                    x=(w[0]+w[2])/2
+                    if not first_left<=x<=group_right or not re.fullmatch(r"years?(?:ended|[-‑–]?to[-‑–]?date)?|annual|ytd|half(?:[-‑–]?year)?|nine|six",str(w[4]),re.I):continue
+                    index=min(range(3),key=lambda i:abs(centers[i]-x))
+                    if re.fullmatch(r'year',str(w[4]),re.I) and previous_year_quarter_heading(group_near,centers,index):continue
+                    cumulative.append(w)
+            quarter_columns=3
+            if cumulative:
+                # Some statements print two quarter columns followed by YTD
+                # or annual columns. Their explicit separate group headings
+                # prove only the first two columns as quarters.
+                boundary=(second+third)/2
+                quarter_labels=group_quarters+three_months
+                if (not any(first_left<=(w[0]+w[2])/2<boundary for w in quarter_labels)
+                    or any((w[0]+w[2])/2<boundary for w in cumulative)
+                    or any(boundary<=(w[0]+w[2])/2<=group_right for w in quarter_labels)):
+                    continue
+                quarter_columns=2
+            matching=[i for i,d in enumerate(dates[:quarter_columns]) if d[0]==period]
+            if len(matching)!=1:continue
+            column=matching[0]
             center=centers[column]
             left=(centers[column-1]+center)/2 if column else first_left
             right=(center+centers[column+1])/2 if column+1<len(centers) else center+(center-centers[column-1])/2
@@ -396,6 +427,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 "facts":{k:found[k] for k in required},"header_evidence":header[:2500],
                 "arithmetic_validation":arithmetic,
                 "parser_revision":"PDF_WORD_COORDINATES_V3"}
-            if allow_comparative:result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:3]],scope_hint_used=scope_hint_used)
+            if allow_comparative:
+                result.update(parser_revision="PDF_WORD_COORDINATES_DATED_COLUMN_V1",selected_column_period=period,column_index=column,header_periods=[d[0] for d in dates[:quarter_columns]],scope_hint_used=scope_hint_used)
+                if quarter_columns==2:result.update(quarter_group_contract='TWO_EXPLICIT_QUARTER_COLUMNS_BEFORE_CUMULATIVE_V1')
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")

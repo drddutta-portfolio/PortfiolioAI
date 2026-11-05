@@ -19,6 +19,42 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def comparative_group_fixture(self,months='3',phrase=True):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        if phrase:
+            for y,text in ((85,'Corresponding'),(100,months+' months ended'),(112,'in the previous year')):
+                p.insert_text((730,y),text,fontsize=8)
+        else:p.insert_text((730,100),'Previous year ended',fontsize=8)
+        return doc,p
+
+    def test_corresponding_three_months_in_previous_year_is_quarter(self):
+        doc,p=self.comparative_group_fixture()
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['column_index'],2)
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'11.88')
+
+    def test_previous_year_and_six_months_never_supply_quarter(self):
+        for kwargs in ({'months':'6'},{'months':'9'},{'phrase':False}):
+            with self.subTest(kwargs=kwargs):
+                doc,p=self.comparative_group_fixture(**kwargs)
+                with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_two_quarters_before_ytd_preserve_physical_columns(self):
+        doc,p=fixture(first='31.12.2025',third='31.12.2025')
+        p.insert_text((750,100),'Year to date',fontsize=10)
+        current=extract_page(p,1,'2025-12-31',allow_comparative=True)
+        prior=extract_page(p,1,'2024-06-30',allow_comparative=True)
+        self.assertEqual(current['column_index'],0)
+        self.assertEqual(prior['column_index'],1)
+        self.assertEqual(prior['header_periods'],['2025-12-31','2024-06-30'])
+        self.assertEqual(prior['facts']['EPS_DILUTED']['value'],'37.81')
+        self.assertEqual(prior['quarter_group_contract'],'TWO_EXPLICIT_QUARTER_COLUMNS_BEFORE_CUMULATIVE_V1')
+
+    def test_cumulative_first_column_cannot_be_rescued_by_later_quarter_heading(self):
+        doc,p=fixture()
+        p.insert_text((450,85),'Six months ended',fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def test_antidilution_footer_cannot_replace_or_corrupt_printed_eps(self):
         doc,p=fixture()
         p.insert_text((25,260),'For the periods with negative Basic EPS, Diluted EPS will be same as Basic EPS. This explanatory note spans the table and is not a financial cell.',fontsize=10)
