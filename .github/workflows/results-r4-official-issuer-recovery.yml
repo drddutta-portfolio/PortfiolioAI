@@ -87,3 +87,5 @@ jobs:
 # Bind verified retained BSE originals to the same owner-approved guarded issuer replay.
 
 # Cancellation must not start follow-up collection; valid active passes finish before queued repairs.
+
+# Replay final printed PBT only with explicit associate-row formula and reported-amount reconciliation.

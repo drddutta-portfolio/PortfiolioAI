@@ -271,10 +271,13 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             units.append(("INR_MILLION",Decimal(10)))
         if len(units)!=1:continue
         unit,divisor=units[0]
-        found={};unavailable_tax_components=set();eps_context="";eps_group_started=False
+        found={};printed_rows={};last_metric=None;unavailable_tax_components=set();eps_context="";eps_group_started=False
         table_rows=rows[header_index+1:]
         for row_index,(yy,ws) in enumerate(table_rows):
-            label=clean_label(row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)]))
+            printed_label=row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)])
+            label=clean_label(printed_label)
+            row_match=re.match(r'^\s*(\d{1,2}|[IVXivx]{1,5})[.)]?\s+',printed_label)
+            row_code=row_match[1].upper() if row_match else None
             preceding_evidence=''
             # Some bank statements place the figures on the second line of
             # "Diluted EPS (before and after extraordinary / items)". Require
@@ -310,6 +313,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^(?:net\s+)?premiums?\s+earned\b",label,re.I):metric="NET_PREMIUM_EARNED_QUARTER"
             elif re.match(r"^profit\s*(?:/\s*\(?loss\)?|\(loss\))?\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
             elif allow_comparative and bank and re.match(r"^profit\s+from\s+ordinary\s+activities\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
+            elif allow_comparative and re.match(r"^share\s+of\s+(?:net\s+)?profit(?:\s*/\s*\(?loss\)?)?\s+(?:of|in)\s+(?:associates?|joint\s+ventures?)\b",label,re.I):metric="SHARE_PROFIT_ASSOCIATES"
             elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
             elif allow_comparative and re.match(r"^(?:(?:current|deferred)\s+)?tax(?:\s+expense)?\s+(?:relating to|in respect of)\s+(?:earlier|previous)\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
@@ -347,8 +351,24 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 "page":page_no,"column_index":column,"column_bounds":[left,right],
                 "row_y":yy,"column_period":period,"extraction_method":"PDF_WORD_COORDINATES_V3"}
             if metric in found and found[metric]["value"]!=fact["value"]:
-                raise ValueError("CONFLICTING_GEOMETRIC_ROWS:"+metric)
+                # Some consolidated formats explicitly show intermediate PBT,
+                # share of associates, then final PBT. Never choose the later
+                # amount without the printed row references AND reconciliation.
+                share=found.get('SHARE_PROFIT_ASSOCIATES')
+                formula=re.search(r'\(\s*(\d{1,2}|[IVXivx]{1,5})\s*\+\s*(\d{1,2}|[IVXivx]{1,5})\s*\)',label)
+                references=tuple(x.upper() for x in formula.groups()) if formula else ()
+                expected=(printed_rows.get('PROFIT_BEFORE_TAX'),printed_rows.get('SHARE_PROFIT_ASSOCIATES'))
+                if (allow_comparative and metric=='PROFIT_BEFORE_TAX' and share is not None
+                    and last_metric=='SHARE_PROFIT_ASSOCIATES' and None not in expected
+                    and references in (expected,expected[::-1]) and row_code is not None
+                    and row_code not in expected and found[metric]['row_y']<share['row_y']<yy
+                    and yy-found[metric]['row_y']<=45
+                    and abs(Decimal(found[metric]['value'])+Decimal(share['value'])-Decimal(fact['value']))<=Decimal('0.02')/divisor):
+                    fact['pre_tax_share_reconciliation']={'contract':'PRINTED_INTERMEDIATE_PBT_PLUS_ASSOCIATE_SHARE_EQUALS_FINAL_PBT_V1',
+                        'printed_row_references':list(references),'intermediate_pbt':found[metric],'share_profit':share}
+                else:raise ValueError("CONFLICTING_GEOMETRIC_ROWS:"+metric)
             found[metric]=fact
+            printed_rows[metric]=row_code;last_metric=metric
         revenue="NET_INTEREST_INCOME_QUARTER" if bank else "NET_PREMIUM_EARNED_QUARTER" if insurer else "OPERATING_REVENUE_QUARTER"
         if bank and all(k in found for k in ("INTEREST_EARNED","INTEREST_EXPENDED")):
             earned,spent=found["INTEREST_EARNED"],found["INTEREST_EXPENDED"]

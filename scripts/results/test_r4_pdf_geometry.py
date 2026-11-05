@@ -19,6 +19,43 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def associate_statement(self,formula='5+6',share='700',indexed=True,share_label='Share of profit of associates'):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,175,950,235),fill=(1,1,1));p.apply_redactions()
+        rows=[(190,'5 Profit before tax (3-4)',['1500','7000','3000']),
+              (210,'6 '+share_label,[share,'1000','1000']),
+              (230,'7 Profit before tax ('+formula+')',['2200','8000','4000']),
+              (250,'8 Total tax expense',['876','1235','1873']),
+              (280,'9 Profit for the period (7-8)',['1324','6765','2127']),
+              (320,'Diluted earnings per share',['7.43','37.81','11.88'])]
+        for y,label,values in rows:
+            p.insert_text((25,y),label if indexed else label.split(' ',1)[1] if label[0].isdigit() else label,fontsize=10)
+            for i,value in enumerate(values):p.insert_text((475+i*150,y),value,fontsize=10)
+        return doc,p
+
+    def test_printed_final_pbt_requires_associate_formula_and_amounts(self):
+        doc,p=self.associate_statement()
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+        pbt=out['arithmetic_validation']['pbt']
+        self.assertEqual(pbt['value'],'220')
+        self.assertEqual(pbt['pre_tax_share_reconciliation']['printed_row_references'],['5','6'])
+
+    def test_ambiguous_or_unreconciled_duplicate_pbt_stays_rejected(self):
+        for args in ({'formula':'4+6'},{'share':'701'},{'indexed':False},
+                     {'share_label':'Unrelated adjustment'}):
+            with self.subTest(args=args):
+                doc,p=self.associate_statement(**args)
+                with self.assertRaisesRegex(ValueError,'CONFLICTING_GEOMETRIC_ROWS:PROFIT_BEFORE_TAX'):
+                    extract_page(p,1,'2024-09-30',allow_comparative=True)
+
+    def test_final_pbt_still_requires_reported_pat_tax_reconciliation(self):
+        doc,p=self.associate_statement()
+        p.add_redact_annot(fitz.Rect(465,238,520,253),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((475,250),'875',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'PROFIT_TAX_RECONCILIATION_FAILED'):
+            extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def wrapped_bank_eps(self,gap=12):
         doc,p=fixture(first='30.09.2025',third='30.09.2024')
         p.add_redact_annot(fitz.Rect(20,205,900,225),fill=(1,1,1));p.apply_redactions()
