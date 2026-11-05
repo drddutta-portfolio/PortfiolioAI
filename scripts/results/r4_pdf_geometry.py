@@ -320,8 +320,12 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^deferred\s+tax\b",label,re.I):metric="DEFERRED_TAX"
             elif allow_comparative and re.match(r"^tax\s+(?:relating to|in respect of)\s+earlier\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?|\s*\(loss\))?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
-            elif allow_comparative and re.match(r"^(?:net\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
-            elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):metric="EPS_DILUTED"
+            elif allow_comparative and re.match(r"^(?:(?:net|total)\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
+            elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):
+                # An explanatory anti-dilution footnote is not an EPS row,
+                # even when its prose crosses the financial column bounds.
+                if allow_comparative and re.search(r'\bwill\s+be\s+(?:the\s+)?same\s+as\s+basic\b',label,re.I):continue
+                metric="EPS_DILUTED"
             if not metric:continue
             context=label+(" "+eps_context if metric=="EPS_DILUTED" else "")
             component=bool(re.search(r"\bcontinuing\b",context,re.I)) != bool(re.search(r"\bdiscontinued\b",context,re.I))

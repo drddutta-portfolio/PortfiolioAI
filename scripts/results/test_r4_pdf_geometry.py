@@ -19,6 +19,20 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_antidilution_footer_cannot_replace_or_corrupt_printed_eps(self):
+        doc,p=fixture()
+        p.insert_text((25,260),'For the periods with negative Basic EPS, Diluted EPS will be same as Basic EPS. This explanatory note spans the table and is not a financial cell.',fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(out['facts']['EPS_DILUTED']['value'],'7.43')
+
+    def test_explicit_total_profit_loss_for_period_is_reported_pat(self):
+        doc,p=fixture(label='Total profit/(loss) for the period')
+        self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+
+    def test_total_profit_attributable_does_not_supply_whole_company_pat(self):
+        doc,p=fixture(label='Total profit/(loss) for the period attributable to owners')
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def associate_statement(self,formula='5+6',share='700',indexed=True,share_label='Share of profit of associates'):
         doc,p=fixture()
         p.add_redact_annot(fitz.Rect(20,175,950,235),fill=(1,1,1));p.apply_redactions()
