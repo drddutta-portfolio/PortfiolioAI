@@ -9,6 +9,7 @@ from dataclasses import dataclass,asdict
 import re,xml.etree.ElementTree as ET
 from decimal import Decimal
 from urllib.parse import urlparse
+from r4_issuer_name import bse_display_alias_matches
 
 CONTRACT="RESULTS_R4_NSE_XML_EXCHANGE_CODE_ISSUER_LINEAGE_V1"
 
@@ -81,7 +82,7 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=Non
         raise ValueError("BSE_LISTING_CANONICAL_IDENTITY_MISMATCH")
     legal=bse_listing.get("Issuer_Name")
     named=catalog_issuer_name(metadata)
-    if not legal_key(legal) or legal_key(legal)!=legal_key(named):
+    if (not legal_key(legal) or legal_key(legal)!=legal_key(named)) and not bse_display_alias_matches(symbol,isin,code,legal,named):
         # An explicit source-pinned rename can reconcile only its two exact
         # legal names. Never use fuzzy company-name matching or a ticker guess.
         if rename is None:raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")

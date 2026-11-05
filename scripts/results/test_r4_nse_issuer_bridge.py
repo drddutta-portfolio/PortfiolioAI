@@ -8,6 +8,21 @@ HEADER={"SecurityCode":"500001","ISIN":"CURRENT_ISIN"}
 LISTING={"SCRIP_CD":"500001","ISIN_NUMBER":"CURRENT_ISIN","Issuer_Name":"Acme Industries Ltd."}
 
 class IssuerBridgeTest(unittest.TestCase):
+    def test_igl_exact_exchange_display_spelling_is_security_bound(self):
+        raw=b'<xbrl><Symbol>IGL</Symbol><ScripCode>532514</ScripCode></xbrl>'
+        meta={"symbol":"IGL","companyName":"Indraprastha Gas Limited",
+            "xbrl":"https://nsearchives.nseindia.com/corporate/xbrl/INDAS_123.xml"}
+        header={"SecurityCode":"532514","ISIN":"INE203G01027"}
+        listing={"SCRIP_CD":"532514","ISIN_NUMBER":"INE203G01027","Issuer_Name":"Indraprashtha Gas Ltd."}
+        proof=bridge_from_sources(raw,meta,"IGL","INE203G01027",header,listing)
+        self.assertEqual(proof.issuer_name,"Indraprashtha Gas Ltd.")
+        self.assertEqual(proof.catalog_company_name,"Indraprastha Gas Limited")
+        for bad in ("Another Gas Limited","Indraprastha Gas Private Limited"):
+            with self.assertRaises(ValueError):
+                bridge_from_sources(raw,{**meta,"companyName":bad},"IGL","INE203G01027",header,listing)
+        with self.assertRaises(ValueError):
+            bridge_from_sources(raw,meta,"IGL","OTHER",{**header,"ISIN":"OTHER"},{**listing,"ISIN_NUMBER":"OTHER"})
+
     def test_exact_original_exchange_code_lineage_preserves_catalog(self):
         proof=bridge_from_sources(XML,META,"ACME","CURRENT_ISIN",HEADER,LISTING)
         self.assertEqual(proof.catalog_isin,"OLD_RETAINED_ISIN")

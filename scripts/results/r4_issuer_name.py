@@ -24,3 +24,14 @@ def exact_legal_identity(name,text):
             if candidate==compact:return True
     return False
 
+
+
+# Exact public exchange display spelling, bound to one canonical security.
+BSE_DISPLAY_ALIASES={'IGL':{'isin':'INE203G01027','scrip_code':'532514',
+    'name':'Indraprashtha Gas Ltd.','legal':'INDRAPRASTHA GAS LIMITED'}}
+
+def bse_display_alias_matches(symbol,isin,code,name,legal_name=None):
+    alias=BSE_DISPLAY_ALIASES.get(symbol)
+    return bool(alias and alias['isin']==isin and alias['scrip_code']==code
+        and words(alias['name'])==words(name)
+        and (legal_name is None or words(alias['legal'])==words(legal_name)))

@@ -10,7 +10,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from urllib.parse import urlparse,urljoin
 import fitz
-from r4_issuer_name import exact_legal_identity,words as issuer_name_words
+from r4_issuer_name import exact_legal_identity,words as issuer_name_words,BSE_DISPLAY_ALIASES,bse_display_alias_matches
 from r4_pdf_geometry import extract_page
 
 CONTRACT='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
@@ -18,7 +18,6 @@ KIND='RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1'
 CURRENT_DISPLAY_POLICY='ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1'
 PREFIX='portfolioai-results/development/v1/quarterly/'
 BUCKET='portfolioai-history-dev'
-BSE_DISPLAY_ALIASES={'IGL':{'isin':'INE203G01027','scrip_code':'532514','name':'Indraprashtha Gas Ltd.'}}
 PERIODS={'2024-09-30':'2024-07-01','2024-12-31':'2024-10-01','2025-03-31':'2025-01-01','2025-06-30':'2025-04-01'}
 SPLIT_AUTHORITIES={'COFORGE':{'url':'https://www.msei.in/SX-Content/Circulars/2025/June/Circular-17281.pdf',
     'old_isin':'INE591G01017','current_isin':'INE591G01025','ex_date':'2025-06-04',
@@ -377,9 +376,7 @@ def split_reference(raw,symbol):
 
 def bse_display_identity(symbol,isin,code,name):
     if exact_legal_identity(ISSUERS[symbol]['legal'],name):return True
-    alias=BSE_DISPLAY_ALIASES.get(symbol)
-    return bool(alias and alias['isin']==isin and alias['scrip_code']==code
-        and issuer_name_words(alias['name'])==issuer_name_words(name))
+    return bse_display_alias_matches(symbol,isin,code,name)
 
 
 def bse_inventory_sources(review,review_hash,symbol,isin,security_id):

@@ -115,3 +115,4 @@ jobs:
 
 # Replay full remaining cohort with complete legal-name and exchange-notice proofs.
 # TMPV historical filings require the pinned NSE CML70875 rename and an unproven business-comparability guard.
+# Reuse the exact security-bound IGL exchange spelling check for original XML identity.
