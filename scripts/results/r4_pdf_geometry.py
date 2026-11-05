@@ -226,7 +226,20 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             group_right=third+(third-second)/2
             # Financial-page titles often say "quarter and year ended".
             # Only actual column-group headings prove quarter/annual scope.
-            group_near=[(yy,ws) for yy,ws in near if not re.search(r"financial|statements?|results",row_text(ws),re.I)]
+            title_continuations=set()
+            for i,(yy,ws) in enumerate(rows[:header_index]):
+                if not i or not ws or not re.match(r'^and\s+(?:year|nine|six|half)\b',row_text(ws),re.I):continue
+                prior_y,prior_words=rows[i-1]
+                prior_text=row_text(prior_words)
+                # A slightly skewed title may be split into coordinate rows:
+                # "Financial results for the quarter" / "and year ended".
+                # Prove that it continues the SAME printed title line, rather
+                # than discarding a separate annual column-group heading.
+                if (0<yy-prior_y<=5 and prior_words
+                    and re.search(r'\bfinancial\b',prior_text,re.I)
+                    and re.sub(r'\s+','',prior_text).lower().endswith('quarter')
+                    and 0<=ws[0][0]-prior_words[-1][2]<=20):title_continuations.add(yy)
+            group_near=[(yy,ws) for yy,ws in near if yy not in title_continuations and not re.search(r"financial|statements?|results",row_text(ws),re.I)]
             group_quarters=[w for _,ws in group_near for w in ws if re.fullmatch(r"(?:quarters?|qtrs?)(?:ended)?",str(w[4]).strip("‘’\""),re.I)]
             three_months=[]
             for _,ws in group_near:

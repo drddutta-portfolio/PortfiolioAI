@@ -1,0 +1,25 @@
+name: Results R4 Bounded Superseded Recovery Handover
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-superseded-recovery-handover.yml]
+permissions:
+  contents: read
+  actions: write
+jobs:
+  handover:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify exact obsolete-run and replacement guards
+        run: python -m unittest discover -s scripts/results -p test_r4_superseded_handover.py -v
+      - name: Handover only allowlisted obsolete runs after the replacement is queued
+        run: python scripts/results/r4-superseded-recovery-handover.py
+# No database, R2, financial original, secret or monitor configuration is changed.

@@ -19,6 +19,20 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_skewed_financial_title_year_is_not_an_annual_group_header(self):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        title='Financial results for the quarter'
+        p.insert_text((500,85),title,fontsize=10)
+        end=500+fitz.get_text_length(title,fontsize=10)
+        p.insert_text((end+5,89),'and year ended',fontsize=10)
+        self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['column_index'],2)
+
+    def test_separate_annual_header_is_not_discarded_as_title_continuation(self):
+        doc,p=fixture(first='30.09.2025',third='30.09.2024')
+        p.insert_text((500,85),'Financial results for the quarter',fontsize=10)
+        p.insert_text((730,100),'and Year ended',fontsize=10)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def test_after_taxes_and_total_profit_are_explicit_pat_labels(self):
         for label in ('Net profit after taxes (5-6)','Total profit for the period/year'):
             doc,p=fixture(label=label)
