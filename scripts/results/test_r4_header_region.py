@@ -6,6 +6,18 @@ from test_r4_pdf_geometry import fixture
 from r4_ocr_dated_geometry import HeaderRegionOCRPage,LabelRegionOCRPage,audit_document,_cached_document_audit
 
 class HeaderRegionTest(unittest.TestCase):
+    def test_unread_supplemental_label_cannot_delete_a_readable_original_profit_row(self):
+        doc,base=self.base();original=base.get_text('words')
+        region_words=[w for w in original if w[2]<430 and 145<w[1]<230 and not 175<w[1]<200]
+        region_words.append((25,185,60,195,'xyz'))
+        region=SimpleNamespace(get_text=lambda kind:region_words)
+        with patch('r4_ocr_dated_geometry.TableOCRPage',return_value=region):
+            result=LabelRegionOCRPage(base,300,preserve_unread_rows=True)
+        from r4_pdf_geometry import extract_page
+        parsed=extract_page(result,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(parsed['facts']['NET_PROFIT_QUARTER']['original_value'],'1,324')
+        self.assertNotIn('xyz',[w[4] for w in result.get_text('words')])
+
     def test_original_audit_cache_is_exact_bounded_and_isolated_from_mutation(self):
         doc,page=fixture();raw=doc.tobytes()
         _cached_document_audit.cache_clear()

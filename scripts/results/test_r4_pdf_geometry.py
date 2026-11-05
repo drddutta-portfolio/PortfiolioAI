@@ -19,6 +19,14 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_duplicate_native_and_rendered_currency_unit_words_remain_explicit(self):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,55,400,75),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,70),'Rs. Rs in in Mn Mn',fontsize=10)
+        result=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(result['unit'],'INR_MILLION')
+        self.assertEqual(result['facts']['OPERATING_REVENUE_QUARTER']['value'],'474.8')
+
     def wrapped_statutory_pbt(self,prior_has_amount=False):
         doc,p=fixture()
         p.add_redact_annot(fitz.Rect(20,35,400,55),fill=(1,1,1));p.apply_redactions()

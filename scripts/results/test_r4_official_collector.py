@@ -11,6 +11,49 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_complete_native_proposal_survives_a_later_ocr_timeout(self):
+        raw=b'original';periods=['2024-09-30','2024-12-31'];events=[]
+        proof={'periods':{periods[0]:[{'method':'NATIVE_STATEMENT_LAYOUT'}],periods[1]:[]},
+               'rejections':{},'document_audit':{'original_sha256':collector.sha(raw)}}
+        def runner(operation,args,timeout):
+            events.append('native' if args[3] else 'ocr')
+            if not args[3]:raise TimeoutError('bounded OCR failure')
+            return proof
+        with patch.object(collector,'run_with_timeout',side_effect=runner):
+            with self.assertRaises(TimeoutError):
+                collector.replay_with_native_checkpoint(raw,'JASH',periods,lambda:None,
+                    lambda value:events.append('native proof retained'),
+                    lambda value:events.append('native proposal committed'))
+        self.assertEqual(events,['native','native proof retained','native proposal committed','ocr'])
+
+    def test_native_cache_reuse_does_not_repeat_completed_financial_work(self):
+        raw=b'original';period='2024-09-30'
+        proof={'periods':{period:[{'method':'NATIVE_STATEMENT_LAYOUT'}]},'rejections':{},
+               'document_audit':{'original_sha256':collector.sha(raw)}}
+        with patch.object(collector,'run_with_timeout',side_effect=AssertionError('Already complete')):
+            output=collector.replay_with_native_checkpoint(raw,'JASH',[period],lambda:proof,
+                lambda value:self.fail('No replacement of retained cache'),lambda value:None)
+        self.assertEqual(output['periods'],proof['periods'])
+        self.assertNotIn('document_audit',output)
+
+    def test_foreign_native_cache_cannot_reach_a_proposal_checkpoint(self):
+        proof={'periods':{'2024-09-30':[]},'rejections':{},'document_audit':{'original_sha256':'0'*64}}
+        with self.assertRaisesRegex(ValueError,'ORIGINAL_OR_QUARTER_MISMATCH'):
+            collector.replay_with_native_checkpoint(b'original','JASH',['2024-09-30'],lambda:proof,
+                lambda value:None,lambda value:self.fail('Foreign evidence must not be persisted'))
+
+    def test_versioned_native_layout_can_finish_before_expensive_ocr(self):
+        from unittest.mock import Mock
+        raw=self.identity_original('JASH ENGINEERING LIMITED')
+        period='2024-09-30'
+        replay=Mock(side_effect=[ValueError('LEGACY_DATE_NOT_RECOGNIZED'),[{'method':'NATIVE_STATEMENT_LAYOUT'}]])
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
+             patch('r4_ocr_dated_geometry.extract_dated_periods',side_effect=AssertionError('Native proof already complete')), \
+             patch.object(collector,'extract_original',replay):
+            result=collector.extract_all(raw,'JASH',[period])
+        self.assertEqual(replay.call_args.args[3],'NATIVE_STATEMENT_LAYOUT')
+        self.assertEqual(result['periods'][period],[{'method':'NATIVE_STATEMENT_LAYOUT'}])
+
     def test_locally_verified_original_is_tried_before_unproven_candidates(self):
         profile={'originals':['https://issuer.example/proven.pdf','https://issuer.example/other.pdf'],
                  'verified_originals':['https://issuer.example/proven.pdf','https://issuer.example/not-pinned.pdf']}
@@ -32,8 +75,8 @@ class CollectorTransportIntegration(TestCase):
         period='2024-09-30'
         parsed={'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}
         proof=Mock(return_value={period:{'parsed':parsed}})
-        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),[{'independently_replayed':True}]])
-        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':['']}), \
+        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),[{'independently_replayed':True}]])
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
              patch('r4_ocr_dated_geometry.extract_dated_periods',proof), \
              patch.object(collector,'extract_original',replay):
             result=collector.extract_all(raw,'JASH',[period])
@@ -147,7 +190,7 @@ class CollectorTransportIntegration(TestCase):
             raw=pdf.tobytes()
         period='2024-09-30'
         replay=Mock(return_value={period:{'rejection':'INDEPENDENT_RENDER_DISAGREEMENT'}})
-        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':['unreadable audit label']}), \
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':['unreadable audit label'],'original_sha256':collector.sha(raw)}), \
              patch('r4_ocr_dated_geometry.extract_dated_periods',replay), \
              patch.object(collector,'extract_original',side_effect=ValueError('NATIVE_TABLE_UNPROVEN')):
             proof=collector.extract_all(raw,'JASH',[period])

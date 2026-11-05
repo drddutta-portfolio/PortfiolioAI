@@ -102,6 +102,7 @@ ISSUERS={
                         'https://www.adityagroup.com/assets_web/images/stock_exchange_submissions/Board_Meeting_Outcome_February_12_2026.pdf',
                         'https://www.adityagroup.com/assets_web/images/result_and_reports/financial_results/Financial_Results_for_quarter_and_financial_year_ended_March_31_2026.pdf']},
  'EBGNG':{'legal':'GNG ELECTRONICS LIMITED','hosts':['www.electronicsbazaar.com','electronicsbazaar.com','nsearchives.nseindia.com'],
+          'verified_originals':['https://nsearchives.nseindia.com/corporate/GNGNSE_27112025105923_Intimation_of_Financial_Results_Q2FY26_in_machine_readble_form.pdf'],
           'pages':['https://www.electronicsbazaar.com/investor'],
           'originals':['https://www.electronicsbazaar.com/media/investor/j/BM_Outcome.pdf',
                        'https://nsearchives.nseindia.com/corporate/GNGNSE_27112025105923_Intimation_of_Financial_Results_Q2FY26_in_machine_readble_form.pdf',
@@ -301,8 +302,10 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             if not 1<=n<=len(pdf):raise ValueError('OFFICIAL_FINANCIAL_PAGE_UNPROVEN')
             if section_pages is not None and n not in section_pages:continue
             try:
-                if method in ('OCR','OCR_HEADER_REGION','OCR_REGIONS'):
-                    if method=='OCR_REGIONS':
+                if method in ('OCR','OCR_HEADER_REGION','OCR_REGIONS','OCR_STATEMENT_LAYOUT'):
+                    if method=='OCR_STATEMENT_LAYOUT':
+                        parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True,statement_layout=True)
+                    elif method=='OCR_REGIONS':
                         parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True)
                     elif method=='OCR_HEADER_REGION':
                         parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True)
@@ -320,7 +323,9 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                 else:
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
                     if profile.get('cin') and not exact_cin(profile['cin'],texts[n-1]):continue
-                    try:parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True)
+                    try:
+                        options={'statement_layout':True} if method=='NATIVE_STATEMENT_LAYOUT' else {}
+                        parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True,**options)
                     except ValueError:
                         if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise
                         parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)

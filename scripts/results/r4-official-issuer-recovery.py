@@ -48,14 +48,20 @@ def retain_split_authority(session,client,symbol):
     batch.immutable_put(client,reference['r2_key'],raw)
     return reference
 
-def extract_all(raw,symbol,periods):
+def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
     import fitz
     from r4_ocr_dated_geometry import audit_document,extract_dated_periods
     preflight_identity(raw,symbol)
-    audit=audit_document(raw,max_pages=120);out={p:[] for p in periods};rejects=Counter();policy=active_basis_policy()
+    audit=document_audit if document_audit is not None else audit_document(raw,max_pages=120)
+    if audit.get('original_sha256')!=sha(raw):raise ValueError('OFFICIAL_DOCUMENT_AUDIT_ORIGINAL_MISMATCH')
+    out={p:[] for p in periods};rejects=Counter();policy=active_basis_policy()
     for period in periods:
         try:out[period]=extract_original(raw,symbol,period,document_audit=audit,basis_policy=policy)
         except ValueError as error:rejects[str(error).split(':')[0]]+=1
+        if not out[period]:
+            try:out[period]=extract_original(raw,symbol,period,'NATIVE_STATEMENT_LAYOUT',document_audit=audit,basis_policy=policy)
+            except ValueError as error:rejects[str(error).split(':')[0]]+=1
+    if native_only:return {'periods':out,'rejections':dict(rejects),'document_audit':audit}
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         native_pages=[page.get_text('text') for page in pdf]
@@ -93,6 +99,29 @@ def extract_all(raw,symbol,periods):
                 if out[period]:pending.remove(period)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}
+
+def replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native,timeout=480):
+    """Commit complete native proposals before a bounded OCR fallback can fail."""
+    started=time.monotonic()
+    def remaining():
+        duration=timeout-(time.monotonic()-started)
+        if duration<=0:raise TimeoutError('PER_ORIGINAL_PROCESSING_TIMEOUT')
+        return duration
+    native=load_native()
+    if native is None:
+        native=run_with_timeout(extract_all,(raw,symbol,periods,True),remaining())
+        save_native(native)
+    if (set(native.get('periods',{}))!=set(periods)
+        or native.get('document_audit',{}).get('original_sha256')!=sha(raw)):
+        raise ValueError('NATIVE_CHECKPOINT_ORIGINAL_OR_QUARTER_MISMATCH')
+    checkpoint_native(native)
+    pending=[period for period in periods if not native['periods'][period]]
+    output={'periods':dict(native['periods']),'rejections':dict(native['rejections'])}
+    if pending:
+        later=run_with_timeout(extract_all,(raw,symbol,pending,False,native['document_audit']),remaining())
+        output['periods'].update(later['periods'])
+        rejects=Counter(output['rejections']);rejects.update(later['rejections']);output['rejections']=dict(rejects)
+    return output
 
 def preflight_identity(raw,symbol):
     """Reject unrelated originals before expensive full-document financial replay.
@@ -244,7 +273,22 @@ def main():
                     try:proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cachekey)['Body'].read())
                     except Exception as error:
                         if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
-                        proof=run_with_timeout(extract_all,(raw,symbol,periods),480)
+                        native_key=cachekey.removesuffix('proof.json')+'native-proof.json'
+                        def load_native():
+                            try:return json.loads(client.get_object(Bucket=batch.BUCKET,Key=native_key)['Body'].read())
+                            except Exception as problem:
+                                if getattr(problem,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
+                                return None
+                        def save_native(value):batch.immutable_put(client,native_key,canonical(value))
+                        def checkpoint_native(value):
+                            for period,options in value['periods'].items():
+                                for parsed in options:counts['observations_inserted']+=persist(db,client,row,period,final_url,raw,parsed,identity_bridge,bse_reference)
+                            outcome.update(phase='NATIVE_PROPOSALS_CHECKPOINTED',original_urls_attempted=attempted,
+                                original_urls_discovered=len(urls),next_offset=(offset+attempted)%len(urls) if urls else 0)
+                            checkpoint(db,client,outcome,counts,args.shard)
+                            print('R4_NATIVE_ORIGINAL_CHECKPOINT',json.dumps({'native_slots':sum(bool(v) for v in value['periods'].values()),
+                                'observations_inserted':counts.get('observations_inserted',0)}),flush=True)
+                        proof=replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native)
                         batch.immutable_put(client,cachekey,canonical(proof))
                     rejects.update(proof['rejections'])
                     for period,parsed_options in proof['periods'].items():
@@ -255,7 +299,7 @@ def main():
                 finally:
                     counts['originals_attempted']+=1
                     attempted+=1
-                    outcome.update(rejections=dict(rejects),original_urls_attempted=attempted,
+                    outcome.update(phase='ORIGINAL_ATTEMPT_CHECKPOINTED',rejections=dict(rejects),original_urls_attempted=attempted,
                         original_urls_discovered=len(urls),next_offset=(offset+attempted)%len(urls) if urls else 0)
                     checkpoint(db,client,outcome,counts,args.shard)
                     print('R4_OFFICIAL_ORIGINAL_PROGRESS',json.dumps(dict(counts)),flush=True)
