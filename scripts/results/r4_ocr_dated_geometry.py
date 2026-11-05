@@ -3,7 +3,7 @@ import hashlib,re
 import fitz
 from r4_ocr_geometry import OCRPage,agree
 from r4_ocr_cli import TableOCRPage
-from r4_pdf_geometry import extract_page,rows_for,row_text,date_cells
+from r4_pdf_geometry import extract_page,rows_for,row_text,date_cells,dated_headers
 REVISION='PDF_OCR_EXPLICIT_DATED_COLUMN_V1'
 RENDER_PAIRS=((300,450),(200,400),(350,500))
 
@@ -79,6 +79,7 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False):
     results={};pending=set(periods)
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         page=pdf[page_no-1];validate_page_layout(page)
+        native_headers=complete_header_dates(page)
         for segmentation_mode in (3,6,11):
             if not pending:break
             for pair in RENDER_PAIRS:
@@ -88,6 +89,16 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False):
                 except ValueError as error:
                     for period in pending:results[period]={'rejection':str(error).split(':')[0]}
                     continue
+                first_headers=complete_header_dates(one);second_headers=complete_header_dates(two)
+                # This is an absence check only, never financial admission.
+                # Require every complete native date group and both rendered
+                # date groups to agree. Incomplete or disagreeing headers keep
+                # all alternate render attempts available.
+                if native_headers and native_headers==first_headers==second_headers:
+                    present={period for group in native_headers for period in group}
+                    for period in list(pending-present):
+                        results[period]={'rejection':'PERIOD_NOT_PRESENT_IN_THREE_WAY_REPLAYED_DATED_HEADERS'}
+                        pending.remove(period)
                 known_columns=None
                 for period in sorted(pending):
                     try:
@@ -102,6 +113,14 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False):
                     for period in list(pending-known_columns):
                         results[period]={'rejection':'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS'};pending.remove(period)
     return results
+
+def complete_header_dates(page):
+    groups=set()
+    for _,_,dates in dated_headers(rows_for(page)):
+        if len(dates)<3:continue
+        if any(period is None for period,_,_ in dates):return None
+        groups.add(tuple(period for period,_,_ in dates))
+    return frozenset(groups) if groups else None
 
 def render_page(page,dpi,segmentation_mode):
     return GroupHeaderOCRPage(page,dpi) if segmentation_mode==3 else SegmentedGroupHeaderOCRPage(page,dpi,segmentation_mode)

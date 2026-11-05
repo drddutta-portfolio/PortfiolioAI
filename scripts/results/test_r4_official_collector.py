@@ -11,6 +11,41 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_agreeing_native_and_two_rendered_headers_skip_only_absent_periods(self):
+        import r4_ocr_dated_geometry as dated
+        from test_r4_pdf_geometry import fixture
+        pdf,page=fixture();raw=pdf.tobytes()
+        with patch.object(dated,'render_page',side_effect=lambda p,d,m:p) as render, \
+             patch.object(dated,'extract_page',side_effect=AssertionError('No financial parsing needed for absent quarter')):
+            result=dated.extract_dated_periods(raw,1,['2025-03-31'])
+        self.assertEqual(render.call_count,2)
+        self.assertEqual(result['2025-03-31']['rejection'],'PERIOD_NOT_PRESENT_IN_THREE_WAY_REPLAYED_DATED_HEADERS')
+
+    def test_disagreeing_or_incomplete_headers_preserve_all_render_attempts(self):
+        import r4_ocr_dated_geometry as dated
+        from test_r4_pdf_geometry import fixture
+        pdf,page=fixture();raw=pdf.tobytes()
+        native=frozenset({('2024-09-30','2024-06-30','2023-09-30')})
+        other=frozenset({('2025-03-31','2024-06-30','2023-09-30')})
+        for first,rendered in ((native,other),(None,native)):
+            with self.subTest(native=first), \
+                 patch.object(dated,'complete_header_dates',side_effect=[first]+[rendered,native]*9), \
+                 patch.object(dated,'render_page',side_effect=lambda p,d,m:p) as render, \
+                 patch.object(dated,'extract_page',side_effect=ValueError('NO_PROVEN_GEOMETRIC_QUARTER_TABLE')):
+                result=dated.extract_dated_periods(raw,1,['2025-03-31'])
+            self.assertEqual(render.call_count,18)
+            self.assertEqual(result['2025-03-31']['rejection'],'NO_PROVEN_GEOMETRIC_QUARTER_TABLE')
+
+    def test_present_period_is_never_removed_by_header_absence_check(self):
+        import r4_ocr_dated_geometry as dated
+        from test_r4_pdf_geometry import fixture
+        pdf,page=fixture();raw=pdf.tobytes()
+        with patch.object(dated,'render_page',side_effect=lambda p,d,m:p) as render, \
+             patch.object(dated,'extract_page',side_effect=ValueError('FINANCIAL_REPLAY_REQUIRED')):
+            result=dated.extract_dated_periods(raw,1,['2024-09-30'])
+        self.assertEqual(render.call_count,18)
+        self.assertEqual(result['2024-09-30']['rejection'],'FINANCIAL_REPLAY_REQUIRED')
+
     def test_unconfigured_recovery_still_covers_every_issuer(self):
         rows=[('SANSERA',),('SSWL',),('JASH',)]
         self.assertEqual(collector.target_cohort(rows,''),rows)

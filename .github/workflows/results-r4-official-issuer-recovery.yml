@@ -101,3 +101,4 @@ jobs:
 # One bounded handover to the corrected parser: legacy active scans finish intact.
 # This stable group is shared by all future retries; it is deliberately not keyed per commit.
 # Replay explicit after-taxes PAT, wrapped associate earnings and EPS annualisation footnotes.
+# Skip absent page periods only after complete native and both rendered date groups agree.
