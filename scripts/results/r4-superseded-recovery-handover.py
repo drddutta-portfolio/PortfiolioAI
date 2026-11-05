@@ -10,6 +10,7 @@ ALLOWED={
     41964478291:('1ab13a124980e602bf55ccf0ede918347967722e','.github/workflows/results-r4-trendlyne-history.yml'),
     41970171948:('c7fabc44f6a6009e363a313aca9e9b92e9dec557',OFFICIAL),
     41970421564:('1f8d9544c010d9339f3dc5ed3756f6b684aec771','.github/workflows/results-r4-verified-seed-recovery.yml'),
+    41969704973:('8978e547e3316b19dff9881a437c74274b64136f',OFFICIAL),
 }
 ACTIVE={'queued','pending','in_progress','waiting','requested'}
 
