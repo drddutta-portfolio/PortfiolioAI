@@ -8,6 +8,14 @@ def row(code,value,source="a",scope="CONSOLIDATED",symbol="RELIANCE"):
  return dict(metric_code=code,numeric_value=Decimal(str(value)),source_record_id=source,
              consolidation_scope=scope,symbol=symbol,security_id="security",period_end="2026-06-30")
 class R4Tests(unittest.TestCase):
+ def test_as_filed_business_guard_requires_replayed_lineage_marker(self):
+  manifest={"contract":"PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1",
+            "issuer_bridge":{"business_basis_unproven":True}}
+  self.assertTrue(m.nse_business_basis_unproven(manifest))
+  self.assertFalse(m.nse_business_basis_unproven({**manifest,"contract":"OTHER"}))
+  self.assertFalse(m.nse_business_basis_unproven({**manifest,"issuer_bridge":{}}))
+  self.assertFalse(m.nse_business_basis_unproven({**manifest,"issuer_bridge":{"business_basis_unproven":"true"}}))
+
  def test_preferred_reporting_scope(self):
   c=["OPERATING_REVENUE_QUARTER","NET_PROFIT_QUARTER","EPS_DILUTED"]
   vals=[row(x,1) for x in c]+[row(x,10,"b","STANDALONE") for x in c]

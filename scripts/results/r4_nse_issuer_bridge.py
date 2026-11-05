@@ -44,10 +44,12 @@ class IssuerBridge:
     share_basis:str="AS_FILED_EPS_ONLY_CORPORATE_ACTION_COMPARABILITY_UNPROVEN"
     historical_symbol:str|None=None
     issuer_rename_evidence_sha256:str|None=None
+    business_basis_unproven:bool=False
     def payload(self):
         value=asdict(self)
         if self.historical_symbol is None:value.pop("historical_symbol")
         if self.issuer_rename_evidence_sha256 is None:value.pop("issuer_rename_evidence_sha256")
+        if not self.business_basis_unproven:value.pop("business_basis_unproven")
         return value
 
 def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=None):
@@ -65,7 +67,7 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=Non
     code=unique("ScripCode")
     original_symbol=unique("Symbol")
     if rename is not None:
-        from r4_issuer_rename import RenameProof
+        from r4_issuer_rename import RenameProof,RULES
         from datetime import datetime
         if (not isinstance(rename,RenameProof) or rename.symbol!=symbol or rename.scrip!=code
             or datetime.strptime(metadata.get("toDate",""),"%d-%b-%Y").date().isoformat()>=rename.effective_date):
@@ -92,7 +94,8 @@ def bridge_from_sources(raw,metadata,symbol,isin,bse_meta,bse_listing,rename=Non
             raise ValueError("EXACT_LEGAL_ISSUER_NAME_LINEAGE_UNPROVEN")
     return IssuerBridge(symbol,isin,code,legal,named,metadata.get("isin"),unique("ISIN"),
         historical_symbol=rename.old_symbol if rename is not None else None,
-        issuer_rename_evidence_sha256=rename.sha256 if rename is not None else None)
+        issuer_rename_evidence_sha256=rename.sha256 if rename is not None else None,
+        business_basis_unproven=bool(rename is not None and RULES.get(symbol,{}).get("business_basis_unproven") is True))
 
 def verify_original_facts(raw,manifest,bridge):
     """Independent numeric/context replay, without collector or network dependencies."""

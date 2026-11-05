@@ -5,6 +5,10 @@ import hashlib,re
 import fitz
 
 RULES={
+ "TMPV":{"old_symbol":"TATAMOTORS","old_name":"Tata Motors Limited",
+   "new_name":"Tata Motors Passenger Vehicles Limited","effective_date":"2025-10-24",
+   "scrip":"500570","require_scrip":False,"business_basis_unproven":True,
+   "url":"https://nsearchives.nseindia.com/corporate/vinodn_16102025185058_CML70875.pdf"},
  "ALIVUS":{"old_symbol":"GLS","old_name":"Glenmark Life Sciences",
    "new_name":"Alivus Life Sciences","effective_date":"2025-01-20","scrip":"543322",
    "url":"https://nsearchives.nseindia.com/corporate/GLS_18012025135211_BSE_NSE_Press_Release_180125_Signed.pdf"},

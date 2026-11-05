@@ -114,3 +114,4 @@ jobs:
 # Replay privately retained, verified issuer-rename authorities.
 
 # Replay full remaining cohort with complete legal-name and exchange-notice proofs.
+# TMPV historical filings require the pinned NSE CML70875 rename and an unproven business-comparability guard.

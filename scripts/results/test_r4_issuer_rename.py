@@ -17,6 +17,24 @@ class RenameTest(unittest.TestCase):
         self.assertEqual(proof.effective_date,"2025-04-09")
         self.assertEqual(len(proof.sha256),64)
 
+    def test_tmpv_rename_preserves_old_issuer_and_guards_business_comparisons(self):
+        raw=authority("TMPV",day="October 24, 2025")
+        proof=verify_rename_pdf(raw,"TMPV",RULES["TMPV"]["url"])
+        xml=b'<xbrl><Symbol>TATAMOTORS</Symbol><ScripCode>500570</ScripCode><ISIN>INE155A01022</ISIN></xbrl>'
+        metadata={"symbol":"TMPV","companyName":"Tata Motors Passenger Vehicles Limited",
+            "toDate":"30-Sep-2024","xbrl":"https://nsearchives.nseindia.com/corporate/xbrl/INDAS_123.xml"}
+        header={"SecurityCode":"500570","ISIN":"INE155A01022"}
+        listing={"SCRIP_CD":"500570","ISIN_NUMBER":"INE155A01022","Issuer_Name":"Tata Motors Passenger Vehicles Ltd"}
+        bridge=bridge_from_sources(xml,metadata,"TMPV","INE155A01022",header,listing,proof)
+        self.assertTrue(bridge.business_basis_unproven)
+        self.assertTrue(bridge.payload()["business_basis_unproven"])
+        self.assertEqual(bridge.historical_symbol,"TATAMOTORS")
+        with self.assertRaises(ValueError):
+            bridge_from_sources(xml,metadata,"TMPV","INE155A01022",header,
+                {**listing,"SCRIP_CD":"544569","ISIN_NUMBER":"INE1TAE01010"},proof)
+        with self.assertRaises(ValueError):
+            bridge_from_sources(xml,metadata,"TMCV","INE1TAE01010",header,listing,proof)
+
     def test_arbitrary_document_url_is_not_authority(self):
         with self.assertRaises(ValueError):verify_rename_pdf(authority(),"ETERNAL","https://example.com/rename.pdf")
 
