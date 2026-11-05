@@ -68,6 +68,8 @@ ISSUERS={
                             'https://www.bseindia.com/xml-data/corpfiling/AttachHis/38b751f3-1e7e-412c-9680-a3b80d0fcb27.pdf']},
  'TATACAP':{'legal':'TATA CAPITAL LIMITED','hosts':['www.tatacapital.com','tatacapital.com','nsearchives.nseindia.com'],
             'pages':['https://www.tatacapital.com/about-us/investor-information-and-financials.html'],
+            'verified_originals':['https://nsearchives.nseindia.com/corporate/TATACAPITAL_19012026163254_TCLFinancialsLODRsigned.pdf',
+                                  'https://nsearchives.nseindia.com/corporate/TATACAPITAL_23042026165109_FinancialsMarch2026signed.pdf'],
             'originals':['https://nsearchives.nseindia.com/corporate/TATACAPITAL_19012026163254_TCLFinancialsLODRsigned.pdf',
                          'https://nsearchives.nseindia.com/corporate/TATACAPITAL_23042026165109_FinancialsMarch2026signed.pdf',
                          'https://www.tatacapital.com/content/dam/tata-capital/pdf/investors-and-financial-reports/stock-exchange/stock-exchange-intimation-financial-results-submission-december-11-2025.pdf',
@@ -303,8 +305,10 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             if not 1<=n<=len(pdf):raise ValueError('OFFICIAL_FINANCIAL_PAGE_UNPROVEN')
             if section_pages is not None and n not in section_pages:continue
             try:
-                if method in ('OCR','OCR_HEADER_REGION','OCR_REGIONS','OCR_STATEMENT_LAYOUT'):
-                    if method=='OCR_STATEMENT_LAYOUT':
+                if method in ('OCR','OCR_HEADER_REGION','OCR_REGIONS','OCR_STATEMENT_LAYOUT','OCR_STATEMENT_LAYOUT_V5'):
+                    if method=='OCR_STATEMENT_LAYOUT_V5':
+                        parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True)
+                    elif method=='OCR_STATEMENT_LAYOUT':
                         parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True,statement_layout=True)
                     elif method=='OCR_REGIONS':
                         parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True)
@@ -325,7 +329,8 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
                     if profile.get('cin') and not exact_cin(profile['cin'],texts[n-1]):continue
                     try:
-                        options={'statement_layout':True} if method=='NATIVE_STATEMENT_LAYOUT' else {}
+                        options={'statement_layout':True} if method in ('NATIVE_STATEMENT_LAYOUT','NATIVE_STATEMENT_LAYOUT_V5') else {}
+                        if method=='NATIVE_STATEMENT_LAYOUT_V5':options['advanced_statement_layout']=True
                         parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True,**options)
                     except ValueError:
                         if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise

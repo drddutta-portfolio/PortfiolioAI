@@ -20,7 +20,7 @@ def active_basis_policy():
 def replay_engine(directory=None):
     root=Path(directory) if directory is not None else Path(__file__).parent
     names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
-        'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')
+        'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py','r4_issuer_name.py')
     return sha(b'\0'.join((root/name).read_bytes() for name in names)+b'\0'+(active_basis_policy() or 'LEGACY_ORIGINAL_ONLY').encode())
 
 def download_original(session,symbol,url):
@@ -61,6 +61,9 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
         if not out[period]:
             try:out[period]=extract_original(raw,symbol,period,'NATIVE_STATEMENT_LAYOUT',document_audit=audit,basis_policy=policy)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
+        if not out[period]:
+            try:out[period]=extract_original(raw,symbol,period,'NATIVE_STATEMENT_LAYOUT_V5',document_audit=audit,basis_policy=policy)
+            except ValueError as error:rejects[str(error).split(':')[0]]+=1
     if native_only:return {'periods':out,'rejections':dict(rejects),'document_audit':audit}
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
@@ -86,16 +89,16 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
         # a label. All figures still require independent paired-render replay.
         text=text+' '+native_pages[n-1]
         if not re.search('diluted',text,re.I) or not re.search(r'revenue|premium.*earned',text,re.I):continue
-        from r4_pdf_geometry import statutory_profit_loss_title
-        regions=statutory_profit_loss_title(re.sub(r'\s+',' ',text))
-        proofs=(extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH',header_region=True,label_region=True)
-                if regions else extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH'))
+        # Versioned layout replay keeps dates, amounts and signs explicit.
+        # Existing receipt methods remain independently replayable unchanged.
+        proofs=extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH',
+            header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True)
         for period in pending[:]:
             proof=proofs[period]
             if proof.get('rejection'):rejects[proof['rejection']]+=1;continue
             parsed=proof['parsed']
             try:
-                out[period]=extract_original(raw,symbol,period,'OCR_REGIONS' if regions else 'OCR',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
+                out[period]=extract_original(raw,symbol,period,'OCR_STATEMENT_LAYOUT_V5',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
                 if out[period]:pending.remove(period)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}

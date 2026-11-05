@@ -1,7 +1,7 @@
 import unittest
 import fitz
 from test_r4_pdf_geometry import fixture
-from r4_pdf_geometry import extract_page,iso_date
+from r4_pdf_geometry import extract_page,iso_date,number
 
 def statement(total='3,073',pbt='3,933',discontinued='14',omit=None,prefix=False):
     doc,page=fixture()
@@ -20,6 +20,50 @@ def statement(total='3,073',pbt='3,933',discontinued='14',omit=None,prefix=False
     return doc,page
 
 class StatementLayoutTests(unittest.TestCase):
+    def test_compact_named_dates_retain_every_printed_digit(self):
+        for value in ('Mar312026','Mar 312026','Mar31 2026','31Mar2026'):
+            self.assertEqual(iso_date(value,True,True),'2026-03-31')
+        self.assertIsNone(iso_date('Dec3i2025',True,True))
+        doc,page=fixture(first='Mar312026',third='Mar312025')
+        result=extract_page(page,1,'2025-03-31',allow_comparative=True,statement_layout=True,advanced_statement_layout=True)
+        self.assertEqual(result['column_index'],2)
+        self.assertEqual(result['facts']['EPS_DILUTED']['original_value'],'11.88')
+        with self.assertRaises(ValueError):extract_page(page,1,'2025-03-31',allow_comparative=True,statement_layout=True)
+
+    def test_unreadable_compact_day_does_not_shift_or_become_an_annual_quarter(self):
+        doc,page=fixture(first='Mar312026',third='Mar3i2025')
+        with self.assertRaises(ValueError):extract_page(page,1,'2025-03-31',allow_comparative=True,statement_layout=True,advanced_statement_layout=True)
+
+    def test_only_edge_vertical_rules_are_excluded_from_numeric_cells(self):
+        def words(text):return [(0,0,20,10,text)]
+        value,original=number(words('|1,324|'),edge_vertical_rules=True)
+        self.assertEqual(str(value),'1324');self.assertEqual(original,'1,324')
+        for raw in ('_—-9,170.9|','o.23|','1|234'):
+            with self.subTest(raw=raw),self.assertRaises(ValueError):number(words(raw),edge_vertical_rules=True)
+        with self.assertRaises(ValueError):number(words('|1,324|'))
+
+    def test_eps_explanatory_sentence_is_not_a_numeric_row_in_v5(self):
+        doc,page=fixture()
+        page.insert_text((25,400),'decreases as a result of a reverse split, the calculation of basic and diluted',fontsize=8)
+        page.insert_text((475,400),'has been adjusted',fontsize=8)
+        result=extract_page(page,1,'2024-09-30',allow_comparative=True,statement_layout=True,advanced_statement_layout=True)
+        self.assertEqual(result['facts']['EPS_DILUTED']['original_value'],'7.43')
+        with self.assertRaises(ValueError):extract_page(page,1,'2024-09-30',allow_comparative=True,statement_layout=True)
+
+    def test_v5_never_ignores_a_corrupt_actual_diluted_eps_cell(self):
+        doc,page=fixture()
+        page.add_redact_annot(fitz.Rect(450,205,550,225),fill=(1,1,1));page.apply_redactions()
+        page.insert_text((475,220),'o.23',fontsize=10)
+        with self.assertRaisesRegex(ValueError,'CORRUPT_OR_MISSING_NUMERIC_CELL'):
+            extract_page(page,1,'2024-09-30',allow_comparative=True,statement_layout=True,advanced_statement_layout=True)
+
+    def test_spaced_ruling_glyphs_are_not_row_numbers_or_financial_characters(self):
+        doc,page=fixture(label='V_ | Profit for the period/year')
+        result=extract_page(page,1,'2024-09-30',allow_comparative=True,statement_layout=True,advanced_statement_layout=True)
+        self.assertEqual(result['facts']['NET_PROFIT_QUARTER']['original_value'],'1,324')
+        self.assertIn('V_ |',result['facts']['NET_PROFIT_QUARTER']['evidence_line'])
+        with self.assertRaises(ValueError):extract_page(page,1,'2024-09-30',allow_comparative=True,statement_layout=True)
+
     def split_font_rows(self,accounting=True,collision=False,overlap=True,distance=3.2):
         doc,page=fixture()
         if accounting:

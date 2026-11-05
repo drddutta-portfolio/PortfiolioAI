@@ -1,0 +1,13 @@
+# R4 explicit statement layout V5
+
+The existing receipt methods and their replay behavior remain unchanged. New proposals use an explicit V5 method after legacy/native V4 fail, and the remaining financial pages use paired V5 OCR with separate header/label regions. Original numbers and full original bytes remain the authority. The collector previously supported OCR V4 qualification but did not invoke that layout in its ordinary OCR acquisition path.
+
+V5 recognizes compact, explicitly printed named dates such as Mar312025 without repairing characters. Unreadable Dec3i2025 remains an unknown physical date column, preventing shifted column selection. It handles explicit row-label decoration such as V_ | Profit and anchors diluted EPS labels so prose discussing diluted earnings cannot be mistaken for a financial row. Only edge vertical table borders (| and broken vertical bar) can be excluded from numeric cells; digits, decimals, comma grouping, parentheses and signs remain unchanged. Underscores, dashes and internal glyphs remain rejected.
+
+Label-region OCR may use native coordinates solely to locate the original image crop when a rendered revenue label is unreadable. No native label or number is imported. Header-region boundaries still require a rendered locator. Independent render/header/financial agreement, exact currency, complete same-scope trio, PBT-minus-tax reconciliation, full 150 DPI original audit, issuer/basis checks and protected selections remain mandatory. No proforma/carveout admission or scope guessing is added.
+
+An actual GNG Electronics original passed Native V5 producer and fresh independent qualifier replay for all three September 2024 observations locally. It was a compatibility/format smoke check and performed no canonical writes or new gap closure. The retained V4 method remains separately replayable. GNG March 2025 attempts with misread date digits remain rejected.
+
+Collector checkpoints successful native proposals before OCR. The engine fingerprint now includes the shared issuer-name module so changing identity logic cannot reuse a stale negative replay. The two inspected Tata Capital NSE copies are prioritized ahead of unproven BSE candidate scans, without qualifying their figures merely because they are prioritized. The ordinary workflow covers the entire unresolved cohort.
+
+At 19:52 UTC independent source qualification selected IGL September/December 2024: coverage is now 2,038/2,096, with 40 historical R4 gaps and 18 deferred R3 gaps. No conflicts with prior selections occurred. R4 remains PARTIAL. No UI components, pages, styles, schema, RLS, holdings, transactions, main or Production changes.

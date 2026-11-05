@@ -40,16 +40,33 @@ class SegmentedGroupHeaderOCRPage(TableOCRPage):
         result=super().get_text(kind,**kwargs)
         return native_metadata(self.page,result) if kind=="words" else result
 
+def financial_location(base,native_coordinates=False):
+    pattern=r'revenue\s+from\s+operations|premiums?\s+earned|interest\s+earned'
+    rows=rows_for(base)
+    match=next(((y,ws) for y,ws in rows if re.search(pattern,row_text(ws),re.I)),None)
+    if match is not None:return match,None
+    if native_coordinates:
+        native=rows_for(base.page)
+        match=next(((y,ws) for y,ws in native if re.search(pattern,row_text(ws),re.I)),None)
+        if match is not None:
+            y,_=match
+            # Use only a conservative coordinate boundary. Every supplemental
+            # word is still read from the actual original render, never native
+            # financial text. Include nearby glyphs so the header ends above
+            # a number whose font box precedes its label.
+            return (y,[w for yy,ws in native if abs(yy-y)<=5 for w in ws]),'ORIGINAL_NATIVE_COORDINATES_ONLY'
+    return None,None
+
 class HeaderRegionOCRPage:
     """Read the printed header separately; keep full-page financial words intact.
 
     The clip ends above the first revenue/premium/interest row's glyphs. No
     financial amount is imported from the supplemental header render.
     """
-    def __init__(self,base,dpi,named_abbreviations=False):
+    def __init__(self,base,dpi,named_abbreviations=False,compact_named_dates=False):
         self.base=base;self.page=base.page;self.words=base.get_text('words');self.header_region_evidence=None
         rows=rows_for(base)
-        financial=next(((y,ws) for y,ws in rows if re.search(r'revenue\s+from\s+operations|premiums?\s+earned|interest\s+earned',row_text(ws),re.I)),None)
+        financial,locator=financial_location(base)
         if financial is None:return
         y,financial_words=financial
         groups=[(yy,ws) for yy,ws in rows if 0<y-yy<=100
@@ -64,11 +81,12 @@ class HeaderRegionOCRPage:
         if not 12<=bottom-top<=100:return
         clip=fitz.Rect(self.page.rect.x0,top,self.page.rect.x1,bottom)
         region=TableOCRPage(self.page,dpi,6,clip=clip)
-        if not complete_header_dates(region,named_abbreviations):return
+        if not complete_header_dates(region,named_abbreviations,compact_named_dates):return
         self.words=[w for w in self.words if not clip.y0<=(w[1]+w[3])/2<clip.y1]+region.get_text('words')
         self.header_region_evidence={'contract':'ORIGINAL_HEADER_REGION_WITH_UNCHANGED_FULL_PAGE_FINANCIAL_WORDS_V1',
             'clip':[clip.x0,clip.y0,clip.x1,clip.y1],'render_dpi':dpi,
             'financial_words_changed':False,'financial_row_glyph_top':min(w[1] for w in financial_words)}
+        if locator:self.header_region_evidence['locator_basis']=locator
     def get_text(self,kind='text',**kwargs):
         return list(self.words) if kind=='words' else self.base.get_text(kind,**kwargs)
 
@@ -79,13 +97,13 @@ class LabelRegionOCRPage:
     A crossing numeric word aborts supplementation. Numeric-only region tokens
     are never imported, and no full-page word in an amount column is replaced.
     """
-    def __init__(self,base,dpi,preserve_unread_rows=False,named_abbreviations=False):
+    def __init__(self,base,dpi,preserve_unread_rows=False,named_abbreviations=False,native_coordinates=False,compact_named_dates=False):
         self.base=base;self.page=base.page;self.words=base.get_text('words');self.label_region_evidence=None
         rows=rows_for(base)
-        financial=next(((y,ws) for y,ws in rows if re.search(r'revenue\s+from\s+operations|premiums?\s+earned|interest\s+earned',row_text(ws),re.I)),None)
+        financial,locator=financial_location(base,native_coordinates)
         if financial is None:return
         y,financial_words=financial
-        headers=[(yy,dates) for _,yy,dates in dated_headers(rows,named_abbreviations) if yy<y and len(dates)>=3 and all(d[0] for d in dates)]
+        headers=[(yy,dates) for _,yy,dates in dated_headers(rows,named_abbreviations,compact_named_dates) if yy<y and len(dates)>=3 and all(d[0] for d in dates)]
         if not headers:return
         _,dates=max(headers,key=lambda item:item[0])
         centres=[(d[1]+d[2])/2 for d in dates]
@@ -117,6 +135,7 @@ class LabelRegionOCRPage:
         if preserve_unread_rows:
             self.label_region_evidence['contract']='ORIGINAL_READABLE_LABEL_ROWS_WITH_UNCHANGED_FULL_PAGE_AMOUNT_WORDS_V2'
             self.label_region_evidence['unread_supplemental_label_rows_preserved']=True
+        if locator:self.label_region_evidence['locator_basis']=locator
     def get_text(self,kind='text',**kwargs):
         return list(self.words) if kind=='words' else self.base.get_text(kind,**kwargs)
 
@@ -141,7 +160,7 @@ def validate_page_layout(page):
     if page.rect.width>1000 or page.rect.height>1500:
         raise ValueError('LARGE_OR_MULTI_REPORT_LAYOUT_REQUIRES_REVIEW')
 
-def checked(first,second,one,two,pair,segmentation_mode=3,statement_layout=False):
+def checked(first,second,one,two,pair,segmentation_mode=3,statement_layout=False,advanced_statement_layout=False):
     fingerprint=agree(first,second)
     for fact in first['facts'].values():fact['extraction_method']='OCR_DOUBLE_RENDER_DATED_WORD_COORDINATES_V1'
     first['ocr_segmentation_mode']=segmentation_mode;first['parser_revision']=REVISION;first['ocr_render_dpi']=list(pair);first['ocr_header_basis']='ORIGINAL_NATIVE_GROUP_AND_UNIT_LABELS_WITH_RENDERED_FACT_CELLS'
@@ -159,23 +178,28 @@ def checked(first,second,one,two,pair,segmentation_mode=3,statement_layout=False
         first['parser_revision']='PDF_OCR_EXPLICIT_STATEMENT_ROW_LAYOUT_V4'
         first['statement_row_layout_contract']='PRINTED_TOTAL_PAT_WITH_OPTIONAL_EXPLICIT_CONTINUING_DISCONTINUED_RECONCILIATION_V1'
         for fact in first['facts'].values():fact['extraction_method']='OCR_DOUBLE_RENDER_EXPLICIT_STATEMENT_ROW_LAYOUT_V4'
+    if advanced_statement_layout:
+        first['parser_revision']='PDF_OCR_EXPLICIT_STATEMENT_ROW_LAYOUT_V5'
+        first['statement_row_layout_contract']='EXPLICIT_NAMED_DATES_PRINTED_TOTAL_PAT_AND_FINANCIAL_EPS_ROWS_V2'
+        for fact in first['facts'].values():fact['extraction_method']='OCR_DOUBLE_RENDER_EXPLICIT_STATEMENT_ROW_LAYOUT_V5'
     return first,{'fingerprint':fingerprint,'render_dpi':list(pair),'segmentation_mode':segmentation_mode,'issuer_text_first':one.get_text('text'),'issuer_text_second':two.get_text('text')}
 
-def extract_dated_page(raw,page_no,period,bank=False,insurer=False,render_dpi=(300,450),segmentation_mode=3,header_region=False,label_region=False,statement_layout=False):
+def extract_dated_page(raw,page_no,period,bank=False,insurer=False,render_dpi=(300,450),segmentation_mode=3,header_region=False,label_region=False,statement_layout=False,advanced_statement_layout=False):
     pair=tuple(render_dpi)
     if pair not in RENDER_PAIRS:raise ValueError('UNAPPROVED_INDEPENDENT_RENDER_PAIR')
     if segmentation_mode not in (3,6,11):raise ValueError('UNAPPROVED_TABLE_SEGMENTATION_MODE')
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         page=pdf[page_no-1];validate_page_layout(page)
         one=render_page(page,pair[0],segmentation_mode);two=render_page(page,pair[1],segmentation_mode)
-        if header_region:one=HeaderRegionOCRPage(one,pair[0],statement_layout);two=HeaderRegionOCRPage(two,pair[1],statement_layout)
-        if label_region:one=LabelRegionOCRPage(one,pair[0],statement_layout,statement_layout);two=LabelRegionOCRPage(two,pair[1],statement_layout,statement_layout)
+        if header_region:one=HeaderRegionOCRPage(one,pair[0],statement_layout,advanced_statement_layout);two=HeaderRegionOCRPage(two,pair[1],statement_layout,advanced_statement_layout)
+        if label_region:one=LabelRegionOCRPage(one,pair[0],statement_layout,statement_layout,advanced_statement_layout,advanced_statement_layout);two=LabelRegionOCRPage(two,pair[1],statement_layout,statement_layout,advanced_statement_layout,advanced_statement_layout)
         options={'statement_layout':True} if statement_layout else {}
+        if advanced_statement_layout:options['advanced_statement_layout']=True
         first=extract_page(one,page_no,period,bank,insurer,allow_comparative=True,**options)
         second=extract_page(two,page_no,period,bank,insurer,allow_comparative=True,**options)
-        return checked(first,second,one,two,pair,segmentation_mode,statement_layout)
+        return checked(first,second,one,two,pair,segmentation_mode,statement_layout,advanced_statement_layout)
 
-def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_region=False,label_region=False,statement_layout=False):
+def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_region=False,label_region=False,statement_layout=False,advanced_statement_layout=False):
     """Render each page once per approved pair, then inspect all target quarters.
 
     A complete explicit header proves absent quarters without extra OCR work.
@@ -191,8 +215,8 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_re
                 if not pending:break
                 try:
                     one=render_page(page,pair[0],segmentation_mode);two=render_page(page,pair[1],segmentation_mode)
-                    if header_region:one=HeaderRegionOCRPage(one,pair[0],statement_layout);two=HeaderRegionOCRPage(two,pair[1],statement_layout)
-                    if label_region:one=LabelRegionOCRPage(one,pair[0],statement_layout,statement_layout);two=LabelRegionOCRPage(two,pair[1],statement_layout,statement_layout)
+                    if header_region:one=HeaderRegionOCRPage(one,pair[0],statement_layout,advanced_statement_layout);two=HeaderRegionOCRPage(two,pair[1],statement_layout,advanced_statement_layout)
+                    if label_region:one=LabelRegionOCRPage(one,pair[0],statement_layout,statement_layout,advanced_statement_layout,advanced_statement_layout);two=LabelRegionOCRPage(two,pair[1],statement_layout,statement_layout,advanced_statement_layout,advanced_statement_layout)
                 except ValueError as error:
                     for period in pending:results[period]={'rejection':str(error).split(':')[0]}
                     continue
@@ -210,9 +234,10 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_re
                 for period in sorted(pending):
                     try:
                         options={'statement_layout':True} if statement_layout else {}
+                        if advanced_statement_layout:options['advanced_statement_layout']=True
                         first=extract_page(one,page_no,period,bank,insurer,allow_comparative=True,**options)
                         second=extract_page(two,page_no,period,bank,insurer,allow_comparative=True,**options)
-                        parsed,checks=checked(first,second,one,two,pair,segmentation_mode,statement_layout)
+                        parsed,checks=checked(first,second,one,two,pair,segmentation_mode,statement_layout,advanced_statement_layout)
                         results[period]={'parsed':parsed,'checks':checks};pending.remove(period)
                         columns=parsed.get('header_periods',[])
                         if len(columns)==3 and all(columns):known_columns=set(columns)
@@ -222,9 +247,9 @@ def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_re
                         results[period]={'rejection':'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS'};pending.remove(period)
     return results
 
-def complete_header_dates(page,named_abbreviations=False):
+def complete_header_dates(page,named_abbreviations=False,compact_named_dates=False):
     groups=set()
-    for _,_,dates in dated_headers(rows_for(page),named_abbreviations):
+    for _,_,dates in dated_headers(rows_for(page),named_abbreviations,compact_named_dates):
         if len(dates)<3:continue
         if any(period is None for period,_,_ in dates):return None
         groups.add(tuple(period for period,_,_ in dates))

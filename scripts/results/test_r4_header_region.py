@@ -6,6 +6,24 @@ from test_r4_pdf_geometry import fixture
 from r4_ocr_dated_geometry import HeaderRegionOCRPage,LabelRegionOCRPage,audit_document,_cached_document_audit
 
 class HeaderRegionTest(unittest.TestCase):
+    def test_native_locator_supplies_no_native_financial_word_or_amount(self):
+        doc,base=self.base();original=base.get_text('words')
+        damaged=[(*w[:4],'Ravenue',*w[5:]) if w[4]=='Revenue' else w for w in original]
+        base.get_text=lambda kind:damaged if kind=='words' else ''
+        # Deliberately alter the native financial layer. Its amounts must not
+        # enter the independently rendered words through the coordinate locator.
+        base.page.insert_text((475,165),'99999',fontsize=10)
+        region_words=[w for w in original if w[2]<430 and w[1]>145]
+        region=SimpleNamespace(get_text=lambda kind:region_words)
+        with patch('r4_ocr_dated_geometry.TableOCRPage',return_value=region):
+            result=LabelRegionOCRPage(base,300,preserve_unread_rows=True,native_coordinates=True)
+        evidence=result.label_region_evidence
+        self.assertEqual(evidence['locator_basis'],'ORIGINAL_NATIVE_COORDINATES_ONLY')
+        right=evidence['clip'][2]
+        self.assertEqual([w for w in result.get_text('words') if w[0]>=right],
+                         [w for w in damaged if w[0]>=right])
+        self.assertNotIn('99999',[w[4] for w in result.get_text('words')])
+
     def test_unread_supplemental_label_cannot_delete_a_readable_original_profit_row(self):
         doc,base=self.base();original=base.get_text('words')
         region_words=[w for w in original if w[2]<430 and 145<w[1]<230 and not 175<w[1]<200]

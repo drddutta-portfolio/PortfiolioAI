@@ -54,6 +54,17 @@ class CollectorTransportIntegration(TestCase):
         self.assertEqual(replay.call_args.args[3],'NATIVE_STATEMENT_LAYOUT')
         self.assertEqual(result['periods'][period],[{'method':'NATIVE_STATEMENT_LAYOUT'}])
 
+    def test_native_v5_is_versioned_and_checkpointed_before_ocr(self):
+        from unittest.mock import Mock
+        raw=self.identity_original('JASH ENGINEERING LIMITED');period='2024-09-30'
+        replay=Mock(side_effect=[ValueError('LEGACY'),ValueError('V4'),[{'method':'NATIVE_STATEMENT_LAYOUT_V5'}]])
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
+             patch('r4_ocr_dated_geometry.extract_dated_periods',side_effect=AssertionError('Native already complete')), \
+             patch.object(collector,'extract_original',replay):
+            result=collector.extract_all(raw,'JASH',[period],native_only=True)
+        self.assertEqual(replay.call_args.args[3],'NATIVE_STATEMENT_LAYOUT_V5')
+        self.assertEqual(result['periods'][period],[{'method':'NATIVE_STATEMENT_LAYOUT_V5'}])
+
     def test_locally_verified_original_is_tried_before_unproven_candidates(self):
         profile={'originals':['https://issuer.example/proven.pdf','https://issuer.example/other.pdf'],
                  'verified_originals':['https://issuer.example/proven.pdf','https://issuer.example/not-pinned.pdf']}
@@ -75,15 +86,15 @@ class CollectorTransportIntegration(TestCase):
         period='2024-09-30'
         parsed={'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}
         proof=Mock(return_value={period:{'parsed':parsed}})
-        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),[{'independently_replayed':True}]])
+        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),ValueError('NATIVE_V5_UNPROVEN'),[{'independently_replayed':True}]])
         with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
              patch('r4_ocr_dated_geometry.extract_dated_periods',proof), \
              patch.object(collector,'extract_original',replay):
             result=collector.extract_all(raw,'JASH',[period])
         proof.assert_called_once()
         self.assertEqual(proof.call_args.args[:2],(raw,1))
-        self.assertEqual(proof.call_args.kwargs,{'header_region':True,'label_region':True})
-        self.assertEqual(replay.call_args.args[3],'OCR_REGIONS')
+        self.assertEqual(proof.call_args.kwargs,{'header_region':True,'label_region':True,'statement_layout':True,'advanced_statement_layout':True})
+        self.assertEqual(replay.call_args.args[3],'OCR_STATEMENT_LAYOUT_V5')
         self.assertEqual(result['periods'][period],[{'independently_replayed':True}])
 
     def test_agreeing_native_and_two_rendered_headers_skip_only_absent_periods(self):
@@ -173,7 +184,7 @@ class CollectorTransportIntegration(TestCase):
 
     def test_collector_change_invalidates_cached_negative_replays(self):
         names=('r4-official-issuer-recovery.py','r4_official_issuer.py','r4_pdf_geometry.py',
-            'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py')
+            'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py','r4_issuer_name.py')
         with tempfile.TemporaryDirectory() as directory:
             for name in names:(Path(directory)/name).write_text('original')
             original=collector.replay_engine(directory)
@@ -194,7 +205,7 @@ class CollectorTransportIntegration(TestCase):
              patch('r4_ocr_dated_geometry.extract_dated_periods',replay), \
              patch.object(collector,'extract_original',side_effect=ValueError('NATIVE_TABLE_UNPROVEN')):
             proof=collector.extract_all(raw,'JASH',[period])
-        replay.assert_called_once_with(raw,1,[period],False,False)
+        replay.assert_called_once_with(raw,1,[period],False,False,header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True)
         self.assertEqual(proof['periods'][period],[])
         self.assertEqual(proof['rejections']['INDEPENDENT_RENDER_DISAGREEMENT'],1)
 

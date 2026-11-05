@@ -14,7 +14,7 @@ DATE=re.compile(r"\b\d{1,2}[./-]\d{1,2}[./-](?:20\d{2}|\d{2})\b|"
     r"\b"+DAY+r"\s*(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*20\d{2}\b",re.I)
 CELL=re.compile(r"\(?-?(?:\d+|\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})*,\d{3})(?:\.\d+)?\)?")
 
-def iso_date(text,named_abbreviations=False):
+def iso_date(text,named_abbreviations=False,compact_named_dates=False):
     if named_abbreviations:text=re.sub(r'\bSept\b','Sep',text,flags=re.I)
     text=re.sub(r'(?<=\d)(?:st|nd|rd|th)(?=\s|[-,./]|$|'+MONTH+r')','',text,flags=re.I)
     text=re.sub(r",\s*", " ",text.strip())
@@ -23,6 +23,7 @@ def iso_date(text,named_abbreviations=False):
                 "%d/%m/%y","%d %B %Y","%d-%B-%Y","%d %b %Y","%d-%b-%Y",
                 "%B %d %Y","%d%b%Y","%d%B%Y","%d %b%Y","%d %B%Y","%d-%b-%y","%d-%B-%y")
     if named_abbreviations:formats+=("%b %d %Y",)
+    if compact_named_dates:formats+=("%b%d%Y","%B%d%Y","%b %d%Y","%B %d%Y","%b%d %Y","%B%d %Y")
     for fmt in formats:
         try:return datetime.strptime(text,fmt).date().isoformat()
         except ValueError:pass
@@ -60,18 +61,20 @@ EXTENDED_DATE=re.compile(DATE.pattern+r'|\b'+EXTENDED_MONTH+r'\s+'+DAY+r',?\s+20
 EXTENDED_SHORT_DATE=re.compile(r'\b'+DAY+r'-'+EXTENDED_MONTH+r'-\d{2}\b',re.I)
 EXTENDED_PARTIAL_DATE=re.compile(r'\b(?:'+DAY+r'[- ]'+EXTENDED_MONTH+r'|'+EXTENDED_MONTH+r' '+DAY+r'),?\b',re.I)
 EXTENDED_UNKNOWN_DATE=re.compile(r'\b'+DAY+r' [A-Za-z]{3,12} 20[0-9A-Za-z]{2}\b|\b[A-Za-z]{3,12} '+DAY+r',?\s+20[0-9A-Za-z]{2}\b',re.I)
+COMPACT_DATE=re.compile(EXTENDED_DATE.pattern+r'|\b'+EXTENDED_MONTH+r'\s*'+DAY+r',?\s*20\d{2}\b|\b'+DAY+r'\s*'+EXTENDED_MONTH+r'\s*20\d{2}\b',re.I)
+COMPACT_UNKNOWN_DATE=re.compile(EXTENDED_UNKNOWN_DATE.pattern+r'|\b'+EXTENDED_MONTH+r'\s*[0-9A-Za-z]{1,2}\s*20[0-9A-Za-z]{2}\b|\b[0-9A-Za-z]{1,2}\s*'+EXTENDED_MONTH+r'\s*20[0-9A-Za-z]{2}\b',re.I)
 
-def dated_headers(rows,named_abbreviations=False):
+def dated_headers(rows,named_abbreviations=False,compact_named_dates=False):
     """Join explicitly printed date parts only within the same physical column.
 
     Never infer years or correct OCR glyphs. Ambiguous vertical matches reject.
     Default first-column extraction continues to use the legacy one-row parser.
     """
     complete=[];partial=[]
-    date_pattern=EXTENDED_DATE if named_abbreviations else DATE
+    date_pattern=COMPACT_DATE if compact_named_dates else EXTENDED_DATE if named_abbreviations else DATE
     short_pattern=EXTENDED_SHORT_DATE if named_abbreviations else SHORT_MONTH_DATE
     partial_pattern=EXTENDED_PARTIAL_DATE if named_abbreviations else PARTIAL_DATE
-    unknown_pattern=EXTENDED_UNKNOWN_DATE if named_abbreviations else UNKNOWN_NAMED_DATE
+    unknown_pattern=COMPACT_UNKNOWN_DATE if compact_named_dates else EXTENDED_UNKNOWN_DATE if named_abbreviations else UNKNOWN_NAMED_DATE
     for index,(y,words) in enumerate(rows):
         text=row_text(words)
         if re.search(r"financial|statement|results",text,re.I):continue
@@ -101,7 +104,7 @@ def dated_headers(rows,named_abbreviations=False):
                     break
         for match in list(date_pattern.finditer(text))+list(short_pattern.finditer(text)):
             if any(a<match.end() and b>match.start() for a,b in occupied):continue
-            raw=match.group();parsed=iso_date(raw,named_abbreviations)
+            raw=match.group();parsed=iso_date(raw,named_abbreviations,compact_named_dates)
             if parsed is None:
                 for fmt in ("%d-%b-%y","%d-%B-%y"):
                     try:parsed=datetime.strptime(raw,fmt).date().isoformat();break
@@ -135,7 +138,7 @@ def dated_headers(rows,named_abbreviations=False):
                 printed=row_text(selected).strip(" |[]()")
                 m=re.fullmatch(r"(\d{1,2})(?:st|nd|rd|th)?,?\s*(20\d{2})",printed,re.I)
                 if not m:continue
-                parsed=iso_date(month+" "+m[1]+" "+m[2],named_abbreviations)
+                parsed=iso_date(month+" "+m[1]+" "+m[2],named_abbreviations,compact_named_dates)
                 if parsed:matches.append((j,yy,(parsed,min(w[0],min(v[0] for v in selected)),max(w[2],max(v[2] for v in selected)))))
             if len(matches)==1:complete.append(matches[0])
     for index,y,raw,x0,x2 in partial:
@@ -146,7 +149,7 @@ def dated_headers(rows,named_abbreviations=False):
                 if re.fullmatch(r"20\d{2}",str(w[4]).strip("|¦[]()")) and x0-8<=(w[0]+w[2])/2<=x2+8:
                     years.append((j,yy,str(w[4]).strip("|¦[]()"),w))
         if len(years)!=1:continue
-        j,yy,year,w=years[0];parsed=iso_date(raw+" "+year,named_abbreviations)
+        j,yy,year,w=years[0];parsed=iso_date(raw+" "+year,named_abbreviations,compact_named_dates)
         if parsed:complete.append((j,yy,(parsed,min(x0,w[0]),max(x2,w[2]))))
     yielded=set()
     for index,y,_ in complete:
@@ -165,9 +168,10 @@ def dated_headers(rows,named_abbreviations=False):
         last=max(i for i,yy,d in complete if abs(yy-y)<=28)
         yield last,rows[last][0],merged
 
-def number(words,allow_annualisation_marker=False):
+def number(words,allow_annualisation_marker=False,edge_vertical_rules=False):
     words=[w for w in words if str(w[4]) not in ("|","¦","*","†","‡")]
     text=row_text(words).strip()
+    if edge_vertical_rules:text=text.strip('|¦').strip()
     original=text
     if allow_annualisation_marker and re.fullmatch(r"\(?-?[\d,]+(?:\.\d+)?\)?\*",text):
         text=text[:-1]
@@ -217,8 +221,11 @@ def statutory_metric_label(text):
     text=re.sub(r'^\s*(?:(?:[IVXRL1!‘’]\s*){1,4}|\d{1,2}\s*)[|¦\]_.}]+\s*(?='+metric+r')','',text,flags=re.I)
     return clean_label(text)
 
-def statement_layout_label(text):
+def statement_layout_label(text,advanced=False):
     # A separated row-number glyph is decoration, never a row reference.
+    if advanced:
+        metric=r'(?:profit|net|revenue|income|tax|current|deferred|diluted|basic|share|total|interest)\b'
+        text=re.sub(r'^\s*(?:(?:[IVXRL1!‘’]\s*){1,4}|\d{1,2}\s*)(?:[|¦\]_.}]\s*)+(?='+metric+r')','',text,flags=re.I)
     text=re.sub(r'^\s*[|¦\[\]]*\s*J\s*[|¦\[\]]\s*(?=Revenue\s*from\s*operations\b)','',text,flags=re.I)
     text=statutory_metric_label(text)
     # OCR may join the words of this exact label; no financial token changes.
@@ -229,7 +236,7 @@ def statement_layout_label(text):
     text=re.sub(r'\b(period|year)\s*from\b',lambda m:m[1]+' from',text,flags=re.I)
     return re.sub(r'\bfrom\s*(continuing|discontinued)\s*operations\b',lambda m:'from '+m[1]+' operations',text,flags=re.I)
 
-def align_statement_rows(rows,centers,first_left,quarter_columns):
+def align_statement_rows(rows,centers,first_left,quarter_columns,advanced=False):
     """Join an overlapping label/amount line split by publisher font boxes.
 
     Only a bare numeric preceding row can join a recognized metric label.
@@ -242,7 +249,7 @@ def align_statement_rows(rows,centers,first_left,quarter_columns):
                        for w in ws if (w[0]+w[2])/2>=first_left and re.search(r'\d',str(w[4]))}
     for y,words in rows:
         label_words=[w for w in words if (w[0]+w[2])/2<first_left]
-        label=statement_layout_label(row_text(label_words))
+        label=statement_layout_label(row_text(label_words),advanced)
         recognized=bool(re.match(r'^(?:revenue\s+from\s+operations|interest\s+(?:earned|expended)|(?:net\s+)?premiums?\s+earned|(?:net\s+)?profit|(?:\(?loss\)?\s*/\s*)profit|(?:total\s+)?tax\s+expense|current\s+tax|deferred\s+tax|diluted|basic)\b',label,re.I))
         if output and recognized and label_words:
             prior_y,prior=output[-1]
@@ -262,9 +269,10 @@ def align_statement_rows(rows,centers,first_left,quarter_columns):
         output.append((y,words))
     return output,evidence
 
-def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None,statement_layout=False):
+def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None,statement_layout=False,advanced_statement_layout=False):
+    if advanced_statement_layout and not statement_layout:raise ValueError('ADVANCED_LAYOUT_REQUIRES_EXPLICIT_STATEMENT_LAYOUT')
     if statement_layout and not allow_comparative:raise ValueError('STATEMENT_LAYOUT_REQUIRES_DATED_COLUMNS')
-    normalize=statement_layout_label if statement_layout else clean_label
+    normalize=(lambda text:statement_layout_label(text,advanced_statement_layout)) if statement_layout else clean_label
     if required_metrics is not None and (not allow_comparative or tuple(required_metrics) not in (
         ('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER'),('EPS_DILUTED',))):
         raise ValueError('UNAPPROVED_CONTINUATION_METRIC_SET')
@@ -278,7 +286,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                          r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b")
         if required_metrics!=('EPS_DILUTED',) and not any(re.match(revenue_pattern,normalize(row_text(ws)),re.I) for _,ws in rows):
             raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
-    headers=dated_headers(rows,named_abbreviations=statement_layout) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
+    headers=dated_headers(rows,named_abbreviations=statement_layout,compact_named_dates=advanced_statement_layout) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
         if len(dates)<3 or dates[0][0] is None:continue
         if not allow_comparative:
@@ -391,7 +399,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
         found={};printed_rows={};last_metric=None;unavailable_tax_components=set();auxiliary_tax_errors=[];eps_context="";eps_group_started=False;layout_components_seen=set()
         table_rows=rows[header_index+1:]
         alignment={}
-        if statement_layout:table_rows,alignment=align_statement_rows(table_rows,centers,first_left,quarter_columns)
+        if statement_layout:table_rows,alignment=align_statement_rows(table_rows,centers,first_left,quarter_columns,advanced_statement_layout)
         for row_index,(yy,ws) in enumerate(table_rows):
             printed_label=row_text([w for w in ws if (w[0]+w[2])/2<(first_left if allow_comparative else left)])
             label=normalize(printed_label) if statement_layout else statutory_metric_label(printed_label) if statutory_title_used else clean_label(printed_label)
@@ -489,6 +497,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif allow_comparative and re.match(r"^(?:(?:net|total)\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif allow_comparative and re.match(r'^(?:(?:net\s+)?profit\s+after\s+taxes|total\s+profit\s+for\s+the\s+(?:period|quarter|year))\b',label,re.I):metric='NET_PROFIT_QUARTER'
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):
+                if advanced_statement_layout and not re.match(r'^(?:diluted\b|basic\s*(?:and|&|/)\s*diluted\b|(?:earnings?\s+per\b|eps\b).*\bdiluted\b)',label,re.I):continue
                 # An explanatory anti-dilution footnote is not an EPS row,
                 # even when its prose crosses the financial column bounds.
                 if allow_comparative and re.search(r'\bwill\s+be\s+(?:the\s+)?same\s+as\s+basic\b',label,re.I):continue
@@ -507,7 +516,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 unavailable_tax_components.add(metric)
                 continue # An unavailable auxiliary component is not a reported zero.
             annotated_eps=allow_comparative and metric=="EPS_DILUTED" and annualisation_marker
-            try:value,original=number(cell,allow_annualisation_marker=annotated_eps)
+            try:value,original=number(cell,allow_annualisation_marker=annotated_eps,edge_vertical_rules=advanced_statement_layout)
             except ValueError as error:
                 if not (allow_comparative and metric in ('CURRENT_TAX','DEFERRED_TAX','TAX_EARLIER_YEARS')):raise
                 unavailable_tax_components.add(metric);auxiliary_tax_errors.append((metric,error));continue
@@ -520,7 +529,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                     other_left=(centers[other-1]+centers[other])/2 if other else first_left
                     other_right=(centers[other]+centers[other+1])/2 if other+1<len(centers) else centers[other]+(centers[other]-centers[other-1])/2
                     try:
-                        number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right],allow_annualisation_marker=annotated_eps)
+                        number([w for w in ws if other_left<=(w[0]+w[2])/2<other_right],allow_annualisation_marker=annotated_eps,edge_vertical_rules=advanced_statement_layout)
                         break
                     except ValueError as error:last_error=error
                 else:
@@ -537,6 +546,9 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 "page":page_no,"column_index":column,"column_bounds":[left,right],
                 "row_y":yy,"column_period":period,"extraction_method":"PDF_WORD_COORDINATES_V3"}
             if yy in alignment:fact['row_alignment_evidence']=alignment[yy]
+            if advanced_statement_layout and row_text(cell).strip().strip('|¦').strip()!=row_text(cell).strip():
+                fact['numeric_ruling_evidence']={'contract':'EDGE_VERTICAL_TABLE_RULES_EXCLUDED_V1',
+                    'original_cell_text':row_text(cell),'financial_characters_changed':False}
             if metric in found and found[metric]["value"]!=fact["value"]:
                 # Some consolidated formats explicitly show intermediate PBT,
                 # share of associates, then final PBT. Never choose the later
@@ -610,5 +622,9 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 result['parser_revision']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V4'
                 result['statement_row_layout_contract']='EXPLICIT_NAMED_DATES_AND_PRINTED_TOTAL_PAT_V1'
                 for fact in result['facts'].values():fact['extraction_method']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V4'
+            if advanced_statement_layout:
+                result['parser_revision']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V5'
+                result['statement_row_layout_contract']='EXPLICIT_NAMED_DATES_PRINTED_TOTAL_PAT_AND_FINANCIAL_EPS_ROWS_V2'
+                for fact in result['facts'].values():fact['extraction_method']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V5'
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
