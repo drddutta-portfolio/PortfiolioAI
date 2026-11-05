@@ -4,6 +4,12 @@ from test_r4_pdf_geometry import fixture
 import r4_official_issuer as o
 
 class OfficialIssuerReplay(unittest.TestCase):
+    def test_independent_parent_audit_cannot_describe_another_original(self):
+        raw,source,rows,profile,audit,fake=self.sample()
+        with patch.dict(o.ISSUERS,{'TEST':profile}),patch.dict(sys.modules,{'r4_ocr_dated_geometry':fake}):
+            with self.assertRaisesRegex(ValueError,'AUDIT_ORIGINAL_MISMATCH'):
+                o.qualify(raw,source,rows,document_audit={**audit,'original_sha256':'0'*64})
+
     def test_tata_legal_entities_have_distinct_fixed_cins(self):
         self.assertEqual(o.ISSUERS['TMCV']['cin'],'L29102MH2024PLC427506')
         self.assertEqual(o.ISSUERS['TMPV']['cin'],'L28920MH1945PLC004520')

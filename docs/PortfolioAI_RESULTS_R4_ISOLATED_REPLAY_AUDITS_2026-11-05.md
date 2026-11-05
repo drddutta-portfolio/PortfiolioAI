@@ -1,0 +1,11 @@
+# R4 independent audit reuse across isolated workers — 5 November 2026
+
+Independent canonical readback now confirms 2,031 / 2,096 qualified eight-quarter slots and 47 historical R4 gaps. SANSERA March 2025 and SSWL September 2024 are selected. The separate 18 R3 gaps remain deferred. R4 remains partial.
+
+The preceding process-local memoization does not share an audit between separate isolated receipt workers. The verifier now owns a fresh, bounded parent-process audit cache. Its first request for exact retained PDF bytes launches a separate full-document 150-DPI audit under the existing replay semaphore and hard timeout. Concurrent receipts for those same bytes and page bound wait for that independent audit. Each isolated financial worker receives a private copy and still re-extracts and compares every financial receipt field. No collector, database or previously persisted audit is accepted as the independent scan.
+
+The expected original hash is checked before lookup. A different original or page bound gets a fresh audit. Failed audits are removed so other work and later retries can proceed. Consumers cannot mutate another receipt's evidence. At most eight completed audits are held, only for the current verifier invocation. Nothing is persisted or uploaded. The combined audit and financial replay retain the original 480-second source deadline and two-process concurrency bound.
+
+Source checks are collected as they finish, with aggregate progress every 50 sources. Final fact evaluation still walks the original observation order; financial selection rules are unchanged. Logs contain counts, not financial traces or original documents.
+
+Validation: all 346 Results tests passed, followed by targeted verifier and cache checks after the deadline/progress changes. A real SANSERA original smoke check launched one fresh independent document audit and two separately isolated complete financial receipt replays, admitting all six local test observations. This was local validation, not an additional database write. Existing source hash, issuer/scope, complete-trio, original provenance, comparability and protected-selection guards remain intact. No UI, schema, RLS or Production changes.

@@ -2,9 +2,9 @@
 """Development-only R4. Verify R2 manifest bytes and select current-display
 facts that agree with the immutable filing. Does not establish issuer publication
 time, adjust historical share basis or change any investment research score."""
-import argparse, hashlib, json, os, re
+import argparse, hashlib, json, os, re, time
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor,as_completed
 from threading import BoundedSemaphore
 SOURCE_REPLAY_SLOTS=BoundedSemaphore(2)
 from datetime import date,datetime
@@ -804,6 +804,8 @@ def verify(db,s3,apply):
         by_id={str(r["source_record_id"]):r for r in observations}
         shared_groups=defaultdict(list)
         for row in observations:shared_groups[str(row["source_record_id"])].append(row)
+        from r4_verification_audit_cache import VerificationAuditCache
+        independent_audits=VerificationAuditCache()
         def check_one(pair):
             k,r=pair
             from r4_official_issuer import CONTRACT as OFFICIAL_CONTRACT,qualify as qualify_official
@@ -833,7 +835,11 @@ def verify(db,s3,apply):
                         bse_identity_raw=s3.get_object(Bucket=BUCKET,Key=bse_reference['r2_key'])['Body'].read()
                     from r4_recovery_queue import run_with_timeout
                     with SOURCE_REPLAY_SLOTS:
-                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k],identity_raw,bse_identity_raw),480)
+                        started=time.monotonic()
+                        audit=independent_audits.get(original,120,digest)
+                        remaining=480-(time.monotonic()-started)
+                        if remaining<=0:raise TimeoutError('OFFICIAL_ORIGINAL_REPLAY_DEADLINE')
+                        document=run_with_timeout(qualify_official,(original,r,shared_groups[k],identity_raw,bse_identity_raw,audit),remaining)
                     return k,(document,None)
                 except Exception as exc:
                     return k,(None,"OFFICIAL_ISSUER_REPLAY_FAILED_"+type(exc).__name__)
@@ -881,7 +887,12 @@ def verify(db,s3,apply):
                     # Native PDF/OCR engines run in isolated processes, with
                     # bounded parallel memory use and a per-original deadline.
                     with SOURCE_REPLAY_SLOTS:
-                        run_with_timeout(validate_original,(original_bytes,document,json.loads(proof)),480)
+                        started=time.monotonic()
+                        audit=(independent_audits.get(original_bytes,40,document['original_sha256_retained'])
+                               if document.get('parser_revision')=='PDF_OCR_EXPLICIT_DATED_COLUMN_V1' else None)
+                        remaining=480-(time.monotonic()-started)
+                        if remaining<=0:raise TimeoutError('DATED_ORIGINAL_REPLAY_DEADLINE')
+                        run_with_timeout(validate_original,(original_bytes,document,json.loads(proof),audit),remaining)
                 except Exception as exc:
                     error="DATED_PDF_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__
             if not error and document.get("contract") in ("PORTFOLIOAI_RESULTS_VERIFIED_NSE_LEGACY_XBRL_V1","PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"):
@@ -924,8 +935,15 @@ def verify(db,s3,apply):
                     error="NSE_EXCHANGE_LINEAGE_REPLAY_FAILED_"+type(exc).__name__
             return k,(document,error)
         with ThreadPoolExecutor(max_workers=12) as pool:
-            for k,validated in pool.map(check_one,by_id.items()):
+            pending=[pool.submit(check_one,pair) for pair in by_id.items()]
+            checked=0;source_errors=0
+            for future in as_completed(pending):
+                k,validated=future.result()
                 cache[k]=validated
+                checked+=1;source_errors+=int(validated[1] is not None)
+                if checked%50==0 or checked==len(by_id):
+                    print('R4_SOURCE_REPLAY_PROGRESS',json.dumps({'checked':checked,'total':len(by_id),
+                        'rejected':source_errors}),flush=True)
         for r in observations:
             k=str(r["source_record_id"])
             doc,error=cache[k]

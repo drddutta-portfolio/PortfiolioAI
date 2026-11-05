@@ -427,7 +427,7 @@ def validate_bse_inventory_reference(payload,source_url,observations,review_raw)
         raise ValueError('OFFICIAL_BSE_ORIGINAL_BINDING_UNPROVEN')
 
 
-def qualify(raw,source,observations,identity_raw=None,bse_identity_raw=None):
+def qualify(raw,source,observations,identity_raw=None,bse_identity_raw=None,document_audit=None):
     payload=source['raw_payload'];symbol=payload.get('symbol')
     if (payload.get('contract')!=CONTRACT or payload.get('sourceUrl')!=source['source_url']
         or sha(canonical(payload))!=source['payload_hash']):raise ValueError('OFFICIAL_SOURCE_PAYLOAD_UNPROVEN')
@@ -453,7 +453,7 @@ def qualify(raw,source,observations,identity_raw=None,bse_identity_raw=None):
                 or payload['period_end']>=bridge['ex_date']):
                 raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
     period=payload['period_end'];recorded=payload['parsed']
-    options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'),basis_policy=recorded.get('basis_policy'))
+    options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'),document_audit=document_audit,basis_policy=recorded.get('basis_policy'))
     matching=[x for x in options if x['scope']==recorded['scope']]
     if len(matching)!=1 or matching[0]!=recorded:raise ValueError('OFFICIAL_ORIGINAL_REPLAY_CHANGED')
     facts=recorded['facts'];required={'NET_PREMIUM_EARNED_QUARTER' if symbol=='STARHEALTH' else 'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}

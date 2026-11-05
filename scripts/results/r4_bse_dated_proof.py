@@ -13,7 +13,7 @@ REVISION='PDF_WORD_COORDINATES_DATED_COLUMN_V1'
 FIELDS=('value','unit','original_unit','original_value','column_period','page','column_index','column_bounds','row_y','evidence_line','extraction_method')
 BANKS=set('AUBANK AXISBANK BANDHANBNK BANKBARODA BANKINDIA CANBK FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK RBLBANK SBIN UNIONBANK'.split())
 
-def validate_original(raw,manifest,identity):
+def validate_original(raw,manifest,identity,document_audit=None):
     if hashlib.sha256(raw).hexdigest()!=manifest['original_sha256_retained'] or not raw.startswith(b'%PDF'):
         raise ValueError('DATED_PDF_ORIGINAL_HASH_MISMATCH')
     code=manifest['bse_scrip_code'];isin=manifest['isin'];legal=manifest['issuer_name']
@@ -34,7 +34,9 @@ def validate_original(raw,manifest,identity):
         text=' '.join(p.get_text('text') for p in list(pdf)[:40])
         if manifest.get('parser_revision')=='PDF_OCR_EXPLICIT_DATED_COLUMN_V1':
             from r4_ocr_dated_geometry import audit_document,extract_dated_page
-            audit=audit_document(raw)
+            audit=document_audit if document_audit is not None else audit_document(raw)
+            if audit.get('original_sha256')!=hashlib.sha256(raw).hexdigest():
+                raise ValueError('DATED_OCR_FULL_DOCUMENT_ORIGINAL_MISMATCH')
             if audit['text_sha256']!=manifest.get('ocr_document_text_sha256'):
                 raise ValueError('DATED_OCR_FULL_DOCUMENT_REPLAY_MISMATCH')
             parsed,checks=extract_dated_page(raw,page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',manifest.get('ocr_render_dpi',(300,450)),manifest.get('ocr_segmentation_mode',3))
