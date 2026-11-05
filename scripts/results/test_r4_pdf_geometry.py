@@ -19,6 +19,32 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def test_after_taxes_and_total_profit_are_explicit_pat_labels(self):
+        for label in ('Net profit after taxes (5-6)','Total profit for the period/year'):
+            doc,p=fixture(label=label)
+            self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['facts']['NET_PROFIT_QUARTER']['value'],'132.4')
+
+    def test_eps_annualisation_prose_is_not_a_second_eps_row(self):
+        doc,p=fixture()
+        p.insert_text((25,260),'Basic and diluted Earnings per share (EPS) for all periods except year ended 31 March 2025 are not annualised',fontsize=10)
+        self.assertEqual(extract_page(p,1,'2024-09-30',allow_comparative=True)['facts']['EPS_DILUTED']['value'],'7.43')
+
+    def test_wrapped_associate_net_of_tax_preserves_its_explicit_row_reference(self):
+        doc,p=self.associate_statement()
+        p.add_redact_annot(fitz.Rect(20,197,950,215),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,205),'6 Share of net profit(loss) of associate accounted for using the equity method,',fontsize=7)
+        p.insert_text((25,215),'net of tax',fontsize=10)
+        for x,value in ((475,'700'),(625,'1000'),(775,'1000')):p.insert_text((x,215),value,fontsize=10)
+        out=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        proof=out['arithmetic_validation']['pbt']['pre_tax_share_reconciliation']
+        self.assertEqual(proof['printed_row_references'],['5','6'])
+        self.assertEqual(proof['share_profit']['value'],'70')
+
+    def test_unrelated_net_of_tax_line_cannot_reconcile_duplicate_pbt(self):
+        doc,p=self.associate_statement(share_label='Unrelated profit distribution')
+        with self.assertRaisesRegex(ValueError,'CONFLICTING_GEOMETRIC_ROWS'):
+            extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def comparative_group_fixture(self,months='3',phrase=True):
         doc,p=fixture(first='30.09.2025',third='30.09.2024')
         if phrase:

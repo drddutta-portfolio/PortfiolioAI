@@ -310,6 +310,20 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             row_match=re.match(r'^\s*(\d{1,2}|[IVXivx]{1,5})[.)]?\s+',printed_label)
             row_code=row_match[1].upper() if row_match else None
             preceding_evidence=''
+            # Equity-accounted associate earnings may print their amount on
+            # a separate "net of tax" line. Bind only this explicit nearby
+            # label-only continuation; never borrow another financial row.
+            if allow_comparative and row_index and re.fullmatch(r'net\s+of\s+tax[.,]?',label,re.I):
+                previous_y,previous_words=table_rows[row_index-1]
+                previous_printed=row_text([w for w in previous_words if (w[0]+w[2])/2<first_left])
+                previous_label=clean_label(previous_printed)
+                if (2.5<yy-previous_y<=16
+                    and re.match(r'^share\s+of\s+(?:net\s+)?profit(?:\s*(?:/\s*)?\(?loss\)?)?\s+of\s+associates?\b',previous_label,re.I)
+                    and not any((w[0]+w[2])/2>=first_left for w in previous_words)):
+                    label=previous_label+' '+label
+                    previous_code=re.match(r'^\s*(\d{1,2}|[IVXivx]{1,5})[.)]?\s+',previous_printed)
+                    row_code=previous_code[1].upper() if previous_code else None
+                    preceding_evidence=row_text(previous_words)+' || '
             # Some bank statements place the figures on the second line of
             # "Diluted EPS (before and after extraordinary / items)". Require
             # that exact continuation, a nearby label-only preceding line,
@@ -344,7 +358,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif re.match(r"^(?:net\s+)?premiums?\s+earned\b",label,re.I):metric="NET_PREMIUM_EARNED_QUARTER"
             elif re.match(r"^profit\s*(?:/\s*\(?loss\)?|\(loss\))?\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
             elif allow_comparative and bank and re.match(r"^profit\s+from\s+ordinary\s+activities\s+before\s+tax\b",label,re.I):metric="PROFIT_BEFORE_TAX"
-            elif allow_comparative and re.match(r"^share\s+of\s+(?:net\s+)?profit(?:\s*/\s*\(?loss\)?)?\s+(?:of|in)\s+(?:associates?|joint\s+ventures?)\b",label,re.I):metric="SHARE_PROFIT_ASSOCIATES"
+            elif allow_comparative and re.match(r"^share\s+of\s+(?:net\s+)?profit(?:\s*(?:/\s*)?\(?loss\)?)?\s+(?:of|in)\s+(?:associates?|joint\s+ventures?)\b",label,re.I):metric="SHARE_PROFIT_ASSOCIATES"
             elif re.match(r"^(?:total\s+)?tax\s+expenses?\b",label,re.I):metric="TAX_EXPENSE"
             elif allow_comparative and re.match(r"^(?:(?:current|deferred)\s+)?tax(?:\s+expense)?\s+(?:relating to|in respect of)\s+(?:earlier|previous)\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^current\s+tax\b",label,re.I):metric="CURRENT_TAX"
@@ -352,10 +366,13 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             elif allow_comparative and re.match(r"^tax\s+(?:relating to|in respect of)\s+earlier\s+years?\b",label,re.I):metric="TAX_EARLIER_YEARS"
             elif re.match(r"^(?:net\s+)?profit(?:\s*\(?\s*/\s*loss\)?|\s*\(loss\))?\s+(?:for\s+the\s+(?:period|quarter)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
             elif allow_comparative and re.match(r"^(?:(?:net|total)\s+)?profit\s*/\s*\(?loss\)?\s+(?:for\s+the\s+(?:period|quarter|year)|after\s+tax)\b",label,re.I):metric="NET_PROFIT_QUARTER"
+            elif allow_comparative and re.match(r'^(?:(?:net\s+)?profit\s+after\s+taxes|total\s+profit\s+for\s+the\s+(?:period|quarter|year))\b',label,re.I):metric='NET_PROFIT_QUARTER'
             elif re.search(r"\bdiluted\b",label,re.I) and not re.search(r"capital|paid|weighted",label,re.I):
                 # An explanatory anti-dilution footnote is not an EPS row,
                 # even when its prose crosses the financial column bounds.
                 if allow_comparative and re.search(r'\bwill\s+be\s+(?:the\s+)?same\s+as\s+basic\b',label,re.I):continue
+                if (allow_comparative and re.search(r'\bfor\s+all\s+periods?\s+except\b',row_text(ws),re.I)
+                    and re.search(r'\bnot\s+annuali[sz]ed\b',row_text(ws),re.I)):continue
                 metric="EPS_DILUTED"
             if not metric:continue
             context=label+(" "+eps_context if metric=="EPS_DILUTED" else "")
