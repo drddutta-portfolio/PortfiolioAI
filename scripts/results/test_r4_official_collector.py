@@ -11,6 +11,28 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_statutory_title_regions_require_same_explicit_method_on_replay(self):
+        from unittest.mock import Mock
+        with fitz.open() as pdf:
+            page=pdf.new_page()
+            page.insert_text((20,30),'JASH ENGINEERING LIMITED')
+            page.insert_text((20,60),'Statement of Consolidated Profit and Loss')
+            page.insert_text((20,90),'Revenue from operations and diluted EPS')
+            raw=pdf.tobytes()
+        period='2024-09-30'
+        parsed={'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}
+        proof=Mock(return_value={period:{'parsed':parsed}})
+        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),[{'independently_replayed':True}]])
+        with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':['']}), \
+             patch('r4_ocr_dated_geometry.extract_dated_periods',proof), \
+             patch.object(collector,'extract_original',replay):
+            result=collector.extract_all(raw,'JASH',[period])
+        proof.assert_called_once()
+        self.assertEqual(proof.call_args.args[:2],(raw,1))
+        self.assertEqual(proof.call_args.kwargs,{'header_region':True,'label_region':True})
+        self.assertEqual(replay.call_args.args[3],'OCR_REGIONS')
+        self.assertEqual(result['periods'][period],[{'independently_replayed':True}])
+
     def test_agreeing_native_and_two_rendered_headers_skip_only_absent_periods(self):
         import r4_ocr_dated_geometry as dated
         from test_r4_pdf_geometry import fixture

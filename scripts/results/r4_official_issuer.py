@@ -51,14 +51,16 @@ ISSUERS={
                       'https://www.bseindia.com/xml-data/corpfiling/AttachHis/2c4df461-9b0f-426d-8f60-d257761facd0.pdf']},
  'SANSERA':{'legal':'SANSERA ENGINEERING LIMITED','hosts':['sansera.in','www.sansera.in'],
             'pages':['https://sansera.in/financial_reports','https://sansera.in/all_years/2024-2025','https://sansera.in/all_quarters/q4'],
-            'originals':['https://sansera.in/wp-content/uploads/2025/08/Outcome-of-Board-meeting-with-results-of-Q1FY26-and-AGM-date.pdf',
+            'originals':['https://sansera.in/wp-content/uploads/2026/05/Outcome-of-Board-meeting-Q4FY26.pdf',
+                         'https://sansera.in/wp-content/uploads/2025/08/Outcome-of-Board-meeting-with-results-of-Q1FY26-and-AGM-date.pdf',
                          'https://sansera.in/wp-content/uploads/2025/05/Outcome-of-Board-meeting-Q4FY25.pdf','https://sansera.in/wp-content/uploads/2024/11/Outcome-of-Board-Meeting-Q2FY25.pdf']},
  'SYRMA':{'legal':'SYRMA SGS TECHNOLOGY LIMITED','hosts':['syrmasgs.com','www.syrmasgs.com'],
           'pages':['https://www.syrmasgs.com/investor-relations/43-2/','https://syrmasgs.com/financial-information/'],
           'originals':['https://www.syrmasgs.com/investor-relations/wp-content/uploads/2025/05/Financial-Results.pdf']},
  'SSWL':{'legal':'STEEL STRIPS WHEELS LIMITED','hosts':['sswlindia.com','www.sswlindia.com','sswlindia.in','www.sswlindia.in'],
          'pages':['https://sswlindia.com/investors/quarterly-annual-financial-results'],
-         'originals':['https://sswlindia.com/investor-docs/FR_SSWL_30_09_2024.pdf']},
+         'originals':['https://sswlindia.com/investor-docs/FR_SSWL_30_09_2024.pdf',
+                      'https://sswlindia.com/investor-docs/FR_SSWL_30_09_2025.pdf']},
  'STARHEALTH':{'legal':'STAR HEALTH AND ALLIED INSURANCE COMPANY LIMITED','hosts':['www.starhealth.in','starhealth.in','nsearchives.nseindia.com','www.bseindia.com'],
                'pages':['https://www.starhealth.in/investors/disclosures/'],
                'originals':['https://nsearchives.nseindia.com/corporate/BoardMeetingoutcome29102024_29102024183837.pdf',
@@ -297,8 +299,12 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             if not 1<=n<=len(pdf):raise ValueError('OFFICIAL_FINANCIAL_PAGE_UNPROVEN')
             if section_pages is not None and n not in section_pages:continue
             try:
-                if method=='OCR':
-                    parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
+                if method in ('OCR','OCR_HEADER_REGION','OCR_REGIONS'):
+                    if method=='OCR_REGIONS':
+                        parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True,label_region=True)
+                    elif method=='OCR_HEADER_REGION':
+                        parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode,header_region=True)
+                    else:parsed,checks=extract_dated_page(raw,n,period,bank,insurer,tuple(render_pair),segmentation_mode)
                     if not all(exact_legal_identity(profile['legal'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):
                         raise ValueError('OFFICIAL_RENDERED_ISSUER_IDENTITY_UNPROVEN')
                     if profile.get('cin') and not all(exact_cin(profile['cin'],checks[k]) for k in ('issuer_text_first','issuer_text_second')):

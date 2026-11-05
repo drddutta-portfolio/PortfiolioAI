@@ -80,13 +80,16 @@ def extract_all(raw,symbol,periods):
         # a label. All figures still require independent paired-render replay.
         text=text+' '+native_pages[n-1]
         if not re.search('diluted',text,re.I) or not re.search(r'revenue|premium.*earned',text,re.I):continue
-        proofs=extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH')
+        from r4_pdf_geometry import statutory_profit_loss_title
+        regions=statutory_profit_loss_title(re.sub(r'\s+',' ',text))
+        proofs=(extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH',header_region=True,label_region=True)
+                if regions else extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH'))
         for period in pending[:]:
             proof=proofs[period]
             if proof.get('rejection'):rejects[proof['rejection']]+=1;continue
             parsed=proof['parsed']
             try:
-                out[period]=extract_original(raw,symbol,period,'OCR',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
+                out[period]=extract_original(raw,symbol,period,'OCR_REGIONS' if regions else 'OCR',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
                 if out[period]:pending.remove(period)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}

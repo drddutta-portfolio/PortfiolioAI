@@ -202,7 +202,7 @@ def statutory_metric_label(text):
     # decoration, not part of the financial label. Never turn it into a row
     # reference: printed_rows still comes from the untouched original words.
     metric=r'(?:profit|net|revenue|income|tax|current|deferred|diluted|basic|share|total|interest)\b'
-    text=re.sub(r'^\s*(?:(?:[IVXRL1!‘’]\s*){1,4}|\d{1,2}\s*)[|¦\]_.]+\s*(?='+metric+r')','',text,flags=re.I)
+    text=re.sub(r'^\s*(?:(?:[IVXRL1!‘’]\s*){1,4}|\d{1,2}\s*)[|¦\]_.}]+\s*(?='+metric+r')','',text,flags=re.I)
     return clean_label(text)
 
 def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None):
@@ -337,6 +337,19 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
             row_match=re.match(r'^\s*(\d{1,2}|[IVXivx]{1,5})[.)]?\s+',printed_label)
             row_code=row_match[1].upper() if row_match else None
             preceding_evidence=''
+            if (statutory_title_used and row_index and row_index+1<len(table_rows)
+                and re.fullmatch(r'[IVXivx]{1,5}',printed_label.strip())):
+                prior_y,prior_words=table_rows[row_index-1]
+                next_y,next_words=table_rows[row_index+1]
+                prior_label=statutory_metric_label(row_text([w for w in prior_words if (w[0]+w[2])/2<first_left]))
+                next_label=statutory_metric_label(row_text([w for w in next_words if (w[0]+w[2])/2<first_left]))
+                if (2.5<yy-prior_y<=6 and 2.5<next_y-yy<=10
+                    and re.fullmatch(r'profit(?:\s*/\s*\(?loss\)?)?\s+before\s+tax\s+after\s+exceptional',prior_label,re.I)
+                    and re.fullmatch(r'items\s*\([IVXivx]+\s*[+-]\s*[IVXivx]+\)\s*[_|]*',next_label)
+                    and not any((w[0]+w[2])/2>=first_left and str(w[4]).strip('|¦_') for w in prior_words+next_words)):
+                    label=prior_label+' '+next_label
+                    row_code=printed_label.strip().upper()
+                    preceding_evidence=row_text(prior_words)+' || '+row_text(next_words)+' || '
             if statutory_title_used and row_index and re.match(r'^items\s*\(',label,re.I):
                 prior_y,prior_words=table_rows[row_index-1]
                 prior_printed=row_text([w for w in prior_words if (w[0]+w[2])/2<first_left])

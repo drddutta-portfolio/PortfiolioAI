@@ -19,10 +19,34 @@ def fixture(first="30.09.2024",quarter=True,profit="1,324",label="7 Profit for t
     return doc,p
 
 class GeometryTest(unittest.TestCase):
+    def wrapped_statutory_pbt(self,prior_has_amount=False):
+        doc,p=fixture()
+        p.add_redact_annot(fitz.Rect(20,35,400,55),fill=(1,1,1));p.apply_redactions()
+        p.insert_text((25,50),'Statement of Consolidated Profit and Loss',fontsize=10)
+        p.insert_text((25,260),'Profit/(loss) before tax after exceptional',fontsize=10)
+        p.insert_text((25,263),'VI',fontsize=10)
+        p.insert_text((25,269),'items(IV+V)',fontsize=10)
+        p.insert_text((25,300),'Total tax expense',fontsize=10)
+        for x,pbt,tax in ((475,'2000','676'),(625,'8000','1235'),(775,'4000','1873')):
+            p.insert_text((x,263),pbt,fontsize=10);p.insert_text((x,300),tax,fontsize=10)
+        if prior_has_amount:p.insert_text((475,260),'999',fontsize=10)
+        return doc,p
+
+    def test_wrapped_statutory_pbt_label_brackets_its_own_amount_row(self):
+        doc,p=self.wrapped_statutory_pbt()
+        result=extract_page(p,1,'2024-09-30',allow_comparative=True)
+        self.assertEqual(result['arithmetic_validation']['difference_crore'],'0.0')
+        self.assertIn('items(IV+V)',result['arithmetic_validation']['pbt']['evidence_line'])
+
+    def test_wrapped_statutory_pbt_cannot_borrow_from_a_numeric_preceding_row(self):
+        doc,p=self.wrapped_statutory_pbt(prior_has_amount=True)
+        with self.assertRaises(ValueError):extract_page(p,1,'2024-09-30',allow_comparative=True)
+
     def test_statutory_row_decoration_does_not_change_financial_label_or_values(self):
         self.assertEqual(statutory_metric_label('vr |Profit/(loss) before tax'),'Profit/(loss) before tax')
         self.assertEqual(statutory_metric_label('V1 |Profit/(loss) before tax'),'Profit/(loss) before tax')
         self.assertEqual(statutory_metric_label('V! |Profit/(loss) before tax'),'Profit/(loss) before tax')
+        self.assertEqual(statutory_metric_label('VIII} Profit/(loss) for the period'),'Profit/(loss) for the period')
         self.assertEqual(statutory_metric_label('1__|Revenue from operations'),'Revenue from operations')
         self.assertEqual(statutory_metric_label('Unrelated Profit before tax'),'Unrelated Profit before tax')
         self.assertEqual(statutory_metric_label('Pre|Profit for the period'),'Pre Profit for the period')

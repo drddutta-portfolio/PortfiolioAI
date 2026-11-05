@@ -10,10 +10,10 @@ jobs:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     with:
-      target_symbols: SANSERA,SSWL
+      target_symbols: SSWL
     secrets: inherit
 # Reuse the full guarded collector and independent verifier for newly verified original URLs.
 # The normal recovery continues to cover the entire unresolved cohort without this target filter.
 # Replay explicit after-taxes PAT, wrapped associate earnings and EPS annualisation footnotes.
 # Continue checkpointed originals on the tested skew-title and three-way header replay revision.
-# Replay explicit ordinal dates, statutory profit-and-loss titles and isolated quarter cells.
+# Replay the independently reconciled original SSWL statement using separate header and label regions.
