@@ -10,6 +10,8 @@ from r4_pdf_geometry import extract_page
 from r4_issuer_name import exact_legal_identity
 
 REVISION='PDF_WORD_COORDINATES_DATED_COLUMN_V1'
+BOARD_REVISION='PDF_WORD_COORDINATES_NSE_BOARD_SCOPE_V2'
+SCOPE_REVISIONS={'NSE_ORIGINAL_SAME_STATEMENT_SCOPE_V1':REVISION,'NSE_ORIGINAL_SAME_BOARD_SINGLE_STATEMENT_SCOPE_V2':BOARD_REVISION}
 FIELDS=('value','unit','original_unit','original_value','column_period','page','column_index','column_bounds','row_y','evidence_line','extraction_method')
 BANKS=set('AUBANK AXISBANK BANDHANBNK BANKBARODA BANKINDIA CANBK FEDERALBNK HDFCBANK ICICIBANK IDBI IDFCFIRSTB INDIANB KARURVYSYA KOTAKBANK RBLBANK SBIN UNIONBANK'.split())
 
@@ -26,7 +28,8 @@ def validate_original(raw,manifest,identity,document_audit=None):
     if (identity.get('original_sha256')!=manifest['original_sha256_retained']
         or identity.get('source_url')!=manifest['issuer_filing_url']):
         raise ValueError('DATED_PDF_IDENTITY_ORIGINAL_LINK_MISMATCH')
-    if manifest.get('scope_evidence_basis') is not None and manifest.get('parser_revision')!=REVISION:
+    if ((manifest.get('scope_evidence_basis') is not None and SCOPE_REVISIONS.get(manifest['scope_evidence_basis'])!=manifest.get('parser_revision'))
+        or (manifest.get('parser_revision')==BOARD_REVISION and manifest.get('scope_evidence_basis')!='NSE_ORIGINAL_SAME_BOARD_SINGLE_STATEMENT_SCOPE_V2')):
         raise ValueError('DATED_PDF_SCOPE_BRIDGE_PROOF_UNPROVEN')
     page=manifest['financial_page'];period=manifest['period_end']
     with fitz.open(stream=raw,filetype='pdf') as pdf:
@@ -48,9 +51,15 @@ def validate_original(raw,manifest,identity,document_audit=None):
                 raise ValueError('DATED_PDF_COMPLETE_LEGAL_NAME_UNPROVEN')
             if manifest.get('scope_evidence_basis') is not None:
                 from r4_scope_bridge import CONTRACT,extract_with_scope_bridge
-                if manifest['scope_evidence_basis']!=CONTRACT or not isinstance(identity.get('scope_bridge'),dict):
+                if not isinstance(identity.get('scope_bridge'),dict):
                     raise ValueError('DATED_PDF_SCOPE_BRIDGE_PROOF_UNPROVEN')
-                parsed,_=extract_with_scope_bridge(pdf,page,period,manifest['symbol'],isin,legal,identity['scope_bridge'],manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH')
+                if manifest['scope_evidence_basis']==CONTRACT:
+                    parsed,_=extract_with_scope_bridge(pdf,page,period,manifest['symbol'],isin,legal,identity['scope_bridge'],manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH')
+                else:
+                    from r4_scope_board import extract_with_scope_board
+                    parsed,evidence=extract_with_scope_board(raw,page,period,manifest['symbol'],isin,legal,identity['scope_bridge'],manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',document_audit)
+                    if evidence!=identity.get('scope_board_evidence'):
+                        raise ValueError('DATED_PDF_SCOPE_BOARD_EVIDENCE_REPLAY_MISMATCH')
             else:
                 if identity.get('scope_bridge') is not None:raise ValueError('DATED_PDF_UNDECLARED_SCOPE_BRIDGE')
                 parsed=extract_page(pdf[page-1],page,period,manifest['symbol'] in BANKS,manifest['symbol']=='STARHEALTH',allow_comparative=True)
