@@ -106,11 +106,13 @@ def main():
                     "symbol":symbol,"isin":isin,"security_id":str(sid),"company_error":company_error,"correction_notices":notices,"bse_identity":identity,"all_sources":all_sources,**entry}
                 encoded=batch.canonical(value);digest=batch.sha(encoded)
                 key=batch.PREFIX+"bse-dated-pdf-review/sha256="+digest+"/capture.json";batch.immutable_put(client,key,encoded)
+                from r4_source_archive import compact_payload
+                index=compact_payload(value,digest)
                 with db.cursor() as cur:
                     cur.execute("""INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot)
                       VALUES('COMPANY_EXCHANGE_FILING','RESULTS_R4_BSE_DATED_PDF_REVIEW_V1',%s,%s,%s::jsonb,%s::jsonb)
                       ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING""",
-                      (str(sid)+":"+period,digest,encoded.decode(),'{"retention":"ISSUER_ORIGINAL_IMMUTABLE_PRIVATE_R2","review_only":true}'))
+                      (str(sid)+":"+period,digest,batch.canonical(index).decode(),'{"retention":"ISSUER_ORIGINAL_IMMUTABLE_PRIVATE_R2","review_only":true}'))
                 db.commit();counts["slots_reviewed"]+=1
                 if entry["candidates"]:counts["slots_with_dated_candidates"]+=1
             print("R4_BSE_DATED_PDF_PROGRESS",json.dumps(dict(counts)),flush=True)

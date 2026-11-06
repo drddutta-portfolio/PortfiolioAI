@@ -245,6 +245,7 @@ def main():
                 db.rollback()
                 for review,review_hash in reviews:
                     try:
+                        review=batch.retained_review(client,review,review_hash)
                         for url,original in bse_inventory_sources(review,review_hash,symbol,isin,str(sid)).items():
                             if url not in retained or original['candidate_priority']<retained[url]['candidate_priority']:
                                 retained[url]=original

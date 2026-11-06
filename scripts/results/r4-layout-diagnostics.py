@@ -79,6 +79,7 @@ def main():
             db.rollback();sources={}
             for review,digest in reviews:
                 try:
+                    review=batch.retained_review(client,review,digest)
                     for url,source in bse_inventory_sources(review,digest,symbol,isin,str(sid)).items():
                         if url not in sources or source['candidate_priority']<sources[url]['candidate_priority']:sources[url]=source
                 except (ValueError,KeyError,TypeError):counts['identity_inventories_rejected']+=1

@@ -789,7 +789,7 @@ def select_quarters(rows,existing_choices=None):
 
 SQL="""SELECT f.id,f.security_id,s.symbol,s.isin,f.metric_code,f.numeric_value,f.unit,
 f.currency,f.period_start,f.period_end,f.consolidation_scope,f.source_record_id,
-f.evidence_status,f.retrieved_at,f.source_code,d.raw_payload,d.source_url,
+f.evidence_status,f.retrieved_at,f.source_code,NULL::jsonb AS raw_payload,d.source_url,
 d.payload_hash,d.retrieved_at AS source_retrieved
 FROM public.fundamental_observations f
 JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
@@ -799,12 +799,31 @@ AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
 AND d.record_kind IN ('RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
+def source_observations_once(cur):
+    """Transmit each full source payload once, instead of once per metric."""
+    cur.execute(SQL,(list(QUARTERS),list(UNITS)))
+    observations=cur.fetchall()
+    ids=list(dict.fromkeys(str(r["source_record_id"]) for r in observations))
+    sources={}
+    for offset in range(0,len(ids),500):
+        cur.execute("SELECT id,raw_payload,payload_hash FROM public.data_source_records WHERE id=ANY(%s::uuid[]) AND source_code='COMPANY_EXCHANGE_FILING'",(ids[offset:offset+500],))
+        for source in cur.fetchall():
+            key=str(source["id"])
+            if key in sources:raise ValueError("DUPLICATE_SOURCE_PAYLOAD")
+            sources[key]=source
+    if set(sources)!=set(ids):raise ValueError("SOURCE_PAYLOAD_MISSING_DURING_REPLAY")
+    for row in observations:
+        source=sources[str(row["source_record_id"])]
+        if source["payload_hash"]!=row["payload_hash"]:raise ValueError("SOURCE_CHANGED_DURING_REPLAY_READ")
+        row["raw_payload"]=source["raw_payload"]
+    return observations
+
+
 def verify(db,s3,apply):
     invalid=Counter();cache={};facts=[]
     with psycopg.connect(db,row_factory=dict_row) as conn:
         with conn.cursor() as cur:
-            cur.execute(SQL,(list(QUARTERS),list(UNITS)))
-            observations=cur.fetchall()
+            observations=source_observations_once(cur)
         # Bound R2 reads without making any concurrent database writes. S3
         # clients support concurrent GET; each source is fetched at most once.
         by_id={str(r["source_record_id"]):r for r in observations}

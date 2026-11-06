@@ -19,10 +19,14 @@ def main():
         for symbol,isin,sid,_name,periods in cohort:
             if int(task_id(sid,'OCR_HEADER_REVIEW',None,{}),16)%4!=a.shard:continue
             with db.cursor() as cur:
-                cur.execute("""SELECT raw_payload FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),));row=cur.fetchone()
+                cur.execute("""SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),));row=cur.fetchone()
             db.rollback()
             if not row:continue
-            for source in {s['original_sha256']:s for s in row[0].get('all_sources',[])}.values():
+            try:review=batch.retained_review(client,row[0],row[1])
+            except Exception as error:
+                counts['review_archive_unverified_'+type(error).__name__]+=1
+                continue
+            for source in {s['original_sha256']:s for s in review.get('all_sources',[])}.values():
                 digest=source['original_sha256'];prefix=batch.PREFIX+'ocr-dated-page-v1/original_version='+digest+'/'
                 try:
                     listed=client.list_objects_v2(Bucket=batch.BUCKET,Prefix=prefix,MaxKeys=200)
@@ -73,8 +77,10 @@ def main():
                             value['native_unit_spans']=unit_spans[:6]
                             encoded=batch.canonical(value);sha=batch.sha(encoded)
                             batch.immutable_put(client,batch.PREFIX+'ocr-header-diagnostics/sha256='+sha+'/diagnostic.json',encoded)
+                            from r4_source_archive import compact_payload
+                            index=compact_payload(value,sha)
                             with db.cursor() as cur:
-                                cur.execute("""INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot) VALUES('COMPANY_EXCHANGE_FILING','RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1',%s,%s,%s::jsonb,'{"diagnostic_only":true,"retention":"PRIVATE_DEVELOPMENT_R2"}'::jsonb) ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING""",(str(sid)+':'+digest+':'+str(page_no),sha,encoded.decode()))
+                                cur.execute("""INSERT INTO data_source_records(source_code,record_kind,external_record_id,payload_hash,raw_payload,terms_snapshot) VALUES('COMPANY_EXCHANGE_FILING','RESULTS_R4_DATED_OCR_HEADER_DIAGNOSTIC_V1',%s,%s,%s::jsonb,'{"diagnostic_only":true,"retention":"PRIVATE_DEVELOPMENT_R2"}'::jsonb) ON CONFLICT(source_code,record_kind,external_record_id,payload_hash) DO NOTHING""",(str(sid)+':'+digest+':'+str(page_no),sha,batch.canonical(index).decode()))
                             db.commit();counts['pages_diagnosed']+=1
                 except Exception as error:
                     db.rollback();counts['source_error_'+type(error).__name__]+=1

@@ -144,6 +144,11 @@ def main():
                       ORDER BY retrieved_at DESC LIMIT 1""",(str(sid),))
                     primary=cur.fetchone()
                 db.rollback()
+                if primary:
+                    try:primary=(batch.retained_review(client,primary[0],primary[1]),primary[1])
+                    except Exception:
+                        blocked.append({"symbol":symbol,"reason":"PRIMARY_EVIDENCE_ARCHIVE_UNAVAILABLE","periods":periods})
+                        continue
                 if primary and batch.sha(batch.canonical(primary[0]))==primary[1]:
                     issuer=primary[0].get("bse_identity") or {}
                     if (issuer.get("header",{}).get("ISIN")==isin

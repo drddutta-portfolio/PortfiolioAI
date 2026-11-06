@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+from contextlib import nullcontext
 from datetime import date
 from decimal import Decimal
 import json
@@ -99,21 +100,15 @@ def classify(symbol: str, selections: list[dict], observations: list[dict]) -> d
             "not_applicable": "UNPROVEN"}
 
 
-def readback(db_url: str) -> dict:
-    if EXPECTED_REF not in db_url:
-        raise RuntimeError("NOT_DEVELOPMENT_DATABASE")
-    import psycopg
-    with psycopg.connect(db_url, options="-c default_transaction_read_only=on") as db:
-        with db.cursor() as cur:
-            cur.execute("""
+COHORT_SQL = """
             SELECT DISTINCT s.id::text, s.symbol FROM public.transactions t
             JOIN public.securities s ON s.id=t.security_id
             WHERE t.portfolio_id=%s AND t.superseded_at IS NULL
               AND s.asset_class='EQUITY'
             ORDER BY s.symbol
-            """, (PORTFOLIO_ID,))
-            equities = cur.fetchall()
-            cur.execute("""
+            """
+
+SELECTED_SQL = """
             SELECT o.id::text,o.security_id::text,o.period_start::text,o.period_end::text,
                    o.metric_code,o.numeric_value::text,o.consolidation_scope,
                    o.source_record_id::text,o.source_code,o.evidence_status,
@@ -128,9 +123,9 @@ def readback(db_url: str) -> dict:
               AND d.consolidation_scope=o.consolidation_scope
               AND o.period_end=ANY(%s::date[])
               AND o.metric_code=ANY(%s::text[])
-            """, (list(PERIODS), list(METRICS)))
-            selected = cur.fetchall()
-            cur.execute("""
+            """
+
+CANDIDATE_SQL = """
             SELECT o.id::text,o.security_id::text,o.period_start::text,o.period_end::text,
                    o.metric_code,o.numeric_value::text,o.consolidation_scope,
                    o.source_record_id::text,o.source_code,o.evidence_status,
@@ -140,7 +135,22 @@ def readback(db_url: str) -> dict:
               AND o.period_end=ANY(%s::date[])
               AND o.metric_code=ANY(%s::text[])
               AND o.source_code='COMPANY_EXCHANGE_FILING'
-            """, (list(PERIODS), list(METRICS)))
+            """
+
+
+def readback(db_url: str, connection=None) -> dict:
+    if EXPECTED_REF not in db_url:
+        raise RuntimeError("NOT_DEVELOPMENT_DATABASE")
+    import psycopg
+    manager=nullcontext(connection) if connection is not None else psycopg.connect(db_url, options="-c default_transaction_read_only=on")
+    with manager as db:
+        if connection is None:db.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY')
+        with db.cursor() as cur:
+            cur.execute(COHORT_SQL, (PORTFOLIO_ID,))
+            equities = cur.fetchall()
+            cur.execute(SELECTED_SQL, (list(PERIODS), list(METRICS)))
+            selected = cur.fetchall()
+            cur.execute(CANDIDATE_SQL, (list(PERIODS), list(METRICS)))
             candidates = cur.fetchall()
     keys = ("id", "security_id", "period_start", "period_end",
             "metric_code", "numeric_value", "consolidation_scope",

@@ -37,6 +37,7 @@ def main():
                 db.rollback()
                 if not row:raise ValueError('PRIVATE_SOURCE_INVENTORY_MISSING')
                 review,digest=row
+                review=batch.retained_review(client,review,digest)
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('REVIEW_HASH_MISMATCH')
                 identity=review.get('bse_identity')
                 if not isinstance(identity,dict):raise ValueError('CANONICAL_BSE_IDENTITY_UNAVAILABLE')

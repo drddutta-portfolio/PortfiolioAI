@@ -611,3 +611,9 @@ def main():
 
 if __name__=="__main__":
     main()
+
+
+# Operational review payloads may be compact DB indexes into immutable R2.
+def retained_review(client,payload,digest):
+    from r4_source_archive import resolve_payload
+    return resolve_payload(client,payload,digest)

@@ -1,0 +1,91 @@
+name: Development Database Storage Relief to Private R2
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-storage-relief.yml]
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: development-private-r2-storage-relief
+  cancel-in-progress: false
+jobs:
+  compact:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_STORAGE_RELIEF_ACK: VERIFY_R2_BEFORE_COMPACTING_DIAGNOSTICS
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Pause Development recovery traffic during lossless storage relief
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,urllib.request,time
+          repo=os.environ['GITHUB_REPOSITORY']
+          names={'Results R4 Development Ten Minute Recovery Monitor','Results R4 Official Issuer Historical Recovery',
+            'Results R4 Development NSE Original Issuer Lineage Recovery','Results R4 Development Eight-Quarter Source Qualification',
+            'Results R5 Original R2 Scope Proof','Results R5-G Live 262-Equity Grade Census','Results R4 Verified Issuer Seed Recovery'}
+          def call(path,method='GET'):
+            request=urllib.request.Request('https://api.github.com/repos/'+repo+path,method=method,
+              headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+            with urllib.request.urlopen(request,timeout=30) as response:
+              raw=response.read()
+              return json.loads(raw) if raw else None
+          cancelled=set()
+          for attempt in range(10):
+            runs=call('/actions/runs?branch=PortfolioAI-Development&per_page=100')['workflow_runs']
+            active=[r for r in runs if r['status']!='completed' and r['name'] in names and str(r['id'])!=os.environ['GITHUB_RUN_ID']]
+            if not active:break
+            for run in active:
+              if run['id'] in cancelled:continue
+              call('/actions/runs/'+str(run['id'])+'/cancel','POST');cancelled.add(run['id'])
+            time.sleep(5)
+          else:raise SystemExit('RECOVERY_DID_NOT_PAUSE_SAFELY')
+          print('DEVELOPMENT_RECOVERY_RUNS_PAUSED',len(cancelled))
+          PY
+      - name: Install pinned storage and audit dependencies
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'pymupdf==1.26.6'
+      - name: Check archive integrity and deduplicated source reads
+        run: |
+          python -m unittest discover -s scripts/results -p 'test_r4_source*.py' -v
+          python -m unittest discover -s scripts/results -p 'test_r4_monitor_cache.py' -v
+          python -m py_compile scripts/results/r4-storage-relief.py scripts/results/r4_source_archive.py
+      - name: Verify cached canonical coverage against a fresh repeatable-read owner result
+        run: |
+          python - <<'PY'
+          import importlib.util,os
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,'scripts/results')
+          from r4_monitor_cache import cached_readback
+          from r4_source_archive import r2_client_from_env
+          spec=importlib.util.spec_from_file_location('reader','scripts/results/r4-eight-quarter-readback.py')
+          reader=importlib.util.module_from_spec(spec);spec.loader.exec_module(reader)
+          url=os.environ['SUPABASE_DB_URL'];client=r2_client_from_env()
+          first=cached_readback(reader,url,client);second=cached_readback(reader,url,client)
+          if first!=second:raise SystemExit('CACHED_CANONICAL_READBACK_CHANGED')
+          print('PRIVATE_R2_CANONICAL_READBACK_PARITY_VERIFIED',first['total_slots'])
+          PY
+      - name: Verify existing private R2 archives and reclaim physical space without changing evidence
+        run: python scripts/results/r4-storage-relief.py --reclaim
+      - name: Read current canonical coverage without original re-downloads
+        run: |
+          python scripts/results/r4-eight-quarter-readback.py > /tmp/storage-relief-readback.json
+          python - <<'PY'
+          import json
+          report=json.load(open('/tmp/storage-relief-readback.json'))
+          print(json.dumps({k:report[k] for k in ('equities','total_slots','status_counts','status')},sort_keys=True))
+          PY
+# Full evidence and restoration journals remain private in R2; no artifacts are published.
+# Recovery stays paused until the exceeded usage category and post-cleanup footprint are confirmed.

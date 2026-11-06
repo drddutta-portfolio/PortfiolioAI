@@ -30,6 +30,7 @@ def main():
                         cur.execute("SELECT raw_payload,payload_hash FROM data_source_records WHERE record_kind='RESULTS_R4_BSE_DATED_PDF_REVIEW_V1' AND raw_payload->>'security_id'=%s ORDER BY retrieved_at DESC LIMIT 1",(str(sid),));inventory=cur.fetchone()
                     db.rollback()
                     if not review or not inventory:raise ValueError('PRIVATE_SCOPE_REVIEW_NOT_AVAILABLE')
+                    inventory=(batch.retained_review(client,inventory[0],inventory[1]),inventory[1])
                     if any(batch.sha(batch.canonical(row[0]))!=row[1] for row in (review,inventory)):raise ValueError('PRIVATE_SCOPE_REVIEW_HASH_MISMATCH')
                     identity=inventory[0].get('bse_identity')
                     if not identity or identity['header']['ISIN']!=isin:raise ValueError('BSE_IDENTITY_UNPROVEN')

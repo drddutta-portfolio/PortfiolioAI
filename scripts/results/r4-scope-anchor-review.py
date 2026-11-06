@@ -49,6 +49,7 @@ def main():
                     anchors.append({'source_record_id':aid,'payload_hash':digest,'metadata':metadata,'facts':facts})
                 if not review_row:raise ValueError('PRIVATE_SOURCE_INVENTORY_MISSING')
                 review,digest=review_row
+                review=batch.retained_review(client,review,digest)
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('SOURCE_INVENTORY_HASH_MISMATCH')
                 identity=review.get('bse_identity')
                 if not identity or identity['header']['ISIN']!=isin or identity['listing']['ISIN_NUMBER']!=isin:raise ValueError('BSE_IDENTITY_UNAVAILABLE')

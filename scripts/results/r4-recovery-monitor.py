@@ -1,6 +1,8 @@
 """Bounded Development recovery controller; inspect every ten minutes and rotate sources."""
 import importlib.util,json,os,time,urllib.request
 from pathlib import Path
+from r4_monitor_cache import cached_readback
+from r4_source_archive import r2_client_from_env
 from r4_recovery_queue import SOURCES,next_source,dispatched,dispatch_failed,observe_completed
 
 REPO="drddutta-portfolio/PortfiolioAI"
@@ -57,6 +59,10 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
     return point
 
 def main():
+    pause=Path(__file__).with_name('r4_storage_pause.json')
+    if pause.exists() and json.loads(pause.read_text()).get('paused') is True:
+        print('R4_RECOVERY_PAUSED_FOR_PRIVATE_R2_STORAGE_RELIEF',flush=True)
+        return
     if os.environ.get("GITHUB_REPOSITORY")!=REPO or os.environ.get("GITHUB_REF")!="refs/heads/"+BRANCH:
         raise RuntimeError("DEVELOPMENT_BRANCH_REQUIRED")
     if "lrgpjimipfkyoqbpsqzz" not in os.environ["SUPABASE_DB_URL"]:
@@ -70,10 +76,11 @@ def main():
     for entry in state.values():
         if not isinstance(entry,dict) or any(not isinstance(v,(int,float)) or v<0 for v in entry.values()):
             raise RuntimeError("INVALID_RECOVERY_STATE")
+    client=r2_client_from_env()
     checkpoints=[]
     for iteration in range(30):
         try:
-            report=module.readback(os.environ["SUPABASE_DB_URL"])
+            report=cached_readback(module,os.environ["SUPABASE_DB_URL"],client)
             point=check_once(report,state,time.time(),allow_trendlyne=os.environ.get("RESULTS_R4_TRENDLYNE_DISPATCH_READY")=="1")
         except Exception as error:
             point={"time":time.time(),"state":"READBACK_RETRY_REQUIRED","reason":type(error).__name__}

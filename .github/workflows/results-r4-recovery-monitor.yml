@@ -27,6 +27,10 @@ jobs:
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       GH_TOKEN: ${{ github.token }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       MONITOR_CYCLE: ${{ inputs.cycle || '0' }}
       RESULTS_R4_TRENDLYNE_DISPATCH_READY: "1"
       RECOVERY_STATE: ${{ inputs.recovery_state || '{}' }}
@@ -37,7 +41,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Install pinned read-only audit dependency
-        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10'
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
       - name: Validate controller and source-rotation regressions
         run: |
           python -m py_compile scripts/results/r4-recovery-monitor.py scripts/results/r4_recovery_queue.py
@@ -53,3 +57,4 @@ jobs:
           retention-days: 21
 # Retry transient partial passes without treating one failure as cohort completion.
 # Owner-requested recovery renewal: 4 November 2026; retain all source and quota gates.
+# Reuse private R2 readbacks only while exact canonical SQL projection fingerprints and classifier code remain unchanged.

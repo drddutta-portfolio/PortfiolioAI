@@ -44,6 +44,10 @@ def main():
                 reviews=cur.fetchall()
             db.rollback();sources={}
             for review,digest in reviews:
+                try:review=batch.retained_review(client,review,digest)
+                except Exception as error:
+                    counts['source_inventory_unverified_'+type(error).__name__]+=1
+                    continue
                 if batch.sha(batch.canonical(review))!=digest:raise ValueError('PRIVATE_INVENTORY_HASH_MISMATCH')
                 for source in review.get('all_sources',[]):sources[source['original_sha256']]=source
             with db.cursor() as cur:
