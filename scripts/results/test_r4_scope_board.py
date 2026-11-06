@@ -36,6 +36,20 @@ class BoardScopeTests(unittest.TestCase):
         self.assertEqual(e['board_start'],'14:00:00');self.assertEqual(e['board_end'],'16:00:00')
         self.assertTrue(e['historical_values_from_pdf_only']);self.assertTrue(e['comparison_basis_unproven'])
 
+    def test_wrapped_meeting_clocks_match_without_changing_any_component(self):
+        from r4_scope_board import match_board
+        from datetime import time
+        self.assertTrue(match_board('July 13, 2026 commenced\nat 2:40 p.m. and concluded at 4:00 p.m.', '2026-07-13',time(14,40),time(16,0)))
+        with self.assertRaisesRegex(ValueError,'START_AND_END'):
+            match_board('July 13, 2026 commenced\nat 2:41 p.m. and concluded at 4:00 p.m.', '2026-07-13',time(14,40),time(16,0))
+
+    def test_unread_second_financial_page_cannot_be_hidden_by_native_uniqueness(self):
+        doc,b=fixture();doc.new_page();raw=doc.tobytes();a=audit(raw)
+        a['pages'][1]='Revenue from operations 123 Diluted earnings per share 4'
+        a['text_sha256']=sha('\n'.join(a['pages']).encode())
+        with self.assertRaisesRegex(ValueError,'FULL_AUDIT_SINGLE_FINANCIAL_PAGE'):
+            extract_with_scope_board(raw,1,'2024-09-30','NATCOPHARM','INE987654321','NATCO PHARMA LIMITED',b,document_audit=a)
+
     def test_other_board_clock_does_not_bind_even_with_same_financial_numbers(self):
         doc,b=fixture();html=base64.b64decode(b['nse_original_base64']).replace(b'14:00:00',b'14:01:00')
         b=make_bridge(html,URL,'2025-09-30')

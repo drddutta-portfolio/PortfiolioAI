@@ -61,6 +61,8 @@ def clock(value,meridiem):
     except ValueError:raise ValueError('BOARD_SCOPE_PRINTED_CLOCK_INVALID') from None
 
 def match_board(cover,board,start,end):
+    # PDF line wrapping is whitespace, never a missing digit or time component.
+    cover=' '.join(cover.split())
     if not any(has_phrase(cover,p) for p in date_phrases(board)):
         raise ValueError('BOARD_SCOPE_SAME_BOARD_DATE_UNPROVEN')
     matches=[]
@@ -145,6 +147,11 @@ def extract_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=Fa
         if (audit.get('original_sha256')!=sha(raw) or len(audit.get('pages',[]))!=len(pdf)
             or audit.get('text_sha256')!=sha('\n'.join(audit['pages']).encode())):
             raise ValueError('BOARD_SCOPE_FULL_ORIGINAL_AUDIT_UNPROVEN')
+        financial_pages={i+1 for i,text in enumerate(audit['pages'])
+            if re.search(r'revenue\s+from\s+operations',text,re.I)
+            and re.search(r'\bdiluted\b|earnings?\s+per\s+share',text,re.I)}
+        if financial_pages!={page_no}:
+            raise ValueError('BOARD_SCOPE_FULL_AUDIT_SINGLE_FINANCIAL_PAGE_UNPROVEN')
         all_text=' '.join(native+audit['pages'])
         if re.search(r'\b(?:restated|recast|pro[ -]?forma|carve[ -]?out|demerger|demerged|common[ -]control)\b',all_text,re.I):
             raise ValueError('BOARD_SCOPE_BUSINESS_PERIMETER_REVIEW_REQUIRED')
