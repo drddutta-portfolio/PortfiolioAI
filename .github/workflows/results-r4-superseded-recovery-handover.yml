@@ -26,3 +26,5 @@ jobs:
 # Include the precisely identified legacy run released by the first handover; preserve corrected active runs.
 
 # Checkpointed handover to verified NSE Tata originals and corrected fresh-capture discovery: 7 November 2026.
+
+# Final V7 handover preserves captures and accepted decisions; every replacement uses the same validated source engine.

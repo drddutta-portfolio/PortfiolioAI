@@ -28,3 +28,5 @@ jobs:
 # Audit and persist every available native original before spending time on optional OCR fallback.
 
 # Replay the exact BSE/NSE-identical September 2024 Tata original through V7; CIN alias requires retained BSE issuer binding.
+
+# Final V7 handover preserves captures and accepted decisions; every replacement uses the same validated source engine.
