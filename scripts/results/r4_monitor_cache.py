@@ -44,7 +44,7 @@ def snapshot_readback(reader,db_url,client,connection):
             or value.get('report_sha256')!=sha(canonical(value.get('report')))):
             raise ValueError('CANONICAL_MONITOR_CACHE_UNPROVEN')
         return value['report']
-    report=reader.readback(db_url,connection=connection)
+    report=json.loads(canonical(reader.readback(db_url,connection=connection)))
     value={'contract':CONTRACT,'engine_revision':revision,'input_fingerprint':fingerprint,
            'report_sha256':sha(canonical(report)),'report':report}
     body=canonical(value)

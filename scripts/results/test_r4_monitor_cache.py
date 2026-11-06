@@ -17,7 +17,7 @@ class PrivateObjects:
 
 class MonitorCacheTests(unittest.TestCase):
     def setup_reader(self):
-        reader=Mock();reader.readback.return_value={'equities':262,'total_slots':2096,'status_counts':{'QUALIFIED':2038},'unresolved':[]}
+        reader=Mock();reader.readback.return_value={'equities':262,'total_slots':2096,'status_counts':{'QUALIFIED':2038},'unresolved':[],'period_ends':('2024-09-30',)}
         return reader,PrivateObjects(),object()
     def test_unchanged_exact_inputs_reuse_private_canonical_report(self):
         reader,client,connection=self.setup_reader()
@@ -26,6 +26,8 @@ class MonitorCacheTests(unittest.TestCase):
             second=cache.snapshot_readback(reader,'db',client,connection)
         self.assertEqual(first,second);reader.readback.assert_called_once_with('db',connection=connection)
         self.assertEqual(len(client.objects),1)
+        self.assertEqual(first['period_ends'],['2024-09-30'])
+        self.assertEqual(reader.readback.return_value['period_ends'],('2024-09-30',))
     def test_changed_input_or_classifier_code_recomputes_canonical_owner(self):
         reader,client,connection=self.setup_reader()
         with patch.object(cache,'engine_revision',side_effect=['v1','v1','v2']),patch.object(cache,'input_fingerprint',side_effect=['a','b','b']):
