@@ -1,1 +1,1 @@
-{"paused":true,"reason":"Owner requested Cloudflare offload and database usage relief; resume after verified cleanup and usage-category review."}
+{"paused":false,"reason":"Owner resumed R4 on 7 November 2026 after database size relief and verified writable access; limit automatic rotation to NSE, issuer originals and paced Trendlyne while monthly egress remains exceeded."}

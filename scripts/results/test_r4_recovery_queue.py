@@ -10,6 +10,20 @@ spec=importlib.util.spec_from_file_location("monitor",Path(__file__).with_name("
 monitor=importlib.util.module_from_spec(spec);spec.loader.exec_module(monitor)
 
 class RecoveryTest(unittest.TestCase):
+    def test_quota_mode_never_reads_or_dispatches_disabled_sources(self):
+        calls=[]
+        enabled=(SOURCES[-2],SOURCES[-1])
+        def request(path,payload=None):
+            calls.append((path,payload))
+            return {"workflow_runs":[]}
+        report={"equities":262,"total_slots":2096,"unresolved":[{"period_end":"2024-09-30"}],"status_counts":{"MISSING":1}}
+        result=monitor.check_once(report,{},100,request=request,enabled_sources=enabled)
+        self.assertIn(result['dispatched_source'],enabled)
+        self.assertTrue(all(any(source in path for source in enabled) for path,_ in calls))
+        self.assertEqual(len([p for p,b in calls if b is None]),2)
+        with self.assertRaises(ValueError):monitor.check_once(report,{},100,request=request,enabled_sources=('unknown.yml',))
+        with self.assertRaises(ValueError):monitor.check_once(report,{},100,request=request,enabled_sources=())
+
     def test_single_provider_batch_and_legacy_shards_preserve_all_tasks_once(self):
         tasks=[(task_id(str(i),"DOCUMENT",None,{}),i) for i in range(100)]
         for shards in (1,16):

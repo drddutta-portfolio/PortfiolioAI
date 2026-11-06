@@ -19,7 +19,10 @@ def api(path,payload=None):
         body=response.read()
         return json.loads(body) if body else None
 
-def check_once(report,state,now,request=api,allow_trendlyne=True):
+def check_once(report,state,now,request=api,allow_trendlyne=True,enabled_sources=None):
+    sources=tuple(SOURCES if enabled_sources is None else enabled_sources)
+    if not sources or len(set(sources))!=len(sources) or any(s not in SOURCES for s in sources):
+        raise ValueError("INVALID_ENABLED_RECOVERY_SOURCES")
     if report.get("equities")!=262 or report.get("total_slots")!=2096:
         raise RuntimeError("EXACT_COHORT_READBACK_REQUIRED")
     remaining=sum(x["period_end"] in HISTORICAL for x in report["unresolved"])
@@ -29,7 +32,7 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
         point["state"]="HISTORICAL_COMPLETE_R3_STILL_SEPARATE"
         return point
     runs={}
-    for source in SOURCES:
+    for source in sources:
         try:
             # Query each workflow independently: unrelated CI runs cannot hide an active collector.
             rows=request("/actions/workflows/"+source+"/runs?branch="+BRANCH+"&per_page=10")["workflow_runs"]
@@ -44,7 +47,7 @@ def check_once(report,state,now,request=api,allow_trendlyne=True):
         runs.pop("results-r4-trendlyne-history.yml",None)
         point["trendlyne_dispatch"]="PAUSED_PENDING_APPROVED_WORKFLOW_AUTH_DEPLOYMENT"
     # Failed dispatches are deferred individually; try the next available source in this same check.
-    for _ in SOURCES:
+    for _ in sources:
         source=next_source(now,state,runs)
         if source is None:break
         try:
@@ -76,12 +79,14 @@ def main():
     for entry in state.values():
         if not isinstance(entry,dict) or any(not isinstance(v,(int,float)) or v<0 for v in entry.values()):
             raise RuntimeError("INVALID_RECOVERY_STATE")
+    configured=os.environ.get("RESULTS_R4_ENABLED_SOURCES","").strip()
+    enabled_sources=tuple(configured.split(",")) if configured else SOURCES
     client=r2_client_from_env()
     checkpoints=[]
     for iteration in range(30):
         try:
             report=cached_readback(module,os.environ["SUPABASE_DB_URL"],client)
-            point=check_once(report,state,time.time(),allow_trendlyne=os.environ.get("RESULTS_R4_TRENDLYNE_DISPATCH_READY")=="1")
+            point=check_once(report,state,time.time(),allow_trendlyne=os.environ.get("RESULTS_R4_TRENDLYNE_DISPATCH_READY")=="1",enabled_sources=enabled_sources)
         except Exception as error:
             point={"time":time.time(),"state":"READBACK_RETRY_REQUIRED","reason":type(error).__name__}
         checkpoints.append(point)

@@ -33,6 +33,7 @@ jobs:
       CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
       MONITOR_CYCLE: ${{ inputs.cycle || '0' }}
       RESULTS_R4_TRENDLYNE_DISPATCH_READY: "1"
+      RESULTS_R4_ENABLED_SOURCES: results-r4-nse-lineage-recovery.yml,results-r4-official-issuer-recovery.yml,results-r4-trendlyne-history.yml
       RECOVERY_STATE: ${{ inputs.recovery_state || '{}' }}
     steps:
       - uses: actions/checkout@v4
@@ -58,3 +59,5 @@ jobs:
 # Retry transient partial passes without treating one failure as cohort completion.
 # Owner-requested recovery renewal: 4 November 2026; retain all source and quota gates.
 # Reuse private R2 readbacks only while exact canonical SQL projection fingerprints and classifier code remain unchanged.
+
+# Owner resumed quota-conscious recovery: private cached fingerprints, three approved source adapters, original financial guards unchanged.
