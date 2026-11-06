@@ -64,6 +64,10 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
         if not out[period]:
             try:out[period]=extract_original(raw,symbol,period,'NATIVE_STATEMENT_LAYOUT_V5',document_audit=audit,basis_policy=policy)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
+    for period in periods:
+        if not out[period]:
+            try:out[period]=extract_original(raw,symbol,period,'NATIVE_FOOTNOTED_HEADERS_V6',document_audit=audit,basis_policy=policy)
+            except ValueError as error:rejects[str(error).split(':')[0]]+=1
     if native_only:return {'periods':out,'rejections':dict(rejects),'document_audit':audit}
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:

@@ -64,7 +64,7 @@ EXTENDED_UNKNOWN_DATE=re.compile(r'\b'+DAY+r' [A-Za-z]{3,12} 20[0-9A-Za-z]{2}\b|
 COMPACT_DATE=re.compile(EXTENDED_DATE.pattern+r'|\b'+EXTENDED_MONTH+r'\s*'+DAY+r',?\s*20\d{2}\b|\b'+DAY+r'\s*'+EXTENDED_MONTH+r'\s*20\d{2}\b',re.I)
 COMPACT_UNKNOWN_DATE=re.compile(EXTENDED_UNKNOWN_DATE.pattern+r'|\b'+EXTENDED_MONTH+r'\s*[0-9A-Za-z]{1,2}\s*20[0-9A-Za-z]{2}\b|\b[0-9A-Za-z]{1,2}\s*'+EXTENDED_MONTH+r'\s*20[0-9A-Za-z]{2}\b',re.I)
 
-def dated_headers(rows,named_abbreviations=False,compact_named_dates=False):
+def dated_headers(rows,named_abbreviations=False,compact_named_dates=False,footnoted_quarter_headers=False):
     """Join explicitly printed date parts only within the same physical column.
 
     Never infer years or correct OCR glyphs. Ambiguous vertical matches reject.
@@ -146,8 +146,10 @@ def dated_headers(rows,named_abbreviations=False,compact_named_dates=False):
         for j,(yy,ws) in enumerate(rows):
             if not 2.5<yy-y<=28:continue
             for w in ws:
-                if re.fullmatch(r"20\d{2}",str(w[4]).strip("|¦[]()")) and x0-8<=(w[0]+w[2])/2<=x2+8:
-                    years.append((j,yy,str(w[4]).strip("|¦[]()"),w))
+                year_token=str(w[4]).strip("|¦[]()")
+                if footnoted_quarter_headers and re.fullmatch(r"20\d{2}\*",year_token):year_token=year_token[:-1]
+                if re.fullmatch(r"20\d{2}",year_token) and x0-8<=(w[0]+w[2])/2<=x2+8:
+                    years.append((j,yy,year_token,w))
         if len(years)!=1:continue
         j,yy,year,w=years[0];parsed=iso_date(raw+" "+year,named_abbreviations,compact_named_dates)
         if parsed:complete.append((j,yy,(parsed,min(x0,w[0]),max(x2,w[2]))))
@@ -158,7 +160,11 @@ def dated_headers(rows,named_abbreviations=False,compact_named_dates=False):
         merged=[];ambiguous=False
         for d in candidates:
             if merged and abs((d[1]+d[2]-merged[-1][1]-merged[-1][2])/2)<12:
-                if d[0]!=merged[-1][0]:ambiguous=True;break
+                if d[0]!=merged[-1][0]:
+                    # Unreadable cumulative-period dates cannot supply a quarter.
+                    # The first three dated positions must remain unambiguous.
+                    if not footnoted_quarter_headers or len(merged)<=3:ambiguous=True;break
+                    merged[-1]=(None,min(d[1],merged[-1][1]),max(d[2],merged[-1][2]))
                 continue
             merged.append(d)
         if ambiguous or len(merged)<3:continue
@@ -269,7 +275,8 @@ def align_statement_rows(rows,centers,first_left,quarter_columns,advanced=False)
         output.append((y,words))
     return output,evidence
 
-def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None,statement_layout=False,advanced_statement_layout=False):
+def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=False,scope_hint=None,required_metrics=None,statement_layout=False,advanced_statement_layout=False,footnoted_quarter_headers=False):
+    if footnoted_quarter_headers and not advanced_statement_layout:raise ValueError("FOOTNOTE_HEADERS_REQUIRE_V6_LAYOUT")
     if advanced_statement_layout and not statement_layout:raise ValueError('ADVANCED_LAYOUT_REQUIRES_EXPLICIT_STATEMENT_LAYOUT')
     if statement_layout and not allow_comparative:raise ValueError('STATEMENT_LAYOUT_REQUIRES_DATED_COLUMNS')
     normalize=(lambda text:statement_layout_label(text,advanced_statement_layout)) if statement_layout else clean_label
@@ -286,7 +293,7 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                          r"^(?:total\s+)?(?:revenue|income)\s+from\s+operations\b")
         if required_metrics!=('EPS_DILUTED',) and not any(re.match(revenue_pattern,normalize(row_text(ws)),re.I) for _,ws in rows):
             raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")
-    headers=dated_headers(rows,named_abbreviations=statement_layout,compact_named_dates=advanced_statement_layout) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
+    headers=dated_headers(rows,named_abbreviations=statement_layout,compact_named_dates=advanced_statement_layout,footnoted_quarter_headers=footnoted_quarter_headers) if allow_comparative else ((i,y,date_cells(ws)) for i,(y,ws) in enumerate(rows))
     for header_index,y,dates in headers:
         if len(dates)<3 or dates[0][0] is None:continue
         if not allow_comparative:
@@ -626,5 +633,8 @@ def extract_page(page,page_no,period,bank=False,insurer=False,allow_comparative=
                 result['parser_revision']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V5'
                 result['statement_row_layout_contract']='EXPLICIT_NAMED_DATES_PRINTED_TOTAL_PAT_AND_FINANCIAL_EPS_ROWS_V2'
                 for fact in result['facts'].values():fact['extraction_method']='PDF_WORD_COORDINATES_EXPLICIT_STATEMENT_LAYOUT_V5'
+            if footnoted_quarter_headers:
+                result['parser_revision']='PDF_WORD_COORDINATES_FOOTNOTED_QUARTER_HEADERS_V6'
+                for fact in result['facts'].values():fact['extraction_method']='PDF_WORD_COORDINATES_FOOTNOTED_QUARTER_HEADERS_V6'
             return result
     raise ValueError("NO_PROVEN_GEOMETRIC_QUARTER_TABLE")

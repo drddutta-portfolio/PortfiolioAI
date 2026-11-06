@@ -86,7 +86,7 @@ class CollectorTransportIntegration(TestCase):
         period='2024-09-30'
         parsed={'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}
         proof=Mock(return_value={period:{'parsed':parsed}})
-        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),ValueError('NATIVE_V5_UNPROVEN'),[{'independently_replayed':True}]])
+        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),ValueError('NATIVE_V5_UNPROVEN'),ValueError('NATIVE_V6_UNPROVEN'),[{'independently_replayed':True}]])
         with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
              patch('r4_ocr_dated_geometry.extract_dated_periods',proof), \
              patch.object(collector,'extract_original',replay):

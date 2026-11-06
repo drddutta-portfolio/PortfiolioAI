@@ -70,7 +70,7 @@ def main():
             metadata={"contract":"RESULTS_R4_TRENDLYNE_HISTORY_REVIEW_V2",
                 "request":body,"provider_run_id":result["runId"],"r2_key":key,"sha256":digest,
                 "canonical_promotion_performed":False,"original_source_qualification_required":True,
-                "fresh_request":os.getenv("RESULTS_R4_FORCE_FRESH")=="1" or os.getenv("RESULTS_R4_FRESH_RETRY")=="1"}
+                "fresh_request":True}  # Network response; cache hits return before this insert.
             encoded=batch.canonical(metadata)
             with db.cursor() as cur:
                 cur.execute("""INSERT INTO data_source_records

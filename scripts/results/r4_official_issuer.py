@@ -329,8 +329,9 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
                     if profile.get('cin') and not exact_cin(profile['cin'],texts[n-1]):continue
                     try:
-                        options={'statement_layout':True} if method in ('NATIVE_STATEMENT_LAYOUT','NATIVE_STATEMENT_LAYOUT_V5') else {}
-                        if method=='NATIVE_STATEMENT_LAYOUT_V5':options['advanced_statement_layout']=True
+                        options={'statement_layout':True} if method in ('NATIVE_STATEMENT_LAYOUT','NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6') else {}
+                        if method in ('NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6'):options['advanced_statement_layout']=True
+                        if method=='NATIVE_FOOTNOTED_HEADERS_V6':options['footnoted_quarter_headers']=True
                         parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True,**options)
                     except ValueError:
                         if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise

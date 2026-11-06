@@ -458,7 +458,6 @@ def fresh_trendlyne_bse_sources(db,client,sid,period):
     with db.cursor() as cur:
         cur.execute("""SELECT raw_payload->>'r2_key',raw_payload->>'sha256'
           FROM data_source_records WHERE record_kind='RESULTS_R4_HISTORY_CAPTURE_V2'
-            AND raw_payload->>'fresh_request'='true'
             AND raw_payload->'request'->>'tool'='get_document_search_results'
             AND raw_payload->'request'->>'securityId'=%s
             AND (position(%s in (raw_payload->'request'->'args'->>'query'))>0

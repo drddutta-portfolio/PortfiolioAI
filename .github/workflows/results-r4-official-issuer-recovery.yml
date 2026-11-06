@@ -48,6 +48,7 @@ jobs:
           python -m unittest discover -s scripts/results -p test_r4_official_collector.py -v
           python -m unittest discover -s scripts/results -p test_r4_header_region.py -v
           python -m unittest discover -s scripts/results -p test_r4_statement_layout.py -v
+          python -m unittest discover -s scripts/results -p test_r4_footnoted_headers.py -v
           python -m unittest discover -s scripts/results -p test_r4_reporting_basis_export.py -v
       - name: Collect every assigned issuer and isolate failed originals
         run: python scripts/results/r4-official-issuer-recovery.py --shard ${{ matrix.shard }}
@@ -109,3 +110,5 @@ jobs:
 # Replay the full unresolved cohort with versioned V5 explicit date/cell layouts; older receipts retain their original methods.
 
 # Owner resumed full R4 recovery on 7 November 2026; private R2 originals and compact DB writes only.
+
+# Replay every unresolved issuer with independently versioned V6 footnoted quarter headers.
