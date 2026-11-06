@@ -26,6 +26,17 @@ class CollectorTransportIntegration(TestCase):
                     lambda value:events.append('native proposal committed'))
         self.assertEqual(events,['native','native proof retained','native proposal committed','ocr'])
 
+    def test_native_pass_leaves_missing_quarters_for_ocr_without_blocking_next_original(self):
+        raw=b'original';periods=['2024-09-30','2024-12-31'];saved=[]
+        proof={'periods':{periods[0]:[{'method':'NATIVE_FOOTNOTED_HEADERS_V6'}],periods[1]:[]},
+               'rejections':{},'document_audit':{'original_sha256':collector.sha(raw)}}
+        with patch.object(collector,'run_with_timeout',side_effect=AssertionError('OCR must remain deferred')):
+            output=collector.replay_with_native_checkpoint(raw,'JASH',periods,lambda:proof,
+                lambda value:self.fail('Retained proof must be reused'),lambda value:saved.append(value),native_only=True)
+        self.assertEqual(saved,[proof])
+        self.assertEqual(output['periods'],proof['periods'])
+        self.assertEqual(output['periods'][periods[1]],[])
+
     def test_native_cache_reuse_does_not_repeat_completed_financial_work(self):
         raw=b'original';period='2024-09-30'
         proof={'periods':{period:[{'method':'NATIVE_STATEMENT_LAYOUT'}]},'rejections':{},

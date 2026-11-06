@@ -11,6 +11,7 @@ jobs:
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     with:
       target_symbols: TMCV
+      native_only: true
     secrets: inherit
 # Reuse the full guarded collector and independent verifier for newly verified original URLs.
 # The normal recovery continues to cover the entire unresolved cohort without this target filter.
@@ -23,3 +24,5 @@ jobs:
 # Fast independent replay of the retained legal-entity-specific Tata CV quarter tables; full-cohort recovery remains active.
 
 # Checkpointed handover to verified NSE Tata originals and corrected fresh-capture discovery: 7 November 2026.
+
+# Audit and persist every available native original before spending time on optional OCR fallback.

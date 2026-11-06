@@ -107,7 +107,7 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
     return {'periods':out,'rejections':dict(rejects)}
 
-def replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native,timeout=480):
+def replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native,timeout=480,native_only=False):
     """Commit complete native proposals before a bounded OCR fallback can fail."""
     started=time.monotonic()
     def remaining():
@@ -124,7 +124,7 @@ def replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,che
     checkpoint_native(native)
     pending=[period for period in periods if not native['periods'][period]]
     output={'periods':dict(native['periods']),'rejections':dict(native['rejections'])}
-    if pending:
+    if pending and not native_only:
         later=run_with_timeout(extract_all,(raw,symbol,pending,False,native['document_audit']),remaining())
         output['periods'].update(later['periods'])
         rejects=Counter(output['rejections']);rejects.update(later['rejections']);output['rejections']=dict(rejects)
@@ -217,6 +217,7 @@ def main():
     if batch.REF not in os.environ['SUPABASE_DB_URL'] or os.environ.get('CLOUDFLARE_R2_BUCKET')!=batch.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
     client=batch.r2_client();counts=Counter();audit_rows=[]
     engine=replay_engine()
+    native_only=os.getenv('RESULTS_R4_NATIVE_ONLY','0')=='1'
     with psycopg.connect(os.environ['SUPABASE_DB_URL']) as db,requests.Session() as session:
         session.headers['User-Agent']='Mozilla/5.0'
         cohort=[row for row in target_cohort(batch.candidates(db),os.getenv('RESULTS_R4_TARGET_SYMBOLS','')) if row[2].int%4==args.shard];db.rollback()
@@ -277,11 +278,11 @@ def main():
                         raw,final_url=download_original(session,symbol,url)
                     digest=sha(raw);batch.immutable_put(client,batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf',raw)
                     counts['originals_retained']+=1
-                    cachekey=batch.PREFIX+'official-issuer-replays/symbol='+symbol+'/engine='+engine+'/original='+digest+'/periods='+sha(canonical(periods))+'/proof.json'
+                    cachekey=batch.PREFIX+'official-issuer-replays/symbol='+symbol+'/engine='+engine+'/original='+digest+'/periods='+sha(canonical(periods))+('/native-only-proof.json' if native_only else '/proof.json')
                     try:proof=json.loads(client.get_object(Bucket=batch.BUCKET,Key=cachekey)['Body'].read())
                     except Exception as error:
                         if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
-                        native_key=cachekey.removesuffix('proof.json')+'native-proof.json'
+                        native_key=cachekey.rsplit('/',1)[0]+'/native-proof.json'
                         def load_native():
                             try:return json.loads(client.get_object(Bucket=batch.BUCKET,Key=native_key)['Body'].read())
                             except Exception as problem:
@@ -296,7 +297,7 @@ def main():
                             checkpoint(db,client,outcome,counts,args.shard)
                             print('R4_NATIVE_ORIGINAL_CHECKPOINT',json.dumps({'native_slots':sum(bool(v) for v in value['periods'].values()),
                                 'observations_inserted':counts.get('observations_inserted',0)}),flush=True)
-                        proof=replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native)
+                        proof=replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native,native_only=native_only)
                         batch.immutable_put(client,cachekey,canonical(proof))
                     rejects.update(proof['rejections'])
                     for period,parsed_options in proof['periods'].items():

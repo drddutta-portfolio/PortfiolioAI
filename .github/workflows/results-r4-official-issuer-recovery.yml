@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
+      native_only:
+        type: boolean
+        required: false
+        default: false
       target_symbols:
         type: string
         required: false
@@ -25,6 +29,7 @@ jobs:
       matrix: {shard: [0, 1, 2, 3]}
     env:
       RESULTS_R4_RESTATED_DISPLAY_READY: '1'
+      RESULTS_R4_NATIVE_ONLY: ${{ inputs.native_only && '1' || '0' }}
       RESULTS_R4_TARGET_SYMBOLS: ${{ inputs.target_symbols || '' }}
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
