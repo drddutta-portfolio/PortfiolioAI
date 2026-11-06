@@ -13,3 +13,11 @@ The monitor previously downloaded the entire canonical readback every ten minute
 No UI component, page, style, schema or RLS change is applied by this maintenance job. No transactions, holdings, accepted facts, source identities or originals are deleted. Production is untouched. R4 checkpoints and already accepted recoveries are retained; R4 is not claimed complete.
 
 Review-only schema proposal: `PortfolioAI_R4_Private_R2_Archive_Migration_Proposal.sql`. It has not been applied and is not a generated migration yet; local CLI setup could not complete in this sandbox. The repository requires a generated, versioned migration and explicit approval before schema application.
+
+## Verified live outcome — 6 November 2026
+
+The supplied organization Usage page confirms egress 5.715/5 GB (114%) and Database Size 0.518/0.5 GB (104%). Other displayed categories are within limits. Already-incurred billing-cycle egress cannot be reversed by deleting data.
+
+Development storage relief run 42152040978 completed successfully. It verified 1,725 existing private R2 originals, identified 1,452 eligible diagnostic indexes, and measured 35,546,663 bytes of potential JSON reduction. This was DRY_RUN: existing evidence copies were not changed. VACUUM FULL completed and reduced the measured database from 322,063,507 to 320,703,635 bytes, about 1.36 MB. All protected existing transaction, observation, decision and source-identity checksums matched. Canonical cached readback parity covered all 2,096 slots; 2,041 remained qualified. R4 remains partial. Historical recovery is explicitly paused for quota relief.
+
+The initial cancellation wait ended before jobs settled; the retry completed once all database-heavy recovery jobs had stopped. A cache array/tuple serialization mismatch was corrected without changing classification, and a regression now checks native owner output against a JSON cache round trip. The source archive/traffic changes passed 396 Python regressions. No UI or schema changes were applied. Existing-copy compaction still requires approval of the separate review-only archival proposal under AGENTS.md's specific migration-approval rule. Its 35.5 MB figure measures JSON bytes; physical PostgreSQL savings must be measured after an approved apply and reclamation, not assumed equal.

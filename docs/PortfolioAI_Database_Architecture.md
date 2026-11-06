@@ -1077,3 +1077,9 @@ refreshes; 28 partial-sale holdings lack deterministic remaining cost basis pend
 FIFO/lot accounting; trusted sector classifications are not populated; and the
 historical OHLCV dataset required by future momentum/technical engines is not yet
 populated.
+
+## Owner-requested diagnostic offload and transport caching — 6 November 2026
+
+Full R4 BSE review and OCR diagnostic originals remain authoritative, immutable private Development R2 objects. New data_source_records entries can hold compact query indexes plus exact original SHA256/R2 references. Read-through restores and verifies the original before its evidence is used. Normalized financial observations, decisions, transaction accounting, RLS, and source-record identities keep their existing canonical authorities. The existing immutable-source trigger remains unchanged; a review-only proposal for storage rewriting of two unreferenced diagnostic-only kinds is not an applied migration. Existing copies cannot be compacted until a generated/versioned archival migration receives specific owner approval.
+
+The monitoring cache is a transport of the existing canonical readback, not another financial classifier or authority. It combines SHA256 fingerprints of the exact canonical SQL input projections with the classifier code hash. Cache misses and fingerprints use the same read-only repeatable-read snapshot. Source verification downloads each source payload once across its metrics. No public R2 access, frontend data bypass, schema change or RLS weakening is introduced by these changes. Original archives and restoration references are verified before any future existing-copy compaction; no accepted financial facts or source identities are eligible for that operation.
