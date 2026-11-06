@@ -536,6 +536,58 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "c1e2f820-fde3-412f-b14b-8d8a3fa670a6",
+        "NET_PROFIT_QUARTER": "75489d62-ccad-4174-8a6d-1a697d4e17e1",
+        "OPERATING_REVENUE_QUARTER": "4fc5e4f1-d879-4552-a33a-fe05063d3bae"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "259861a8-729a-42e3-b8a9-9a000113a870",
+      "sourceRecordId": "a142d27c-db79-45f6-ad38-0871d5ef3238",
+      "symbol": "IGL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "7ac38b89-4702-4448-9cb8-adfe5537fc69",
+        "NET_PROFIT_QUARTER": "43199001-b3a3-4860-9ddc-7a81e0320c49",
+        "OPERATING_REVENUE_QUARTER": "4ededb87-f0af-4fc8-a4a7-c09d293cbedb"
+      },
+      "periodEnd": "2024-09-30",
+      "scope": "STANDALONE",
+      "securityId": "259861a8-729a-42e3-b8a9-9a000113a870",
+      "sourceRecordId": "f819549f-6c83-4e3f-b7f7-b5adaeacc8cc",
+      "symbol": "IGL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "edb28e26-2cc1-4395-b2df-61e23c229106",
+        "NET_PROFIT_QUARTER": "05b5c1ec-d16c-40d0-942d-248955603732",
+        "OPERATING_REVENUE_QUARTER": "debd8060-c965-4c5c-bc37-77addcf6e2b5"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "CONSOLIDATED",
+      "securityId": "259861a8-729a-42e3-b8a9-9a000113a870",
+      "sourceRecordId": "f941b1a8-1adb-42ae-a891-9d36ee0092fc",
+      "symbol": "IGL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "4498b7ff-da79-458c-afc7-3cd50a670ade",
+        "NET_PROFIT_QUARTER": "4de8654a-a3f8-4546-9a7d-ede41c1d70d0",
+        "OPERATING_REVENUE_QUARTER": "8f2c6c4a-f4af-4eac-ad2b-6bc25df9d761"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "259861a8-729a-42e3-b8a9-9a000113a870",
+      "sourceRecordId": "1f5339c0-c99a-4e6c-a0a1-8db00b00a947",
+      "symbol": "IGL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "c32bcbf7-f010-4e2d-80bc-092bbdb9521a",
         "NET_PROFIT_QUARTER": "34edf48f-1a97-404a-bfc9-0d4b10ad829a",
         "OPERATING_REVENUE_QUARTER": "d9d7e1c6-0440-42c8-b3b7-331e72138a55"
@@ -1312,6 +1364,19 @@
       "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
       "sourceRecordId": "fba1fe13-eaa1-444f-acf0-0ad2cd68ddcd",
       "symbol": "FEDERALBNK"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "599fb030-dfce-4b3c-b4a1-5914a4918bb2",
+        "NET_PREMIUM_EARNED_QUARTER": "c820a6f1-7e70-4856-8839-ec827f30ae0f",
+        "NET_PROFIT_QUARTER": "fa02a623-2689-4efa-8df4-958796e94502"
+      },
+      "periodEnd": "2024-12-31",
+      "scope": "STANDALONE",
+      "securityId": "7176239e-fd2d-4d2d-83e6-7cc1a6b3f8ff",
+      "sourceRecordId": "39db8ed8-6696-4e96-8a07-96a7c1d3c773",
+      "symbol": "STARHEALTH"
     },
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
