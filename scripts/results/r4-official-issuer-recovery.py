@@ -68,6 +68,10 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
         if not out[period]:
             try:out[period]=extract_original(raw,symbol,period,'NATIVE_FOOTNOTED_HEADERS_V6',document_audit=audit,basis_policy=policy)
             except ValueError as error:rejects[str(error).split(':')[0]]+=1
+    for period in periods:
+        if not out[period]:
+            try:out[period]=extract_original(raw,symbol,period,'NATIVE_INITIAL_ISSUER_LAYOUT_V7',document_audit=audit,basis_policy=policy)
+            except ValueError as error:rejects[str(error).split(':')[0]]+=1
     if native_only:return {'periods':out,'rejections':dict(rejects),'document_audit':audit}
     pending=[p for p in periods if not out[p]]
     with fitz.open(stream=raw,filetype='pdf') as pdf:
@@ -165,6 +169,8 @@ def target_cohort(cohort,configured):
     return [row for row in cohort if row[0] in targets]
 
 def persist(db,client,row,period,url,raw,parsed,identity_bridge=None,bse_identity_reference=None):
+    if parsed.get('historical_cin_authority') and bse_identity_reference is None:
+        raise ValueError('HISTORICAL_CIN_REQUIRES_EXACT_BSE_ISSUER_BINDING')
     symbol,isin,sid,_name,_periods=row;digest=sha(raw)
     original_key=batch.PREFIX+'evidence/original_version='+digest+'/issuer-original.pdf'
     batch.immutable_put(client,original_key,raw)

@@ -83,11 +83,14 @@ ISSUERS={
             'originals':['https://www.ventivehospitality.com/wp-content/uploads/2024/07/Board-Meeting-outcome-13.11.2025.pdf']},
  # Post-demerger names are intentionally exact: the predecessor group's
  # financials cannot automatically become the successor entity's history.
- 'TMCV':{'legal':'TATA MOTORS LIMITED','cin':'L29102MH2024PLC427506','hosts':['cv.tatamotors.com','nsearchives.nseindia.com'],
+ 'TMCV':{'legal':'TATA MOTORS LIMITED','cin':'L29102MH2024PLC427506','hosts':['cv.tatamotors.com','nsearchives.nseindia.com','www.bseindia.com'],
          'pages':['https://cv.tatamotors.com/investors'],
-         'verified_originals':['https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
+         'verified_originals':['https://www.bseindia.com/xml-data/corpfiling/AttachHis/fae994f5-307f-42b1-af81-ca9d9484b361.pdf',
+                               'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
                                'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_12082026154213_Final.pdf'],
-         'originals':['https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
+         'originals':['https://www.bseindia.com/xml-data/corpfiling/AttachHis/fae994f5-307f-42b1-af81-ca9d9484b361.pdf',
+                      'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13112025171536_NSEBSELETTERFINAL.pdf',
+                      'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
                       'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_12082026154213_Final.pdf',
                       'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_29012026162752_NSEBSELETTERFINAL.pdf',
                       'https://cv.tatamotors.com/assets/cv/files/2026-01/TML%20conso%20final%20results_Dec%202025.pdf']},
@@ -282,6 +285,7 @@ def extract_ocr_statutory_continuation(pdf,symbol,period,start,pair,segmentation
 def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None,segmentation_mode=None,document_audit=None,basis_policy=None):
     """Replays explicit dated cells, with document-wide business-basis checks."""
     profile=ISSUERS[symbol]
+    historical_cin=historical_cin_original(symbol,method,sha(raw))
     if basis_policy not in (None,CURRENT_DISPLAY_POLICY):raise ValueError('OFFICIAL_REPORTING_BASIS_POLICY_UNAPPROVED')
     if period not in PERIODS or not raw.startswith(b'%PDF'):raise ValueError('OFFICIAL_QUARTER_OR_PDF_UNPROVEN')
     bank=False;insurer=symbol=='STARHEALTH';candidates=[]
@@ -332,11 +336,13 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     parsed=extract_statutory_continuation(pdf,symbol,period,n,section_pages)
                 else:
                     if not exact_legal_identity(profile['legal'],texts[n-1]):continue
-                    if profile.get('cin') and not exact_cin(profile['cin'],texts[n-1]):continue
+                    if profile.get('cin') and not (exact_cin(profile['cin'],texts[n-1])
+                        or historical_cin and exact_cin('U29102MH2024PLC427506',texts[n-1])):continue
                     try:
-                        options={'statement_layout':True} if method in ('NATIVE_STATEMENT_LAYOUT','NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6') else {}
-                        if method in ('NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6'):options['advanced_statement_layout']=True
-                        if method=='NATIVE_FOOTNOTED_HEADERS_V6':options['footnoted_quarter_headers']=True
+                        options={'statement_layout':True} if method in ('NATIVE_STATEMENT_LAYOUT','NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6','NATIVE_INITIAL_ISSUER_LAYOUT_V7') else {}
+                        if method in ('NATIVE_STATEMENT_LAYOUT_V5','NATIVE_FOOTNOTED_HEADERS_V6','NATIVE_INITIAL_ISSUER_LAYOUT_V7'):options['advanced_statement_layout']=True
+                        if method in ('NATIVE_FOOTNOTED_HEADERS_V6','NATIVE_INITIAL_ISSUER_LAYOUT_V7'):options['footnoted_quarter_headers']=True
+                        if method=='NATIVE_INITIAL_ISSUER_LAYOUT_V7':options['initial_issuer_layout']=True
                         parsed=extract_page(pdf[n-1],n,period,bank,insurer,allow_comparative=True,**options)
                     except ValueError:
                         if basis_policy!=CURRENT_DISPLAY_POLICY or symbol!='TATACAP':raise
@@ -356,6 +362,10 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
             parsed=sorted(items,key=lambda x:x['page'])[0]
             result={**parsed,'document_audit_text_sha256':audit['text_sha256'],
                 'method':('OCR_CONTINUATION' if parsed.get('ocr_render_dpi') else 'NATIVE_CONTINUATION') if parsed.get('continuation_pages') else method or 'NATIVE','source_reporting_basis':'AS_FILED_OWN_QUARTER' if parsed['first_column_period']==period else 'LATER_FILING_REPORTED_COMPARATIVE'}
+            if historical_cin:
+                result['historical_cin_authority']={'contract':'EXACT_ORIGINAL_AND_BSE_ISSUER_BOUND_CIN_LISTING_STATUS_V1',
+                    'canonical_cin':profile['cin'],'original_cin':'U29102MH2024PLC427506',
+                    'original_sha256':sha(raw),'bse_inventory_binding_required':True}
             if basis_policy is not None:
                 result.update(basis_policy=basis_policy,comparison_basis_unproven=restated or reorganized)
                 if section_pages is not None:
@@ -364,6 +374,12 @@ def extract_original(raw,symbol,period,method=None,page_no=None,render_pair=None
                     result['source_reporting_basis']='ISSUER_RESTATED_COMPARATIVE'
             out.append(result)
         return out
+
+def historical_cin_original(symbol,method,original_digest):
+    # Exact BSE/NSE-identical original. The alias additionally requires replay
+    # of the retained BSE code/ISIN inventory during independent qualification.
+    return (symbol=='TMCV' and method=='NATIVE_INITIAL_ISSUER_LAYOUT_V7'
+        and original_digest=='d9c5ae2fd7afe79708a026dfc0eeb8fe31ea8654c87b40023f7a614b524ab0c4')
 
 def exact_cin(cin,text):
     """Names reused across Tata legal entities cannot substitute for their CIN.
@@ -468,6 +484,8 @@ def qualify(raw,source,observations,identity_raw=None,bse_identity_raw=None,docu
                 or payload['period_end']>=bridge['ex_date']):
                 raise ValueError('OFFICIAL_CHANGED_SOURCE_ISIN_REQUIRES_EXPLICIT_BRIDGE')
     period=payload['period_end'];recorded=payload['parsed']
+    if recorded.get('historical_cin_authority') and payload.get('bse_identity_reference') is None:
+        raise ValueError('HISTORICAL_CIN_REQUIRES_EXACT_BSE_ISSUER_BINDING')
     options=extract_original(raw,symbol,period,recorded['method'],recorded['page'],recorded.get('ocr_render_dpi'),recorded.get('ocr_segmentation_mode'),document_audit=document_audit,basis_policy=recorded.get('basis_policy'))
     matching=[x for x in options if x['scope']==recorded['scope']]
     if len(matching)!=1 or matching[0]!=recorded:raise ValueError('OFFICIAL_ORIGINAL_REPLAY_CHANGED')

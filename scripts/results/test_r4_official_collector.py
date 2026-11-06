@@ -37,6 +37,11 @@ class CollectorTransportIntegration(TestCase):
         self.assertEqual(output['periods'],proof['periods'])
         self.assertEqual(output['periods'][periods[1]],[])
 
+    def test_historical_cin_cannot_be_written_without_retained_bse_identity(self):
+        with self.assertRaisesRegex(ValueError,'HISTORICAL_CIN_REQUIRES_EXACT_BSE_ISSUER_BINDING'):
+            collector.persist(None,None,None,'2024-09-30','https://issuer.example',b'original',
+                {'historical_cin_authority':{'contract':'EXACT_ORIGINAL_AND_BSE_ISSUER_BOUND_CIN_LISTING_STATUS_V1'}})
+
     def test_native_cache_reuse_does_not_repeat_completed_financial_work(self):
         raw=b'original';period='2024-09-30'
         proof={'periods':{period:[{'method':'NATIVE_STATEMENT_LAYOUT'}]},'rejections':{},
@@ -97,7 +102,7 @@ class CollectorTransportIntegration(TestCase):
         period='2024-09-30'
         parsed={'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}
         proof=Mock(return_value={period:{'parsed':parsed}})
-        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),ValueError('NATIVE_V5_UNPROVEN'),ValueError('NATIVE_V6_UNPROVEN'),[{'independently_replayed':True}]])
+        replay=Mock(side_effect=[ValueError('NATIVE_UNPROVEN'),ValueError('NATIVE_LAYOUT_UNPROVEN'),ValueError('NATIVE_V5_UNPROVEN'),ValueError('NATIVE_V6_UNPROVEN'),ValueError('NATIVE_V7_UNPROVEN'),[{'independently_replayed':True}]])
         with patch('r4_ocr_dated_geometry.audit_document',return_value={'pages':[''],'original_sha256':collector.sha(raw)}), \
              patch('r4_ocr_dated_geometry.extract_dated_periods',proof), \
              patch.object(collector,'extract_original',replay):
