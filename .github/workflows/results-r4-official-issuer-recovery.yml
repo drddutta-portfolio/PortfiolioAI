@@ -107,3 +107,5 @@ jobs:
 # Continue checkpointed originals on the tested skew-title and three-way header replay revision.
 # Include the precisely identified legacy run released by the first handover; preserve corrected active runs.
 # Replay the full unresolved cohort with versioned V5 explicit date/cell layouts; older receipts retain their original methods.
+
+# Owner resumed full R4 recovery on 7 November 2026; private R2 originals and compact DB writes only.

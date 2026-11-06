@@ -74,3 +74,5 @@ jobs:
 
 # The BSE recovery chain already invokes official issuer replay after its review.
 # Keep one official replay per provider batch to avoid duplicate concurrency queues.
+
+# Owner resumed full R4 recovery on 7 November 2026; private R2 originals and compact DB writes only.
