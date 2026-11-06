@@ -9,7 +9,7 @@ permissions:
   actions: write
 concurrency:
   group: development-private-r2-storage-relief
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
   compact:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
@@ -45,7 +45,7 @@ jobs:
           cancelled=set()
           for attempt in range(10):
             runs=call('/actions/runs?branch=PortfolioAI-Development&per_page=100')['workflow_runs']
-            active=[r for r in runs if r['status']!='completed' and r['name'] in names and str(r['id'])!=os.environ['GITHUB_RUN_ID']]
+            active=[r for r in runs if r['status']!='completed' and (r['name'].startswith('Results R4 ') or r['name'] in names) and str(r['id'])!=os.environ['GITHUB_RUN_ID']]
             if not active:break
             for run in active:
               if run['id'] in cancelled:continue
