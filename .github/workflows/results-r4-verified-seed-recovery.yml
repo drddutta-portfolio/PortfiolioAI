@@ -10,7 +10,7 @@ jobs:
     if: github.ref == 'refs/heads/PortfolioAI-Development'
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     with:
-      target_symbols: TATACAP
+      target_symbols: TMCV
     secrets: inherit
 # Reuse the full guarded collector and independent verifier for newly verified original URLs.
 # The normal recovery continues to cover the entire unresolved cohort without this target filter.
@@ -19,3 +19,5 @@ jobs:
 # Replay the independently reconciled original SSWL statement using separate header and label regions.
 # Continue with GNG Electronics after SSWL and SANSERA passed canonical selection.
 # Recover accessible NSE copies of the statutory Tata Capital originals; issuer-host downloads return 406.
+
+# Fast independent replay of the retained legal-entity-specific Tata CV quarter tables; full-cohort recovery remains active.
