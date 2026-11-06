@@ -24,3 +24,5 @@ jobs:
         run: python scripts/results/r4-superseded-recovery-handover.py
 # No database, R2, financial original, secret or monitor configuration is changed.
 # Include the precisely identified legacy run released by the first handover; preserve corrected active runs.
+
+# Checkpointed handover to verified NSE Tata originals and corrected fresh-capture discovery: 7 November 2026.

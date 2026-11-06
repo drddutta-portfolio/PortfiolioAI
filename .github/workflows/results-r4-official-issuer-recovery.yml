@@ -112,3 +112,5 @@ jobs:
 # Owner resumed full R4 recovery on 7 November 2026; private R2 originals and compact DB writes only.
 
 # Replay every unresolved issuer with independently versioned V6 footnoted quarter headers.
+
+# Checkpointed handover to verified NSE Tata originals and corrected fresh-capture discovery: 7 November 2026.

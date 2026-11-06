@@ -83,9 +83,14 @@ ISSUERS={
             'originals':['https://www.ventivehospitality.com/wp-content/uploads/2024/07/Board-Meeting-outcome-13.11.2025.pdf']},
  # Post-demerger names are intentionally exact: the predecessor group's
  # financials cannot automatically become the successor entity's history.
- 'TMCV':{'legal':'TATA MOTORS LIMITED','cin':'L29102MH2024PLC427506','hosts':['cv.tatamotors.com'],
+ 'TMCV':{'legal':'TATA MOTORS LIMITED','cin':'L29102MH2024PLC427506','hosts':['cv.tatamotors.com','nsearchives.nseindia.com'],
          'pages':['https://cv.tatamotors.com/investors'],
-         'originals':['https://cv.tatamotors.com/assets/cv/files/2026-01/TML%20conso%20final%20results_Dec%202025.pdf']},
+         'verified_originals':['https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
+                               'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_12082026154213_Final.pdf'],
+         'originals':['https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_13052026161728_Final.pdf',
+                      'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_12082026154213_Final.pdf',
+                      'https://nsearchives.nseindia.com/corporate/TMLCOMMERCIAL_29012026162752_NSEBSELETTERFINAL.pdf',
+                      'https://cv.tatamotors.com/assets/cv/files/2026-01/TML%20conso%20final%20results_Dec%202025.pdf']},
  'TMPV':{'legal':'TATA MOTORS PASSENGER VEHICLES LIMITED','cin':'L28920MH1945PLC004520','hosts':['www.tatamotors.com','tatamotors.com'],
          'pages':['https://www.tatamotors.com/investors/'],'originals':[]},
  'VAML':{'legal':'VEDANTA ALUMINIUM METAL LIMITED','hosts':['vedantaaluminium.com','www.vedantaaluminium.com','d1rbiogke1jwo5.cloudfront.net'],

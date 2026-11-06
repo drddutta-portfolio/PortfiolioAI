@@ -7,6 +7,10 @@ REPO='drddutta-portfolio/PortfiolioAI'
 BRANCH='PortfolioAI-Development'
 OFFICIAL='.github/workflows/results-r4-official-issuer-recovery.yml'
 ALLOWED={
+    42274372727:('b9a727ad1b132336fcde13ce7f6ef6d7fc60c116',OFFICIAL),
+    42274372805:('b9a727ad1b132336fcde13ce7f6ef6d7fc60c116','.github/workflows/results-r4-trendlyne-history.yml'),
+    42275751248:('bc5f38bf53e2a97326cefca56603efc9d235c185',OFFICIAL),
+    42275890289:('dc9ca859e100827bd5326cf8e0715b5a00d231f2','.github/workflows/results-r4-verified-seed-recovery.yml'),
     41964478291:('1ab13a124980e602bf55ccf0ede918347967722e','.github/workflows/results-r4-trendlyne-history.yml'),
     41970171948:('c7fabc44f6a6009e363a313aca9e9b92e9dec557',OFFICIAL),
     41970421564:('1f8d9544c010d9339f3dc5ed3756f6b684aec771','.github/workflows/results-r4-verified-seed-recovery.yml'),
