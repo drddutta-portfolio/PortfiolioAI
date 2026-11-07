@@ -23,7 +23,8 @@ PREFIX="portfolioai-results/development/v1/quarterly/"
 R4_EIGHT_QUARTER_MODE=os.getenv("RESULTS_R4_EIGHT_QUARTER_SELECTION","0")=="1"
 R5_COMPARISON_MODE=os.getenv("RESULTS_R5_COMPARISON_SELECTION","0")=="1"
 R5_LEGACY_MODE=os.getenv("RESULTS_R5_LEGACY_SELECTION","0")=="1"
-QUARTERS=(("2024-09-30","2024-12-31","2025-03-31","2025-06-30",
+Q2FY27_RELIANCE_PILOT=os.getenv("RESULTS_Q2FY27_RELIANCE_PILOT","0")=="1"
+QUARTERS=(("2026-09-30",) if Q2FY27_RELIANCE_PILOT else (("2024-09-30","2024-12-31","2025-03-31","2025-06-30",
             "2025-09-30","2025-12-31","2026-03-31","2026-06-30")
           if R4_EIGHT_QUARTER_MODE else
           ("2024-09-30","2024-12-31") if R5_LEGACY_MODE else
@@ -805,6 +806,8 @@ def source_observations_once(cur):
     """Transmit each full source payload once, instead of once per metric."""
     cur.execute(SQL,(list(QUARTERS),list(UNITS)))
     observations=cur.fetchall()
+    if Q2FY27_RELIANCE_PILOT:
+        observations=[r for r in observations if r["symbol"]=="RELIANCE" and r["isin"]=="INE002A01018"]
     ids=list(dict.fromkeys(str(r["source_record_id"]) for r in observations))
     sources={}
     for offset in range(0,len(ids),500):
@@ -1154,6 +1157,8 @@ def verify(db,s3,apply):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
+    if Q2FY27_RELIANCE_PILOT and (R4_EIGHT_QUARTER_MODE or R5_LEGACY_MODE or R5_COMPARISON_MODE):
+        raise SystemExit("Q2FY27_PILOT_SELECTION_SCOPE_CONFLICT")
     if R4_EIGHT_QUARTER_MODE and (R5_LEGACY_MODE or R5_COMPARISON_MODE):
         raise SystemExit("R4_EIGHT_QUARTER_SCOPE_CONFLICT")
     if R5_LEGACY_MODE and os.environ.get("RESULTS_R5_LEGACY_ACK")!="2024_SEP_DEC_ORIGINAL_XBRL":
