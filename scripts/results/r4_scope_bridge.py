@@ -37,6 +37,8 @@ def date_phrases(period):
     return [words(value) for value in (
         f'{d:%B} {d.day} {d.year}', f'{d.day} {d:%B} {d.year}',
         f'{d:%b} {d.day} {d.year}', f'{d.day} {d:%b} {d.year}',
+        f'{d:%B} {d:%d} {d.year}', f'{d:%d} {d:%B} {d.year}',
+        f'{d:%b} {d:%d} {d.year}', f'{d:%d} {d:%b} {d.year}',
         f'{d:%d-%m-%Y}', f'{d:%d.%m.%Y}')]
 
 def common_statement_note(nse_text, pdf_text, period):

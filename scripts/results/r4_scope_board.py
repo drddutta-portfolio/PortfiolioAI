@@ -115,7 +115,7 @@ def parse_page(view,page_no,period,scope):
         raise ValueError('BOARD_SCOPE_INDEPENDENT_PBT_TAX_RECONCILIATION_REQUIRED')
     return result
 
-def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
+def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None,allow_ipo_restated=False):
     current,board,start,end=read_bridge(bridge,symbol,isin,legal)
     if current['scope']!='STANDALONE' or any(Decimal(f['value'])==0 for f in current['facts'].values()):
         raise ValueError('BOARD_SCOPE_NONZERO_SINGLE_COMPANY_STANDALONE_ONLY')
@@ -130,7 +130,10 @@ def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insur
         for i,page in enumerate(pdf,1):
             text=native[i-1]
             if not re.search(r'revenue',text,re.I) or not re.search(r'diluted',text,re.I):continue
-            view=CaptionView(page)
+            if allow_ipo_restated:
+                from r4_pdf_rotation import DeclaredRotationPage
+                rotated=DeclaredRotationPage(page);view=CaptionView(rotated)
+            else:view=CaptionView(page)
             try:parsed=parse_page(view,i,bridge['current_period'],current['scope'])
             except ValueError:continue
             if parsed['column_index']==0 and parsed['first_column_period']==bridge['current_period']:
@@ -152,8 +155,13 @@ def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insur
         if financial_pages!={page_no}:
             raise ValueError('BOARD_SCOPE_FULL_AUDIT_SINGLE_FINANCIAL_PAGE_UNPROVEN')
         all_text=' '.join(native+audit['pages'])
-        if re.search(r'\b(?:restated|recast|pro[ -]?forma|carve[ -]?out|demerger|demerged|common[ -]control)\b',all_text,re.I):
+        business=re.search(r'\b(?:recast|pro[ -]?forma|carve[ -]?out|demerger|demerged|common[ -]control)\b',all_text,re.I)
+        restated=bool(re.search(r'\brestated\b',all_text,re.I))
+        ipo_match=re.search(r'\baudited\s+restated\s+financial\s+information\b.{0,350}\b(?:initial\s+public\s+offer|IPO)\b',' '.join(all_text.split()),re.I)
+        if business or restated and not allow_ipo_restated:
             raise ValueError('BOARD_SCOPE_BUSINESS_PERIMETER_REVIEW_REQUIRED')
+        if allow_ipo_restated and (not restated or ipo_match is None):
+            raise ValueError('BOARD_SCOPE_AUDITED_IPO_RESTATEMENT_REQUIRED')
         if re.search(r'\bgroup\b|subsidiar|joint[ -]?venture',all_text,re.I):
             raise ValueError('BOARD_SCOPE_GROUP_CONTEXT_REVIEW_REQUIRED')
         audited_scopes={x.upper() for x in re.findall(r'\bstandalone\b|\bconsolidated\b',all_text,re.I)}
@@ -164,6 +172,9 @@ def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insur
             'unit_caption_evidence':view.evidence,'document_audit_text_sha256':audit['text_sha256'],
             'scope_hint_used':historical.get('scope_hint_used',False),'historical_values_from_pdf_only':True,
             'comparison_basis_unproven':True}
+        if allow_ipo_restated:
+            evidence['declared_page_rotation']=view.page.evidence
+            evidence['ipo_restatement_evidence_text']=ipo_match.group()
         return historical,evidence
 
 
@@ -178,4 +189,13 @@ def extract_current_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge
     if evidence['board_date']<=bridge['current_period']:raise ValueError('BOARD_SCOPE_CURRENT_APPROVAL_EVENT_PRECEDES_QUARTER_END')
     evidence={**evidence,'contract':'NSE_ORIGINAL_SAME_BOARD_CURRENT_COMPARATIVE_SCOPE_V1',
         'historical_values_from_pdf_only':False,'current_comparative_values_from_pdf_only':True}
+    return parsed,evidence
+
+
+def extract_ipo_restated_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
+    if period not in HISTORICAL or bank or insurer:raise ValueError('BOARD_SCOPE_IPO_HISTORICAL_NONBANK_ONLY')
+    parsed,evidence=_extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank,insurer,document_audit,allow_ipo_restated=True)
+    evidence={**evidence,'contract':'NSE_ORIGINAL_SAME_BOARD_AUDITED_IPO_RESTATEMENT_SCOPE_V1',
+        'reporting_basis':'AUDITED_IPO_RESTATEMENT_AS_REPORTED; CURRENT_DISPLAY_ONLY',
+        'share_or_eps_adjustment_authorized':False,'comparison_basis_unproven':True}
     return parsed,evidence

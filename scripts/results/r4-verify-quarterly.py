@@ -798,7 +798,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_R4_CURRENT_ISSUER_LINEAGE_ORIGINAL_XBRL_V1','RESULTS_R4_CURRENT_SAME_BOARD_PDF_V1','RESULTS_R4_CURRENT_GI_ORIGINAL_XBRL_V1','RESULTS_R4_CURRENT_NBFC_ORIGINAL_XBRL_V1','RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_R4_IPO_RESTATED_SAME_BOARD_PDF_V1','RESULTS_R4_CURRENT_ISSUER_LINEAGE_ORIGINAL_XBRL_V1','RESULTS_R4_CURRENT_SAME_BOARD_PDF_V1','RESULTS_R4_CURRENT_GI_ORIGINAL_XBRL_V1','RESULTS_R4_CURRENT_NBFC_ORIGINAL_XBRL_V1','RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def source_observations_once(cur):
@@ -835,6 +835,13 @@ def verify(db,s3,apply):
         independent_audits=VerificationAuditCache()
         def check_one(pair):
             k,r=pair
+            from r4_ipo_board_pdf import CONTRACT as IPO_BOARD_CONTRACT,qualify as qualify_ipo_board
+            if r["raw_payload"].get("contract")==IPO_BOARD_CONTRACT:
+                try:
+                    document=qualify_ipo_board(r,shared_groups[k],s3)
+                    return k,(document,None)
+                except Exception as exc:
+                    return k,(None,"IPO_BOARD_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__)
             from r4_current_issuer_lineage import CONTRACT as CURRENT_LINEAGE_CONTRACT,qualify as qualify_current_lineage
             if r["raw_payload"].get("contract")==CURRENT_LINEAGE_CONTRACT:
                 try:
@@ -1050,6 +1057,7 @@ def verify(db,s3,apply):
                         "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE),
+                        "ipo_board":bool(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_IPO_RESTATED_SAME_BOARD_PDF_V1"),
                         "current_lineage":bool(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_CURRENT_ISSUER_LINEAGE_RETAINED_XML_V1"),
                         "current_board":bool(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_CURRENT_SAME_BOARD_PDF_V1"),
                         "current_gi":bool(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_CURRENT_GI_RETAINED_XML_V1"),
@@ -1068,7 +1076,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean,nse_declared_revision boolean,current_nbfc boolean,current_gi boolean,current_board boolean,current_lineage boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean,nse_declared_revision boolean,current_nbfc boolean,current_gi boolean,current_board boolean,current_lineage boolean,ipo_board boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -1100,6 +1108,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_NSE_ORIGINAL_XBRL_EXCHANGE_ISSUER_LINEAGE_RECONCILED; ORIGINAL_AS_FILED_BUSINESS_PERIMETER; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_CARVEOUT_OR_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.restated_basis THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.ipo_board THEN
+                                 'RESULTS_R4_AUDITED_IPO_RESTATED_PDF_COMPARATIVE_INDEPENDENTLY_REPLAYED; PDF_DECLARED_ROTATION_COORDINATES_ONLY; SAME_BOARD_DATE_AND_START_END_CLOCKS; COMPLETE_PRIMARY_CURRENT_TRIO_MATCHED_AT_PRINTED_PRECISION; EXACT_PRIVATE_BSE_INVENTORY_AND_ORIGINAL_BYTES_REPLAYED; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.current_lineage THEN
                                  'RESULTS_R4_CURRENT_ORIGINAL_NSE_XML_EXCHANGE_ISSUER_LINEAGE_INDEPENDENTLY_REPLAYED; BOTH_BSE_CODE_CANONICAL_ISIN_ENDPOINTS_AND_NSE_ISSUER_REPLAYED; ORIGINAL_REPORTED_ISIN_PRESERVED; ORIGINAL_BYTES_RETAINED_IN_PRIVATE_R2; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; NO_CATALOG_ISIN_REWRITE_OR_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.current_board THEN
