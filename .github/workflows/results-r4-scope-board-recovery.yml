@@ -1,4 +1,5 @@
 name: Results R4 Same Board Original Scope Recovery
+# Replay exact grouping-comma precision and dependency-free raw catalog lookup.
 on:
   workflow_dispatch:
   push:
@@ -34,7 +35,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
       - name: Verify scope binding and rejection regressions
-        run: python -m unittest discover -s scripts/results -p 'test_r4_scope_board*.py' -v
+        run: |
+          python -m unittest discover -s scripts/results -p 'test_r4_scope_board*.py' -v
+          python scripts/results/test_r4_scope_catalog.py -v
       - name: Replay every eligible historical original against its selected primary anchor
         run: python scripts/results/r4-scope-board-recovery.py --shard ${{ matrix.shard }}
       # No source bytes, issuer diagnostics or financial rows are published.

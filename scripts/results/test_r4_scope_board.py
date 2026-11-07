@@ -77,6 +77,13 @@ class BoardScopeTests(unittest.TestCase):
         self.assertFalse(printed_precision_match(pdf,{'unit':'INR_CRORE','value':'1514.676'}))
         self.assertFalse(printed_precision_match(pdf,{'unit':'INR_LAKH','value':'1514.67'}))
 
+    def test_grouping_comma_whitespace_preserves_literal_amount_and_precision(self):
+        fact={'unit':'INR_CRORE','value':'4114.394','original_value':'41 ,143.94','original_unit':'INR_MILLION'}
+        self.assertTrue(printed_precision_match(fact,{'unit':'INR_CRORE','value':'4114.394'}))
+        self.assertFalse(printed_precision_match({**fact,'original_value':'4 1143.94'},{'unit':'INR_CRORE','value':'4114.394'}))
+        self.assertFalse(printed_precision_match({**fact,'value':'4114.395'},{'unit':'INR_CRORE','value':'4114.395'}))
+        self.assertFalse(printed_precision_match(fact,{'unit':'INR_CRORE','value':'4114.3945'}))
+
     def test_conflicting_scope_group_and_restatement_contexts_remain_rejected(self):
         for text,reason in [('Consolidated financial results','OTHER_DOCUMENT_SCOPE'),('The Company and its subsidiaries','GROUP_CONTEXT'),('Comparative figures restated for a business combination','BUSINESS_PERIMETER')]:
             doc,b=fixture();doc[0].insert_text((25,600),text,fontsize=8)

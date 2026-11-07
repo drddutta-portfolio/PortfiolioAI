@@ -73,8 +73,13 @@ def match_board(cover,board,start,end):
 
 def printed_precision_match(pdf_fact,primary_fact):
     if pdf_fact['unit']!=primary_fact['unit']:return False
-    raw=pdf_fact['original_value'].strip().replace(',','').replace('(','-').replace(')','')
+    # The geometry parser already validates tightly adjacent numeric glyphs.
+    # A split grouping comma may retain surrounding whitespace in evidence.
+    # Remove whitespace only beside an actually printed comma, never digits
+    # or decimal points, and recheck the exact normalized source amount.
+    raw=re.sub(r'\s*,\s*',',',pdf_fact['original_value'].strip()).replace(',','').replace('(','-').replace(')','')
     if not re.fullmatch(r'-?\d+(?:\.\d+)?',raw):return False
+    if Decimal(raw)/DIVISORS[pdf_fact['original_unit']]!=Decimal(pdf_fact['value']):return False
     places=len(raw.split('.')[1]) if '.' in raw else 0
     quantum=Decimal(1).scaleb(-places)/DIVISORS[pdf_fact['original_unit']]
     # Strict interior of the rounding interval; ties are not guessed.
