@@ -8,6 +8,7 @@ from collections import defaultdict,Counter
 from urllib.parse import urlencode
 import requests,psycopg
 from r4_current_gap_discovery import pending_current
+from r4_nse_issuer_bridge import bridge_from_sources
 from r4_current_issuer_lineage import CONTRACT,KIND,PREFIX,BUCKET,PERIODS,origin,extract
 from r4_nse_catalog_revision import BASE,scope,canonical,sha
 
@@ -90,5 +91,6 @@ def main():
             except Exception as error:db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
             counts['issuers_checked']+=1;print('R4_CURRENT_ISSUER_LINEAGE_PROGRESS',json.dumps({**dict(counts),'rejections':dict(rejects)}),flush=True)
     print('R4_CURRENT_ISSUER_LINEAGE_FINAL',json.dumps({**dict(counts),'rejections':dict(rejects)}),flush=True)
+    if any(rejects[name] for name in ('NameError','AttributeError','TypeError')):raise RuntimeError('CURRENT_ISSUER_LINEAGE_PROGRAMMING_FAILURES_AFTER_ALL_ATTEMPTS')
 
 if __name__=='__main__':main()

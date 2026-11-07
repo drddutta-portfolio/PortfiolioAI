@@ -24,6 +24,40 @@ class CurrentLineageTests(unittest.TestCase):
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         self.assertEqual(module.CONTRACT,m.CONTRACT);self.assertEqual(module.KIND,m.KIND)
 
+    def test_collector_ingests_full_original_then_independent_qualifier_replays(self):
+        import importlib.util,json,contextlib
+        from pathlib import Path
+        from unittest.mock import patch,Mock
+        spec=importlib.util.spec_from_file_location('lineage_transport',Path(__file__).with_name('r4-current-issuer-lineage-recovery.py'));collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
+        source,observations,_,_,raw,_=case();row={'symbol':'AVANTIFEED','qe_Date':'31-DEC-2025','seq_Id':'123','smName':'AVANTI FEEDS LIMITED','cmName':'AVANTI FEEDS LIMITED','xbrl':source['source_url'],'consolidated':'Consolidated'};writes=[];objects={}
+        class Cursor:
+            def __enter__(self):return self
+            def __exit__(self,*args):pass
+            def execute(self,query,args):writes.append((query,args))
+            def fetchall(self):return []
+            def fetchone(self):return ('source',)
+        class Database:
+            def __enter__(self):return self
+            def __exit__(self,*args):pass
+            def cursor(self):return Cursor()
+            def rollback(self):pass
+            def commit(self):pass
+        session=Mock();session.headers={}
+        def response(url,**kwargs):
+            return Mock(status_code=200,content=m.canonical([row]) if url.startswith(collector.BASE) else raw)
+        session.get.side_effect=response;bse=Mock();bse.__enter__=Mock(return_value=bse);bse.__exit__=Mock(return_value=None);bse.get_scrip_candidate.return_value={'bse_scrip_code':'512573'};bse._bse.equityMetaInfo.return_value={'SecurityCode':'512573','ISIN':'INE871C01038'};bse._bse.listSecurities.return_value=[{'SCRIP_CD':'512573','ISIN_NUMBER':'INE871C01038','Issuer_Name':'AVANTI FEEDS LIMITED'}]
+        class Client:
+            def get_object(self,**kw):return {'Body':io.BytesIO(objects[kw['Key']])}
+        client=Client()
+        env={'SUPABASE_DB_URL':'postgresql://'+collector.batch.REF+'/test','CLOUDFLARE_R2_BUCKET':m.BUCKET,'GITHUB_REPOSITORY':'drddutta-portfolio/PortfiolioAI','GITHUB_REF':'refs/heads/PortfolioAI-Development'}
+        with patch.dict(collector.os.environ,env),patch.object(collector.psycopg,'connect',return_value=Database()),patch.object(collector.batch,'PortfolioBSE',return_value=bse),patch.object(collector.batch,'r2_client',return_value=client),patch.object(collector.batch,'immutable_put',side_effect=lambda client,key,body:objects.setdefault(key,body)),patch.object(collector.requests,'Session',return_value=session),patch.object(collector,'pending_current',return_value=[('security','AVANTIFEED','INE871C01038','2025-12-31',None)]),contextlib.redirect_stdout(io.StringIO()) as output:
+            collector.main()
+            with patch.object(collector,'bridge_from_sources',side_effect=NameError('missing helper')):
+                with self.assertRaisesRegex(RuntimeError,'PROGRAMMING_FAILURES_AFTER_ALL_ATTEMPTS'):collector.main()
+        self.assertIn('"observations_inserted": 3',output.getvalue());self.assertIn('"source_trios_retained": 1',output.getvalue())
+        saved=next(args for query,args in writes if 'INSERT INTO data_source_records' in query);payload=json.loads(saved[4]);actual={**source,'raw_payload':payload,'payload_hash':saved[3]}
+        self.assertEqual(m.qualify(actual,observations,client)['facts']['EPS_DILUTED']['value'],'2')
+
     def test_exact_issuer_lineage_preserves_original_isin_and_eps(self):
         s,o,c,_,_,b=case();result=m.qualify(s,o,c);self.assertEqual(result['issuer_bridge']['xml_reported_isin'],'INE871C01012');self.assertEqual(result['facts']['EPS_DILUTED']['value'],'2');self.assertIn('COMPARABILITY_UNPROVEN',b.share_basis)
     def test_both_bse_endpoints_must_tie_code_to_canonical_isin(self):

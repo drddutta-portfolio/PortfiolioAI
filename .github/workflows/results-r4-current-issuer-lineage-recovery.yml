@@ -1,5 +1,5 @@
 name: Results R4 Missing Current Issuer Lineage Recovery
-# Validate collector imports before hosted recovery (entry point correction).
+# Validate full collector ingestion and independent replay before hosted recovery.
 on:
   workflow_dispatch:
   push:
