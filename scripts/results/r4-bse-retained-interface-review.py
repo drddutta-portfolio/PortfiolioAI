@@ -21,7 +21,8 @@ def main():
     # These are exchange link identifiers, never financial statement rows.
     print('R4_BSE_RETAINED_PERIOD_LINK_IDENTIFIERS',json.dumps(data.get('resultinS')),flush=True)
     with batch.PortfolioBSE() as bse:
-        for url in ('https://www.bseindia.com/corporates/financialres.aspx','https://www.bseindia.com/stock-share-price/coforge-limited/coforge/532541/financials-results/'):
+        reviewed=set()
+        for url in ('https://www.bseindia.com/corporates/results.aspx?Code=532541&Company=Coforge-Ltd&qtr=131.00&RType=', 'https://www.bseindia.com/corporates/results.aspx?Code=532541&Company=Coforge-Ltd&qtr=125.00&RType=', 'https://www.bseindia.com/corporates/financialres.aspx','https://www.bseindia.com/stock-share-price/coforge-limited/coforge/532541/financials-results/'):
             try:
                 response=bse._bse.session.get(url,timeout=(15,35));response.raise_for_status()
                 if urlparse(response.url).hostname!='www.bseindia.com' or len(response.content)>5_000_000:raise ValueError('EXCHANGE_INTERFACE_ORIGIN_OR_SIZE_UNPROVEN')
@@ -29,9 +30,10 @@ def main():
                 scripts=[urljoin(response.url,u) for u in parser.sources];scripts=[u for u in scripts if urlparse(u).scheme=='https' and urlparse(u).hostname=='www.bseindia.com']
                 scripts.sort(key=lambda u:(not bool(re.search('financ|result|stock|corp|controller|main',u,re.I)),u));print('R4_BSE_PUBLIC_INTERFACE',json.dumps({'url':response.url,'scripts':scripts,'bytes':len(response.content)}),flush=True)
                 sources=[(response.url,body)]
-                seen=set(); pending=list(scripts[:12]); total_bytes=0
+                print('R4_BSE_PUBLIC_RESULT_PAGE_MARKUP',json.dumps({'url':response.url,'fragments':re.findall(r'.{0,80}(?:Quarter|Period|Revenue|Profit|Diluted|<select|<option|BseIndiaAPI).{0,180}',body,re.I)[:35]}),flush=True)
+                seen=reviewed; pending=list(scripts[:12]); total_bytes=0
                 # Angular loads the financial route from first-party lazy chunks.
-                while pending and len(seen)<45 and total_bytes<20_000_000:
+                while pending and len(seen)<100 and total_bytes<20_000_000:
                     script=pending.pop(0)
                     if script in seen:continue
                     seen.add(script)
@@ -45,7 +47,7 @@ def main():
                     except Exception as e:print('R4_PUBLIC_SCRIPT_UNAVAILABLE',type(e).__name__,flush=True)
                 print('R4_PUBLIC_SCRIPT_REVIEW_BOUNDS',json.dumps({'scripts':len(seen),'bytes':total_bytes,'pending':len(pending)}),flush=True)
                 for source,text in sources:
-                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres|FinancialResult|TabResults_PAR|qtrcode|quarterid',text,re.I))[:15]:
+                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres|FinancialResult|TabResults_PAR|qtrcode|quarterid|financial-results|financialresult|financeresult',text,re.I))[:15]:
                         fragment=text[max(0,match.start()-150):match.end()+550]
                         print('R4_BSE_PUBLIC_FINANCIAL_INTERFACE_FRAGMENT',json.dumps({'source':source,'fragment':fragment}),flush=True)
                     digest=hashlib.sha256(text.encode()).hexdigest();batch.immutable_put(client,batch.PREFIX+'bse-public-interface-review/sha256='+digest+'/source.txt',text.encode())
