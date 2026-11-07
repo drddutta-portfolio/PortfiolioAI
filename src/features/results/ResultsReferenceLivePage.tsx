@@ -11,6 +11,7 @@ import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResultsEvidence } from "./resultsR5LiveRefresh"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
 import { buildResultsQuarterPeriods } from "./resultsQuarterPeriods"
+import { newlyReportedQuarterKeys } from "./resultsNewlyReported"
 import type { ResultsQuarterPeriod } from "./resultsQuarterPeriods"
 import { getResultsScanStatus, startResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
@@ -138,11 +139,15 @@ function statusName(status: string) {
   return "Not Rated"
 }
 
-function StatusDot({ status, pending = false }: { readonly status: string; readonly pending?: boolean }) {
-  return <i className={"ref-status-dot " + (pending ? "review" : status.toLowerCase())} aria-hidden="true" />
+function StatusDot({ status, pending = false, newlyReported = false }: {
+  readonly status: string; readonly pending?: boolean; readonly newlyReported?: boolean
+}) {
+  return <i className={"ref-status-dot " + (newlyReported ? "new" : pending ? "review" : status.toLowerCase())}
+    title={newlyReported ? "Newly Reported · first 7 days after addition" : undefined}
+    aria-hidden="true" />
 }
 
-function PreviewCard({ preview, calibrations }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations }) {
+function PreviewCard({ preview, calibrations, newlyReported }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations; readonly newlyReported: boolean }) {
   const { entry, period, observations } = preview
   const assessment = gradeQuarterR5(preview.history, entry.position.securityId, period.end,
     entry.position.sector, entry.position.industry, calibrations)
@@ -155,7 +160,7 @@ function PreviewCard({ preview, calibrations }: { readonly preview: Preview; rea
   return createPortal(
     <div className="ref-preview" role="tooltip" style={{ left: preview.left, top: preview.top }}>
       <strong>{entry.position.symbol} — {period.label}</strong>
-      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)}/>{observations.length ? observations.some((row) => row.selected) ? presentationStatus(grade, observations) : "Review pending" : "Not available"}</div>
+      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)} newlyReported={newlyReported}/>{observations.length ? observations.some((row) => row.selected) ? presentationStatus(grade, observations) : "Review pending" : "Not available"}{newlyReported ? " · Newly Reported" : ""}</div>
       {displayed ? <dl>
         <div><dt>{LABELS[displayed.code] ?? displayed.code}</dt><dd>{formattedValue(displayed)}</dd></div>
         {observations.filter((row) => row.id !== displayed.id).slice(0, 2).map((row) =>
@@ -351,6 +356,7 @@ export function ResultsLivePage() {
   const [statuses, setStatuses] = useState<Set<StatusFilter>>(new Set())
   const [scrollTop, setScrollTop] = useState(0)
   const [onlyNew, setOnlyNew] = useState(false)
+  const [newResultClock, setNewResultClock] = useState(() => Date.now())
   const [maxHorizontalScroll, setMaxHorizontalScroll] = useState(0)
   const [horizontalOffset, setHorizontalOffset] = useState(0)
   const [selection, setSelection] = useState<Selection | null>(null)
@@ -360,6 +366,18 @@ export function ResultsLivePage() {
   const analysisRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const periods = useMemo(() => buildResultsQuarterPeriods(observations), [observations])
+  const newlyReported = useMemo(() => newlyReportedQuarterKeys(observations,newResultClock), [observations,newResultClock])
+  // Expire the one-week indicator while the page stays open, without fetching
+  // again or touching the original evidence / grading methodology.
+  useEffect(() => {
+    const timer = window.setInterval(() => setNewResultClock(Date.now()), 60000)
+    const refresh = () => setNewResultClock(Date.now())
+    document.addEventListener("visibilitychange",refresh)
+    return () => {
+      window.clearInterval(timer)
+      document.removeEventListener("visibilitychange",refresh)
+    }
+  }, [])
 
   // R5-F: observe R4's source selections without launching another provider
   // collection. Re-read only while the Results page is visible, and on a
@@ -537,10 +555,10 @@ export function ResultsLivePage() {
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
-    if (onlyNew && !observations.some(row => row.securityId === p.securityId && row.periodEnd === periods[0]?.end)) return false
+    if (onlyNew && !periods.some(quarter => newlyReported.has(p.securityId + "|" + quarter.end))) return false
     if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end, industryCalibrations)))) return false
     return true
-  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew])
+  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew, newlyReported])
 
   const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
   // Latest stored quarter is useful even while its original-source selection
@@ -612,7 +630,7 @@ export function ResultsLivePage() {
         <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((name) => <option key={name}>{name}</option>)}</select></label>
         {(["STRONG", "MIXED", "WEAK", "UNAVAILABLE"] as const).map((s) =>
           <button type="button" key={s} className={statuses.has(s) ? "active" : ""} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
-        <button type="button" className={onlyNew ? "active" : ""} aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Show companies with observations in the latest reported quarter"><span className="ref-status-dot new"/>Newly Reported</button>
+        <button type="button" className={onlyNew ? "active" : ""} aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Show companies with newly verified quarterly results added within the last 7 days"><span className="ref-status-dot new"/>Newly Reported</button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
       </div>
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
@@ -640,15 +658,16 @@ export function ResultsLivePage() {
               const outcome = gradeQuarterR5(observations, entry.position.securityId, p.end,
                 entry.position.sector, entry.position.industry, industryCalibrations)
               const status = outcome.status
+              const isNew = newlyReported.has(entry.position.securityId + "|" + p.end)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
                 type="button" aria-pressed={active}
-                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis + (status === "UNAVAILABLE" ? "; " + unratedExplanation(outcome.explanation,rows.length>0) : "")}
+                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + (isNew ? "; Newly Reported (7-day indicator)" : "") + "; " + outcome.basis + (status === "UNAVAILABLE" ? "; " + unratedExplanation(outcome.explanation,rows.length>0) : "")}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
-                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{statusName(status)}</small>
+                <StatusDot status={status} pending={pending} newlyReported={isNew}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{statusName(status)}</small>
               </button></td>
             })}</tr>)}
             {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
@@ -666,7 +685,7 @@ export function ResultsLivePage() {
       {chosen && period ? <div className="selected-analysis" ref={analysisRef}>
         <div className="selected-analysis-heading">
           <div><h2>{chosen.position.symbol} — {period.label}</h2><span className={"analysis-status " + (grade === "UNAVAILABLE" ? "ref-assessment-pending" : "result-" + grade.toLowerCase())}>
-            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)}/>{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : presentationStatus(grade, detailRows)}
+            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)} newlyReported={newlyReported.has(chosen.position.securityId + "|" + period.end)}/>{newlyReported.has(chosen.position.securityId + "|" + period.end) ? "Newly Reported · " : ""}{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : presentationStatus(grade, detailRows)}
           </span></div>
           <div className="analysis-actions">
             <button type="button" disabled title="Verified original filing URL is not yet linked">NSE Filing ↗</button>
@@ -691,6 +710,6 @@ export function ResultsLivePage() {
       </div> : null}
       <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Automatic source scans are scheduled for 7:00 AM IST daily; manual scanning remains available. A new fiscal-quarter column appears only after its first original-filing financial trio is independently selected.</footer>
     </section>
-    {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations}/> : null}
+    {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations} newlyReported={newlyReported.has(preview.entry.position.securityId + "|" + preview.period.end)}/> : null}
   </section>
 }
