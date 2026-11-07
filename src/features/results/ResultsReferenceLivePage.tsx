@@ -10,13 +10,15 @@ import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparison
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResultsEvidence } from "./resultsR5LiveRefresh"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
+import { buildResultsQuarterPeriods } from "./resultsQuarterPeriods"
+import type { ResultsQuarterPeriod } from "./resultsQuarterPeriods"
 import { getResultsScanStatus, startResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import "./ResultsPage.css"
 import "./ResultsReference.css"
 
-interface Period { readonly end: string; readonly label: string }
+type Period = ResultsQuarterPeriod
 interface Entry { readonly position: PortfolioPosition; readonly kind: "CURRENT" | "CLOSED" }
 type PositionFilter = "ALL" | "CURRENT" | "CLOSED"
 type StatusFilter = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
@@ -45,22 +47,8 @@ const isBank = (industry: string | null) => /\bbanks?\b/i.test(industry ?? "")
 const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
   rows.some((row) => row.code === "NET_INTEREST_INCOME_QUARTER" || row.code === "GROSS_NPA_PERCENT" || row.code === "NET_NPA_PERCENT")
 
-// R5 approved four-quarter window. Never auto-advance to unqualified new quarter.
-// Completed calendar quarters, newest first, beginning March 2025.
- // Do not wait for four-stock coverage before displaying a newly reported quarter.
-function makePeriods(): Period[] {
-  const now = new Date()
-  const qStartMonth = Math.floor(now.getUTCMonth() / 3) * 3
-  const previousEnd = new Date(Date.UTC(now.getUTCFullYear(), qStartMonth, 0))
-  const periods: Period[] = []
-  for (let end = previousEnd; end >= new Date(Date.UTC(2025, 2, 31)); end = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() - 2, 0))) {
-    const month = end.getUTCMonth() + 1
-    const quarter = month === 3 ? 4 : month === 6 ? 1 : month === 9 ? 2 : 3
-    const fiscalYear = month === 3 ? end.getUTCFullYear() : end.getUTCFullYear() + 1
-    periods.push({ end: end.toISOString().slice(0, 10), label: `Q${quarter} FY${String(fiscalYear).slice(-2)}` })
-  }
-  return periods
-}
+// Fiscal-quarter columns are derived from actually qualified original filings;
+// calendar rollover alone never adds an empty future quarter.
 const R5_REQUIRED_QUARTERS = new Set(["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"])
 
 function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
@@ -78,8 +66,8 @@ function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], ent
   const insurer = entry.position.symbol === "STARHEALTH"
   const core = [insurer ? "NET_PREMIUM_EARNED_QUARTER" : bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
     "NET_PROFIT_QUARTER", "EPS_DILUTED"]
-  return makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).length === 4 &&
-    makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).every(period => {
+  return [...R5_REQUIRED_QUARTERS].every(end => {
+    const period = { end }
     const quarter = own.filter(r => r.periodEnd === period.end && core.includes(r.code))
     if (quarter.length !== 3 || new Set(quarter.map(r => r.code)).size !== 3) return false
     if (quarter.some(r => !r.sourceRecordId || !r.scope ||
@@ -371,7 +359,7 @@ export function ResultsLivePage() {
   const [insightExpanded, setInsightExpanded] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
-  const periods = useMemo(() => makePeriods(), [])
+  const periods = useMemo(() => buildResultsQuarterPeriods(observations), [observations])
 
   // R5-F: observe R4's source selections without launching another provider
   // collection. Re-read only while the Results page is visible, and on a
@@ -596,7 +584,7 @@ export function ResultsLivePage() {
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
       </div>
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
-        <strong>R5 · Jun 2026</strong>
+        <strong title="Frozen four-quarter baseline. Future quarters are graded separately when source-qualified.">R5 · Jun 2026 baseline</strong>
         <span>{loadingEvidence ? "Assessing selected source data…" :
           r5Coverage.complete + " / " + entries.length + " stocks with four qualified quarters · " + (entries.length - r5Coverage.complete) + " R3 pending"}</span>
         <span className="ref-r5-strong">Strong {r5Coverage.counts.STRONG}</span>
@@ -669,7 +657,7 @@ export function ResultsLivePage() {
         </details>
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
-      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
+      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Automatic source scans are scheduled for 7:00 AM IST daily; manual scanning remains available. A new fiscal-quarter column appears only after its first original-filing financial trio is independently selected.</footer>
     </section>
     {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations}/> : null}
   </section>
