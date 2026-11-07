@@ -33,7 +33,7 @@ def main():
                 print('R4_BSE_PUBLIC_RESULT_PAGE_MARKUP',json.dumps({'url':response.url,'fragments':re.findall(r'.{0,80}(?:Quarter|Period|Revenue|Profit|Diluted|<select|<option|BseIndiaAPI).{0,180}',body,re.I)[:35]}),flush=True)
                 seen=reviewed; pending=list(scripts[:12]); total_bytes=0
                 # Angular loads the financial route from first-party lazy chunks.
-                while pending and len(seen)<100 and total_bytes<20_000_000:
+                while pending and len(seen)<180 and total_bytes<35_000_000:
                     script=pending.pop(0)
                     if script in seen:continue
                     seen.add(script)
@@ -47,7 +47,7 @@ def main():
                     except Exception as e:print('R4_PUBLIC_SCRIPT_UNAVAILABLE',type(e).__name__,flush=True)
                 print('R4_PUBLIC_SCRIPT_REVIEW_BOUNDS',json.dumps({'scripts':len(seen),'bytes':total_bytes,'pending':len(pending)}),flush=True)
                 for source,text in sources:
-                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres|FinancialResult|TabResults_PAR|qtrcode|quarterid|financial-results|financialresult|financeresult',text,re.I))[:15]:
+                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres|FinancialResult|TabResults_PAR|StockreachResult|corpFinanceResult|financialres|FinancialResultHeader|financialresult|financeresult',text,re.I))[:15]:
                         fragment=text[max(0,match.start()-150):match.end()+550]
                         print('R4_BSE_PUBLIC_FINANCIAL_INTERFACE_FRAGMENT',json.dumps({'source':source,'fragment':fragment}),flush=True)
                     digest=hashlib.sha256(text.encode()).hexdigest();batch.immutable_put(client,batch.PREFIX+'bse-public-interface-review/sha256='+digest+'/source.txt',text.encode())
