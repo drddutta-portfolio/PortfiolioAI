@@ -8,6 +8,7 @@ on:
       - scripts/results/results_scan_worker.py
       - scripts/results/r3-live-public-filing-batch.py
       - scripts/results/r4-verify-quarterly.py
+      - supabase/functions/results-quarterly-scan/**
       - supabase/functions/results-quarterly-scan-v2/**
   workflow_dispatch:
 permissions: {contents: read}
@@ -28,6 +29,8 @@ jobs:
         run: |
           npm run typecheck
           npm run check:architecture
+      - name: Lint authenticated scanner edge endpoint
+        run: npx eslint --config eslint.edge.config.js supabase/functions/results-quarterly-scan/index.ts
       - name: Syntax-verify live collector, independent verifier, and scan worker
         run: |
           python -m py_compile scripts/results/r3-live-public-filing-batch.py scripts/results/r4-verify-quarterly.py scripts/results/results_scan_worker.py
