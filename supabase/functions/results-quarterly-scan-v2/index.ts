@@ -170,7 +170,34 @@ async function enqueue(admin: Client, portfolioId: string, userId: string) {
     const publish=await fetch(GITHUB_URL,{
       method:"PUT",headers:requestHeaders,body:JSON.stringify(body)
     })
-    if(!publish.ok)throw new Error("SCAN_WORKER_DISPATCH_HTTP_"+publish.status)
+    if(!publish.ok) {
+      // GitHub rejects writes for several independent reasons. Report only
+      // a fixed, nonsecret reason code; never echo the token or request headers.
+      const data: unknown = await publish.json().catch(()=>null)
+      const message = data && typeof data==="object" && "message" in data
+        && typeof (data as {message?:unknown}).message==="string"
+        ? (data as {message:string}).message.toLowerCase() : ""
+      const reason = message.includes("resource not accessible by personal access token")
+        || message.includes("resource not accessible by integration")
+        ? "GITHUB_TOKEN_CONTENTS_WRITE_DENIED"
+        : message.includes("protected branch") || message.includes("ruleset")
+          || message.includes("repository rule")
+          ? "GITHUB_BRANCH_WRITE_RESTRICTED"
+        : message.includes("workflow") && message.includes("permission")
+          ? "GITHUB_WORKFLOW_PERMISSION_REQUIRED"
+        : message.includes("must have write access") || message.includes("write access to this repository")
+          ? "GITHUB_REPOSITORY_WRITE_ACCESS_DENIED"
+        : message.includes("personal access token") && message.includes("organization")
+          ? "GITHUB_TOKEN_ORGANIZATION_APPROVAL_REQUIRED"
+        : "GITHUB_DISPATCH_FORBIDDEN_UNCLASSIFIED"
+      console.error("RESULTS_SCAN_GITHUB_DISPATCH_REJECTED",{
+        httpStatus:publish.status,reason,
+        requiredPermission:"repository Contents:read/write",
+        // GitHub itself supplies permission names, never access token contents.
+        acceptedPermissions:(publish.headers.get("x-accepted-github-permissions")??"").slice(0,120),
+      })
+      throw new Error("SCAN_WORKER_DISPATCH_HTTP_"+publish.status+"_"+reason)
+    }
     const pushed=await publish.json()
     if (!pushed?.commit?.sha) throw new Error("SCAN_WORKER_DISPATCH_ACK_MISSING")
     const mark=await admin.from("data_ingestion_runs").update({
@@ -181,8 +208,12 @@ async function enqueue(admin: Client, portfolioId: string, userId: string) {
     return reply(200,await status(admin,portfolioId))
   } catch(error) {
     const reason=fail(error)
+    const finishedAt=new Date().toISOString()
+    await admin.from("data_ingestion_run_items").update({
+      status:"FAILED",safe_reason_code:"SCAN_DISPATCH_FAILED",completed_at:finishedAt,
+    }).eq("ingestion_run_id",runId).eq("status","PLANNED")
     await admin.from("data_ingestion_runs").update({
-      status:"FAILED",completed_at:new Date().toISOString(),
+      status:"FAILED",completed_at:finishedAt,
       error_summary:reason,metadata:{contract:OPERATION,stage:"DISPATCH_FAILED"}
     }).eq("id",runId)
     return reply(503,{error:"SCAN_DISPATCH_FAILED",details:reason})
