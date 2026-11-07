@@ -70,6 +70,17 @@ def execution(path: str, env: dict[str, str]) -> dict:
     process = subprocess.run(args, env=env, text=True,
                              capture_output=True, timeout=14400, check=False)
     if process.returncode:
+        # A bounded NSE access-denied stop returns exit 2 with an auditable
+        # compact result. Preserve its already-saved originals and still run
+        # independent R4 verification before declaring a partial scan.
+        if "r3-live-public-filing" in path and process.returncode==2:
+            try:
+                partial=json.loads(process.stdout)
+                if partial.get("blocked"):
+                    partial["_source_blocked"]=True
+                    return partial
+            except (ValueError,TypeError,AttributeError):
+                pass
         print("SCAN_STEP_FAILED", json.dumps({
             "source":path,"exit_code":process.returncode,
             "stderr_tail":process.stderr[-600:]}), flush=True)
@@ -188,6 +199,8 @@ def main() -> int:
         if verification.get("mode")!="APPLY":
             raise RuntimeError("SCAN_VERIFIER_NOT_APPLIED")
         qualified=read_selected_new(db_url,run_id)
+        if acquisition.get("_source_blocked"):
+            failure="NSE_OFFICIAL_SOURCE_ACCESS_BLOCKED_PARTIAL"
     except Exception as exc:
         failure=str(exc)[:90]
     complete(db_url,run_id, "SUCCEEDED" if not failure else "PARTIAL",
