@@ -107,6 +107,10 @@ def main():
                 result=call("parameters-"+str(index),"search_financial_parameters",{"query":query})
                 print("R4_EXACT_PARAMETER_DISCOVERY",index,"retained_privately",flush=True)
             return
+        if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="CURRENT_CORRECTIONS":
+            from r4_current_gap_discovery import run
+            run(db,call,names,client,batch,dest)
+            return
         if os.getenv("RESULTS_R4_TRENDLYNE_MODE")=="HISTORICAL":
             with db.cursor() as cur:
                 cur.execute("""SELECT raw_payload->>'r2_key' FROM data_source_records

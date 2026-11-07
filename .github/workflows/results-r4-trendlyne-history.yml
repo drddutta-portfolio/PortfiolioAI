@@ -58,6 +58,54 @@ jobs:
 
 # Use the provider's focused semantic-search contract, retaining exact issuer/date qualification downstream.
 
+  current-corrections:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        shard: [0]
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_FORCE_FRESH: '0'
+      RESULTS_R4_FRESH_RETRY: '0'
+      RESULTS_R4_TRENDLYNE_SHARDS: '1'
+      RESULTS_R4_TRENDLYNE_MODE: CURRENT_CORRECTIONS
+      RESULTS_R4_TRENDLYNE_SHARD: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-node@v4
+        with: {node-version: "24"}
+      - name: Verify workflow identity and independent retry regressions
+        run: |
+          node scripts/results/test_r4_workflow_identity.mjs
+          node scripts/results/test_r4_provider_result.mjs
+          python -m unittest discover -s scripts/results -p test_r4_provider_capture_health.py -v
+          python scripts/results/test_r4_recovery_queue.py -v
+      - name: Verify unauthenticated requests remain rejected
+        run: |
+          status=$(curl --silent --output /dev/null --write-out '%{http_code}' --request POST --header 'x-portfolioai-r4: history' --header 'content-type: application/json' --data '{}' https://lrgpjimipfkyoqbpsqzz.supabase.co/functions/v1/discover-trendlyne-capabilities)
+          test "$status" = 401
+      - name: Install pinned historical source dependencies
+        run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Collect every assigned request and defer individual failures
+        run: python scripts/results/r4-trendlyne-history.py
+      # Detailed captures and retry traces are retained privately in Development R2.
+# Exact legal issuer names and original reporting windows for every remaining dated quarter.
+
+# Revisit the entire unresolved cohort with exact-quarter issuer-original discovery; preserve same-day captures.
+
+# Use the provider's focused semantic-search contract, retaining exact issuer/date qualification downstream.
+
+
   recover-originals:
     needs: history
     if: always() && !cancelled() && github.ref == 'refs/heads/PortfolioAI-Development'
