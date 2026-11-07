@@ -772,6 +772,19 @@ def main():
         qualified_sets=({"HCLTECH","HDFCBANK"},{"BECTORFOOD","KOTAKBANK","V2RETAIL"})
         if requalify and {x[0] for x in stocks} not in qualified_sets:
             raise RuntimeError("REQUALIFICATION_NOT_TARGETED_APPROVED_COHORT")
+        bse_priorities=set()
+        if RESULTS_LIVE_SCAN_MODE and os.getenv("RESULTS_BSE_HINT_PATH"):
+            with open(os.environ["RESULTS_BSE_HINT_PATH"],encoding="utf-8") as source_file:
+                hints=json.load(source_file)
+            if hints.get("source")!="BSEINDIAAPI" or hints.get("mode")!="READ_ONLY_DISCOVERY_HINTS" or hints.get("quarter_end")!=TARGET_QUARTERS[-1]:
+                raise RuntimeError("BSE_DISCOVERY_HINT_SCOPE_INVALID")
+            symbols=hints.get("symbols",[])
+            if not isinstance(symbols,list) or len(symbols)>262 or not all(isinstance(x,str) for x in symbols):
+                raise RuntimeError("BSE_DISCOVERY_HINTS_INVALID")
+            bse_priorities=set(symbols)&{x[0] for x in stocks}
+            # BSE data only prioritizes public original-file discovery.
+            # BSE's summary figures are NEVER selected as audited R5 facts.
+            stocks.sort(key=lambda x:(x[0] not in bse_priorities,x[0]))
         conn.rollback()
         session=requests.Session()
         session.headers.update({"User-Agent":"Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)","Accept-Language":"en-IN,en;q=0.8"})
@@ -788,6 +801,7 @@ def main():
         log={"universe_target":len(stocks),"target_period_ends":list(TARGET_QUARTERS),
              "access_ok":bootstrap_error is None,"listing_error":bootstrap_error,"visited":0,"already_complete":0,"with_documents":0,
              "documents_parsed":0,"observations_inserted":0,"blocked":[],
+             "bse_prioritized_stocks":len(bse_priorities),
              "stock_outcomes":[]}
         for symbol,isin,security_id in stocks:
             entry={"symbol":symbol,"qualified":0,"observations":0,"reason":None}
