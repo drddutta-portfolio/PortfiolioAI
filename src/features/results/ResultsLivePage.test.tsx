@@ -54,6 +54,20 @@ describe("Results scan button integration", () => {
     expect(screen.getByText("New independently qualified company-quarters")).toBeInTheDocument()
   })
 
+  it("explains a GitHub 403 Contents-write failure instead of displaying only an HTTP code", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view,error:null,isLoading:false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockRejectedValue(new Error(
+      "SCAN_DISPATCH_FAILED: SCAN_WORKER_DISPATCH_HTTP_403_GITHUB_TOKEN_CONTENTS_WRITE_DENIED"
+    ))
+    render(<ResultsLivePage />)
+    fireEvent.click(await screen.findByRole("button",{name:/Run Scan Now/}))
+    expect(await screen.findByRole("alert")).toHaveTextContent("GitHub denied write access")
+    expect(screen.getByRole("alert")).toHaveTextContent("Contents")
+    expect(mock.step).not.toHaveBeenCalled()
+  })
+
   it("shows a missing scanner-dispatch credential instead of pretending zero new results", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio:view,error:null,isLoading:false })
     mock.load.mockResolvedValue([])
