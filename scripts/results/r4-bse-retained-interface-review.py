@@ -29,14 +29,23 @@ def main():
                 scripts=[urljoin(response.url,u) for u in parser.sources];scripts=[u for u in scripts if urlparse(u).scheme=='https' and urlparse(u).hostname=='www.bseindia.com']
                 scripts.sort(key=lambda u:(not bool(re.search('financ|result|stock|corp|controller|main',u,re.I)),u));print('R4_BSE_PUBLIC_INTERFACE',json.dumps({'url':response.url,'scripts':scripts,'bytes':len(response.content)}),flush=True)
                 sources=[(response.url,body)]
-                for script in scripts[:12]:
+                seen=set(); pending=list(scripts[:12]); total_bytes=0
+                # Angular loads the financial route from first-party lazy chunks.
+                while pending and len(seen)<45 and total_bytes<20_000_000:
+                    script=pending.pop(0)
+                    if script in seen:continue
+                    seen.add(script)
                     try:
                         r=bse._bse.session.get(script,timeout=(15,25));r.raise_for_status()
                         if urlparse(r.url).hostname!='www.bseindia.com' or len(r.content)>5_000_000:continue
-                        sources.append((r.url,r.text))
+                        sources.append((r.url,r.text));total_bytes+=len(r.content)
+                        children=[urljoin(r.url,m) for m in re.findall(r'''["']([^"']*(?:chunk|financial|result)[^"']*\.js)["']''',r.text,re.I)]
+                        children=[u for u in children if urlparse(u).scheme=='https' and urlparse(u).hostname=='www.bseindia.com' and u not in seen]
+                        pending.extend(u for u in children if u not in pending)
                     except Exception as e:print('R4_PUBLIC_SCRIPT_UNAVAILABLE',type(e).__name__,flush=True)
+                print('R4_PUBLIC_SCRIPT_REVIEW_BOUNDS',json.dumps({'scripts':len(seen),'bytes':total_bytes,'pending':len(pending)}),flush=True)
                 for source,text in sources:
-                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres\.aspx|FinancialResult/|TabResults_PAR',text,re.I))[:15]:
+                    for match in list(re.finditer(r'resultinS|Corp_FinanceResult|financialres|FinancialResult|TabResults_PAR|qtrcode|quarterid',text,re.I))[:15]:
                         fragment=text[max(0,match.start()-150):match.end()+550]
                         print('R4_BSE_PUBLIC_FINANCIAL_INTERFACE_FRAGMENT',json.dumps({'source':source,'fragment':fragment}),flush=True)
                     digest=hashlib.sha256(text.encode()).hexdigest();batch.immutable_put(client,batch.PREFIX+'bse-public-interface-review/sha256='+digest+'/source.txt',text.encode())

@@ -29,3 +29,5 @@ jobs:
       - name: Read retained link identifiers and public exchange interface without financial writes
         run: python scripts/results/r4-bse-retained-interface-review.py
 # Retained bodies remain private R2; logs show public interface code and link metadata only.
+
+# Follow bounded first-party financial-route lazy chunks for the historical interface.
