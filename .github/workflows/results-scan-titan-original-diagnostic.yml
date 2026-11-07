@@ -1,0 +1,47 @@
+name: Results Scan TITAN Original Financial Statement Identity Canary
+on:
+  push:
+    branches: [results-scan-v2-dev-rollout-20261107]
+    paths: [.github/workflows/results-scan-titan-original-diagnostic.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --no-cache-dir 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+      - name: Verify NSE original TITAN September quarter financial identity without writes
+        run: |
+          python - <<'PY'
+          import importlib.util,requests,json
+          from bs4 import BeautifulSoup
+          from pathlib import Path
+          p=Path('scripts/results/r3-live-public-filing-batch.py')
+          spec=importlib.util.spec_from_file_location('r3',p);r3=importlib.util.module_from_spec(spec);spec.loader.exec_module(r3)
+          symbol,isin='TITAN','INE280A01028'
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)','Accept-Language':'en-IN,en;q=0.8'})
+          s.get('https://www.nseindia.com/companies-listing/corporate-integrated-filing',timeout=20)
+          records=r3.fetch_json(s,symbol)
+          urls=r3.listing_urls(records,symbol)
+          print('NSE_ORIGINAL_COUNT',len(urls))
+          for url in urls[:4]:
+            try:
+              res=s.get(url,timeout=22);res.raise_for_status()
+              soup=BeautifulSoup(res.text,'html.parser');tables=list(r3.html_rows(soup))
+              declared_isins=[v for t in tables for v in r3.field_values(t,'isin')]
+              declared_symbols=[v for t in tables for v in r3.field_values(t,'nse symbol')]
+              fact,reason=r3.extract_source(res.text,symbol,isin,url)
+              print('SOURCE_VERIFICATION',json.dumps({'url_tail':url.rsplit('/',1)[-1],
+               'source_symbol':list(dict.fromkeys(declared_symbols)),
+               'source_isin':list(dict.fromkeys(declared_isins)),
+               'period_end':fact.get('period_end') if fact else None,
+               'financial_scope':fact.get('scope') if fact else None,
+               'metric_keys':sorted(fact.get('facts',{})) if fact else [],
+               'parse_reason':reason},sort_keys=True))
+            except Exception as exc:print('SOURCE_ERROR',type(exc).__name__,str(exc)[:90])
+          PY

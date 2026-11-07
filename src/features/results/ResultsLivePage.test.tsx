@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
 import type { PortfolioPosition, PortfolioViewModel } from "../portfolio/types"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
@@ -31,8 +31,54 @@ function observation(code: string, value: string, selected = false): ResultsSour
   }
 }
 beforeAll(() => { Object.defineProperty(Element.prototype, "scrollIntoView", { value: vi.fn(), configurable: true }) })
-afterEach(() => { cleanup(); vi.clearAllMocks() })
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.clearAllMocks() })
 mock.status.mockResolvedValue({ lastScan: null, newResults: 0, run: null })
+
+describe("Results scan button integration", () => {
+  it("clicking Run Scan Now launches the verified backend run, not legacy STEP loops", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockResolvedValue({lastScan:null,newResults:0,run:{
+      id:"run-1",status:"RUNNING",started_at:"2026-11-07T10:00:00Z",
+      completed_at:null,requested_count:2,processed:0,pending:2,
+      accepted_count:0,failed_count:0,
+    }})
+    render(<ResultsLivePage />)
+    const start = await screen.findByRole("button", {name:/Run Scan Now/})
+    fireEvent.click(start)
+    await waitFor(()=>expect(mock.start).toHaveBeenCalledWith("p"))
+    expect(await screen.findByText("Queued · waiting for worker")).toBeInTheDocument()
+    expect(screen.getByRole("button", {name:/Scanning/})).toBeDisabled()
+    expect(mock.step).not.toHaveBeenCalled()
+    expect(screen.getByText("New independently qualified company-quarters")).toBeInTheDocument()
+  })
+
+  it("explains a GitHub 403 Contents-write failure instead of displaying only an HTTP code", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view,error:null,isLoading:false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockRejectedValue(new Error(
+      "SCAN_DISPATCH_FAILED: SCAN_WORKER_DISPATCH_HTTP_403_GITHUB_TOKEN_CONTENTS_WRITE_DENIED"
+    ))
+    render(<ResultsLivePage />)
+    fireEvent.click(await screen.findByRole("button",{name:/Run Scan Now/}))
+    expect(await screen.findByRole("alert")).toHaveTextContent("GitHub denied write access")
+    expect(screen.getByRole("alert")).toHaveTextContent("Contents")
+    expect(mock.step).not.toHaveBeenCalled()
+  })
+
+  it("shows a missing scanner-dispatch credential instead of pretending zero new results", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio:view,error:null,isLoading:false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockRejectedValue(new Error("SCAN_WORKER_CONFIGURATION_PENDING: Development dispatcher credential missing"))
+    render(<ResultsLivePage />)
+    fireEvent.click(await screen.findByRole("button",{name:/Run Scan Now/}))
+    expect(await screen.findByRole("alert")).toHaveTextContent("SCAN_WORKER_CONFIGURATION_PENDING")
+    expect(mock.step).not.toHaveBeenCalled()
+  })
+})
 
 describe("Results live approved visual contract", () => {
   it("retains the four-card approved R2 presentation with real holdings, not fixture data", async () => {
@@ -143,23 +189,33 @@ describe("Results live approved visual contract", () => {
     expect(screen.getByText("HDFCBANK")).toBeInTheDocument()
   })
 
-  it("starts a real authenticated source scan and reloads observations after completion", async () => {
+  it("starts an authenticated background scan and refreshes selected Results after completion", async () => {
+    vi.useFakeTimers({ toFake: ["setInterval"] })
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
     mock.load.mockResolvedValue([])
     const started = { lastScan: null, newResults: 0, run: {
       id: "run-1", status: "RUNNING", requested_count: 2, processed: 0, pending: 2,
-      started_at: "2026-10-14T03:00:00Z", completed_at: null, accepted_count: 0, failed_count: 0,
+      started_at: "2026-11-07T10:00:00Z", completed_at: null, accepted_count: 0, failed_count: 0,
     }}
+    const completed = { lastScan: "2026-11-07T10:01:00Z", newResults: 1, run: {
+      ...started.run, status: "SUCCEEDED", processed: 2, pending: 0,
+      completed_at: "2026-11-07T10:01:00Z", accepted_count: 1,
+    }}
+    mock.status.mockResolvedValueOnce({lastScan:null,newResults:0,run:null}).mockResolvedValue(completed)
     mock.start.mockResolvedValue(started)
-    mock.step.mockResolvedValue({ lastScan: "2026-10-14T03:01:00Z", newResults: 1, run: {
-      ...started.run, status: "PARTIAL", processed: 2, pending: 0,
-      completed_at: "2026-10-14T03:01:00Z", accepted_count: 1,
-    }})
     render(<ResultsLivePage />)
     fireEvent.click(await screen.findByRole("button", { name: /Run Scan Now/ }))
-    await waitFor(() => expect(mock.step).toHaveBeenCalledWith("p", "run-1"))
+    await waitFor(() => expect(mock.start).toHaveBeenCalledWith("p"))
+    expect(await screen.findByText("Queued · waiting for worker")).toBeInTheDocument()
+    await act(async () => {
+      vi.advanceTimersByTime(8000)
+      await Promise.resolve()
+    })
+    await waitFor(() => expect(mock.status).toHaveBeenCalledTimes(2))
     await waitFor(() => expect(mock.load).toHaveBeenCalledTimes(2))
-    expect(screen.getByText("1")).toBeInTheDocument()
+    expect(screen.getByText("New independently qualified company-quarters")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /Run Scan Now/ })).toBeEnabled()
+    expect(mock.step).not.toHaveBeenCalled()
   })
 
   it("shows a real quarter label without duplicate Q4 FY26 labels", async () => {
