@@ -11,14 +11,22 @@ import requests,psycopg
 from psycopg.rows import dict_row
 from r4_dated_columns import parse_html,extract_tables
 from r4_nse_catalog_revision import xml_trio,canonical,sha
-from r4_scope_catalog import list_filings
 
 HERE=Path(__file__).parent
 spec=importlib.util.spec_from_file_location('public_filing',HERE/'r3-live-public-filing-batch.py');public=importlib.util.module_from_spec(spec);spec.loader.exec_module(public)
 SYMBOL='BHARTIARTL';ISIN='INE397D01024';PERIOD='2025-12-31';START='2025-10-01'
 OLD_SOURCE='b5928597-5290-4f43-9286-3e917a7aab1c'
+CATALOG_SHA='190d98e43d30dd4576690625acaecb18f03a301698f166fc459fb1aa1bf081a6'
 CORE={'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
 OLD_VALUES={'OPERATING_REVENUE_QUARTER':Decimal('30854.8'),'NET_PROFIT_QUARTER':Decimal('4090.7'),'EPS_DILUTED':Decimal('6.8')}
+
+def retained_catalog(client):
+    key=public.R2_PREFIX+'bharti-scope-repair/sha256='+CATALOG_SHA+'/catalog.json'
+    raw=client.get_object(Bucket=public.BUCKET,Key=key)['Body'].read()
+    if len(raw)>5_000_000 or sha(raw)!=CATALOG_SHA:raise ValueError('CATALOG_CAPTURE_HASH_MISMATCH')
+    rows=json.loads(raw)
+    if not isinstance(rows,list) or not 1<=len(rows)<100 or any(not isinstance(r,dict) or r.get('symbol')!=SYMBOL for r in rows):raise ValueError('CATALOG_CAPTURE_ISSUER_OR_COMPLETENESS_UNPROVEN')
+    return rows
 
 def validate_pair(html,xml):
     parsed=extract_tables(parse_html(html.decode('utf-8-sig'))[1],SYMBOL,ISIN,PERIOD)
@@ -46,7 +54,8 @@ def main():
     if public.PROJECT_REF not in dburl or os.environ.get('GITHUB_REPOSITORY')!='drddutta-portfolio/PortfiolioAI' or os.environ.get('GITHUB_REF')!='refs/heads/PortfolioAI-Development' or os.environ.get('CLOUDFLARE_R2_BUCKET')!=public.BUCKET:raise RuntimeError('DEVELOPMENT_ONLY')
     client=public.r2_client();client.head_bucket(Bucket=public.BUCKET)
     with requests.Session() as session:
-        catalog=list_filings(session,SYMBOL)
+        session.headers.update({'User-Agent':'Mozilla/5.0','Referer':'https://www.nseindia.com/companies-listing/corporate-integrated-filing'})
+        catalog=retained_catalog(client)
         matches=[r for r in catalog if r.get('qe_Date','').upper()=='31-DEC-2025' and r.get('consolidated')=='Consolidated' and r.get('type_Sub')=='Original']
         if len(matches)!=1 or any(r.get('qe_Date','').upper()=='31-DEC-2025' and r.get('consolidated')=='Consolidated' and r.get('type_Sub')=='Revision' for r in catalog):raise ValueError('UNAMBIGUOUS_ORIGINAL_CATALOG_ENTRY_REQUIRED')
         row=matches[0];html=get(session,row['ixbrl']);xml=get(session,row['xbrl']);parsed=validate_pair(html,xml)
@@ -73,7 +82,7 @@ def main():
                 expected={r['metric_code']:r['id'] for r in fresh}
                 if any(r['selected_observation_id']!=expected[r['metric_code']] for r in prior):raise ValueError('REPAIRED_SELECTION_OBSERVATION_MISMATCH')
                 print('BHARTI_SCOPE_REPAIR_ALREADY_APPLIED',flush=True);db.rollback();return
-            proof={'contract':'BHARTI_EXPLICIT_PREFERRED_CONSOLIDATED_SCOPE_CORRECTION_V1','symbol':SYMBOL,'isin':ISIN,'period_start':START,'period_end':PERIOD,'reason':'Restore preferred consolidated reporting scope across adjacent quarters; no standalone financial figures are invalidated','prior_selections':prior,'new_source_record_id':source,'new_observation_ids':{r['metric_code']:r['id'] for r in fresh},'html_url':row['ixbrl'],'html_sha256_unretained':sha(html),'xml_url':row['xbrl'],'xml_sha256':sha(xml),'xml_r2_key':xmlkey,'catalog_r2_key':catkey,'catalog_sha256':sha(catraw),'source_commit':os.getenv('GITHUB_SHA')}
+            proof={'contract':'BHARTI_EXPLICIT_PREFERRED_CONSOLIDATED_SCOPE_CORRECTION_V1','symbol':SYMBOL,'isin':ISIN,'period_start':START,'period_end':PERIOD,'reason':'Restore preferred consolidated reporting scope across adjacent quarters; no standalone financial figures are invalidated','prior_selections':prior,'new_source_record_id':source,'new_observation_ids':{r['metric_code']:r['id'] for r in fresh},'html_url':row['ixbrl'],'html_sha256_unretained':sha(html),'xml_url':row['xbrl'],'xml_sha256':sha(xml),'xml_r2_key':xmlkey,'catalog_r2_key':catkey,'catalog_sha256':sha(catraw),'catalog_source':'NSE integrated-filing-results public response captured in this repair session; exact full-response hash pinned before hosted replay','source_commit':os.getenv('GITHUB_SHA')}
             encoded=canonical(proof);digest=sha(encoded);key=public.R2_PREFIX+'bharti-scope-repair/sha256='+digest+'/proof.json';public.put_immutable(client,encoded,key)
             if client.get_object(Bucket=public.BUCKET,Key=key)['Body'].read()!=encoded:raise ValueError('CORRECTION_PROOF_READBACK_FAILED')
             compact=canonical({'contract':proof['contract'],'symbol':SYMBOL,'isin':ISIN,'period_end':PERIOD,'r2_key':key,'proof_sha256':digest,'old_source_record_id':OLD_SOURCE,'new_source_record_id':source})

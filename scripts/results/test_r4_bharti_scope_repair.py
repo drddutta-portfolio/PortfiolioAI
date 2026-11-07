@@ -1,4 +1,5 @@
-import importlib.util,unittest
+import importlib.util,unittest,io
+from unittest.mock import Mock,patch
 from pathlib import Path
 from copy import deepcopy
 from test_r4_nse_catalog_revision import html
@@ -12,6 +13,16 @@ def originals():
 def prior():return [{'metric_code':k,'numeric_value':str(v),'consolidation_scope':'STANDALONE','source_record_id':m.OLD_SOURCE} for k,v in m.OLD_VALUES.items()]
 
 class BhartiScopeRepairTests(unittest.TestCase):
+    def test_retained_catalog_cannot_change_or_claim_another_issuer(self):
+        client=Mock();raw=b'[{"symbol":"OTHER"}]'
+        client.get_object.return_value={'Body':io.BytesIO(raw)}
+        with patch.object(m,'CATALOG_SHA',m.sha(raw)):
+            with self.assertRaisesRegex(ValueError,'ISSUER_OR_COMPLETENESS'):m.retained_catalog(client)
+        client.get_object.return_value={'Body':io.BytesIO(raw)}
+        with self.assertRaisesRegex(ValueError,'HASH_MISMATCH'):m.retained_catalog(client)
+    def test_exact_retained_catalog_is_reused_without_network_listing(self):
+        client=Mock();raw=b'[{"symbol":"BHARTIARTL"}]';client.get_object.return_value={'Body':io.BytesIO(raw)}
+        with patch.object(m,'CATALOG_SHA',m.sha(raw)):self.assertEqual(m.retained_catalog(client),[{'symbol':'BHARTIARTL'}])
     def test_both_original_formats_agree_on_exact_consolidated_quarter(self):
         h,x=originals();p=m.validate_pair(h,x)
         self.assertEqual(p['scope'],'CONSOLIDATED');self.assertEqual(p['period_start'],'2025-10-01');self.assertEqual(p['facts']['OPERATING_REVENUE_QUARTER']['value'],'1000')
