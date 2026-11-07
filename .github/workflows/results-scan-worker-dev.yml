@@ -1,0 +1,48 @@
+name: PortfolioAI Results Verified Manual Scan Worker - Development
+on:
+  push:
+    branches: [results-scan-worker-dev]
+    paths: [.github/scan-requests/latest.json]
+permissions: {contents: read}
+concurrency:
+  group: results-verified-manual-scan-dev
+  cancel-in-progress: false
+jobs:
+  scan:
+    if: github.ref == 'refs/heads/results-scan-worker-dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify strictly Development-only credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_DB_URL:-}"
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test "$CLOUDFLARE_R2_BUCKET" = portfolioai-history-dev
+          test -f .github/scan-requests/latest.json
+      - name: Install existing pinned original-source/replay dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            'psycopg[binary]==3.2.10' 'boto3==1.40.46' \
+            'requests==2.32.5' 'beautifulsoup4==4.13.5' \
+            'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+      - name: Verify original-filing parser regressions before provider access
+        run: |
+          python -m py_compile scripts/results/r3-live-public-filing-batch.py \
+            scripts/results/r4-verify-quarterly.py scripts/results/results_scan_worker.py
+          python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: Run owner-authorized original acquisition and independent R4 qualification
+        run: python scripts/results/results_scan_worker.py
