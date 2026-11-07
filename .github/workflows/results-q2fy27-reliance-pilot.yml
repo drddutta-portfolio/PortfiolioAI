@@ -1,0 +1,114 @@
+name: Results Q2 FY27 RELIANCE Isolated Development Pilot
+on:
+  push:
+    branches: [results-q2fy27-reliance-pilot-20261107]
+    paths:
+      - .github/workflows/results-q2fy27-reliance-pilot.yml
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: results-q2fy27-reliance-pilot-dev
+  cancel-in-progress: false
+jobs:
+  pilot:
+    if: github.ref == 'refs/heads/results-q2fy27-reliance-pilot-20261107'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_Q2FY27_RELIANCE_PILOT: '1'
+      RESULTS_TARGET_SYMBOLS: RELIANCE
+      RESULTS_MAX_STOCKS: '262'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify Development-only and exact issuer pilot
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_DB_URL:-}" || { echo MISSING_DB_SECRET; exit 1; }
+          [[ "$SUPABASE_DB_URL" == *lrgpjimipfkyoqbpsqzz* ]] || { echo NOT_DEVELOPMENT_DB; exit 1; }
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+          test "$RESULTS_TARGET_SYMBOLS" = RELIANCE
+          test "$RESULTS_Q2FY27_RELIANCE_PILOT" = 1
+      - name: Install existing pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            'psycopg[binary]==3.2.10' 'boto3==1.40.46' \
+            'requests==2.32.5' 'beautifulsoup4==4.13.5' 'mthrottle==0.0.2'
+      - name: Verify existing source parsing regression tests
+        run: python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: Acquire only RELIANCE Sep 2026 original quarterly facts to Dev R2 and database
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-q2fy27-pilot
+          python scripts/results/r3-live-public-filing-batch.py > tmp/results-q2fy27-pilot/acquisition.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('tmp/results-q2fy27-pilot/acquisition.json').read_text())
+          assert result['universe_target']==1, result['universe_target']
+          assert result['target_period_ends']==['2026-09-30'], result['target_period_ends']
+          assert len(result['stock_outcomes'])==1
+          row=result['stock_outcomes'][0]
+          assert row['symbol']=='RELIANCE', row
+          assert not result['blocked'], result['blocked']
+          assert row['qualified']>=1 or row['reason']=='FOUR_QUARTERS_ORIGINALS_EXIST_R4_SELECTION_PENDING',row
+          print(json.dumps({'issuer':row['symbol'],'period':'2026-09-30','new_observations':row['observations'],'status':row['reason']},sort_keys=True))
+          PY
+      - name: Independently verify and select only September 2026 original issuer trio
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply > tmp/results-q2fy27-pilot/verification.json
+      - name: Verify exactly three selected original consolidated metrics for Results UI
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          import psycopg
+          metrics={'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
+          query="""
+          SELECT o.metric_code,o.numeric_value::text,o.unit,o.consolidation_scope,
+                 o.source_record_id::text,o.period_start::text,o.period_end::text,
+                 d.selected_observation_id::text AS selected_id
+          FROM public.fundamental_observation_decisions d
+          JOIN public.fundamental_observations o ON o.id=d.selected_observation_id
+          JOIN public.securities s ON s.id=o.security_id
+          WHERE s.symbol='RELIANCE' AND s.isin='INE002A01018'
+            AND d.period_type='QUARTER' AND d.period_end='2026-09-30'
+            AND o.period_type='QUARTER' AND o.period_end=d.period_end
+            AND o.source_code='COMPANY_EXCHANGE_FILING'
+            AND o.metric_code=ANY(%s)
+          """
+          with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
+            with db.cursor() as cur:
+              cur.execute(query,(list(metrics),))
+              rows=cur.fetchall()
+          assert len(rows)==3 and {r[0] for r in rows}==metrics,rows
+          assert {r[3] for r in rows}=={'CONSOLIDATED'},rows
+          assert len({r[4] for r in rows})==1,rows
+          assert {r[5] for r in rows}=={'2026-07-01'},rows
+          assert {r[6] for r in rows}=={'2026-09-30'},rows
+          assert all(r[2]==('INR_PER_SHARE' if r[0]=='EPS_DILUTED' else 'INR_CRORE') for r in rows)
+          out={'status':'PASS','security':'RELIANCE','quarter_end':'2026-09-30',
+               'selected_core_metrics':{r[0]:{'value':r[1],'unit':r[2]} for r in rows},
+               'single_original_source':True,'ui_repository':'fundamental_observation_decisions + fundamental_observations',
+               'production_changes':0}
+          Path('tmp/results-q2fy27-pilot/acceptance.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,sort_keys=True))
+          PY
+      - name: Upload source acquisition, independent qualification and readback evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-q2fy27-reliance-dev-pilot
+          path: tmp/results-q2fy27-pilot/*.json
+          if-no-files-found: warn
+          retention-days: 14
