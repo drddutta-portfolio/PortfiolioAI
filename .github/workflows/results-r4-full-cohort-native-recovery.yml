@@ -11,8 +11,6 @@ jobs:
     uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
     with:
       native_only: true
-      # Complete unresolved issuer cohort at the 6 November recovery checkpoint.
-      # The shared collector still queries canonical missing quarters; selected
-      # quarters are skipped and original audit/independent selection stay mandatory.
-      target_symbols: BLUSPRING,COFORGE,CPPLUS,DDEVPLSTIK,GROWW,ICICIAMC,IKS,LENSKART,LGEINDIA,PINELABS,STARHEALTH,TATACAP,TMCV,UTLSOLAR,VAML
+      # Omit target_symbols: the existing empty default selects every
+      # unresolved issuer. A targeted shortlist is deliberately capped at four.
     secrets: inherit

@@ -11,6 +11,12 @@ spec=importlib.util.spec_from_file_location('official_collector',Path(__file__).
 collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
 
 class CollectorTransportIntegration(TestCase):
+    def test_full_cohort_workflow_uses_unfiltered_default(self):
+        workflow=Path(__file__).resolve().parents[2]/'.github/workflows/results-r4-full-cohort-native-recovery.yml'
+        text=workflow.read_text()
+        self.assertIn('native_only: true',text)
+        self.assertNotRegex(text,r'(?m)^\s+target_symbols:')
+
     def test_complete_native_proposal_survives_a_later_ocr_timeout(self):
         raw=b'original';periods=['2024-09-30','2024-12-31'];events=[]
         proof={'periods':{periods[0]:[{'method':'NATIVE_STATEMENT_LAYOUT'}],periods[1]:[]},
