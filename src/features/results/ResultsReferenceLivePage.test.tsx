@@ -52,7 +52,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(screen.getByRole("tab",{name:"Quarterly Results"})).toHaveAttribute("aria-selected","true")
     expect(screen.getByRole("columnheader",{name:/Q1 FY27/})).toBeInTheDocument()
     expect(screen.getByRole("columnheader",{name:"Q2 FY26"})).toBeInTheDocument()
-    expect(screen.getByRole("columnheader",{name:/Q2 FY27/})).toBeInTheDocument()
+    expect(screen.queryByRole("columnheader",{name:/Q2 FY27/})).not.toBeInTheDocument()
     expect(screen.getByRole("columnheader",{name:"Q1 FY26"})).toBeInTheDocument()
     expect(screen.getByRole("tab",{name:/Annual Results/})).toBeDisabled()
     expect(screen.getByRole("button",{name:"Current Holdings"})).toBeInTheDocument()
