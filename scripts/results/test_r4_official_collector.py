@@ -17,6 +17,31 @@ class CollectorTransportIntegration(TestCase):
         self.assertIn('native_only: true',text)
         self.assertNotRegex(text,r'(?m)^\s+target_symbols:')
 
+    def test_fair_ocr_attempts_later_page_before_escalating_first_page(self):
+        doc=fitz.open()
+        for _ in range(2):
+            page=doc.new_page();page.insert_text((20,30),'JASH ENGINEERING LIMITED Revenue diluted')
+        raw=doc.tobytes();period='2024-09-30';attempts=[]
+        def render(*args,**kwargs):
+            page=args[1];attempts.append((page,kwargs['render_config']))
+            if page==1:raise ValueError('one original page failed')
+            return {period:{'parsed':{'ocr_render_dpi':[300,450],'ocr_segmentation_mode':3}}}
+        def financial(*args,**kwargs):
+            if len(args)>3 and args[3]=='OCR_STATEMENT_LAYOUT_V5':return [{'proved':'complete paired-render trio'}]
+            raise ValueError('native absent')
+        with patch.object(collector,'extract_original',side_effect=financial),patch('r4_ocr_dated_geometry.extract_dated_periods',side_effect=render):
+            result=collector.extract_all(raw,'JASH',[period],document_audit={'original_sha256':collector.sha(raw),'pages':['Revenue diluted']*2})
+        self.assertEqual(attempts,[(1,(3,(300,450))),(2,(3,(300,450)))])
+        self.assertTrue(result['periods'][period])
+
+    def test_predecessor_native_cache_requires_exact_dependencies_and_policy(self):
+        key='prefix/engine='+'1'*64+'/original=digest/native-proof.json'
+        with patch.object(collector,'active_basis_policy',return_value=collector.CURRENT_DISPLAY_POLICY):
+            self.assertEqual(len(collector.native_cache_keys(key)),2)
+            with patch.object(collector,'native_compatibility_fingerprint',return_value='changed dependency'):
+                self.assertEqual(collector.native_cache_keys(key),[key])
+        with patch.object(collector,'active_basis_policy',return_value=None):self.assertEqual(collector.native_cache_keys(key),[key])
+
     def test_complete_native_proposal_survives_a_later_ocr_timeout(self):
         raw=b'original';periods=['2024-09-30','2024-12-31'];events=[]
         proof={'periods':{periods[0]:[{'method':'NATIVE_STATEMENT_LAYOUT'}],periods[1]:[]},
@@ -115,7 +140,7 @@ class CollectorTransportIntegration(TestCase):
             result=collector.extract_all(raw,'JASH',[period])
         proof.assert_called_once()
         self.assertEqual(proof.call_args.args[:2],(raw,1))
-        self.assertEqual(proof.call_args.kwargs,{'header_region':True,'label_region':True,'statement_layout':True,'advanced_statement_layout':True})
+        self.assertEqual(proof.call_args.kwargs,{'header_region':True,'label_region':True,'statement_layout':True,'advanced_statement_layout':True,'render_config':(3,(300,450))})
         self.assertEqual(replay.call_args.args[3],'OCR_STATEMENT_LAYOUT_V5')
         self.assertEqual(result['periods'][period],[{'independently_replayed':True}])
 
@@ -227,9 +252,10 @@ class CollectorTransportIntegration(TestCase):
              patch('r4_ocr_dated_geometry.extract_dated_periods',replay), \
              patch.object(collector,'extract_original',side_effect=ValueError('NATIVE_TABLE_UNPROVEN')):
             proof=collector.extract_all(raw,'JASH',[period])
-        replay.assert_called_once_with(raw,1,[period],False,False,header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True)
+        self.assertEqual(replay.call_count,9)
+        replay.assert_any_call(raw,1,[period],False,False,header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True,render_config=(3,(300,450)))
         self.assertEqual(proof['periods'][period],[])
-        self.assertEqual(proof['rejections']['INDEPENDENT_RENDER_DISAGREEMENT'],1)
+        self.assertEqual(proof['rejections']['INDEPENDENT_RENDER_DISAGREEMENT'],9)
 
     def session(self,raw):
         class Response:

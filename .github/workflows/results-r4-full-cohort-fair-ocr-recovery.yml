@@ -1,0 +1,16 @@
+name: Results R4 Full Historical Cohort Fair Page OCR Recovery
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-full-cohort-fair-ocr-recovery.yml]
+permissions: {contents: read}
+jobs:
+  recover:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    uses: ./.github/workflows/results-r4-official-issuer-recovery.yml
+    with:
+      native_only: false
+      # Omit target_symbols: the existing empty default selects every
+      # unresolved issuer. A targeted shortlist is deliberately capped at four.
+    secrets: inherit

@@ -23,6 +23,29 @@ def replay_engine(directory=None):
         'r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py','r4_issuer_name.py')
     return sha(b'\0'.join((root/name).read_bytes() for name in names)+b'\0'+(active_basis_policy() or 'LEGACY_ORIGINAL_ONLY').encode())
 
+# One exact predecessor is compatible only while the native extraction prefix
+# and all its parser/audit dependencies remain byte-identical to this release.
+# This reuses native acquisition work, never old complete OCR proofs or decisions.
+PRE_FAIR_ENGINE='376a91c667ae87ccef9b83c60c8e78ee72157b6ae68ae5907803241d49e04ac2'
+NATIVE_COMPATIBILITY='98d18a3b4596dd2e411c685c85b618d8bd3c8ef004bda150e96dadb6bd9128cb'
+def native_compatibility_fingerprint():
+    root=Path(__file__).parent;text=Path(__file__).read_text();start=text.index('def extract_all(');end=text.index('    if native_only:return',start)
+    names=('r4_official_issuer.py','r4_pdf_geometry.py','r4_ocr_dated_geometry.py','r4_ocr_geometry.py','r4_ocr_cli.py','r4_issuer_name.py')
+    return sha(text[start:end].encode()+b'\0'+b'\0'.join((root/name).read_bytes() for name in names))
+
+def native_cache_keys(key):
+    keys=[key]
+    if active_basis_policy()==CURRENT_DISPLAY_POLICY and native_compatibility_fingerprint()==NATIVE_COMPATIBILITY:
+        keys.append(re.sub(r'/engine=[a-f0-9]{64}/','/engine='+PRE_FAIR_ENGINE+'/',key))
+    return list(dict.fromkeys(keys))
+
+def load_native_cache(client,key):
+    for candidate in native_cache_keys(key):
+        try:return json.loads(client.get_object(Bucket=batch.BUCKET,Key=candidate)['Body'].read())
+        except Exception as error:
+            if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
+    return None
+
 def download_original(session,symbol,url):
     approved_url(symbol,url)
     if urlparse(url).hostname=='www.bseindia.com':
@@ -90,25 +113,39 @@ def extract_all(raw,symbol,periods,native_only=False,document_audit=None):
                         out[period]=extract_original(raw,symbol,period,'OCR_CONTINUATION',index+1,pair,3,audit,basis_policy=policy)
                         if out[period]:pending.remove(period);break
                     except ValueError as error:rejects[str(error).split(':')[0]]+=1
-    for n,text in enumerate(audit['pages'],1):
-        if not pending:break
-        # The low-resolution audit locates candidates; it is not financial
-        # qualification. Native labels can locate a table when audit OCR loses
-        # a label. All figures still require independent paired-render replay.
-        text=text+' '+native_pages[n-1]
-        if not re.search('diluted',text,re.I) or not re.search(r'revenue|premium.*earned',text,re.I):continue
-        # Versioned layout replay keeps dates, amounts and signs explicit.
-        # Existing receipt methods remain independently replayable unchanged.
-        proofs=extract_dated_periods(raw,n,pending,False,symbol=='STARHEALTH',
-            header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True)
-        for period in pending[:]:
-            proof=proofs[period]
-            if proof.get('rejection'):rejects[proof['rejection']]+=1;continue
-            parsed=proof['parsed']
-            try:
-                out[period]=extract_original(raw,symbol,period,'OCR_STATEMENT_LAYOUT_V5',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
-                if out[period]:pending.remove(period)
-            except ValueError as error:rejects[str(error).split(':')[0]]+=1
+    pages=[n for n,text in enumerate(audit['pages'],1)
+        if re.search('diluted',text+' '+native_pages[n-1],re.I)
+        and re.search(r'revenue|premium.*earned',text+' '+native_pages[n-1],re.I)]
+    # Round-robin pages before escalating the independent render settings.
+    # A difficult first table must not consume every configuration before a
+    # later financial page gets its first attempt. No financial gate changes.
+    absent=set()
+    for mode in (3,6,11):
+        for pair in ((300,450),(200,400),(350,500)):
+            for n in pages:
+                if not pending:break
+                available=[p for p in pending if (n,p) not in absent]
+                if not available:continue
+                try:
+                    proofs=extract_dated_periods(raw,n,available,False,symbol=='STARHEALTH',
+                        header_region=True,label_region=True,statement_layout=True,advanced_statement_layout=True,
+                        render_config=(mode,pair))
+                except ValueError as error:
+                    rejects[str(error).split(':')[0]]+=1;continue
+                for period in available:
+                    proof=proofs[period]
+                    if proof.get('rejection'):
+                        rejects[proof['rejection']]+=1
+                        if proof['rejection'] in ('PERIOD_NOT_PRESENT_IN_THREE_WAY_REPLAYED_DATED_HEADERS','PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS'):absent.add((n,period))
+                        continue
+                    parsed=proof['parsed']
+                    try:
+                        out[period]=extract_original(raw,symbol,period,'OCR_STATEMENT_LAYOUT_V5',n,parsed['ocr_render_dpi'],parsed['ocr_segmentation_mode'],audit,basis_policy=policy)
+                        if out[period]:pending.remove(period)
+                    except ValueError as error:rejects[str(error).split(':')[0]]+=1
+            # Return complete independently replayed trios promptly so the
+            # caller can persist them before another hard original deadline.
+            if any(out.values()):return {'periods':out,'rejections':dict(rejects)}
     return {'periods':out,'rejections':dict(rejects)}
 
 def replay_with_native_checkpoint(raw,symbol,periods,load_native,save_native,checkpoint_native,timeout=480,native_only=False):
@@ -289,11 +326,7 @@ def main():
                     except Exception as error:
                         if getattr(error,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
                         native_key=cachekey.rsplit('/',1)[0]+'/native-proof.json'
-                        def load_native():
-                            try:return json.loads(client.get_object(Bucket=batch.BUCKET,Key=native_key)['Body'].read())
-                            except Exception as problem:
-                                if getattr(problem,'response',{}).get('Error',{}).get('Code') not in ('404','NoSuchKey','NotFound'):raise
-                                return None
+                        def load_native():return load_native_cache(client,native_key)
                         def save_native(value):batch.immutable_put(client,native_key,canonical(value))
                         def checkpoint_native(value):
                             for period,options in value['periods'].items():

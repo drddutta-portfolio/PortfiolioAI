@@ -199,19 +199,22 @@ def extract_dated_page(raw,page_no,period,bank=False,insurer=False,render_dpi=(3
         second=extract_page(two,page_no,period,bank,insurer,allow_comparative=True,**options)
         return checked(first,second,one,two,pair,segmentation_mode,statement_layout,advanced_statement_layout)
 
-def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_region=False,label_region=False,statement_layout=False,advanced_statement_layout=False):
+def extract_dated_periods(raw,page_no,periods,bank=False,insurer=False,header_region=False,label_region=False,statement_layout=False,advanced_statement_layout=False,render_config=None):
     """Render each page once per approved pair, then inspect all target quarters.
 
     A complete explicit header proves absent quarters without extra OCR work.
     Alternate resolutions remain subject to the same exact-cell/arithmetic gate.
     """
+    if render_config is not None:
+        mode,pair=render_config;pair=tuple(pair)
+        if mode not in (3,6,11) or pair not in RENDER_PAIRS:raise ValueError('UNAPPROVED_FAIR_RENDER_CONFIGURATION')
     results={};pending=set(periods)
     with fitz.open(stream=raw,filetype='pdf') as pdf:
         page=pdf[page_no-1];validate_page_layout(page)
         native_headers=complete_header_dates(page)
-        for segmentation_mode in (3,6,11):
+        for segmentation_mode in ((render_config[0],) if render_config is not None else (3,6,11)):
             if not pending:break
-            for pair in RENDER_PAIRS:
+            for pair in ((tuple(render_config[1]),) if render_config is not None else RENDER_PAIRS):
                 if not pending:break
                 try:
                     one=render_page(page,pair[0],segmentation_mode);two=render_page(page,pair[1],segmentation_mode)

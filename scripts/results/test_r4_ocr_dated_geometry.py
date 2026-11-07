@@ -34,6 +34,17 @@ class DatedOCRTest(unittest.TestCase):
         self.assertEqual(result['2024-09-30']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
         self.assertEqual(result['2024-12-31']['rejection'],'PERIOD_NOT_PRESENT_IN_PROVEN_QUARTER_COLUMNS')
 
+    def test_fair_configuration_runs_only_one_approved_independent_pair(self):
+        from unittest.mock import patch
+        import r4_ocr_dated_geometry as m
+        with patch.object(m,'render_page',wraps=m.render_page) as render:
+            result=m.extract_dated_periods(self.raw,1,('2024-09-30',),render_config=(3,(300,450)))
+        self.assertEqual(render.call_count,2)
+        self.assertEqual(result['2024-09-30']['parsed']['facts']['EPS_DILUTED']['value'],'11.88')
+        for config in ((7,(300,450)),(3,(300,300)),(3,(100,200))):
+            with self.assertRaisesRegex(ValueError,'UNAPPROVED_FAIR_RENDER_CONFIGURATION'):
+                m.extract_dated_periods(self.raw,1,('2024-09-30',),render_config=config)
+
     def test_table_segmentation_replays_both_actual_financial_renders(self):
         parsed,checks=extract_dated_page(self.raw,1,'2024-09-30',segmentation_mode=6)
         self.assertEqual(parsed['facts']['EPS_DILUTED']['value'],'11.88')
