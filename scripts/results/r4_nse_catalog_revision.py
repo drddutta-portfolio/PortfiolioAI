@@ -104,7 +104,7 @@ def unit_kinds(root):
         units[node.attrib.get('id')]=kind
     return units
 
-def xml_trio(raw,proof):
+def xml_facts(raw,proof,tags):
     if len(raw)>5_000_000 or b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():raise ValueError('NSE_REVISION_XML_BYTES_UNPROVEN')
     root=ET.fromstring(raw)
     if local(root.tag)!='xbrl':raise ValueError('NSE_REVISION_NOT_XML_INSTANCE')
@@ -125,7 +125,7 @@ def xml_trio(raw,proof):
         or [(e.text or '').strip() for e in context.iter() if local(e.tag)=='identifier'] not in ([code],[proof['symbol']])):
         raise ValueError('NSE_REVISION_XML_EXACT_QUARTER_ENTITY_UNPROVEN')
     units=unit_kinds(root)
-    tags={'OPERATING_REVENUE_QUARTER':'RevenueFromOperations','NET_PROFIT_QUARTER':'ProfitLossForPeriod','EPS_DILUTED':'DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations'};facts={}
+    facts={}
     for metric,tag in tags.items():
         values=set();eps=metric=='EPS_DILUTED'
         for e in root:
@@ -139,6 +139,9 @@ def xml_trio(raw,proof):
         if len(values)!=1:raise ValueError('NSE_REVISION_XML_COMPLETE_TRIO_UNPROVEN')
         facts[metric]=values.pop()
     return facts
+
+def xml_trio(raw,proof):
+    return xml_facts(raw,proof,{'OPERATING_REVENUE_QUARTER':'RevenueFromOperations','NET_PROFIT_QUARTER':'ProfitLossForPeriod','EPS_DILUTED':'DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations'})
 
 def parse_original(raw,url,proof):
     if not origin(url):raise ValueError('NSE_REVISION_ORIGINAL_ORIGIN_UNPROVEN')
