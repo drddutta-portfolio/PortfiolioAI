@@ -23,7 +23,7 @@ def main():
     if os.environ.get('RESULTS_R4_BSE_ENDPOINT_PROBE')=='1':
         # Public route discovery only. No financial amount or quarter is admitted.
         with batch.PortfolioBSE() as bse:
-            for endpoint in ('FinancialResultHeader/w','StockreachResult/w','Corp_FinanceResult_ng_new/w','Corp_GetFINANCE_DRDOWN_ng/w'):
+            for endpoint in tuple(e+'?'+q for e in ('FinancialResultHeader/w','StockreachResult/w') for q in ('Code=532541&qtr=125.00&RType=','scripcode=532541&qtrid=125.00','scripcode=532541&qtr=125.00')):
                 url='https://api.bseindia.com/BseIndiaAPI/api/'+endpoint
                 try:
                     response=bse._bse.session.get(url,timeout=(15,35),allow_redirects=False)
@@ -37,6 +37,8 @@ def main():
                     if isinstance(body,dict):
                         detail['keys']=sorted(body)[:40]
                         detail['message']=str(body.get('Message',''))[:1200]
+                        detail['data_type']=type(body.get('data')).__name__
+                    if isinstance(body,list) and body and isinstance(body[0],dict):detail['first_row_keys']=sorted(body[0])[:40]
                     print('R4_BSE_PUBLIC_ENDPOINT_DISCOVERY',json.dumps(detail),flush=True)
                 except Exception as error:print('R4_BSE_PUBLIC_ENDPOINT_UNAVAILABLE',json.dumps({'url':url,'reason':type(error).__name__}),flush=True)
         return
