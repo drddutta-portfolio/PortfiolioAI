@@ -1,0 +1,118 @@
+name: Results Q2 FY27 ADANIPORTS Isolated Scan Acceptance
+on:
+  push:
+    branches: [results-scan-adanip-acceptance-20261107]
+    paths:
+      - .github/workflows/results-q2fy27-adanip-acceptance.yml
+      - scripts/results/r3-live-public-filing-batch.py
+      - scripts/results/r4-verify-quarterly.py
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: results-adanip-q2fy27-dev
+  cancel-in-progress: false
+jobs:
+  verify-manual-scan-data-pipeline:
+    if: github.ref == 'refs/heads/results-scan-adanip-acceptance-20261107'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_Q2FY27_ACCEPTANCE_PILOT: '1'
+      RESULTS_TARGET_SYMBOLS: ADANIPORTS
+      RESULTS_MAX_STOCKS: '262'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Guard exact Development database and issuer scope
+        run: |
+          set -euo pipefail
+          [[ "${SUPABASE_DB_URL:-}" == *lrgpjimipfkyoqbpsqzz* ]] || exit 1
+          test "$CLOUDFLARE_R2_BUCKET" = portfolioai-history-dev
+          test "$RESULTS_TARGET_SYMBOLS" = ADANIPORTS
+          test "$RESULTS_Q2FY27_ACCEPTANCE_PILOT" = 1
+      - name: Install verified collector and source-replay dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            'boto3==1.40.46' 'psycopg[binary]==3.2.10' \
+            'requests==2.32.5' 'beautifulsoup4==4.13.5' \
+            'mthrottle==0.0.2' 'pymupdf==1.26.6'
+      - name: Compile and test original financial statement parsers
+        env:
+          RESULTS_Q2FY27_ACCEPTANCE_PILOT: '0'
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/results/r3-live-public-filing-batch.py scripts/results/r4-verify-quarterly.py
+          python scripts/results/test_r3_live_public_filing_batch.py -v
+      - name: First scan — acquire official ADANIPORTS consolidated quarter
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/results-scan-adanip
+          python scripts/results/r3-live-public-filing-batch.py > tmp/results-scan-adanip/first.json
+          python - <<'PY'
+          import json
+          r=json.load(open('tmp/results-scan-adanip/first.json'))
+          assert r['target_period_ends']==['2026-09-30'] and r['universe_target']==1,r
+          assert not r['blocked'],r
+          assert len(r['stock_outcomes'])==1 and r['stock_outcomes'][0]['symbol']=='ADANIPORTS',r
+          assert r['stock_outcomes'][0]['qualified']>=1 or r['stock_outcomes'][0]['reason'] in ('FOUR_QUARTERS_ALREADY_COMPLETE','FOUR_QUARTERS_ORIGINALS_EXIST_R4_SELECTION_PENDING'),r
+          print(json.dumps({'first_scan_observations_inserted':r['observations_inserted'],'source_documents_parsed':r['documents_parsed']}))
+          PY
+      - name: Independently qualify and select new quarter from immutable original manifest
+        run: |
+          set -euo pipefail
+          python scripts/results/r4-verify-quarterly.py --apply > tmp/results-scan-adanip/verification.txt
+      - name: Verify three original-source metrics selected for existing Results UI
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import psycopg,os,json
+          from pathlib import Path
+          with psycopg.connect(os.environ['SUPABASE_DB_URL'],options='-c default_transaction_read_only=on') as db:
+            with db.cursor() as cur:
+              cur.execute("""
+                SELECT f.metric_code,f.numeric_value::text,f.unit,f.consolidation_scope,
+                       f.period_start::text,f.period_end::text,f.source_record_id::text
+                FROM public.fundamental_observation_decisions d
+                JOIN public.fundamental_observations f ON f.id=d.selected_observation_id
+                JOIN public.securities s ON s.id=f.security_id
+                WHERE s.symbol='ADANIPORTS' AND s.isin='INE742F01042'
+                  AND d.period_type='QUARTER' AND d.period_end='2026-09-30'
+                  AND d.metric_code IN ('OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED')
+                ORDER BY f.metric_code""")
+              rows=cur.fetchall()
+          expected={'OPERATING_REVENUE_QUARTER','NET_PROFIT_QUARTER','EPS_DILUTED'}
+          assert {row[0] for row in rows}==expected and len(rows)==3,rows
+          assert {row[3] for row in rows}=={'CONSOLIDATED'} and len({row[6] for row in rows})==1,rows
+          assert {row[4] for row in rows}=={'2026-07-01'} and {row[5] for row in rows}=={'2026-09-30'},rows
+          assert all(row[2]==('INR_PER_SHARE' if row[0]=='EPS_DILUTED' else 'INR_CRORE') for row in rows),rows
+          p={'security':'ADANIPORTS','period_end':'2026-09-30','qualified_metric_count':len(rows),'source_count':len({row[6] for row in rows}),'metrics':{row[0]:row[1] for row in rows}}
+          Path('tmp/results-scan-adanip/accepted.json').write_text(json.dumps(p,indent=2))
+          print(json.dumps(p))
+          PY
+      - name: Second scan — verify idempotency and no duplicates
+        run: |
+          set -euo pipefail
+          python scripts/results/r3-live-public-filing-batch.py > tmp/results-scan-adanip/second.json
+          python - <<'PY'
+          import json
+          first=json.load(open('tmp/results-scan-adanip/first.json'))
+          repeat=json.load(open('tmp/results-scan-adanip/second.json'))
+          assert repeat['universe_target']==1 and repeat['visited']==1,repeat
+          assert repeat['observations_inserted']==0,repeat
+          assert repeat['stock_outcomes'][0]['reason']=='FOUR_QUARTERS_ALREADY_COMPLETE',repeat
+          print(json.dumps({'first_inserted':first['observations_inserted'],'repeat_inserted':repeat['observations_inserted'],'repeat_source_downloads':repeat['documents_parsed']}))
+          PY
+      - name: Preserve audited nonsecret results for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adanip-q2fy27-scan-acquisition-selection-repeat
+          path: tmp/results-scan-adanip/*
+          retention-days: 14
+          if-no-files-found: warn
