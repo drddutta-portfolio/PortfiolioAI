@@ -86,6 +86,24 @@ def catalog_group(raw,proof):
         raise ValueError('NSE_REVISION_EXPLICIT_REVISED_SUBMISSION_REQUIRED')
     return [r for _,r in group],latest
 
+def unit_kinds(root):
+    units={}
+    for node in root:
+        if local(node.tag)!='unit':continue
+        children=list(node);kind=None
+        if len(children)==1 and local(children[0].tag)=='measure' and (children[0].text or '').strip() in ('iso4217:INR','INR'):
+            kind='money'
+        elif len(children)==1 and local(children[0].tag)=='divide':
+            parts=list(children[0])
+            if len(parts)==2 and [local(x.tag) for x in parts]==['unitNumerator','unitDenominator']:
+                num,den=[list(x) for x in parts]
+                if (len(num)==len(den)==1 and local(num[0].tag)==local(den[0].tag)=='measure'
+                    and (num[0].text or '').strip() in ('iso4217:INR','INR')
+                    and (den[0].text or '').strip() in ('xbrli:shares','shares')):kind='eps'
+        if node.attrib.get('id') in units:raise ValueError('NSE_REVISION_DUPLICATE_UNIT_DECLARATION')
+        units[node.attrib.get('id')]=kind
+    return units
+
 def xml_trio(raw,proof):
     if len(raw)>5_000_000 or b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():raise ValueError('NSE_REVISION_XML_BYTES_UNPROVEN')
     root=ET.fromstring(raw)
@@ -106,21 +124,7 @@ def xml_trio(raw,proof):
         or [(e.text or '').strip() for e in context.iter() if local(e.tag)=='endDate']!=[proof['period_end']]
         or [(e.text or '').strip() for e in context.iter() if local(e.tag)=='identifier'] not in ([code],[proof['symbol']])):
         raise ValueError('NSE_REVISION_XML_EXACT_QUARTER_ENTITY_UNPROVEN')
-    units={}
-    for node in root:
-        if local(node.tag)!='unit':continue
-        children=list(node);kind=None
-        if len(children)==1 and local(children[0].tag)=='measure' and (children[0].text or '').strip() in ('iso4217:INR','INR'):
-            kind='money'
-        elif len(children)==1 and local(children[0].tag)=='divide':
-            parts=list(children[0])
-            if len(parts)==2 and [local(x.tag) for x in parts]==['unitNumerator','unitDenominator']:
-                num,den=[list(x) for x in parts]
-                if (len(num)==len(den)==1 and local(num[0].tag)==local(den[0].tag)=='measure'
-                    and (num[0].text or '').strip() in ('iso4217:INR','INR')
-                    and (den[0].text or '').strip() in ('xbrli:shares','shares')):kind='eps'
-        if node.attrib.get('id') in units:raise ValueError('NSE_REVISION_DUPLICATE_UNIT_DECLARATION')
-        units[node.attrib.get('id')]=kind
+    units=unit_kinds(root)
     tags={'OPERATING_REVENUE_QUARTER':'RevenueFromOperations','NET_PROFIT_QUARTER':'ProfitLossForPeriod','EPS_DILUTED':'DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations'};facts={}
     for metric,tag in tags.items():
         values=set();eps=metric=='EPS_DILUTED'

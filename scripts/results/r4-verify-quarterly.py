@@ -798,7 +798,7 @@ JOIN public.securities s ON s.id=f.security_id AND s.asset_class='EQUITY'
 JOIN public.data_source_records d ON d.id=f.source_record_id
 WHERE f.period_type='QUARTER' AND f.period_end=ANY(%s::date[])
 AND f.source_code='COMPANY_EXCHANGE_FILING' AND d.source_code=f.source_code
-AND d.record_kind IN ('RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
+AND d.record_kind IN ('RESULTS_R4_CURRENT_NBFC_ORIGINAL_XBRL_V1','RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1','RESULTS_R5_GMBREW_SIGNED_MARCH_2025_V1','RESULTS_R5_SSWL_SIGNED_DEC2024_COMPARATIVE_V1','RESULTS_R5_FEDERAL_CONSOLIDATED_SOURCE_REPLAY_V1','RESULTS_R5_TATAPOWER_SOURCE_LOCKED_2024_V1','RESULTS_R4_NSE_EXCHANGE_LINEAGE_XBRL_V1','RESULTS_R4_BSE_ORIGINAL_PDF_GENERAL_V1','RESULTS_QUARTERLY_NSE_DISCOVERY_V1','RESULTS_QUARTERLY_ISSUER_PDF_V1','RESULTS_QUARTERLY_NSE_LEGACY_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2025_XBRL_V1','RESULTS_QUARTERLY_NSE_LEGACY_2024_COMPACT_V1','RESULTS_QUARTERLY_NSE_INTEGRATED_CURRENT_COMPACT_V1','RESULTS_QUARTERLY_BSE_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASTRAL_ORIGINAL_PDF_2024_V1','RESULTS_QUARTERLY_BSE_ASHOKA_ORIGINAL_PDF_2024_V1')
 AND f.metric_code=ANY(%s) AND f.numeric_value IS NOT NULL
 ORDER BY f.source_record_id,f.metric_code"""
 def source_observations_once(cur):
@@ -835,6 +835,13 @@ def verify(db,s3,apply):
         independent_audits=VerificationAuditCache()
         def check_one(pair):
             k,r=pair
+            from r4_current_nbfc_original import CONTRACT as CURRENT_NBFC_CONTRACT,qualify as qualify_current_nbfc
+            if r["raw_payload"].get("contract")==CURRENT_NBFC_CONTRACT:
+                try:
+                    document=qualify_current_nbfc(r,shared_groups[k],s3)
+                    return k,(document,None)
+                except Exception as exc:
+                    return k,(None,"CURRENT_NBFC_ORIGINAL_REPLAY_FAILED_"+type(exc).__name__)
             from r4_official_issuer import CONTRACT as OFFICIAL_CONTRACT,qualify as qualify_official
             if r["raw_payload"].get("contract")==OFFICIAL_CONTRACT:
                 try:
@@ -1022,6 +1029,7 @@ def verify(db,s3,apply):
                         "nse_bridge_eps":bool(r["metric_code"]=="EPS_DILUTED" and r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1"),
                         "issuer_correction":bool(
                             exide_corrected and str(r["source_record_id"])==EXIDE_REVISED_SOURCE),
+                        "current_nbfc":bool(r["raw_payload"].get("contract")=="PORTFOLIOAI_RESULTS_NSE_CURRENT_NBFC_RETAINED_XML_V1"),
                         "official_issuer":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"),
                         "restated_basis":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"
                             and r["raw_payload"].get("parsed",{}).get("comparison_basis_unproven") is True),
@@ -1036,7 +1044,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean,nse_declared_revision boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean,nse_declared_revision boolean,current_nbfc boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -1068,6 +1076,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_NSE_ORIGINAL_XBRL_EXCHANGE_ISSUER_LINEAGE_RECONCILED; ORIGINAL_AS_FILED_BUSINESS_PERIMETER; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_CARVEOUT_OR_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_PRECISION_CATALOG_ONLY; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.restated_basis THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.current_nbfc THEN
+                                 'RESULTS_R4_CURRENT_NBFC_ORIGINAL_NSE_XML_INDEPENDENTLY_REPLAYED; EXPLICIT_OWN_QUARTER_ONED; ORIGINAL_BYTES_RETAINED_IN_PRIVATE_R2; REPORTED_REVENUE_TOTAL_PAT_AND_TOTAL_OPERATION_DILUTED_EPS; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.official_issuer THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.nse_declared_revision THEN
