@@ -1407,6 +1407,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "f3af0409-6659-4a74-8dff-80ba87416d4f",
+        "NET_PREMIUM_EARNED_QUARTER": "43332099-7a06-4ab5-a0e1-d8bd5c9ab035",
+        "NET_PROFIT_QUARTER": "2cbac408-9bb7-4477-9324-047e3a51435f"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "7176239e-fd2d-4d2d-83e6-7cc1a6b3f8ff",
+      "sourceRecordId": "a3a28995-a44a-4666-8995-df73e79fdefe",
+      "symbol": "STARHEALTH"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "cb9fcf7d-9e18-479b-a055-da661b56ccb8",
         "NET_PROFIT_QUARTER": "1163c915-92fe-4843-9fc1-f0e0d07e16c6",
         "OPERATING_REVENUE_QUARTER": "dabea68b-8951-4236-a4bd-40b57aa0089f"
