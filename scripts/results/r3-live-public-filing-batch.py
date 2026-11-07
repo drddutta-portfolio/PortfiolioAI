@@ -36,7 +36,19 @@ FIELDS = {
 # R5 historical comparisons are a separate, explicit Development-only campaign.
 # Do not widen ordinary R3 acquisition or reinterpret unverified older rows.
 R5_HISTORY_MODE = os.getenv("RESULTS_R5_HISTORICAL_ACQUISITION", "0") == "1"
+RESULTS_LIVE_SCAN_MODE = os.getenv("RESULTS_LIVE_SCAN_MODE", "0") == "1"
+# Only the explicitly launched Development scan uses rolling completed quarters.
+def rolling_completed_quarters(today: date) -> tuple[str, ...]:
+    first = date(today.year, ((today.month - 1) // 3) * 3 + 1, 1)
+    newest = first - timedelta(days=1)
+    quarters = []
+    for _ in range(4):
+        quarters.append(newest.isoformat())
+        newest = date(newest.year, ((newest.month - 1) // 3) * 3 + 1, 1) - timedelta(days=1)
+    return tuple(reversed(quarters))
+
 TARGET_QUARTERS = (
+    rolling_completed_quarters(date.today()) if RESULTS_LIVE_SCAN_MODE else
     ("2025-03-31", "2025-06-30") if R5_HISTORY_MODE
     else ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
 )
@@ -537,6 +549,13 @@ def extract_source(html: str, symbol: str, isin: str, source_url: str):
 # still run against the downloaded original bytes before any DB write.
 # No guessed archive names or non-official hosts may be added.
 OFFICIAL_NSE_SEEDS={
+    # Independently verified exact-source hints; issuer/ISIN/period rechecked on every import.
+    "ADANIPORTS": (
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_205453_28102026155328_iXBRL_WEB.html",
+    ),
+    "RELIANCE": (
+        "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_207709_30102026213255_iXBRL_WEB.html",
+    ),
     "JIOFIN":(
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html",
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_151303_17042026225608_iXBRL_WEB.html",
@@ -666,12 +685,13 @@ def persist(conn,s3,parsed,url,original_sha):
         if not security:raise RuntimeError("CANONICAL_SECURITY_NOT_FOUND")
         cur.execute("""
           INSERT INTO public.data_source_records
-             (source_code,record_kind,external_record_id,source_url,payload_hash,raw_payload,terms_snapshot)
-          VALUES (%s,%s,%s,%s,%s,%s::jsonb,%s::jsonb)
+             (source_code,record_kind,external_record_id,source_url,payload_hash,raw_payload,terms_snapshot,ingestion_run_id)
+          VALUES (%s,%s,%s,%s,%s,%s::jsonb,%s::jsonb,%s)
           ON CONFLICT (source_code,record_kind,external_record_id,payload_hash)
             DO NOTHING RETURNING id
         """,(SOURCE_CODE,KIND,parsed["symbol"]+":"+original_sha,url,h,raw,
-              '{"retention":"COMPACT_FACTS_ONLY","original_nse_bytes_retained":false,"results_review":"PENDING"}'))
+              '{"retention":"COMPACT_FACTS_ONLY","original_nse_bytes_retained":false,"results_review":"PENDING"}',
+              os.getenv("RESULTS_SCAN_RUN_ID") if RESULTS_LIVE_SCAN_MODE else None))
         new=cur.fetchone()
         if new: rec=new[0]
         else:
@@ -717,6 +737,10 @@ def main():
     db=required("SUPABASE_DB_URL")
     if PROJECT_REF not in db:raise RuntimeError("NON_DEVELOPMENT_DATABASE_FORBIDDEN")
     if required("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise RuntimeError("NON_DEVELOPMENT_R2_FORBIDDEN")
+    if RESULTS_LIVE_SCAN_MODE and R5_HISTORY_MODE:
+        raise RuntimeError("LIVE_SCAN_AND_HISTORICAL_ACQUISITION_CANNOT_OVERLAP")
+    if RESULTS_LIVE_SCAN_MODE and not os.getenv("RESULTS_SCAN_RUN_ID"):
+        raise RuntimeError("LIVE_SCAN_RUN_ID_REQUIRED")
     if R5_HISTORY_MODE and os.getenv("RESULTS_R5_HISTORICAL_ACK") != "2025_MAR_JUN_ONLY":
         raise RuntimeError("R5_HISTORICAL_PERIOD_SCOPE_NOT_APPROVED")
     maxstocks=int(os.getenv("RESULTS_MAX_STOCKS","262"))
@@ -898,6 +922,26 @@ def main():
             log["visited"]+=1
             log["observations_inserted"]+=entry["observations"]
             log["stock_outcomes"].append(entry)
+            if RESULTS_LIVE_SCAN_MODE:
+                # Existing audit item rows are the only run-progress authority; no schema migration.
+                if entry["observations"] > 0:
+                    item_status, reason_code = "ACCEPTED", "ORIGINAL_FACTS_EXTRACTED_AWAITING_VERIFICATION"
+                elif entry.get("listing_error") or entry["reason"] in ("NO_QUALIFIED_LISTING_URL","FILING_NOT_FOUND","FILING_TOO_LARGE"):
+                    item_status, reason_code = "REJECTED", "NO_QUALIFIED_ORIGINAL"
+                else:
+                    item_status, reason_code = "UNCHANGED", "NO_NEW_SOURCE"
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE public.data_ingestion_run_items SET status=%s,safe_reason_code=%s,
+                          accepted_record_count=%s,completed_at=now(),
+                          metadata=%s::jsonb
+                        WHERE ingestion_run_id=%s::uuid AND security_id=%s::uuid
+                          AND data_domain='QUARTERLY_RESULTS' AND status='PLANNED'
+                    """,(item_status,reason_code,entry["observations"],
+                         json.dumps({"source_documents_parsed":entry["qualified"],
+                                     "source_reason":entry.get("reason")}),
+                         os.environ["RESULTS_SCAN_RUN_ID"],security_id))
+                conn.commit()
             if len(completed)!=len(TARGET_QUARTERS):
                 time.sleep(1.2)
     log["all_four_quarters_complete"] = sum(not row["missing_quarters"] for row in log["stock_outcomes"])
