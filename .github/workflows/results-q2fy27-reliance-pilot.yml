@@ -43,6 +43,9 @@ jobs:
             'psycopg[binary]==3.2.10' 'boto3==1.40.46' \
             'requests==2.32.5' 'beautifulsoup4==4.13.5' 'mthrottle==0.0.2'
       - name: Verify existing source parsing regression tests
+        # Older-quarter fixtures must use the ordinary historical contract.
+        env:
+          RESULTS_Q2FY27_RELIANCE_PILOT: '0'
         run: python scripts/results/test_r3_live_public_filing_batch.py -v
       - name: Acquire only RELIANCE Sep 2026 original quarterly facts to Dev R2 and database
         run: |
