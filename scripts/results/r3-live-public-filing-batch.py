@@ -942,6 +942,9 @@ def main():
                     item_status, reason_code = "ACCEPTED", "ORIGINAL_FACTS_EXTRACTED_AWAITING_VERIFICATION"
                 elif entry.get("listing_error") or entry["reason"] in ("NO_QUALIFIED_LISTING_URL","FILING_NOT_FOUND","FILING_TOO_LARGE"):
                     item_status, reason_code = "REJECTED", "NO_QUALIFIED_ORIGINAL"
+                elif entry["reason"] and entry["reason"] not in ("FOUR_QUARTERS_ALREADY_COMPLETE","FOUR_QUARTERS_ORIGINALS_EXIST_R4_SELECTION_PENDING","NO_NEW_QUALIFIED_QUARTER"):
+                    # Unparsable evidence is not proof that no new result exists.
+                    item_status, reason_code = "REJECTED", "SOURCE_UNSTRUCTURED"
                 else:
                     item_status, reason_code = "UNCHANGED", "NO_NEW_SOURCE"
                 with conn.cursor() as cur:
