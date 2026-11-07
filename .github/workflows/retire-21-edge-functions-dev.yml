@@ -1,0 +1,94 @@
+name: Retire exactly 21 already-410 Supabase Development functions
+on:
+  push:
+    branches: [edge-retirement-21-dev-20261107]
+    paths:
+      - .github/workflows/retire-21-edge-functions-dev.yml
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: retired-410-functions-dev-only-20261107
+  cancel-in-progress: false
+jobs:
+  retire:
+    if: github.ref == 'refs/heads/edge-retirement-21-dev-20261107'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: lrgpjimipfkyoqbpsqzz
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.65.0
+      - name: Require Development scope and management credential before any mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SUPABASE_PROJECT_REF" = lrgpjimipfkyoqbpsqzz
+          test -n "${SUPABASE_ACCESS_TOKEN:-}" || { echo "::error::SUPABASE_ACCESS_TOKEN is not configured in GitHub Actions; no changes made"; exit 2; }
+          supabase functions list --project-ref "$SUPABASE_PROJECT_REF" --output json > /tmp/functions-before.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/functions-before.json'))
+          if isinstance(data,dict):data=data.get('functions',data.get('data',[]))
+          assert isinstance(data,list),type(data)
+          deployed={x.get('slug') or x.get('name') for x in data}
+          target=set(["p8-storage-export-readonly","v14-action-b-trendlyne-canary","v14-review-regression-selftest","v14-materializer-mock-selftest","v14-closure-regression-selftest","v14-ownership-policy-selftest","v14-batch-b-contract-selftest","v14-selection-audit","v14-run-reason-audit","v14-115-alivus-canary","v14-115-alivus-canary2","v14-h1-official-capture-once","v14-o1-ownership-capture-once","v14-f0-akums-discovery-once","v14-existing-h1-readonly-analyzer","v14-batch-a-history-actions","v14-batch-e-akums-pdfs","v14-115-history-package-remediation","v14-115-alivus-remainder","v14-115-capture-batch","v14-115-residual-capture"])
+          protected={'results-quarterly-scan','v14-bank-maintenance-run','run-nse-news-pipeline','refresh-market-data','discover-trendlyne-capabilities'}
+          assert len(target)==21 and len(deployed)==100,(len(target),len(deployed))
+          assert target<=deployed,sorted(target-deployed)
+          assert protected<=deployed,sorted(protected-deployed)
+          assert not(target&protected)
+          print('PRECHECK_PASS',len(deployed),'active functions; 21 approved retirement slugs')
+          PY
+      - name: Delete only the 21 previously retired HTTP 410 endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=(
+            p8-storage-export-readonly
+            v14-action-b-trendlyne-canary
+            v14-review-regression-selftest
+            v14-materializer-mock-selftest
+            v14-closure-regression-selftest
+            v14-ownership-policy-selftest
+            v14-batch-b-contract-selftest
+            v14-selection-audit
+            v14-run-reason-audit
+            v14-115-alivus-canary
+            v14-115-alivus-canary2
+            v14-h1-official-capture-once
+            v14-o1-ownership-capture-once
+            v14-f0-akums-discovery-once
+            v14-existing-h1-readonly-analyzer
+            v14-batch-a-history-actions
+            v14-batch-e-akums-pdfs
+            v14-115-history-package-remediation
+            v14-115-alivus-remainder
+            v14-115-capture-batch
+            v14-115-residual-capture
+          )
+          for slug in "${target[@]}"; do
+            echo "Deleting retired Development endpoint: $slug"
+            supabase functions delete "$slug" --project-ref "$SUPABASE_PROJECT_REF" --yes
+          done
+      - name: Independently check 79 remaining and all protected endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          supabase functions list --project-ref "$SUPABASE_PROJECT_REF" --output json > /tmp/functions-after.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/functions-after.json'))
+          if isinstance(data,dict):data=data.get('functions',data.get('data',[]))
+          remaining={x.get('slug') or x.get('name') for x in data}
+          target=set(["p8-storage-export-readonly","v14-action-b-trendlyne-canary","v14-review-regression-selftest","v14-materializer-mock-selftest","v14-closure-regression-selftest","v14-ownership-policy-selftest","v14-batch-b-contract-selftest","v14-selection-audit","v14-run-reason-audit","v14-115-alivus-canary","v14-115-alivus-canary2","v14-h1-official-capture-once","v14-o1-ownership-capture-once","v14-f0-akums-discovery-once","v14-existing-h1-readonly-analyzer","v14-batch-a-history-actions","v14-batch-e-akums-pdfs","v14-115-history-package-remediation","v14-115-alivus-remainder","v14-115-capture-batch","v14-115-residual-capture"])
+          protected={'results-quarterly-scan','v14-bank-maintenance-run','run-nse-news-pipeline','refresh-market-data','discover-trendlyne-capabilities'}
+          assert len(remaining)==79,(len(remaining),sorted(target&remaining))
+          assert not(target&remaining),sorted(target&remaining)
+          assert protected<=remaining,sorted(protected-remaining)
+          print('CLEANUP_PASS remaining_functions=79 freed_slots=21 protected_endpoints_preserved=true')
+          PY
