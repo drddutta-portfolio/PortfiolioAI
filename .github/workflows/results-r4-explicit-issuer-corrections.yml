@@ -1,0 +1,57 @@
+name: Results R4 Explicit Issuer Correction Original Replay
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-explicit-issuer-corrections.yml]
+permissions: {contents: read}
+concurrency:
+  group: results-r4-explicit-issuer-corrections-development
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_R4_EIGHT_QUARTER_SELECTION: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned original replay dependencies
+        run: |
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+      - name: Verify explicit correction and protected selection regressions
+        run: |
+          python scripts/results/test_r4_avanti_correction.py -v
+          python scripts/results/test_r4_verify_quarterly.py -v
+      - name: Retain and independently fetch exact original correction authorities
+        run: |
+          python - <<'PY'
+          import importlib.util,os,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts/results')
+          if (os.environ.get('GITHUB_REPOSITORY')!='drddutta-portfolio/PortfiolioAI'
+              or os.environ.get('GITHUB_REF')!='refs/heads/PortfolioAI-Development'
+              or 'lrgpjimipfkyoqbpsqzz' not in os.environ['SUPABASE_DB_URL']
+              or os.environ['CLOUDFLARE_R2_BUCKET']!='portfolioai-history-dev'):
+              raise RuntimeError('DEVELOPMENT_ONLY')
+          spec=importlib.util.spec_from_file_location('batch',Path('scripts/results/r4-bse-historical-batch.py'))
+          batch=importlib.util.module_from_spec(spec);spec.loader.exec_module(batch)
+          from r4_avanti_correction import retain
+          retain(batch,batch.r2_client())
+          print('R4_EXPLICIT_ISSUER_CORRECTION_ORIGINALS_VALIDATED')
+          PY
+      - name: Independently qualify all sources and preserve protected selections
+        run: |
+          python scripts/results/r4-verify-quarterly.py --apply
+          python scripts/results/r4-eight-quarter-readback.py
+# No source evidence or financial diagnostics are uploaded to public artifacts.

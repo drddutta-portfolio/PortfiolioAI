@@ -983,6 +983,8 @@ def verify(db,s3,apply):
         facts,krn_corrected=qualify_krn_correction(facts,s3)
         from r4_bdl_correction import qualify as qualify_bdl_correction
         facts,bdl_corrected=qualify_bdl_correction(facts,s3)
+        from r4_avanti_correction import qualify as qualify_avanti_correction
+        facts,avanti_corrected=qualify_avanti_correction(facts,s3)
         with conn.cursor() as cur:
             cur.execute("""SELECT security_id,metric_code,period_end,consolidation_scope,selected_observation_id
               FROM public.fundamental_observation_decisions WHERE period_type='QUARTER'
@@ -993,6 +995,7 @@ def verify(db,s3,apply):
         if exide_corrected:invalid["EXIDE_CORRECTED_EPS_SUPPORTED_BY_NSE_ORIGINAL"]+=1
         if krn_corrected:invalid["KRN_CORRECTED_XBRL_SUPPORTED_BY_ISSUER_AND_EXCHANGE_ACK"]+=1
         if bdl_corrected:invalid["BDL_XML_TAX_SIGN_RECONCILED_TO_SIGNED_STATEMENT"]+=1
+        if avanti_corrected:invalid["AVANTI_EXPLICIT_ISSUER_EPS_CORRECTION_REPLAYED"]+=1
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -1013,6 +1016,8 @@ def verify(db,s3,apply):
                         "official_issuer":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"),
                         "restated_basis":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"
                             and r["raw_payload"].get("parsed",{}).get("comparison_basis_unproven") is True),
+                        "avanti_correction":bool(avanti_corrected and r["symbol"]=="AVANTIFEED"
+                            and str(r["period_end"])=="2025-12-31" and r["consolidation_scope"]=="CONSOLIDATED"),
                         "bdl_correction":bool(bdl_corrected and r["symbol"]=="BDL"
                             and str(r["period_end"])=="2025-03-31" and r["consolidation_scope"]=="STANDALONE"),
                         "krn_correction":bool(krn_corrected and r["symbol"]=="KRN"
@@ -1021,7 +1026,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -1055,6 +1060,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.official_issuer THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.avanti_correction THEN
+                                 'RESULTS_R4_AVANTI_EXPLICIT_ISSUER_CORRECTION_2026_02_12; BOTH_EXACT_NSE_XML_ORIGINALS_AND_COMPLETE_ISSUER_CORRECTION_PDF_REPLAYED; ONLY_TOTAL_OPERATION_DILUTED_EPS_CORRECTED; REVENUE_AND_PAT_UNCHANGED; ORIGINALS_PRESERVED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.bdl_correction THEN
                                  'RESULTS_R4_BDL_SIGNED_STANDALONE_STATEMENT_RECONCILIATION; ORIGINAL_AND_REVISED_XML_AND_INSPECTED_STATEMENT_IMAGE_HASH_PINNED; OLD_XML_DEFERRED_TAX_SIGN_DISAGREES_WITH_SIGNED_TOTAL_TAX_AND_PAT; ORIGINALS_PRESERVED; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.krn_correction THEN
