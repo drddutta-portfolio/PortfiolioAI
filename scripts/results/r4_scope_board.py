@@ -115,8 +115,7 @@ def parse_page(view,page_no,period,scope):
         raise ValueError('BOARD_SCOPE_INDEPENDENT_PBT_TAX_RECONCILIATION_REQUIRED')
     return result
 
-def extract_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
-    if period not in HISTORICAL or bank or insurer:raise ValueError('BOARD_SCOPE_HISTORICAL_NONBANK_ONLY')
+def _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
     current,board,start,end=read_bridge(bridge,symbol,isin,legal)
     if current['scope']!='STANDALONE' or any(Decimal(f['value'])==0 for f in current['facts'].values()):
         raise ValueError('BOARD_SCOPE_NONZERO_SINGLE_COMPANY_STANDALONE_ONLY')
@@ -166,3 +165,17 @@ def extract_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=Fa
             'scope_hint_used':historical.get('scope_hint_used',False),'historical_values_from_pdf_only':True,
             'comparison_basis_unproven':True}
         return historical,evidence
+
+
+def extract_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
+    if period not in HISTORICAL or bank or insurer:raise ValueError('BOARD_SCOPE_HISTORICAL_NONBANK_ONLY')
+    return _extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank,insurer,document_audit)
+
+def extract_current_with_scope_board(raw,page_no,period,symbol,isin,legal,bridge,bank=False,insurer=False,document_audit=None):
+    if period not in CURRENT or period>=bridge.get('current_period','') or bank or insurer:
+        raise ValueError('BOARD_SCOPE_CURRENT_REPORTED_COMPARATIVE_ONLY')
+    parsed,evidence=_extract_window(raw,page_no,period,symbol,isin,legal,bridge,bank,insurer,document_audit)
+    if evidence['board_date']<=bridge['current_period']:raise ValueError('BOARD_SCOPE_CURRENT_APPROVAL_EVENT_PRECEDES_QUARTER_END')
+    evidence={**evidence,'contract':'NSE_ORIGINAL_SAME_BOARD_CURRENT_COMPARATIVE_SCOPE_V1',
+        'historical_values_from_pdf_only':False,'current_comparative_values_from_pdf_only':True}
+    return parsed,evidence
