@@ -42,6 +42,28 @@ async function status(admin: Client, portfolioId: string) {
   if (recent.error) throw recent.error
   const run = recent.data
   if (!run) return {lastScan:null,newResults:0,run:null}
+  // GitHub's worker timeout is four hours. A stale job must not disable
+  // Scan Now indefinitely after its runner fails or disappears.
+  if (run.status === "RUNNING" && Date.now() - Date.parse(run.started_at) > 5 * 60 * 60 * 1000) {
+    const completedAt = new Date().toISOString()
+    const stale = await admin.from("data_ingestion_runs").update({
+      status:"FAILED",completed_at:completedAt,error_summary:"SCAN_WORKER_TIMEOUT",
+      metadata:{...(run.metadata ?? {}),stage:"WORKER_TIMEOUT"},
+    }).eq("id",run.id).eq("status","RUNNING").select("id").maybeSingle()
+    if (stale.error) throw stale.error
+    if (stale.data) {
+      const items=await admin.from("data_ingestion_run_items").update({
+        status:"FAILED",safe_reason_code:"SCAN_WORKER_TIMEOUT",completed_at:completedAt,
+      }).eq("ingestion_run_id",run.id).in("status",["PLANNED","ATTEMPTED"])
+      if(items.error) throw items.error
+      run.status="FAILED"
+      run.completed_at=completedAt
+      run.error_summary="SCAN_WORKER_TIMEOUT"
+    } else {
+      // The background worker completed concurrently; read fresh state.
+      return status(admin,portfolioId)
+    }
+  }
   const rows = await admin.from("data_ingestion_run_items")
     .select("status").eq("ingestion_run_id",run.id).eq("data_domain",DOMAIN)
   if (rows.error) throw rows.error
@@ -95,7 +117,11 @@ async function enqueue(admin: Client, portfolioId: string, userId: string) {
     requested_by:userId,requested_count:equity.length,accepted_count:0,
     metadata:{contract:OPERATION,stage:"DISPATCHING",source:"EXCHANGE_ORIGINALS_REUSE_FIRST"}
   }).select("id").single()
-  if(create.error)throw create.error
+  if(create.error) {
+    // Atomic partial-unique index is the authority for concurrent tabs.
+    if(create.error.code==="23505")return reply(200,await status(admin,portfolioId))
+    throw create.error
+  }
   const runId=create.data.id as string
   try {
     for(let offset=0;offset<equity.length;offset+=80) {
