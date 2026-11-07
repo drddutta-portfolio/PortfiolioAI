@@ -2,12 +2,28 @@ from pathlib import Path
 import importlib.util
 from decimal import Decimal
 import unittest
+from unittest.mock import Mock,patch
 spec=importlib.util.spec_from_file_location("r4",Path(__file__).with_name("r4-verify-quarterly.py"))
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def row(code,value,source="a",scope="CONSOLIDATED",symbol="RELIANCE"):
  return dict(metric_code=code,numeric_value=Decimal(str(value)),source_record_id=source,
              consolidation_scope=scope,symbol=symbol,security_id="security",period_end="2026-06-30")
 class R4Tests(unittest.TestCase):
+ def test_archive_preflight_checks_only_existing_bucket(self):
+  client=Mock()
+  m.require_archive_access(client)
+  client.head_bucket.assert_called_once_with(Bucket=m.BUCKET)
+
+ def test_unavailable_archive_stops_before_verification_or_database_work(self):
+  client=Mock();client.head_bucket.side_effect=RuntimeError('NotEntitled')
+  env={'SUPABASE_DB_URL':'postgresql://'+m.REF+'/db','CLOUDFLARE_R2_BUCKET':m.BUCKET,
+       'CLOUDFLARE_R2_ACCOUNT_ID':'a'*32,'CLOUDFLARE_R2_ACCESS_KEY_ID':'test-only',
+       'CLOUDFLARE_R2_SECRET_ACCESS_KEY':'test-only'}
+  with patch.dict(m.os.environ,env,clear=True),patch('sys.argv',['r4-verify-quarterly.py']),patch.object(m.boto3,'client',return_value=client),patch.object(m,'verify') as verify:
+   with self.assertRaisesRegex(RuntimeError,'R4_PRIVATE_R2_ARCHIVE_UNAVAILABLE') as raised:m.main()
+   self.assertIn('NotEntitled',str(raised.exception.__cause__))
+   verify.assert_not_called()
+
  def test_as_filed_business_guard_requires_replayed_lineage_marker(self):
   manifest={"contract":"PORTFOLIOAI_RESULTS_NSE_EXCHANGE_CODE_ISSUER_LINEAGE_V1",
             "issuer_bridge":{"business_basis_unproven":True}}

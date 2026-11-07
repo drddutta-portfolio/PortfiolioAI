@@ -1171,6 +1171,14 @@ def verify(db,s3,apply):
     if observations and not facts:
         raise RuntimeError("R4_ZERO_VALID_SOURCES_FAIL_CLOSED:"+json.dumps(report["exceptions"]))
     return report
+def require_archive_access(client):
+    """Stop before database work when the required private archive is unavailable."""
+    try:
+        client.head_bucket(Bucket=BUCKET)
+    except Exception as error:
+        raise RuntimeError('R4_PRIVATE_R2_ARCHIVE_UNAVAILABLE; restore existing archive access before source verification') from error
+
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
@@ -1201,6 +1209,7 @@ def main():
                     aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
                     aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
                     region_name="auto",config=Config(retries={"max_attempts":2,"mode":"standard"}))
+    require_archive_access(s3)
     result=verify(db,s3,options.apply)
     os.makedirs("tmp/results-r4",exist_ok=True)
     with open("tmp/results-r4/readback.json","w") as f:json.dump(result,f,indent=2,sort_keys=True)
