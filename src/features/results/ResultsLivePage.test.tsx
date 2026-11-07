@@ -224,7 +224,7 @@ describe("Results live approved visual contract", () => {
     render(<ResultsLivePage />)
     expect(await screen.findByText("2 stocks")).toBeInTheDocument()
     const headers = screen.getAllByRole("columnheader")
-    const labels = headers.slice(1).map((h) => h.textContent?.replace("(Latest completed) ↓", ""))
+    const labels = headers.slice(1).map((h) => h.textContent?.replace("(Rolling reports) ↓", "").replace("(Latest completed) ↓", ""))
     expect(new Set(labels).size).toBe(labels.length)
     expect(labels).toContain("Q2 FY26")
     expect(labels).toContain("Q1 FY27")
