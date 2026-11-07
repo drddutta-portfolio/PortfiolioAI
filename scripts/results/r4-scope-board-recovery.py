@@ -9,6 +9,7 @@ import argparse,importlib.util,json,os,re
 from pathlib import Path
 from collections import Counter,defaultdict
 from decimal import Decimal
+from datetime import datetime
 import fitz,psycopg,requests
 from r4_scope_board import CONTRACT,REVISION,CORE,CURRENT,make_bridge,read_bridge,match_board,extract_with_scope_board
 from r4_scope_bridge import original_origin
@@ -70,10 +71,13 @@ def anchors_for(db,client,session,symbol,isin,sid):
             primary_url=m['issuer_filing_url']
             if not original_origin(primary_url):
                 if catalog is None:
-                    spec=importlib.util.spec_from_file_location('current',HERE/'r3-current-quarter-integrated-xbrl.py');current=importlib.util.module_from_spec(spec);spec.loader.exec_module(current)
-                    catalog=current.list_filings(session,symbol)
+                    from r4_scope_catalog import list_filings
+                    catalog=list_filings(session,symbol)
                     encoded=batch.canonical(catalog);batch.immutable_put(client,batch.PREFIX+'scope-board-catalog/sha256='+batch.sha(encoded)+'/catalog.json',encoded)
-                urls={x.get('ixbrl') for x in catalog if x.get('xbrl')==primary_url and original_origin(x.get('ixbrl',''))}
+                urls={x.get('ixbrl') for x in catalog if x.get('xbrl')==primary_url
+                    and datetime.strptime(x.get('qe_Date',''),'%d-%b-%Y').date().isoformat()==m['period_end']
+                    and {'Consolidated':'CONSOLIDATED','Standalone':'STANDALONE'}.get(x.get('consolidated'))==m['consolidation_scope']
+                    and original_origin(x.get('ixbrl',''))}
                 if len(urls)!=1:raise ValueError('BOARD_ANCHOR_PRIMARY_HTML_CATALOG_UNPROVEN')
                 primary_url=urls.pop()
             response=session.get(primary_url,timeout=40,allow_redirects=False);response.raise_for_status()

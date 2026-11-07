@@ -1,0 +1,31 @@
+name: Results R4 Retained BSE Financial Interface Review
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths: [.github/workflows/results-r4-bse-retained-interface-review.yml]
+permissions: {contents: read}
+concurrency:
+  group: results-r4-bse-retained-interface-review-development
+  cancel-in-progress: false
+jobs:
+  review:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned private capture readers
+        run: python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'pymupdf==1.26.6' 'mthrottle==0.0.2'
+      - name: Validate source-link isolation
+        run: python scripts/results/test_r4_bse_structured_review.py -v
+      - name: Read retained link identifiers and public exchange interface without financial writes
+        run: python scripts/results/r4-bse-retained-interface-review.py
+# Retained bodies remain private R2; logs show public interface code and link metadata only.

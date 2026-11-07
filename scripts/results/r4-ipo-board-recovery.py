@@ -96,6 +96,6 @@ def main():
             except Exception as error:db.rollback();rejects[str(error).split(':')[0] if isinstance(error,ValueError) else type(error).__name__]+=1
             counts['issuers_checked']+=1;print('R4_IPO_BOARD_PROGRESS',json.dumps({**dict(counts),'rejections':dict(rejects)}),flush=True)
     print('R4_IPO_BOARD_FINAL',json.dumps({**dict(counts),'rejections':dict(rejects)}),flush=True)
-    if any(rejects[name] for name in ('NameError','AttributeError','TypeError')):raise RuntimeError('IPO_BOARD_PROGRAMMING_FAILURES_AFTER_ALL_ATTEMPTS')
+    if any(rejects[name] for name in ('NameError','AttributeError','TypeError','ModuleNotFoundError','ImportError')):raise RuntimeError('IPO_BOARD_PROGRAMMING_FAILURES_AFTER_ALL_ATTEMPTS')
 
 if __name__=='__main__':main()

@@ -1,4 +1,5 @@
 name: Results R4 Audited IPO Restated Board Scope Recovery
+# Raw current XML anchors resolve through the bounded dependency-free catalog.
 on:
   workflow_dispatch:
   push:
@@ -33,12 +34,15 @@ jobs:
       - name: Verify explicit correction and protected selection regressions
         run: |
           python scripts/results/test_r4_ipo_board_pdf.py -v
+          python scripts/results/test_r4_scope_catalog.py -v
           python scripts/results/test_r4_nse_catalog_revision.py -v
           python scripts/results/test_r4_avanti_correction.py -v
           python scripts/results/test_r4_verify_quarterly.py -v
-      - name: Attempt every missing current quarter against retained signed PDF originals
+      - name: Attempt every missing historical quarter against retained signed PDF originals
+        id: collect
         run: python scripts/results/r4-ipo-board-recovery.py
       - name: Independently qualify all sources and preserve protected selections
+        if: ${{ always() && steps.collect.outcome != 'skipped' && steps.collect.outcome != '' }}
         run: |
           python scripts/results/r4-verify-quarterly.py --apply
           python scripts/results/r4-eight-quarter-readback.py
