@@ -66,7 +66,8 @@ def inspect_run(db_url: str, run_id: str) -> int:
 
 
 def execution(path: str, env: dict[str, str]) -> dict:
-    process = subprocess.run([sys.executable, path], env=env, text=True,
+    args = [sys.executable, path] + (["--apply"] if "r4-verify-quarterly" in path else [])
+    process = subprocess.run(args, env=env, text=True,
                              capture_output=True, timeout=14400, check=False)
     if process.returncode:
         print("SCAN_STEP_FAILED", json.dumps({
@@ -121,7 +122,7 @@ def complete(db_url: str,run_id: str,status: str, qualified: int,
             """,(run_id,))
             counts=dict(cur.fetchall())
             finished=sum(counts.values())
-            if not error and counts.get("PLANNED",0):
+            if not error and (counts.get("PLANNED",0) or counts.get("FAILED",0) or counts.get("REJECTED",0)):
                 status="PARTIAL"
             meta={
                 "contract":"RESULTS_QUARTERLY_SCAN_V2",
