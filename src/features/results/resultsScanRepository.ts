@@ -25,7 +25,7 @@ export interface ResultsScanStatus {
 type Action = "STATUS" | "START"
 
 async function invoke(action: Action, portfolioId: string): Promise<ResultsScanStatus> {
-  const response = await supabase.functions.invoke<ResultsScanStatus>("results-quarterly-scan", {
+  const response = await supabase.functions.invoke<ResultsScanStatus>("results-quarterly-scan-v2", {
     body: { action, portfolioId },
   })
   if (response.error) {
