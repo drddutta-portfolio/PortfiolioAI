@@ -22,6 +22,9 @@ PROJECT_REF = "lrgpjimipfkyoqbpsqzz"
 BUCKET = "portfolioai-history-dev"
 PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
 OPERATION = "RESULTS_QUARTERLY_SCAN_V2"
+PILOT_OPERATION = "RESULTS_QUARTERLY_SCAN_V2_PILOT"
+PILOT_SYMBOL = "HINDALCO"
+PILOT_ISIN = "INE038A01020"
 DOMAIN = "QUARTERLY_RESULTS"
 RUN_PATH = Path(".github/scan-requests/latest.json")
 
@@ -35,18 +38,19 @@ def require_dev_environment() -> str:
     return db
 
 
-def read_request() -> str:
+def read_request() -> tuple[str,bool]:
     import re
     request = json.loads(RUN_PATH.read_text())
     run_id = request.get("run_id")
-    if request.get("contract") != OPERATION or not isinstance(run_id, str):
+    pilot = request.get("contract") == PILOT_OPERATION and request.get("symbol") == PILOT_SYMBOL
+    if request.get("contract") != OPERATION and not pilot or not isinstance(run_id, str):
         raise RuntimeError("SCAN_REQUEST_CONTRACT_INVALID")
     if not re.fullmatch(r"[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}", run_id):
         raise RuntimeError("SCAN_RUN_ID_INVALID")
-    return run_id
+    return run_id,pilot
 
 
-def inspect_run(db_url: str, run_id: str) -> int:
+def inspect_run(db_url: str, run_id: str, pilot: bool) -> int:
     with psycopg.connect(db_url, options="-c default_transaction_read_only=on") as db:
         with db.cursor() as cur:
             cur.execute("""
@@ -62,6 +66,15 @@ def inspect_run(db_url: str, run_id: str) -> int:
             """, (run_id, DOMAIN))
             if cur.fetchone()[0] != row[1]:
                 raise RuntimeError("SCAN_RUN_ITEM_COHORT_NOT_COMPLETE")
+            if pilot:
+                if row[1]!=1:raise RuntimeError("PILOT_EXPECTED_SINGLE_COMPANY")
+                cur.execute("""
+                    SELECT s.symbol,s.isin FROM public.data_ingestion_run_items i
+                    JOIN public.securities s ON s.id=i.security_id
+                    WHERE i.ingestion_run_id=%s::uuid AND i.data_domain=%s
+                """,(run_id,DOMAIN))
+                if cur.fetchall()!=[(PILOT_SYMBOL,PILOT_ISIN)]:
+                    raise RuntimeError("PILOT_SECURITY_IDENTITY_MISMATCH")
             return row[1]
 
 
@@ -137,7 +150,7 @@ def complete(db_url: str,run_id: str,status: str, qualified: int,
             if not error and (counts.get("PLANNED",0) or counts.get("FAILED",0) or counts.get("REJECTED",0)):
                 status="PARTIAL"
             meta={
-                "contract":"RESULTS_QUARTERLY_SCAN_V2",
+                "contract":OPERATION,
                 "source":"EXCHANGE_ORIGINALS_REUSE_FIRST",
                 "issuer_documents_parsed":(acquisition or {}).get("documents_parsed",0),
                 "bse_discovery_checked":(bse_discovery or {}).get("checked",0),
@@ -171,13 +184,18 @@ def complete(db_url: str,run_id: str,status: str, qualified: int,
 
 def main() -> int:
     db_url=require_dev_environment()
-    run_id=read_request()
-    cohort=inspect_run(db_url,run_id)
+    global OPERATION
+    run_id,pilot=read_request()
+    if pilot:OPERATION=PILOT_OPERATION
+    cohort=inspect_run(db_url,run_id,pilot)
     env=dict(os.environ)
     env["RESULTS_LIVE_SCAN_MODE"]="1"
     env["RESULTS_SCAN_RUN_ID"]=run_id
-    env["RESULTS_MAX_STOCKS"]=str(cohort)
-    env.pop("RESULTS_TARGET_SYMBOLS",None) # complete transaction-derived universe
+    env["RESULTS_MAX_STOCKS"]="262" if pilot else str(cohort)
+    if pilot:
+        env["RESULTS_TARGET_SYMBOLS"]=PILOT_SYMBOL
+    else:
+        env.pop("RESULTS_TARGET_SYMBOLS",None) # full transaction-derived universe
     acquisition=verification=None
     qualified=0
     failure=None
@@ -185,6 +203,7 @@ def main() -> int:
     # BSEIndiaApi is primary DISCOVERY, not financial admission authority.
     # Independent NSE/issuer originals and R4 remain the only selectable facts.
     try:
+        if pilot:raise RuntimeError("BSE_PILOT_DISCOVERY_ALREADY_TESTED")
         bse_discovery=execution("scripts/results/results_bse_live_discovery.py",env)
         env["RESULTS_BSE_HINT_PATH"]="tmp/results-scan-v2/bse_hints.json"
     except Exception as exc:
