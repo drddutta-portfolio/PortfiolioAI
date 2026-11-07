@@ -23,7 +23,17 @@ PREFIX="portfolioai-results/development/v1/quarterly/"
 R4_EIGHT_QUARTER_MODE=os.getenv("RESULTS_R4_EIGHT_QUARTER_SELECTION","0")=="1"
 R5_COMPARISON_MODE=os.getenv("RESULTS_R5_COMPARISON_SELECTION","0")=="1"
 R5_LEGACY_MODE=os.getenv("RESULTS_R5_LEGACY_SELECTION","0")=="1"
-QUARTERS=(("2024-09-30","2024-12-31","2025-03-31","2025-06-30",
+RESULTS_LIVE_SCAN_MODE=os.getenv("RESULTS_LIVE_SCAN_MODE","0")=="1"
+def rolling_completed_quarters(today):
+    from datetime import timedelta
+    start=date(today.year,((today.month-1)//3)*3+1,1)
+    end=start-timedelta(days=1)
+    result=[]
+    for _ in range(4):
+        result.append(end.isoformat())
+        end=date(end.year,((end.month-1)//3)*3+1,1)-timedelta(days=1)
+    return tuple(reversed(result))
+QUARTERS=rolling_completed_quarters(date.today()) if RESULTS_LIVE_SCAN_MODE else (("2024-09-30","2024-12-31","2025-03-31","2025-06-30",
             "2025-09-30","2025-12-31","2026-03-31","2026-06-30")
           if R4_EIGHT_QUARTER_MODE else
           ("2024-09-30","2024-12-31") if R5_LEGACY_MODE else
@@ -1164,6 +1174,8 @@ def verify(db,s3,apply):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--apply",action="store_true")
     options=parser.parse_args()
+    if RESULTS_LIVE_SCAN_MODE and (R4_EIGHT_QUARTER_MODE or R5_LEGACY_MODE or R5_COMPARISON_MODE):
+        raise SystemExit("RESULTS_LIVE_SCAN_VERIFIER_SCOPE_CONFLICT")
     if R4_EIGHT_QUARTER_MODE and (R5_LEGACY_MODE or R5_COMPARISON_MODE):
         raise SystemExit("R4_EIGHT_QUARTER_SCOPE_CONFLICT")
     if R5_LEGACY_MODE and os.environ.get("RESULTS_R5_LEGACY_ACK")!="2024_SEP_DEC_ORIGINAL_XBRL":
