@@ -163,4 +163,25 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(within(panel).getByText("Strong 1")).toBeInTheDocument()
   })
 
+  it("shows the blue Newly Reported dot and filters only source-verified recent results", async () => {
+    mock.usePortfolio.mockReturnValue({portfolio,isLoading:false,error:null})
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    const admitted=new Date(Date.now()-120000).toISOString()
+    mock.load.mockResolvedValue([
+      {...fact("2026-09-30","NET_INTEREST_INCOME_QUARTER","120"),createdAt:admitted},
+      {...fact("2026-09-30","NET_PROFIT_QUARTER","21"),createdAt:admitted},
+      {...fact("2026-09-30","EPS_DILUTED","3"),unit:"INR_PER_SHARE",createdAt:admitted},
+    ])
+    render(<ResultsLivePage />)
+    expect(await screen.findByText("BANKTEST")).toBeInTheDocument()
+    const cell=screen.getByText("BANKTEST").closest("tr")?.querySelector('button[aria-label*="Q2 FY27"]')
+    expect(cell).not.toBeNull()
+    expect(cell?.getAttribute("aria-label")).toContain("Newly Reported")
+    expect(cell?.querySelector(".ref-status-dot.new")).not.toBeNull()
+    expect(cell?.textContent).toContain("Not Rated")
+    fireEvent.click(screen.getByRole("button",{name:"Newly Reported"}))
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    expect(screen.queryByText("CLOSEDTEST")).not.toBeInTheDocument()
+  })
+
 })
