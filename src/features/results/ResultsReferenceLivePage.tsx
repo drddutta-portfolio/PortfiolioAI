@@ -605,7 +605,9 @@ export function ResultsLivePage() {
         <span>Not rated {r5Coverage.counts.UNAVAILABLE}</span>
         <small>{r5Coverage.counts.peer} peer-ranked · {r5Coverage.counts.trajectory} own-trend · separate assessment methods</small>
       </section>
-      {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
+      {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError.includes("GITHUB_TOKEN_CONTENTS_WRITE_DENIED")
+        ? "GitHub denied write access to the Scan worker repository. Update the fine-grained token used by RESULTS_SCAN_GITHUB_CONTENTS_TOKEN: select drddutta-portfolio/PortfiolioAI and grant repository Contents → Read and write, including any owner approval."
+        : scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
       <div className="results-matrix-shell" ref={gridRef} aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => { setScrollTop(e.currentTarget.scrollTop); setHorizontalOffset(e.currentTarget.scrollLeft) }}>
         <table className="results-matrix" style={{ minWidth: `${14.4 + periods.length * 16.5}rem` }}>
