@@ -12,6 +12,7 @@ import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResu
 import { displayQuarterEvidence } from "./quarterlyPresentation"
 import { buildResultsQuarterPeriods } from "./resultsQuarterPeriods"
 import { newlyReportedQuarterKeys } from "./resultsNewlyReported"
+import { matchesResultsQuarterFilters } from "./resultsQuarterFilter"
 import type { ResultsQuarterPeriod } from "./resultsQuarterPeriods"
 import { getResultsScanStatus, startResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
@@ -550,13 +551,23 @@ export function ResultsLivePage() {
     }
     return { complete: eligible.length, counts }
   }, [entries, observations, industryCalibrations])
+  // Different counters: the last scan reports its own new company-quarters;
+  // the blue filter persists for seven days across all recently added filings.
+  const newlyReportedStockCount = useMemo(() =>
+    entries.filter(entry => periods.some(period =>
+      newlyReported.has(entry.position.securityId + "|" + period.end))).length,
+    [entries, periods, newlyReported])
+
   const filtered = useMemo(() => entries.filter((e) => {
     const p = e.position
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
-    if (onlyNew && !periods.some(quarter => newlyReported.has(p.securityId + "|" + quarter.end))) return false
-    if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end, industryCalibrations)))) return false
+    if (!matchesResultsQuarterFilters({
+      securityId: p.securityId, quarterEnds: periods.map(period => period.end),
+      selectedGrades: statuses, onlyNew, newlyReported,
+      gradeForQuarter: end => resultStatus(observations, e, end, industryCalibrations),
+    })) return false
     return true
   }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew, newlyReported])
 
@@ -613,7 +624,7 @@ export function ResultsLivePage() {
       <div><h1 id="results-title">Results</h1><p>Quarterly and annual company performance for all current and closed portfolio positions.</p></div>
       <section className="results-collection-status" aria-label="Results collection status">
         <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanStatus.run.processed ? "Scanning…" : "Queued · waiting for worker" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
-        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New independently qualified company-quarters</small></div>
+        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>Last scan · {newlyReportedStockCount} blue in last 7 days</small></div>
         <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{loadingEvidence ? "Loading quarterly evidence…" : sourceCompanyCount + " of " + entries.length + " with results · " + sourceQuarterCount + " stock-quarters"}</small></div>
         <button type="button" disabled={scanBusy || scanStatus?.run?.status === "RUNNING" || entries.length === 0} onClick={() => void runScan()} title={scanBusy || scanStatus?.run?.status === "RUNNING" ? "Verified quarterly collection is running" : "Discover and verify new official company quarterly filings"}>{scanBusy || scanStatus?.run?.status === "RUNNING" ? "↻ Scanning…" : "↻ Run Scan Now"}</button>
       </section>
@@ -629,9 +640,10 @@ export function ResultsLivePage() {
           <button key={kind} type="button" className={filter === kind ? "active" : ""} onClick={() => { setFilter(kind); setScrollTop(0) }}>{kind === "ALL" ? "All Stocks" : kind === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
         <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((name) => <option key={name}>{name}</option>)}</select></label>
         {(["STRONG", "MIXED", "WEAK", "UNAVAILABLE"] as const).map((s) =>
-          <button type="button" key={s} className={statuses.has(s) ? "active" : ""} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
-        <button type="button" className={onlyNew ? "active" : ""} aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Show companies with newly verified quarterly results added within the last 7 days"><span className="ref-status-dot new"/>Newly Reported</button>
+          <button type="button" key={s} className={statuses.has(s) ? "active" : ""} aria-pressed={statuses.has(s)} title={onlyNew ? "Combine with Blue on the same newly reported quarter; other grade colors are OR" : "Filter the latest displayed quarter; multiple grade colors combine as OR"} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
+        <button type="button" className={onlyNew ? "active" : ""} aria-label="Newly Reported" aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Blue = all qualified results added in the last 7 days (not only the most recent scan). Combine with selected grades on the same quarter."><span className="ref-status-dot new"/>Newly Reported <small aria-hidden="true" className="ref-new-count">{newlyReportedStockCount}</small></button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
+        <span className="sr-only" role="status">Showing {filtered.length} companies matching the selected filters. Grade colors combine as OR; Newly Reported combines as AND for the same quarterly result.</span>
       </div>
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
         <strong title="Frozen four-quarter baseline. Future quarters are graded separately when source-qualified.">R5 · Jun 2026 baseline</strong>
