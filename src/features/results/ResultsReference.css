@@ -149,6 +149,19 @@
 .ref-status-dot.mixed, .ref-status-dot.review { background: #ffb724; }
 .ref-status-dot.unavailable { background: #adb7c5; }
 .ref-status-dot.new { background: #146fec; }
+.ref-results .results-filter-bar .ref-new-count {
+  font-size: .65rem;
+  font-weight: 750;
+  color: #185fd1;
+  background: #eaf2ff;
+  border-radius: 999px;
+  padding: 0 .3rem;
+  margin-left: .1rem;
+}
+.ref-results .results-filter-bar button.active .ref-new-count {
+  background: #dbeaff;
+}
+
 /* R5 classification disclosure: retains the reference grid and four cards. */
 .ref-results .ref-r5-summary {
   display: flex;
