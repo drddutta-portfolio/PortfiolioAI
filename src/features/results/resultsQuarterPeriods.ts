@@ -41,8 +41,8 @@ export function buildResultsQuarterPeriods(
       row.periodEnd <= BASELINE_END || row.periodEnd > latestCompleted ||
       !quarterEndDate(row.periodEnd) || !CORE.has(row.code) ||
       !row.sourceRecordId || !row.scope || row.currency !== "INR") continue
-    const byStock = candidates.get(row.periodEnd) ?? new Map()
-    const facts = byStock.get(row.securityId) ?? []
+    const byStock: Map<string, ResultsSourceObservation[]> = candidates.get(row.periodEnd) ?? new Map<string, ResultsSourceObservation[]>()
+    const facts: ResultsSourceObservation[] = byStock.get(row.securityId) ?? []
     facts.push(row)
     byStock.set(row.securityId, facts)
     candidates.set(row.periodEnd, byStock)
