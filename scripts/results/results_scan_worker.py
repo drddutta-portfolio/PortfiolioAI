@@ -74,7 +74,7 @@ def execution(path: str, env: dict[str, str]) -> dict:
             "source":path,"exit_code":process.returncode,
             "stderr_tail":process.stderr[-600:]}), flush=True)
         raise RuntimeError("RESULTS_ORIGINAL_PIPELINE_FAILED")
-    if "r3-live-public-filing" in path:
+    if "r3-live-public-filing" in path or "results_bse_live_discovery" in path:
         return json.loads(process.stdout)
     # R4 logs progress followed by its final JSON report.
     rows=[line for line in process.stdout.splitlines() if line.lstrip().startswith("{")]
@@ -104,7 +104,8 @@ def read_selected_new(db_url: str, run_id: str) -> int:
 
 
 def complete(db_url: str,run_id: str,status: str, qualified: int,
-             acquisition: dict | None, verification: dict | None, error: str | None) -> None:
+             acquisition: dict | None, verification: dict | None, error: str | None,
+             bse_discovery: dict | None = None) -> None:
     with psycopg.connect(db_url) as db:
         with db.cursor() as cur:
             # Every outstanding equity is explicitly incomplete on an
@@ -128,6 +129,10 @@ def complete(db_url: str,run_id: str,status: str, qualified: int,
                 "contract":"RESULTS_QUARTERLY_SCAN_V2",
                 "source":"EXCHANGE_ORIGINALS_REUSE_FIRST",
                 "issuer_documents_parsed":(acquisition or {}).get("documents_parsed",0),
+                "bse_discovery_checked":(bse_discovery or {}).get("checked",0),
+                "bse_identity_matched":(bse_discovery or {}).get("identity_matched",0),
+                "bse_current_quarter_candidates":(bse_discovery or {}).get("quarter_candidates",0),
+                "bse_discovery_error":(bse_discovery or {}).get("error") or (bse_discovery or {}).get("connection_failure"),
                 "observations_inserted":(acquisition or {}).get("observations_inserted",0),
                 "qualified_stock_quarters_new":qualified,
                 "verifier_qualified_fact_rows":(verification or {}).get("qualified_fact_rows",0),
@@ -165,6 +170,14 @@ def main() -> int:
     acquisition=verification=None
     qualified=0
     failure=None
+    bse_discovery=None
+    # BSEIndiaApi is primary DISCOVERY, not financial admission authority.
+    # Independent NSE/issuer originals and R4 remain the only selectable facts.
+    try:
+        bse_discovery=execution("scripts/results/results_bse_live_discovery.py",env)
+        env["RESULTS_BSE_HINT_PATH"]="tmp/results-scan-v2/bse_hints.json"
+    except Exception as exc:
+        bse_discovery={"source":"BSEINDIAAPI","error":type(exc).__name__}
     try:
         acquisition=execution("scripts/results/r3-live-public-filing-batch.py",env)
         if acquisition.get("universe_target")!=cohort:
@@ -178,7 +191,7 @@ def main() -> int:
     except Exception as exc:
         failure=str(exc)[:90]
     complete(db_url,run_id, "SUCCEEDED" if not failure else "PARTIAL",
-             qualified,acquisition,verification,failure)
+             qualified,acquisition,verification,failure,bse_discovery)
     return 1 if failure else 0
 
 
