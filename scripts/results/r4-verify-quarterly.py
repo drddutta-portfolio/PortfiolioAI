@@ -985,6 +985,14 @@ def verify(db,s3,apply):
         facts,bdl_corrected=qualify_bdl_correction(facts,s3)
         from r4_avanti_correction import qualify as qualify_avanti_correction
         facts,avanti_corrected=qualify_avanti_correction(facts,s3)
+        from r4_nse_catalog_revision import qualify as qualify_nse_revisions,KIND as NSE_REVISION_KIND
+        with conn.cursor() as cur:
+            cur.execute("""SELECT DISTINCT ON (external_record_id) payload_hash,raw_payload
+              FROM data_source_records WHERE source_code='COMPANY_EXCHANGE_FILING' AND record_kind=%s
+              ORDER BY external_record_id,retrieved_at DESC,id DESC""",(NSE_REVISION_KIND,))
+            revision_indexes=cur.fetchall()
+        facts,nse_revised_sources,nse_revision_errors=qualify_nse_revisions(facts,revision_indexes,s3)
+        invalid.update(nse_revision_errors)
         with conn.cursor() as cur:
             cur.execute("""SELECT security_id,metric_code,period_end,consolidation_scope,selected_observation_id
               FROM public.fundamental_observation_decisions WHERE period_type='QUARTER'
@@ -996,6 +1004,7 @@ def verify(db,s3,apply):
         if krn_corrected:invalid["KRN_CORRECTED_XBRL_SUPPORTED_BY_ISSUER_AND_EXCHANGE_ACK"]+=1
         if bdl_corrected:invalid["BDL_XML_TAX_SIGN_RECONCILED_TO_SIGNED_STATEMENT"]+=1
         if avanti_corrected:invalid["AVANTI_EXPLICIT_ISSUER_EPS_CORRECTION_REPLAYED"]+=1
+        if nse_revised_sources:invalid["NSE_EXPLICIT_REVISION_CATALOG_AND_XML_HTML_ORIGINALS_REPLAYED"]+=len(nse_revised_sources)
         inserted=unchanged=protected=0
         if apply:
             proposals=[{"security_id":str(r["security_id"]),
@@ -1016,6 +1025,7 @@ def verify(db,s3,apply):
                         "official_issuer":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"),
                         "restated_basis":bool(r["raw_payload"].get("contract")=="RESULTS_R4_OFFICIAL_ISSUER_DATED_ORIGINAL_V1"
                             and r["raw_payload"].get("parsed",{}).get("comparison_basis_unproven") is True),
+                        "nse_declared_revision":str(r["source_record_id"]) in nse_revised_sources,
                         "avanti_correction":bool(avanti_corrected and r["symbol"]=="AVANTIFEED"
                             and str(r["period_end"])=="2025-12-31" and r["consolidation_scope"]=="CONSOLIDATED"),
                         "bdl_correction":bool(bdl_corrected and r["symbol"]=="BDL"
@@ -1026,7 +1036,7 @@ def verify(db,s3,apply):
             payload=json.dumps(proposals,separators=(",",":"))
             fields="""SELECT * FROM jsonb_to_recordset(%s::jsonb)
                 AS x(security_id uuid,metric_code text,period_end date,
-                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean)"""
+                     consolidation_scope text,selected_observation_id uuid,original_share_basis boolean,issuer_correction boolean,general_bse_eps boolean,nse_bridge_eps boolean,nse_bridge_basis boolean,krn_correction boolean,dated_bse boolean,bdl_correction boolean,official_issuer boolean,restated_basis boolean,scope_board_basis boolean,avanti_correction boolean,nse_declared_revision boolean)"""
             with conn.cursor() as cur:
                 cur.execute("""WITH proposals AS ("""+fields+""")
                     SELECT count(*) FILTER (WHERE d.selected_observation_id<>p.selected_observation_id) AS conflicts,
@@ -1060,6 +1070,8 @@ def verify(db,s3,apply):
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; ISSUER_RESTATED_CURRENT_DISPLAY_20261104_V1; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_PORTFOLIOAI_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.official_issuer THEN
                                  'RESULTS_R4_OFFICIAL_ISSUER_ORIGINAL_DATED_TABLE_INDEPENDENTLY_REPLAYED; COMPLETE_ORIGINAL_BASIS_AUDIT; REPORTED_IN_SELECTED_FILING; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
+                               WHEN p.nse_declared_revision THEN
+                                 'RESULTS_R4_EXPLICIT_NSE_CATALOG_DECLARED_FINANCIAL_REVISION; ISSUER_RESTATED_BASIS_COMPARABILITY_UNPROVEN; LITERAL_REVISION_TYPE_AND_REASON_RETAINED; EXACT_CURRENT_ISSUER_QUARTER_AND_SCOPE; REVISED_XML_AND_IXBRL_TRIOS_AGREE; PREVIOUS_RECORDS_AND_HASHES_PRESERVED; FRESH_PRIMARY_BYTES_RETAINED_SEPARATELY_WHERE_INITIAL_BYTES_UNRETAINED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.avanti_correction THEN
                                  'RESULTS_R4_AVANTI_EXPLICIT_ISSUER_CORRECTION_2026_02_12; BOTH_EXACT_NSE_XML_ORIGINALS_AND_COMPLETE_ISSUER_CORRECTION_PDF_REPLAYED; ONLY_TOTAL_OPERATION_DILUTED_EPS_CORRECTED; REVENUE_AND_PAT_UNCHANGED; ORIGINALS_PRESERVED; HISTORICAL_ORIGINAL_EPS_COMPARABILITY_UNPROVEN; NO_SHARE_OR_EPS_REBASING; ORIGINAL_PUBLICATION_TIMESTAMP_UNKNOWN; NO_HISTORICAL_PIT_OR_V1_4_AUTHORITY'
                                WHEN p.bdl_correction THEN
