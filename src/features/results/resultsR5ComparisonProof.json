@@ -2694,6 +2694,32 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "81d0f974-16c2-4891-b16a-a7aa81b0c606",
+        "NET_PROFIT_QUARTER": "4de0877e-63bb-4610-84a2-6657dedaf117",
+        "OPERATING_REVENUE_QUARTER": "1a1ddbe7-13ae-4cda-b9e9-d54655e72345"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "b68c6f9d-5881-4ca8-a9b6-b00d266f778f",
+      "sourceRecordId": "f8b6c678-a96e-412e-acef-a316bcdecc4a",
+      "symbol": "360ONE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "7b384185-0f25-4b02-88c1-2f13bd4067ff",
+        "NET_PROFIT_QUARTER": "782518ea-7635-45bc-865f-66826f6bf98a",
+        "OPERATING_REVENUE_QUARTER": "ea21ac13-0394-42b4-a073-3a26d87c968d"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "b68c6f9d-5881-4ca8-a9b6-b00d266f778f",
+      "sourceRecordId": "98fb59f1-e30e-4c03-8805-46fca53b7841",
+      "symbol": "360ONE"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "b47972e5-1ea7-4588-b0bc-130546621322",
         "NET_PROFIT_QUARTER": "edfeb49a-303e-49fd-ac63-a3e832a34b91",
         "OPERATING_REVENUE_QUARTER": "d260f16c-ad7f-4f36-acdd-f79aecabe053"
@@ -3378,6 +3404,32 @@
       "scope": "STANDALONE",
       "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
       "sourceRecordId": "24cb359b-2ce0-4568-89a1-a874f8946a3e",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "11b784b0-7ff6-4e73-a257-f4c2c7f72d97",
+        "NET_PROFIT_QUARTER": "54bb8d3d-29c5-4e15-a8ca-9080c6765cc5",
+        "OPERATING_REVENUE_QUARTER": "3f5a9ea6-f744-4760-8395-1725a2c14f29"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "29b776da-780e-4ae8-b7a4-32bd3ed0359b",
+      "symbol": "JIOFIN"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "41018be3-996e-4ca3-bc42-846cdce364cd",
+        "NET_PROFIT_QUARTER": "979407f5-5fd7-42eb-871b-f3afa8f48442",
+        "OPERATING_REVENUE_QUARTER": "cd658626-81c3-4974-9e69-be95a214ebb6"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "sourceRecordId": "0ed23e9a-a68b-4c1e-8a6a-3a585244aa51",
       "symbol": "JIOFIN"
     },
     {
