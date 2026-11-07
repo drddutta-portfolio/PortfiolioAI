@@ -20,6 +20,26 @@ def main():
     data=json.loads(raw);data=json.loads(data) if isinstance(data,str) else data
     # These are exchange link identifiers, never financial statement rows.
     print('R4_BSE_RETAINED_PERIOD_LINK_IDENTIFIERS',json.dumps(data.get('resultinS')),flush=True)
+    if os.environ.get('RESULTS_R4_BSE_ENDPOINT_PROBE')=='1':
+        # Public route discovery only. No financial amount or quarter is admitted.
+        with batch.PortfolioBSE() as bse:
+            for endpoint in ('FinancialResultHeader/w','StockreachResult/w','Corp_FinanceResult_ng_new/w','Corp_GetFINANCE_DRDOWN_ng/w'):
+                url='https://api.bseindia.com/BseIndiaAPI/api/'+endpoint
+                try:
+                    response=bse._bse.session.get(url,timeout=(15,35),allow_redirects=False)
+                    if len(response.content)>5_000_000:raise ValueError('PUBLIC_API_RESPONSE_SIZE_BOUND')
+                    digest=hashlib.sha256(response.content).hexdigest()
+                    batch.immutable_put(client,batch.PREFIX+'bse-public-endpoint-review/sha256='+digest+'/response.bin',response.content)
+                    try:
+                        body=response.json();body=json.loads(body) if isinstance(body,str) else body
+                    except (ValueError,TypeError):body=None
+                    detail={'url':url,'status':response.status_code,'sha256':digest,'bytes':len(response.content),'response_type':type(body).__name__}
+                    if isinstance(body,dict):
+                        detail['keys']=sorted(body)[:40]
+                        detail['message']=str(body.get('Message',''))[:1200]
+                    print('R4_BSE_PUBLIC_ENDPOINT_DISCOVERY',json.dumps(detail),flush=True)
+                except Exception as error:print('R4_BSE_PUBLIC_ENDPOINT_UNAVAILABLE',json.dumps({'url':url,'reason':type(error).__name__}),flush=True)
+        return
     with batch.PortfolioBSE() as bse:
         reviewed=set()
         for url in ('https://www.bseindia.com/corporates/results.aspx?Code=532541&Company=Coforge-Ltd&qtr=131.00&RType=', 'https://www.bseindia.com/corporates/results.aspx?Code=532541&Company=Coforge-Ltd&qtr=125.00&RType=', 'https://www.bseindia.com/corporates/financialres.aspx','https://www.bseindia.com/stock-share-price/coforge-limited/coforge/532541/financials-results/'):
