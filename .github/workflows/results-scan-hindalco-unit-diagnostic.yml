@@ -1,0 +1,49 @@
+name: Results Scan HINDALCO Official Filing Unit Diagnostic (Read Only)
+on:
+  push:
+    branches: [results-scan-v2-dev-rollout-20261107]
+    paths: [.github/workflows/results-scan-hindalco-unit-diagnostic.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check --no-cache-dir 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'psycopg[binary]==3.2.10' 'boto3==1.40.46'
+      - name: Inspect exact official financial unit labels and statement headings (no writes)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import importlib.util,re,json,requests
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          file=Path('scripts/results/r3-live-public-filing-batch.py')
+          spec=importlib.util.spec_from_file_location('r3',file)
+          r3=importlib.util.module_from_spec(spec);spec.loader.exec_module(r3)
+          symbol,isin='HINDALCO','INE038A01020'
+          sess=requests.Session()
+          sess.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)', 'Accept-Language':'en-IN,en;q=0.8'})
+          sess.get('https://www.nseindia.com/companies-listing/corporate-integrated-filing',timeout=20)
+          listing=r3.fetch_json(sess,symbol)
+          records=[{'qe_Date':x.get('qe_Date'),'type':x.get('filingType'),'url':str(x.get('ixbrl') or x.get('ixbrlUrl') or '')[-95:]} for x in listing[:12] if isinstance(x,dict)]
+          print('LISTING_SAMPLE',json.dumps(records))
+          links=r3.listing_urls(listing,symbol)
+          print('URL_COUNT',len(links))
+          for url in links[:9]:
+            try:
+              res=sess.get(url,timeout=22);res.raise_for_status()
+              soup=BeautifulSoup(res.text,'html.parser')
+              tables=list(r3.html_rows(soup))
+              declarations=[v for t in tables for v in r3.field_values(t,'level of rounding used in financial results')]
+              headings=[soup.get_text(' ',strip=True)[max(0,m.start()-48):m.end()+85]
+                        for m in list(re.finditer(r'(?i)(?:amount|figures|rupees|lakhs|crores|million)',soup.get_text(' ',strip=True)))[:12]]
+              unit,reason=r3.source_filing_unit(soup,tables)
+              parsed,parsed_reason=r3.extract_source(res.text,symbol,isin,url)
+              selected=[k for k in ['Revenue from operations','Total profit (loss) for period','Date of end of reporting period'] if any(r3.field_values(t,k) for t in tables)]
+              print('SOURCE_DIAG',json.dumps({'url_tail':url.rsplit('/',1)[-1],'bytes':len(res.content),'declared_units':declarations[:12],'heading_fragments':headings[:10],'unit':unit,'unit_reason':reason,'parsed':parsed is not None,'parse_reason':parsed_reason,'statement_labels':selected},sort_keys=True))
+            except Exception as exc:print('SOURCE_ERROR',type(exc).__name__,str(exc)[:90])
+          PY
