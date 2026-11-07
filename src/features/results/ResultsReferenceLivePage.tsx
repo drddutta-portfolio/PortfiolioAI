@@ -10,7 +10,7 @@ import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparison
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResultsEvidence } from "./resultsR5LiveRefresh"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
-import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
+import { getResultsScanStatus, startResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import "./ResultsPage.css"
@@ -456,24 +456,40 @@ export function ResultsLivePage() {
     return () => { active = false }
   }, [portfolio?.portfolio.id])
 
+  // A scan is a real server-side job; closing the page must not cancel it.
+  // Poll only while a run is active. Its completion triggers the existing
+  // source-inventory refresh and R5 recomputation (no competing calculations).
+  useEffect(() => {
+    const id = portfolio?.portfolio.id
+    if (!id || scanStatus?.run?.status !== "RUNNING") return
+    let active = true
+    const timer = window.setInterval(() => {
+      void getResultsScanStatus(id)
+        .then(next => {
+          if (!active) return
+          setScanStatus(next)
+          if (next.run?.status !== "RUNNING") {
+            setEvidenceRevision(value => value + 1)
+            if (next.run?.error_summary) setScanError(next.run.error_summary)
+          }
+        })
+        .catch((reason: unknown) => {
+          if (active) setScanError(reason instanceof Error ? reason.message : "Unable to check scan progress")
+        })
+    }, 8000)
+    return () => { active = false; window.clearInterval(timer) }
+  }, [portfolio?.portfolio.id, scanStatus?.run?.status])
+
   const runScan = async () => {
-    if (!portfolio || scanBusy) return
+    if (!portfolio || scanBusy || scanStatus?.run?.status === "RUNNING") return
     setScanBusy(true)
     setScanError(null)
     try {
-      let progress = await startResultsScan(portfolio.portfolio.id)
-      setScanStatus(progress)
-      let previousProcessed = -1
-      for (let attempts = 0; attempts < 45 && progress.run?.status === "RUNNING" && progress.run.pending > 0; attempts++) {
-        if (progress.run.processed === previousProcessed) throw new Error("Scan stopped making progress. Try again after checking its status.")
-        previousProcessed = progress.run.processed
-        progress = await stepResultsScan(portfolio.portfolio.id, progress.run.id)
-        setScanStatus(progress)
-      }
-      if (progress.run?.status === "RUNNING") throw new Error("Scan has not finished. Use Run Scan Now to resume.")
-      setEvidenceRevision((value) => value + 1)
+      const result = await startResultsScan(portfolio.portfolio.id)
+      setScanStatus(result)
+      if (result.run?.status !== "RUNNING") setEvidenceRevision(value => value + 1)
     } catch (reason: unknown) {
-      setScanError(reason instanceof Error ? reason.message : "The results scan failed")
+      setScanError(reason instanceof Error ? reason.message : "Unable to start Results scan")
     } finally {
       setScanBusy(false)
     }
@@ -558,10 +574,10 @@ export function ResultsLivePage() {
     <header className="results-page-header">
       <div><h1 id="results-title">Results</h1><p>Quarterly and annual company performance for all current and closed portfolio positions.</p></div>
       <section className="results-collection-status" aria-label="Results collection status">
-        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanBusy ? "Scanning…" : "Paused · resume" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
-        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New stored metric observations</small></div>
+        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanStatus.run.processed ? "Scanning…" : "Queued · waiting for worker" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
+        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New independently qualified company-quarters</small></div>
         <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{loadingEvidence ? "Loading quarterly evidence…" : sourceCompanyCount + " of " + entries.length + " with results · " + sourceQuarterCount + " stock-quarters"}</small></div>
-        <button type="button" disabled={scanBusy || entries.length === 0} onClick={() => void runScan()} title={scanBusy ? "Processing quarterly data" : "Check existing and newly linked source data"}>{scanBusy ? "↻ Scanning…" : scanStatus?.run?.status === "RUNNING" ? "↻ Resume Scan" : "↻ Run Scan Now"}</button>
+        <button type="button" disabled={scanBusy || scanStatus?.run?.status === "RUNNING" || entries.length === 0} onClick={() => void runScan()} title={scanBusy || scanStatus?.run?.status === "RUNNING" ? "Verified quarterly collection is running" : "Discover and verify new official company quarterly filings"}>{scanBusy || scanStatus?.run?.status === "RUNNING" ? "↻ Scanning…" : "↻ Run Scan Now"}</button>
       </section>
     </header>
     <div className="results-tabs" role="tablist" aria-label="Results view">
