@@ -26,7 +26,7 @@ jobs:
         with: {python-version: '3.12'}
       - run: npm ci --no-audit --no-fund
       - name: Verify UI-to-service button click and Results R5 contract
-        run: npx vitest run src/features/results/ResultsLivePage.test.tsx src/features/results/ResultsReferenceLivePage.test.tsx
+        run: npx vitest run src/features/results/ResultsLivePage.test.tsx src/features/results/ResultsReferenceLivePage.test.tsx src/features/results/resultsQuarterPeriods.test.ts
       - name: Verify TypeScript and canonical architecture rules
         run: |
           npm run typecheck
