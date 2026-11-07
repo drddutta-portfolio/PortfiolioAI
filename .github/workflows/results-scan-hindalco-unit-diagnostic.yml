@@ -44,6 +44,8 @@ jobs:
               unit,reason=r3.source_filing_unit(soup,tables)
               parsed,parsed_reason=r3.extract_source(res.text,symbol,isin,url)
               selected=[k for k in ['Revenue from operations','Total profit (loss) for period','Date of end of reporting period'] if any(r3.field_values(t,k) for t in tables)]
-              print('SOURCE_DIAG',json.dumps({'url_tail':url.rsplit('/',1)[-1],'bytes':len(res.content),'declared_units':declarations[:12],'heading_fragments':headings[:10],'unit':unit,'unit_reason':reason,'parsed':parsed is not None,'parse_reason':parsed_reason,'statement_labels':selected},sort_keys=True))
+              reported_symbols=[v for t in tables for v in r3.field_values(t,'nse symbol')]
+              reported_isins=[v for t in tables for v in r3.field_values(t,'isin')]
+              print('SOURCE_DIAG',json.dumps({'url_tail':url.rsplit('/',1)[-1],'bytes':len(res.content),'declared_units':declarations[:12],'heading_fragments':headings[:10],'unit':unit,'unit_reason':reason,'parsed':parsed is not None,'parse_reason':parsed_reason,'statement_labels':selected,'reported_symbols':list(dict.fromkeys(reported_symbols))[:8],'reported_isins':list(dict.fromkeys(reported_isins))[:8]},sort_keys=True))
             except Exception as exc:print('SOURCE_ERROR',type(exc).__name__,str(exc)[:90])
           PY
