@@ -36,7 +36,9 @@ FIELDS = {
 # R5 historical comparisons are a separate, explicit Development-only campaign.
 # Do not widen ordinary R3 acquisition or reinterpret unverified older rows.
 R5_HISTORY_MODE = os.getenv("RESULTS_R5_HISTORICAL_ACQUISITION", "0") == "1"
-TARGET_QUARTERS = (
+# Explicitly scoped Development pilot; never expands ordinary R3/R4 history.
+Q2FY27_RELIANCE_PILOT = os.getenv("RESULTS_Q2FY27_RELIANCE_PILOT", "0") == "1"
+TARGET_QUARTERS = (("2026-09-30",) if Q2FY27_RELIANCE_PILOT else
     ("2025-03-31", "2025-06-30") if R5_HISTORY_MODE
     else ("2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")
 )
@@ -537,6 +539,7 @@ def extract_source(html: str, symbol: str, isin: str, source_url: str):
 # still run against the downloaded original bytes before any DB write.
 # No guessed archive names or non-official hosts may be added.
 OFFICIAL_NSE_SEEDS={
+    **({"RELIANCE": ("https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_INDAS_207709_30102026213255_iXBRL_WEB.html",)} if Q2FY27_RELIANCE_PILOT else {}),
     "JIOFIN":(
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_175188_16072026191853_iXBRL_WEB.html",
         "https://nsearchives.nseindia.com/corporate/ixbrl/INTEGRATED_FILING_NBFC_INDAS_151303_17042026225608_iXBRL_WEB.html",
@@ -717,6 +720,8 @@ def main():
     db=required("SUPABASE_DB_URL")
     if PROJECT_REF not in db:raise RuntimeError("NON_DEVELOPMENT_DATABASE_FORBIDDEN")
     if required("CLOUDFLARE_R2_BUCKET")!=BUCKET:raise RuntimeError("NON_DEVELOPMENT_R2_FORBIDDEN")
+    if Q2FY27_RELIANCE_PILOT and (os.getenv("RESULTS_TARGET_SYMBOLS") != "RELIANCE" or R5_HISTORY_MODE):
+        raise RuntimeError("Q2FY27_RELIANCE_PILOT_EXACT_SCOPE_REQUIRED")
     if R5_HISTORY_MODE and os.getenv("RESULTS_R5_HISTORICAL_ACK") != "2025_MAR_JUN_ONLY":
         raise RuntimeError("R5_HISTORICAL_PERIOD_SCOPE_NOT_APPROVED")
     maxstocks=int(os.getenv("RESULTS_MAX_STOCKS","262"))
@@ -869,6 +874,10 @@ def main():
                                         examples.append({"issuer_url":url,
                                                          "nse_symbol":unique_field(tt,"nse symbol"),
                                                          "source_isin":unique_field(tt,"isin")})
+                                continue
+                            # The first pilot requires the original consolidated quarter,
+                            # not a standalone statement or a cumulative half-year column.
+                            if Q2FY27_RELIANCE_PILOT and data["scope"] != "CONSOLIDATED":
                                 continue
                             if (data["period_end"] not in TARGET_QUARTERS
                                 or data["period_end"] in completed
