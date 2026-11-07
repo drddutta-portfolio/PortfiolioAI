@@ -10,13 +10,17 @@ import { compareQuarterMetric, compareQuarterMetrics, explainQuarterlyComparison
 import { loadResultsSourceInventory } from "./resultsSourceRepository"
 import { RESULTS_R5_REFRESH_INTERVAL_MS, resultsEvidenceEqual, shouldRefreshResultsEvidence } from "./resultsR5LiveRefresh"
 import { displayQuarterEvidence } from "./quarterlyPresentation"
-import { getResultsScanStatus, startResultsScan, stepResultsScan } from "./resultsScanRepository"
+import { buildResultsQuarterPeriods } from "./resultsQuarterPeriods"
+import { newlyReportedQuarterKeys } from "./resultsNewlyReported"
+import { matchesResultsQuarterFilters } from "./resultsQuarterFilter"
+import type { ResultsQuarterPeriod } from "./resultsQuarterPeriods"
+import { getResultsScanStatus, startResultsScan } from "./resultsScanRepository"
 import type { ResultsScanStatus } from "./resultsScanRepository"
 import type { ResultsSourceObservation } from "./resultsSourceRepository"
 import "./ResultsPage.css"
 import "./ResultsReference.css"
 
-interface Period { readonly end: string; readonly label: string }
+type Period = ResultsQuarterPeriod
 interface Entry { readonly position: PortfolioPosition; readonly kind: "CURRENT" | "CLOSED" }
 type PositionFilter = "ALL" | "CURRENT" | "CLOSED"
 type StatusFilter = "STRONG" | "MIXED" | "WEAK" | "UNAVAILABLE"
@@ -45,22 +49,8 @@ const isBank = (industry: string | null) => /\bbanks?\b/i.test(industry ?? "")
 const hasBankMetrics = (rows: readonly ResultsSourceObservation[]) =>
   rows.some((row) => row.code === "NET_INTEREST_INCOME_QUARTER" || row.code === "GROSS_NPA_PERCENT" || row.code === "NET_NPA_PERCENT")
 
-// R5 approved four-quarter window. Never auto-advance to unqualified new quarter.
-// Completed calendar quarters, newest first, beginning March 2025.
- // Do not wait for four-stock coverage before displaying a newly reported quarter.
-function makePeriods(): Period[] {
-  const now = new Date()
-  const qStartMonth = Math.floor(now.getUTCMonth() / 3) * 3
-  const previousEnd = new Date(Date.UTC(now.getUTCFullYear(), qStartMonth, 0))
-  const periods: Period[] = []
-  for (let end = previousEnd; end >= new Date(Date.UTC(2025, 2, 31)); end = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() - 2, 0))) {
-    const month = end.getUTCMonth() + 1
-    const quarter = month === 3 ? 4 : month === 6 ? 1 : month === 9 ? 2 : 3
-    const fiscalYear = month === 3 ? end.getUTCFullYear() : end.getUTCFullYear() + 1
-    periods.push({ end: end.toISOString().slice(0, 10), label: `Q${quarter} FY${String(fiscalYear).slice(-2)}` })
-  }
-  return periods
-}
+// Fiscal-quarter columns are derived from actually qualified original filings;
+// calendar rollover alone never adds an empty future quarter.
 const R5_REQUIRED_QUARTERS = new Set(["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"])
 
 function allForQuarter(rows: readonly ResultsSourceObservation[], securityId: string, end: string) {
@@ -78,8 +68,8 @@ function hasFourQualifiedQuarters(rows: readonly ResultsSourceObservation[], ent
   const insurer = entry.position.symbol === "STARHEALTH"
   const core = [insurer ? "NET_PREMIUM_EARNED_QUARTER" : bank ? "NET_INTEREST_INCOME_QUARTER" : "OPERATING_REVENUE_QUARTER",
     "NET_PROFIT_QUARTER", "EPS_DILUTED"]
-  return makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).length === 4 &&
-    makePeriods().filter(period => R5_REQUIRED_QUARTERS.has(period.end)).every(period => {
+  return [...R5_REQUIRED_QUARTERS].every(end => {
+    const period = { end }
     const quarter = own.filter(r => r.periodEnd === period.end && core.includes(r.code))
     if (quarter.length !== 3 || new Set(quarter.map(r => r.code)).size !== 3) return false
     if (quarter.some(r => !r.sourceRecordId || !r.scope ||
@@ -150,11 +140,15 @@ function statusName(status: string) {
   return "Not Rated"
 }
 
-function StatusDot({ status, pending = false }: { readonly status: string; readonly pending?: boolean }) {
-  return <i className={"ref-status-dot " + (pending ? "review" : status.toLowerCase())} aria-hidden="true" />
+function StatusDot({ status, pending = false, newlyReported = false }: {
+  readonly status: string; readonly pending?: boolean; readonly newlyReported?: boolean
+}) {
+  return <i className={"ref-status-dot " + (newlyReported ? "new" : pending ? "review" : status.toLowerCase())}
+    title={newlyReported ? "Newly Reported · first 7 days after addition" : undefined}
+    aria-hidden="true" />
 }
 
-function PreviewCard({ preview, calibrations }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations }) {
+function PreviewCard({ preview, calibrations, newlyReported }: { readonly preview: Preview; readonly calibrations: R5IndustryCalibrations; readonly newlyReported: boolean }) {
   const { entry, period, observations } = preview
   const assessment = gradeQuarterR5(preview.history, entry.position.securityId, period.end,
     entry.position.sector, entry.position.industry, calibrations)
@@ -167,7 +161,7 @@ function PreviewCard({ preview, calibrations }: { readonly preview: Preview; rea
   return createPortal(
     <div className="ref-preview" role="tooltip" style={{ left: preview.left, top: preview.top }}>
       <strong>{entry.position.symbol} — {period.label}</strong>
-      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)}/>{observations.length ? observations.some((row) => row.selected) ? presentationStatus(grade, observations) : "Review pending" : "Not available"}</div>
+      <div className="ref-preview-state"><StatusDot status={grade} pending={observations.length > 0 && !observations.some((r) => r.selected)} newlyReported={newlyReported}/>{observations.length ? observations.some((row) => row.selected) ? presentationStatus(grade, observations) : "Review pending" : "Not available"}{newlyReported ? " · Newly Reported" : ""}</div>
       {displayed ? <dl>
         <div><dt>{LABELS[displayed.code] ?? displayed.code}</dt><dd>{formattedValue(displayed)}</dd></div>
         {observations.filter((row) => row.id !== displayed.id).slice(0, 2).map((row) =>
@@ -363,6 +357,7 @@ export function ResultsLivePage() {
   const [statuses, setStatuses] = useState<Set<StatusFilter>>(new Set())
   const [scrollTop, setScrollTop] = useState(0)
   const [onlyNew, setOnlyNew] = useState(false)
+  const [newResultClock, setNewResultClock] = useState(() => Date.now())
   const [maxHorizontalScroll, setMaxHorizontalScroll] = useState(0)
   const [horizontalOffset, setHorizontalOffset] = useState(0)
   const [selection, setSelection] = useState<Selection | null>(null)
@@ -371,7 +366,19 @@ export function ResultsLivePage() {
   const [insightExpanded, setInsightExpanded] = useState(false)
   const analysisRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
-  const periods = useMemo(() => makePeriods(), [])
+  const periods = useMemo(() => buildResultsQuarterPeriods(observations), [observations])
+  const newlyReported = useMemo(() => newlyReportedQuarterKeys(observations,newResultClock), [observations,newResultClock])
+  // Expire the one-week indicator while the page stays open, without fetching
+  // again or touching the original evidence / grading methodology.
+  useEffect(() => {
+    const timer = window.setInterval(() => setNewResultClock(Date.now()), 60000)
+    const refresh = () => setNewResultClock(Date.now())
+    document.addEventListener("visibilitychange",refresh)
+    return () => {
+      window.clearInterval(timer)
+      document.removeEventListener("visibilitychange",refresh)
+    }
+  }, [])
 
   // R5-F: observe R4's source selections without launching another provider
   // collection. Re-read only while the Results page is visible, and on a
@@ -456,24 +463,72 @@ export function ResultsLivePage() {
     return () => { active = false }
   }, [portfolio?.portfolio.id])
 
+  // A scan is a real server-side job; closing the page must not cancel it.
+  // Poll only while a run is active. Its completion triggers the existing
+  // source-inventory refresh and R5 recomputation (no competing calculations).
+  useEffect(() => {
+    const id = portfolio?.portfolio.id
+    if (!id || scanStatus?.run?.status !== "RUNNING") return
+    let active = true
+    const timer = window.setInterval(() => {
+      void getResultsScanStatus(id)
+        .then(next => {
+          if (!active) return
+          setScanStatus(next)
+          if (next.run?.status !== "RUNNING") {
+            setEvidenceRevision(value => value + 1)
+            if (next.run?.error_summary) setScanError(next.run.error_summary)
+          }
+        })
+        .catch((reason: unknown) => {
+          if (active) setScanError(reason instanceof Error ? reason.message : "Unable to check scan progress")
+        })
+    }, 8000)
+    return () => { active = false; window.clearInterval(timer) }
+  }, [portfolio?.portfolio.id, scanStatus?.run?.status])
+
+  // Daily 07:00 IST scans start in the background with no open browser.
+  // While the user keeps an idle Results page open, discover a newly scheduled
+  // run and its completion without requiring a reload or a manual click.
+  useEffect(() => {
+    const portfolioId = portfolio?.portfolio.id
+    if (!portfolioId || scanStatus?.run?.status === "RUNNING") return
+    let active = true
+    const refreshScheduledState = () => {
+      if (document.visibilityState !== "visible") return
+      void getResultsScanStatus(portfolioId).then(next => {
+        if (!active) return
+        const prior = scanStatus?.run
+        if (next.run?.id !== prior?.id || next.run?.status !== prior?.status) {
+          setScanStatus(next)
+          if (next.run && next.run.status !== "RUNNING") {
+            setEvidenceRevision(value => value + 1)
+          }
+        }
+      }).catch(() => {
+        // A transient idle poll never disables manual Scan Now or clears
+        // previously displayed source-qualified financial results.
+      })
+    }
+    const timer = window.setInterval(refreshScheduledState, 60000)
+    window.addEventListener("focus", refreshScheduledState)
+    return () => {
+      active = false
+      window.clearInterval(timer)
+      window.removeEventListener("focus", refreshScheduledState)
+    }
+  }, [portfolio?.portfolio.id, scanStatus?.run?.id, scanStatus?.run?.status])
+
   const runScan = async () => {
-    if (!portfolio || scanBusy) return
+    if (!portfolio || scanBusy || scanStatus?.run?.status === "RUNNING") return
     setScanBusy(true)
     setScanError(null)
     try {
-      let progress = await startResultsScan(portfolio.portfolio.id)
-      setScanStatus(progress)
-      let previousProcessed = -1
-      for (let attempts = 0; attempts < 45 && progress.run?.status === "RUNNING" && progress.run.pending > 0; attempts++) {
-        if (progress.run.processed === previousProcessed) throw new Error("Scan stopped making progress. Try again after checking its status.")
-        previousProcessed = progress.run.processed
-        progress = await stepResultsScan(portfolio.portfolio.id, progress.run.id)
-        setScanStatus(progress)
-      }
-      if (progress.run?.status === "RUNNING") throw new Error("Scan has not finished. Use Run Scan Now to resume.")
-      setEvidenceRevision((value) => value + 1)
+      const result = await startResultsScan(portfolio.portfolio.id)
+      setScanStatus(result)
+      if (result.run?.status !== "RUNNING") setEvidenceRevision(value => value + 1)
     } catch (reason: unknown) {
-      setScanError(reason instanceof Error ? reason.message : "The results scan failed")
+      setScanError(reason instanceof Error ? reason.message : "Unable to start Results scan")
     } finally {
       setScanBusy(false)
     }
@@ -496,15 +551,25 @@ export function ResultsLivePage() {
     }
     return { complete: eligible.length, counts }
   }, [entries, observations, industryCalibrations])
+  // Different counters: the last scan reports its own new company-quarters;
+  // the blue filter persists for seven days across all recently added filings.
+  const newlyReportedStockCount = useMemo(() =>
+    entries.filter(entry => periods.some(period =>
+      newlyReported.has(entry.position.securityId + "|" + period.end))).length,
+    [entries, periods, newlyReported])
+
   const filtered = useMemo(() => entries.filter((e) => {
     const p = e.position
     if (query.trim() && !(p.symbol + " " + p.company).toLowerCase().includes(query.trim().toLowerCase())) return false
     if (filter !== "ALL" && e.kind !== filter) return false
     if (industry !== "ALL" && (p.industry ?? "Unclassified") !== industry) return false
-    if (onlyNew && !observations.some(row => row.securityId === p.securityId && row.periodEnd === periods[0]?.end)) return false
-    if (statuses.size > 0 && !periods.some((period) => statuses.has(resultStatus(observations, e, period.end, industryCalibrations)))) return false
+    if (!matchesResultsQuarterFilters({
+      securityId: p.securityId, quarterEnds: periods.map(period => period.end),
+      selectedGrades: statuses, onlyNew, newlyReported,
+      gradeForQuarter: end => resultStatus(observations, e, end, industryCalibrations),
+    })) return false
     return true
-  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew])
+  }), [entries, query, filter, industry, statuses, observations, periods, industryCalibrations, onlyNew, newlyReported])
 
   const suggestedEntry = entries.find((e) => observations.some((r) => r.securityId === e.position.securityId && r.selected && periods.some((p) => p.end === r.periodEnd))) ?? entries[0]
   // Latest stored quarter is useful even while its original-source selection
@@ -558,10 +623,10 @@ export function ResultsLivePage() {
     <header className="results-page-header">
       <div><h1 id="results-title">Results</h1><p>Quarterly and annual company performance for all current and closed portfolio positions.</p></div>
       <section className="results-collection-status" aria-label="Results collection status">
-        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanBusy ? "Scanning…" : "Paused · resume" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
-        <div><span>New results</span><strong>{scanStatus?.newResults ?? "—"}</strong><small>New stored metric observations</small></div>
+        <div><span>Last scan</span><strong>{scanStatus?.run?.status === "RUNNING" ? scanStatus.run.processed ? "Scanning…" : "Queued · waiting for worker" : scanStatus?.lastScan ? new Date(scanStatus.lastScan).toLocaleString("en-IN", {timeZone:"Asia/Kolkata"}) : "Not run"}</strong><small>{scanStatus?.run ? scanStatus.run.processed + " of " + scanStatus.run.requested_count + " equities checked" : "Manual scan available"}</small></div>
+        <div><span>New results</span><strong title="New company-quarters qualified in the most recent scan. Blue marks all recent results during their seven-day window.">{scanStatus?.newResults ?? "—"}</strong><small>New independently qualified company-quarters</small></div>
         <div><span>Coverage</span><strong>Open + Closed Positions</strong><small>{loadingEvidence ? "Loading quarterly evidence…" : sourceCompanyCount + " of " + entries.length + " with results · " + sourceQuarterCount + " stock-quarters"}</small></div>
-        <button type="button" disabled={scanBusy || entries.length === 0} onClick={() => void runScan()} title={scanBusy ? "Processing quarterly data" : "Check existing and newly linked source data"}>{scanBusy ? "↻ Scanning…" : scanStatus?.run?.status === "RUNNING" ? "↻ Resume Scan" : "↻ Run Scan Now"}</button>
+        <button type="button" disabled={scanBusy || scanStatus?.run?.status === "RUNNING" || entries.length === 0} onClick={() => void runScan()} title={scanBusy || scanStatus?.run?.status === "RUNNING" ? "Verified quarterly collection is running" : "Discover and verify new official company quarterly filings"}>{scanBusy || scanStatus?.run?.status === "RUNNING" ? "↻ Scanning…" : "↻ Run Scan Now"}</button>
       </section>
     </header>
     <div className="results-tabs" role="tablist" aria-label="Results view">
@@ -575,12 +640,13 @@ export function ResultsLivePage() {
           <button key={kind} type="button" className={filter === kind ? "active" : ""} onClick={() => { setFilter(kind); setScrollTop(0) }}>{kind === "ALL" ? "All Stocks" : kind === "CURRENT" ? "Current Holdings" : "Closed Positions"}</button>)}
         <label className="industry-filter"><span className="sr-only">Industry</span><select value={industry} onChange={(e) => { setIndustry(e.target.value); setScrollTop(0) }}><option value="ALL">All Industries</option>{industries.map((name) => <option key={name}>{name}</option>)}</select></label>
         {(["STRONG", "MIXED", "WEAK", "UNAVAILABLE"] as const).map((s) =>
-          <button type="button" key={s} className={statuses.has(s) ? "active" : ""} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
-        <button type="button" className={onlyNew ? "active" : ""} aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Show companies with observations in the latest reported quarter"><span className="ref-status-dot new"/>Newly Reported</button>
+          <button type="button" key={s} className={statuses.has(s) ? "active" : ""} aria-pressed={statuses.has(s)} title={onlyNew ? "Combine with Blue on the same newly reported quarter; other grade colors are OR" : "Filter the latest displayed quarter; multiple grade colors combine as OR"} onClick={() => toggleStatus(s)}><StatusDot status={s}/>{s === "UNAVAILABLE" ? "Not Available" : statusName(s)}</button>)}
+        <button type="button" className={onlyNew ? "active" : ""} aria-label="Newly Reported" aria-pressed={onlyNew} onClick={() => { setOnlyNew(v => !v); setScrollTop(0) }} title="Blue = all qualified results added in the last 7 days (not only the most recent scan). Combine with selected grades on the same quarter."><span className="ref-status-dot new"/>Newly Reported <small aria-hidden="true" className="ref-new-count">{newlyReportedStockCount}</small></button>
         <button type="button" className="clear-filter" onClick={clearFilters}>Clear Filters</button>
+        <span className="sr-only" role="status">Showing {filtered.length} companies matching the selected filters. Grade colors combine as OR; Newly Reported combines as AND for the same quarterly result.</span>
       </div>
       <section className="ref-r5-summary" aria-label="R5 quarterly grade coverage">
-        <strong>R5 · Jun 2026</strong>
+        <strong title="Frozen four-quarter baseline. Future quarters are graded separately when source-qualified.">R5 · Jun 2026 baseline</strong>
         <span>{loadingEvidence ? "Assessing selected source data…" :
           r5Coverage.complete + " / " + entries.length + " stocks with four qualified quarters · " + (entries.length - r5Coverage.complete) + " R3 pending"}</span>
         <span className="ref-r5-strong">Strong {r5Coverage.counts.STRONG}</span>
@@ -589,7 +655,9 @@ export function ResultsLivePage() {
         <span>Not rated {r5Coverage.counts.UNAVAILABLE}</span>
         <small>{r5Coverage.counts.peer} peer-ranked · {r5Coverage.counts.trajectory} own-trend · separate assessment methods</small>
       </section>
-      {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError}</p> : null}
+      {scanError ? <p className="ref-evidence-error" role="alert">Results scan: {scanError.includes("GITHUB_TOKEN_CONTENTS_WRITE_DENIED")
+        ? "GitHub denied write access to the Scan worker repository. Update the fine-grained token used by RESULTS_SCAN_GITHUB_CONTENTS_TOKEN: select drddutta-portfolio/PortfiolioAI and grant repository Contents → Read and write, including any owner approval."
+        : scanError}</p> : null}
       {evidenceError ? <p className="ref-evidence-error" role="alert">Financial source data could not be loaded: {evidenceError}. Portfolio membership is unaffected.</p> : null}
       <div className="results-matrix-shell" ref={gridRef} aria-label="Quarterly results matrix" tabIndex={0} onScroll={(e) => { setScrollTop(e.currentTarget.scrollTop); setHorizontalOffset(e.currentTarget.scrollLeft) }}>
         <table className="results-matrix" style={{ minWidth: `${14.4 + periods.length * 16.5}rem` }}>
@@ -602,15 +670,16 @@ export function ResultsLivePage() {
               const outcome = gradeQuarterR5(observations, entry.position.securityId, p.end,
                 entry.position.sector, entry.position.industry, industryCalibrations)
               const status = outcome.status
+              const isNew = newlyReported.has(entry.position.securityId + "|" + p.end)
               const pending = rows.length > 0 && !rows.some((r) => r.selected)
               const active = effectiveSelection?.securityId === entry.position.securityId && effectiveSelection.periodEnd === p.end
               return <td key={p.end}><button className={"result-pill ref-cell " + (rows.length ? (pending ? "ref-pending" : "ref-" + status.toLowerCase()) : "ref-empty") + (active ? " selected" : "")}
                 type="button" aria-pressed={active}
-                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + "; " + outcome.basis + (status === "UNAVAILABLE" ? "; " + unratedExplanation(outcome.explanation,rows.length>0) : "")}
+                aria-label={entry.position.symbol + " " + p.label + ": " + (primary ? quarterCellLabel(observations, entry, p, primary) + (pending ? ", review pending" : "") : "not available") + "; grade " + statusName(status) + (isNew ? "; Newly Reported (7-day indicator)" : "") + "; " + outcome.basis + (status === "UNAVAILABLE" ? "; " + unratedExplanation(outcome.explanation,rows.length>0) : "")}
                 onClick={() => selectCell(entry, p)}
                 onMouseEnter={(e) => showPreview(e, entry, p, rows)} onFocus={(e) => showPreview(e, entry, p, rows)}
                 onMouseLeave={() => setPreview(null)} onBlur={() => setPreview(null)}>
-                <StatusDot status={status} pending={pending}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{statusName(status)}</small>
+                <StatusDot status={status} pending={pending} newlyReported={isNew}/><span>{loadingEvidence ? "Loading" : quarterCellLabel(observations, entry, p, primary)}</span><small className="ref-grade-mark">{statusName(status)}</small>
               </button></td>
             })}</tr>)}
             {end < filtered.length ? <tr className="virtual-spacer"><td colSpan={periods.length + 1} style={{ height: (filtered.length - end) * rowHeight }} /></tr> : null}
@@ -628,7 +697,7 @@ export function ResultsLivePage() {
       {chosen && period ? <div className="selected-analysis" ref={analysisRef}>
         <div className="selected-analysis-heading">
           <div><h2>{chosen.position.symbol} — {period.label}</h2><span className={"analysis-status " + (grade === "UNAVAILABLE" ? "ref-assessment-pending" : "result-" + grade.toLowerCase())}>
-            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)}/>{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : presentationStatus(grade, detailRows)}
+            <StatusDot status={grade} pending={detailRows.length > 0 && !detailRows.some((r) => r.selected)} newlyReported={newlyReported.has(chosen.position.securityId + "|" + period.end)}/>{newlyReported.has(chosen.position.securityId + "|" + period.end) ? "Newly Reported · " : ""}{detailRows.length && !detailRows.some((r) => r.selected) ? "Review pending" : presentationStatus(grade, detailRows)}
           </span></div>
           <div className="analysis-actions">
             <button type="button" disabled title="Verified original filing URL is not yet linked">NSE Filing ↗</button>
@@ -651,8 +720,8 @@ export function ResultsLivePage() {
         </details>
         <EvidenceDetails rows={allDetailRows} period={period}/>
       </div> : null}
-      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Quarter values are shown only where available, with their verification state; manual source scans are available; scheduled daily collection is not yet enabled.</footer>
+      <footer className="results-footnote">ⓘ Portfolio coverage includes current and fully closed equities. Automatic source scans are scheduled for 7:00 AM IST daily; manual scanning remains available. A new fiscal-quarter column appears only after its first original-filing financial trio is independently selected.</footer>
     </section>
-    {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations}/> : null}
+    {preview ? <PreviewCard preview={preview} calibrations={industryCalibrations} newlyReported={newlyReported.has(preview.entry.position.securityId + "|" + preview.period.end)}/> : null}
   </section>
 }

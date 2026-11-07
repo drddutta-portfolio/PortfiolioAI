@@ -52,7 +52,7 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(screen.getByRole("tab",{name:"Quarterly Results"})).toHaveAttribute("aria-selected","true")
     expect(screen.getByRole("columnheader",{name:/Q1 FY27/})).toBeInTheDocument()
     expect(screen.getByRole("columnheader",{name:"Q2 FY26"})).toBeInTheDocument()
-    expect(screen.getByRole("columnheader",{name:/Q2 FY27/})).toBeInTheDocument()
+    expect(screen.queryByRole("columnheader",{name:/Q2 FY27/})).not.toBeInTheDocument()
     expect(screen.getByRole("columnheader",{name:"Q1 FY26"})).toBeInTheDocument()
     expect(screen.getByRole("tab",{name:/Annual Results/})).toBeDisabled()
     expect(screen.getByRole("button",{name:"Current Holdings"})).toBeInTheDocument()
@@ -161,6 +161,69 @@ describe("Results R5 approved visual shell with qualified evidence", () => {
     expect(q1?.textContent).toContain("Strong")
     const panel=screen.getByRole("region",{name:"R5 quarterly grade coverage"})
     expect(within(panel).getByText("Strong 1")).toBeInTheDocument()
+  })
+
+  it("shows the blue Newly Reported dot and filters only source-verified recent results", async () => {
+    mock.usePortfolio.mockReturnValue({portfolio,isLoading:false,error:null})
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    const admitted=new Date(Date.now()-120000).toISOString()
+    mock.load.mockResolvedValue([
+      {...fact("2026-09-30","NET_INTEREST_INCOME_QUARTER","120"),createdAt:admitted},
+      {...fact("2026-09-30","NET_PROFIT_QUARTER","21"),createdAt:admitted},
+      {...fact("2026-09-30","EPS_DILUTED","3"),unit:"INR_PER_SHARE",createdAt:admitted},
+    ])
+    render(<ResultsLivePage />)
+    expect(await screen.findByText("BANKTEST")).toBeInTheDocument()
+    const cell=screen.getByText("BANKTEST").closest("tr")?.querySelector('button[aria-label*="Q2 FY27"]')
+    expect(cell).not.toBeNull()
+    expect(cell?.getAttribute("aria-label")).toContain("Newly Reported")
+    expect(cell?.querySelector(".ref-status-dot.new")).not.toBeNull()
+    expect(cell?.textContent).toContain("Not Rated")
+    fireEvent.click(screen.getByRole("button",{name:"Newly Reported"}))
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    expect(screen.queryByText("CLOSEDTEST")).not.toBeInTheDocument()
+  })
+
+  it("combines Blue AND (Green OR Red OR Grey) on the same quarter while retaining holding and search filters", async () => {
+    mock.usePortfolio.mockReturnValue({portfolio,isLoading:false,error:null})
+    mock.status.mockResolvedValue({lastScan:"2026-11-07T17:07:39Z",newResults:77,run:null})
+    const added=new Date(Date.now()-120000).toISOString()
+    mock.load.mockResolvedValue([
+      {...fact("2026-09-30","NET_INTEREST_INCOME_QUARTER","120"),createdAt:added},
+      {...fact("2026-09-30","NET_PROFIT_QUARTER","21"),createdAt:added},
+      {...fact("2026-09-30","EPS_DILUTED","3"),unit:"INR_PER_SHARE",createdAt:added},
+    ])
+    render(<ResultsLivePage />)
+    await screen.findByRole("columnheader",{name:/Q2 FY27/})
+    const blue=screen.getByRole("button",{name:"Newly Reported"})
+    expect(within(blue).getByText("1")).toBeInTheDocument()
+    fireEvent.click(blue)
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    expect(screen.queryByText("CLOSEDTEST")).not.toBeInTheDocument()
+    expect(blue).toHaveAttribute("aria-pressed","true")
+
+    fireEvent.click(screen.getByRole("button",{name:"Strong"}))
+    expect(screen.getByText("No matching securities for the current filters.")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button",{name:"Weak"}))
+    expect(screen.getByText("No matching securities for the current filters.")).toBeInTheDocument()
+    // Red and Green together form OR, but neither may bypass Blue.
+    fireEvent.click(screen.getByRole("button",{name:"Not Available"}))
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    expect(screen.getByRole("button",{name:"Strong"})).toHaveAttribute("aria-pressed","true")
+    expect(screen.getByRole("button",{name:"Weak"})).toHaveAttribute("aria-pressed","true")
+    expect(screen.getByRole("button",{name:"Not Available"})).toHaveAttribute("aria-pressed","true")
+
+    fireEvent.click(screen.getByRole("button",{name:"Closed Positions"}))
+    expect(screen.getByText("No matching securities for the current filters.")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button",{name:"Current Holdings"}))
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    fireEvent.change(screen.getByPlaceholderText("Search stocks…"),{target:{value:"NOMATCH"}})
+    expect(screen.getByText("No matching securities for the current filters.")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button",{name:"Clear Filters"}))
+    expect(screen.getByText("BANKTEST")).toBeInTheDocument()
+    expect(screen.getByText("CLOSEDTEST")).toBeInTheDocument()
+    expect(blue).toHaveAttribute("aria-pressed","false")
+    expect(screen.getByRole("button",{name:"Not Available"})).toHaveAttribute("aria-pressed","false")
   })
 
 })

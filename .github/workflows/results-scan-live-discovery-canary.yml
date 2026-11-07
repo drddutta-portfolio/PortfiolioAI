@@ -1,0 +1,67 @@
+name: Results Scan Live Discovery Canary - Development
+on:
+  push:
+    branches: [results-scan-v2-dev-rollout-20261107]
+    paths: [.github/workflows/results-scan-live-discovery-canary.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  live-discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install the same public NSE and BSE connector dependencies
+        run: |
+          python -m pip install --no-cache-dir 'requests==2.32.5' \
+            'beautifulsoup4==4.13.5' 'psycopg[binary]==3.2.10' \
+            'boto3==1.40.46' 'mthrottle==0.0.2'
+      - name: Read-only original-filing discovery for two unseeded portfolio issuers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util,json,sys,requests
+          from pathlib import Path
+          source=Path('scripts/results/r3-live-public-filing-batch.py')
+          spec=importlib.util.spec_from_file_location('r3_pilot',source)
+          r3=importlib.util.module_from_spec(spec);spec.loader.exec_module(r3)
+          symbols=('HINDALCO','TITAN')
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0 (compatible; PortfolioAIResearch/1.0)',
+                            'Accept-Language':'en-IN,en;q=0.8'})
+          try:
+            seed=s.get('https://www.nseindia.com/companies-listing/corporate-integrated-filing',timeout=20)
+            bootstrap={'status':seed.status_code}
+          except requests.RequestException as exc:
+            bootstrap={'error':type(exc).__name__}
+          report={'bootstrap':bootstrap,'nse':{},'bse':{}}
+          for symbol in symbols:
+            try:
+              hits=r3.fetch_json(s,symbol)
+              source_urls=r3.listing_urls(hits,symbol)
+              report['nse'][symbol]={'listing_records':len(hits),
+                                     'qualifying_original_links':len(source_urls)}
+            except (requests.RequestException,RuntimeError,ValueError) as exc:
+              report['nse'][symbol]={'blocked':type(exc).__name__+':'+str(exc)[:75]}
+          sys.path.insert(0,str(Path('vendor/bseindiaapi/src').resolve()))
+          from bse import BSE
+          Path('tmp/results-live-discovery-canary').mkdir(parents=True,exist_ok=True)
+          try:
+            with BSE(download_folder=Path('tmp/results-live-discovery-canary')) as bse:
+              for symbol in symbols:
+                try:
+                  code=str(bse.getScripCode(symbol))
+                  snap=bse.resultsSnapshot(code)
+                  result=snap.get('results_in_crores') if isinstance(snap,dict) else None
+                  columns=(result or {}).get('fields',[]) if isinstance(result,dict) else []
+                  report['bse'][symbol]={'scrip_found':bool(code),
+                       'quarter_fields':[x for x in columns if isinstance(x,str)][:12]}
+                except Exception as exc:
+                  report['bse'][symbol]={'blocked':type(exc).__name__+':'+str(exc)[:75]}
+          except Exception as exc:
+            report['bse']['connection']={'blocked':type(exc).__name__+':'+str(exc)[:75]}
+          print('CANARY_PUBLIC_SOURCE_DISCOVERY',json.dumps(report,sort_keys=True))
+          PY

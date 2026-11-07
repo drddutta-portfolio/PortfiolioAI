@@ -18,6 +18,8 @@ export interface ResultsSourceObservation {
   readonly source: string
   readonly publishedAt: string | null
   readonly retrievedAt: string
+  /** Immutable first admission date; re-fetching must not restart NEW indicator. */
+  readonly createdAt?: string | null
   readonly selected: boolean
   readonly originalShareBasis?: boolean
   /** Display is qualified; cross-period reporting-basis equivalence is not. */
@@ -76,7 +78,7 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
     }
     for (let page = 0; page < MAX_PAGES_PER_BATCH; page++) {
       const { data, error } = await supabase.from("fundamental_observations")
-        .select("id,security_id,metric_code,numeric_value,unit,currency,period_start,period_end,period_type,consolidation_scope,evidence_status,source_code,source_record_id,published_at,retrieved_at")
+        .select("id,security_id,metric_code,numeric_value,unit,currency,period_start,period_end,period_type,consolidation_scope,evidence_status,source_code,source_record_id,published_at,retrieved_at,created_at")
         .in("security_id", [...batch])
         .in("metric_code", [...METRICS])
         .eq("period_type", "QUARTER")
@@ -101,6 +103,7 @@ export async function loadResultsSourceInventory(ids: readonly string[]): Promis
           source: row.source_code,
           publishedAt: row.published_at,
           retrievedAt: row.retrieved_at,
+          createdAt: row.created_at,
           selected: selected.has(row.id),
           originalShareBasis: originalShareIds.has(row.id),
           reportingBasisUnproven: reportingBasisIds.has(row.id) || reportingBasisQuarters.has(`${row.security_id}:${row.period_end}`),
