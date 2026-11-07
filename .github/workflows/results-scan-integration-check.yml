@@ -1,7 +1,7 @@
 name: Results Manual Scan V2 Integration Checks
 on:
   push:
-    branches: [results-scan-button-integration-20261107]
+    branches: [results-scan-v2-dev-rollout-20261107]
     paths:
       - .github/workflows/results-scan-integration-check.yml
       - src/features/results/**
@@ -30,7 +30,7 @@ jobs:
           npm run typecheck
           npm run check:architecture
       - name: Lint authenticated scanner edge endpoint
-        run: npx eslint --config eslint.edge.config.js supabase/functions/results-quarterly-scan/index.ts
+        run: npx eslint --config eslint.edge.config.js supabase/functions/results-quarterly-scan-v2/index.ts
       - name: Syntax-verify live collector, independent verifier, and scan worker
         run: |
           python -m py_compile scripts/results/r3-live-public-filing-batch.py scripts/results/r4-verify-quarterly.py scripts/results/results_scan_worker.py
