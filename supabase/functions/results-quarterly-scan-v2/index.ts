@@ -22,10 +22,26 @@ const reply = (code: number, value: Record<string, unknown>) =>
 const fail = (e: unknown) => e instanceof Error ? e.message.slice(0, 90) : "SCAN_UNKNOWN_FAILURE"
 type Client = ReturnType<typeof createClient>
 type Body = { action?: "START" | "STATUS"; portfolioId?: string }
+// Supports current independently rotated Supabase API keys while keeping
+// legacy JWT keys as a fallback during the November 2026 transition.
+function apiKey(dictionaryName: string, legacyName: string): string | undefined {
+  const serialized = Deno.env.get(dictionaryName)
+  if (serialized) {
+    try {
+      const keys: unknown = JSON.parse(serialized)
+      if (keys && typeof keys === "object" && "default" in keys) {
+        const current = (keys as {default?:unknown}).default
+        if (typeof current === "string" && current.length) return current
+      }
+    } catch { /* No authority is inferred from an invalid configuration. */ }
+  }
+  return Deno.env.get(legacyName)
+}
 
 async function checkOwner(admin: Client, authHeader: string, portfolioId: string): Promise<string | null> {
   const url = Deno.env.get("SUPABASE_URL")!
-  const anon = Deno.env.get("SUPABASE_ANON_KEY")!
+  const anon = apiKey("SUPABASE_PUBLISHABLE_KEYS","SUPABASE_ANON_KEY")
+  if (!anon) return null
   const session = createClient(url, anon, { global: { headers: { Authorization: authHeader } } })
   const user = await session.auth.getUser()
   if (user.error || !user.data.user) return null
@@ -178,8 +194,8 @@ Deno.serve(async(request:Request)=>{
   if(request.method!=="POST")return reply(405,{error:"METHOD_NOT_ALLOWED"})
   const header=request.headers.get("Authorization")
   if(!header)return reply(401,{error:"AUTH_REQUIRED"})
-  const url=Deno.env.get("SUPABASE_URL"),key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
-  if(!url||!key||!Deno.env.get("SUPABASE_ANON_KEY"))
+  const url=Deno.env.get("SUPABASE_URL"),key=apiKey("SUPABASE_SECRET_KEYS","SUPABASE_SERVICE_ROLE_KEY")
+  if(!url||!key||!apiKey("SUPABASE_PUBLISHABLE_KEYS","SUPABASE_ANON_KEY"))
     return reply(503,{error:"SUPABASE_CONFIGURATION_MISSING"})
   const admin=createClient(url,key,{auth:{persistSession:false}})
   try {
