@@ -21,7 +21,7 @@ const reply = (code: number, value: Record<string, unknown>) =>
   new Response(JSON.stringify(value), { status: code, headers: responseHeaders })
 const fail = (e: unknown) => e instanceof Error ? e.message.slice(0, 90) : "SCAN_UNKNOWN_FAILURE"
 type Client = ReturnType<typeof createClient>
-type Body = { action?: "START" | "STATUS"; portfolioId?: string }
+type Body = { action?: "START" | "STATUS" | "SCHEDULED_START"; portfolioId?: string }
 // Supports current independently rotated Supabase API keys while keeping
 // legacy JWT keys as a fallback during the November 2026 transition.
 function apiKey(dictionaryName: string, legacyName: string): string | undefined {
@@ -102,11 +102,21 @@ async function status(admin: Client, portfolioId: string) {
   }
 }
 
-async function enqueue(admin: Client, portfolioId: string, userId: string) {
+async function enqueue(admin: Client, portfolioId: string, userId: string | null, scheduled = false) {
   const token = Deno.env.get("RESULTS_SCAN_GITHUB_CONTENTS_TOKEN")
   if (!token) return reply(503,{error:"SCAN_WORKER_CONFIGURATION_PENDING",details:"Development scan dispatcher credential not configured"})
   const prior = await status(admin,portfolioId)
   if (prior.run?.status==="RUNNING") return reply(200,prior)
+  // A scheduled dispatch may never start a second run on the same IST day.
+  if (scheduled) {
+    const recent=await admin.from("data_ingestion_runs").select("started_at")
+      .eq("portfolio_id",portfolioId).eq("operation",OPERATION)
+      .eq("trigger_source","SCHEDULED").order("started_at",{ascending:false}).limit(1).maybeSingle()
+    if(recent.error)throw recent.error
+    const istDay=(iso:string)=>new Date(Date.parse(iso)+330*60000).toISOString().slice(0,10)
+    if(recent.data?.started_at && istDay(recent.data.started_at)===istDay(new Date().toISOString()))
+      return reply(200,{...prior,scheduledSkipped:"ALREADY_SCHEDULED_TODAY"})
+  }
   const transactions:{security_id:string}[]=[]
   for (let offset=0;;offset+=700) {
     const q=await admin.from("transactions").select("security_id")
@@ -129,9 +139,9 @@ async function enqueue(admin: Client, portfolioId: string, userId: string) {
     return reply(409,{error:"SCAN_UNIVERSE_NOT_VERIFIED",details:"Unrecognized equity cohort size"})
   const create=await admin.from("data_ingestion_runs").insert({
     portfolio_id:portfolioId,source_code:SOURCE,operation:OPERATION,status:"RUNNING",
-    trigger_source:"OWNER",orchestration_type:"BACKGROUND_VERIFIED_ORIGINALS",
+    trigger_source:scheduled?"SCHEDULED":"OWNER",orchestration_type:"BACKGROUND_VERIFIED_ORIGINALS",
     requested_by:userId,requested_count:equity.length,accepted_count:0,
-    metadata:{contract:OPERATION,stage:"DISPATCHING",source:"EXCHANGE_ORIGINALS_REUSE_FIRST"}
+    metadata:{contract:OPERATION,stage:"DISPATCHING",source:"EXCHANGE_ORIGINALS_REUSE_FIRST",trigger:scheduled?"DAILY_0700_IST":"OWNER"}
   }).select("id").single()
   if(create.error) {
     // Atomic partial-unique index is the authority for concurrent tabs.
@@ -202,7 +212,7 @@ async function enqueue(admin: Client, portfolioId: string, userId: string) {
     if (!pushed?.commit?.sha) throw new Error("SCAN_WORKER_DISPATCH_ACK_MISSING")
     const mark=await admin.from("data_ingestion_runs").update({
       metadata:{contract:OPERATION,stage:"QUEUED",dispatch_commit:pushed.commit.sha,
-        source:"EXCHANGE_ORIGINALS_REUSE_FIRST"}
+        source:"EXCHANGE_ORIGINALS_REUSE_FIRST",trigger:scheduled?"DAILY_0700_IST":"OWNER"}
     }).eq("id",runId).eq("status","RUNNING")
     if(mark.error)throw mark.error
     return reply(200,await status(admin,portfolioId))
@@ -231,10 +241,25 @@ Deno.serve(async(request:Request)=>{
   const admin=createClient(url,key,{auth:{persistSession:false}})
   try {
     const payload=await request.json() as Body
-    if(!payload.portfolioId||!["START","STATUS"].includes(payload.action??""))
+    if(!payload.portfolioId||!["START","STATUS","SCHEDULED_START"].includes(payload.action??""))
       return reply(400,{error:"INVALID_SCAN_REQUEST"})
     if(payload.portfolioId!==APPROVED_PORTFOLIO)
       return reply(403,{error:"PORTFOLIO_NOT_IN_DEVELOPMENT_SCAN_SCOPE"})
+    if(payload.action==="SCHEDULED_START") {
+      // No user session may impersonate a scheduler. A dedicated 256-bit
+      // Supabase Vault secret, verified by an RPC reserved for service_role,
+      // is mandatory and cannot be sent to the browser.
+      const supplied=request.headers.get("x-portfolioai-results-scheduler-token")
+      if(!supplied || !/^[0-9a-f]{64}$/.test(supplied))
+        return reply(403,{error:"SCHEDULED_SCAN_FORBIDDEN"})
+      const verified=await admin.rpc("verify_results_scan_scheduler_token_v1",{p_token:supplied})
+      if(verified.error || verified.data!==true)
+        return reply(403,{error:"SCHEDULED_SCAN_FORBIDDEN"})
+      const active=await admin.from("portfolios").select("id")
+        .eq("id",payload.portfolioId).eq("is_active",true).maybeSingle()
+      if(active.error||!active.data) return reply(403,{error:"SCHEDULED_PORTFOLIO_INACTIVE"})
+      return await enqueue(admin,payload.portfolioId,null,true)
+    }
     const userId=await checkOwner(admin,header,payload.portfolioId)
     if(!userId)return reply(403,{error:"PORTFOLIO_FORBIDDEN"})
     if(payload.action==="STATUS")return reply(200,await status(admin,payload.portfolioId))
