@@ -23,15 +23,15 @@ const fail = (e: unknown) => e instanceof Error ? e.message.slice(0, 90) : "SCAN
 type Client = ReturnType<typeof createClient>
 type Body = { action?: "START" | "STATUS"; portfolioId?: string }
 
-async function checkOwner(admin: Client, authHeader: string, portfolioId: string): Promise<boolean> {
+async function checkOwner(admin: Client, authHeader: string, portfolioId: string): Promise<string | null> {
   const url = Deno.env.get("SUPABASE_URL")!
   const anon = Deno.env.get("SUPABASE_ANON_KEY")!
   const session = createClient(url, anon, { global: { headers: { Authorization: authHeader } } })
   const user = await session.auth.getUser()
-  if (user.error || !user.data.user) return false
+  if (user.error || !user.data.user) return null
   const row = await admin.from("portfolios").select("id").eq("id",portfolioId)
     .eq("user_id",user.data.user.id).maybeSingle()
-  return !row.error && !!row.data
+  return !row.error && row.data ? user.data.user.id : null
 }
 
 async function status(admin: Client, portfolioId: string) {
@@ -64,7 +64,7 @@ async function status(admin: Client, portfolioId: string) {
   }
 }
 
-async function enqueue(admin: Client, portfolioId: string) {
+async function enqueue(admin: Client, portfolioId: string, userId: string) {
   const token = Deno.env.get("RESULTS_SCAN_GITHUB_CONTENTS_TOKEN")
   if (!token) return reply(503,{error:"SCAN_WORKER_CONFIGURATION_PENDING",details:"Development scan dispatcher credential not configured"})
   const prior = await status(admin,portfolioId)
@@ -92,7 +92,7 @@ async function enqueue(admin: Client, portfolioId: string) {
   const create=await admin.from("data_ingestion_runs").insert({
     portfolio_id:portfolioId,source_code:SOURCE,operation:OPERATION,status:"RUNNING",
     trigger_source:"OWNER",orchestration_type:"BACKGROUND_VERIFIED_ORIGINALS",
-    requested_count:equity.length,accepted_count:0,
+    requested_by:userId,requested_count:equity.length,accepted_count:0,
     metadata:{contract:OPERATION,stage:"DISPATCHING",source:"EXCHANGE_ORIGINALS_REUSE_FIRST"}
   }).select("id").single()
   if(create.error)throw create.error
@@ -162,10 +162,10 @@ Deno.serve(async(request:Request)=>{
       return reply(400,{error:"INVALID_SCAN_REQUEST"})
     if(payload.portfolioId!==APPROVED_PORTFOLIO)
       return reply(403,{error:"PORTFOLIO_NOT_IN_DEVELOPMENT_SCAN_SCOPE"})
-    if(!await checkOwner(admin,header,payload.portfolioId))
-      return reply(403,{error:"PORTFOLIO_FORBIDDEN"})
+    const userId=await checkOwner(admin,header,payload.portfolioId)
+    if(!userId)return reply(403,{error:"PORTFOLIO_FORBIDDEN"})
     if(payload.action==="STATUS")return reply(200,await status(admin,payload.portfolioId))
-    return await enqueue(admin,payload.portfolioId)
+    return await enqueue(admin,payload.portfolioId,userId)
   }catch(error){
     console.error("Results scan V2:",fail(error))
     return reply(500,{error:"SCAN_OPERATION_FAILED",details:fail(error)})
