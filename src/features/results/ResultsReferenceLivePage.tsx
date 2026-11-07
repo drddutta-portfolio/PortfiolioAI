@@ -468,6 +468,38 @@ export function ResultsLivePage() {
     return () => { active = false; window.clearInterval(timer) }
   }, [portfolio?.portfolio.id, scanStatus?.run?.status])
 
+  // Daily 07:00 IST scans start in the background with no open browser.
+  // While the user keeps an idle Results page open, discover a newly scheduled
+  // run and its completion without requiring a reload or a manual click.
+  useEffect(() => {
+    const portfolioId = portfolio?.portfolio.id
+    if (!portfolioId || scanStatus?.run?.status === "RUNNING") return
+    let active = true
+    const refreshScheduledState = () => {
+      if (document.visibilityState !== "visible") return
+      void getResultsScanStatus(portfolioId).then(next => {
+        if (!active) return
+        const prior = scanStatus?.run
+        if (next.run?.id !== prior?.id || next.run?.status !== prior?.status) {
+          setScanStatus(next)
+          if (next.run && next.run.status !== "RUNNING") {
+            setEvidenceRevision(value => value + 1)
+          }
+        }
+      }).catch(() => {
+        // A transient idle poll never disables manual Scan Now or clears
+        // previously displayed source-qualified financial results.
+      })
+    }
+    const timer = window.setInterval(refreshScheduledState, 60000)
+    window.addEventListener("focus", refreshScheduledState)
+    return () => {
+      active = false
+      window.clearInterval(timer)
+      window.removeEventListener("focus", refreshScheduledState)
+    }
+  }, [portfolio?.portfolio.id, scanStatus?.run?.id, scanStatus?.run?.status])
+
   const runScan = async () => {
     if (!portfolio || scanBusy || scanStatus?.run?.status === "RUNNING") return
     setScanBusy(true)
