@@ -1,0 +1,63 @@
+name: Results BHARTIARTL Verified Consolidated Scope Repair
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - .github/workflows/results-bharti-scope-repair.yml
+      - scripts/results/r4-bharti-scope-repair.py
+      - scripts/results/test_r4_bharti_scope_repair.py
+      - src/features/results/resultsBhartiScopeRecovery.test.ts
+permissions: {contents: read}
+concurrency:
+  group: results-bharti-explicit-scope-repair-development
+  cancel-in-progress: false
+jobs:
+  repair-and-readback:
+    if: github.ref == 'refs/heads/PortfolioAI-Development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: portfolioai-history-dev
+      RESULTS_BHARTI_SCOPE_INPUT: tmp/results-r5-g/selected-source-input.json
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install existing pinned original-replay dependencies
+        run: |
+          npm ci
+          python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6'
+      - name: Check protected selection and paired-original regressions
+        run: python scripts/results/test_r4_bharti_scope_repair.py -v
+      - name: Capture transient before state with the canonical read-only exporter
+        run: |
+          python scripts/results/r5-g-live-input.py
+          cp tmp/results-r5-g/selected-source-input.json tmp/results-r5-g/bharti-before.json
+      - name: Reconcile paired NSE originals and atomically correct the three selections
+        run: python scripts/results/r4-bharti-scope-repair.py
+      - name: Independently read canonical after state
+        run: python scripts/results/r5-g-live-input.py
+      - name: Verify actual application comparisons and grades
+        run: npx vitest run src/features/results/resultsBhartiScopeRecovery.test.ts src/features/results/quarterlyR5.test.ts src/features/results/quarterlyR5Classification.test.ts
+      - name: Verify architecture, types, lint and build without changing UI
+        run: |
+          npm run check:architecture
+          npm run typecheck
+          npx eslint src/features/results/resultsBhartiScopeRecovery.test.ts
+          npm run build
+      - name: Retain derived readback only, never raw source snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bharti-derived-scope-repair-readback
+          path: tmp/bharti-scope-repair/derived-grade-readback.json
+          if-no-files-found: warn
+          retention-days: 14
