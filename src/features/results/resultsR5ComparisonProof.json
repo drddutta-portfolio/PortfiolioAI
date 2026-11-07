@@ -3864,6 +3864,19 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "a86924f5-4d34-4a4e-8dc9-7530d74cb335",
+        "NET_PROFIT_QUARTER": "7defc325-650e-45b6-8b8f-b12b01547952",
+        "OPERATING_REVENUE_QUARTER": "30f09538-acc7-41dc-9fcb-13f86b9f2120"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "f396294a-84ac-4b09-acdc-986d39e17ba6",
+      "sourceRecordId": "64423aa2-3126-419f-84bf-157d8a56c1e9",
+      "symbol": "BDL"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "b54c5313-7932-4cea-8e72-cf17c65faa1f",
         "NET_PROFIT_QUARTER": "282105d1-8792-4a1f-a784-9be491e6050b",
         "OPERATING_REVENUE_QUARTER": "f69b737e-6702-472b-82d8-2fbef8f658bb"
