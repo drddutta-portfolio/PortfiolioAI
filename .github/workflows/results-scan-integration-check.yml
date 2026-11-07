@@ -6,6 +6,8 @@ on:
       - .github/workflows/results-scan-integration-check.yml
       - src/features/results/**
       - scripts/results/results_scan_worker.py
+      - scripts/results/results_bse_live_discovery.py
+      - scripts/results/test_results_bse_live_discovery.py
       - scripts/results/r3-live-public-filing-batch.py
       - scripts/results/r4-verify-quarterly.py
       - supabase/functions/results-quarterly-scan/**
@@ -33,12 +35,13 @@ jobs:
         run: npx eslint --config eslint.edge.config.js supabase/functions/results-quarterly-scan-v2/index.ts
       - name: Syntax-verify live collector, independent verifier, and scan worker
         run: |
-          python -m py_compile scripts/results/r3-live-public-filing-batch.py scripts/results/r4-verify-quarterly.py scripts/results/results_scan_worker.py
+          python -m py_compile scripts/results/r3-live-public-filing-batch.py scripts/results/r4-verify-quarterly.py scripts/results/results_scan_worker.py scripts/results/results_bse_live_discovery.py
       - name: Verify existing original-source parser regressions (without live credential)
         run: |
           python -m pip install --disable-pip-version-check --no-cache-dir \
             'boto3==1.40.46' 'psycopg[binary]==3.2.10' \
             'requests==2.32.5' 'beautifulsoup4==4.13.5'
           python scripts/results/test_r3_live_public_filing_batch.py -v
+          python scripts/results/test_results_bse_live_discovery.py -v
       - name: Verify production bundle still builds
         run: npm run build
