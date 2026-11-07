@@ -1043,6 +1043,32 @@
     {
       "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
       "observations": {
+        "EPS_DILUTED": "0e44bf5d-c4be-4661-aca2-d175adf8a16f",
+        "NET_PROFIT_QUARTER": "dcaa6659-d5f1-4efd-ab7e-995e26641406",
+        "OPERATING_REVENUE_QUARTER": "2e895846-f02d-45dc-94ee-6bd2e694e439"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "CONSOLIDATED",
+      "securityId": "4fe8e292-50cc-4ada-94ea-e6ae8623b64b",
+      "sourceRecordId": "454abdab-98a6-423b-b3ce-956aad100586",
+      "symbol": "AVANTIFEED"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
+        "EPS_DILUTED": "ad9fcdd4-5213-485c-8e9c-f38c2becfc58",
+        "NET_PROFIT_QUARTER": "fc159d25-0952-43ac-9449-ce7552b78f68",
+        "OPERATING_REVENUE_QUARTER": "4a91b540-9853-497e-9dc7-3a8f7afa14c8"
+      },
+      "periodEnd": "2025-09-30",
+      "scope": "STANDALONE",
+      "securityId": "4fe8e292-50cc-4ada-94ea-e6ae8623b64b",
+      "sourceRecordId": "87a676b7-5cbd-46fa-bdd7-fd3d601c5f00",
+      "symbol": "AVANTIFEED"
+    },
+    {
+      "approval": "R5_COMPARISON_ONLY_R2_HASH_VERIFIED_NOT_R4_SELECTION",
+      "observations": {
         "EPS_DILUTED": "de840443-f53a-4f0a-b0a2-e98e7a146059",
         "NET_PROFIT_QUARTER": "53e4e3fd-5f9d-427b-ab7c-3bf10fd5079d",
         "OPERATING_REVENUE_QUARTER": "9754a3b1-547c-4b24-a4c6-8e8a3e27cd37"
