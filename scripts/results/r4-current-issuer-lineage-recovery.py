@@ -8,7 +8,7 @@ from collections import defaultdict,Counter
 from urllib.parse import urlencode
 import requests,psycopg
 from r4_current_gap_discovery import pending_current
-from r4_current_issuer_lineage_original import CONTRACT,KIND,PREFIX,BUCKET,PERIODS,origin,extract
+from r4_current_issuer_lineage import CONTRACT,KIND,PREFIX,BUCKET,PERIODS,origin,extract
 from r4_nse_catalog_revision import BASE,scope,canonical,sha
 
 spec=importlib.util.spec_from_file_location('batch',Path(__file__).with_name('r4-bse-historical-batch.py'))

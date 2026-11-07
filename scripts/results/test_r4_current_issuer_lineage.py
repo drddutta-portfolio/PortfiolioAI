@@ -17,6 +17,13 @@ def case():
     return source,observations,Client(),objects,raw,bridge
 
 class CurrentLineageTests(unittest.TestCase):
+    def test_collector_imports_the_deployed_source_contract(self):
+        import importlib.util
+        from pathlib import Path
+        spec=importlib.util.spec_from_file_location('current_lineage_collector',Path(__file__).with_name('r4-current-issuer-lineage-recovery.py'))
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        self.assertEqual(module.CONTRACT,m.CONTRACT);self.assertEqual(module.KIND,m.KIND)
+
     def test_exact_issuer_lineage_preserves_original_isin_and_eps(self):
         s,o,c,_,_,b=case();result=m.qualify(s,o,c);self.assertEqual(result['issuer_bridge']['xml_reported_isin'],'INE871C01012');self.assertEqual(result['facts']['EPS_DILUTED']['value'],'2');self.assertIn('COMPARABILITY_UNPROVEN',b.share_basis)
     def test_both_bse_endpoints_must_tie_code_to_canonical_isin(self):
