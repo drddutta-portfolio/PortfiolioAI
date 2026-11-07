@@ -7,6 +7,7 @@ on:
       - .github/workflows/results-bharti-scope-repair.yml
       - scripts/results/r4-bharti-scope-repair.py
       - scripts/results/test_r4_bharti_scope_repair.py
+      - scripts/results/test_bharti_export_periods.py
       - src/features/results/resultsBhartiScopeRecovery.test.ts
 permissions: {contents: read}
 concurrency:
@@ -36,7 +37,9 @@ jobs:
           npm ci
           python -m pip install 'psycopg[binary]==3.2.10' 'boto3==1.40.46' 'requests==2.32.5' 'beautifulsoup4==4.13.5' 'pymupdf==1.26.6'
       - name: Check protected selection and paired-original regressions
-        run: python scripts/results/test_r4_bharti_scope_repair.py -v
+        run: |
+          python scripts/results/test_r4_bharti_scope_repair.py -v
+          python scripts/results/test_bharti_export_periods.py -v
       - name: Capture transient before state with the canonical read-only exporter
         run: |
           python scripts/results/r5-g-live-input.py

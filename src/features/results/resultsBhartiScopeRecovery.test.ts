@@ -39,7 +39,7 @@ describe.skipIf(!process.env.RESULTS_BHARTI_SCOPE_INPUT)("BHARTIARTL live origin
       const profit=compareQuarterMetric(own,equity.securityId,end,"NET_PROFIT_QUARTER")
       const grade=gradeR5WithVerifiedOriginal(own,equity.securityId,end,equity.sector,equity.industry,calibration)
       const previous=gradeR5WithVerifiedOriginal(old,equity.securityId,end,equity.sector,equity.industry,oldCalibration)
-      if(["2025-12-31","2026-03-31","2026-06-30"].includes(end)){
+      if(["2025-12-31","2026-03-31","2026-06-30","2026-09-30"].includes(end)){
         expect(revenue.qoq).not.toBeNull();expect(profit.qoq).not.toBeNull();expect(grade.status).not.toBe("UNAVAILABLE")
       }
       return {quarter:end,before:previous.status,after:grade.status,revenueQoQ:revenue.qoq,patQoQ:profit.qoq,explanation:grade.explanation}
