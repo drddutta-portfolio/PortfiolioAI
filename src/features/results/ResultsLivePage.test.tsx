@@ -34,6 +34,38 @@ beforeAll(() => { Object.defineProperty(Element.prototype, "scrollIntoView", { v
 afterEach(() => { cleanup(); vi.clearAllMocks() })
 mock.status.mockResolvedValue({ lastScan: null, newResults: 0, run: null })
 
+describe("Results scan button integration", () => {
+  it("clicking Run Scan Now launches the verified backend run, not legacy STEP loops", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockResolvedValue({lastScan:null,newResults:0,run:{
+      id:"run-1",status:"RUNNING",started_at:"2026-11-07T10:00:00Z",
+      completed_at:null,requested_count:2,processed:0,pending:2,
+      accepted_count:0,failed_count:0,
+    }})
+    render(<ResultsLivePage />)
+    const start = await screen.findByRole("button", {name:/Run Scan Now/})
+    fireEvent.click(start)
+    await waitFor(()=>expect(mock.start).toHaveBeenCalledWith("p"))
+    expect(await screen.findByText("Queued · waiting for worker")).toBeInTheDocument()
+    expect(screen.getByRole("button", {name:/Scanning/})).toBeDisabled()
+    expect(mock.step).not.toHaveBeenCalled()
+    expect(screen.getByText("New independently qualified company-quarters")).toBeInTheDocument()
+  })
+
+  it("shows a missing scanner-dispatch credential instead of pretending zero new results", async () => {
+    mock.usePortfolio.mockReturnValue({ portfolio:view,error:null,isLoading:false })
+    mock.load.mockResolvedValue([])
+    mock.status.mockResolvedValue({lastScan:null,newResults:0,run:null})
+    mock.start.mockRejectedValue(new Error("SCAN_WORKER_CONFIGURATION_PENDING: Development dispatcher credential missing"))
+    render(<ResultsLivePage />)
+    fireEvent.click(await screen.findByRole("button",{name:/Run Scan Now/}))
+    expect(await screen.findByRole("alert")).toHaveTextContent("SCAN_WORKER_CONFIGURATION_PENDING")
+    expect(mock.step).not.toHaveBeenCalled()
+  })
+})
+
 describe("Results live approved visual contract", () => {
   it("retains the four-card approved R2 presentation with real holdings, not fixture data", async () => {
     mock.usePortfolio.mockReturnValue({ portfolio: view, error: null, isLoading: false })
