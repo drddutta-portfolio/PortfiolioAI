@@ -1,0 +1,202 @@
+name: One-Time PortfolioAI Dev Backup Recovery
+
+# Intentionally manual only. This workflow never connects to Supabase or Production.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolioai-dev-backup-recovery
+  cancel-in-progress: false
+
+jobs:
+  reencrypt:
+    name: Re-encrypt verified Dev backup using recovery secret
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+      BACKUP_RECOVERY_PASSPHRASE: ${{ secrets.BACKUP_RECOVERY_PASSPHRASE }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      EXPECTED_BUCKET: portfolioai-history-dev
+      EXPECTED_PROJECT: lrgpjimipfkyoqbpsqzz
+      # Exact original backup from successful 2026-11-08 GitHub Action.
+      SOURCE_PREFIX: portfolioai-backups/development/database/manual/2026-11-08T05-19-45Z
+      SOURCE_NAME: portfolioai-dev-2026-11-08T05-19-45Z-42450325319.dump.enc
+
+    steps:
+      - name: Validate required secrets and fixed Development source
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          for key in BACKUP_ENCRYPTION_PASSPHRASE BACKUP_RECOVERY_PASSPHRASE \
+            CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID \
+            CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET; do
+            if [[ -z "${!key:-}" ]]; then
+              echo "Missing required GitHub Actions secret/setting: $key" >&2
+              exit 1
+            fi
+          done
+          [[ "$GITHUB_REPOSITORY" == "drddutta-portfolio/PortfiolioAI" ]]
+          [[ "$GITHUB_REF" == "refs/heads/main" ]]
+          [[ "$CLOUDFLARE_R2_BUCKET" == "$EXPECTED_BUCKET" ]]
+          [[ "$SOURCE_PREFIX" == portfolioai-backups/development/database/manual/* ]]
+          echo 'Development-only validation PASS; no database connection is used.'
+
+      - name: Install pinned R2 client
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir boto3==1.40.46
+
+      - name: Recover original and create separately encrypted backup
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import re
+          import subprocess
+          import tempfile
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from urllib.parse import urlparse
+          import boto3
+          from boto3.s3.transfer import TransferConfig
+          from botocore.config import Config
+
+          def digest(path):
+              h = hashlib.sha256()
+              with path.open('rb') as handle:
+                  for chunk in iter(lambda: handle.read(4 * 1024 * 1024), b''):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          def cmd(args):
+              subprocess.run(args, check=True, stdout=subprocess.DEVNULL)
+
+          raw = os.environ['CLOUDFLARE_R2_ACCOUNT_ID'].strip().rstrip('/')
+          hostname = (urlparse(raw).hostname or '') if '://' in raw else raw
+          suffix = '.r2.cloudflarestorage.com'
+          account_id = hostname[:-len(suffix)] if hostname.endswith(suffix) else hostname
+          if not re.fullmatch(r'[0-9a-fA-F]{32}', account_id):
+              raise SystemExit('R2 Account ID/endpoint is invalid; refusing backup recovery.')
+
+          s3 = boto3.client(
+              's3',
+              endpoint_url=f'https://{account_id}.r2.cloudflarestorage.com',
+              aws_access_key_id=os.environ['CLOUDFLARE_R2_ACCESS_KEY_ID'],
+              aws_secret_access_key=os.environ['CLOUDFLARE_R2_SECRET_ACCESS_KEY'],
+              region_name='auto',
+              config=Config(retries={'max_attempts': 8, 'mode': 'adaptive'},
+                            connect_timeout=30, read_timeout=180,
+                            s3={'addressing_style': 'path'}),
+          )
+          transfer = TransferConfig(multipart_threshold=64*1024*1024,
+                                    multipart_chunksize=64*1024*1024,
+                                    max_concurrency=4)
+          bucket = os.environ['CLOUDFLARE_R2_BUCKET']
+          source_prefix = os.environ['SOURCE_PREFIX']
+          source_name = os.environ['SOURCE_NAME']
+          source_key = f'{source_prefix}/{source_name}'
+          source_manifest_key = f'{source_prefix}/manifest.json'
+
+          with tempfile.TemporaryDirectory(prefix='portfolioai-dev-rekey-') as folder:
+              root = Path(folder)
+              original_encrypted = root/'original.dump.enc'
+              original_manifest_file = root/'original-manifest.json'
+              original_checksum_file = root/'original.dump.enc.sha256'
+              original_plain = root/'original.dump'
+              recovered_encrypted = root/'recovered.dump.enc'
+              downloaded_recovered = root/'r2-recovered.dump.enc'
+              recovered_plain = root/'verified-recovered.dump'
+
+              s3.download_file(bucket, source_key, str(original_encrypted), Config=transfer)
+              s3.download_file(bucket, source_manifest_key, str(original_manifest_file), Config=transfer)
+              s3.download_file(bucket, source_key+'.sha256', str(original_checksum_file), Config=transfer)
+              original_manifest = json.loads(original_manifest_file.read_text())
+              assert original_manifest['source_project_ref'] == os.environ['EXPECTED_PROJECT'], 'Wrong project reference'
+              assert original_manifest['r2_bucket'] == bucket, 'Wrong source bucket'
+              assert original_manifest['r2_object_prefix'] == source_prefix, 'Wrong backup prefix'
+              assert original_manifest['r2_encrypted_object'] == source_name, 'Wrong backup file'
+              source_checksum = original_checksum_file.read_text().strip().split()[0].lower()
+              if digest(original_encrypted) != source_checksum:
+                  raise SystemExit('Original encrypted backup SHA-256 does not match.')
+
+              cmd(['openssl', 'enc', '-d', '-aes-256-cbc', '-pbkdf2', '-iter', '200000',
+                   '-in', str(original_encrypted), '-out', str(original_plain),
+                   '-pass', 'env:BACKUP_ENCRYPTION_PASSPHRASE'])
+              plaintext_hash = digest(original_plain)
+              if plaintext_hash != original_manifest['dump_sha256'].lower():
+                  raise SystemExit('Original decrypted backup SHA-256 does not match manifest.')
+              cmd(['docker', 'run', '--rm', '-v', f'{root}:/backup:ro',
+                   'postgres:17-alpine', 'sh', '-ceu',
+                   'pg_restore --list /backup/original.dump >/dev/null'])
+
+              cmd(['openssl', 'enc', '-aes-256-cbc', '-salt', '-pbkdf2', '-iter', '200000',
+                   '-in', str(original_plain), '-out', str(recovered_encrypted),
+                   '-pass', 'env:BACKUP_RECOVERY_PASSPHRASE'])
+              encrypted_hash = digest(recovered_encrypted)
+              timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H-%M-%SZ')
+              dest_prefix = f'portfolioai-backups/development/database/recovery/{timestamp}-{os.environ["GITHUB_RUN_ID"]}'
+              dest_name = f'portfolioai-dev-recovery-{timestamp}.dump.enc'
+              dest_key = f'{dest_prefix}/{dest_name}'
+
+              s3.upload_file(str(recovered_encrypted), bucket, dest_key,
+                             ExtraArgs={'ContentType': 'application/octet-stream',
+                                        'Metadata': {'sha256': encrypted_hash,
+                                                     'backup_version': 'PORTFOLIOAI_DEV_RECOVERY_V1'}},
+                             Config=transfer)
+              s3.download_file(bucket, dest_key, str(downloaded_recovered), Config=transfer)
+              if digest(downloaded_recovered) != encrypted_hash:
+                  raise SystemExit('Recovery upload read-back SHA-256 mismatch.')
+              cmd(['openssl', 'enc', '-d', '-aes-256-cbc', '-pbkdf2', '-iter', '200000',
+                   '-in', str(downloaded_recovered), '-out', str(recovered_plain),
+                   '-pass', 'env:BACKUP_RECOVERY_PASSPHRASE'])
+              if digest(recovered_plain) != plaintext_hash:
+                  raise SystemExit('New passphrase failed to decrypt matching original DB archive.')
+              cmd(['docker', 'run', '--rm', '-v', f'{root}:/backup:ro',
+                   'postgres:17-alpine', 'sh', '-ceu',
+                   'pg_restore --list /backup/verified-recovered.dump >/dev/null'])
+
+              recovery_manifest = {
+                  'backup_version': 'PORTFOLIOAI_DEV_RECOVERY_V1',
+                  'source_project_ref': os.environ['EXPECTED_PROJECT'],
+                  'source_encrypted_object_key': source_key,
+                  'source_manifest_dump_sha256': plaintext_hash,
+                  'recovered_utc': datetime.now(timezone.utc).isoformat(),
+                  'github_run_id': os.environ['GITHUB_RUN_ID'],
+                  'r2_bucket': bucket,
+                  'r2_object_key': dest_key,
+                  'encryption': 'AES-256-CBC/PBKDF2/200000',
+                  'passphrase_secret_name': 'BACKUP_RECOVERY_PASSPHRASE',
+                  'recovered_encrypted_sha256': encrypted_hash,
+                  'recovered_encrypted_size_bytes': recovered_encrypted.stat().st_size,
+                  'status': 'PASS',
+                  'checks': ['source_original_encrypted_checksum',
+                             'source_manifest_plaintext_checksum',
+                             'original_pg_restore_list', 'recovery_upload_readback_checksum',
+                             'new_passphrase_decrypt_plaintext_checksum',
+                             'new_pg_restore_list'],
+              }
+              s3.put_object(Bucket=bucket, Key=dest_key+'.sha256',
+                            Body=(encrypted_hash+'\n').encode(), ContentType='text/plain')
+              s3.put_object(Bucket=bucket, Key=f'{dest_prefix}/manifest.json',
+                            Body=(json.dumps(recovery_manifest, indent=2, sort_keys=True)+'\n').encode(),
+                            ContentType='application/json')
+              s3.put_object(Bucket=bucket, Key=f'{dest_prefix}/COMPLETE.json',
+                            Body=(json.dumps(recovery_manifest, indent=2, sort_keys=True)+'\n').encode(),
+                            ContentType='application/json')
+              print('Recovery backup PASS; Development only; original backup untouched.')
+              print('New R2 key:', dest_key)
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as fh:
+                  fh.write('### PortfolioAI Dev backup recovery: PASS\n\n')
+                  fh.write(f'Recovered encrypted R2 object: `{dest_key}`\n\n')
+                  fh.write('Uses `BACKUP_RECOVERY_PASSPHRASE`; no raw backup is uploaded.\n')
+          PY
