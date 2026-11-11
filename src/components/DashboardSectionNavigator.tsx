@@ -7,6 +7,7 @@ const SECTIONS = [
   ["dashboard-performance", "Performance"],
   ["dashboard-structure", "Structure"],
   ["dashboard-health", "Health"],
+  ["dashboard-sizing", "Sizing"],
   ["dashboard-risk", "Risk"],
   ["dashboard-monitoring", "Monitoring"],
   ["dashboard-research", "Research"],
