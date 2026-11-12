@@ -47,10 +47,10 @@ per_candidate AS (
          COUNT(o.ordinal) FILTER (
            WHERE o.period_label IS NULL OR o.value_text IS NULL
               OR o.period_label !~ '^(Mar|Jun|Sep|Dec) [0-9]{4}$'
-              OR o.value_text !~ '^[0-9]+(\\.[0-9]+)?$'
+              OR o.value_text !~ '^[0-9]+([.][0-9]+)?$'
          ) AS invalid_observations,
          COUNT(o.ordinal) FILTER (
-           WHERE o.value_text ~ '^[0-9]+(\\.[0-9]+)?$'
+           WHERE o.value_text ~ '^[0-9]+([.][0-9]+)?$'
              AND o.value_text::numeric > 100
          ) AS out_of_range_observations,
          COUNT(o.ordinal) FILTER (WHERE o.series_name='Promoter') AS promoter_count,
