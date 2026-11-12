@@ -77,6 +77,20 @@ describe("TransactionsPage", () => {
     expect(screen.getByText("ABC Limited")).toBeInTheDocument()
   })
 
+  it("explains that an unknown ticker must be verified before recording", async () => {
+    render(<TransactionsPage />)
+    await screen.findByRole("heading", { name: "Transactions" })
+    fireEvent.click(screen.getByRole("button", { name: "Add transaction" }))
+    fireEvent.change(screen.getByLabelText("Broker / demat account"), { target: { value: "a1" } })
+    fireEvent.change(screen.getByLabelText("Transaction date"), { target: { value: "2026-09-07" } })
+    fireEvent.change(screen.getByLabelText("Quantity"), { target: { value: "7" } })
+    fireEvent.change(screen.getByLabelText("Execution price"), { target: { value: "491" } })
+    fireEvent.change(screen.getByPlaceholderText("Type ticker or company name"), { target: { value: "AARTIIND" } })
+    fireEvent.submit(screen.getByRole("button", { name: "Record transaction" }).closest("form")!)
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Verify and add"))
+    expect(createManualTransaction).not.toHaveBeenCalled()
+  })
+
   it("offers unknown ticker onboarding, preserves BUY fields, and selects the new security", async () => {
     createManualSecurity.mockResolvedValue({ security_id: "s-new", mapping_status: "UNRESOLVED" })
     createManualTransaction.mockResolvedValue({ transaction_id: "t-new" })
@@ -88,7 +102,7 @@ describe("TransactionsPage", () => {
     fireEvent.change(screen.getByLabelText("Quantity"), { target: { value: "12" } })
     fireEvent.change(screen.getByLabelText("Execution price"), { target: { value: "221" } })
     fireEvent.change(screen.getByPlaceholderText("Type ticker or company name"), { target: { value: "V2RETAIL" } })
-    expect(screen.getByText("No existing security found.")).toBeInTheDocument()
+    expect(screen.getByText(/No existing security found\. Add and verify this security/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "+ Add V2RETAIL as a new security" }))
     expect(screen.getByLabelText("Trading symbol")).toHaveValue("V2RETAIL")
     fireEvent.change(screen.getByLabelText("Security name"), { target: { value: "New Company" } })
